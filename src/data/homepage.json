@@ -1,0 +1,35 @@
+[
+  {
+    "bannerContent": {
+      "SubTitle": "At Revent, we focus on elevating your presentations with seamless design, powered by AI."
+    },
+    "working": {
+      "Title": "Create stunning Presentations in minutes using AI"
+    },
+    "about": {
+      "clients": {
+        "title": "We Win When Our Clients Win",
+        "description": "Revent is for every founder, every pitch maker, and essentially, every busy mind out there. Bringing expert design capabilities at your fingertips to save crucial time. "
+      },
+      "build": {
+        "title": "Build Presentations The Right Way",
+        "description": "Spend your time on what matters, while we focus on helping you with what shows. Design slides with one click of a button and present brand compliant presentations in minutes."
+      },
+      "reinvent": {
+        "title": "Reinventing The Way We Present",
+        "description": "By leveraging the power of AI and the expertise of design professionals, we’re bringing you a new way of looking at presentations forever, one where you do not have to look at them much."
+      }
+    },
+    "mission": {
+      "title": "To serve as a reminder for technology to adapt to people and not the other way round. As long as people are prioritized, quality and value will always follow."
+    },
+    "services": {
+      "service1": {
+        "description": "Deliver customized presentations on-the-go with Revent Press, our flagship Presentation Automation software."
+      },
+      "service2": {
+        "description": "Employ the premium services of our experts to craft the perfect presentationstailored to your requirements."
+      }
+    }
+  }
+]
