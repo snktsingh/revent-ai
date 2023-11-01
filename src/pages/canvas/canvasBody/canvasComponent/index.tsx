@@ -19,6 +19,12 @@ interface CustomControl extends fabric.Control {
   cornerSize?: number;
 }
 
+interface IExtendedTextboxOptions extends fabric.ITextboxOptions {
+  listType?: string;
+  listBullet?: string;
+  listCounter?: number;
+}
+
 const CanvasComponent: React.FC = () => {
   const canvasRef = useRef<fabric.Canvas | null>(null);
   const Container = useRef<HTMLDivElement | null>(null);
@@ -211,7 +217,7 @@ Integer nec odio.`;
         listType: 'bullet',
         listBullet: '\u2022',
         listCounter: 0
-      });
+      } as IExtendedTextboxOptions);
       BulletText._renderTextLine = renderTextLine;
       canvas?.add(BulletText)
     };
@@ -225,7 +231,7 @@ Integer nec odio.`;
       
       fileInput.addEventListener('change', (e)=>{
         let reader = new FileReader();
-        const file = e.target?.files[0];
+        const file = (e.target as HTMLInputElement)?.files?.[0];
         if (file) {
           reader.onload = () => {
             if (canvasRef.current) {
