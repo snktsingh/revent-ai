@@ -1,3 +1,4 @@
+import { theme } from '@/constants/theme';
 import styled, { css } from 'styled-components';
 
 interface ContainerProps {
@@ -15,7 +16,7 @@ export const NotesBodyContainer = styled.div`
 export const AddNotesContainer = styled.div<ContainerProps>`
   width: 100%;
   height: 6vh;
-  background: #fff;
+  background:  ${theme.colorSchemes.light.palette.common.white};
   box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25);
   transform: translateY(200%);
   transition: opacity 0.5s ease-out, transform 0.5s ease-out;
@@ -29,7 +30,7 @@ export const AddNotesContainer = styled.div<ContainerProps>`
     `}
 
   span {
-    color: #4d4d4d;
+    color: ${theme.colorSchemes.light.palette.common.darkGrey};
     text-align: center;
     font-size: 0.8rem;
     margin: 2%;
@@ -38,7 +39,7 @@ export const AddNotesContainer = styled.div<ContainerProps>`
 export const NotesHeadingContainer = styled.div`
   width: 100%;
   height: 6vh;
-  background: #fff;
+  background:  ${theme.colorSchemes.light.palette.common.white};
   box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25);
 `;
 
@@ -67,7 +68,7 @@ export const NotesInput = styled.input`
   border: none;
   outline: none;
   background: none;
-  color: #4d4d4d;
+  color: ${theme.colorSchemes.light.palette.common.darkGrey};
   font-family: 'Roboto';
   font-size: 0.8vw;
   height: 100%;

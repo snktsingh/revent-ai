@@ -15,6 +15,8 @@ import {
   AddTitle,
   ArrowIcon,
   CircleIcon,
+  Diamond,
+  Hexagon,
   LeftArrowIcon,
   LineIcon,
   RectIcon,
@@ -150,53 +152,65 @@ export interface Shapes {
 export const ShapesData: Shapes[] = [
   {
     id: 1,
-    name: 'Rectangle',
+    name: "Rectangle",
     icon: RectIcon,
-    onClick: () => {},
+    onClick: () => { },
   },
   {
     id: 2,
-    name: 'Arrow',
+    name: "Arrow",
     icon: ArrowIcon,
-    onClick: () => {},
+    onClick: () => { },
   },
   {
     id: 3,
-    name: 'Line',
+    name: "Line",
     icon: LineIcon,
-    onClick: () => {},
+    onClick: () => { }
   },
   {
     id: 4,
-    name: 'Circle',
+    name: "Circle",
     icon: CircleIcon,
-    onClick: () => {},
+    onClick: () => { }
   },
   {
     id: 5,
-    name: 'Triangle',
+    name: "Triangle",
     icon: TriangleIcon,
-    onClick: () => {},
+    onClick: () => { }
   },
   {
     id: 6,
-    name: 'Star',
+    name: "Star",
     icon: StarIcon,
-    onClick: () => {},
+    onClick: () => { }
   },
   {
     id: 7,
-    name: 'Right Arrow',
+    name: "Right Arrow",
     icon: RightArrowIcon,
-    onClick: () => {},
+    onClick: () => { }
   },
   {
     id: 8,
-    name: 'Left Arrow',
+    name: "Left Arrow",
     icon: LeftArrowIcon,
-    onClick: () => {},
+    onClick: () => { }
   },
-];
+  {
+    id: 9,
+    name: 'HexagonOutlinedIcon',
+    icon: Hexagon,
+    onClick: () => { },
+  },
+  {
+    id: 10,
+    name: 'Diamond',
+    icon: Diamond,
+    onClick: () => { },
+  }
+]
 
 export interface ColorsType {
   title: string;
@@ -392,9 +406,18 @@ export let colorChange: ColorChangeType = {
 interface ContentEle {
   addTitle: Function;
   openFullScreen: Function;
+  handleBold: Function;
+  handleItalic: Function;
+  handleUnderlIne: Function;
 }
 
 export const ContentElements: ContentEle = {
-  addTitle: () => {},
-  openFullScreen: () => {},
-};
+  addTitle: () => { },
+  openFullScreen: () => { },
+  handleBold: () => { },
+  handleItalic: () => { },
+  handleUnderlIne: () => { },
+}
+
+export const deleteIcon =
+"data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3C!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'%3E%3Csvg version='1.1' id='Ebene_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='595.275px' height='595.275px' viewBox='200 215 230 470' xml:space='preserve'%3E%3Ccircle style='fill:%23F44336;' cx='299.76' cy='439.067' r='218.516'/%3E%3Cg%3E%3Crect x='267.162' y='307.978' transform='matrix(0.7071 -0.7071 0.7071 0.7071 -222.6202 340.6915)' style='fill:white;' width='65.545' height='262.18'/%3E%3Crect x='266.988' y='308.153' transform='matrix(0.7071 0.7071 -0.7071 0.7071 398.3889 -83.3116)' style='fill:white;' width='65.544' height='262.179'/%3E%3C/g%3E%3C/svg%3E";

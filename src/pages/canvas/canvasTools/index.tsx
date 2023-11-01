@@ -66,6 +66,7 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import {
   ColorsData,
+  ContentElements,
   ShapesData,
   ThemeColor,
   colorChange,
@@ -304,13 +305,13 @@ const CanvasTools = () => {
 
         <FontTool>
           <Stack direction="row" spacing={1}>
-            <IconButton size="small">
+            <IconButton size="small" onClick={()=>ContentElements.handleBold()}>
               <FormatBoldRounded />
             </IconButton>
-            <IconButton size="small">
+            <IconButton size="small" onClick={()=>ContentElements.handleItalic()}>
               <FormatItalicRounded />
             </IconButton>
-            <IconButton size="small">
+            <IconButton size="small" onClick={()=>ContentElements.handleUnderlIne()}>
               <FormatUnderlinedRounded />
             </IconButton>
             <IconButton onClick={handleColorClick}>

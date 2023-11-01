@@ -1,3 +1,4 @@
+import { theme } from '@/constants/theme';
 import { Button, styled as Mstyled } from '@mui/material';
 import styled from 'styled-components';
 
@@ -40,7 +41,7 @@ export const DrawerVariantButton = styled.button`
 export const DrawerVariant = styled.div`
   width: 80%;
   height: 100%;
-  background: #fff;
+  background: ${theme.colorSchemes.light.palette.common.white};
   padding: 4px;
 
   overflow-y: scroll;
@@ -61,7 +62,7 @@ export const VariantSlide = styled.div`
   width: 100%;
   justify-content: space-around;
   div {
-    color: #4d4d4d;
+    color: ${theme.colorSchemes.light.palette.common.darkGrey};
     font-family: 'Roboto';
     font-size: 0.6rem;
     font-style: normal;
@@ -74,7 +75,7 @@ export const VariantSlideCard = styled.div`
   height: 12vh;
   flex-shrink: 0;
   border-radius: 5px;
-  background: #d9d9d9;
+  background: ${theme.colorSchemes.light.palette.common.border};
 `;
 export const ButtonContainer = styled.div`
   width: 90%;

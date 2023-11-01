@@ -38,6 +38,10 @@ import TriangleIcon from "../assets/shapes/triangle.svg";
 import StarIcon from "../assets/shapes/star.svg";
 import RightArrowIcon from "../assets/shapes/right_arrow.svg";
 import LeftArrowIcon from "../assets/shapes/left_arrow.svg";
+import Hexagon from '../assets/shapes/hexagon.svg';
+import Diamond from '../assets/shapes/diamond.svg';
+import CanvasOutlinedArrow from "../assets/shapes/outlinedArrow.svg";
+import CanvasLine from "../assets/shapes/outlinedline.svg";
 
 
 
@@ -82,5 +86,8 @@ export {
   StarIcon,
   RightArrowIcon,
   LeftArrowIcon,
-  
+  Hexagon,
+  Diamond,
+  CanvasOutlinedArrow,
+  CanvasLine,
 };

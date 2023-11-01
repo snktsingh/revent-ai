@@ -6,13 +6,14 @@ import {
   ContentElements,
   ShapesData,
   colorChange,
+  deleteIcon,
   elementData,
 } from '../elementData';
 import { CanvasContainer, SearchInputContainer } from './style';
 import { Card, InputBase, MenuItem, Stack } from '@mui/material';
 import { searchElement } from '@/redux/reducers/slide';
 import { ElementContainer, ElementSubtitle, ElementTitle } from '../style';
-import { Copy } from '@/constants/media';
+import { CanvasLine, CanvasOutlinedArrow, Copy } from '@/constants/media';
 
 interface CustomControl extends fabric.Control {
   cornerSize?: number;
@@ -36,8 +37,8 @@ const CanvasComponent: React.FC = () => {
     setFilteredList(filtered);
   };
 
-  const deleteIcon =
-    "data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3C!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'%3E%3Csvg version='1.1' id='Ebene_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='595.275px' height='595.275px' viewBox='200 215 230 470' xml:space='preserve'%3E%3Ccircle style='fill:%23F44336;' cx='299.76' cy='439.067' r='218.516'/%3E%3Cg%3E%3Crect x='267.162' y='307.978' transform='matrix(0.7071 -0.7071 0.7071 0.7071 -222.6202 340.6915)' style='fill:white;' width='65.545' height='262.18'/%3E%3Crect x='266.988' y='308.153' transform='matrix(0.7071 0.7071 -0.7071 0.7071 398.3889 -83.3116)' style='fill:white;' width='65.544' height='262.179'/%3E%3C/g%3E%3C/svg%3E";
+ 
+    
 
   useEffect(() => {
     const canvas = new fabric.Canvas('canvas', {
@@ -148,27 +149,109 @@ const CanvasComponent: React.FC = () => {
 
       canvas?.add(paragraph);
     };
+    const text = `Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Integer nec odio.`;
 
+    
+    const renderTextLine = function (
+      this: any,
+      method:any,
+      ctx:any,
+      line:any,
+      left:any,
+      top:any,
+      lineIndex:any,
+    ) {
+      const style0 = this.getCompleteStyleDeclaration(lineIndex, 0);
+    
+      // Determine the list type
+      const bullet = this.listType === 'numbered'
+        ? [this.listCounter + '.']
+        : [this.listBullet];
+    
+      const bulletLeft = left - style0.fontSize - 2;
+    
+      if (line.length) {
+        if (!this.isWrapping) {
+          this._renderChars(method, ctx, bullet, bulletLeft, top, lineIndex);
+          this.isWrapping = !this.isEndOfWrapping(lineIndex);
+          if (!this.isWrapping) {
+            if (this.listType === 'numbered') {
+              this.listCounter++;
+            }
+          }
+        } else if (this.isEndOfWrapping(lineIndex)) {
+          this.isWrapping = false;
+          if (this.listType === 'numbered') {
+            this.listCounter++;
+          }
+        }
+      }
+    
+      if (lineIndex === this.textLines.length - 1) {
+        this.isWrapping = false;
+        this.listCounter = 1;
+      }
+    
+      this._renderChars(method, ctx, line, left, top, lineIndex);
+    };
+
+   
     elementData[5].onClick = () => {
       const canvas = canvasRef.current;
-      const text = new fabric.IText('', {
+      const BulletText = new fabric.Textbox(text, {
+        fontFamily: 'sans-serif',
+        lineHeight: 1.40,
         left: 50,
         top: 50,
-        width: 200,
-        fontSize: 16,
+        width: 450,
+        fontSize:20,
+        objectCaching: false,
+        isWrapping: false,
+        listType: 'bullet',
+        listBullet: '\u2022',
+        listCounter: 0
       });
-
-      const addBullet = (text: fabric.IText) => {
-        const bullet = '\u2022 '; // Unicode character for bullet point
-        text.text += bullet;
-        text.set('text', text.text); // Update the text
-      };
-
-      addBullet(text);
-
-      canvas?.add(text);
+      BulletText._renderTextLine = renderTextLine;
+      canvas?.add(BulletText)
     };
-    elementData[6].onClick = () => {};
+
+    elementData[6].onClick = ()=> {
+      const canvas = canvasRef.current;
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept ="image/**"
+      fileInput.click();
+      
+      fileInput.addEventListener('change', (e)=>{
+        let reader = new FileReader();
+        const file = e.target?.files[0];
+        if (file) {
+          reader.onload = () => {
+            if (canvasRef.current) {
+              const canvas = canvasRef.current;
+      
+              fabric.Image.fromURL(reader.result as string, (img) => {
+                img.set({
+                  left: 5,
+                  top: 5,
+                  scaleX: 0.5,
+                  scaleY: 0.5,
+                  
+                });
+              
+                canvas.add(img);
+                canvas.renderAll();
+              });
+            }
+          };
+          reader.readAsDataURL(file);
+        }
+        
+      })
+    }
+   
+
     elementData[7].onClick = () => {};
 
     var img = new Image();
@@ -293,9 +376,10 @@ const CanvasComponent: React.FC = () => {
     }
   };
 
+  
   ShapesData[0].onClick = () => {
     if (canvasRef.current) {
-      console.log(canvasRef.current);
+      
       const rect = new fabric.Rect({
         width: 100,
         height: 100,
@@ -307,7 +391,29 @@ const CanvasComponent: React.FC = () => {
       });
 
       canvasRef.current.add(rect);
-      canvasRef.current.renderAll();
+      
+    }
+  };
+
+  ShapesData[1].onClick = () => {
+    if (canvasRef.current) {
+      fabric.loadSVGFromURL(CanvasOutlinedArrow, (objects) => {
+        const svgObject = objects[0];
+        svgObject.fill = '#004FBA';
+        canvasRef.current?.add(svgObject);
+        canvasRef.current?.renderAll();
+      });
+    }
+  };
+
+  ShapesData[2].onClick = () => {
+    if (canvasRef.current) {
+      fabric.loadSVGFromURL(CanvasLine, (objects) => {
+        const svgObject = objects[0];
+        svgObject.fill = '#004FBA';
+        canvasRef.current?.add(svgObject);
+        canvasRef.current?.renderAll();
+      });
     }
   };
 
@@ -421,6 +527,45 @@ const CanvasComponent: React.FC = () => {
     }
   };
 
+
+  ShapesData[8].onClick = () => {
+    if (canvasRef.current) {
+      const hexagon = new fabric.Polygon([
+        { x: 50, y: 0 },
+        { x: 150, y: 0 },
+        { x: 200, y: 100 },
+        { x: 150, y: 200 },
+        { x: 50, y: 200 },
+        { x: 0, y: 100 },
+      ], {
+        fill: 'transparent',
+        stroke: '#043199',
+        strokeWidth: 1,
+        left: 100,
+        top: 100,
+        type: 'shape'
+      });
+      canvasRef.current?.add(hexagon);
+    }
+  };
+  ShapesData[9].onClick = () => {
+    if (canvasRef.current) {
+      const polygon = new fabric.Polygon([
+        { x: 50, y: 0 },
+        { x: 100, y: 50 },
+        { x: 50, y: 100 },
+        { x: 0, y: 50 },
+      ], {
+        stroke: '#043199',
+        fill: 'transparent',
+        left: 200,
+        top: 100,
+        type: 'shape'
+      });
+      canvasRef.current?.add(polygon);
+    }
+  };
+
   const handleElementSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(searchElement(e.target.value));
     filterData(slide.listSearch);
@@ -444,6 +589,30 @@ const CanvasComponent: React.FC = () => {
       }
     }
   };
+
+
+  ContentElements.handleBold = () => {
+    let activeObj = canvasRef.current?.getActiveObjects() as any;
+    if (activeObj && activeObj[0]?.type === 'text') {
+      activeObj[0].setSelectionStyles({ fontWeight: 'bold' }, activeObj[0].selectionStart, activeObj[0].selectionEnd);
+      canvasRef.current?.renderAll();
+    }
+  }
+  ContentElements.handleItalic = () => {
+    let activeObj = canvasRef.current?.getActiveObjects() as any;
+    if (activeObj && activeObj[0]?.type === 'text') {
+      activeObj[0].setSelectionStyles({ fontStyle: 'italic' }, activeObj[0].selectionStart, activeObj[0].selectionEnd);
+      canvasRef.current?.renderAll();
+    }
+  }
+  ContentElements.handleUnderlIne = () => {
+    let activeObj = canvasRef.current?.getActiveObjects() as any;
+    if (activeObj && activeObj[0]?.type === 'text') {
+      const selectedText = activeObj[0]?.text.slice(activeObj[0].selectionStart, activeObj[0].selectionEnd);
+      activeObj[0].setSelectionStyles({ underline: true }, activeObj[0].selectionStart, activeObj[0].selectionEnd);
+      canvasRef.current?.renderAll();
+    }
+  }
 
   return (
     <CanvasContainer ref={Container}>
