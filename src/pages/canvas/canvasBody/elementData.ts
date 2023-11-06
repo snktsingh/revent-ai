@@ -152,65 +152,65 @@ export interface Shapes {
 export const ShapesData: Shapes[] = [
   {
     id: 1,
-    name: "Rectangle",
+    name: 'Rectangle',
     icon: RectIcon,
-    onClick: () => { },
+    onClick: () => {},
   },
   {
     id: 2,
-    name: "Arrow",
+    name: 'Arrow',
     icon: ArrowIcon,
-    onClick: () => { },
+    onClick: () => {},
   },
   {
     id: 3,
-    name: "Line",
+    name: 'Line',
     icon: LineIcon,
-    onClick: () => { }
+    onClick: () => {},
   },
   {
     id: 4,
-    name: "Circle",
+    name: 'Circle',
     icon: CircleIcon,
-    onClick: () => { }
+    onClick: () => {},
   },
   {
     id: 5,
-    name: "Triangle",
+    name: 'Triangle',
     icon: TriangleIcon,
-    onClick: () => { }
+    onClick: () => {},
   },
   {
     id: 6,
-    name: "Star",
+    name: 'Star',
     icon: StarIcon,
-    onClick: () => { }
+    onClick: () => {},
   },
   {
     id: 7,
-    name: "Right Arrow",
+    name: 'Right Arrow',
     icon: RightArrowIcon,
-    onClick: () => { }
+    onClick: () => {},
   },
   {
     id: 8,
-    name: "Left Arrow",
+    name: 'Left Arrow',
     icon: LeftArrowIcon,
-    onClick: () => { }
+    onClick: () => {},
   },
   {
     id: 9,
     name: 'HexagonOutlinedIcon',
     icon: Hexagon,
-    onClick: () => { },
+    onClick: () => {},
   },
   {
     id: 10,
     name: 'Diamond',
     icon: Diamond,
-    onClick: () => { },
-  }
-]
+    onClick: () => {},
+  },
+];
 
 export interface ColorsType {
   title: string;
@@ -354,43 +354,6 @@ export const shadesData: ShadesType[] = [
     shade6: '#e600e6',
     shade7: '#b300b3',
   },
-
-  // {
-  //   title: 'Green',
-  //   color: '#008000',
-  // },
-  // {
-  //   title: 'Blue',
-  //   color: '#0000ff',
-  // },
-  // {
-  //   title: 'Yellow',
-  //   color: '#ffff00',
-  // },
-  // {
-  //   title: 'Purple',
-  //   color: '#800080',
-  // },
-  // {
-  //   title: 'Orange',
-  //   color: '#ffA500',
-  // },
-  // {
-  //   title: 'Pink',
-  //   color: '#ffc0cb',
-  // },
-  // {
-  //   title: 'Brown',
-  //   color: '#a52a2a',
-  // },
-  // {
-  //   title: 'Black',
-  //   color: '#000000',
-  // },
-  // {
-  //   title: 'White',
-  //   color: '#ffffff',
-  // },
 ];
 interface ColorChangeType {
   colorFillChange: Function;
@@ -412,12 +375,12 @@ interface ContentEle {
 }
 
 export const ContentElements: ContentEle = {
-  addTitle: () => { },
-  openFullScreen: () => { },
-  handleBold: () => { },
-  handleItalic: () => { },
-  handleUnderlIne: () => { },
-}
+  addTitle: () => {},
+  openFullScreen: () => {},
+  handleBold: () => {},
+  handleItalic: () => {},
+  handleUnderlIne: () => {},
+};
 
 export const deleteIcon =
-"data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3C!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'%3E%3Csvg version='1.1' id='Ebene_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='595.275px' height='595.275px' viewBox='200 215 230 470' xml:space='preserve'%3E%3Ccircle style='fill:%23F44336;' cx='299.76' cy='439.067' r='218.516'/%3E%3Cg%3E%3Crect x='267.162' y='307.978' transform='matrix(0.7071 -0.7071 0.7071 0.7071 -222.6202 340.6915)' style='fill:white;' width='65.545' height='262.18'/%3E%3Crect x='266.988' y='308.153' transform='matrix(0.7071 0.7071 -0.7071 0.7071 398.3889 -83.3116)' style='fill:white;' width='65.544' height='262.179'/%3E%3C/g%3E%3C/svg%3E";
+  "data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3C!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'%3E%3Csvg version='1.1' id='Ebene_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='595.275px' height='595.275px' viewBox='200 215 230 470' xml:space='preserve'%3E%3Ccircle style='fill:%23F44336;' cx='299.76' cy='439.067' r='218.516'/%3E%3Cg%3E%3Crect x='267.162' y='307.978' transform='matrix(0.7071 -0.7071 0.7071 0.7071 -222.6202 340.6915)' style='fill:white;' width='65.545' height='262.18'/%3E%3Crect x='266.988' y='308.153' transform='matrix(0.7071 0.7071 -0.7071 0.7071 398.3889 -83.3116)' style='fill:white;' width='65.544' height='262.179'/%3E%3C/g%3E%3C/svg%3E";

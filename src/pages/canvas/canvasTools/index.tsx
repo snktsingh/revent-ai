@@ -1,18 +1,6 @@
+import { Button, Divider, IconButton, Menu, Stack } from '@mui/material';
 import {
-  Box,
-  Button,
-  Divider,
-  IconButton,
-  Input,
-  Menu,
-  Popover,
-  Stack,
-} from '@mui/material';
-import {
-  AddColorButton,
-  AddColorIcon,
   BorderColorDiv,
-  ButtonContainer,
   ColorDiv,
   ColorGrid,
   ColorItem,
@@ -24,21 +12,8 @@ import {
   SectionTitle,
   ShapeItem,
   ShapesCard,
-  TransparentButton,
 } from './style';
-import {
-  Add,
-  ArrowIcon,
-  CircleIcon,
-  LeftArrowIcon,
-  LineIcon,
-  RectIcon,
-  RightArrowIcon,
-  ShapesIcon,
-  StarIcon,
-  Template,
-  TriangleIcon,
-} from '@/constants/media';
+import { Add, ShapesIcon, Template } from '@/constants/media';
 import MenuItem from '@mui/material/MenuItem';
 import FormatAlignLeftIcon from '@mui/icons-material/FormatAlignLeft';
 import FormatAlignCenterIcon from '@mui/icons-material/FormatAlignCenter';
@@ -57,7 +32,6 @@ import {
 } from '../style';
 import {
   AddOutlined,
-  Directions,
   FormatBoldRounded,
   FormatItalicRounded,
   FormatUnderlinedRounded,
@@ -65,7 +39,6 @@ import {
 } from '@mui/icons-material';
 import { useEffect, useRef, useState } from 'react';
 import {
-  ColorsData,
   ContentElements,
   ShapesData,
   ThemeColor,
@@ -304,14 +277,23 @@ const CanvasTools = () => {
         </Menu>
 
         <FontTool>
-          <Stack direction="row" spacing={1}>
-            <IconButton size="small" onClick={()=>ContentElements.handleBold()}>
+          <Stack direction="row" spacing={0}>
+            <IconButton
+              size="small"
+              onClick={() => ContentElements.handleBold()}
+            >
               <FormatBoldRounded />
             </IconButton>
-            <IconButton size="small" onClick={()=>ContentElements.handleItalic()}>
+            <IconButton
+              size="small"
+              onClick={() => ContentElements.handleItalic()}
+            >
               <FormatItalicRounded />
             </IconButton>
-            <IconButton size="small" onClick={()=>ContentElements.handleUnderlIne()}>
+            <IconButton
+              size="small"
+              onClick={() => ContentElements.handleUnderlIne()}
+            >
               <FormatUnderlinedRounded />
             </IconButton>
             <IconButton onClick={handleColorClick}>

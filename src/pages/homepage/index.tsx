@@ -149,7 +149,9 @@ const Home = () => {
             </GridRowEven>
             <GridRowCenter xs={3}>
               <StackColCenter direction="row" spacing={3}>
-                <UserLink>Sign In</UserLink>
+                <UserLink>
+                  <UserLink href="/login">Sign In</UserLink>
+                </UserLink>
                 <Button variant="outlined" onClick={handleTry}>
                   Create Now
                 </Button>
