@@ -11,6 +11,7 @@ export const NotesBodyContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+  
 `;
 
 export const AddNotesContainer = styled.div<ContainerProps>`
@@ -21,6 +22,8 @@ export const AddNotesContainer = styled.div<ContainerProps>`
   transform: translateY(200%);
   transition: opacity 0.5s ease-out, transform 0.5s ease-out;
   z-index: -1;
+  display: flex;
+  align-items: center;
   ${props =>
     props.isActive &&
     css`

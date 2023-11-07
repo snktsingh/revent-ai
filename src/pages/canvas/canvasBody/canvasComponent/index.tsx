@@ -41,7 +41,7 @@ const CanvasComponent: React.FC = () => {
       height: Container.current?.clientHeight || 0,
       backgroundColor: `${theme.colorSchemes.light.palette.common.white}`,
     });
-    canvas.selectionColor = '#cfd6e7';
+    canvas.selectionColor = 'transparent';
     canvas.selectionBorderColor = `${theme.colorSchemes.light.palette.primary.main}`;
     canvas.selectionLineWidth = 1;
     fabric.Object.prototype.cornerColor = `${theme.colorSchemes.light.palette.primary.main}`;
@@ -118,6 +118,8 @@ const CanvasComponent: React.FC = () => {
     };
 
     elementData[7].onClick = () => {};
+
+
     var img = new Image();
     img.src = deleteIcon;
     var cloneImg = new Image();
@@ -166,8 +168,8 @@ const CanvasComponent: React.FC = () => {
       var target = transformData.target;
       var canvas = target.canvas;
       target.clone(function (cloned: fabric.Object) {
-        cloned.left! += 10;
-        cloned.top! += 10;
+        cloned.left! += 20;
+        cloned.top! += 20;
         canvas?.add(cloned);
       });
       return true;
@@ -202,9 +204,10 @@ const CanvasComponent: React.FC = () => {
       ctx.restore();
     }
 
+  canvas.renderAll();
     return () => {
       canvas.dispose();
-      window.removeEventListener('resize', () => {});
+      window.removeEventListener('resize', () => { });
     };
   }, []);
 
@@ -348,7 +351,99 @@ const CanvasComponent: React.FC = () => {
       );
       canvasRef.current?.renderAll();
     }
+  }
+
+ 
+  //fabric table
+  
+  ContentElements.handleOpenTable = (rows: number, cols: number, cellWidth: number, cellHeight: number) => {
+    const canvas = canvasRef.current;
+  
+    const fabricDblClick = function (obj : any, handler : any) {
+      return function () {
+        if (obj.clicked) handler(obj);
+        else {
+          obj.clicked = true;
+          setTimeout(function () {
+            obj.clicked = false;
+          }, 500);
+        }
+      };
+    };
+  
+    const ungroup = function (group: fabric.Group) {
+      let items = group._objects;
+      group._restoreObjectsState();
+      canvas?.remove(group);
+      canvas?.renderAll();
+      for (let i = 0; i < items.length; i++) {
+        canvas?.add(items[i]);
+      }
+      canvas?.renderAll();
+    };
+  
+    const groupObjects = function (objects: fabric.Object[]) {
+      let group = new fabric.Group(objects);
+      canvas?.add(group);
+      canvas?.renderAll();
+      return group;
+    };
+  
+    console.log(rows, cols, cellWidth, cellHeight);
+  
+    const cellPadding = 6; 
+    const tableLeft = 50;
+    const tableTop = 50;
+  
+    function createCell(left: number, top: number, i: number, j: number) {
+      const cell = new fabric.Rect({
+        width: cellWidth,
+        height: cellHeight,
+        fill: 'transparent',
+        stroke: 'black',
+        strokeWidth: 1,
+        selectable: false,
+        left: tableLeft + (j * cellWidth),
+        top: tableTop + (i * cellHeight),
+        hasControls: false,
+        hasBorders: false,
+      });
+  
+      const text = new fabric.Textbox(`Cell ${i + 1},${j + 1}`, {
+        left: cell.left! + cellPadding,
+        top: cell.top! + cellPadding,
+        fontSize: 16,
+        width: cellWidth - (2 * cellPadding),
+        height: cellHeight - (2 * cellPadding),
+        fontFamily: 'Arial',
+        editable: true,
+      });
+  
+      const table = new fabric.Group([cell, text], {});
+  
+      table.on('mousedown', fabricDblClick(table, function (obj : any) {
+        if (obj.clicked) {
+          ungroup(table);
+          canvas?.setActiveObject(text);
+          text.enterEditing();
+          text.selectAll();
+        } else {
+          groupObjects([cell, text]);
+          canvas?.renderAll();
+        }
+      }));
+  
+      return table;
+    }
+  
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < cols; j++) {
+        const cell = createCell(50, 50, i, j);
+        canvas?.add(cell)
+      }
+    }
   };
+
 
   return (
     <CanvasContainer ref={Container}>

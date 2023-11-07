@@ -1,3 +1,4 @@
+import { theme } from '@/constants/theme';
 import { fabric } from 'fabric';
 
 export default function useAllShapes() {
@@ -5,7 +6,7 @@ export default function useAllShapes() {
     width: 100,
     height: 100,
     fill: 'transparent',
-    stroke: '#043199',
+    stroke: theme.colorSchemes.light.palette.primary.main,
     top: 100,
     left: 100,
     type: 'shape',
@@ -19,7 +20,7 @@ export default function useAllShapes() {
   const addCircle = new fabric.Circle({
     radius: 50,
     fill: 'transparent',
-    stroke: '#043199',
+    stroke: theme.colorSchemes.light.palette.primary.main,
     top: 100,
     left: 100,
     type: 'shape',
@@ -29,7 +30,7 @@ export default function useAllShapes() {
     width: 100,
     height: 100,
     fill: 'transparent',
-    stroke: '#043199',
+    stroke: theme.colorSchemes.light.palette.primary.main,
     top: 100,
     left: 100,
     type: 'shape',
@@ -52,7 +53,7 @@ export default function useAllShapes() {
   }
   const addStar = new fabric.Polygon(starPoints, {
     fill: 'transparent',
-    stroke: '#043199',
+    stroke: theme.colorSchemes.light.palette.primary.main,
     left: 50,
     top: 50,
     type: 'shape',
@@ -69,7 +70,7 @@ export default function useAllShapes() {
   ];
 
   const addRightArrow = new fabric.Polygon(rightArrowPoints, {
-    fill: '#043199',
+    fill: theme.colorSchemes.light.palette.primary.main,
     left: 50,
     top: 50,
     type: 'shape',
@@ -86,7 +87,7 @@ export default function useAllShapes() {
   ];
 
   const addLeftArrow = new fabric.Polygon(leftArrowPoints, {
-    fill: '#043199',
+    fill: theme.colorSchemes.light.palette.primary.main,
     left: 50,
     top: 50,
     type: 'shape',
@@ -103,7 +104,7 @@ export default function useAllShapes() {
     ],
     {
       fill: 'transparent',
-      stroke: '#043199',
+      stroke: theme.colorSchemes.light.palette.primary.main,
       strokeWidth: 1,
       left: 100,
       top: 100,
@@ -119,7 +120,7 @@ export default function useAllShapes() {
       { x: 0, y: 50 },
     ],
     {
-      stroke: '#043199',
+      stroke: theme.colorSchemes.light.palette.primary.main,
       fill: 'transparent',
       left: 200,
       top: 100,

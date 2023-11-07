@@ -36,7 +36,7 @@ export default function useAllElements() {
     type: 'text',
   });
 
-  const paragraph = new fabric.Textbox('parageph', {
+  const paragraph = new fabric.IText('parageph', {
     left: 100,
     top: 150, // Adjust the position as needed
     width: 600, // Adjust the width as needed
@@ -57,7 +57,7 @@ export default function useAllElements() {
     mr: true,
   });
 
-  paragraph.on('scaling', function (this: fabric.Textbox) {
+  paragraph.on('scaling', function (this: fabric.IText) {
     const scaleX = this.scaleX;
     const scaleY = this.scaleY;
     const newFontSize = (this.fontSize! * (scaleX! + scaleY!)) / 2;
@@ -128,3 +128,4 @@ Integer nec odio.`;
 
   return { title, subtitle, heading, paragraph, BulletText };
 }
+//table 
