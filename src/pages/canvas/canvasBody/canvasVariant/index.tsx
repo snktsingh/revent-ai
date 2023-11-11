@@ -16,7 +16,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { toggleVariantSlide } from '@/redux/reducers/elements';
 import { Logo } from '@/constants/media';
 
-export const CanavasVariant = () => {
+export const CanvasVariant = () => {
   const dispatch = useAppDispatch();
   const { openVariant } = useAppSelector(state => state.element);
   const array: number[] = [1, 2, 3];

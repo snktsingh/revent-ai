@@ -5,11 +5,14 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControl,
   Grid,
   IconButton,
   InputBase,
+  InputLabel,
   Menu,
   MenuItem,
+  Select,
   Stack,
   TextField,
 } from '@mui/material';
@@ -28,12 +31,12 @@ import PopUpModal from '@/constants/elements/modal';
 import { searchElement } from '@/redux/reducers/slide';
 import { ContentElements, elementData } from './elementData';
 import React, { useState } from 'react';
-import { CanavasNotes } from './canavasNotes';
+import { CanvasNotes } from './canvasNotes';
 import SlideList from './slideList';
 import Templates from './templates';
 import { ThumbDownAltRounded, Widgets } from '@mui/icons-material';
 import CanvasComponent from './canvasComponent';
-import { CanavasVariant } from './canvasVariant';
+import { CanvasVariant } from './canvasVariant';
 import { TableDetails, setTableDetails } from '@/redux/reducers/canvas';
 
 const CanvasBody = () => {
@@ -93,6 +96,10 @@ const CanvasBody = () => {
     setElementName("table");
     handleClickOpenDialog()
   }
+  elementData[10].onClick = () => {
+    setElementName('cycle');
+    handleClickOpenDialog();
+  };
   elementData[13].onClick = () => {
     setElementName("funnel");
     handleClickOpenDialog()
@@ -110,8 +117,9 @@ const CanvasBody = () => {
   const [columns, setColumns] = useState('');
   const [cellWidth, setCellWidth] = useState('120');
   const [cellHeight, setCellHeight] = useState('35');
-  const [elemSize,setElemSize] = useState(3);
-  const [elemWidth,setElemWidth] = useState(120);
+  const [elemSize, setElemSize] = useState(3);
+  const [elemWidth, setElemWidth] = useState(120);
+  const [steps,setSteps] = useState<number>(3);
 
   const handleElementData = () => {
     let newTableData: TableDetails = {
@@ -123,13 +131,17 @@ const CanvasBody = () => {
 
     switch (elementName) {
       case 'table':
-          ContentElements.handleOpenTable(+rows, +columns, +cellWidth, +cellHeight);
-      break;
+        ContentElements.handleOpenTable(+rows, +columns, +cellWidth, +cellHeight);
+        break;
       case 'funnel':
-        ContentElements.handleFunnel(elemSize, elemWidth);
-      break;
+        ContentElements.handleFunnel(+elemSize, +elemWidth);
+        break;
       case 'pyramid':
         ContentElements.handlePyramid(elemSize, elemWidth);
+        break;
+      case 'cycle':
+        ContentElements.handleCycle(steps);
+        break;
       default:
         break;
     }
@@ -191,7 +203,7 @@ const CanvasBody = () => {
             <TextField
               label="Levels"
               variant="outlined"
-              value={rows}
+              value={elemSize}
               onChange={(e) => setElemSize(+(e.target.value))}
               required
               type="number"
@@ -201,7 +213,7 @@ const CanvasBody = () => {
             <TextField
               label="Width"
               variant="outlined"
-              value={columns}
+              value={elemWidth}
               onChange={(e) => setElemWidth(+(e.target.value))}
               required
               type="number"
@@ -216,7 +228,7 @@ const CanvasBody = () => {
             <TextField
               label="Levels"
               variant="outlined"
-              value={rows}
+              value={elemSize}
               onChange={(e) => setElemSize(+(e.target.value))}
               required
               type="number"
@@ -226,7 +238,7 @@ const CanvasBody = () => {
             <TextField
               label="Width"
               variant="outlined"
-              value={columns}
+              value={elemWidth}
               onChange={(e) => setElemWidth(+(e.target.value))}
               required
               type="number"
@@ -235,14 +247,34 @@ const CanvasBody = () => {
             />
           </Box>
         )
-
+      case 'cycle':
+        return (
+          <FormControl style={{marginTop:"10px"}} fullWidth>
+            <InputLabel id="demo-simple-select-label">Steps</InputLabel>
+            <Select
+              labelId="demo-select-small-label"
+              id="demo-select-small"
+              value={steps}
+              label="Steps"
+              onChange={(e)=> setSteps(+e.target.value)}
+            >
+              <MenuItem value="">
+                <em>Steps</em>
+              </MenuItem>
+              <MenuItem value={3}>3</MenuItem>
+              <MenuItem value={4}>4</MenuItem>
+              <MenuItem value={5}>5</MenuItem>
+              <MenuItem value={6}>6</MenuItem>
+            </Select>
+          </FormControl>
+        )
       default:
         return 'Something went wrong';
     }
   }
 
 
-  const DialogTitleContent = ()=>{
+  const DialogTitleContent = () => {
 
     switch (elementName) {
       case 'table':
@@ -251,6 +283,8 @@ const CanvasBody = () => {
         return "Please provide Funnel details";
       case 'pyramid':
         return "Please provide Pyramid details";
+      case 'cycle':
+        return "Please provide Cycle details";
       default:
         return 'Something went wrong';
     }
@@ -390,10 +424,10 @@ const CanvasBody = () => {
               })}
             </Menu>
           </EditSlideContainer>
-          <CanavasNotes />
+          <CanvasNotes />
         </Grid>
         {/* <CanavasVariant /> */}
-        <CanavasVariant />
+        <CanvasVariant />
       </Grid>
       <Templates />
       <PopUpModal content={slide.slideKey} />
@@ -407,7 +441,7 @@ const CanvasBody = () => {
         }}
       >
         <DialogTitle id="responsive-dialog-title">
-          <DialogTitleContent/>
+          <DialogTitleContent />
         </DialogTitle>
         <DialogContent>
           <Box>

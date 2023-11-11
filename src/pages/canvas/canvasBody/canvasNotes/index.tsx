@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { toggleNotesSlide } from '@/redux/reducers/elements';
 import { Input, InputBase } from '@mui/material';
 
-export const CanavasNotes = () => {
+export const CanvasNotes = () => {
   const dispatch = useAppDispatch();
   const { openNotes } = useAppSelector(store => store.element);
 

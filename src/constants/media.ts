@@ -42,7 +42,7 @@ import Hexagon from '../assets/shapes/hexagon.svg';
 import Diamond from '../assets/shapes/diamond.svg';
 import CanvasOutlinedArrow from "../assets/shapes/outlinedArrow.svg";
 import CanvasLine from "../assets/shapes/outlinedline.svg";
-
+import DeleteX from "../assets/deleteX.svg";
 
 
 export {
@@ -90,4 +90,5 @@ export {
   Diamond,
   CanvasOutlinedArrow,
   CanvasLine,
+  DeleteX,
 };
