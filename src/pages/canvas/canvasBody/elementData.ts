@@ -25,6 +25,7 @@ import {
   StarIcon,
   TriangleIcon,
 } from '@/constants/media';
+import { Table } from '@mui/material';
 
 interface IElementData {
   key: number;
@@ -391,5 +392,12 @@ export const ContentElements: ContentEle = {
   handlePyramid: ()=>{},
   handleCycle: ()=>{},
   handleProcess: ()=>{},
-  handleTimeline: ()=>{}
+  handleTimeline: ()=>{},
 };
+
+export const TABLE = 'TABLE';
+export const FUNNEL = 'FUNNEL';
+export const CYCLE = 'CYCLE';
+export const PROCESS = 'PROCESS';
+export const TIMELINE = 'TIMELINE';
+export const PYRAMID = 'PYRAMID';

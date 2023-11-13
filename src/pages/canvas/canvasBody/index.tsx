@@ -29,7 +29,7 @@ import { AddElement, Copy, Delete } from '@/constants/media';
 import { openModal } from '@/redux/reducers/elements';
 import PopUpModal from '@/constants/elements/modal';
 import { searchElement } from '@/redux/reducers/slide';
-import { ContentElements, elementData } from './elementData';
+import { CYCLE, ContentElements, FUNNEL, PROCESS, PYRAMID, TABLE, TIMELINE, elementData } from './elementData';
 import React, { useState } from 'react';
 import { CanvasNotes } from './canvasNotes';
 import SlideList from './slideList';
@@ -93,21 +93,30 @@ const CanvasBody = () => {
   };
 
   elementData[7].onClick = () => {
-    setElementName("table");
-    handleClickOpenDialog()
+    setElementName(TABLE);
+    handleClickOpenDialog();
   }
   elementData[10].onClick = () => {
-    setElementName('cycle');
+    setElementName(CYCLE);
     handleClickOpenDialog();
   };
+  elementData[11].onClick = () => {
+    setElementName(PROCESS);
+    handleClickOpenDialog();
+  }
+  elementData[12].onClick = () => {
+    setElementName(TIMELINE);
+    handleClickOpenDialog();
+  }
   elementData[13].onClick = () => {
-    setElementName("funnel");
-    handleClickOpenDialog()
+    setElementName(FUNNEL);
+    handleClickOpenDialog();
   }
   elementData[14].onClick = () => {
-    setElementName("pyramid");
-    handleClickOpenDialog()
+    setElementName(PYRAMID);
+    handleClickOpenDialog();
   }
+
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
@@ -130,17 +139,23 @@ const CanvasBody = () => {
     };
 
     switch (elementName) {
-      case 'table':
+      case TABLE:
         ContentElements.handleOpenTable(+rows, +columns, +cellWidth, +cellHeight);
         break;
-      case 'funnel':
+      case FUNNEL:
         ContentElements.handleFunnel(+elemSize, +elemWidth);
         break;
-      case 'pyramid':
+      case PYRAMID:
         ContentElements.handlePyramid(elemSize, elemWidth);
         break;
-      case 'cycle':
+      case CYCLE:
         ContentElements.handleCycle(steps);
+        break;
+      case PROCESS:
+        ContentElements.handleProcess(steps);
+        break;
+      case TIMELINE:
+        ContentElements.handleTimeline(steps);
         break;
       default:
         break;
@@ -152,7 +167,7 @@ const CanvasBody = () => {
   const DialogDetails = () => {
 
     switch (elementName) {
-      case 'table':
+      case TABLE:
         return (
           <Box style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
             <TextField
@@ -197,19 +212,27 @@ const CanvasBody = () => {
             />
           </Box>
         )
-      case 'funnel':
+      case FUNNEL:
         return (
           <Box display={'flex'} gap={'10px'} mt={'10px'}>
-            <TextField
-              label="Levels"
-              variant="outlined"
+            <FormControl size="small"  fullWidth>
+            <InputLabel id="demo-simple-select-label">Levels</InputLabel>
+            <Select
+              labelId="demo-select-small-label"
+              id="demo-select-small"
               value={elemSize}
-              onChange={(e) => setElemSize(+(e.target.value))}
-              required
-              type="number"
-              size="small"
-              InputProps={{ inputProps: { min: 1 } }}
-            />
+              label="Steps"
+              onChange={(e)=> setElemSize(+(e.target.value))}
+            >
+              <MenuItem value="">
+                <em>Levels</em>
+              </MenuItem>
+              <MenuItem value={3}>3</MenuItem>
+              <MenuItem value={4}>4</MenuItem>
+              <MenuItem value={5}>5</MenuItem>
+            </Select>
+            </FormControl>
+
             <TextField
               label="Width"
               variant="outlined"
@@ -222,19 +245,26 @@ const CanvasBody = () => {
             />
           </Box>
         )
-      case 'pyramid':
+      case PYRAMID:
         return (
           <Box display={'flex'} gap={'10px'} mt={'10px'}>
-            <TextField
-              label="Levels"
-              variant="outlined"
+            <FormControl size="small"  fullWidth>
+            <InputLabel id="demo-simple-select-label">Levels</InputLabel>
+            <Select
+              labelId="demo-select-small-label"
+              id="demo-select-small"
               value={elemSize}
-              onChange={(e) => setElemSize(+(e.target.value))}
-              required
-              type="number"
-              size="small"
-              InputProps={{ inputProps: { min: 1 } }}
-            />
+              label="Steps"
+              onChange={(e)=> setElemSize(+(e.target.value))}
+            >
+              <MenuItem value="">
+                <em>Levels</em>
+              </MenuItem>
+              <MenuItem value={3}>3</MenuItem>
+              <MenuItem value={4}>4</MenuItem>
+              <MenuItem value={5}>5</MenuItem>
+            </Select>
+            </FormControl>
             <TextField
               label="Width"
               variant="outlined"
@@ -247,7 +277,9 @@ const CanvasBody = () => {
             />
           </Box>
         )
-      case 'cycle':
+      case CYCLE:
+      case TIMELINE:
+      case PROCESS:
         return (
           <FormControl style={{marginTop:"10px"}} fullWidth>
             <InputLabel id="demo-simple-select-label">Steps</InputLabel>
@@ -277,14 +309,18 @@ const CanvasBody = () => {
   const DialogTitleContent = () => {
 
     switch (elementName) {
-      case 'table':
+      case TABLE:
         return ("Please Provide Table Details: Rows, Columns, Width, and Height");
-      case 'funnel':
+      case FUNNEL:
         return "Please provide Funnel details";
-      case 'pyramid':
+      case PYRAMID:
         return "Please provide Pyramid details";
-      case 'cycle':
+      case CYCLE:
         return "Please provide Cycle details";
+      case TIMELINE:
+        return "Please provide Timeline Steps";
+      case PROCESS:
+        return "Please provide Process Steps";
       default:
         return 'Something went wrong';
     }

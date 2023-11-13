@@ -194,6 +194,8 @@ Integer nec odio.`;
       var target = transformData.target;
 
       var canvas = target.canvas;
+      
+      
       canvas?.remove(target);
       canvas?.requestRenderAll();
 
@@ -450,6 +452,33 @@ Integer nec odio.`;
   //funnel
 
   const addFunnel = (lev: number, size: number, canvas: fabric.Canvas | null) => {
+    let rectTop:number;
+    let rectLeft:number;
+    let rectWidth:number;
+    let rectHeight:number;
+
+    switch (lev) {
+      case 3:
+        rectTop=34;
+        rectLeft=-80;
+        rectWidth=160;
+        rectHeight=100;
+        break;
+      case 4:
+        rectLeft=-61;
+        rectWidth=121;
+        rectHeight=100;
+        break;
+      case 5:
+        rectLeft=-40;
+        rectWidth=80;
+        rectHeight=100;
+        break;
+      default:
+        break;
+    }
+
+
     function createLevels(n: number) {
       let x1 = -120;
       let x2 = 120;
@@ -457,7 +486,6 @@ Integer nec odio.`;
       let x4 = -140;
       let levels: fabric.Object[] = [];
       let trapTop = -60;
-      let textTop = n * 23;
       for (let i = 1; i <= n; i++) {
         let trapezoid = new fabric.Polygon([
           { x: x1, y: 0 },
@@ -470,34 +498,22 @@ Integer nec odio.`;
           top: trapTop,
         });
 
-        let text = new fabric.Textbox(`Level ${n - i + 1}`, {
-          fontSize: 18,
-          left: -70,
-          width: 140,
-          top: textTop,
-          editable: true,
-          textAlign: 'center',
-        });
-
-        textTop = textTop - 50;
         trapTop = trapTop + 50;
         x1 = x1 + 20;
         x2 = x2 - 20;
         x3 = x3 - 20;
         x4 = x4 + 20
         levels.push(trapezoid);
-        levels.push(text);
       }
       let rect = new fabric.Rect({
         fill: 'transparent',
         stroke: 'black',
-        width: 120,
-        height: 120,
+        width: rectWidth,
+        height: rectHeight,
         top: trapTop,
-        left: -60
+        left: rectLeft
       });
       levels.push(rect);
-
 
       return levels;
     }
@@ -507,35 +523,79 @@ Integer nec odio.`;
       top: 50,
     });
 
+    function addText(left:number,top:number,textC:string){
+      let text = new fabric.Textbox(textC, {
+        fontSize: 18,
+        left,
+        top,
+        width: 140,
+        editable: true,
+        textAlign: 'center',
+      });
+      return canvas?.add(text)
+    }
+
     canvas?.add(group);
+    switch(lev){
+      case 3:
+        addText(126,66,'Level 1');
+        addText(126,115,'Level 2');
+        addText(126,166,'Level 3');  
+        break;
+      case 4:
+        addText(126,66,'Level 1');
+        addText(126,115,'Level 2');
+        addText(126,166,'Level 3');  
+        addText(126,214,'Level 4');  
+        break;
+      case 5:
+        addText(126,66,'Level 1');
+        addText(126,115,'Level 2');
+        addText(126,166,'Level 3');  
+        addText(126,214,'Level 4');  
+        addText(126,261,'Level 5');  
+        break;
+      case 6:
+        addText(126,66,'Level 1');
+        addText(126,115,'Level 2');
+        addText(126,166,'Level 3');  
+        addText(126,214,'Level 4');  
+        addText(126,261,'Level 5');      
+        addText(126,314,'Level 6');    
+        break;
+
+      default :
+        break;
+    }
+
     canvas?.renderAll();
   };
 
   //CYCLE 
 
+  const addArrow = (left: number, top: number, angle: number) => {
+    const ArrowPoints = [
+      { x: 100, y: 100 },
+      { x: 125, y: 100 },
+      { x: 125, y: 87.5 },
+      { x: 150, y: 112.5 },
+      { x: 125, y: 137.5 },
+      { x: 125, y: 125 },
+      { x: 100, y: 125 },
+    ];
+
+    const Arrow = new fabric.Polygon(ArrowPoints, {
+      fill: theme.colorSchemes.light.palette.common.steelBlue,
+      type: 'shape',
+      left,
+      top,
+      angle
+    });
+
+    return Arrow;
+  }
   const addCycle = (levels: number, canvas: fabric.Canvas | null) => {
 
-    const addArrow = (left: number, top: number, angle: number) => {
-      const ArrowPoints = [
-        { x: 100, y: 100 },
-        { x: 125, y: 100 },
-        { x: 125, y: 87.5 },
-        { x: 150, y: 112.5 },
-        { x: 125, y: 137.5 },
-        { x: 125, y: 125 },
-        { x: 100, y: 125 },
-      ];
-
-      const Arrow = new fabric.Polygon(ArrowPoints, {
-        fill: 'blue', // Replace with the appropriate color
-        type: 'shape',
-        left,
-        top,
-        angle
-      });
-
-      return Arrow;
-    }
 
     const unGroup = function (group: fabric.Group) {
       let items = group._objects;
@@ -550,7 +610,7 @@ Integer nec odio.`;
 
     function createCircleWithText(left: number, top: number) {
 
-      const text = new fabric.Textbox(`edit the text`, {
+      const text = new fabric.Textbox(`Add Text`, {
         left: left + 20,
         top: top + 20,
         fontSize: 16,
@@ -634,7 +694,204 @@ Integer nec odio.`;
       default:
         break;
     }
+  };
 
+  //Timeline
+
+  const addTimeline = (steps: number, canvas: fabric.Canvas | null)=>{
+
+    function addText(left:number,top:number,width:number,fontSize:number,textContent: string){
+      let text = new fabric.Textbox(textContent, {
+          fontSize,
+          originX: 'left',
+          originY: 'top',
+          top,
+          left,
+          width,
+          fill:'black'
+      });
+      return canvas?.add(text);
+    }
+
+    function addLine(left:number,top:number,width:number){
+      let line = new fabric.Line([50, 100, width, 100],{
+        left,
+        top,
+        strokeWidth: 3,
+        stroke: theme.colorSchemes.light.palette.common.steelBlue
+      });
+      return canvas?.add(line);
+    }
+
+    function addCircle(left:number,top:number){
+      let circle = new fabric.Circle({
+        radius: 20,
+        fill:theme.colorSchemes.light.palette.primary.main,
+        top,
+        left,
+        stroke: theme.colorSchemes.light.palette.common.black
+      })
+      return canvas?.add(circle);
+    }
+    
+
+    switch (steps) {
+      case 3:
+        addLine(126,171,150);
+        addLine(267,171,200);
+        addLine(456,171,200);
+        addCircle(227,152);
+        addCircle(418,152);
+        addCircle(608,152);
+        addText(199,126,100,14,'Add Timeline');
+        addText(398,126,100,14,'Add Timeline');
+        addText(582,126,100,14,'Add Timeline');
+        addText(208,205,150,16,'Add Text');
+        addText(404,205,150,16,'Add Text');
+        addText(596,205,150,16,'Add Text');
+        break;
+      case 4:
+        addLine(39,176,150);
+        addLine(180,176,200);
+        addLine(369,176,200);
+        addLine(562,176,200);
+        addCircle(140,157);
+        addCircle(331,157);
+        addCircle(521,157);
+        addCircle(712,157);
+        addText(112,131,100,14,'Add Timeline');
+        addText(311,131,100,14,'Add Timeline');
+        addText(499,131,100,14,'Add Timeline');
+        addText(684,131,100,14,'Add Timeline');
+        addText(121,210,150,16,'Add Text');
+        addText(317,210,150,16,'Add Text');
+        addText(509,210,150,16,'Add Text');
+        addText(701,210,150,16,'Add Text');
+        break;
+      case 5:
+        addLine(126,171,150);
+        addLine(267,171,200);
+        addLine(456,171,200);
+        addText(199,126,100,14,'Add Timeline');
+        addText(398,126,100,14,'Add Timeline');
+        addText(582,126,100,14,'Add Timeline');
+        addCircle(227,152);
+        addCircle(418,152);
+        addCircle(608,152);
+        addText(208,205,150,16,'Add Text');
+        addText(404,205,150,16,'Add Text');
+        addText(596,205,150,16,'Add Text');
+        break;
+      case 6:
+        addLine(126,171,150);
+        addLine(267,171,200);
+        addLine(456,171,200);
+        addCircle(227,152);
+        addCircle(418,152);
+        addCircle(608,152);
+        addText(199,126,100,14,'Add Timeline');
+        addText(398,126,100,14,'Add Timeline');
+        addText(582,126,100,14,'Add Timeline');
+        addText(208,205,150,16,'Add Text');
+        addText(404,205,150,16,'Add Text');
+        addText(596,205,150,16,'Add Text');
+        break;
+    
+      default:
+        break;
+    }
+
+  };
+
+  //Process
+
+  function addProcess(steps: number, canvas: fabric.Canvas | null){
+      function addRectangle(left:number,top:number,width:number,height:number){
+        let rect = new fabric.Rect({
+          left: left,
+          top: top,
+          width,
+          height,
+          fill: theme.colorSchemes.light.palette.primary.main,
+          rx:10,
+          ry:10
+        })
+        return canvas?.add(rect);
+      }
+
+      function addText(left:number,top:number) {
+        const text = new fabric.Textbox("Add Text",{
+          fontSize : 14,
+          left,
+          top,
+          fill:'white',
+          width:140
+        });
+        return canvas?.add(text);
+      }
+
+      switch (steps) {
+        case 3:
+          addRectangle(96,124,150,100);
+          addRectangle(332,124,150,100);
+          addRectangle(562,124,150,100);
+          canvas?.add(addArrow(264, 153, 0));
+          canvas?.add(addArrow(498, 153, 0));
+          addText(105,130);
+          addText(338,130);
+          addText(567,130);
+          break;
+        case 4:
+          addRectangle(11,130,150,100);
+          addRectangle(228,130,150,100);
+          addRectangle(441,130,150,100);
+          addRectangle(652,130,150,100);
+          canvas?.add(addArrow(169, 154, 0));
+          canvas?.add(addArrow(388, 154, 0));
+          canvas?.add(addArrow(598, 154, 0));
+          addText(20,136);
+          addText(239,136);
+          addText(450,136);
+          addText(661,136);
+          break;
+        case 5:
+          addRectangle(96,124,150,100);
+          addRectangle(332,124,150,100);
+          addRectangle(562,124,150,100);
+          addRectangle(332,288,150,100);
+          addRectangle(562,288,150,100);
+          canvas?.add(addArrow(264, 153, 0));
+          canvas?.add(addArrow(498, 153, 0));
+          canvas?.add(addArrow(664, 231, 90));
+          canvas?.add(addArrow(548, 362, 180));
+          addText(105,130);
+          addText(338,130);
+          addText(567,130);
+          addText(341,294);
+          addText(571,294);
+          break;
+        case 6:
+          addRectangle(96,124,150,100);
+          addRectangle(332,124,150,100);
+          addRectangle(562,124,150,100);
+          addRectangle(332,288,150,100);
+          addRectangle(562,288,150,100);
+          addRectangle(96,288,150,100);
+          canvas?.add(addArrow(264, 153, 0));
+          canvas?.add(addArrow(498, 153, 0));
+          canvas?.add(addArrow(664, 231, 90));
+          canvas?.add(addArrow(548, 362, 180));
+          canvas?.add(addArrow(312, 362, 180));
+          addText(105,130);
+          addText(338,130);
+          addText(567,130);
+          addText(341,294);
+          addText(571,294);
+          addText(105,294);
+          break;
+        default:
+          break;
+      }
   }
 
   return {
@@ -655,5 +912,7 @@ Integer nec odio.`;
     addFunnel,
     addPyramid,
     addCycle,
+    addTimeline,
+    addProcess
   };
 }

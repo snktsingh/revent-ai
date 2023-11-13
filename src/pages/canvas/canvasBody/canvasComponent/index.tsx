@@ -44,7 +44,9 @@ const CanvasComponent: React.FC = () => {
     addTable,
     addFunnel,
     addPyramid,
-    addCycle
+    addCycle,
+    addTimeline,
+    addProcess
   } = useAllElements();
 
   const { color, textColor, borderColor } = useAppSelector(
@@ -65,6 +67,7 @@ const CanvasComponent: React.FC = () => {
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Delete' && canvas.getActiveObject()) {
+      
         canvas.remove(canvas.getActiveObject()!);
         canvas.discardActiveObject();
         canvas.renderAll();
@@ -240,10 +243,19 @@ const CanvasComponent: React.FC = () => {
     addCycle(levels,canvas);
   }
 
+  ContentElements.handleTimeline = (steps: number) => {
+    addTimeline(steps,canvas);
+  }
 
+  ContentElements.handleProcess = (steps : number) => {
+    addProcess(steps,canvas);
+  }
+
+ 
 
   return (
     <CanvasContainer ref={Container}>
+      <button onClick={()=> console.log(canvasRef.current?.getActiveObject())}>GET DETAILS</button>
       <canvas id="canvas"></canvas>
     </CanvasContainer>
   );
