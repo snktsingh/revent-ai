@@ -396,57 +396,94 @@ Integer nec odio.`;
 
   const addPyramid = (lev: number, size: number, canvas: fabric.Canvas | null) => {
 
+    let textsList : fabric.Textbox[] = [];
+    let textLeft:number;
+    switch (lev) {
+      case 3: 
+        textLeft = 316
+        break;
+      case 4: 
+        textLeft = 360
+        break;
+      case 5: 
+        textLeft = 408
+        break;
+      default:
+        break;
+    }
     function createLevels(n: number) {
       let x1 = -140;
       let x2 = 140;
-      let x3 = 120;
-      let x4 = -120;
+      let x3 = 100;
+      let x4 = -100;
       let levels: fabric.Object[] = [];
-      let trapTop = 60;
-      let textTop = n * 23;
-      for (let i = 1; i <= n; i++) {
+      let trapTop = 0;
+      let textTop = 219;
+      for (let i = 1; i < n; i++) {
         let trapezoid = new fabric.Polygon([
           { x: x1, y: 0 },
           { x: x2, y: 0 },
-          { x: x3, y: -50 },
-          { x: x4, y: -50 },
+          { x: x3, y: -60 },
+          { x: x4, y: -60 },
         ], {
           fill: 'transparent',
           stroke: 'black',
           top: trapTop,
         });
 
-        let text = new fabric.Textbox(`Level ${n - i + 1}`, {
-          fontSize: 18,
-          left: -70,
-          width: 140,
-          top: textTop,
-          editable: true,
-          textAlign: 'center',
-        });
+        const text = new fabric.Textbox(`Level ${i+1}`,{
+          fontSize : 18,
+          left:textLeft,
+          top : textTop,
+          width:100
+        })
 
-        textTop = textTop - 50;
-        trapTop = trapTop - 50;
-        x1 = x1 + 20;
-        x2 = x2 - 20;
-        x3 = x3 - 20;
-        x4 = x4 + 20
+        textTop+=60;
+
+        trapTop = trapTop + 60;
+        x1 = x1 - 40;
+        x2 = x2 + 40;
+        x3 = x3 + 40;
+        x4 = x4 - 40
+        textsList.push(text);
         levels.push(trapezoid);
-        levels.push(text);
       }
 
+      let triangle = new fabric.Triangle({
+        width: 200,
+        height: 150,
+        left:-101,
+        top: -150,
+        fill:'transparent',
+        stroke:'black'
+      });
+
+      const text = new fabric.Textbox('Level 1',{
+        fontSize : 18,
+        left : textLeft,
+        top : 160,
+        width:100
+      })
+
+      levels.push(triangle);
+      textsList.push(text);
       return levels;
     }
 
     let pyramidLevels = createLevels(lev);
 
     let group = new fabric.Group(pyramidLevels, {
-      left: 150,
-      top: 100,
+      left: 173,
+      top: 46,
     });
 
+    
+    
     canvas?.add(group);
     canvas?.renderAll();
+    textsList.forEach((el)=>{
+      canvas?.add(el)
+    })
   }
 
   //funnel
