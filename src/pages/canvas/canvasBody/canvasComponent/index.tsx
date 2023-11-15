@@ -33,6 +33,7 @@ const CanvasComponent: React.FC = () => {
     heading, 
     paragraph, 
     BulletText, 
+    addQuotes,
     ImageUploader, 
     CustomBorderIcons, 
     ColorFillForObjects,
@@ -46,7 +47,8 @@ const CanvasComponent: React.FC = () => {
     addPyramid,
     addCycle,
     addTimeline,
-    addProcess
+    addProcess,
+    addList
   } = useAllElements();
 
   const { color, textColor, borderColor } = useAppSelector(
@@ -66,9 +68,14 @@ const CanvasComponent: React.FC = () => {
     fabric.Object.prototype.borderColor = `${theme.colorSchemes.light.palette.primary.main}`;
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Delete' && canvas.getActiveObject()) {
-      
+      if (e.key === 'Delete' && canvas.getActiveObject()) { 
         canvas.remove(canvas.getActiveObject()!);
+        const groupObjects = (canvas.getActiveObject()  as fabric.Group)?.getObjects();
+
+        groupObjects.forEach((obj:any) => {
+          canvas.remove(obj);
+        });
+     
         canvas.discardActiveObject();
         canvas.renderAll();
       }
@@ -106,7 +113,16 @@ const CanvasComponent: React.FC = () => {
     elementData[6].onClick = () => {
       ImageUploader(canvas);
     };
-
+    elementData[8].onClick = () => {
+      let text= addQuotes()
+      canvasRef.current?.add(text);
+      canvasRef.current?.setActiveObject(text);
+      text?.enterEditing()
+      canvas?.renderAll();
+    };
+    elementData[9].onClick = () => {
+      addList(canvas);
+    };
     CustomBorderIcons(canvas);
     return () => {
       canvas.dispose();

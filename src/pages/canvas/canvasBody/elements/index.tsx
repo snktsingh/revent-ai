@@ -165,7 +165,7 @@ Integer nec odio.`;
     img.src = DeleteX;
     var cloneImg = new Image();
     cloneImg.src = Copy;
-    fabric.Object.prototype.controls.deleteControl = new fabric.Control({
+    fabric.Object.prototype.controls.deleteControl = fabric.Textbox.prototype.controls.deleteControl= new fabric.Control({
       x: 0.5,
       y: -0.5,
       offsetY: -16,
@@ -175,7 +175,7 @@ Integer nec odio.`;
       render: renderIcon,
     });
 
-    fabric.Object.prototype.controls.clone = new fabric.Control({
+    fabric.Object.prototype.controls.clone = fabric.Textbox.prototype.controls.clone = new fabric.Control({
       x: -0.5,
       y: -0.5,
       offsetY: -16,
@@ -191,14 +191,16 @@ Integer nec odio.`;
       x: number,
       y: number
     ): boolean {
-      var target = transformData.target;
-
-      var canvas = target.canvas;
-      
-      
-      canvas?.remove(target);
-      canvas?.requestRenderAll();
-
+      canvas?.remove(canvas?.getActiveObject()!);
+      const groupObjects = (canvas?.getActiveObject()  as fabric.Group)?.getObjects();
+      if(groupObjects){
+        groupObjects.forEach((obj:any) => {
+          canvas?.remove(obj);
+        });
+      }
+   
+      canvas?.discardActiveObject();
+      canvas?.renderAll();
       return true;
     }
 
@@ -208,13 +210,28 @@ Integer nec odio.`;
       x: number,
       y: number
     ): boolean {
-      var target = transformData.target;
-      var canvas = target.canvas;
-      target.clone(function (cloned: fabric.Object) {
-        cloned.left! += 20;
-        cloned.top! += 20;
-        canvas?.add(cloned);
-      });
+      const target = transformData.target;
+      const canvas = target.canvas;
+    
+      if (target instanceof fabric.Group) {
+        // Clone each object in the group
+        const groupObjects = target.getObjects();
+        groupObjects.forEach((obj) => {
+          obj.clone(function (cloned: fabric.Object) {
+            cloned.left! += cloned.width+200;
+            cloned.top! += 200;
+            canvas?.add(cloned);
+          });
+        });
+      } else {
+        // Clone a single object
+        target.clone(function (cloned: fabric.Object) {
+          cloned.left! += 20;
+          cloned.top! += 20;
+          canvas?.add(cloned);
+        });
+      }
+    
       return true;
     }
 
@@ -311,6 +328,25 @@ Integer nec odio.`;
     }
   };
 
+  //Quotes
+
+  const addQuotes = () => {
+    let text = new fabric.IText("❝Quotation mark❞", {
+      left: 150,
+      top: 200,
+      width: 300,
+      height: 40,
+      fill: 'black',
+      fontSize: 28,
+      hasRotatingPoint: false,
+      selectable: true,
+      cursorColor:theme.colorSchemes.light.palette.primary.main
+    })
+
+    
+    return text;
+  }
+
   //table
   const fabricDblClick = function (obj: any, handler: any) {
     return function () {
@@ -343,69 +379,147 @@ Integer nec odio.`;
     const tableLeft = 50;
     const tableTop = 50;
 
-    function createCell(left: number, top: number, i: number, j: number) {
-      const cell = new fabric.Rect({
-        width: cellWidth,
-        height: cellHeight,
-        fill: 'transparent',
-        stroke: 'black',
-        strokeWidth: 0.5,
-        selectable: false,
-        left: tableLeft + (j * cellWidth),
-        top: tableTop + (i * cellHeight),
-      });
+    // function createCell(left: number, top: number, i: number, j: number) {
+    //   const cell = new fabric.Rect({
+    //     width: cellWidth,
+    //     height: cellHeight,
+    //     fill: 'transparent',
+    //     stroke: 'black',
+    //     strokeWidth: 0.5,
+    //     selectable: false,
+    //     left: tableLeft + (j * cellWidth),
+    //     top: tableTop + (i * cellHeight),
+    //   });
 
-      const text = new fabric.Textbox(`Cell ${i + 1},${j + 1}`, {
-        left: cell.left! + cellPadding,
-        top: cell.top! + cellPadding,
-        fontSize: 16,
-        width: cellWidth - (2 * cellPadding),
-        height: cellHeight - (2 * cellPadding),
-        fontFamily: 'Arial',
-        editable: true,
-        hasControls: false,
-        hasBorders: false,
-      });
+    //   const text = new fabric.Textbox(`Cell ${i + 1},${j + 1}`, {
+    //     left: cell.left! + cellPadding,
+    //     top: cell.top! + cellPadding,
+    //     fontSize: 16,
+    //     width: cellWidth - (2 * cellPadding),
+    //     height: cellHeight - (2 * cellPadding),
+    //     fontFamily: 'Arial',
+    //     editable: true,
+    //     hasControls: false,
+    //     hasBorders: false,
+    //   });
+    //   canvas.add(text)
+    //   canvas.add(cell)
+    //   const table = new fabric.Group([cell, text], {
+    //     hasBorders: true,
+    //     hasControls: true,
+    //   });
 
-      const table = new fabric.Group([cell, text], {
+    // table.on('mousedown', fabricDblClick(table, function (obj: any) {
+    //   ungroup(table);
+    //   canvas?.setActiveObject(text);
+    //   text.enterEditing();
+    //   text.selectAll();
+    // }));
+
+
+
+    //   return cell;
+    // }
+
+
+    // for (let i = 0; i < rows; i++) {
+    //   for (let j = 0; j < cols; j++) {
+    //     const cell = createCell(50, 50, i, j);
+    //     const group = new fabric.Group([cell]);
+    //     canvas?.add(group)
+    //   }
+    // }
+
+    function createTable() {
+      const tableElements = [];
+      const texts = [];
+      for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+          const cell = new fabric.Rect({
+            width: cellWidth,
+            height: cellHeight,
+            fill: 'transparent',
+            stroke: 'black',
+            left: tableLeft + (j * cellWidth),
+            top: tableTop + (i * cellHeight),
+            selectable: false,
+            hasBorders: false,
+          });
+
+          const text = new fabric.Textbox(`Row ${i + 1}, Col ${j + 1}`, {
+            width: cellWidth - (2 * cellPadding),
+            height: cellHeight - (2 * cellPadding),
+            fontSize: 18,
+            textAlign: 'center',
+            left: cell.left! + cellPadding,
+            top: cell.top! + cellPadding,
+            selectable: true,
+            backgroundColor: 'white',
+
+          });
+
+        
+          tableElements.push(cell);
+          texts?.push(text);
+        }
+      }
+
+      const tableGroup = new fabric.Group(tableElements, {
+        left: tableLeft,
+        top: tableTop,
         hasBorders: true,
         hasControls: true,
       });
 
-      table.on('mousedown', fabricDblClick(table, function (obj: any) {
-        ungroup(table);
-        canvas?.setActiveObject(text);
-        text.enterEditing();
-        text.selectAll();
-      }));
+      canvas?.add(tableGroup);
+      texts.forEach((el)=>{
 
+        canvas?.add(el);
+        el.setControlsVisibility({
+          mt: false,
+          mb: false,
+          ml: false,
+          mr: false,
+          tr: true,
+          tl: true,
+          br: true,
+          bl: true,
+          mtr: false,
+        })
+      })
 
+      tableGroup.setControlsVisibility({
+        tl: true,
+        tr: true,
+        bl: true,
+        br: true,
+        ml: false,
+        mt: false,
+        mr: false,
+        mb: false,
+        mtr: false,
+      });
 
-      return table;
     }
 
-    for (let i = 0; i < rows; i++) {
-      for (let j = 0; j < cols; j++) {
-        const cell = createCell(50, 50, i, j);
-        canvas?.add(cell)
-      }
-    }
+    createTable();
+
   };
 
   //pyramid
 
   const addPyramid = (lev: number, size: number, canvas: fabric.Canvas | null) => {
 
-    let textsList : fabric.Textbox[] = [];
-    let textLeft:number;
+    let textsList: fabric.Textbox[] = [];
+    let textLeft: number;
     switch (lev) {
-      case 3: 
+      case 3:
         textLeft = 316
         break;
-      case 4: 
+      case 4:
         textLeft = 360
         break;
-      case 5: 
+      case 5:
         textLeft = 408
         break;
       default:
@@ -431,14 +545,14 @@ Integer nec odio.`;
           top: trapTop,
         });
 
-        const text = new fabric.Textbox(`Level ${i+1}`,{
-          fontSize : 18,
-          left:textLeft,
-          top : textTop,
-          width:100
+        const text = new fabric.Textbox(`Level ${i + 1}`, {
+          fontSize: 18,
+          left: textLeft,
+          top: textTop,
+          width: 100
         })
 
-        textTop+=60;
+        textTop += 60;
 
         trapTop = trapTop + 60;
         x1 = x1 - 40;
@@ -452,17 +566,17 @@ Integer nec odio.`;
       let triangle = new fabric.Triangle({
         width: 200,
         height: 150,
-        left:-101,
+        left: -101,
         top: -150,
-        fill:'transparent',
-        stroke:'black'
+        fill: 'transparent',
+        stroke: 'black'
       });
 
-      const text = new fabric.Textbox('Level 1',{
-        fontSize : 18,
-        left : textLeft,
-        top : 160,
-        width:100
+      const text = new fabric.Textbox('Level 1', {
+        fontSize: 18,
+        left: textLeft,
+        top: 160,
+        width: 100
       })
 
       levels.push(triangle);
@@ -477,11 +591,11 @@ Integer nec odio.`;
       top: 46,
     });
 
-    
-    
+
+
     canvas?.add(group);
     canvas?.renderAll();
-    textsList.forEach((el)=>{
+    textsList.forEach((el) => {
       canvas?.add(el)
     })
   }
@@ -489,27 +603,27 @@ Integer nec odio.`;
   //funnel
 
   const addFunnel = (lev: number, size: number, canvas: fabric.Canvas | null) => {
-    let rectTop:number;
-    let rectLeft:number;
-    let rectWidth:number;
-    let rectHeight:number;
+    let rectTop: number;
+    let rectLeft: number;
+    let rectWidth: number;
+    let rectHeight: number;
 
     switch (lev) {
       case 3:
-        rectTop=34;
-        rectLeft=-80;
-        rectWidth=160;
-        rectHeight=100;
+        rectTop = 34;
+        rectLeft = -80;
+        rectWidth = 160;
+        rectHeight = 100;
         break;
       case 4:
-        rectLeft=-61;
-        rectWidth=121;
-        rectHeight=100;
+        rectLeft = -61;
+        rectWidth = 121;
+        rectHeight = 100;
         break;
       case 5:
-        rectLeft=-40;
-        rectWidth=80;
-        rectHeight=100;
+        rectLeft = -40;
+        rectWidth = 80;
+        rectHeight = 100;
         break;
       default:
         break;
@@ -560,7 +674,7 @@ Integer nec odio.`;
       top: 50,
     });
 
-    function addText(left:number,top:number,textC:string){
+    function addText(left: number, top: number, textC: string) {
       let text = new fabric.Textbox(textC, {
         fontSize: 18,
         left,
@@ -573,35 +687,35 @@ Integer nec odio.`;
     }
 
     canvas?.add(group);
-    switch(lev){
+    switch (lev) {
       case 3:
-        addText(126,66,'Level 1');
-        addText(126,115,'Level 2');
-        addText(126,166,'Level 3');  
+        addText(126, 66, 'Level 1');
+        addText(126, 115, 'Level 2');
+        addText(126, 166, 'Level 3');
         break;
       case 4:
-        addText(126,66,'Level 1');
-        addText(126,115,'Level 2');
-        addText(126,166,'Level 3');  
-        addText(126,214,'Level 4');  
+        addText(126, 66, 'Level 1');
+        addText(126, 115, 'Level 2');
+        addText(126, 166, 'Level 3');
+        addText(126, 214, 'Level 4');
         break;
       case 5:
-        addText(126,66,'Level 1');
-        addText(126,115,'Level 2');
-        addText(126,166,'Level 3');  
-        addText(126,214,'Level 4');  
-        addText(126,261,'Level 5');  
+        addText(126, 66, 'Level 1');
+        addText(126, 115, 'Level 2');
+        addText(126, 166, 'Level 3');
+        addText(126, 214, 'Level 4');
+        addText(126, 261, 'Level 5');
         break;
       case 6:
-        addText(126,66,'Level 1');
-        addText(126,115,'Level 2');
-        addText(126,166,'Level 3');  
-        addText(126,214,'Level 4');  
-        addText(126,261,'Level 5');      
-        addText(126,314,'Level 6');    
+        addText(126, 66, 'Level 1');
+        addText(126, 115, 'Level 2');
+        addText(126, 166, 'Level 3');
+        addText(126, 214, 'Level 4');
+        addText(126, 261, 'Level 5');
+        addText(126, 314, 'Level 6');
         break;
 
-      default :
+      default:
         break;
     }
 
@@ -681,7 +795,7 @@ Integer nec odio.`;
 
 
     }
-    
+
     switch (levels) {
       case 3:
         createCircleWithText(100, 100);
@@ -689,7 +803,7 @@ Integer nec odio.`;
         canvas?.add(addArrow(197, 208, 56))
         canvas?.add(addArrow(337, 232, 120))
         createCircleWithText(292, 100);
-        createCircleWithText(195, 258);  
+        createCircleWithText(195, 258);
         break;
       case 4:
         createCircleWithText(305, 35);
@@ -727,7 +841,7 @@ Integer nec odio.`;
         canvas?.add(addArrow(614, 301, 124))
         canvas?.add(addArrow(436, 408, 180))
         break;
-    
+
       default:
         break;
     }
@@ -735,23 +849,23 @@ Integer nec odio.`;
 
   //Timeline
 
-  const addTimeline = (steps: number, canvas: fabric.Canvas | null)=>{
+  const addTimeline = (steps: number, canvas: fabric.Canvas | null) => {
 
-    function addText(left:number,top:number,width:number,fontSize:number,textContent: string){
+    function addText(left: number, top: number, width: number, fontSize: number, textContent: string) {
       let text = new fabric.Textbox(textContent, {
-          fontSize,
-          originX: 'left',
-          originY: 'top',
-          top,
-          left,
-          width,
-          fill:'black'
+        fontSize,
+        originX: 'left',
+        originY: 'top',
+        top,
+        left,
+        width,
+        fill: 'black'
       });
       return canvas?.add(text);
     }
 
-    function addLine(left:number,top:number,width:number){
-      let line = new fabric.Line([50, 100, width, 100],{
+    function addLine(left: number, top: number, width: number) {
+      let line = new fabric.Line([50, 100, width, 100], {
         left,
         top,
         strokeWidth: 3,
@@ -760,80 +874,80 @@ Integer nec odio.`;
       return canvas?.add(line);
     }
 
-    function addCircle(left:number,top:number){
+    function addCircle(left: number, top: number) {
       let circle = new fabric.Circle({
         radius: 20,
-        fill:theme.colorSchemes.light.palette.primary.main,
+        fill: theme.colorSchemes.light.palette.primary.main,
         top,
         left,
         stroke: theme.colorSchemes.light.palette.common.black
       })
       return canvas?.add(circle);
     }
-    
+
 
     switch (steps) {
       case 3:
-        addLine(126,171,150);
-        addLine(267,171,200);
-        addLine(456,171,200);
-        addCircle(227,152);
-        addCircle(418,152);
-        addCircle(608,152);
-        addText(199,126,100,14,'Add Timeline');
-        addText(398,126,100,14,'Add Timeline');
-        addText(582,126,100,14,'Add Timeline');
-        addText(208,205,150,16,'Add Text');
-        addText(404,205,150,16,'Add Text');
-        addText(596,205,150,16,'Add Text');
+        addLine(126, 171, 150);
+        addLine(267, 171, 200);
+        addLine(456, 171, 200);
+        addCircle(227, 152);
+        addCircle(418, 152);
+        addCircle(608, 152);
+        addText(199, 126, 100, 14, 'Add Timeline');
+        addText(398, 126, 100, 14, 'Add Timeline');
+        addText(582, 126, 100, 14, 'Add Timeline');
+        addText(208, 205, 150, 16, 'Add Text');
+        addText(404, 205, 150, 16, 'Add Text');
+        addText(596, 205, 150, 16, 'Add Text');
         break;
       case 4:
-        addLine(39,176,150);
-        addLine(180,176,200);
-        addLine(369,176,200);
-        addLine(562,176,200);
-        addCircle(140,157);
-        addCircle(331,157);
-        addCircle(521,157);
-        addCircle(712,157);
-        addText(112,131,100,14,'Add Timeline');
-        addText(311,131,100,14,'Add Timeline');
-        addText(499,131,100,14,'Add Timeline');
-        addText(684,131,100,14,'Add Timeline');
-        addText(121,210,150,16,'Add Text');
-        addText(317,210,150,16,'Add Text');
-        addText(509,210,150,16,'Add Text');
-        addText(701,210,150,16,'Add Text');
+        addLine(39, 176, 150);
+        addLine(180, 176, 200);
+        addLine(369, 176, 200);
+        addLine(562, 176, 200);
+        addCircle(140, 157);
+        addCircle(331, 157);
+        addCircle(521, 157);
+        addCircle(712, 157);
+        addText(112, 131, 100, 14, 'Add Timeline');
+        addText(311, 131, 100, 14, 'Add Timeline');
+        addText(499, 131, 100, 14, 'Add Timeline');
+        addText(684, 131, 100, 14, 'Add Timeline');
+        addText(121, 210, 150, 16, 'Add Text');
+        addText(317, 210, 150, 16, 'Add Text');
+        addText(509, 210, 150, 16, 'Add Text');
+        addText(701, 210, 150, 16, 'Add Text');
         break;
       case 5:
-        addLine(126,171,150);
-        addLine(267,171,200);
-        addLine(456,171,200);
-        addText(199,126,100,14,'Add Timeline');
-        addText(398,126,100,14,'Add Timeline');
-        addText(582,126,100,14,'Add Timeline');
-        addCircle(227,152);
-        addCircle(418,152);
-        addCircle(608,152);
-        addText(208,205,150,16,'Add Text');
-        addText(404,205,150,16,'Add Text');
-        addText(596,205,150,16,'Add Text');
+        addLine(126, 171, 150);
+        addLine(267, 171, 200);
+        addLine(456, 171, 200);
+        addText(199, 126, 100, 14, 'Add Timeline');
+        addText(398, 126, 100, 14, 'Add Timeline');
+        addText(582, 126, 100, 14, 'Add Timeline');
+        addCircle(227, 152);
+        addCircle(418, 152);
+        addCircle(608, 152);
+        addText(208, 205, 150, 16, 'Add Text');
+        addText(404, 205, 150, 16, 'Add Text');
+        addText(596, 205, 150, 16, 'Add Text');
         break;
       case 6:
-        addLine(126,171,150);
-        addLine(267,171,200);
-        addLine(456,171,200);
-        addCircle(227,152);
-        addCircle(418,152);
-        addCircle(608,152);
-        addText(199,126,100,14,'Add Timeline');
-        addText(398,126,100,14,'Add Timeline');
-        addText(582,126,100,14,'Add Timeline');
-        addText(208,205,150,16,'Add Text');
-        addText(404,205,150,16,'Add Text');
-        addText(596,205,150,16,'Add Text');
+        addLine(126, 171, 150);
+        addLine(267, 171, 200);
+        addLine(456, 171, 200);
+        addCircle(227, 152);
+        addCircle(418, 152);
+        addCircle(608, 152);
+        addText(199, 126, 100, 14, 'Add Timeline');
+        addText(398, 126, 100, 14, 'Add Timeline');
+        addText(582, 126, 100, 14, 'Add Timeline');
+        addText(208, 205, 150, 16, 'Add Text');
+        addText(404, 205, 150, 16, 'Add Text');
+        addText(596, 205, 150, 16, 'Add Text');
         break;
-    
+
       default:
         break;
     }
@@ -842,93 +956,143 @@ Integer nec odio.`;
 
   //Process
 
-  function addProcess(steps: number, canvas: fabric.Canvas | null){
-      function addRectangle(left:number,top:number,width:number,height:number){
-        let rect = new fabric.Rect({
-          left: left,
-          top: top,
-          width,
-          height,
-          fill: theme.colorSchemes.light.palette.primary.main,
-          rx:10,
-          ry:10
-        })
-        return canvas?.add(rect);
-      }
+  function addProcess(steps: number, canvas: fabric.Canvas | null) {
+    function addRectangle(left: number, top: number, width: number, height: number) {
+      let rect = new fabric.Rect({
+        left: left,
+        top: top,
+        width,
+        height,
+        fill: theme.colorSchemes.light.palette.primary.main,
+        rx: 10,
+        ry: 10
+      })
+      return canvas?.add(rect);
+    }
 
-      function addText(left:number,top:number) {
-        const text = new fabric.Textbox("Add Text",{
-          fontSize : 14,
-          left,
-          top,
-          fill:'white',
-          width:140
-        });
-        return canvas?.add(text);
-      }
+    function addText(left: number, top: number) {
+      const text = new fabric.Textbox("Add Text", {
+        fontSize: 14,
+        left,
+        top,
+        fill: 'white',
+        width: 140
+      });
+      return canvas?.add(text);
+    }
 
-      switch (steps) {
-        case 3:
-          addRectangle(96,124,150,100);
-          addRectangle(332,124,150,100);
-          addRectangle(562,124,150,100);
-          canvas?.add(addArrow(264, 153, 0));
-          canvas?.add(addArrow(498, 153, 0));
-          addText(105,130);
-          addText(338,130);
-          addText(567,130);
-          break;
-        case 4:
-          addRectangle(11,130,150,100);
-          addRectangle(228,130,150,100);
-          addRectangle(441,130,150,100);
-          addRectangle(652,130,150,100);
-          canvas?.add(addArrow(169, 154, 0));
-          canvas?.add(addArrow(388, 154, 0));
-          canvas?.add(addArrow(598, 154, 0));
-          addText(20,136);
-          addText(239,136);
-          addText(450,136);
-          addText(661,136);
-          break;
-        case 5:
-          addRectangle(96,124,150,100);
-          addRectangle(332,124,150,100);
-          addRectangle(562,124,150,100);
-          addRectangle(332,288,150,100);
-          addRectangle(562,288,150,100);
-          canvas?.add(addArrow(264, 153, 0));
-          canvas?.add(addArrow(498, 153, 0));
-          canvas?.add(addArrow(664, 231, 90));
-          canvas?.add(addArrow(548, 362, 180));
-          addText(105,130);
-          addText(338,130);
-          addText(567,130);
-          addText(341,294);
-          addText(571,294);
-          break;
-        case 6:
-          addRectangle(96,124,150,100);
-          addRectangle(332,124,150,100);
-          addRectangle(562,124,150,100);
-          addRectangle(332,288,150,100);
-          addRectangle(562,288,150,100);
-          addRectangle(96,288,150,100);
-          canvas?.add(addArrow(264, 153, 0));
-          canvas?.add(addArrow(498, 153, 0));
-          canvas?.add(addArrow(664, 231, 90));
-          canvas?.add(addArrow(548, 362, 180));
-          canvas?.add(addArrow(312, 362, 180));
-          addText(105,130);
-          addText(338,130);
-          addText(567,130);
-          addText(341,294);
-          addText(571,294);
-          addText(105,294);
-          break;
-        default:
-          break;
+    switch (steps) {
+      case 3:
+        addRectangle(96, 124, 150, 100);
+        addRectangle(332, 124, 150, 100);
+        addRectangle(562, 124, 150, 100);
+        canvas?.add(addArrow(264, 153, 0));
+        canvas?.add(addArrow(498, 153, 0));
+        addText(105, 130);
+        addText(338, 130);
+        addText(567, 130);
+        break;
+      case 4:
+        addRectangle(11, 130, 150, 100);
+        addRectangle(228, 130, 150, 100);
+        addRectangle(441, 130, 150, 100);
+        addRectangle(652, 130, 150, 100);
+        canvas?.add(addArrow(169, 154, 0));
+        canvas?.add(addArrow(388, 154, 0));
+        canvas?.add(addArrow(598, 154, 0));
+        addText(20, 136);
+        addText(239, 136);
+        addText(450, 136);
+        addText(661, 136);
+        break;
+      case 5:
+        addRectangle(96, 124, 150, 100);
+        addRectangle(332, 124, 150, 100);
+        addRectangle(562, 124, 150, 100);
+        addRectangle(332, 288, 150, 100);
+        addRectangle(562, 288, 150, 100);
+        canvas?.add(addArrow(264, 153, 0));
+        canvas?.add(addArrow(498, 153, 0));
+        canvas?.add(addArrow(664, 231, 90));
+        canvas?.add(addArrow(548, 362, 180));
+        addText(105, 130);
+        addText(338, 130);
+        addText(567, 130);
+        addText(341, 294);
+        addText(571, 294);
+        break;
+      case 6:
+        addRectangle(96, 124, 150, 100);
+        addRectangle(332, 124, 150, 100);
+        addRectangle(562, 124, 150, 100);
+        addRectangle(332, 288, 150, 100);
+        addRectangle(562, 288, 150, 100);
+        addRectangle(96, 288, 150, 100);
+        canvas?.add(addArrow(264, 153, 0));
+        canvas?.add(addArrow(498, 153, 0));
+        canvas?.add(addArrow(664, 231, 90));
+        canvas?.add(addArrow(548, 362, 180));
+        canvas?.add(addArrow(312, 362, 180));
+        addText(105, 130);
+        addText(338, 130);
+        addText(567, 130);
+        addText(341, 294);
+        addText(571, 294);
+        addText(105, 294);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const addList = (canvas: fabric.Canvas | null) => {
+
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/**';
+    fileInput.click();
+
+    let file;
+    let reader = new FileReader();
+    fileInput.addEventListener('change', e => {
+      file = (e.target as HTMLInputElement)?.files?.[0];
+      if (file) {
+        reader.onload = () => {
+          if (canvas) {
+
+            fabric.Image.fromURL(reader.result as string, img => {
+              const fixedWidth = 100; // Set the fixed width you desire
+              const fixedHeight = 120; // Set the fixed height you desire
+
+              img.scaleToWidth(fixedWidth);
+              img.scaleToHeight(fixedHeight);
+
+              img.set({
+                left: 100,
+                top: 100,
+
+              });
+
+              const text = new fabric.Textbox('Text', {
+                fontSize: 20,
+                width: 100,
+                height: 100,
+                fill: 'black',
+                left: 100,
+                top: 230,
+              })
+
+              canvas?.add(img);
+              canvas?.add(text);
+              canvas?.renderAll();
+            });
+          }
+        };
+        reader.readAsDataURL(file);
       }
+    });
+
+
   }
 
   return {
@@ -937,6 +1101,7 @@ Integer nec odio.`;
     heading,
     paragraph,
     BulletText,
+    addQuotes,
     ImageUploader,
     CustomBorderIcons,
     ColorFillForObjects,
@@ -950,6 +1115,7 @@ Integer nec odio.`;
     addPyramid,
     addCycle,
     addTimeline,
-    addProcess
+    addProcess,
+    addList
   };
 }
