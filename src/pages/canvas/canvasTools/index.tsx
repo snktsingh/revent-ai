@@ -46,6 +46,7 @@ import {
   shadesData,
 } from '../canvasBody/elementData';
 import {
+  addCanvas,
   setBorderColor,
   setColor,
   setTextColor,
@@ -56,7 +57,7 @@ import ColorizeOutlinedIcon from '@mui/icons-material/ColorizeOutlined';
 const CanvasTools = () => {
   const dispatch = useAppDispatch();
   const newKey = useAppSelector(state => state.slide);
-  const { color, textColor, borderColor } = useAppSelector(
+  const { color, textColor, borderColor,canvasList } = useAppSelector(
     state => state.canvas
   );
   const obj = { key: newKey.nextKey, name: `Slide ${newKey.nextKey}` };
@@ -162,7 +163,11 @@ const CanvasTools = () => {
             <p>Change Template</p>
           </Stack>
         </ToolOutlinedButton>
-        <ToolOutlinedButton onClick={() => dispatch(addSlide(obj))}>
+        <ToolOutlinedButton onClick={() => {
+          dispatch(addCanvas());
+          console.log(canvasList);
+          dispatch(addSlide(obj));
+          }}>
           <Stack direction="row" spacing={1}>
             <img src={Add} />
             <p>New Slide</p>
@@ -216,7 +221,7 @@ const CanvasTools = () => {
               <ColorGrid>
                 {shadesData.map(color => {
                   return (
-                    <span style={{ display: 'flex', flexDirection: 'column' }}>
+                    <span key={color.shade1} style={{ display: 'flex', flexDirection: 'column' }}>
                       <ColorItem
                         key={color.shade1}
                         style={{ backgroundColor: color.shade1 }}
@@ -324,7 +329,7 @@ const CanvasTools = () => {
                     {shadesData.map(color => {
                       return (
                         <span
-                          style={{ display: 'flex', flexDirection: 'column' }}
+                        key={color.shade1} style={{ display: 'flex', flexDirection: 'column' }}
                         >
                           <ColorItem
                             key={color.shade1}
@@ -426,7 +431,7 @@ const CanvasTools = () => {
             <ColorGrid>
               {shadesData.map(color => {
                 return (
-                  <span style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span key={color.shade1} style={{ display: 'flex', flexDirection: 'column' }}>
                     <ColorItem
                       key={color.shade1}
                       style={{ backgroundColor: color.shade1 }}

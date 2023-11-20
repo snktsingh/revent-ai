@@ -9,7 +9,6 @@ export default function useAllShapes() {
     stroke: theme.colorSchemes.light.palette.primary.main,
     top: 100,
     left: 100,
-    type: 'shape',
   });
 
   const addLine = new fabric.Line([10, 10, 50, 50], {
@@ -23,7 +22,6 @@ export default function useAllShapes() {
     stroke: theme.colorSchemes.light.palette.primary.main,
     top: 100,
     left: 100,
-    type: 'shape',
   });
 
   const addTriangle = new fabric.Triangle({
@@ -33,7 +31,6 @@ export default function useAllShapes() {
     stroke: theme.colorSchemes.light.palette.primary.main,
     top: 100,
     left: 100,
-    type: 'shape',
   });
 
   const starPoints = [];
@@ -56,7 +53,6 @@ export default function useAllShapes() {
     stroke: theme.colorSchemes.light.palette.primary.main,
     left: 50,
     top: 50,
-    type: 'shape',
   });
 
   const rightArrowPoints = [
@@ -73,7 +69,6 @@ export default function useAllShapes() {
     fill: theme.colorSchemes.light.palette.primary.main,
     left: 50,
     top: 50,
-    type: 'shape',
   });
 
   const leftArrowPoints = [
@@ -90,7 +85,6 @@ export default function useAllShapes() {
     fill: theme.colorSchemes.light.palette.primary.main,
     left: 50,
     top: 50,
-    type: 'shape',
   });
 
   const addHexagon = new fabric.Polygon(
@@ -108,7 +102,6 @@ export default function useAllShapes() {
       strokeWidth: 1,
       left: 100,
       top: 100,
-      type: 'shape',
     }
   );
 
@@ -124,7 +117,6 @@ export default function useAllShapes() {
       fill: 'transparent',
       left: 200,
       top: 100,
-      type: 'shape',
     }
   );
   return {

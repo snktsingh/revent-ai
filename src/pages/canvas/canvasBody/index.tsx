@@ -37,12 +37,12 @@ import Templates from './templates';
 import { ThumbDownAltRounded, Widgets } from '@mui/icons-material';
 import CanvasComponent from './canvasComponent';
 import { CanvasVariant } from './canvasVariant';
-import { TableDetails, setTableDetails } from '@/redux/reducers/canvas';
+import { TableDetails, copyCanvasCopy, setTableDetails } from '@/redux/reducers/canvas';
 
 const CanvasBody = () => {
   const slide = useAppSelector(state => state.slide);
   const dispatch = useAppDispatch();
-
+  const {canvasJS} = useAppSelector(state => state.canvas);
   const [activeLike, setActiveLike] = useState(false);
   const [activeDislike, setActiveDislike] = useState(false);
   const [elementName, setElementName] = useState<string>("");
@@ -340,7 +340,8 @@ const CanvasBody = () => {
                 <IconButton onClick={() => dispatch(openModal())}>
                   <img src={Delete} />
                 </IconButton>
-                <IconButton>
+                <IconButton onClick={()=> dispatch(copyCanvasCopy(canvasJS.id))
+                }>
                   <img src={Copy} />
                 </IconButton>
                 <IconButton onClick={handleClick}>
@@ -493,8 +494,6 @@ const CanvasBody = () => {
           </Button>
         </DialogActions>
       </Dialog>
-
-
     </BodyContainer>
   );
 };

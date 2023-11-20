@@ -218,7 +218,7 @@ Integer nec odio.`;
         const groupObjects = target.getObjects();
         groupObjects.forEach((obj) => {
           obj.clone(function (cloned: fabric.Object) {
-            cloned.left! += cloned.width+200;
+            cloned.left! += cloned.width!+200;
             cloned.top! += 200;
             canvas?.add(cloned);
           });
@@ -737,7 +737,6 @@ Integer nec odio.`;
 
     const Arrow = new fabric.Polygon(ArrowPoints, {
       fill: theme.colorSchemes.light.palette.common.steelBlue,
-      type: 'shape',
       left,
       top,
       angle
@@ -786,14 +785,7 @@ Integer nec odio.`;
       });
 
       canvas?.add(CircleWithText);
-      CircleWithText.on('mousedown', fabricDblClick(CircleWithText, function (obj: any) {
-        unGroup(CircleWithText);
-        canvas?.setActiveObject(text);
-        text.enterEditing();
-        text.selectAll();
-      }));
-
-
+    
     }
 
     switch (levels) {
@@ -1080,6 +1072,7 @@ Integer nec odio.`;
                 fill: 'black',
                 left: 100,
                 top: 230,
+                textAlign:'center'
               })
 
               canvas?.add(img);

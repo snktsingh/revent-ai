@@ -22,7 +22,6 @@ export const EditSlideContainer = styled.div`
 export const ListSlideCard = styled(Card)`
   height: 14vh;
   width: 100%;
-  padding: 5%;
 `;
 
 export const ElementContainer = styled.div`
