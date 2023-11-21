@@ -31,7 +31,7 @@ const PopUpModal = (props: IPopUpModal) => {
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          You want to delete the slide {props.content}
+          You want to delete the slide {canvasJS.id}
         </DialogContentText>
       </DialogContent>
       <DialogActions>

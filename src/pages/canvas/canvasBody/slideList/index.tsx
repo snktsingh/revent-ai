@@ -18,51 +18,45 @@ export default function SlideList() {
     dispatch(setActiveCanvas(id));
   };
 
-  const getImg = (canvasJson: Object) => {
-    const canvas = new fabric.Canvas(null); 
-    try {
-      let imageURL;
-      canvas.loadFromJSON(canvasJson, () => {
-        canvas.width = 970;
-        canvas.height = 500;
-        imageURL = canvas.toDataURL();
-      })
-      return imageURL;
-    } catch (error) {
-      console.log(error);
-      return 'error'
-    }
+  const [imageURLs, setImageURLs] = useState<string[]>([]); // State to hold image URLs
+
+  const getImg = async (canvasJson: Object) => {
+    const canvas = new fabric.Canvas(null);
+
+    return new Promise<string>((resolve, reject) => {
+      try {
+        canvas.loadFromJSON(canvasJson, () => {
+          canvas.width = 970;
+          canvas.height = 500;
+          const imageURL = canvas.toDataURL();
+          resolve(imageURL);
+        });
+      } catch (error) {
+        console.log(error);
+        reject('Error occurred while loading canvas');
+      }
+    });
   };
 
- 
- 
-  
-  // return (
-  //   <SlideContainer>
-  //     {slide.listOfSlides.map((data, index) => {
-  //       return (
-  //         <div key={index}>
-  //           <SingleSliderContainer
-  //             onClick={() => {
-  //               dispatch(getSlidekey(data.key)), handleCardClick(index);
-  //             }}
-  //           >
-  //             <Stack direction="row" spacing={1}>
-  //               <p>{index + 1}</p>
-  //               <ListSlideCard
-  //                 className={isClicked === index ? 'clicked-card' : ''}
-  //               >
-  //                 {data.name}
-  //               </ListSlideCard>
-  //             </Stack>
-  //           </SingleSliderContainer>
-  //           <br />
-  //         </div>
-  //       );
-  //     })}
-  //     <br />
-  //   </SlideContainer>
-  // );
+  useEffect(() => {
+    const loadImages = async () => {
+      const urls: string[] = [];
+      for (const canvas of canvasList) {
+        try {
+          const imageURL = await getImg(canvas.canvas);
+          urls.push(imageURL);
+        } catch (error) {
+          console.error(error);
+          urls.push('error'); // Push placeholder for error cases
+        }
+      }
+      setImageURLs(urls);
+    };
+
+    loadImages();
+  }, [canvasList]);
+
+
   return (
     <SlideContainer>
       {canvasList.map((canvas,index) => {
@@ -80,7 +74,7 @@ export default function SlideList() {
                 <ListSlideCard
                   className={activeCanvasID == canvas.id ? 'clicked-card' : ''}
                 >
-                 <img src={getImg(canvas.canvas)} alt="canvas" style={{width:'100%',objectFit:'contain',height:'100%'}} />
+                 <img src={imageURLs[index] || 'placeholder-for-error'} alt={`canvas-${index}`} style={{width:'100%',objectFit:'contain',height:'100%'}} />
                 </ListSlideCard>
               </Stack>
             </SingleSliderContainer>

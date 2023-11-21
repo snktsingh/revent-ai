@@ -57,62 +57,30 @@ const CanvasComponent: React.FC = () => {
     state => state.canvas
   );
 
-  let c = {
-    "version": "4.3.0",
-    "objects": [
-        {
-            "type": "image",
-            "version": "5.3.0",
-            "originX": "left",
-            "originY": "top",
-            "left": 276.89,
-            "top": 123,
-            "width": 700,
-            "height": 374,
-            "fill": "rgb(0,0,0)",
-            "stroke": null,
-            "strokeWidth": 0,
-            "strokeDashArray": null,
-            "strokeLineCap": "butt",
-            "strokeDashOffset": 0,
-            "strokeLineJoin": "miter",
-            "strokeUniform": false,
-            "strokeMiterLimit": 4,
-            "scaleX": 0.5,
-            "scaleY": 0.5,
-            "angle": 0,
-            "flipX": false,
-            "flipY": false,
-            "opacity": 1,
-            "shadow": null,
-            "visible": true,
-            "backgroundColor": "",
-            "fillRule": "nonzero",
-            "paintFirst": "fill",
-            "globalCompositeOperation": "source-over",
-            "skewX": 0,
-            "skewY": 0,
-            "cropX": 0,
-            "cropY": 0,
-            "src": "https://www.yttags.com/blog/wp-content/uploads/2023/02/image-urls-for-testing.webp",
-            "crossOrigin": null,
-            "filters": []
-        }
-    ],
-    "background": "#fff"
-};
-
-
-  
 
   useEffect(() => {
     
-     const newCanvas = new fabric.Canvas('canvas');
-      newCanvas.clear()
+    const newCanvas = new fabric.Canvas('canvas');
+    //  newCanvas.clear()
+    
     
     newCanvas.loadFromJSON(canvasJS.canvas,()=>{
       canvasRef.current = newCanvas;
-      
+      newCanvas.setDimensions({ 
+        width: 970, 
+        height: 500,    
+      });
+      newCanvas.setBackgroundColor(`${theme.colorSchemes.light.palette.common.white}`, newCanvas.renderAll.bind(newCanvas));
+  
+      newCanvas.selectionColor = 'transparent';
+      newCanvas.selectionBorderColor = `${theme.colorSchemes.light.palette.primary.main}`;
+      newCanvas.selectionLineWidth = 1;
+      fabric.Object.prototype.cornerColor = `${theme.colorSchemes.light.palette.primary.main}`;
+      fabric.Object.prototype.borderColor = `${theme.colorSchemes.light.palette.primary.main}`;
+
+      CustomBorderIcons(newCanvas);
+   
+
       newCanvas.renderAll();
 
     }, (error:Error) => {
@@ -121,25 +89,13 @@ const CanvasComponent: React.FC = () => {
 
      const canvas = canvasRef.current!;
 
-
     // const canvas = new fabric.Canvas('canvas', {
     //   width: Container.current?.clientWidth || 0,
     //   height: Container.current?.clientHeight || 0,
     //   backgroundColor: `${theme.colorSchemes.light.palette.common.white}`,
     // });
 
-
-    canvas.setDimensions({ 
-      width: 970, 
-      height: 500,    
-    });
-    canvas.setBackgroundColor(`${theme.colorSchemes.light.palette.common.white}`, canvas.renderAll.bind(canvas));
-
-    canvas.selectionColor = 'transparent';
-    canvas.selectionBorderColor = `${theme.colorSchemes.light.palette.primary.main}`;
-    canvas.selectionLineWidth = 1;
-    fabric.Object.prototype.cornerColor = `${theme.colorSchemes.light.palette.primary.main}`;
-    fabric.Object.prototype.borderColor = `${theme.colorSchemes.light.palette.primary.main}`;
+    
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Delete' && canvas.getActiveObject()) { 
@@ -163,12 +119,11 @@ const CanvasComponent: React.FC = () => {
     //   });
     // });
     // canvasRef.current = canvas;
-
-    CustomBorderIcons(canvas);
     return () => {
-      canvas.dispose();
+      newCanvas.dispose();
       window.removeEventListener('resize', () => { });
     };
+    
   }, [canvasJS]);
 
   
@@ -178,7 +133,7 @@ const CanvasComponent: React.FC = () => {
       const onObjectModified = () => {
         const updatedCanvas = canvasRef.current?.toObject();
         const id = canvasJS.id;
-        console.log(updatedCanvas)
+        // console.log(canvasRef.current?.toDataURL())
         dispatch(updateCanvasInList({id,updatedCanvas}));
       };
 
@@ -361,25 +316,11 @@ const CanvasComponent: React.FC = () => {
     addProcess(steps,canvas);
   }
 
-  // const addImage = ()=>{
-  //   fabric.Image.fromURL('https://www.yttags.com/blog/wp-content/uploads/2023/02/image-urls-for-testing.webp', (img) => {
-  //     // Add the image onto the canvas
-  //     img.set({
-  //       left: 5,
-  //       top: 5,
-  //       scaleX: 0.5,
-  //       scaleY: 0.5,
-  //     });
-
-  //     canvas?.add(img);
-  //     canvas?.renderAll();
-  //   });
-  // }
+ 
 
   return (
     <CanvasContainer ref={Container}>
       {/* <button onClick={()=> console.log(canvasRef.current?.getActiveObject())}>GET DETAILS</button> */}
-      {/* <button onClick={()=> addImage()}>Add image</button> */}
       <canvas id="canvas"></canvas>
     </CanvasContainer>
   );
