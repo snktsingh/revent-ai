@@ -24,6 +24,7 @@ export interface CanvasSate {
   canvasList: CanvasItem[];
   canvasJS: CanvasJSON;
   activeCanvasID: number;
+  size: number
 }
 const canvas = new fabric.Canvas(null);
 const canvasJSON = canvas.toJSON();
@@ -37,7 +38,8 @@ export const initialState: CanvasSate = {
   tableDetails: null,
   canvasList: [{ id: 1, canvas: canvasJSON }],
   canvasJS: { id: 1, canvas: canvasJSON },
-  activeCanvasID: 1
+  activeCanvasID: 1,
+  size: 1,
 };
 
 
@@ -161,8 +163,19 @@ export const CanvasReducer = createSlice({
       }
 
       return state;
+    },
+    handleSize(state,action){
+      return {
+        ...state,
+        size: state.size+action.payload
+      }
+    },
+    handleInputSize(state,action){
+      return{
+        ...state,
+        size: action.payload
+        }
     }
-
   },
 });
 
@@ -177,7 +190,9 @@ export const {
   updateCanvasInList,
   copyCanvasCopy,
   deleteCanvasItem,
-  setActiveCanvas
+  setActiveCanvas,
+  handleSize,
+  handleInputSize
 } = CanvasReducer.actions;
 
 export default CanvasReducer.reducer;

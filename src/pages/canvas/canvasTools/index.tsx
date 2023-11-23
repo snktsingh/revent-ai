@@ -8,6 +8,7 @@ import {
   ColorSection,
   FontTool,
   IconsContainer,
+  InputForSize,
   MainToolContainer,
   SectionTitle,
   ShapeItem,
@@ -47,6 +48,8 @@ import {
 } from '../canvasBody/elementData';
 import {
   addCanvas,
+  handleInputSize,
+  handleSize,
   setBorderColor,
   setColor,
   setTextColor,
@@ -57,7 +60,7 @@ import ColorizeOutlinedIcon from '@mui/icons-material/ColorizeOutlined';
 const CanvasTools = () => {
   const dispatch = useAppDispatch();
   const newKey = useAppSelector(state => state.slide);
-  const { color, textColor, borderColor,canvasList } = useAppSelector(
+  const { color, textColor, borderColor,canvasList,size } = useAppSelector(
     state => state.canvas
   );
   const obj = { key: newKey.nextKey, name: `Slide ${newKey.nextKey}` };
@@ -184,10 +187,20 @@ const CanvasTools = () => {
           <SelectMenuItem value={20}>Twenty</SelectMenuItem>
           <SelectMenuItem value={30}>Thirty</SelectMenuItem>
         </ToolOutlinedSelect>
-        <IconButton size="small">
+        <IconButton size="small" onClick={()=> {
+          dispatch(handleSize(-1))
+          ContentElements.handleFontSize()
+        }} disabled={size === 1}>
           <RemoveOutlined />
         </IconButton>
-        <IconButton size="small">
+         <InputForSize value={size} type='number' onChange={(e)=> {
+          dispatch(handleInputSize(+e.target.value))
+          ContentElements.handleFontSize()
+          }} />
+        <IconButton size="small" onClick={()=> {
+          dispatch(handleSize(1))
+          ContentElements.handleFontSize()
+          }}>
           <AddOutlined />
         </IconButton>
         <ColorDiv onClick={handleTextColorClick}>

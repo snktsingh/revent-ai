@@ -11,7 +11,7 @@ import { CanvasContainer } from './style';
 import useAllShapes from '../shapes';
 import useAllElements from '../elements';
 import { theme } from '@/constants/theme';
-import { updateCanvasInList } from '@/redux/reducers/canvas';
+import { handleInputSize, updateCanvasInList } from '@/redux/reducers/canvas';
 
 const CanvasComponent: React.FC = () => {
   const canvasRef = useRef<fabric.Canvas | null>(null);
@@ -53,7 +53,7 @@ const CanvasComponent: React.FC = () => {
     addList
   } = useAllElements();
 
-  const { color, textColor, borderColor, canvasJS } = useAppSelector(
+  const { color, textColor, borderColor, canvasJS, canvasList, size} = useAppSelector(
     state => state.canvas
   );
 
@@ -65,6 +65,12 @@ const CanvasComponent: React.FC = () => {
     
     
     newCanvas.loadFromJSON(canvasJS.canvas,()=>{
+
+      newCanvas.forEachObject(obj=>{
+         console.log(obj);
+         
+      })
+
       canvasRef.current = newCanvas;
       newCanvas.setDimensions({ 
         width: 970, 
@@ -75,12 +81,48 @@ const CanvasComponent: React.FC = () => {
       newCanvas.selectionColor = 'transparent';
       newCanvas.selectionBorderColor = `${theme.colorSchemes.light.palette.primary.main}`;
       newCanvas.selectionLineWidth = 1;
+      fabric.Object.prototype.cornerStyle = 'circle';
+      fabric.Object.prototype.cornerSize = 10;
+      fabric.Object.prototype.transparentCorners = false;
       fabric.Object.prototype.cornerColor = `${theme.colorSchemes.light.palette.primary.main}`;
       fabric.Object.prototype.borderColor = `${theme.colorSchemes.light.palette.primary.main}`;
 
       CustomBorderIcons(newCanvas);
-   
 
+      newCanvas.on('selection:created', function(event) {
+        const activeObject = event.selected;
+        
+        if (activeObject?.length === 1) {
+           if(activeObject[0].type == 'text' || activeObject[0].type == 'textbox'){
+                dispatch(handleInputSize((activeObject[0] as any)?.fontSize));
+           }
+        }
+      });
+
+
+      newCanvas.on("object:added",(e)=>{
+        const updatedCanvas = newCanvas?.toObject(['listType', 'listBullet', 'listCounter']);
+        const id = canvasJS.id;
+        dispatch(updateCanvasInList({id,updatedCanvas}));
+      })
+      newCanvas.on("object:removed",(e)=>{
+        const updatedCanvas = newCanvas?.toObject(['listType', 'listBullet', 'listCounter']);
+        const id = canvasJS.id;
+        dispatch(updateCanvasInList({id,updatedCanvas}));
+      })
+
+      newCanvas.on('object:modified',(e)=>{
+        const updatedCanvas = newCanvas?.toObject(['listType', 'listBullet', 'listCounter']);
+        const id = canvasJS.id;
+        dispatch(updateCanvasInList({id,updatedCanvas}));
+      })
+  
+      newCanvas.on('selection:cleared',(e)=>{
+        const updatedCanvas = newCanvas?.toObject(['listType', 'listBullet', 'listCounter']);
+        const id = canvasJS.id;
+        dispatch(updateCanvasInList({id,updatedCanvas}));
+      })
+      
       newCanvas.renderAll();
 
     }, (error:Error) => {
@@ -119,31 +161,43 @@ const CanvasComponent: React.FC = () => {
     //   });
     // });
     // canvasRef.current = canvas;
+    
     return () => {
       newCanvas.dispose();
       window.removeEventListener('resize', () => { });
     };
+
     
   }, [canvasJS]);
 
   
 
-  useEffect(()=>{
-    if (canvasRef.current) {
-      const onObjectModified = () => {
-        const updatedCanvas = canvasRef.current?.toObject();
-        const id = canvasJS.id;
-        // console.log(canvasRef.current?.toDataURL())
-        dispatch(updateCanvasInList({id,updatedCanvas}));
-      };
+  // useEffect(()=>{
+  //   if (canvasRef.current) {
+  //     const onObjectModified = () => {
+  //       const updatedCanvas = canvasRef.current?.toObject(['listType', 'listBullet', 'listCounter']);
+  //       const id = canvasJS.id;
+  //       // console.log(canvasRef.current?.toDataURL())
+  //       dispatch(updateCanvasInList({id,updatedCanvas}));
+  //     };
 
-      canvasRef.current?.on('object:modified', onObjectModified);
+  //     canvasRef.current?.on('object:modified', onObjectModified);
 
-      return () => {
-        canvasRef.current?.off('object:modified', onObjectModified);
-      };
+  //     return () => {
+  //       canvasRef.current?.off('object:modified', onObjectModified);
+  //     };
+  //   }
+  // },[canvasJS]);
+
+  ContentElements.handleFontSize = ()=>{
+    const element = canvasRef.current?.getActiveObject();
+    
+    
+    if(element?.type == 'text' || element?.type == 'textbox'){
+      (element as any).set('fontSize',size)
     }
-  },[canvasJS]);
+    canvasRef.current?.renderAll()
+  }
 
   elementData[1].onClick = () => {
     canvasRef.current?.add(title);
@@ -262,7 +316,8 @@ const CanvasComponent: React.FC = () => {
 
   ContentElements.openFullScreen = () => {
     const element = document.getElementById('canvas');
-    canvasRef.current?.discardActiveObject();
+    // canvasRef.current?.discardActiveObject();
+    
     if (element) {
       if (document.fullscreenElement) {
         document.exitFullscreen();
@@ -320,7 +375,7 @@ const CanvasComponent: React.FC = () => {
 
   return (
     <CanvasContainer ref={Container}>
-      {/* <button onClick={()=> console.log(canvasRef.current?.getActiveObject())}>GET DETAILS</button> */}
+      {/* <button onClick={()=> console.log(canvasRef.current?.getActiveObject())}>GET DETAILS</button>  */}
       <canvas id="canvas"></canvas>
     </CanvasContainer>
   );

@@ -9,7 +9,7 @@ interface IExtendedTextboxOptions extends fabric.ITextboxOptions {
   listCounter?: number;
 }
 export default function useAllElements() {
-  const title = new fabric.IText('Click to Edit', {
+  const title = new fabric.IText('Click to add a title', {
     left: 30,
     top: 30,
     width: 600,
@@ -19,7 +19,7 @@ export default function useAllElements() {
     type: 'text',
   });
 
-  const subtitle = new fabric.IText('This is the subtitle', {
+  const subtitle = new fabric.IText('Click to add a subtitle', {
     left: 100,
     top: 100,
     width: 200,
@@ -28,7 +28,7 @@ export default function useAllElements() {
     type: 'text',
   });
 
-  const heading = new fabric.IText('This is the heading', {
+  const heading = new fabric.IText('Click to add a heading', {
     left: 100,
     top: 50,
     width: 300,
@@ -38,7 +38,7 @@ export default function useAllElements() {
     type: 'text',
   });
 
-  const paragraph = new fabric.IText('parageph', {
+  const paragraph = new fabric.IText('Click to add a paragraph', {
     left: 100,
     top: 150, // Adjust the position as needed
     width: 600, // Adjust the width as needed
@@ -66,8 +66,7 @@ export default function useAllElements() {
     this.fontSize = newFontSize;
   });
 
-  const text = `Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Integer nec odio.`;
+  const text = `Click to add a bullet point`;
 
   const renderTextLine = function (
     this: any,
@@ -331,7 +330,7 @@ Integer nec odio.`;
   //Quotes
 
   const addQuotes = () => {
-    let text = new fabric.IText("❝Quotation mark❞", {
+    let text = new fabric.IText("❝Click to add a quote❞", {
       left: 150,
       top: 200,
       width: 300,
@@ -912,32 +911,52 @@ Integer nec odio.`;
         addText(701, 210, 150, 16, 'Add Text');
         break;
       case 5:
-        addLine(126, 171, 150);
-        addLine(267, 171, 200);
-        addLine(456, 171, 200);
-        addText(199, 126, 100, 14, 'Add Timeline');
-        addText(398, 126, 100, 14, 'Add Timeline');
-        addText(582, 126, 100, 14, 'Add Timeline');
-        addCircle(227, 152);
-        addCircle(418, 152);
-        addCircle(608, 152);
-        addText(208, 205, 150, 16, 'Add Text');
-        addText(404, 205, 150, 16, 'Add Text');
-        addText(596, 205, 150, 16, 'Add Text');
+        addLine(28, 171, 120);
+        addLine(139, 172, 200);
+        addLine(328, 172, 200);
+        addLine(521, 172, 200);
+        addLine(712, 172, 200);
+        addCircle(99, 153);
+        addCircle(290, 153);
+        addCircle(480, 153);
+        addCircle(671, 153);
+        addCircle(861, 153);
+        addText(78, 126, 100, 14, 'Add Timeline');
+        addText(270, 126, 100, 14, 'Add Timeline');
+        addText(456, 126, 100, 14, 'Add Timeline');
+        addText(643, 126, 100, 14, 'Add Timeline');
+        addText(843, 126, 100, 14, 'Add Timeline');
+        addText(84, 205, 150, 16, 'Add Text');
+        addText(276, 205, 150, 16, 'Add Text');
+        addText(468, 205, 150, 16, 'Add Text');
+        addText(660, 205, 150, 16, 'Add Text');
+        addText(854, 205, 150, 16, 'Add Text');
         break;
       case 6:
-        addLine(126, 171, 150);
-        addLine(267, 171, 200);
-        addLine(456, 171, 200);
-        addCircle(227, 152);
-        addCircle(418, 152);
-        addCircle(608, 152);
-        addText(199, 126, 100, 14, 'Add Timeline');
-        addText(398, 126, 100, 14, 'Add Timeline');
-        addText(582, 126, 100, 14, 'Add Timeline');
-        addText(208, 205, 150, 16, 'Add Text');
-        addText(404, 205, 150, 16, 'Add Text');
-        addText(596, 205, 150, 16, 'Add Text');
+        addLine(6, 224, 100);
+        addLine(95, 224, 180);
+        addLine(266, 224, 180);
+        addLine(435, 224, 180);
+        addLine(606, 224, 180);
+        addLine(776, 224, 180);
+        addCircle(55, 205);
+        addCircle(224, 205);
+        addCircle(394, 205);
+        addCircle(565, 205);
+        addCircle(736, 205);
+        addCircle(906,205);
+        addText(34, 179, 100, 14, 'Add Timeline');
+        addText(208, 179, 100, 14, 'Add Timeline');
+        addText(370, 179, 100, 14, 'Add Timeline');
+        addText(537, 179, 100, 14, 'Add Timeline');
+        addText(718, 179, 100, 14, 'Add Timeline');
+        addText(883, 179, 100, 14, 'Add Timeline');
+        addText(40, 259, 150, 16, 'Add Text');
+        addText(214, 259, 150, 16, 'Add Text');
+        addText(382, 259, 150, 16, 'Add Text');
+        addText(554, 259, 150, 16, 'Add Text');
+        addText(729, 259, 150, 16, 'Add Text');
+        addText(898, 259, 150, 16, 'Add Text');
         break;
 
       default:

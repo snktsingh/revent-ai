@@ -73,7 +73,7 @@ export default function SlideList() {
                 <p>{index + 1}</p>
                 <ListSlideCard
                   className={activeCanvasID == canvas.id ? 'clicked-card' : ''}
-                >
+                  >
                  <img src={imageURLs[index] || 'placeholder-for-error'} alt={`canvas-${index}`} style={{width:'100%',objectFit:'contain',height:'100%'}} />
                 </ListSlideCard>
               </Stack>

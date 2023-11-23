@@ -47,98 +47,98 @@ export const elementData: IElementData[] = [
     key: 2,
     icon: AddTitle,
     title: 'Title',
-    subtitle: 'Save the current slide as template',
+    subtitle: 'Add Title to the Canvas',
     onClick: () => {},
   },
   {
     key: 3,
     icon: AddSubtitle,
     title: 'Subtitle',
-    subtitle: 'Save the current slide as template',
+    subtitle: 'Add Subtitle to the Canvas',
     onClick: () => {},
   },
   {
     key: 4,
     icon: AddHeading,
     title: 'Heading',
-    subtitle: 'Save the current slide as template',
+    subtitle: 'Add Heading to the Canvas',
     onClick: () => {},
   },
   {
     key: 5,
     icon: AddParagraph,
     title: 'Paragraph',
-    subtitle: 'Save the current slide as template',
+    subtitle: 'Add Paragraph to the Canvas',
     onClick: () => {},
   },
   {
     key: 6,
     icon: AddBullet,
     title: 'Bullet',
-    subtitle: 'Save the current slide as template',
+    subtitle: 'Add Bullet to the Canvas',
     onClick: () => {},
   },
   {
     key: 7,
     icon: AddImage,
     title: 'Image',
-    subtitle: 'Save the current slide as template',
+    subtitle: 'Add Image to the Canvas',
     onClick: () => {},
   },
   {
     key: 8,
     icon: AddTable,
     title: 'Table',
-    subtitle: 'Save the current slide as template',
+    subtitle: 'Add Table to the Canvas',
     onClick: () => {},
   },
   {
     key: 9,
     icon: AddQuote,
     title: 'Quotes',
-    subtitle: 'Save the current slide as template',
+    subtitle: 'Add Quotes to the Canvas',
     onClick: () => {},
   },
   {
     key: 10,
     icon: AddList,
     title: 'List',
-    subtitle: 'Save the current slide as template',
+    subtitle: 'Add List to the Canvas',
     onClick: () => {},
   },
   {
     key: 11,
     icon: AddCycle,
     title: 'Cycle',
-    subtitle: 'Save the current slide as template',
+    subtitle: 'Add Cycle to the Canvas',
     onClick: () => {},
   },
   {
     key: 12,
     icon: AddProcess,
     title: 'Process',
-    subtitle: 'Save the current slide as template',
+    subtitle: 'Add Process to the Canvas',
     onClick: () => {},
   },
   {
     key: 13,
     icon: AddTimeline,
     title: 'Timeline',
-    subtitle: 'Save the current slide as template',
+    subtitle: 'Add Timeline to the Canvas',
     onClick: () => {},
   },
   {
     key: 14,
     icon: AddFunnel,
     title: 'Funnel',
-    subtitle: 'Save the current slide as template',
+    subtitle: 'Add Funnel to the Canvas',
     onClick: () => {},
   },
   {
     key: 15,
     icon: AddPyramid,
     title: 'Pyramid',
-    subtitle: 'Save the current slide as template',
+    subtitle: 'Add Pyramid to the Canvas',
     onClick: () => {},
   },
 ];
@@ -379,6 +379,7 @@ interface ContentEle {
   handleCycle : Function;
   handleProcess : Function;
   handleTimeline : Function;
+  handleFontSize : Function;
 }
 
 export const ContentElements: ContentEle = {
@@ -393,6 +394,7 @@ export const ContentElements: ContentEle = {
   handleCycle: ()=>{},
   handleProcess: ()=>{},
   handleTimeline: ()=>{},
+  handleFontSize : ()=>{}
 };
 
 export const TABLE = 'TABLE';

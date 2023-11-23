@@ -449,7 +449,7 @@ const CanvasBody = () => {
                     style={{ display: 'flex', flexDirection: 'column' }}
                     key={index}
                   >
-                    <Stack direction="row" spacing={2}>
+                    <Stack direction="row" width={'100%'} spacing={2}>
                       <img src={item.icon} width="30vh" />
                       <ElementContainer>
                         <ElementTitle>{item.title}</ElementTitle>

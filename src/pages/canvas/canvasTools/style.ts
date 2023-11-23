@@ -163,3 +163,19 @@ export const BorderColorDiv = styled(Box)`
     margin-top: 4%;
   }
 `;
+export const InputForSize = styled.input`
+border: none;
+outline: none;
+background: none;
+padding: 0;
+margin: 0;
+width: 25px;
+color: inherit;
+font-size: inherit;
+-moz-appearance: textfield; 
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+`;
