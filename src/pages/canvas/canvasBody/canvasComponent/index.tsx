@@ -12,6 +12,7 @@ import useAllShapes from '../shapes';
 import useAllElements from '../elements';
 import { theme } from '@/constants/theme';
 import { handleInputSize, updateCanvasInList } from '@/redux/reducers/canvas';
+import WebFont from 'webfontloader';
 
 const CanvasComponent: React.FC = () => {
   const canvasRef = useRef<fabric.Canvas | null>(null);
@@ -29,17 +30,17 @@ const CanvasComponent: React.FC = () => {
     addPolygon,
   } = useAllShapes();
 
-  const { 
-    title, 
-    subtitle, 
-    heading, 
-    paragraph, 
-    BulletText, 
+  const {
+    title,
+    subtitle,
+    heading,
+    paragraph,
+    BulletText,
     addQuotes,
-    ImageUploader, 
-    CustomBorderIcons, 
+    ImageUploader,
+    CustomBorderIcons,
     ColorFillForObjects,
-    ColorForText, 
+    ColorForText,
     ColorForBorder,
     handleBold,
     handleItalic,
@@ -53,31 +54,31 @@ const CanvasComponent: React.FC = () => {
     addList
   } = useAllElements();
 
-  const { color, textColor, borderColor, canvasJS, canvasList, size} = useAppSelector(
+  const { color, textColor, borderColor, canvasJS, canvasList, size } = useAppSelector(
     state => state.canvas
   );
 
 
   useEffect(() => {
-    
+
     const newCanvas = new fabric.Canvas('canvas');
     //  newCanvas.clear()
-    
-    
-    newCanvas.loadFromJSON(canvasJS.canvas,()=>{
 
-      newCanvas.forEachObject(obj=>{
-         console.log(obj);
-         
+
+    newCanvas.loadFromJSON(canvasJS.canvas, () => {
+
+      newCanvas.forEachObject(obj => {
+        console.log(obj);
+
       })
 
       canvasRef.current = newCanvas;
-      newCanvas.setDimensions({ 
-        width: 970, 
-        height: 500,    
+      newCanvas.setDimensions({
+        width: 970,
+        height: 500,
       });
       newCanvas.setBackgroundColor(`${theme.colorSchemes.light.palette.common.white}`, newCanvas.renderAll.bind(newCanvas));
-  
+
       newCanvas.selectionColor = 'transparent';
       newCanvas.selectionBorderColor = `${theme.colorSchemes.light.palette.primary.main}`;
       newCanvas.selectionLineWidth = 1;
@@ -89,47 +90,47 @@ const CanvasComponent: React.FC = () => {
 
       CustomBorderIcons(newCanvas);
 
-      newCanvas.on('selection:created', function(event) {
+      newCanvas.on('selection:created', function (event) {
         const activeObject = event.selected;
-        
+
         if (activeObject?.length === 1) {
-           if(activeObject[0].type == 'text' || activeObject[0].type == 'textbox'){
-                dispatch(handleInputSize((activeObject[0] as any)?.fontSize));
-           }
+          if (activeObject[0].type == 'text' || activeObject[0].type == 'textbox') {
+            dispatch(handleInputSize((activeObject[0] as any)?.fontSize));
+          }
         }
       });
 
 
-      newCanvas.on("object:added",(e)=>{
+      newCanvas.on("object:added", (e) => {
         const updatedCanvas = newCanvas?.toObject(['listType', 'listBullet', 'listCounter']);
         const id = canvasJS.id;
-        dispatch(updateCanvasInList({id,updatedCanvas}));
+        dispatch(updateCanvasInList({ id, updatedCanvas }));
       })
-      newCanvas.on("object:removed",(e)=>{
+      newCanvas.on("object:removed", (e) => {
         const updatedCanvas = newCanvas?.toObject(['listType', 'listBullet', 'listCounter']);
         const id = canvasJS.id;
-        dispatch(updateCanvasInList({id,updatedCanvas}));
+        dispatch(updateCanvasInList({ id, updatedCanvas }));
       })
 
-      newCanvas.on('object:modified',(e)=>{
+      newCanvas.on('object:modified', (e) => {
         const updatedCanvas = newCanvas?.toObject(['listType', 'listBullet', 'listCounter']);
         const id = canvasJS.id;
-        dispatch(updateCanvasInList({id,updatedCanvas}));
+        dispatch(updateCanvasInList({ id, updatedCanvas }));
       })
-  
-      newCanvas.on('selection:cleared',(e)=>{
+
+      newCanvas.on('selection:cleared', (e) => {
         const updatedCanvas = newCanvas?.toObject(['listType', 'listBullet', 'listCounter']);
         const id = canvasJS.id;
-        dispatch(updateCanvasInList({id,updatedCanvas}));
+        dispatch(updateCanvasInList({ id, updatedCanvas }));
       })
-      
+
       newCanvas.renderAll();
 
-    }, (error:Error) => {
+    }, (error: Error) => {
       console.error('Error loading canvas:', error);
     });
 
-     const canvas = canvasRef.current!;
+    const canvas = canvasRef.current!;
 
     // const canvas = new fabric.Canvas('canvas', {
     //   width: Container.current?.clientWidth || 0,
@@ -137,20 +138,20 @@ const CanvasComponent: React.FC = () => {
     //   backgroundColor: `${theme.colorSchemes.light.palette.common.white}`,
     // });
 
-    
+
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Delete' && canvas.getActiveObject()) { 
+      if (e.key === 'Delete' && canvas.getActiveObject()) {
         canvas.remove(canvas.getActiveObject()!);
-        const groupObjects = (canvas.getActiveObject()  as fabric.Group)?.getObjects();
+        const groupObjects = (canvas.getActiveObject() as fabric.Group)?.getObjects();
 
-        groupObjects.forEach((obj:any) => {
+        groupObjects.forEach((obj: any) => {
           canvas.remove(obj);
         });
-     
+
         canvas.discardActiveObject();
         canvas.renderAll();
-      }           
+      }
     };
     window.addEventListener('keydown', handleKeyDown);
 
@@ -161,16 +162,16 @@ const CanvasComponent: React.FC = () => {
     //   });
     // });
     // canvasRef.current = canvas;
-    
+
     return () => {
       newCanvas.dispose();
       window.removeEventListener('resize', () => { });
     };
 
-    
+
   }, [canvasJS]);
 
-  
+
 
   // useEffect(()=>{
   //   if (canvasRef.current) {
@@ -189,14 +190,41 @@ const CanvasComponent: React.FC = () => {
   //   }
   // },[canvasJS]);
 
-  ContentElements.handleFontSize = ()=>{
+  ContentElements.handleFontSize = () => {
     const element = canvasRef.current?.getActiveObject();
-    
-    
-    if(element?.type == 'text' || element?.type == 'textbox'){
-      (element as any).set('fontSize',size)
+
+
+    if (element?.type == 'text' || element?.type == 'textbox') {
+      (element as any).set('fontSize', size)
     }
-    canvasRef.current?.renderAll()
+    canvasRef.current?.renderAll();
+    const updatedCanvas = canvasRef.current?.toObject(['listType', 'listBullet', 'listCounter']);
+    const id = canvasJS.id;
+    dispatch(updateCanvasInList({ id, updatedCanvas }));
+  }
+
+  ContentElements.handleFontFamily = (fontFamily: string) => {
+
+    WebFont.load({
+      google: {
+        families: [fontFamily],
+      },
+      active: () => {
+        if (canvasRef.current) {
+
+          const element = canvasRef.current?.getActiveObject();
+          if (element?.type == 'text' || element?.type == 'textbox') {
+            (element as any).set('fontFamily', fontFamily)
+          }
+          canvasRef.current?.renderAll();
+          const updatedCanvas = canvasRef.current?.toObject(['listType', 'listBullet', 'listCounter']);
+          const id = canvasJS.id;
+          dispatch(updateCanvasInList({ id, updatedCanvas }));
+        }
+      },
+    });
+
+
   }
 
   elementData[1].onClick = () => {
@@ -223,7 +251,7 @@ const CanvasComponent: React.FC = () => {
     ImageUploader(canvas);
   };
   elementData[8].onClick = () => {
-    let text= addQuotes()
+    let text = addQuotes()
     canvasRef.current?.add(text);
     canvasRef.current?.setActiveObject(text);
     text?.enterEditing()
@@ -236,22 +264,31 @@ const CanvasComponent: React.FC = () => {
   colorChange.colorFillChange = () => {
     const selectedObject = canvasRef.current?.getActiveObject();
     const canvas = canvasRef.current;
-    ColorFillForObjects(selectedObject,canvas,color);
+    ColorFillForObjects(selectedObject, canvas, color);
+    const updatedCanvas = canvasRef.current?.toObject(['listType', 'listBullet', 'listCounter']);
+        const id = canvasJS.id;
+        dispatch(updateCanvasInList({id,updatedCanvas}));
   };
 
   colorChange.colorTextChange = () => {
     const selectedObject = canvasRef.current?.getActiveObject();
     const canvas = canvasRef.current;
-    ColorForText(selectedObject,canvas,textColor);
+    ColorForText(selectedObject, canvas, textColor);
+    const updatedCanvas = canvasRef.current?.toObject(['listType', 'listBullet', 'listCounter']);
+        const id = canvasJS.id;
+        dispatch(updateCanvasInList({id,updatedCanvas}));
   };
 
   colorChange.colorBorderChange = () => {
     const selectedObject = canvasRef.current?.getActiveObject();
     const canvas = canvasRef.current;
-    ColorForBorder(selectedObject,canvas,borderColor);
+    ColorForBorder(selectedObject, canvas, borderColor);
+    const updatedCanvas = canvasRef.current?.toObject(['listType', 'listBullet', 'listCounter']);
+        const id = canvasJS.id;
+        dispatch(updateCanvasInList({id,updatedCanvas}));
   };
 
-  
+
   ShapesData[0].onClick = () => {
     if (canvasRef.current) {
       canvasRef.current.add(addRectangle);
@@ -317,7 +354,7 @@ const CanvasComponent: React.FC = () => {
   ContentElements.openFullScreen = () => {
     const element = document.getElementById('canvas');
     // canvasRef.current?.discardActiveObject();
-    
+
     if (element) {
       if (document.fullscreenElement) {
         document.exitFullscreen();
@@ -330,17 +367,17 @@ const CanvasComponent: React.FC = () => {
   ContentElements.handleBold = () => {
     let activeObj = canvasRef.current?.getActiveObjects() as any;
     const canvas = canvasRef.current;
-    handleBold(activeObj,canvas)
+    handleBold(activeObj, canvas)
   };
   ContentElements.handleItalic = () => {
     let activeObj = canvasRef.current?.getActiveObjects() as any;
     const canvas = canvasRef.current;
-    handleItalic(activeObj,canvas)
+    handleItalic(activeObj, canvas)
   };
   ContentElements.handleUnderlIne = () => {
     let activeObj = canvasRef.current?.getActiveObjects() as any;
     const canvas = canvasRef.current;
-    handleUnderLine(activeObj,canvas)
+    handleUnderLine(activeObj, canvas)
   }
 
   //fabric table
@@ -349,33 +386,33 @@ const CanvasComponent: React.FC = () => {
     addTable(rows, cols, cellWidth, cellHeight, canvas);
   };
 
- //fabric Funnel
-  ContentElements.handleFunnel = (lev:number,size:number)=>{
-    addFunnel(lev,size,canvas);
+  //fabric Funnel
+  ContentElements.handleFunnel = (lev: number, size: number) => {
+    addFunnel(lev, size, canvas);
   };
 
   //fabric Pyramid
-  ContentElements.handlePyramid = (lev:number,size:number)=>{
-    addPyramid(lev,size,canvas);
+  ContentElements.handlePyramid = (lev: number, size: number) => {
+    addPyramid(lev, size, canvas);
   }
 
-  ContentElements.handleCycle = (levels:number) => {
-    addCycle(levels,canvas);
+  ContentElements.handleCycle = (levels: number) => {
+    addCycle(levels, canvas);
   }
 
   ContentElements.handleTimeline = (steps: number) => {
-    addTimeline(steps,canvas);
+    addTimeline(steps, canvas);
   }
 
-  ContentElements.handleProcess = (steps : number) => {
-    addProcess(steps,canvas);
+  ContentElements.handleProcess = (steps: number) => {
+    addProcess(steps, canvas);
   }
 
- 
+
 
   return (
     <CanvasContainer ref={Container}>
-      {/* <button onClick={()=> console.log(canvasRef.current?.getActiveObject())}>GET DETAILS</button>  */}
+      {/* <button onClick={() => console.log(canvasRef.current?.getActiveObject())}>GET DETAILS</button> */}
       <canvas id="canvas"></canvas>
     </CanvasContainer>
   );

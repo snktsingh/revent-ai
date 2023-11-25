@@ -68,7 +68,7 @@ const CanvasTools = () => {
   const [inputColor, setInputColor] = useState<string>('');
   const [inputTextColor, setInputTextColor] = useState<string>('');
   const [inputBorderColor, setInputBorderColor] = useState<string>('');
-
+  const [googleFonts,setGoogleFonts] = useState([]);
   const [anchorShapesEl, setAnchorShapesEl] = useState<null | HTMLElement>(
     null
   );
@@ -131,6 +131,23 @@ const CanvasTools = () => {
     dispatch(setBorderColor(e.target.value));
   };
 
+  useEffect(()=>{
+  
+    fetch(`https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyAQsGKSth3gRPYEmNuIqIBrk_32GqB6W38&sort=popularity`)
+    .then((res)=>res.json()).then((res)=>{
+      setGoogleFonts(res.items);
+
+    })
+    .catch((error)=>{
+      console.log(error);
+      
+    })
+
+  },[]);
+
+  // console.log(googleFonts?.items?.slice(0,40))
+  
+
   useEffect(() => {
     colorChange.colorFillChange();
   }, [color]);
@@ -179,13 +196,19 @@ const CanvasTools = () => {
         <ToolOutlinedSelect
           inputProps={{ 'aria-label': 'Without label' }}
           defaultValue={0}
+          onChange={(e)=> ContentElements.handleFontFamily(e.target.value) }
         >
-          <SelectMenuItem disabled value={0}>
+          <SelectMenuItem disabled value={0} style={{width:'200px'}} >
             Font Style
           </SelectMenuItem>
-          <SelectMenuItem value={10}>Ten</SelectMenuItem>
+          {/* <SelectMenuItem value={10}>Ten</SelectMenuItem>
           <SelectMenuItem value={20}>Twenty</SelectMenuItem>
-          <SelectMenuItem value={30}>Thirty</SelectMenuItem>
+          <SelectMenuItem value={30}>Thirty</SelectMenuItem> */}
+          {
+           googleFonts?.slice(0,100)?.map((el:any)=>{
+              return <SelectMenuItem key={el.family} value={el.family}>{el.family}</SelectMenuItem>
+            })
+          }
         </ToolOutlinedSelect>
         <IconButton size="small" onClick={()=> {
           dispatch(handleSize(-1))
@@ -521,7 +544,7 @@ const CanvasTools = () => {
         </ToolOutlinedSelect>
         <ToolOutlinedSelect
           inputProps={{ 'aria-label': 'Without label' }}
-          defaultValue={1}
+          // defaultValue={1}
         >
           <MenuItem value={1}>
             <FormatListBulletedIcon style={{ display: 'flex' }} />

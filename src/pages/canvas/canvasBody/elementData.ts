@@ -380,6 +380,7 @@ interface ContentEle {
   handleProcess : Function;
   handleTimeline : Function;
   handleFontSize : Function;
+  handleFontFamily : Function;
 }
 
 export const ContentElements: ContentEle = {
@@ -394,7 +395,8 @@ export const ContentElements: ContentEle = {
   handleCycle: ()=>{},
   handleProcess: ()=>{},
   handleTimeline: ()=>{},
-  handleFontSize : ()=>{}
+  handleFontSize : ()=>{},
+  handleFontFamily: ()=>{}
 };
 
 export const TABLE = 'TABLE';
