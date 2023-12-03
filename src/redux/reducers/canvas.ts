@@ -13,8 +13,8 @@ interface CanvasItem {
 }
 
 interface CanvasJSON {
-  id: number,
-  canvas: object | null
+  id: number;
+  canvas: object | null;
 }
 export interface CanvasSate {
   color: string;
@@ -24,12 +24,11 @@ export interface CanvasSate {
   canvasList: CanvasItem[];
   canvasJS: CanvasJSON;
   activeCanvasID: number;
-  size: number
+  size: number;
+  canvasData: string[];
 }
 const canvas = new fabric.Canvas(null);
 const canvasJSON = canvas.toJSON();
-
-
 
 export const initialState: CanvasSate = {
   color: '',
@@ -40,9 +39,8 @@ export const initialState: CanvasSate = {
   canvasJS: { id: 1, canvas: canvasJSON },
   activeCanvasID: 1,
   size: 1,
+  canvasData: [],
 };
-
-
 
 export const CanvasReducer = createSlice({
   name: 'element',
@@ -57,16 +55,20 @@ export const CanvasReducer = createSlice({
     setCanvas(state, action) {
       state.canvasJS = action.payload;
     },
+    setCanvasData: (state, action) => {
+      state.canvasData = action.payload;
+    },
     addCanvas(state) {
       const canvas = new fabric.Canvas(null);
-      const canvasID = state.canvasList[state.canvasList.length - 1].id + 1 || 2;
-      const canvasJSON = canvas.toObject(); // Use toObject() instead of toJSON() for Fabric.js    
+      const canvasID =
+        state.canvasList[state.canvasList.length - 1].id + 1 || 2;
+      const canvasJSON = canvas.toObject(); // Use toObject() instead of toJSON() for Fabric.js
       const updatedCanvasList = [
         ...state.canvasList,
         {
           id: canvasID,
-          canvas: canvasJSON
-        }
+          canvas: canvasJSON,
+        },
       ];
 
       return {
@@ -75,15 +77,15 @@ export const CanvasReducer = createSlice({
         activeCanvasID: canvasID,
         canvasJS: {
           id: canvasID,
-          canvas: canvasJSON
-        }
+          canvas: canvasJSON,
+        },
       };
     },
     setActiveCanvas(state, action) {
       return {
         ...state,
-        activeCanvasID: action.payload
-      }
+        activeCanvasID: action.payload,
+      };
     },
     setColor(state, action) {
       state.color = action.payload;
@@ -104,7 +106,7 @@ export const CanvasReducer = createSlice({
         if (canvasItem.id === id) {
           return {
             ...canvasItem,
-            canvas: updatedCanvas
+            canvas: updatedCanvas,
           };
         }
         return canvasItem;
@@ -112,48 +114,61 @@ export const CanvasReducer = createSlice({
 
       return {
         ...state,
-        canvasList: updatedList
+        canvasList: updatedList,
       };
     },
     copyCanvasCopy(state, action) {
       const id = action.payload;
       console.log(id);
 
-      const selectedCanvasIndex = state.canvasList.findIndex((canvas) => canvas.id === id);
+      const selectedCanvasIndex = state.canvasList.findIndex(
+        canvas => canvas.id === id
+      );
       const selectedCanvas = state.canvasList[selectedCanvasIndex];
 
       const copiedCanvas = { ...selectedCanvas, id: selectedCanvas.id + 1 };
 
-      const updatedCanvasList: CanvasItem[] = state.canvasList.reduce((acc, canvas, index) => {
-        if (index === selectedCanvasIndex) {
-          acc.push(canvas, copiedCanvas);
-        } else if (index > selectedCanvasIndex) {
-          acc.push({ ...canvas, id: canvas.id + 1 });
-        } else {
-          acc.push(canvas);
-        }
-        return acc;
-      }, [] as CanvasItem[]);
+      const updatedCanvasList: CanvasItem[] = state.canvasList.reduce(
+        (acc, canvas, index) => {
+          if (index === selectedCanvasIndex) {
+            acc.push(canvas, copiedCanvas);
+          } else if (index > selectedCanvasIndex) {
+            acc.push({ ...canvas, id: canvas.id + 1 });
+          } else {
+            acc.push(canvas);
+          }
+          return acc;
+        },
+        [] as CanvasItem[]
+      );
 
       return {
         ...state,
         canvasList: updatedCanvasList,
         activeCanvasID: id + 1,
-        canvasJS: copiedCanvas
+        canvasJS: copiedCanvas,
       };
     },
     deleteCanvasItem(state, action) {
       const idToDelete = action.payload;
 
       const indexOfItemToDelete = idToDelete - 1;
-      if (indexOfItemToDelete > 0 && indexOfItemToDelete >= 0 && indexOfItemToDelete < state.canvasList.length) {
-        const updatedCanvasList = state.canvasList.filter((canvas, index) => index !== indexOfItemToDelete);
+      if (
+        indexOfItemToDelete > 0 &&
+        indexOfItemToDelete >= 0 &&
+        indexOfItemToDelete < state.canvasList.length
+      ) {
+        const updatedCanvasList = state.canvasList.filter(
+          (canvas, index) => index !== indexOfItemToDelete
+        );
 
         const renumberedCanvasList = updatedCanvasList.map((canvas, index) => ({
           ...canvas,
-          id: index + 1
+          id: index + 1,
         }));
-        let newActiveCanvasId = state.canvasList.filter((canvas) => canvas.id == idToDelete - 1);
+        let newActiveCanvasId = state.canvasList.filter(
+          canvas => canvas.id == idToDelete - 1
+        );
         return {
           ...state,
           canvasList: renumberedCanvasList,
@@ -164,18 +179,18 @@ export const CanvasReducer = createSlice({
 
       return state;
     },
-    handleSize(state,action){
+    handleSize(state, action) {
       return {
         ...state,
-        size: state.size+action.payload
-      }
+        size: state.size + action.payload,
+      };
     },
-    handleInputSize(state,action){
-      return{
+    handleInputSize(state, action) {
+      return {
         ...state,
-        size: action.payload
-        }
-    }
+        size: action.payload,
+      };
+    },
   },
 });
 
@@ -192,7 +207,8 @@ export const {
   deleteCanvasItem,
   setActiveCanvas,
   handleSize,
-  handleInputSize
+  handleInputSize,
+  setCanvasData,
 } = CanvasReducer.actions;
 
 export default CanvasReducer.reducer;

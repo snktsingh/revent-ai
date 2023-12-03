@@ -17,6 +17,7 @@ export default function useAllElements() {
     fontWeight: 'bold',
     fontFamily: 'Red Hat Display, sans-serif',
     type: 'text',
+    name: 'title',
   });
 
   const subtitle = new fabric.IText('Click to add a subtitle', {
@@ -25,7 +26,7 @@ export default function useAllElements() {
     width: 200,
     fontSize: 20,
     fontFamily: 'Arial',
-    type: 'text',
+    name: 'subTitle',
   });
 
   const heading = new fabric.IText('Click to add a heading', {
@@ -35,7 +36,7 @@ export default function useAllElements() {
     fontSize: 30,
     fontFamily: 'Arial',
     fontWeight: 'bold',
-    type: 'text',
+    name: 'heading',
   });
 
   const paragraph = new fabric.IText('Click to add a paragraph', {
@@ -45,7 +46,7 @@ export default function useAllElements() {
     lineHeight: 1.5,
     fontSize: 16, // Adjust the font size as needed
     fontFamily: 'Arial',
-    type: 'text',
+    name: 'paragraph',
   });
 
   paragraph.setControlsVisibility({
@@ -124,9 +125,9 @@ export default function useAllElements() {
     listType: 'bullet',
     listBullet: '\u2022',
     listCounter: 0,
+    name: 'bullet',
   } as IExtendedTextboxOptions);
   BulletText._renderTextLine = renderTextLine;
-
 
   const ImageUploader = (canvas: fabric.Canvas | null) => {
     const fileInput = document.createElement('input');
@@ -140,13 +141,13 @@ export default function useAllElements() {
       if (file) {
         reader.onload = () => {
           if (canvas) {
-
             fabric.Image.fromURL(reader.result as string, img => {
               img.set({
                 left: 5,
                 top: 5,
                 scaleX: 0.5,
                 scaleY: 0.5,
+                name: 'image',
               });
 
               canvas?.add(img);
@@ -164,25 +165,27 @@ export default function useAllElements() {
     img.src = DeleteX;
     var cloneImg = new Image();
     cloneImg.src = Copy;
-    fabric.Object.prototype.controls.deleteControl = fabric.Textbox.prototype.controls.deleteControl= new fabric.Control({
-      x: 0.5,
-      y: -0.5,
-      offsetY: -16,
-      offsetX: 16,
-      cursorStyle: 'pointer',
-      mouseUpHandler: deleteObject,
-      render: renderIcon,
-    });
+    fabric.Object.prototype.controls.deleteControl =
+      fabric.Textbox.prototype.controls.deleteControl = new fabric.Control({
+        x: 0.5,
+        y: -0.5,
+        offsetY: -16,
+        offsetX: 16,
+        cursorStyle: 'pointer',
+        mouseUpHandler: deleteObject,
+        render: renderIcon,
+      });
 
-    fabric.Object.prototype.controls.clone = fabric.Textbox.prototype.controls.clone = new fabric.Control({
-      x: -0.5,
-      y: -0.5,
-      offsetY: -16,
-      offsetX: -16,
-      cursorStyle: 'pointer',
-      mouseUpHandler: cloneObject,
-      render: renderCloneIcon,
-    });
+    fabric.Object.prototype.controls.clone =
+      fabric.Textbox.prototype.controls.clone = new fabric.Control({
+        x: -0.5,
+        y: -0.5,
+        offsetY: -16,
+        offsetX: -16,
+        cursorStyle: 'pointer',
+        mouseUpHandler: cloneObject,
+        render: renderCloneIcon,
+      });
 
     function deleteObject(
       eventData: MouseEvent,
@@ -191,13 +194,15 @@ export default function useAllElements() {
       y: number
     ): boolean {
       canvas?.remove(canvas?.getActiveObject()!);
-      const groupObjects = (canvas?.getActiveObject()  as fabric.Group)?.getObjects();
-      if(groupObjects){
-        groupObjects.forEach((obj:any) => {
+      const groupObjects = (
+        canvas?.getActiveObject() as fabric.Group
+      )?.getObjects();
+      if (groupObjects) {
+        groupObjects.forEach((obj: any) => {
           canvas?.remove(obj);
         });
       }
-   
+
       canvas?.discardActiveObject();
       canvas?.renderAll();
       return true;
@@ -211,13 +216,13 @@ export default function useAllElements() {
     ): boolean {
       const target = transformData.target;
       const canvas = target.canvas;
-    
+
       if (target instanceof fabric.Group) {
         // Clone each object in the group
         const groupObjects = target.getObjects();
-        groupObjects.forEach((obj) => {
+        groupObjects.forEach(obj => {
           obj.clone(function (cloned: fabric.Object) {
-            cloned.left! += cloned.width!+200;
+            cloned.left! += cloned.width! + 200;
             cloned.top! += 200;
             canvas?.add(cloned);
           });
@@ -230,7 +235,7 @@ export default function useAllElements() {
           canvas?.add(cloned);
         });
       }
-    
+
       return true;
     }
 
@@ -266,7 +271,11 @@ export default function useAllElements() {
     canvas?.renderAll();
   };
 
-  const ColorFillForObjects = (selectedObject: fabric.Object | null | undefined, canvas: fabric.Canvas | null, color: string) => {
+  const ColorFillForObjects = (
+    selectedObject: fabric.Object | null | undefined,
+    canvas: fabric.Canvas | null,
+    color: string
+  ) => {
     if (selectedObject?.type == 'shape') {
       selectedObject.set('fill', color);
       canvas?.renderAll();
@@ -276,14 +285,22 @@ export default function useAllElements() {
     }
   };
 
-  const ColorForText = (selectedObject: fabric.Object | null | undefined, canvas: fabric.Canvas | null, textColor: string) => {
+  const ColorForText = (
+    selectedObject: fabric.Object | null | undefined,
+    canvas: fabric.Canvas | null,
+    textColor: string
+  ) => {
     if (selectedObject?.type == 'text') {
       selectedObject.set('fill', textColor);
       canvas?.renderAll();
     }
-  }
+  };
 
-  const ColorForBorder = (selectedObject: fabric.Object | null | undefined, canvas: fabric.Canvas | null, borderColor: string) => {
+  const ColorForBorder = (
+    selectedObject: fabric.Object | null | undefined,
+    canvas: fabric.Canvas | null,
+    borderColor: string
+  ) => {
     if (selectedObject) {
       selectedObject.set('stroke', borderColor);
       canvas?.renderAll();
@@ -330,7 +347,7 @@ export default function useAllElements() {
   //Quotes
 
   const addQuotes = () => {
-    let text = new fabric.IText("❝Click to add a quote❞", {
+    let text = new fabric.IText('❝Click to add a quote❞', {
       left: 150,
       top: 200,
       width: 300,
@@ -339,12 +356,12 @@ export default function useAllElements() {
       fontSize: 28,
       hasRotatingPoint: false,
       selectable: true,
-      cursorColor:theme.colorSchemes.light.palette.primary.main
-    })
+      name: 'quotes',
+      cursorColor: theme.colorSchemes.light.palette.primary.main,
+    });
 
-    
     return text;
-  }
+  };
 
   //table
   const fabricDblClick = function (obj: any, handler: any) {
@@ -359,10 +376,13 @@ export default function useAllElements() {
     };
   };
 
-
-
-  const addTable = (rows: number, cols: number, cellWidth: number, cellHeight: number, canvas: fabric.Canvas | null) => {
-
+  const addTable = (
+    rows: number,
+    cols: number,
+    cellWidth: number,
+    cellHeight: number,
+    canvas: fabric.Canvas | null
+  ) => {
     const ungroup = function (group: fabric.Group) {
       let items = group._objects;
       group._restoreObjectsState();
@@ -415,11 +435,8 @@ export default function useAllElements() {
     //   text.selectAll();
     // }));
 
-
-
     //   return cell;
     // }
-
 
     // for (let i = 0; i < rows; i++) {
     //   for (let j = 0; j < cols; j++) {
@@ -439,25 +456,23 @@ export default function useAllElements() {
             height: cellHeight,
             fill: 'transparent',
             stroke: 'black',
-            left: tableLeft + (j * cellWidth),
-            top: tableTop + (i * cellHeight),
+            left: tableLeft + j * cellWidth,
+            top: tableTop + i * cellHeight,
             selectable: false,
             hasBorders: false,
           });
 
           const text = new fabric.Textbox(`Row ${i + 1}, Col ${j + 1}`, {
-            width: cellWidth - (2 * cellPadding),
-            height: cellHeight - (2 * cellPadding),
+            width: cellWidth - 2 * cellPadding,
+            height: cellHeight - 2 * cellPadding,
             fontSize: 18,
             textAlign: 'center',
             left: cell.left! + cellPadding,
             top: cell.top! + cellPadding,
             selectable: true,
             backgroundColor: 'white',
-
           });
 
-        
           tableElements.push(cell);
           texts?.push(text);
         }
@@ -471,8 +486,7 @@ export default function useAllElements() {
       });
 
       canvas?.add(tableGroup);
-      texts.forEach((el)=>{
-
+      texts.forEach(el => {
         canvas?.add(el);
         el.setControlsVisibility({
           mt: false,
@@ -484,8 +498,8 @@ export default function useAllElements() {
           br: true,
           bl: true,
           mtr: false,
-        })
-      })
+        });
+      });
 
       tableGroup.setControlsVisibility({
         tl: true,
@@ -498,28 +512,29 @@ export default function useAllElements() {
         mb: false,
         mtr: false,
       });
-
     }
 
     createTable();
-
   };
 
   //pyramid
 
-  const addPyramid = (lev: number, size: number, canvas: fabric.Canvas | null) => {
-
+  const addPyramid = (
+    lev: number,
+    size: number,
+    canvas: fabric.Canvas | null
+  ) => {
     let textsList: fabric.Textbox[] = [];
     let textLeft: number;
     switch (lev) {
       case 3:
-        textLeft = 316
+        textLeft = 316;
         break;
       case 4:
-        textLeft = 360
+        textLeft = 360;
         break;
       case 5:
-        textLeft = 408
+        textLeft = 408;
         break;
       default:
         break;
@@ -533,23 +548,26 @@ export default function useAllElements() {
       let trapTop = 0;
       let textTop = 219;
       for (let i = 1; i < n; i++) {
-        let trapezoid = new fabric.Polygon([
-          { x: x1, y: 0 },
-          { x: x2, y: 0 },
-          { x: x3, y: -60 },
-          { x: x4, y: -60 },
-        ], {
-          fill: 'transparent',
-          stroke: 'black',
-          top: trapTop,
-        });
+        let trapezoid = new fabric.Polygon(
+          [
+            { x: x1, y: 0 },
+            { x: x2, y: 0 },
+            { x: x3, y: -60 },
+            { x: x4, y: -60 },
+          ],
+          {
+            fill: 'transparent',
+            stroke: 'black',
+            top: trapTop,
+          }
+        );
 
         const text = new fabric.Textbox(`Level ${i + 1}`, {
           fontSize: 18,
           left: textLeft,
           top: textTop,
-          width: 100
-        })
+          width: 100,
+        });
 
         textTop += 60;
 
@@ -557,7 +575,7 @@ export default function useAllElements() {
         x1 = x1 - 40;
         x2 = x2 + 40;
         x3 = x3 + 40;
-        x4 = x4 - 40
+        x4 = x4 - 40;
         textsList.push(text);
         levels.push(trapezoid);
       }
@@ -568,15 +586,15 @@ export default function useAllElements() {
         left: -101,
         top: -150,
         fill: 'transparent',
-        stroke: 'black'
+        stroke: 'black',
       });
 
       const text = new fabric.Textbox('Level 1', {
         fontSize: 18,
         left: textLeft,
         top: 160,
-        width: 100
-      })
+        width: 100,
+      });
 
       levels.push(triangle);
       textsList.push(text);
@@ -590,18 +608,20 @@ export default function useAllElements() {
       top: 46,
     });
 
-
-
     canvas?.add(group);
     canvas?.renderAll();
-    textsList.forEach((el) => {
-      canvas?.add(el)
-    })
-  }
+    textsList.forEach(el => {
+      canvas?.add(el);
+    });
+  };
 
   //funnel
 
-  const addFunnel = (lev: number, size: number, canvas: fabric.Canvas | null) => {
+  const addFunnel = (
+    lev: number,
+    size: number,
+    canvas: fabric.Canvas | null
+  ) => {
     let rectTop: number;
     let rectLeft: number;
     let rectWidth: number;
@@ -628,7 +648,6 @@ export default function useAllElements() {
         break;
     }
 
-
     function createLevels(n: number) {
       let x1 = -120;
       let x2 = 120;
@@ -637,22 +656,25 @@ export default function useAllElements() {
       let levels: fabric.Object[] = [];
       let trapTop = -60;
       for (let i = 1; i <= n; i++) {
-        let trapezoid = new fabric.Polygon([
-          { x: x1, y: 0 },
-          { x: x2, y: 0 },
-          { x: x3, y: -50 },
-          { x: x4, y: -50 },
-        ], {
-          fill: 'transparent',
-          stroke: 'black',
-          top: trapTop,
-        });
+        let trapezoid = new fabric.Polygon(
+          [
+            { x: x1, y: 0 },
+            { x: x2, y: 0 },
+            { x: x3, y: -50 },
+            { x: x4, y: -50 },
+          ],
+          {
+            fill: 'transparent',
+            stroke: 'black',
+            top: trapTop,
+          }
+        );
 
         trapTop = trapTop + 50;
         x1 = x1 + 20;
         x2 = x2 - 20;
         x3 = x3 - 20;
-        x4 = x4 + 20
+        x4 = x4 + 20;
         levels.push(trapezoid);
       }
       let rect = new fabric.Rect({
@@ -661,7 +683,7 @@ export default function useAllElements() {
         width: rectWidth,
         height: rectHeight,
         top: trapTop,
-        left: rectLeft
+        left: rectLeft,
       });
       levels.push(rect);
 
@@ -682,7 +704,7 @@ export default function useAllElements() {
         editable: true,
         textAlign: 'center',
       });
-      return canvas?.add(text)
+      return canvas?.add(text);
     }
 
     canvas?.add(group);
@@ -721,7 +743,7 @@ export default function useAllElements() {
     canvas?.renderAll();
   };
 
-  //CYCLE 
+  //CYCLE
 
   const addArrow = (left: number, top: number, angle: number) => {
     const ArrowPoints = [
@@ -738,14 +760,12 @@ export default function useAllElements() {
       fill: theme.colorSchemes.light.palette.common.steelBlue,
       left,
       top,
-      angle
+      angle,
     });
 
     return Arrow;
-  }
+  };
   const addCycle = (levels: number, canvas: fabric.Canvas | null) => {
-
-
     const unGroup = function (group: fabric.Group) {
       let items = group._objects;
       group._restoreObjectsState();
@@ -758,7 +778,6 @@ export default function useAllElements() {
     };
 
     function createCircleWithText(left: number, top: number) {
-
       const text = new fabric.Textbox(`Add Text`, {
         left: left + 20,
         top: top + 20,
@@ -778,21 +797,19 @@ export default function useAllElements() {
         left,
       });
 
-
       const CircleWithText = new fabric.Group([circle, text], {
         hasControls: true,
       });
 
       canvas?.add(CircleWithText);
-    
     }
 
     switch (levels) {
       case 3:
         createCircleWithText(100, 100);
-        canvas?.add(addArrow(220, 124, 0))
-        canvas?.add(addArrow(197, 208, 56))
-        canvas?.add(addArrow(337, 232, 120))
+        canvas?.add(addArrow(220, 124, 0));
+        canvas?.add(addArrow(197, 208, 56));
+        canvas?.add(addArrow(337, 232, 120));
         createCircleWithText(292, 100);
         createCircleWithText(195, 258);
         break;
@@ -801,10 +818,10 @@ export default function useAllElements() {
         createCircleWithText(305, 259);
         createCircleWithText(178, 148);
         createCircleWithText(436, 148);
-        canvas?.add(addArrow(242, 132, 311))
-        canvas?.add(addArrow(428, 85, 29))
-        canvas?.add(addArrow(271, 227, 35))
-        canvas?.add(addArrow(466, 263, 124))
+        canvas?.add(addArrow(242, 132, 311));
+        canvas?.add(addArrow(428, 85, 29));
+        canvas?.add(addArrow(271, 227, 35));
+        canvas?.add(addArrow(466, 263, 124));
         break;
       case 5:
         createCircleWithText(330, 17);
@@ -812,11 +829,11 @@ export default function useAllElements() {
         createCircleWithText(191, 133);
         createCircleWithText(262, 307);
         createCircleWithText(452, 307);
-        canvas?.add(addArrow(256, 116, -51))
-        canvas?.add(addArrow(465, 76, 31))
-        canvas?.add(addArrow(251, 320, 232))
-        canvas?.add(addArrow(560, 265, 114))
-        canvas?.add(addArrow(426, 394, 179))
+        canvas?.add(addArrow(256, 116, -51));
+        canvas?.add(addArrow(465, 76, 31));
+        canvas?.add(addArrow(251, 320, 232));
+        canvas?.add(addArrow(560, 265, 114));
+        canvas?.add(addArrow(426, 394, 179));
         break;
       case 6:
         createCircleWithText(261, 24);
@@ -825,12 +842,12 @@ export default function useAllElements() {
         createCircleWithText(571, 169);
         createCircleWithText(261, 327);
         createCircleWithText(461, 332);
-        canvas?.add(addArrow(388, 38, 358))
-        canvas?.add(addArrow(211, 140, 311))
-        canvas?.add(addArrow(584, 102, 51))
-        canvas?.add(addArrow(234, 336, 235))
-        canvas?.add(addArrow(614, 301, 124))
-        canvas?.add(addArrow(436, 408, 180))
+        canvas?.add(addArrow(388, 38, 358));
+        canvas?.add(addArrow(211, 140, 311));
+        canvas?.add(addArrow(584, 102, 51));
+        canvas?.add(addArrow(234, 336, 235));
+        canvas?.add(addArrow(614, 301, 124));
+        canvas?.add(addArrow(436, 408, 180));
         break;
 
       default:
@@ -841,8 +858,13 @@ export default function useAllElements() {
   //Timeline
 
   const addTimeline = (steps: number, canvas: fabric.Canvas | null) => {
-
-    function addText(left: number, top: number, width: number, fontSize: number, textContent: string) {
+    function addText(
+      left: number,
+      top: number,
+      width: number,
+      fontSize: number,
+      textContent: string
+    ) {
       let text = new fabric.Textbox(textContent, {
         fontSize,
         originX: 'left',
@@ -850,7 +872,8 @@ export default function useAllElements() {
         top,
         left,
         width,
-        fill: 'black'
+        fill: 'black',
+        name: 'TimeLineText',
       });
       return canvas?.add(text);
     }
@@ -860,7 +883,8 @@ export default function useAllElements() {
         left,
         top,
         strokeWidth: 3,
-        stroke: theme.colorSchemes.light.palette.common.steelBlue
+        stroke: theme.colorSchemes.light.palette.common.steelBlue,
+        name: 'TimeLineDirection',
       });
       return canvas?.add(line);
     }
@@ -871,11 +895,11 @@ export default function useAllElements() {
         fill: theme.colorSchemes.light.palette.primary.main,
         top,
         left,
-        stroke: theme.colorSchemes.light.palette.common.black
-      })
+        stroke: theme.colorSchemes.light.palette.common.black,
+        name: 'timeLineCircle',
+      });
       return canvas?.add(circle);
     }
-
 
     switch (steps) {
       case 3:
@@ -944,7 +968,7 @@ export default function useAllElements() {
         addCircle(394, 205);
         addCircle(565, 205);
         addCircle(736, 205);
-        addCircle(906,205);
+        addCircle(906, 205);
         addText(34, 179, 100, 14, 'Add Timeline');
         addText(208, 179, 100, 14, 'Add Timeline');
         addText(370, 179, 100, 14, 'Add Timeline');
@@ -962,13 +986,17 @@ export default function useAllElements() {
       default:
         break;
     }
-
   };
 
   //Process
 
   function addProcess(steps: number, canvas: fabric.Canvas | null) {
-    function addRectangle(left: number, top: number, width: number, height: number) {
+    function addRectangle(
+      left: number,
+      top: number,
+      width: number,
+      height: number
+    ) {
       let rect = new fabric.Rect({
         left: left,
         top: top,
@@ -976,18 +1004,19 @@ export default function useAllElements() {
         height,
         fill: theme.colorSchemes.light.palette.primary.main,
         rx: 10,
-        ry: 10
-      })
+        ry: 10,
+        name: 'ProcessBox',
+      });
       return canvas?.add(rect);
     }
-
     function addText(left: number, top: number) {
-      const text = new fabric.Textbox("Add Text", {
+      const text = new fabric.Textbox('Add Text', {
         fontSize: 14,
         left,
         top,
         fill: 'white',
-        width: 140
+        width: 140,
+        name: 'ProcessName',
       });
       return canvas?.add(text);
     }
@@ -1054,15 +1083,13 @@ export default function useAllElements() {
       default:
         break;
     }
-  };
+  }
 
   const addList = (canvas: fabric.Canvas | null) => {
-
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.accept = 'image/**';
     fileInput.click();
-
     let file;
     let reader = new FileReader();
     fileInput.addEventListener('change', e => {
@@ -1070,20 +1097,16 @@ export default function useAllElements() {
       if (file) {
         reader.onload = () => {
           if (canvas) {
-
             fabric.Image.fromURL(reader.result as string, img => {
               const fixedWidth = 100; // Set the fixed width you desire
               const fixedHeight = 120; // Set the fixed height you desire
-
               img.scaleToWidth(fixedWidth);
               img.scaleToHeight(fixedHeight);
-
               img.set({
                 left: 100,
                 top: 100,
-
+                name: 'listImage',
               });
-
               const text = new fabric.Textbox('Text', {
                 fontSize: 20,
                 width: 100,
@@ -1091,8 +1114,9 @@ export default function useAllElements() {
                 fill: 'black',
                 left: 100,
                 top: 230,
-                textAlign:'center'
-              })
+                textAlign: 'center',
+                name: 'listText',
+              });
 
               canvas?.add(img);
               canvas?.add(text);
@@ -1103,9 +1127,7 @@ export default function useAllElements() {
         reader.readAsDataURL(file);
       }
     });
-
-
-  }
+  };
 
   return {
     title,
@@ -1128,6 +1150,6 @@ export default function useAllElements() {
     addCycle,
     addTimeline,
     addProcess,
-    addList
+    addList,
   };
 }
