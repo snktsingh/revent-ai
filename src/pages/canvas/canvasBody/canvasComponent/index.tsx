@@ -9,11 +9,10 @@ import {
 } from '../elementData';
 import { CanvasContainer } from './style';
 import useAllShapes from '../shapes';
-import useAllElements from '../elements';
+import useAllElements, { IExtendedTextboxOptions } from '../elements';
 import { theme } from '@/constants/theme';
-import { handleInputSize, updateCanvasInList } from '@/redux/reducers/canvas';
+import { handleInputSize, setActiveCanvas, setCanvas, updateCanvasInList } from '@/redux/reducers/canvas';
 import WebFont from 'webfontloader';
-import { Button } from '@mui/material';
 
 const CanvasComponent: React.FC = () => {
   const canvasRef = useRef<fabric.Canvas | null>(null);
@@ -53,121 +52,98 @@ const CanvasComponent: React.FC = () => {
     addTimeline,
     addProcess,
     addList,
+    addPyramidLevel,
+    handleObjectMoving,
+    handleAddCustomIcon,
+    handleSelectionCreated
   } = useAllElements();
 
-  const { color, textColor, borderColor, canvasJS, canvasList, size } =
-    useAppSelector(state => state.canvas);
+  const { color, textColor, borderColor, canvasJS, canvasList, size } = useAppSelector(
+    state => state.canvas
+  );
 
+ 
   useEffect(() => {
+
     const newCanvas = new fabric.Canvas('canvas');
-    //  newCanvas.clear()
-    console.log(newCanvas.toObject());
+    newCanvas.clear()
 
-    newCanvas.loadFromJSON(
-      canvasJS.canvas,
-      () => {
-        newCanvas.forEachObject(obj => {
-          console.log(obj);
-        });
-        console.log(newCanvas.toObject());
-        canvasRef.current = newCanvas;
-        newCanvas.setDimensions({
-          width: 970,
-          height: 500,
-        });
-        newCanvas.setBackgroundColor(
-          `${theme.colorSchemes.light.palette.common.white}`,
-          newCanvas.renderAll.bind(newCanvas)
-        );
 
-        newCanvas.selectionColor = 'transparent';
-        newCanvas.selectionBorderColor = `${theme.colorSchemes.light.palette.primary.main}`;
-        newCanvas.selectionLineWidth = 1;
-        fabric.Object.prototype.cornerStyle = 'circle';
-        fabric.Object.prototype.cornerSize = 10;
-        fabric.Object.prototype.transparentCorners = false;
-        fabric.Object.prototype.cornerColor = `${theme.colorSchemes.light.palette.primary.main}`;
-        fabric.Object.prototype.borderColor = `${theme.colorSchemes.light.palette.primary.main}`;
 
-        CustomBorderIcons(newCanvas);
-        console.log(newCanvas?.toObject());
+    newCanvas.loadFromJSON(canvasJS.canvas, () => {
 
-        newCanvas.on('selection:created', function (event) {
-          const activeObject = event.selected;
+      canvasRef.current = newCanvas;
+      newCanvas.setDimensions({
+        width: 970,
+        height: 500,
+      });
+      newCanvas.setBackgroundColor(`${theme.colorSchemes.light.palette.common.white}`, newCanvas.renderAll.bind(newCanvas));
 
-          if (activeObject?.length === 1) {
-            if (
-              activeObject[0].type == 'text' ||
-              activeObject[0].type == 'textbox'
-            ) {
-              dispatch(handleInputSize((activeObject[0] as any)?.fontSize));
-            }
-          }
-        });
-        console.log(newCanvas.toObject());
+      newCanvas.selectionColor = 'transparent';
+      newCanvas.selectionBorderColor = `${theme.colorSchemes.light.palette.primary.main}`;
+      newCanvas.selectionLineWidth = 1;
 
-        newCanvas.on('object:added', e => {
-          const updatedCanvas = newCanvas?.toObject([
-            'listType',
-            'listBullet',
-            'listCounter',
-          ]);
-          const id = canvasJS.id;
-          console.log(newCanvas.toObject(['name']));
 
-          dispatch(updateCanvasInList({ id, updatedCanvas }));
-        });
-        newCanvas.on('object:removed', e => {
-          const updatedCanvas = newCanvas?.toObject([
-            'listType',
-            'listBullet',
-            'listCounter',
-          ]);
-          const id = canvasJS.id;
-          console.log(newCanvas.toObject(['name']));
+      CustomBorderIcons(newCanvas);
 
-          dispatch(updateCanvasInList({ id, updatedCanvas }));
-        });
+      newCanvas.on('selection:created', function (event) {
+        handleSelectionCreated(canvas,event)
+      });
 
-        newCanvas.on('object:modified', e => {
-          const updatedCanvas = newCanvas?.toObject([
-            'listType',
-            'listBullet',
-            'listCounter',
-          ]);
-          const id = canvasJS.id;
-          console.log(newCanvas.toObject(['name']));
-          dispatch(updateCanvasInList({ id, updatedCanvas }));
-        });
+      
 
-        newCanvas.on('selection:cleared', e => {
-          const updatedCanvas = newCanvas?.toObject([
-            'listType',
-            'listBullet',
-            'listCounter',
-          ]);
-          const id = canvasJS.id;
 
-          dispatch(updateCanvasInList({ id, updatedCanvas }));
-        });
-        console.log(newCanvas.toObject());
+      newCanvas.on("object:added", (e) => {
+        const updatedCanvas = newCanvas?.toObject(['listType', 'listBullet', 'listCounter','name','className']);
+        const id = canvasJS.id;
+        dispatch(updateCanvasInList({ id, updatedCanvas }));
+      })
+      newCanvas.on("object:removed", (e) => {
+        const updatedCanvas = newCanvas?.toObject(['listType', 'listBullet', 'listCounter','name','className']);
+        const id = canvasJS.id;
+        dispatch(updateCanvasInList({ id, updatedCanvas }));
+      })
 
-        newCanvas.renderAll();
-      },
+      newCanvas.on('object:modified', (e) => {
+        const updatedCanvas = newCanvas?.toObject(['listType', 'listBullet', 'listCounter','name','className']);
+        const id = canvasJS.id;
+        dispatch(updateCanvasInList({ id, updatedCanvas }));
+      })
 
-      (error: Error) => {
-        console.error('Error loading canvas:', error);
-      }
-    );
+      newCanvas.on('selection:cleared', (e) => {
+        const updatedCanvas = newCanvas?.toObject(['listType', 'listBullet', 'listCounter','name','className']);
+        const id = canvasJS.id;
+        dispatch(updateCanvasInList({ id, updatedCanvas }));
+      });
+
+  
+      newCanvas.on("object:moving", function (options) {
+           handleObjectMoving(options,newCanvas)
+      })
+
+      handleAddCustomIcon(newCanvas)
+      newCanvas.renderAll();
+
+      canvasRef.current = newCanvas;
+
+    }, (error: Error) => {
+      console.error('Error loading canvas:', error);
+    });
 
     const canvas = canvasRef.current!;
+
+    // const canvas = new fabric.Canvas('canvas', {
+    //   width: Container.current?.clientWidth || 0,
+    //   height: Container.current?.clientHeight || 0,
+    //   backgroundColor: `${theme.colorSchemes.light.palette.common.white}`,
+    // });
+
+
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Delete' && canvas.getActiveObject()) {
         canvas.remove(canvas.getActiveObject()!);
-        const groupObjects = (
-          canvas.getActiveObject() as fabric.Group
-        )?.getObjects();
+        const groupObjects = (canvas.getActiveObject() as fabric.Group)?.getObjects();
 
         groupObjects.forEach((obj: any) => {
           canvas.remove(obj);
@@ -177,6 +153,8 @@ const CanvasComponent: React.FC = () => {
         canvas.renderAll();
       }
     };
+
+
     window.addEventListener('keydown', handleKeyDown);
 
     // window.addEventListener('resize', () => {
@@ -189,49 +167,49 @@ const CanvasComponent: React.FC = () => {
 
     return () => {
       newCanvas.dispose();
-      window.removeEventListener('resize', () => {});
+      window.removeEventListener('resize', () => { });
     };
+
+
   }, [canvasJS]);
+
 
   ContentElements.handleFontSize = () => {
     const element = canvasRef.current?.getActiveObject();
 
+
     if (element?.type == 'text' || element?.type == 'textbox') {
-      (element as any).set('fontSize', size);
+      (element as any).set('fontSize', size)
     }
     canvasRef.current?.renderAll();
-    const updatedCanvas = canvasRef.current?.toObject([
-      'listType',
-      'listBullet',
-      'listCounter',
-    ]);
+    const updatedCanvas = canvasRef.current?.toObject(['listType', 'listBullet', 'listCounter','name','className']);
     const id = canvasJS.id;
     dispatch(updateCanvasInList({ id, updatedCanvas }));
-  };
+  }
 
   ContentElements.handleFontFamily = (fontFamily: string) => {
+
     WebFont.load({
       google: {
         families: [fontFamily],
       },
       active: () => {
         if (canvasRef.current) {
+
           const element = canvasRef.current?.getActiveObject();
           if (element?.type == 'text' || element?.type == 'textbox') {
-            (element as any).set('fontFamily', fontFamily);
+            (element as any).set('fontFamily', fontFamily)
           }
           canvasRef.current?.renderAll();
-          const updatedCanvas = canvasRef.current?.toObject([
-            'listType',
-            'listBullet',
-            'listCounter',
-          ]);
+          const updatedCanvas = canvasRef.current?.toObject(['listType', 'listBullet', 'listCounter','name','className']);
           const id = canvasJS.id;
           dispatch(updateCanvasInList({ id, updatedCanvas }));
         }
       },
     });
-  };
+
+
+  }
 
   elementData[1].onClick = () => {
     canvasRef.current?.add(title);
@@ -257,10 +235,10 @@ const CanvasComponent: React.FC = () => {
     ImageUploader(canvas);
   };
   elementData[8].onClick = () => {
-    let text = addQuotes();
+    let text = addQuotes()
     canvasRef.current?.add(text);
     canvasRef.current?.setActiveObject(text);
-    text?.enterEditing();
+    text?.enterEditing()
     canvas?.renderAll();
   };
   elementData[9].onClick = () => {
@@ -271,11 +249,7 @@ const CanvasComponent: React.FC = () => {
     const selectedObject = canvasRef.current?.getActiveObject();
     const canvas = canvasRef.current;
     ColorFillForObjects(selectedObject, canvas, color);
-    const updatedCanvas = canvasRef.current?.toObject([
-      'listType',
-      'listBullet',
-      'listCounter',
-    ]);
+    const updatedCanvas = canvasRef.current?.toObject(['listType', 'listBullet', 'listCounter','name','className']);
     const id = canvasJS.id;
     dispatch(updateCanvasInList({ id, updatedCanvas }));
   };
@@ -284,11 +258,7 @@ const CanvasComponent: React.FC = () => {
     const selectedObject = canvasRef.current?.getActiveObject();
     const canvas = canvasRef.current;
     ColorForText(selectedObject, canvas, textColor);
-    const updatedCanvas = canvasRef.current?.toObject([
-      'listType',
-      'listBullet',
-      'listCounter',
-    ]);
+    const updatedCanvas = canvasRef.current?.toObject(['listType', 'listBullet', 'listCounter','name','className']);
     const id = canvasJS.id;
     dispatch(updateCanvasInList({ id, updatedCanvas }));
   };
@@ -297,14 +267,11 @@ const CanvasComponent: React.FC = () => {
     const selectedObject = canvasRef.current?.getActiveObject();
     const canvas = canvasRef.current;
     ColorForBorder(selectedObject, canvas, borderColor);
-    const updatedCanvas = canvasRef.current?.toObject([
-      'listType',
-      'listBullet',
-      'listCounter',
-    ]);
+    const updatedCanvas = canvasRef.current?.toObject(['listType', 'listBullet', 'listCounter','name','className']);
     const id = canvasJS.id;
     dispatch(updateCanvasInList({ id, updatedCanvas }));
   };
+
 
   ShapesData[0].onClick = () => {
     if (canvasRef.current) {
@@ -368,80 +335,112 @@ const CanvasComponent: React.FC = () => {
     }
   };
 
+  //FULLSCREEN
   ContentElements.openFullScreen = () => {
     const element = document.getElementById('canvas');
-    // canvasRef.current?.discardActiveObject();
-
-    if (element) {
-      if (document.fullscreenElement) {
-        document.exitFullscreen();
-      } else {
-        element.requestFullscreen();
+    const handleKeyDown = (event:any) => {
+      if (!document.fullscreenElement) return;
+  
+      if (event.keyCode === 37 && currentCanvasIndex > 0) { // Left arrow key
+        console.log('left');
+        
+        currentCanvasIndex--;
+        dispatch(setCanvas(canvasList[currentCanvasIndex]));
+        dispatch(setActiveCanvas(canvasList[currentCanvasIndex].id));
+      } else if (event.keyCode === 39 && currentCanvasIndex < canvasList.length - 1) { // Right arrow key
+        console.log('right');
+        currentCanvasIndex++;
+        dispatch(setCanvas(canvasList[currentCanvasIndex]));
+        dispatch(setActiveCanvas(canvasList[currentCanvasIndex].id));
       }
+    };
+  
+    let currentCanvasIndex = 0;
+    dispatch(setCanvas(canvasList[currentCanvasIndex]));
+  
+    const enterFullScreen = () => {
+      element?.requestFullscreen();
+      window.addEventListener('keydown', handleKeyDown);
+    };
+  
+    const exitFullScreen = () => {
+      document.exitFullscreen();
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  
+    const fullscreenChange = () => {
+      if (!document.fullscreenElement) {
+        window.removeEventListener('keydown', handleKeyDown);
+      } else {
+        window.addEventListener('keydown', handleKeyDown);
+      }
+    };
+  
+    if (!document.fullscreenElement) {
+      enterFullScreen();
+    } else {
+      exitFullScreen();
     }
+  
+    document.addEventListener('fullscreenchange', fullscreenChange);
   };
+  
 
   ContentElements.handleBold = () => {
     let activeObj = canvasRef.current?.getActiveObjects() as any;
     const canvas = canvasRef.current;
-    handleBold(activeObj, canvas);
+    handleBold(activeObj, canvas)
   };
   ContentElements.handleItalic = () => {
     let activeObj = canvasRef.current?.getActiveObjects() as any;
     const canvas = canvasRef.current;
-    handleItalic(activeObj, canvas);
+    handleItalic(activeObj, canvas)
   };
   ContentElements.handleUnderlIne = () => {
     let activeObj = canvasRef.current?.getActiveObjects() as any;
     const canvas = canvasRef.current;
-    handleUnderLine(activeObj, canvas);
-  };
+    handleUnderLine(activeObj, canvas)
+  }
 
   //fabric table
   const canvas = canvasRef.current;
-  ContentElements.handleOpenTable = (
-    rows: number,
-    cols: number,
-    cellWidth: number,
-    cellHeight: number
-  ) => {
+  ContentElements.handleOpenTable = (rows: number, cols: number, cellWidth: number, cellHeight: number) => {
     addTable(rows, cols, cellWidth, cellHeight, canvas);
   };
 
   //fabric Funnel
-  ContentElements.handleFunnel = (lev: number, size: number) => {
-    addFunnel(lev, size, canvas);
+  ContentElements.handleFunnel = () => {
+    addFunnel(canvas);
   };
 
   //fabric Pyramid
-  ContentElements.handlePyramid = (lev: number, size: number) => {
-    addPyramid(lev, size, canvas);
-  };
-
+  ContentElements.handlePyramid = () => {
+    addPyramid(canvas);
+  }
+  //addCycle
   ContentElements.handleCycle = (levels: number) => {
     addCycle(levels, canvas);
-  };
+  }
+  //addTimeline
+  ContentElements.handleTimeline = () => {
+    addTimeline(canvas);
+  }
+  //addProcess
+  ContentElements.handleProcess = () => {
+    addProcess(canvas);
+  }
 
-  ContentElements.handleTimeline = (steps: number) => {
-    addTimeline(steps, canvas);
-  };
 
-  ContentElements.handleProcess = (steps: number) => {
-    addProcess(steps, canvas);
-  };
-
-  const catchData = (steps: number) => {
-    const res = addTimeline(steps, canvas);
-    console.log(res);
-  };
+  
 
   return (
     <CanvasContainer ref={Container}>
-      <Button onClick={() => catchData(4)}>Click me</Button>
-      {/* <button onClick={() => console.log(canvasRef.current?.getActiveObject())}>GET DETAILS</button> */}
+ <button id='but' onClick={() => console.log(canvasRef.current.toJSON())}>GET DETAILS</button> 
+      {/* <button id='but' onClick={addInitialLevels}>Add Funnel</button> */}
       <canvas id="canvas"></canvas>
     </CanvasContainer>
   );
 };
 
 export default CanvasComponent;
+

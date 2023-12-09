@@ -28,7 +28,7 @@ export interface CanvasSate {
   canvasData: string[];
 }
 const canvas = new fabric.Canvas(null);
-const canvasJSON = canvas.toJSON();
+const canvasJSON = canvas.toObject();
 
 export const initialState: CanvasSate = {
   color: '',

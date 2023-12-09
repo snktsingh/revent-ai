@@ -9,7 +9,7 @@ export const VariantButton = styled.button`
   cursor: pointer;
   transform: translate(40%, 40%) rotate(-90deg);
   background: #fff;
-  font-weight: 600;
+  font-family: 'Roboto';
   border-radius: 12px 12px 0 0;
   padding: 6px 20px;
   border-top: 1px solid #dfdfdf;
@@ -86,10 +86,7 @@ export const ButtonContainer = styled.div`
   p {
     opacity: 50%;
     color: #222222;
-    font-family: 'Roboto';
     font-size: 0.7rem;
-    font-style: normal;
-    font-weight: 600;
   }
 `;
 export const RefreshBtn = Mstyled(Button)`

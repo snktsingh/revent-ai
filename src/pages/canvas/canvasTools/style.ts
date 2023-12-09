@@ -164,15 +164,30 @@ export const BorderColorDiv = styled(Box)`
   }
 `;
 export const InputForSize = styled.input`
-border: none;
-outline: none;
-background: none;
-padding: 0;
-margin: 0;
-width: 25px;
-color: inherit;
-font-size: inherit;
--moz-appearance: textfield; 
+  border: none;
+  outline: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  width: 25px;
+  color: inherit;
+  font-size: inherit;
+  -moz-appearance: textfield;
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+`;
+export const FontsInput = styled.input`
+  border: none;
+  outline: none;
+  background: none;
+  padding: 0;
+  color: inherit;
+  margin: 2px 0 0 3px;
+  font-size: inherit;
+  -moz-appearance: textfield;
   &::-webkit-inner-spin-button,
   &::-webkit-outer-spin-button {
     appearance: none;

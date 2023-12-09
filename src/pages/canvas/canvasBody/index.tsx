@@ -113,20 +113,24 @@ const CanvasBody = () => {
     handleClickOpenDialog();
   };
   elementData[11].onClick = () => {
-    setElementName(PROCESS);
-    handleClickOpenDialog();
+    // setElementName(PROCESS);
+    // handleClickOpenDialog();
+    ContentElements.handleProcess()
   };
   elementData[12].onClick = () => {
-    setElementName(TIMELINE);
-    handleClickOpenDialog();
+    // setElementName(TIMELINE);
+    // handleClickOpenDialog();
+    ContentElements.handleTimeline();
   };
   elementData[13].onClick = () => {
-    setElementName(FUNNEL);
-    handleClickOpenDialog();
+    // setElementName(FUNNEL);
+    // handleClickOpenDialog();
+    ContentElements.handleFunnel();
   };
   elementData[14].onClick = () => {
-    setElementName(PYRAMID);
-    handleClickOpenDialog();
+    // setElementName(PYRAMID);
+    // handleClickOpenDialog();
+    ContentElements.handlePyramid();
   };
 
   const handleCloseDialog = () => {

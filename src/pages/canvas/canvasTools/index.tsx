@@ -1,4 +1,4 @@
-import { Button, Divider, IconButton, Menu, Stack } from '@mui/material';
+import { Button, Divider, IconButton, Input, Menu, Stack } from '@mui/material';
 import {
   BorderColorDiv,
   ColorDiv,
@@ -7,6 +7,7 @@ import {
   ColorMenuContainer,
   ColorSection,
   FontTool,
+  FontsInput,
   IconsContainer,
   InputForSize,
   MainToolContainer,
@@ -56,6 +57,8 @@ import {
 } from '@/redux/reducers/canvas';
 import FontDownloadOutlinedIcon from '@mui/icons-material/FontDownloadOutlined';
 import ColorizeOutlinedIcon from '@mui/icons-material/ColorizeOutlined';
+import WebFont from 'webfontloader';
+
 
 const CanvasTools = () => {
   const dispatch = useAppDispatch();
@@ -69,6 +72,10 @@ const CanvasTools = () => {
   const [inputTextColor, setInputTextColor] = useState<string>('');
   const [inputBorderColor, setInputBorderColor] = useState<string>('');
   const [googleFonts,setGoogleFonts] = useState([]);
+  const [start, setStart] = useState<number>(0);
+  const [end, setEnd] = useState<number>(200);
+  const selectRef = useRef<HTMLDivElement>(null);
+
   const [anchorShapesEl, setAnchorShapesEl] = useState<null | HTMLElement>(
     null
   );
@@ -133,20 +140,33 @@ const CanvasTools = () => {
 
   useEffect(()=>{
   
-    fetch(`https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyAQsGKSth3gRPYEmNuIqIBrk_32GqB6W38&sort=popularity`)
+    fetch(`https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyAQsGKSth3gRPYEmNuIqIBrk_32GqB6W38&sort=alpha`)
     .then((res)=>res.json()).then((res)=>{
-      setGoogleFonts(res.items);
-
+      // setGoogleFonts(res.items);
+      const fonts = res.items.slice(start, end);
+      setGoogleFonts((prevFonts) => [...prevFonts, ...fonts]);
     })
     .catch((error)=>{
       console.log(error);
       
     })
 
-  },[]);
+    
+
+  },[start,end]);
 
   // console.log(googleFonts?.items?.slice(0,40))
-  
+ const handleScroll = () => {
+    const { current } = selectRef;
+    console.log('hello')
+    if (current) {
+      const bottom = current.scrollHeight - current.scrollTop === current.clientHeight;
+      if (bottom) {
+        setStart(end);
+        setEnd(end + 200);
+      }
+    }
+  };
 
   useEffect(() => {
     colorChange.colorFillChange();
@@ -196,19 +216,31 @@ const CanvasTools = () => {
         <ToolOutlinedSelect
           inputProps={{ 'aria-label': 'Without label' }}
           defaultValue={0}
+          onScroll={handleScroll} ref={selectRef}
           onChange={(e)=> ContentElements.handleFontFamily(e.target.value) }
         >
-          <SelectMenuItem disabled value={0} style={{width:'200px'}} >
-            Font Style
-          </SelectMenuItem>
+         
+          <FontsInput placeholder='search fonts'/>
           {/* <SelectMenuItem value={10}>Ten</SelectMenuItem>
           <SelectMenuItem value={20}>Twenty</SelectMenuItem>
           <SelectMenuItem value={30}>Thirty</SelectMenuItem> */}
           {
-           googleFonts?.slice(0,100)?.map((el:any)=>{
-              return <SelectMenuItem key={el.family} value={el.family}>{el.family}</SelectMenuItem>
+           googleFonts?.slice(0,200)?.map((el:any)=>{
+            
+            WebFont.load({
+              google: {
+                families: [el.family],
+              },
+              active: () => {
+                
+              },
+            });
+            return <SelectMenuItem key={el.family} value={el.family} style={{fontFamily:el.family}}>{el.family}</SelectMenuItem>
             })
           }
+           <SelectMenuItem disabled value={0} style={{width:'200px',visibility:'hidden'}} >
+            Font Style
+          </SelectMenuItem>
         </ToolOutlinedSelect>
         <IconButton size="small" onClick={()=> {
           dispatch(handleSize(-1))
