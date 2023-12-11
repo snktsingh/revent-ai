@@ -511,7 +511,7 @@ const CanvasComponent: React.FC = () => {
   };
   //addCycle
   ContentElements.handleCycle = (levels: number) => {
-    addCycle(levels, canvas);
+    addCycle(canvas);
   };
   //addTimeline
   ContentElements.handleTimeline = () => {

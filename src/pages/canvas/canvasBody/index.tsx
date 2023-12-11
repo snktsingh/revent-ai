@@ -109,8 +109,9 @@ const CanvasBody = () => {
     handleClickOpenDialog();
   };
   elementData[10].onClick = () => {
-    setElementName(CYCLE);
-    handleClickOpenDialog();
+    // setElementName(CYCLE);
+    // handleClickOpenDialog();
+    ContentElements.handleCycle()
   };
   elementData[11].onClick = () => {
     // setElementName(PROCESS);

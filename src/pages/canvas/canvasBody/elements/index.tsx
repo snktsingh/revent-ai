@@ -603,48 +603,57 @@ export default function useAllElements() {
   let x3 = 100;
   let x4 = -100;
 
-  let textTop = 219;
-  let textLeft: number;
+
   let trapTop = 0;
   let group: fabric.Group;
+
   const addPyramidLevel = (canvas: fabric.Canvas) => {
-    canvas.forEachObject(obj => {
-      if (obj.name == 'PYRAMID') {
-        x1 = x1 - 40;
-        x2 = x2 + 40;
-        x3 = x3 + 40;
-        x4 = x4 - 40;
+   
+    let lastLevel: any;
+    let lastText: any;
+    canvas.forEachObject((obj) => {
 
-        let trapezoid = new fabric.Polygon(
-          [
-            { x: x1, y: 0 },
-            { x: x2, y: 0 },
-            { x: x3, y: -60 },
-            { x: x4, y: -60 },
-          ],
-          {
-            fill: 'transparent',
-            stroke: 'black',
-            top: obj.getScaledHeight() + 45,
-            left: obj.left!! - 40,
-            name: 'Pyramid_LEVEL',
-          }
-        );
-        console.log(trapezoid.left);
-
-        const text = new fabric.Textbox('Add Text', {
-          fontSize: 18,
-          left: trapezoid.getScaledWidth() / 2 + 85,
-          top: trapezoid.top! + 20,
-          width: 100,
-          name: 'PYRAMID_TEXT',
-        });
-
-        (obj as fabric.Group).addWithUpdate(trapezoid);
-        canvas.add(text);
-        canvas?.requestRenderAll();
+      if (obj.name == 'PYRAMID_TEXT') {
+        lastText = obj;
       }
-    });
+    })
+    let activeObject = canvas.getActiveObject();
+    if (activeObject?.type == 'group' && activeObject.name === 'PYRAMID') {
+      (activeObject as fabric.Group).forEachObject((obj) => {
+        lastLevel = obj
+      })
+    }
+
+    if (lastLevel) {
+      let trapezoid = new fabric.Polygon(
+        [
+          { x: lastLevel.points[0].x - 40, y: 0 },
+          { x: lastLevel.points[1].x + 40, y: 0 },
+          { x: lastLevel.points[2].x + 40, y: -60 },
+          { x: lastLevel.points[3].x - 40, y: -60 },
+        ],
+        {
+          fill: 'transparent',
+          stroke: 'black',
+          top: (activeObject as fabric.Group)?.getScaledHeight() + (activeObject as fabric.Group).top! - 1,
+          left: (activeObject as fabric.Group).left! - 40,
+          name: 'Pyramid_LEVEL',
+        }
+      );
+
+      const text = new fabric.Textbox('Add Text', {
+        fontSize: 18,
+        left: lastText.left,
+        top: trapezoid.top! + 20,
+        width: 100,
+        name: 'PYRAMID_TEXT',
+      });
+
+
+      (activeObject as fabric.Group).addWithUpdate(trapezoid);
+      canvas.add(text);
+      canvas?.requestRenderAll();
+    }
   };
 
   const addPyramid = (canvas: fabric.Canvas | null) => {
@@ -653,6 +662,16 @@ export default function useAllElements() {
 
     function createLevels(n: number) {
       let levels: fabric.Object[] = [];
+
+      let triangle = new fabric.Triangle({
+        width: 200,
+        height: 150,
+        left: -101,
+        top: -150,
+        fill: 'transparent',
+        stroke: 'black',
+      });
+      levels.push(triangle);
       for (let i = 1; i < n; i++) {
         let trapezoid = new fabric.Polygon(
           [
@@ -687,14 +706,7 @@ export default function useAllElements() {
         levels.push(trapezoid);
       }
 
-      let triangle = new fabric.Triangle({
-        width: 200,
-        height: 150,
-        left: -101,
-        top: -150,
-        fill: 'transparent',
-        stroke: 'black',
-      });
+
 
       const text = new fabric.Textbox('Add Text', {
         fontSize: 18,
@@ -704,7 +716,7 @@ export default function useAllElements() {
         name: 'PYRAMID_TEXT',
       });
 
-      levels.push(triangle);
+
       textsList.push(text);
       return levels;
     }
@@ -758,7 +770,7 @@ export default function useAllElements() {
 
     (funnelGroup as fabric.Group)?.addWithUpdate(trapezoid);
 
-    let texts :any[] = [];
+    let texts: any[] = [];
     canvas.forEachObject((object, i) => {
       if (object.name == 'Funnel_Text') {
         texts.push(object);
@@ -766,7 +778,6 @@ export default function useAllElements() {
         object.setCoords(); // Update object coordinates
       }
     });
-    console.log(texts[0]);
     let text = new fabric.Textbox('Add Text', {
       fontSize: 18,
       left: texts[texts.length - 1].left,
@@ -897,25 +908,25 @@ export default function useAllElements() {
         Circles.push(obj);
         canvas.remove(obj)
       }
-      if(obj.name == 'Cycle_Text'){
+      if (obj.name == 'Cycle_Text') {
         texts.push(obj);
-        
+
       }
     });
-     const addCircle = (left:number,top:number)=>{
+    const addCircle = (left: number, top: number) => {
 
-       const circle = new fabric.Circle({
-         radius: 50,
-         fill: theme.colorSchemes.light.palette.primary.main,
-         stroke: theme.colorSchemes.light.palette.primary.main,
-         top,
-         left,
-         name: 'Cycle_Circle',
-       });
-       return canvas.add(circle);
-     }
+      const circle = new fabric.Circle({
+        radius: 50,
+        fill: theme.colorSchemes.light.palette.primary.main,
+        stroke: theme.colorSchemes.light.palette.primary.main,
+        top,
+        left,
+        name: 'Cycle_Circle',
+      });
+      return canvas.add(circle);
+    }
 
-     const addText = (left:number,top:number)=>{
+    const addText = (left: number, top: number) => {
       const text = new fabric.Textbox('Add Text', {
         width: 80,
         fontSize: 16,
@@ -924,10 +935,10 @@ export default function useAllElements() {
         top,
         left,
         name: 'Cycle_Text',
-        });
-        return canvas.add(text);
-     }
-     switch (Circles.length+1) {
+      });
+      return canvas.add(text);
+    }
+    switch (Circles.length + 1) {
       // case 3:
       //   createCircleWithText(100, 100);
       //   canvas?.add(addArrow(220, 124, 0));
@@ -938,13 +949,13 @@ export default function useAllElements() {
       //   break;
       case 4:
         mainContainer!.set({
-           width:382,
-           height:324,
-           top:35,
-           left:178
+          width: 382,
+          height: 324,
+          top: 35,
+          left: 178
         })
         canvas.add(mainContainer!)
-        
+
         addCircle(305, 35);
         addCircle(305, 259);
         addCircle(178, 148);
@@ -956,31 +967,31 @@ export default function useAllElements() {
         canvas.bringToFront(texts[0]);
         canvas.bringToFront(texts[1]);
         canvas.bringToFront(texts[2]);
-        addText(320,275)
+        addText(320, 275)
         texts[0].set({
-          left:198,
-          top:165,
+          left: 198,
+          top: 165,
         }).setCoords()
         texts[1].set({
-          left:320,
-          top:54,
+          left: 320,
+          top: 54,
         }).setCoords()
         texts[2].set({
-          left:452,
-          top:166,
+          left: 452,
+          top: 166,
         }).setCoords()
-       
-        
+
+
         canvas?.requestRenderAll()
         break;
       case 5:
         mainContainer!.set({
-          width:386,
-          height:391,
-          top:17,
-          left:191
-       })
-       canvas.add(mainContainer!)
+          width: 386,
+          height: 391,
+          top: 17,
+          left: 191
+        })
+        canvas.add(mainContainer!)
         addCircle(330, 17);
         addCircle(476, 133);
         addCircle(191, 133);
@@ -995,33 +1006,33 @@ export default function useAllElements() {
         canvas.bringToFront(texts[1]);
         canvas.bringToFront(texts[2]);
         canvas.bringToFront(texts[3]);
-        addText(277,325)
+        addText(277, 325)
         texts[0].set({
-          left:217,
-          top:162,
+          left: 217,
+          top: 162,
         }).setCoords()
         texts[1].set({
-          left:354,
-          top:36,
+          left: 354,
+          top: 36,
         }).setCoords()
         texts[2].set({
-          left:501,
-          top:153,
+          left: 501,
+          top: 153,
         }).setCoords()
         texts[3].set({
-          left:478,
-          top:322,
+          left: 478,
+          top: 322,
         }).setCoords()
         canvas?.requestRenderAll()
         break;
       case 6:
         mainContainer!.set({
-          width:524,
-          height:409,
-          top:24,
-          left:148
-       })
-       canvas.add(mainContainer!)
+          width: 524,
+          height: 409,
+          top: 24,
+          left: 148
+        })
+        canvas.add(mainContainer!)
         addCircle(261, 24);
         addCircle(461, 24);
         addCircle(148, 169);
@@ -1039,26 +1050,26 @@ export default function useAllElements() {
         canvas.bringToFront(texts[2]);
         canvas.bringToFront(texts[3]);
         canvas.bringToFront(texts[4]);
-        addText(274,346)
+        addText(274, 346)
         texts[0].set({
-          left:162,
-          top:186,
+          left: 162,
+          top: 186,
         }).setCoords()
         texts[1].set({
-          left:276,
-          top:40,
+          left: 276,
+          top: 40,
         }).setCoords()
         texts[2].set({
-          left:481,
-          top:43,
+          left: 481,
+          top: 43,
         }).setCoords()
         texts[3].set({
-          left:580,
-          top:189,
+          left: 580,
+          top: 189,
         }).setCoords()
         texts[4].set({
-          left:474,
-          top:346,
+          left: 474,
+          top: 346,
         }).setCoords()
         canvas?.requestRenderAll()
         break;
@@ -1067,11 +1078,11 @@ export default function useAllElements() {
     }
 
     canvas?.renderAll()
-    
+
     console.log(texts);
   }
 
-  const addCycle = (levels: number, canvas: fabric.Canvas | null) => {
+  const addCycle = (canvas: fabric.Canvas | null) => {
     function createCircleWithText(left: number, top: number) {
       const text = new fabric.Textbox(`Add Text`, {
         left: left + 20,
@@ -1311,7 +1322,7 @@ export default function useAllElements() {
     canvas?.add(mainTimelineContainer);
     canvas?.setActiveObject(mainTimelineContainer);
 
-    let mTop : number = mainTimelineContainer.top!;
+    let mTop: number = mainTimelineContainer.top!;
     addLine(29, mTop + 20 + 45, 150);
     addLine(170, mTop + 20 + 45, 200);
     addCircle(130, mTop + 20 + 26);
@@ -1561,7 +1572,7 @@ export default function useAllElements() {
     options: fabric.IEvent<MouseEvent>,
     canvas: fabric.Canvas
   ) => {
-    var movedObject : FabricObject = options.target;
+    var movedObject: FabricObject = options.target;
     movedObject?.setCoords();
 
     if (movedObject?.name === 'PYRAMID') {
@@ -1569,7 +1580,7 @@ export default function useAllElements() {
       const lastTop = movedObject.get('lastTop') || movedObject.top;
 
       var deltaX = movedObject.left! - lastLeft!;
-      var deltaY = movedObject.top!- lastTop!;
+      var deltaY = movedObject.top! - lastTop!;
 
       canvas.forEachObject(function (obj) {
         let left;
@@ -1932,7 +1943,7 @@ export default function useAllElements() {
     }
 
     canvas.on('selection:created', event => {
-      let selectedObject : fabric.Object | undefined = event.selected[0] ;
+      let selectedObject: fabric.Object | undefined = event.selected[0];
 
       if (selectedObject?.name === 'PYRAMID') {
         selectedObject.setControlVisible('addPyramid', true);
