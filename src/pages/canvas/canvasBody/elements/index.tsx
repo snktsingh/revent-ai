@@ -626,7 +626,7 @@ export default function useAllElements() {
             fill: 'transparent',
             stroke: 'black',
             top: obj.getScaledHeight() + 45,
-            left: obj.left - 40,
+            left: obj.left!! - 40,
             name: 'Pyramid_LEVEL',
           }
         );
@@ -635,12 +635,12 @@ export default function useAllElements() {
         const text = new fabric.Textbox('Add Text', {
           fontSize: 18,
           left: trapezoid.getScaledWidth() / 2 + 85,
-          top: trapezoid.top + 20,
+          top: trapezoid.top! + 20,
           width: 100,
           name: 'PYRAMID_TEXT',
         });
 
-        obj.addWithUpdate(trapezoid);
+        (obj as fabric.Group).addWithUpdate(trapezoid);
         canvas.add(text);
         canvas?.requestRenderAll();
       }
@@ -729,7 +729,7 @@ export default function useAllElements() {
   //funnel
 
   function addFunnelLev(canvas: fabric.Canvas) {
-    let lastLevel: fabric.Object;
+    let lastLevel: any;
 
     let funnelGroup = canvas.getActiveObject();
     if (funnelGroup?.name === 'Funnel' && funnelGroup.type == 'group') {
@@ -751,18 +751,18 @@ export default function useAllElements() {
         fill: 'transparent',
         stroke: 'black',
         name: 'Funnel_Level',
-        top: funnelGroup.top - 50,
-        left: funnelGroup.left - 20,
+        top: funnelGroup?.top! - 50,
+        left: funnelGroup?.left! - 20,
       }
     );
 
-    funnelGroup.addWithUpdate(trapezoid);
+    (funnelGroup as fabric.Group)?.addWithUpdate(trapezoid);
 
-    let texts = [];
+    let texts :any[] = [];
     canvas.forEachObject((object, i) => {
       if (object.name == 'Funnel_Text') {
         texts.push(object);
-        object.set({ top: object.top - 50 }); // Adjust the shift amount as needed
+        object.set({ top: object.top! - 50 }); // Adjust the shift amount as needed
         object.setCoords(); // Update object coordinates
       }
     });
@@ -882,22 +882,193 @@ export default function useAllElements() {
     let mainContainer: fabric.Object;
     let arrows: fabric.Object[] = [];
     let Circles: fabric.Object[] = [];
+    let texts: fabric.Object[] = [];
     canvas.forEachObject(obj => {
       if (obj.name == 'Cycle_Container') {
         mainContainer = obj;
+        canvas.remove(obj)
       }
 
       if (obj.name == 'Cycle_Arrow') {
         arrows.push(obj);
+        canvas.remove(obj)
       }
       if (obj.name == 'Cycle_Circle') {
         Circles.push(obj);
+        canvas.remove(obj)
+      }
+      if(obj.name == 'Cycle_Text'){
+        texts.push(obj);
+        
       }
     });
+     const addCircle = (left:number,top:number)=>{
 
-    console.log(mainContainer);
-    console.log(arrows);
-    console.log(Circles);
+       const circle = new fabric.Circle({
+         radius: 50,
+         fill: theme.colorSchemes.light.palette.primary.main,
+         stroke: theme.colorSchemes.light.palette.primary.main,
+         top,
+         left,
+         name: 'Cycle_Circle',
+       });
+       return canvas.add(circle);
+     }
+
+     const addText = (left:number,top:number)=>{
+      const text = new fabric.Textbox('Add Text', {
+        width: 80,
+        fontSize: 16,
+        fontFamily: 'Arial',
+        fill: theme.colorSchemes.light.palette.common.white,
+        top,
+        left,
+        name: 'Cycle_Text',
+        });
+        return canvas.add(text);
+     }
+     switch (Circles.length+1) {
+      // case 3:
+      //   createCircleWithText(100, 100);
+      //   canvas?.add(addArrow(220, 124, 0));
+      //   canvas?.add(addArrow(197, 208, 56));
+      //   canvas?.add(addArrow(337, 232, 120));
+      //   createCircleWithText(292, 100);
+      //   createCircleWithText(195, 258);
+      //   break;
+      case 4:
+        mainContainer!.set({
+           width:382,
+           height:324,
+           top:35,
+           left:178
+        })
+        canvas.add(mainContainer!)
+        
+        addCircle(305, 35);
+        addCircle(305, 259);
+        addCircle(178, 148);
+        addCircle(436, 148);
+        canvas?.add(addArrow(242, 132, 311));
+        canvas?.add(addArrow(428, 85, 29));
+        canvas?.add(addArrow(279, 298, 221));
+        canvas?.add(addArrow(466, 263, 124));
+        canvas.bringToFront(texts[0]);
+        canvas.bringToFront(texts[1]);
+        canvas.bringToFront(texts[2]);
+        addText(320,275)
+        texts[0].set({
+          left:198,
+          top:165,
+        }).setCoords()
+        texts[1].set({
+          left:320,
+          top:54,
+        }).setCoords()
+        texts[2].set({
+          left:452,
+          top:166,
+        }).setCoords()
+       
+        
+        canvas?.requestRenderAll()
+        break;
+      case 5:
+        mainContainer!.set({
+          width:386,
+          height:391,
+          top:17,
+          left:191
+       })
+       canvas.add(mainContainer!)
+        addCircle(330, 17);
+        addCircle(476, 133);
+        addCircle(191, 133);
+        addCircle(262, 307);
+        addCircle(452, 307);
+        canvas?.add(addArrow(256, 116, -51));
+        canvas?.add(addArrow(465, 76, 31));
+        canvas?.add(addArrow(251, 320, 232));
+        canvas?.add(addArrow(560, 265, 114));
+        canvas?.add(addArrow(426, 394, 179));
+        canvas.bringToFront(texts[0]);
+        canvas.bringToFront(texts[1]);
+        canvas.bringToFront(texts[2]);
+        canvas.bringToFront(texts[3]);
+        addText(277,325)
+        texts[0].set({
+          left:217,
+          top:162,
+        }).setCoords()
+        texts[1].set({
+          left:354,
+          top:36,
+        }).setCoords()
+        texts[2].set({
+          left:501,
+          top:153,
+        }).setCoords()
+        texts[3].set({
+          left:478,
+          top:322,
+        }).setCoords()
+        canvas?.requestRenderAll()
+        break;
+      case 6:
+        mainContainer!.set({
+          width:524,
+          height:409,
+          top:24,
+          left:148
+       })
+       canvas.add(mainContainer!)
+        addCircle(261, 24);
+        addCircle(461, 24);
+        addCircle(148, 169);
+        addCircle(571, 169);
+        addCircle(261, 327);
+        addCircle(461, 332);
+        canvas?.add(addArrow(388, 38, 358));
+        canvas?.add(addArrow(211, 140, 311));
+        canvas?.add(addArrow(584, 102, 51));
+        canvas?.add(addArrow(234, 336, 235));
+        canvas?.add(addArrow(614, 301, 124));
+        canvas?.add(addArrow(436, 408, 180));
+        canvas.bringToFront(texts[0]);
+        canvas.bringToFront(texts[1]);
+        canvas.bringToFront(texts[2]);
+        canvas.bringToFront(texts[3]);
+        canvas.bringToFront(texts[4]);
+        addText(274,346)
+        texts[0].set({
+          left:162,
+          top:186,
+        }).setCoords()
+        texts[1].set({
+          left:276,
+          top:40,
+        }).setCoords()
+        texts[2].set({
+          left:481,
+          top:43,
+        }).setCoords()
+        texts[3].set({
+          left:580,
+          top:189,
+        }).setCoords()
+        texts[4].set({
+          left:474,
+          top:346,
+        }).setCoords()
+        canvas?.requestRenderAll()
+        break;
+      default:
+        break;
+    }
+
+    canvas?.renderAll()
+    
+    console.log(texts);
   }
 
   const addCycle = (levels: number, canvas: fabric.Canvas | null) => {
@@ -977,10 +1148,10 @@ export default function useAllElements() {
     // }
 
     const mainCycleContainer = new fabric.Rect({
-      left: 250,
-      top: 77,
-      width: 350,
-      height: 280,
+      left: 267,
+      top: 92,
+      width: 293,
+      height: 259,
       fill: 'transparent',
       strokeWidth: 1,
       stroke: 'transparent',
@@ -991,7 +1162,7 @@ export default function useAllElements() {
     canvas?.setActiveObject(mainCycleContainer);
 
     canvas?.add(addArrow(387, 116, 0));
-    canvas?.add(addArrow(364, 200, 56));
+    canvas?.add(addArrow(349, 264, 236));
     canvas?.add(addArrow(504, 224, 120));
     createCircleWithText(267, 92);
     createCircleWithText(459, 92);
@@ -1003,8 +1174,8 @@ export default function useAllElements() {
   //Timeline
 
   const addTimelineStep = (canvas: fabric.Canvas) => {
-    let lastCircle: fabric.Object;
-    let mainContainer: fabric.Object;
+    let lastCircle: any;
+    let mainContainer: any;
 
     canvas.forEachObject(obj => {
       if (obj.name == 'timeLineCircle') {
@@ -1074,7 +1245,7 @@ export default function useAllElements() {
     canvas.forEachObject(obj => {
       if (obj.name == 'Timeline_Container') {
         obj.set({
-          width: obj.width + 100,
+          width: obj.width! + 100,
         });
       }
     });
@@ -1140,7 +1311,7 @@ export default function useAllElements() {
     canvas?.add(mainTimelineContainer);
     canvas?.setActiveObject(mainTimelineContainer);
 
-    let mTop = mainTimelineContainer.top;
+    let mTop : number = mainTimelineContainer.top!;
     addLine(29, mTop + 20 + 45, 150);
     addLine(170, mTop + 20 + 45, 200);
     addCircle(130, mTop + 20 + 26);
@@ -1154,8 +1325,8 @@ export default function useAllElements() {
   //Process
 
   const addProcessSteps = (canvas: fabric.Canvas) => {
-    let lastRect: fabric.Object;
-    let mainContainer: fabric.Object;
+    let lastRect: any;
+    let mainContainer: any;
 
     canvas.forEachObject(obj => {
       if (obj.name === 'ProcessBox') {
@@ -1185,7 +1356,7 @@ export default function useAllElements() {
     });
 
     let rect = new fabric.Rect({
-      left: Arrow.left + 60,
+      left: Arrow.left! + 60,
       top: mainContainer.top + 20,
       width: 150,
       height: 100,
@@ -1197,8 +1368,8 @@ export default function useAllElements() {
 
     let text = new fabric.Textbox('Add Text', {
       fontSize: 14,
-      left: rect.left + 10,
-      top: rect.top + 10,
+      left: rect.left! + 10,
+      top: rect.top! + 10,
       fill: 'white',
       width: 140,
       name: 'ProcessText',
@@ -1207,7 +1378,7 @@ export default function useAllElements() {
     canvas.forEachObject(obj => {
       if (obj.name == 'Process_Container') {
         obj.set({
-          width: obj.width + 150,
+          width: obj.width! + 150,
         });
       }
     });
@@ -1283,16 +1454,16 @@ export default function useAllElements() {
     });
 
     canvas?.add(mainProcessContainer);
-    canvas.setActiveObject(mainProcessContainer);
+    canvas?.setActiveObject(mainProcessContainer);
 
-    canvas?.add(addArrow(250, mainProcessContainer.top + 40, 0));
+    canvas?.add(addArrow(250, mainProcessContainer.top! + 40, 0));
     addRectangle(
-      mainProcessContainer.left + 10,
-      mainProcessContainer.top + 20,
+      mainProcessContainer.left! + 10,
+      mainProcessContainer.top! + 20,
       150,
       100
     );
-    addRectangle(310, mainProcessContainer.top + 20, 150, 100);
+    addRectangle(310, mainProcessContainer.top! + 20, 150, 100);
     addText(96, 146);
     addText(326, 146);
   }
@@ -1357,14 +1528,14 @@ export default function useAllElements() {
       height: 100,
       fill: 'black',
       left: mainListContainer.left,
-      top: mainListContainer.getScaledHeight() + mainListContainer.top - 30,
+      top: mainListContainer.getScaledHeight() + mainListContainer.top! - 30,
       textAlign: 'center',
       name: 'listText',
     });
 
     const addImage = new fabric.Text('+ Add Image', {
-      top: mainListContainer.top + 50,
-      left: mainListContainer.left + 30,
+      top: mainListContainer.top! + 50,
+      left: mainListContainer.left! + 30,
       fill: 'black',
       fontSize: 20,
       hasControls: false,
@@ -1372,25 +1543,33 @@ export default function useAllElements() {
       hoverCursor: 'pointer',
     });
 
-    canvas.add(mainListContainer);
+    canvas?.add(mainListContainer);
     canvas?.add(addImage);
-    canvas.add(text);
-    canvas.renderAll();
+    canvas?.add(text);
+    canvas?.renderAll();
   };
+
+
+  //HandleObjectMoving
+
+  interface FabricObject extends fabric.Object {
+    lastLeft: number,
+    lastTop: number,
+  }
 
   const handleObjectMoving = (
     options: fabric.IEvent<MouseEvent>,
     canvas: fabric.Canvas
   ) => {
-    var movedObject = options.target;
-    movedObject.setCoords();
+    var movedObject : FabricObject = options.target;
+    movedObject?.setCoords();
 
-    if (movedObject.name === 'PYRAMID') {
+    if (movedObject?.name === 'PYRAMID') {
       const lastLeft = movedObject.get('lastLeft') || movedObject.left;
       const lastTop = movedObject.get('lastTop') || movedObject.top;
 
-      var deltaX = movedObject.left - lastLeft;
-      var deltaY = movedObject.top - lastTop;
+      var deltaX = movedObject.left! - lastLeft!;
+      var deltaY = movedObject.top!- lastTop!;
 
       canvas.forEachObject(function (obj) {
         let left;
@@ -1398,23 +1577,23 @@ export default function useAllElements() {
 
         if (
           obj.name === 'PYRAMID_TEXT' &&
-          obj.intersectsWithObject(movedObject, true, true)
+          obj.intersectsWithObject(movedObject!, true, true)
         ) {
           obj
             .set({
-              left: obj.left + deltaX,
-              top: obj.top + deltaY,
+              left: obj.left! + deltaX,
+              top: obj.top! + deltaY,
             })
             .setCoords();
-          left = obj.left + deltaX;
-          top = obj.top + deltaY;
+          left = obj.left! + deltaX;
+          top = obj.top! + deltaY;
         }
 
         if (obj.name == 'ADD_PYRAMID_BUTTON') {
           obj
             .set({
               left: movedObject.left,
-              top: movedObject.top + movedObject.getScaledHeight() + 30,
+              top: movedObject.top! + movedObject.getScaledHeight() + 30,
             })
             .setCoords();
         }
@@ -1424,12 +1603,12 @@ export default function useAllElements() {
         lastLeft: movedObject.left,
         lastTop: movedObject.top,
       });
-    } else if (movedObject.name === 'Process_Container') {
+    } else if (movedObject?.name === 'Process_Container') {
       const lastLeft = movedObject.get('lastLeft') || movedObject.left;
       const lastTop = movedObject.get('lastTop') || movedObject.top;
 
-      var deltaX = movedObject.left - lastLeft;
-      var deltaY = movedObject.top - lastTop;
+      var deltaX = movedObject.left! - lastLeft!;
+      var deltaY = movedObject.top! - lastTop!;
 
       canvas.forEachObject(function (obj) {
         let left;
@@ -1441,12 +1620,12 @@ export default function useAllElements() {
         ) {
           obj
             .set({
-              left: obj.left + deltaX,
-              top: obj.top + deltaY,
+              left: obj.left! + deltaX,
+              top: obj.top! + deltaY,
             })
             .setCoords();
-          left = obj.left + deltaX;
-          top = obj.top + deltaY;
+          left = obj.left! + deltaX;
+          top = obj.top! + deltaY;
         }
 
         if (
@@ -1455,12 +1634,12 @@ export default function useAllElements() {
         ) {
           obj
             .set({
-              left: obj.left + deltaX,
-              top: obj.top + deltaY,
+              left: obj.left! + deltaX,
+              top: obj.top! + deltaY,
             })
             .setCoords();
-          left = obj.left + deltaX;
-          top = obj.top + deltaY;
+          left = obj.left! + deltaX;
+          top = obj.top! + deltaY;
         }
 
         if (
@@ -1469,12 +1648,12 @@ export default function useAllElements() {
         ) {
           obj
             .set({
-              left: obj.left + deltaX,
-              top: obj.top + deltaY,
+              left: obj.left! + deltaX,
+              top: obj.top! + deltaY,
             })
             .setCoords();
-          left = obj.left + deltaX;
-          top = obj.top + deltaY;
+          left = obj.left! + deltaX;
+          top = obj.top! + deltaY;
         }
       });
 
@@ -1486,8 +1665,8 @@ export default function useAllElements() {
       const lastLeft = movedObject.get('lastLeft') || movedObject.left;
       const lastTop = movedObject.get('lastTop') || movedObject.top;
 
-      var deltaX = movedObject.left - lastLeft;
-      var deltaY = movedObject.top - lastTop;
+      var deltaX = movedObject.left! - lastLeft!;
+      var deltaY = movedObject.top! - lastTop!;
 
       canvas.forEachObject(function (obj) {
         let left;
@@ -1499,12 +1678,12 @@ export default function useAllElements() {
         ) {
           obj
             .set({
-              left: obj.left + deltaX,
-              top: obj.top + deltaY,
+              left: obj.left! + deltaX,
+              top: obj.top! + deltaY,
             })
             .setCoords();
-          left = obj.left + deltaX;
-          top = obj.top + deltaY;
+          left = obj.left! + deltaX;
+          top = obj.top! + deltaY;
         }
 
         if (
@@ -1513,12 +1692,12 @@ export default function useAllElements() {
         ) {
           obj
             .set({
-              left: obj.left + deltaX,
-              top: obj.top + deltaY,
+              left: obj.left! + deltaX,
+              top: obj.top! + deltaY,
             })
             .setCoords();
-          left = obj.left + deltaX;
-          top = obj.top + deltaY;
+          left = obj.left! + deltaX;
+          top = obj.top! + deltaY;
         }
 
         if (
@@ -1527,12 +1706,12 @@ export default function useAllElements() {
         ) {
           obj
             .set({
-              left: obj.left + deltaX,
-              top: obj.top + deltaY,
+              left: obj.left! + deltaX,
+              top: obj.top! + deltaY,
             })
             .setCoords();
-          left = obj.left + deltaX;
-          top = obj.top + deltaY;
+          left = obj.left! + deltaX;
+          top = obj.top! + deltaY;
         }
       });
 
@@ -1544,8 +1723,8 @@ export default function useAllElements() {
       const lastLeft = movedObject.get('lastLeft') || movedObject.left;
       const lastTop = movedObject.get('lastTop') || movedObject.top;
 
-      var deltaX = movedObject.left - lastLeft;
-      var deltaY = movedObject.top - lastTop;
+      var deltaX = movedObject.left! - lastLeft!;
+      var deltaY = movedObject.top! - lastTop!;
 
       canvas.forEachObject(function (obj) {
         let left;
@@ -1557,12 +1736,12 @@ export default function useAllElements() {
         ) {
           obj
             .set({
-              left: obj.left + deltaX,
-              top: obj.top + deltaY,
+              left: obj.left! + deltaX,
+              top: obj.top! + deltaY,
             })
             .setCoords();
-          left = obj.left + deltaX;
-          top = obj.top + deltaY;
+          left = obj.left! + deltaX;
+          top = obj.top! + deltaY;
         }
 
         if (
@@ -1571,12 +1750,12 @@ export default function useAllElements() {
         ) {
           obj
             .set({
-              left: obj.left! + deltaX,
-              top: obj.top + deltaY,
+              left: obj.left!! + deltaX,
+              top: obj.top! + deltaY,
             })
             .setCoords();
-          left = obj.left + deltaX;
-          top = obj.top + deltaY;
+          left = obj.left! + deltaX;
+          top = obj.top! + deltaY;
         }
 
         if (
@@ -1585,12 +1764,12 @@ export default function useAllElements() {
         ) {
           obj
             .set({
-              left: obj.left + deltaX,
-              top: obj.top + deltaY,
+              left: obj.left! + deltaX,
+              top: obj.top! + deltaY,
             })
             .setCoords();
-          left = obj.left + deltaX;
-          top = obj.top + deltaY;
+          left = obj.left! + deltaX;
+          top = obj.top! + deltaY;
         }
       });
 
@@ -1602,8 +1781,8 @@ export default function useAllElements() {
       const lastLeft = movedObject.get('lastLeft') || movedObject.left;
       const lastTop = movedObject.get('lastTop') || movedObject.top;
 
-      var deltaX = movedObject.left - lastLeft;
-      var deltaY = movedObject.top - lastTop;
+      var deltaX = movedObject.left! - lastLeft!;
+      var deltaY = movedObject.top! - lastTop!;
 
       canvas.forEachObject(function (obj) {
         let left;
@@ -1615,12 +1794,12 @@ export default function useAllElements() {
         ) {
           obj
             .set({
-              left: obj.left + deltaX,
-              top: obj.top + deltaY,
+              left: obj.left! + deltaX,
+              top: obj.top! + deltaY,
             })
             .setCoords();
-          left = obj.left + deltaX;
-          top = obj.top + deltaY;
+          left = obj.left! + deltaX;
+          top = obj.top! + deltaY;
         }
 
         if (
@@ -1629,12 +1808,12 @@ export default function useAllElements() {
         ) {
           obj
             .set({
-              left: obj.left + deltaX,
-              top: obj.top + deltaY,
+              left: obj.left! + deltaX,
+              top: obj.top! + deltaY,
             })
             .setCoords();
-          left = obj.left + deltaX;
-          top = obj.top + deltaY;
+          left = obj.left! + deltaX;
+          top = obj.top! + deltaY;
         }
 
         if (
@@ -1643,12 +1822,12 @@ export default function useAllElements() {
         ) {
           obj
             .set({
-              left: obj.left + deltaX,
-              top: obj.top + deltaY,
+              left: obj.left! + deltaX,
+              top: obj.top! + deltaY,
             })
             .setCoords();
-          left = obj.left + deltaX;
-          top = obj.top + deltaY;
+          left = obj.left! + deltaX;
+          top = obj.top! + deltaY;
         }
       });
 
@@ -1753,7 +1932,7 @@ export default function useAllElements() {
     }
 
     canvas.on('selection:created', event => {
-      let selectedObject = event.selected[0];
+      let selectedObject : fabric.Object | undefined = event.selected[0] ;
 
       if (selectedObject?.name === 'PYRAMID') {
         selectedObject.setControlVisible('addPyramid', true);
@@ -1920,7 +2099,7 @@ export default function useAllElements() {
 
           this._renderChars(method, ctx, line, left, top, lineIndex);
         };
-        (obj as IExtendedTextboxOptions)._renderTextLine = renderTextLine;
+        obj._renderTextLine = renderTextLine;
         obj.dirty = true;
       }
     });

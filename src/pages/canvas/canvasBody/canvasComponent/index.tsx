@@ -209,12 +209,6 @@ const CanvasComponent: React.FC = () => {
 
     const canvas = canvasRef.current!;
 
-    // const canvas = new fabric.Canvas('canvas', {
-    //   width: Container.current?.clientWidth || 0,
-    //   height: Container.current?.clientHeight || 0,
-    //   backgroundColor: `${theme.colorSchemes.light.palette.common.white}`,
-    // });
-
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Delete' && canvas.getActiveObject()) {
         canvas.remove(canvas.getActiveObject()!);
@@ -232,14 +226,6 @@ const CanvasComponent: React.FC = () => {
     };
 
     window.addEventListener('keydown', handleKeyDown);
-
-    // window.addEventListener('resize', () => {
-    //   canvas.setDimensions({
-    //     width: Container.current?.clientWidth || 0,
-    //     height: Container.current?.clientHeight || 0,
-    //   });
-    // });
-    // canvasRef.current = canvas;
 
     return () => {
       newCanvas.dispose();
@@ -538,8 +524,7 @@ const CanvasComponent: React.FC = () => {
 
   return (
     <CanvasContainer ref={Container}>
-      {/* <button id='but' onClick={() => console.log(canvasRef.current.toJSON())}>GET DETAILS</button>  */}
-      {/* <button id='but' onClick={addInitialLevels}>Add Funnel</button> */}
+      <button id='but' onClick={() => console.log(canvasRef.current?.getActiveObject())}>GET DETAILS</button>  
       <canvas id="canvas"></canvas>
     </CanvasContainer>
   );
