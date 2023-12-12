@@ -111,12 +111,12 @@ const CanvasBody = () => {
   elementData[10].onClick = () => {
     // setElementName(CYCLE);
     // handleClickOpenDialog();
-    ContentElements.handleCycle()
+    ContentElements.handleCycle();
   };
   elementData[11].onClick = () => {
     // setElementName(PROCESS);
     // handleClickOpenDialog();
-    ContentElements.handleProcess()
+    ContentElements.handleProcess();
   };
   elementData[12].onClick = () => {
     // setElementName(TIMELINE);
@@ -343,6 +343,12 @@ const CanvasBody = () => {
     }
   };
 
+  const [request, setRequest] = useState(null);
+
+  const handleRequest = () => {
+    setRequest;
+  };
+
   return (
     <BodyContainer>
       <Grid container>
@@ -387,7 +393,11 @@ const CanvasBody = () => {
                   />
                 </IconButton>{' '}
                 &nbsp;
-                <Button variant="contained" size="small" onClick={() => {}}>
+                <Button
+                  variant="contained"
+                  size="small"
+                  onClick={handleRequest}
+                >
                   Regenerate
                 </Button>
               </span>

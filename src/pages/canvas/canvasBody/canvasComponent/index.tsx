@@ -14,6 +14,7 @@ import { theme } from '@/constants/theme';
 import {
   setActiveCanvas,
   setCanvas,
+  setRequest,
   updateCanvasInList,
 } from '@/redux/reducers/canvas';
 import WebFont from 'webfontloader';
@@ -118,7 +119,8 @@ const CanvasComponent: React.FC = () => {
   useEffect(() => {
     const newCanvas = new fabric.Canvas('canvas');
     newCanvas.clear();
-
+    console.log(canvasList);
+    console.log(newCanvas.toObject());
     newCanvas.loadFromJSON(
       canvasJS.canvas,
       () => {
@@ -154,6 +156,9 @@ const CanvasComponent: React.FC = () => {
             'className',
           ]);
           const id = canvasJS.id;
+          console.log(newCanvas.toObject(['name']).objects);
+          dispatch(setRequest(newCanvas.toObject(['name']).objects));
+
           dispatch(updateCanvasInList({ id, updatedCanvas }));
         });
         newCanvas.on('object:removed', e => {
@@ -165,6 +170,8 @@ const CanvasComponent: React.FC = () => {
             'className',
           ]);
           const id = canvasJS.id;
+          console.log(newCanvas.toObject());
+
           dispatch(updateCanvasInList({ id, updatedCanvas }));
         });
 
@@ -177,6 +184,8 @@ const CanvasComponent: React.FC = () => {
             'className',
           ]);
           const id = canvasJS.id;
+          console.log(newCanvas.toObject());
+
           dispatch(updateCanvasInList({ id, updatedCanvas }));
         });
 
@@ -189,10 +198,12 @@ const CanvasComponent: React.FC = () => {
             'className',
           ]);
           const id = canvasJS.id;
+          console.log(newCanvas.toObject());
+
           dispatch(updateCanvasInList({ id, updatedCanvas }));
         });
-        newCanvas.on('object:moving', handleAllElements);
 
+        newCanvas.on('object:moving', handleAllElements);
         newCanvas.on('object:moving', function (options) {
           handleObjectMoving(options, newCanvas);
         });
@@ -524,7 +535,12 @@ const CanvasComponent: React.FC = () => {
 
   return (
     <CanvasContainer ref={Container}>
-      <button id='but' onClick={() => console.log(canvasRef.current?.getActiveObject())}>GET DETAILS</button>  
+      <button
+        id="but"
+        onClick={() => console.log(canvasRef.current?.getActiveObject())}
+      >
+        GET DETAILS
+      </button>
       <canvas id="canvas"></canvas>
     </CanvasContainer>
   );
