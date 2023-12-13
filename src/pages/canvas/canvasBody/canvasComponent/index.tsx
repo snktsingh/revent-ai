@@ -65,6 +65,7 @@ const CanvasComponent: React.FC = () => {
     handleObjectMoving,
     handleAddCustomIcon,
     handleSelectionCreated,
+    CanvasClick
   } = useAllElements();
 
   const { color, textColor, borderColor, canvasJS, canvasList, size } =
@@ -137,6 +138,10 @@ const CanvasComponent: React.FC = () => {
         newCanvas.selectionLineWidth = 1;
 
         CustomBorderIcons(newCanvas);
+
+        newCanvas.on('mouse:down',(event)=>{
+          CanvasClick(newCanvas,event)
+        })
 
         newCanvas.on('selection:created', function (event) {
           handleSelectionCreated(canvas, event);
@@ -524,7 +529,7 @@ const CanvasComponent: React.FC = () => {
 
   return (
     <CanvasContainer ref={Container}>
-      <button id='but' onClick={() => console.log(canvasRef.current?.getActiveObject())}>GET DETAILS</button>  
+      {/* <button id='but' onClick={() => console.log(canvasRef.current?.getActiveObject())}>GET DETAILS</button>   */}
       <canvas id="canvas"></canvas>
     </CanvasContainer>
   );

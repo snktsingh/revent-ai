@@ -17,6 +17,7 @@ export interface IExtendedTextboxOptions extends fabric.ITextboxOptions {
   listType?: string;
   listBullet?: string;
   listCounter?: number;
+  _renderTextLine?: Function;
 }
 
 export interface RectContainer extends fabric.Rect {
@@ -608,7 +609,7 @@ export default function useAllElements() {
   let group: fabric.Group;
 
   const addPyramidLevel = (canvas: fabric.Canvas) => {
-   
+
     let lastLevel: any;
     let lastText: any;
     canvas.forEachObject((obj) => {
@@ -1107,57 +1108,6 @@ export default function useAllElements() {
 
       canvas?.add(circle, text);
     }
-
-    // switch (levels) {
-    //   case 3:
-    //     createCircleWithText(100, 100);
-    //     canvas?.add(addArrow(220, 124, 0));
-    //     canvas?.add(addArrow(197, 208, 56));
-    //     canvas?.add(addArrow(337, 232, 120));
-    //     createCircleWithText(292, 100);
-    //     createCircleWithText(195, 258);
-    //     break;
-    //   case 4:
-    //     createCircleWithText(305, 35);
-    //     createCircleWithText(305, 259);
-    //     createCircleWithText(178, 148);
-    //     createCircleWithText(436, 148);
-    //     canvas?.add(addArrow(242, 132, 311));
-    //     canvas?.add(addArrow(428, 85, 29));
-    //     canvas?.add(addArrow(271, 227, 35));
-    //     canvas?.add(addArrow(466, 263, 124));
-    //     break;
-    //   case 5:
-    //     createCircleWithText(330, 17);
-    //     createCircleWithText(476, 133);
-    //     createCircleWithText(191, 133);
-    //     createCircleWithText(262, 307);
-    //     createCircleWithText(452, 307);
-    //     canvas?.add(addArrow(256, 116, -51));
-    //     canvas?.add(addArrow(465, 76, 31));
-    //     canvas?.add(addArrow(251, 320, 232));
-    //     canvas?.add(addArrow(560, 265, 114));
-    //     canvas?.add(addArrow(426, 394, 179));
-    //     break;
-    //   case 6:
-    //     createCircleWithText(261, 24);
-    //     createCircleWithText(461, 24);
-    //     createCircleWithText(148, 169);
-    //     createCircleWithText(571, 169);
-    //     createCircleWithText(261, 327);
-    //     createCircleWithText(461, 332);
-    //     canvas?.add(addArrow(388, 38, 358));
-    //     canvas?.add(addArrow(211, 140, 311));
-    //     canvas?.add(addArrow(584, 102, 51));
-    //     canvas?.add(addArrow(234, 336, 235));
-    //     canvas?.add(addArrow(614, 301, 124));
-    //     canvas?.add(addArrow(436, 408, 180));
-    //     break;
-
-    //   default:
-    //     break;
-    // }
-
     const mainCycleContainer = new fabric.Rect({
       left: 267,
       top: 92,
@@ -1529,13 +1479,13 @@ export default function useAllElements() {
       height: 250,
       fill: 'transparent',
       strokeWidth: 1,
-      stroke: 'transparent',
+      stroke: '#cbcbcb',
       name: 'List_Container',
     });
 
     const text = new fabric.Textbox('Text', {
       fontSize: 20,
-      width: 100,
+      width: 200,
       height: 100,
       fill: 'black',
       left: mainListContainer.left,
@@ -1545,13 +1495,14 @@ export default function useAllElements() {
     });
 
     const addImage = new fabric.Text('+ Add Image', {
-      top: mainListContainer.top! + 50,
-      left: mainListContainer.left! + 30,
+      top: mainListContainer.top! + 80,
+      left: mainListContainer.left! + 50,
       fill: 'black',
       fontSize: 20,
       hasControls: false,
       selectable: false,
       hoverCursor: 'pointer',
+      name: 'ListAddImageText'
     });
 
     canvas?.add(mainListContainer);
@@ -1572,8 +1523,9 @@ export default function useAllElements() {
     options: fabric.IEvent<MouseEvent>,
     canvas: fabric.Canvas
   ) => {
-    var movedObject: FabricObject = options.target;
-    movedObject?.setCoords();
+    const movedObject = options.target as FabricObject | undefined;
+    if (movedObject) {
+      movedObject.setCoords();
 
     if (movedObject?.name === 'PYRAMID') {
       const lastLeft = movedObject.get('lastLeft') || movedObject.left;
@@ -1846,8 +1798,66 @@ export default function useAllElements() {
         lastLeft: movedObject.left,
         lastTop: movedObject.top,
       });
-    }
 
+    } else if (movedObject.name === 'List_Container') {
+      const lastLeft = movedObject.get('lastLeft') || movedObject.left;
+      const lastTop = movedObject.get('lastTop') || movedObject.top;
+
+      var deltaX = movedObject.left! - lastLeft!;
+      var deltaY = movedObject.top! - lastTop!;
+
+      canvas.forEachObject(function (obj) {
+        let left;
+        let top;
+
+        if (
+          obj.name === 'listText' &&
+          obj.intersectsWithObject(movedObject, true, true)
+        ) {
+          obj
+            .set({
+              left: obj.left! + deltaX,
+              top: obj.top! + deltaY,
+            })
+            .setCoords();
+          left = obj.left! + deltaX;
+          top = obj.top! + deltaY;
+        }
+
+        if (
+          obj.name == 'ListAddImageText' &&
+          obj.intersectsWithObject(movedObject, true, true)
+        ) {
+          obj
+            .set({
+              left: obj.left! + deltaX,
+              top: obj.top! + deltaY,
+            })
+            .setCoords();
+          left = obj.left! + deltaX;
+          top = obj.top! + deltaY;
+        }
+        if (
+          obj.name == 'listImage' &&
+          obj.intersectsWithObject(movedObject, true, true)
+        ) {
+          obj
+            .set({
+              left: obj.left! + deltaX,
+              top: obj.top! + deltaY,
+            })
+            .setCoords();
+          left = obj.left! + deltaX;
+          top = obj.top! + deltaY;
+        }
+      });
+
+      movedObject.set({
+        lastLeft: movedObject.left,
+        lastTop: movedObject.top,
+      });
+    }
+  }
     canvas?.requestRenderAll();
   };
 
@@ -1943,36 +1953,38 @@ export default function useAllElements() {
     }
 
     canvas.on('selection:created', event => {
-      let selectedObject: fabric.Object | undefined = event.selected[0];
-
-      if (selectedObject?.name === 'PYRAMID') {
-        selectedObject.setControlVisible('addPyramid', true);
-      } else {
-        selectedObject.setControlVisible('addPyramid', false);
-      }
-
-      if (selectedObject?.name === 'Process_Container') {
-        selectedObject.setControlVisible('addProcess', true);
-      } else {
-        selectedObject.setControlVisible('addProcess', false);
-      }
-
-      if (selectedObject?.name === 'Timeline_Container') {
-        selectedObject.setControlVisible('addTimeline', true);
-      } else {
-        selectedObject.setControlVisible('addTimeline', false);
-      }
-
-      if (selectedObject?.name === 'Funnel') {
-        selectedObject.setControlVisible('addFunnel', true);
-      } else {
-        selectedObject.setControlVisible('addFunnel', false);
-      }
-
-      if (selectedObject?.name === 'Cycle_Container') {
-        selectedObject.setControlVisible('addCycle', true);
-      } else {
-        selectedObject.setControlVisible('addCycle', false);
+      if (event.selected && event.selected.length > 0){
+        let selectedObject: fabric.Object | undefined = event.selected[0];
+  
+        if (selectedObject?.name === 'PYRAMID') {
+          selectedObject.setControlVisible('addPyramid', true);
+        } else {
+          selectedObject.setControlVisible('addPyramid', false);
+        }
+  
+        if (selectedObject?.name === 'Process_Container') {
+          selectedObject.setControlVisible('addProcess', true);
+        } else {
+          selectedObject.setControlVisible('addProcess', false);
+        }
+  
+        if (selectedObject?.name === 'Timeline_Container') {
+          selectedObject.setControlVisible('addTimeline', true);
+        } else {
+          selectedObject.setControlVisible('addTimeline', false);
+        }
+  
+        if (selectedObject?.name === 'Funnel') {
+          selectedObject.setControlVisible('addFunnel', true);
+        } else {
+          selectedObject.setControlVisible('addFunnel', false);
+        }
+  
+        if (selectedObject?.name === 'Cycle_Container') {
+          selectedObject.setControlVisible('addCycle', true);
+        } else {
+          selectedObject.setControlVisible('addCycle', false);
+        }
       }
     });
 
@@ -2059,7 +2071,8 @@ export default function useAllElements() {
     }
 
     canvas.forEachObject(function (obj) {
-      if ((obj as IExtendedTextboxOptions).listType == 'bullet') {
+      const extendedTextbox = obj as IExtendedTextboxOptions;
+      if (extendedTextbox?.listType == 'bullet') {
         const renderTextLine = function (
           this: any,
           method: any,
@@ -2068,7 +2081,7 @@ export default function useAllElements() {
           left: any,
           top: any,
           lineIndex: any
-        ) {
+        )  {
           const style0 = this.getCompleteStyleDeclaration(lineIndex, 0);
 
           // Determine the list type
@@ -2110,11 +2123,53 @@ export default function useAllElements() {
 
           this._renderChars(method, ctx, line, left, top, lineIndex);
         };
-        obj._renderTextLine = renderTextLine;
-        obj.dirty = true;
+        extendedTextbox._renderTextLine = renderTextLine;
+        extendedTextbox.dirty = true;
       }
     });
   };
+
+  //Canvas Click Event 
+
+  function CanvasClick(canvas: fabric.Canvas, event: fabric.IEvent<MouseEvent>) {
+    let object = event.target;
+    if (object && object?.name === "ListAddImageText") {
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = 'image/**';
+      fileInput.click();
+      let file;
+      let reader = new FileReader();
+      fileInput.addEventListener('change', e => {
+        file = (e.target as HTMLInputElement)?.files?.[0];
+        if (file) {
+          reader.onload = () => {
+            if (canvas) {
+              fabric.Image.fromURL(reader.result as string, img => {
+                const fixedWidth = 195; // Set the fixed width you desire
+                const fixedHeight = 200; // Set the fixed height you desire
+                img.scaleToWidth(fixedWidth);
+                img.scaleToHeight(fixedHeight);
+                img.set({
+                  left: object && object.left !== undefined ? object.left - 48 : 0,
+                  top: object && object.top !== undefined ? object.top - 78 : 0,
+                  name: 'listImage',
+    
+                });
+
+                canvas?.add(img);
+                canvas?.bringForward(img)
+              
+              });
+            }
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+      canvas.remove(object)
+      canvas.requestRenderAll()
+    }
+  }
 
   return {
     title,
@@ -2142,5 +2197,6 @@ export default function useAllElements() {
     handleObjectMoving,
     handleAddCustomIcon,
     handleSelectionCreated,
+    CanvasClick
   };
 }

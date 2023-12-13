@@ -59,6 +59,18 @@ import FontDownloadOutlinedIcon from '@mui/icons-material/FontDownloadOutlined';
 import ColorizeOutlinedIcon from '@mui/icons-material/ColorizeOutlined';
 import WebFont from 'webfontloader';
 
+interface FontItem {
+  category: string;
+  family: string;
+  files: { [key: string]: string };
+  kind: string;
+  lastModified: string;
+  menu: string;
+  subsets: string[];
+  variants: string[];
+  version: string;
+  // Add other properties as needed
+}
 
 const CanvasTools = () => {
   const dispatch = useAppDispatch();
@@ -71,7 +83,7 @@ const CanvasTools = () => {
   const [inputColor, setInputColor] = useState<string>('');
   const [inputTextColor, setInputTextColor] = useState<string>('');
   const [inputBorderColor, setInputBorderColor] = useState<string>('');
-  const [googleFonts,setGoogleFonts] = useState([]);
+  const [googleFonts,setGoogleFonts] = useState<FontItem[]>([]);
   const [start, setStart] = useState<number>(0);
   const [end, setEnd] = useState<number>(200);
   const selectRef = useRef<HTMLDivElement>(null);
@@ -143,7 +155,8 @@ const CanvasTools = () => {
     fetch(`https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyAQsGKSth3gRPYEmNuIqIBrk_32GqB6W38&sort=alpha`)
     .then((res)=>res.json()).then((res)=>{
       // setGoogleFonts(res.items);
-      const fonts = res.items.slice(start, end);
+      const fonts: FontItem[] = res.items.slice(start, end);
+      console.log(res)
       setGoogleFonts((prevFonts) => [...prevFonts, ...fonts]);
     })
     .catch((error)=>{
@@ -221,9 +234,7 @@ const CanvasTools = () => {
         >
          
           <FontsInput placeholder='search fonts'/>
-          {/* <SelectMenuItem value={10}>Ten</SelectMenuItem>
-          <SelectMenuItem value={20}>Twenty</SelectMenuItem>
-          <SelectMenuItem value={30}>Thirty</SelectMenuItem> */}
+        
           {
            googleFonts?.slice(0,200)?.map((el:any)=>{
             

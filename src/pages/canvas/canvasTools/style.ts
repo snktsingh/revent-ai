@@ -185,7 +185,7 @@ export const FontsInput = styled.input`
   background: none;
   padding: 0;
   color: inherit;
-  margin: 2px 0 0 3px;
+  margin: 5px 0 5px 15px;
   font-size: inherit;
   -moz-appearance: textfield;
   &::-webkit-inner-spin-button,
