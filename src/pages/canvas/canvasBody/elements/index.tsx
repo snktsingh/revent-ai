@@ -604,7 +604,6 @@ export default function useAllElements() {
   let x3 = 100;
   let x4 = -100;
 
-
   let trapTop = 0;
   let group: fabric.Group;
 
@@ -612,17 +611,16 @@ export default function useAllElements() {
 
     let lastLevel: any;
     let lastText: any;
-    canvas.forEachObject((obj) => {
-
+    canvas.forEachObject(obj => {
       if (obj.name == 'PYRAMID_TEXT') {
         lastText = obj;
       }
-    })
+    });
     let activeObject = canvas.getActiveObject();
     if (activeObject?.type == 'group' && activeObject.name === 'PYRAMID') {
-      (activeObject as fabric.Group).forEachObject((obj) => {
-        lastLevel = obj
-      })
+      (activeObject as fabric.Group).forEachObject(obj => {
+        lastLevel = obj;
+      });
     }
 
     if (lastLevel) {
@@ -636,7 +634,10 @@ export default function useAllElements() {
         {
           fill: 'transparent',
           stroke: 'black',
-          top: (activeObject as fabric.Group)?.getScaledHeight() + (activeObject as fabric.Group).top! - 1,
+          top:
+            (activeObject as fabric.Group)?.getScaledHeight() +
+            (activeObject as fabric.Group).top! -
+            1,
           left: (activeObject as fabric.Group).left! - 40,
           name: 'Pyramid_LEVEL',
         }
@@ -649,7 +650,6 @@ export default function useAllElements() {
         width: 100,
         name: 'PYRAMID_TEXT',
       });
-
 
       (activeObject as fabric.Group).addWithUpdate(trapezoid);
       canvas.add(text);
@@ -707,8 +707,6 @@ export default function useAllElements() {
         levels.push(trapezoid);
       }
 
-
-
       const text = new fabric.Textbox('Add Text', {
         fontSize: 18,
         left: 274,
@@ -716,7 +714,6 @@ export default function useAllElements() {
         width: 100,
         name: 'PYRAMID_TEXT',
       });
-
 
       textsList.push(text);
       return levels;
@@ -898,24 +895,22 @@ export default function useAllElements() {
     canvas.forEachObject(obj => {
       if (obj.name == 'Cycle_Container') {
         mainContainer = obj;
-        canvas.remove(obj)
+        canvas.remove(obj);
       }
 
       if (obj.name == 'Cycle_Arrow') {
         arrows.push(obj);
-        canvas.remove(obj)
+        canvas.remove(obj);
       }
       if (obj.name == 'Cycle_Circle') {
         Circles.push(obj);
-        canvas.remove(obj)
+        canvas.remove(obj);
       }
       if (obj.name == 'Cycle_Text') {
         texts.push(obj);
-
       }
     });
     const addCircle = (left: number, top: number) => {
-
       const circle = new fabric.Circle({
         radius: 50,
         fill: theme.colorSchemes.light.palette.primary.main,
@@ -925,7 +920,7 @@ export default function useAllElements() {
         name: 'Cycle_Circle',
       });
       return canvas.add(circle);
-    }
+    };
 
     const addText = (left: number, top: number) => {
       const text = new fabric.Textbox('Add Text', {
@@ -938,7 +933,7 @@ export default function useAllElements() {
         name: 'Cycle_Text',
       });
       return canvas.add(text);
-    }
+    };
     switch (Circles.length + 1) {
       // case 3:
       //   createCircleWithText(100, 100);
@@ -953,9 +948,9 @@ export default function useAllElements() {
           width: 382,
           height: 324,
           top: 35,
-          left: 178
-        })
-        canvas.add(mainContainer!)
+          left: 178,
+        });
+        canvas.add(mainContainer!);
 
         addCircle(305, 35);
         addCircle(305, 259);
@@ -968,31 +963,36 @@ export default function useAllElements() {
         canvas.bringToFront(texts[0]);
         canvas.bringToFront(texts[1]);
         canvas.bringToFront(texts[2]);
-        addText(320, 275)
-        texts[0].set({
-          left: 198,
-          top: 165,
-        }).setCoords()
-        texts[1].set({
-          left: 320,
-          top: 54,
-        }).setCoords()
-        texts[2].set({
-          left: 452,
-          top: 166,
-        }).setCoords()
+        addText(320, 275);
+        texts[0]
+          .set({
+            left: 198,
+            top: 165,
+          })
+          .setCoords();
+        texts[1]
+          .set({
+            left: 320,
+            top: 54,
+          })
+          .setCoords();
+        texts[2]
+          .set({
+            left: 452,
+            top: 166,
+          })
+          .setCoords();
 
-
-        canvas?.requestRenderAll()
+        canvas?.requestRenderAll();
         break;
       case 5:
         mainContainer!.set({
           width: 386,
           height: 391,
           top: 17,
-          left: 191
-        })
-        canvas.add(mainContainer!)
+          left: 191,
+        });
+        canvas.add(mainContainer!);
         addCircle(330, 17);
         addCircle(476, 133);
         addCircle(191, 133);
@@ -1007,33 +1007,41 @@ export default function useAllElements() {
         canvas.bringToFront(texts[1]);
         canvas.bringToFront(texts[2]);
         canvas.bringToFront(texts[3]);
-        addText(277, 325)
-        texts[0].set({
-          left: 217,
-          top: 162,
-        }).setCoords()
-        texts[1].set({
-          left: 354,
-          top: 36,
-        }).setCoords()
-        texts[2].set({
-          left: 501,
-          top: 153,
-        }).setCoords()
-        texts[3].set({
-          left: 478,
-          top: 322,
-        }).setCoords()
-        canvas?.requestRenderAll()
+        addText(277, 325);
+        texts[0]
+          .set({
+            left: 217,
+            top: 162,
+          })
+          .setCoords();
+        texts[1]
+          .set({
+            left: 354,
+            top: 36,
+          })
+          .setCoords();
+        texts[2]
+          .set({
+            left: 501,
+            top: 153,
+          })
+          .setCoords();
+        texts[3]
+          .set({
+            left: 478,
+            top: 322,
+          })
+          .setCoords();
+        canvas?.requestRenderAll();
         break;
       case 6:
         mainContainer!.set({
           width: 524,
           height: 409,
           top: 24,
-          left: 148
-        })
-        canvas.add(mainContainer!)
+          left: 148,
+        });
+        canvas.add(mainContainer!);
         addCircle(261, 24);
         addCircle(461, 24);
         addCircle(148, 169);
@@ -1051,34 +1059,44 @@ export default function useAllElements() {
         canvas.bringToFront(texts[2]);
         canvas.bringToFront(texts[3]);
         canvas.bringToFront(texts[4]);
-        addText(274, 346)
-        texts[0].set({
-          left: 162,
-          top: 186,
-        }).setCoords()
-        texts[1].set({
-          left: 276,
-          top: 40,
-        }).setCoords()
-        texts[2].set({
-          left: 481,
-          top: 43,
-        }).setCoords()
-        texts[3].set({
-          left: 580,
-          top: 189,
-        }).setCoords()
-        texts[4].set({
-          left: 474,
-          top: 346,
-        }).setCoords()
-        canvas?.requestRenderAll()
+        addText(274, 346);
+        texts[0]
+          .set({
+            left: 162,
+            top: 186,
+          })
+          .setCoords();
+        texts[1]
+          .set({
+            left: 276,
+            top: 40,
+          })
+          .setCoords();
+        texts[2]
+          .set({
+            left: 481,
+            top: 43,
+          })
+          .setCoords();
+        texts[3]
+          .set({
+            left: 580,
+            top: 189,
+          })
+          .setCoords();
+        texts[4]
+          .set({
+            left: 474,
+            top: 346,
+          })
+          .setCoords();
+        canvas?.requestRenderAll();
         break;
       default:
         break;
     }
 
-    canvas?.renderAll()
+    canvas?.renderAll();
 
     console.log(texts);
   }
@@ -1511,12 +1529,11 @@ export default function useAllElements() {
     canvas?.renderAll();
   };
 
-
   //HandleObjectMoving
 
   interface FabricObject extends fabric.Object {
-    lastLeft: number,
-    lastTop: number,
+    lastLeft: number;
+    lastTop: number;
   }
 
   const handleObjectMoving = (
@@ -1546,6 +1563,7 @@ export default function useAllElements() {
             .set({
               left: obj.left! + deltaX,
               top: obj.top! + deltaY,
+              name: 'pyramidTextbox',
             })
             .setCoords();
           left = obj.left! + deltaX;

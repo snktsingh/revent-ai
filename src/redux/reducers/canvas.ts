@@ -26,6 +26,7 @@ export interface CanvasSate {
   activeCanvasID: number;
   size: number;
   canvasData: string[];
+  requestData: any;
 }
 const canvas = new fabric.Canvas(null);
 const canvasJSON = canvas.toObject();
@@ -40,6 +41,7 @@ export const initialState: CanvasSate = {
   activeCanvasID: 1,
   size: 1,
   canvasData: [],
+  requestData: null,
 };
 
 export const CanvasReducer = createSlice({
@@ -52,7 +54,10 @@ export const CanvasReducer = createSlice({
       // state.canvasJS = canvasJSON;
       // state.canvasList.push(canvasJSON);
     },
-    setCanvas(state, action) {
+    setRequest: (state, action) => {
+      state.requestData = action.payload;
+    },
+    setCanvas: (state, action) => {
       state.canvasJS = action.payload;
     },
     setCanvasData: (state, action) => {
@@ -209,6 +214,7 @@ export const {
   handleSize,
   handleInputSize,
   setCanvasData,
+  setRequest,
 } = CanvasReducer.actions;
 
 export default CanvasReducer.reducer;
