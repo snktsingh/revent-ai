@@ -15,6 +15,7 @@ import {
   setActiveCanvas,
   setCanvas,
   setRequest,
+  setTempData,
   updateCanvasInList,
 } from '@/redux/reducers/canvas';
 import WebFont from 'webfontloader';
@@ -66,11 +67,29 @@ const CanvasComponent: React.FC = () => {
     handleObjectMoving,
     handleAddCustomIcon,
     handleSelectionCreated,
-    CanvasClick
+    CanvasClick,
   } = useAllElements();
 
-  const { color, textColor, borderColor, canvasJS, canvasList, size } =
-    useAppSelector(state => state.canvas);
+  const {
+    color,
+    textColor,
+    borderColor,
+    canvasJS,
+    canvasList,
+    size,
+    requestData,
+    tempData,
+  } = useAppSelector(state => state.canvas);
+
+  // For
+  useEffect(() => {
+    for (let i = 0; i < tempData.length; i++) {
+      if (tempData[i].type === 'textbox' || tempData[i].type === 'i-text') {
+        dispatch(setRequest([...requestData, { text: tempData[i].text }]));
+        // dispatch(setTempData(tempData.splice(tempData[i], tempData[i + 1])));
+      }
+    }
+  }, [tempData]);
 
   const handleAllElements = (event: fabric.IEvent) => {
     const { target } = event;
@@ -141,9 +160,9 @@ const CanvasComponent: React.FC = () => {
 
         CustomBorderIcons(newCanvas);
 
-        newCanvas.on('mouse:down',(event)=>{
-          CanvasClick(newCanvas,event)
-        })
+        newCanvas.on('mouse:down', event => {
+          CanvasClick(newCanvas, event);
+        });
 
         newCanvas.on('selection:created', function (event) {
           handleSelectionCreated(canvas, event);
@@ -161,11 +180,12 @@ const CanvasComponent: React.FC = () => {
             'className',
           ]);
           const id = canvasJS.id;
+          dispatch(setTempData(newCanvas.toObject(['name']).objects));
           console.log(newCanvas.toObject(['name']).objects);
-          dispatch(setRequest(newCanvas.toObject(['name']).objects));
-
+          // dispatch(setRequest(newCanvas.toObject(['name']).objects));
           dispatch(updateCanvasInList({ id, updatedCanvas }));
         });
+
         newCanvas.on('object:removed', e => {
           const updatedCanvas = newCanvas?.toObject([
             'listType',
@@ -207,7 +227,6 @@ const CanvasComponent: React.FC = () => {
 
           dispatch(updateCanvasInList({ id, updatedCanvas }));
         });
-
         newCanvas.on('object:moving', handleAllElements);
         newCanvas.on('object:moving', function (options) {
           handleObjectMoving(options, newCanvas);
@@ -540,7 +559,15 @@ const CanvasComponent: React.FC = () => {
 
   return (
     <CanvasContainer ref={Container}>
-      {/* <button id='but' onClick={() => console.log(canvasRef.current?.getActiveObject())}>GET DETAILS</button>   */}
+      <button
+        id="but"
+        onClick={() => {
+          console.log('temp', tempData);
+          console.log('requuest', requestData);
+        }}
+      >
+        GET DETAILS
+      </button>
       <canvas id="canvas"></canvas>
     </CanvasContainer>
   );

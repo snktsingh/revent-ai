@@ -50,13 +50,17 @@ import {
   TableDetails,
   copyCanvasCopy,
   setCanvas,
+  setRequest,
   setTableDetails,
+  setTempData,
 } from '@/redux/reducers/canvas';
 
 const CanvasBody = () => {
   const slide = useAppSelector(state => state.slide);
   const dispatch = useAppDispatch();
-  const { canvasJS } = useAppSelector(state => state.canvas);
+  const { canvasJS, requestData, tempData } = useAppSelector(
+    state => state.canvas
+  );
   const [activeLike, setActiveLike] = useState(false);
   const [activeDislike, setActiveDislike] = useState(false);
   const [elementName, setElementName] = useState<string>('');
@@ -343,10 +347,8 @@ const CanvasBody = () => {
     }
   };
 
-  const [request, setRequest] = useState(null);
-
   const handleRequest = () => {
-    setRequest;
+    console.log(requestData);
   };
 
   return (
