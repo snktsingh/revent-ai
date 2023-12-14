@@ -81,15 +81,63 @@ const CanvasComponent: React.FC = () => {
     tempData,
   } = useAppSelector(state => state.canvas);
 
-  // For
+  const { itemKey } = useAppSelector(state => state.element);
+
   useEffect(() => {
     for (let i = 0; i < tempData.length; i++) {
       if (tempData[i].type === 'textbox' || tempData[i].type === 'i-text') {
-        dispatch(setRequest([...requestData, { text: tempData[i].text }]));
-        // dispatch(setTempData(tempData.splice(tempData[i], tempData[i + 1])));
+        if (
+          itemKey == 1 ||
+          itemKey == 2 ||
+          itemKey == 3 ||
+          itemKey == 4 ||
+          itemKey == 5
+        ) {
+          dispatch(setRequest([...requestData, { text: tempData[i].text }]));
+        } else if (itemKey == 15) {
+          dispatch(
+            setRequest([
+              ...requestData,
+              { shape: 'Pyramid', data: [{ text: tempData[i].text }] },
+            ])
+          );
+        } else if (itemKey == 14) {
+          dispatch(
+            setRequest([
+              ...requestData,
+              { shape: 'Funnel', data: [{ text: tempData[i].text }] },
+            ])
+          );
+        } else if (itemKey == 13) {
+          dispatch(
+            setRequest([
+              ...requestData,
+              { shape: 'Timeline', data: [{ text: tempData[i].text }] },
+            ])
+          );
+        } else if (itemKey == 12) {
+          dispatch(
+            setRequest([
+              ...requestData,
+              { shape: 'Process', data: [{ text: tempData[i].text }] },
+            ])
+          );
+        } else if (itemKey == 11) {
+          dispatch(
+            setRequest([
+              ...requestData,
+              { shape: 'Cycle', data: [{ text: tempData[i].text }] },
+            ])
+          );
+        }
       }
     }
   }, [tempData]);
+
+  const data = {
+    companyName: 'Revent Ai',
+    data: requestData,
+  };
 
   const handleAllElements = (event: fabric.IEvent) => {
     const { target } = event;
@@ -160,7 +208,7 @@ const CanvasComponent: React.FC = () => {
 
         CustomBorderIcons(newCanvas);
 
-        newCanvas.on('mouse:down', event => {
+        newCanvas.on('mouse:up', event => {
           CanvasClick(newCanvas, event);
         });
 
@@ -195,8 +243,6 @@ const CanvasComponent: React.FC = () => {
             'className',
           ]);
           const id = canvasJS.id;
-          console.log(newCanvas.toObject());
-
           dispatch(updateCanvasInList({ id, updatedCanvas }));
         });
 
@@ -210,7 +256,6 @@ const CanvasComponent: React.FC = () => {
           ]);
           const id = canvasJS.id;
           console.log(newCanvas.toObject());
-
           dispatch(updateCanvasInList({ id, updatedCanvas }));
         });
 
@@ -223,8 +268,6 @@ const CanvasComponent: React.FC = () => {
             'className',
           ]);
           const id = canvasJS.id;
-          console.log(newCanvas.toObject());
-
           dispatch(updateCanvasInList({ id, updatedCanvas }));
         });
         newCanvas.on('object:moving', handleAllElements);
@@ -564,6 +607,7 @@ const CanvasComponent: React.FC = () => {
         onClick={() => {
           console.log('temp', tempData);
           console.log('requuest', requestData);
+          console.log('API DATA', data);
         }}
       >
         GET DETAILS

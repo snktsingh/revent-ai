@@ -16,6 +16,7 @@ import {
   Stack,
   TextField,
 } from '@mui/material';
+import axios from 'axios';
 import {
   BodyContainer,
   EditSlideContainer,
@@ -26,7 +27,7 @@ import {
 } from './style';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { AddElement, Copy, Delete } from '@/constants/media';
-import { openModal } from '@/redux/reducers/elements';
+import { openModal, setMenuItemKey } from '@/redux/reducers/elements';
 import PopUpModal from '@/constants/elements/modal';
 import { searchElement } from '@/redux/reducers/slide';
 import {
@@ -348,7 +349,14 @@ const CanvasBody = () => {
   };
 
   const handleRequest = () => {
-    console.log(requestData);
+    axios
+      .post('http://3.108.53.183:8080/api/ppt/generate-ppt', requestData)
+      .then(res => {
+        return console.log(res);
+      })
+      .catch(err => {
+        return console.log(err.data.message);
+      });
   };
 
   return (
@@ -474,7 +482,7 @@ const CanvasBody = () => {
                     onClick={() => {
                       handleClose();
                       item.onClick();
-                      console.log(item.key);
+                      dispatch(setMenuItemKey(item.key));
                     }}
                     style={{ display: 'flex', flexDirection: 'column' }}
                     key={index}

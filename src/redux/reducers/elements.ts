@@ -3,15 +3,17 @@ import { createSlice } from '@reduxjs/toolkit';
 export interface TestState {
   isModalVisible: boolean;
   openTemplates: boolean;
-  openVariant : boolean;
-  openNotes : boolean;
+  openVariant: boolean;
+  openNotes: boolean;
+  itemKey: number;
 }
 
 const initialState: TestState = {
   isModalVisible: false,
   openTemplates: false,
-  openVariant : false,
+  openVariant: false,
   openNotes: false,
+  itemKey: 0,
 };
 
 export const ElementReducer = createSlice({
@@ -21,23 +23,32 @@ export const ElementReducer = createSlice({
     openModal: state => {
       state.isModalVisible = true;
     },
+    setMenuItemKey: (state, action) => {
+      state.itemKey = action.payload;
+    },
     closeModal: state => {
       state.isModalVisible = false;
     },
     toggleTemplateVisibility: state => {
       state.openTemplates = !state.openTemplates;
     },
-    toggleVariantSlide : state => {
+    toggleVariantSlide: state => {
       state.openVariant = !state.openVariant;
     },
-    toggleNotesSlide : state => {
+    toggleNotesSlide: state => {
       state.openNotes = !state.openNotes;
-    }
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { openModal, closeModal, toggleTemplateVisibility,toggleVariantSlide,toggleNotesSlide } =
-  ElementReducer.actions;
+export const {
+  openModal,
+  closeModal,
+  toggleTemplateVisibility,
+  toggleVariantSlide,
+  toggleNotesSlide,
+  setMenuItemKey,
+} = ElementReducer.actions;
 
 export default ElementReducer.reducer;
