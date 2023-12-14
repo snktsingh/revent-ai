@@ -1,4 +1,4 @@
-import { Button, Divider, IconButton, Input, Menu, Stack } from '@mui/material';
+import { Autocomplete, Button, Divider, IconButton, Input, Menu, Paper, Stack, TextField } from '@mui/material';
 import {
   BorderColorDiv,
   ColorDiv,
@@ -75,7 +75,7 @@ interface FontItem {
 const CanvasTools = () => {
   const dispatch = useAppDispatch();
   const newKey = useAppSelector(state => state.slide);
-  const { color, textColor, borderColor,canvasList,size } = useAppSelector(
+  const { color, textColor, borderColor, canvasList, size } = useAppSelector(
     state => state.canvas
   );
   const obj = { key: newKey.nextKey, name: `Slide ${newKey.nextKey}` };
@@ -83,9 +83,11 @@ const CanvasTools = () => {
   const [inputColor, setInputColor] = useState<string>('');
   const [inputTextColor, setInputTextColor] = useState<string>('');
   const [inputBorderColor, setInputBorderColor] = useState<string>('');
-  const [googleFonts,setGoogleFonts] = useState<FontItem[]>([]);
+  const [googleFonts, setGoogleFonts] = useState<FontItem[]>([]);
   const [start, setStart] = useState<number>(0);
   const [end, setEnd] = useState<number>(200);
+  const [filteredFonts, setFilteredFonts] = useState<FontItem[]>([]);
+  const [searchFont, setSearchFont] = useState<string>();
   const selectRef = useRef<HTMLDivElement>(null);
 
   const [anchorShapesEl, setAnchorShapesEl] = useState<null | HTMLElement>(
@@ -150,36 +152,25 @@ const CanvasTools = () => {
     dispatch(setBorderColor(e.target.value));
   };
 
-  useEffect(()=>{
-  
+  useEffect(() => {
+
     fetch(`https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyAQsGKSth3gRPYEmNuIqIBrk_32GqB6W38&sort=alpha`)
-    .then((res)=>res.json()).then((res)=>{
-      // setGoogleFonts(res.items);
-      const fonts: FontItem[] = res.items.slice(start, end);
-      console.log(res)
-      setGoogleFonts((prevFonts) => [...prevFonts, ...fonts]);
-    })
-    .catch((error)=>{
-      console.log(error);
-      
-    })
+      .then((res) => res.json()).then((res) => {
+        // setGoogleFonts(res.items);
+        const fonts: FontItem[] = res.items.slice(start, end);
+        setFilteredFonts(fonts);
+        // setGoogleFonts((prevFonts) => [...prevFonts, ...fonts]);
+        setGoogleFonts(res.items)
 
-    
+      })
+      .catch((error) => {
+        console.log(error);
 
-  },[start,end]);
+      })
 
-  // console.log(googleFonts?.items?.slice(0,40))
- const handleScroll = () => {
-    const { current } = selectRef;
-    console.log('hello')
-    if (current) {
-      const bottom = current.scrollHeight - current.scrollTop === current.clientHeight;
-      if (bottom) {
-        setStart(end);
-        setEnd(end + 200);
-      }
-    }
-  };
+  }, [start, end]);
+
+
 
   useEffect(() => {
     colorChange.colorFillChange();
@@ -201,6 +192,27 @@ const CanvasTools = () => {
     dispatch(setColor(e.target.value));
   };
 
+  const loadFont = (fontfamily: string) => {
+    WebFont.load({
+      google: {
+        families: [fontfamily],
+      }
+    });
+  }
+
+
+  const searchFonts = (value: string) => {
+    if (value === '') {
+      const fonts: FontItem[] = googleFonts.slice(0, 200);
+      setFilteredFonts(fonts);
+    } else {
+      const filtered = googleFonts.filter((font) =>
+        font.family.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredFonts(filtered);
+    }
+  }
+
   return (
     <MainToolContainer>
       <Stack
@@ -220,20 +232,20 @@ const CanvasTools = () => {
           dispatch(addCanvas());
           console.log(canvasList);
           dispatch(addSlide(obj));
-          }}>
+        }}>
           <Stack direction="row" spacing={1}>
             <img src={Add} />
             <p>New Slide</p>
           </Stack>
         </ToolOutlinedButton>
-        <ToolOutlinedSelect
+        {/* <ToolOutlinedSelect
           inputProps={{ 'aria-label': 'Without label' }}
           defaultValue={0}
           onScroll={handleScroll} ref={selectRef}
           onChange={(e)=> ContentElements.handleFontFamily(e.target.value) }
         >
          
-          <FontsInput placeholder='search fonts'/>
+          <FontsInput placeholder='search fonts' />
         
           {
            googleFonts?.slice(0,200)?.map((el:any)=>{
@@ -252,21 +264,53 @@ const CanvasTools = () => {
            <SelectMenuItem disabled value={0} style={{width:'200px',visibility:'hidden'}} >
             Font Style
           </SelectMenuItem>
-        </ToolOutlinedSelect>
-        <IconButton size="small" onClick={()=> {
+        </ToolOutlinedSelect> */}
+
+
+        <Autocomplete
+          sx={{ width: 200 }}
+          size="small"
+          value={searchFont}
+          onChange={(event, newValue) => {
+            ContentElements.handleFontFamily(newValue);
+          }}
+          inputValue={searchFont}
+          onInputChange={(event, newInputValue) => {
+            searchFonts(newInputValue );
+          }}
+          options={filteredFonts.map((el) => el.family) || []}
+          renderInput={(params) => {
+            return (<TextField
+              {...params}
+              label="Select a font"
+              variant="outlined"
+              placeholder="Search fonts"
+            />)
+          }}
+          renderOption={(props, option) => {
+            loadFont(option)
+            return (
+              <MenuItem {...props} style={{ fontFamily: option }}>
+                {option}
+              </MenuItem>
+            );
+          }}
+        />
+
+        <IconButton size="small" onClick={() => {
           dispatch(handleSize(-1))
           ContentElements.handleFontSize()
         }} disabled={size === 1}>
           <RemoveOutlined />
         </IconButton>
-         <InputForSize value={size} type='number' onChange={(e)=> {
+        <InputForSize value={size} type='number' onChange={(e) => {
           dispatch(handleInputSize(+e.target.value))
           ContentElements.handleFontSize()
-          }} />
-        <IconButton size="small" onClick={()=> {
+        }} />
+        <IconButton size="small" onClick={() => {
           dispatch(handleSize(1))
           ContentElements.handleFontSize()
-          }}>
+        }}>
           <AddOutlined />
         </IconButton>
         <ColorDiv onClick={handleTextColorClick}>
@@ -408,7 +452,7 @@ const CanvasTools = () => {
                     {shadesData.map(color => {
                       return (
                         <span
-                        key={color.shade1} style={{ display: 'flex', flexDirection: 'column' }}
+                          key={color.shade1} style={{ display: 'flex', flexDirection: 'column' }}
                         >
                           <ColorItem
                             key={color.shade1}
@@ -587,7 +631,7 @@ const CanvasTools = () => {
         </ToolOutlinedSelect>
         <ToolOutlinedSelect
           inputProps={{ 'aria-label': 'Without label' }}
-          // defaultValue={1}
+        // defaultValue={1}
         >
           <MenuItem value={1}>
             <FormatListBulletedIcon style={{ display: 'flex' }} />

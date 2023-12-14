@@ -177,6 +177,7 @@ export default function useAllElements() {
     });
   };
 
+  //custom border icons
   const CustomBorderIcons = (canvas: fabric.Canvas | null) => {
     var img = new Image();
     img.src = DeleteX;
@@ -205,76 +206,63 @@ export default function useAllElements() {
         render: renderCloneIcon,
       });
 
-    function deleteObject(
-      eventData: MouseEvent,
-      transformData: fabric.Transform,
-      x: number,
-      y: number
-    ): boolean {
-      if (canvas?.getActiveObject()!.name == 'Process_Container') {
+      const deleteObjectsByName = (names: string[]) => {
         canvas?.forEachObject(obj => {
-          if (
-            obj.name === 'ProcessBox' ||
-            obj.name === 'ProcessText' ||
-            obj.name === 'ProcessArrow'
-          ) {
+          if (names.includes(obj.name || '')) {
             canvas.remove(obj);
           }
         });
         canvas?.renderAll();
-      }
-
-      if (canvas?.getActiveObject()!.name == 'Timeline_Container') {
-        canvas?.forEachObject(obj => {
-          if (
-            obj.name === 'timeLineCircle' ||
-            obj.name === 'TimeLineText' ||
-            obj.name === 'TimeLineDirection'
-          ) {
-            canvas.remove(obj);
+      };
+    
+      function deleteObject(eventData: MouseEvent): boolean {
+        const activeObject = canvas?.getActiveObject();
+    
+        if (activeObject) {
+          const objectsToDelete: string[] = [];
+    
+          switch (activeObject.name) {
+            case 'Process_Container':
+              objectsToDelete.push('ProcessBox', 'ProcessText', 'ProcessArrow');
+              break;
+            case 'Timeline_Container':
+              objectsToDelete.push('timeLineCircle', 'TimeLineText', 'TimeLineDirection');
+              break;
+            case 'PYRAMID':
+              objectsToDelete.push('Pyramid_LEVEL', 'PYRAMID_TEXT');
+              break;
+            case 'Funnel':
+              objectsToDelete.push('Funnel_Text', 'Funnel_Base', 'Funnel_Level');
+              break;
+            case 'Cycle_Container' :
+              objectsToDelete.push('Cycle_Arrow', 'Cycle_Circle','Cycle_Text');
+              break;
+            case 'List_Container' :
+              objectsToDelete.push('listText','listImage','ListAddImageText');
+              break;
+            case 'Table_Container' :
+              objectsToDelete.push('Table_Text');
+              break;
+            default:
+              break;
           }
-        });
-        canvas?.renderAll();
-      }
-
-      if (canvas?.getActiveObject()!.name == 'PYRAMID') {
-        canvas?.forEachObject(obj => {
-          if (obj.name === 'Pyramid_LEVEL' || obj.name === 'PYRAMID_TEXT') {
-            canvas.remove(obj);
+    
+          deleteObjectsByName(objectsToDelete);
+    
+          if (activeObject instanceof fabric.Group) {
+            const groupObjects = activeObject.getObjects();
+            groupObjects.forEach(obj => {
+              canvas?.remove(obj);
+            });
           }
-        });
-        canvas?.renderAll();
+    
+          canvas?.remove(activeObject);
+          canvas?.discardActiveObject();
+          canvas?.renderAll();
+        }
+    
+        return true;
       }
-
-      if (canvas?.getActiveObject()!.name == 'Funnel') {
-        canvas?.forEachObject(obj => {
-          if (
-            obj.name === 'Funnel_Text' ||
-            obj.name === 'Funnel_Base' ||
-            obj.name === 'Funnel_Level'
-          ) {
-            canvas.remove(obj);
-          }
-        });
-        canvas?.renderAll();
-      }
-
-      canvas?.remove(canvas?.getActiveObject()!);
-
-      const groupObjects = (
-        canvas?.getActiveObject() as fabric.Group
-      )?.getObjects();
-      if (groupObjects) {
-        groupObjects.forEach((obj: any) => {
-          canvas?.remove(obj);
-        });
-      }
-
-      canvas?.discardActiveObject();
-      canvas?.renderAll();
-      return true;
-    }
-
     function cloneObject(
       eventData: MouseEvent,
       transformData: fabric.Transform,
@@ -463,68 +451,13 @@ export default function useAllElements() {
     cellHeight: number,
     canvas: fabric.Canvas | null
   ) => {
-    const ungroup = function (group: fabric.Group) {
-      let items = group._objects;
-      group._restoreObjectsState();
-      canvas?.remove(group);
-      canvas?.renderAll();
-      for (let i = 0; i < items.length; i++) {
-        canvas?.add(items[i]);
-      }
-      canvas?.renderAll();
-    };
+    
 
     const cellPadding = 6;
     const tableLeft = 50;
     const tableTop = 50;
 
-    // function createCell(left: number, top: number, i: number, j: number) {
-    //   const cell = new fabric.Rect({
-    //     width: cellWidth,
-    //     height: cellHeight,
-    //     fill: 'transparent',
-    //     stroke: 'black',
-    //     strokeWidth: 0.5,
-    //     selectable: false,
-    //     left: tableLeft + (j * cellWidth),
-    //     top: tableTop + (i * cellHeight),
-    //   });
-
-    //   const text = new fabric.Textbox(`Cell ${i + 1},${j + 1}`, {
-    //     left: cell.left! + cellPadding,
-    //     top: cell.top! + cellPadding,
-    //     fontSize: 16,
-    //     width: cellWidth - (2 * cellPadding),
-    //     height: cellHeight - (2 * cellPadding),
-    //     fontFamily: 'Arial',
-    //     editable: true,
-    //     hasControls: false,
-    //     hasBorders: false,
-    //   });
-    //   canvas.add(text)
-    //   canvas.add(cell)
-    //   const table = new fabric.Group([cell, text], {
-    //     hasBorders: true,
-    //     hasControls: true,
-    //   });
-
-    // table.on('mousedown', fabricDblClick(table, function (obj: any) {
-    //   ungroup(table);
-    //   canvas?.setActiveObject(text);
-    //   text.enterEditing();
-    //   text.selectAll();
-    // }));
-
-    //   return cell;
-    // }
-
-    // for (let i = 0; i < rows; i++) {
-    //   for (let j = 0; j < cols; j++) {
-    //     const cell = createCell(50, 50, i, j);
-    //     const group = new fabric.Group([cell]);
-    //     canvas?.add(group)
-    //   }
-    // }
+  
 
     function createTable() {
       const tableElements = [];
@@ -551,6 +484,7 @@ export default function useAllElements() {
             top: cell.top! + cellPadding,
             selectable: true,
             backgroundColor: 'white',
+            name:'Table_Text'
           });
 
           tableElements.push(cell);
@@ -563,6 +497,7 @@ export default function useAllElements() {
         top: tableTop,
         hasBorders: true,
         hasControls: true,
+        name:'Table_Container'
       });
 
       canvas?.add(tableGroup);
@@ -599,20 +534,14 @@ export default function useAllElements() {
 
   //pyramid
 
-  let x1 = -140;
-  let x2 = 140;
-  let x3 = 100;
-  let x4 = -100;
-
-  let trapTop = 0;
-  let group: fabric.Group;
+ 
 
   const addPyramidLevel = (canvas: fabric.Canvas) => {
 
     let lastLevel: any;
     let lastText: any;
     canvas.forEachObject(obj => {
-      if (obj.name == 'PYRAMID_TEXT') {
+      if (obj.name == 'pyramidTextbox') {
         lastText = obj;
       }
     });
@@ -622,8 +551,8 @@ export default function useAllElements() {
         lastLevel = obj;
       });
     }
-
-    if (lastLevel) {
+    console.log({lastLevel,lastText})
+    if (lastLevel && lastText) {
       let trapezoid = new fabric.Polygon(
         [
           { x: lastLevel.points[0].x - 40, y: 0 },
@@ -648,7 +577,7 @@ export default function useAllElements() {
         left: lastText.left,
         top: trapezoid.top! + 20,
         width: 100,
-        name: 'PYRAMID_TEXT',
+        name: 'pyramidTextbox',
       });
 
       (activeObject as fabric.Group).addWithUpdate(trapezoid);
@@ -658,6 +587,13 @@ export default function useAllElements() {
   };
 
   const addPyramid = (canvas: fabric.Canvas | null) => {
+    let x1 = -140;
+    let x2 = 140;
+    let x3 = 100;
+    let x4 = -100;
+  
+    let trapTop = 0;
+    let group: fabric.Group;
     let textsList: fabric.Textbox[] = [];
     let textLeft: number;
 
@@ -695,7 +631,7 @@ export default function useAllElements() {
           left: 274,
           top: 213,
           width: 100,
-          name: 'PYRAMID_TEXT',
+          name: 'pyramidTextbox',
         });
 
         trapTop = trapTop + 60;
@@ -712,7 +648,7 @@ export default function useAllElements() {
         left: 274,
         top: 137,
         width: 100,
-        name: 'PYRAMID_TEXT',
+        name: 'pyramidTextbox',
       });
 
       textsList.push(text);
@@ -1097,9 +1033,7 @@ export default function useAllElements() {
     }
 
     canvas?.renderAll();
-
-    console.log(texts);
-  }
+    }
 
   const addCycle = (canvas: fabric.Canvas | null) => {
     function createCircleWithText(left: number, top: number) {
@@ -1556,7 +1490,7 @@ export default function useAllElements() {
         let top;
 
         if (
-          obj.name === 'PYRAMID_TEXT' &&
+          obj.name === 'pyramidTextbox' &&
           obj.intersectsWithObject(movedObject!, true, true)
         ) {
           obj
@@ -1570,14 +1504,7 @@ export default function useAllElements() {
           top = obj.top! + deltaY;
         }
 
-        if (obj.name == 'ADD_PYRAMID_BUTTON') {
-          obj
-            .set({
-              left: movedObject.left,
-              top: movedObject.top! + movedObject.getScaledHeight() + 30,
-            })
-            .setCoords();
-        }
+      
       });
 
       movedObject.set({
@@ -1890,6 +1817,17 @@ export default function useAllElements() {
     addFunnel.src = AddFunnel;
     let addCycleIcon = new Image();
     addCycleIcon.src = AddCycle;
+
+    let cycleLevels:number=0;
+    canvas.forEachObject((obj)=>{
+      if(obj){
+        if(obj.name == 'Cycle_Circle'){
+          cycleLevels++;
+        }
+      }
+    })
+
+
     //pyramid
     fabric.Object.prototype.controls.addPyramid = new fabric.Control({
       x: -0.5,
@@ -2151,7 +2089,8 @@ export default function useAllElements() {
 
   function CanvasClick(canvas: fabric.Canvas, event: fabric.IEvent<MouseEvent>) {
     let object = event.target;
-    if (object && object?.name === "ListAddImageText") {
+   if(object){ 
+    if (object?.name === "ListAddImageText") {
       const fileInput = document.createElement('input');
       fileInput.type = 'file';
       fileInput.accept = 'image/**';
@@ -2177,7 +2116,7 @@ export default function useAllElements() {
 
                 canvas?.add(img);
                 canvas?.bringForward(img)
-              
+                
               });
             }
           };
@@ -2187,6 +2126,7 @@ export default function useAllElements() {
       canvas.remove(object)
       canvas.requestRenderAll()
     }
+  }
   }
 
   return {

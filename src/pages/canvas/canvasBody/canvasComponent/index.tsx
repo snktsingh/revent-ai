@@ -211,6 +211,9 @@ const CanvasComponent: React.FC = () => {
         newCanvas.on('mouse:up', event => {
           CanvasClick(newCanvas, event);
         });
+        newCanvas.on('mouse:up', event => {
+          CanvasClick(newCanvas, event);
+        });
 
         newCanvas.on('selection:created', function (event) {
           handleSelectionCreated(canvas, event);
