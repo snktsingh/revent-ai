@@ -141,7 +141,7 @@ const CanvasComponent: React.FC = () => {
 
         CustomBorderIcons(newCanvas);
 
-        newCanvas.on('mouse:down',(event)=>{
+        newCanvas.on('mouse:up',(event)=>{
           CanvasClick(newCanvas,event)
         })
 
@@ -161,7 +161,6 @@ const CanvasComponent: React.FC = () => {
             'className',
           ]);
           const id = canvasJS.id;
-          console.log(newCanvas.toObject(['name']).objects);
           dispatch(setRequest(newCanvas.toObject(['name']).objects));
 
           dispatch(updateCanvasInList({ id, updatedCanvas }));
@@ -175,8 +174,6 @@ const CanvasComponent: React.FC = () => {
             'className',
           ]);
           const id = canvasJS.id;
-          console.log(newCanvas.toObject());
-
           dispatch(updateCanvasInList({ id, updatedCanvas }));
         });
 
@@ -203,7 +200,6 @@ const CanvasComponent: React.FC = () => {
             'className',
           ]);
           const id = canvasJS.id;
-          console.log(newCanvas.toObject());
 
           dispatch(updateCanvasInList({ id, updatedCanvas }));
         });

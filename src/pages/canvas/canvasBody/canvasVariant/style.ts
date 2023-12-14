@@ -15,6 +15,10 @@ export const VariantButton = styled.button`
   border-top: 1px solid #dfdfdf;
   border-right: 1px solid #dfdfdf;
   border-left: 1px solid #dfdfdf;
+  color: ${theme.colorSchemes.light.palette.common.black};
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
 `;
 export const DrawerMainContainer = styled.div`
   width: 100%;
@@ -32,11 +36,12 @@ export const DrawerVariantButton = styled.button`
   right: 0;
   transform: translate(-10%, -10%) rotate(-90deg);
   background: #fff;
-  color: #2f2f2f;
-  font-weight: 600;
+  color: ${theme.colorSchemes.light.palette.common.black};
   border-radius: 12px 12px 0 0;
   padding: 6px 20px;
   border: none;
+  cursor: pointer;
+  font-family: 'Roboto';
 `;
 export const DrawerVariant = styled.div`
   width: 80%;
