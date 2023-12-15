@@ -15,6 +15,7 @@ import {
   setActiveCanvas,
   setCanvas,
   setRequest,
+  setShapeName,
   setTempData,
   updateCanvasInList,
 } from '@/redux/reducers/canvas';
@@ -79,6 +80,7 @@ const CanvasComponent: React.FC = () => {
     size,
     requestData,
     tempData,
+    shapeName,
   } = useAppSelector(state => state.canvas);
 
   const { itemKey } = useAppSelector(state => state.element);
@@ -95,49 +97,24 @@ const CanvasComponent: React.FC = () => {
         ) {
           dispatch(setRequest([...requestData, { text: tempData[i].text }]));
         } else if (itemKey == 15) {
-          dispatch(
-            setRequest([
-              ...requestData,
-              { shape: 'Pyramid', data: [{ text: tempData[i].text }] },
-            ])
-          );
+          dispatch(setShapeName('Pyramid'));
+          dispatch(setRequest([...requestData, { text: tempData[i].text }]));
         } else if (itemKey == 14) {
-          dispatch(
-            setRequest([
-              ...requestData,
-              { shape: 'Funnel', data: [{ text: tempData[i].text }] },
-            ])
-          );
+          dispatch(setShapeName('Funnel'));
+          dispatch(setRequest([...requestData, { text: tempData[i].text }]));
         } else if (itemKey == 13) {
-          dispatch(
-            setRequest([
-              ...requestData,
-              { shape: 'Timeline', data: [{ text: tempData[i].text }] },
-            ])
-          );
+          dispatch(setShapeName('Timeline'));
+          dispatch(setRequest([...requestData, { text: tempData[i].text }]));
         } else if (itemKey == 12) {
-          dispatch(
-            setRequest([
-              ...requestData,
-              { shape: 'Process', data: [{ text: tempData[i].text }] },
-            ])
-          );
+          dispatch(setShapeName('Process'));
+          dispatch(setRequest([...requestData, { text: tempData[i].text }]));
         } else if (itemKey == 11) {
-          dispatch(
-            setRequest([
-              ...requestData,
-              { shape: 'Cycle', data: [{ text: tempData[i].text }] },
-            ])
-          );
+          dispatch(setShapeName('Cycle'));
+          dispatch(setRequest([...requestData, { text: tempData[i].text }]));
         }
       }
     }
   }, [tempData]);
-
-  const data = {
-    companyName: 'Revent Ai',
-    data: requestData,
-  };
 
   const handleAllElements = (event: fabric.IEvent) => {
     const { target } = event;
@@ -289,7 +266,16 @@ const CanvasComponent: React.FC = () => {
     );
 
     const canvas = canvasRef.current!;
+    // const url =
+    //   'https://www.google.com/imgres?imgurl=https%3A%2F%2Fbuffer.com%2Flibrary%2Fcontent%2Fimages%2Fsize%2Fw1200%2F2023%2F10%2Ffree-images.jpg&tbnid=ivTDs79HInLVcM&vet=12ahUKEwjAieatj5KDAxUoRmwGHbhJCKkQMygBegQIARB1..i&imgrefurl=https%3A%2F%2Fbuffer.com%2Flibrary%2Ffree-images%2F&docid=U9G_8UXPMlqatM&w=1200&h=800&q=images&ved=2ahUKEwjAieatj5KDAxUoRmwGHbhJCKkQMygBegQIARB1';
+    // fabric.Image.fromURL(url, img => {
+    //   canvas.add(img);
+    // });
 
+    // const base64 = canvas.toDataURL({ format: 'jpeg', quality: 0.8 });
+    // fabric.Image.fromURL(base64, img => {
+    //   canvas.add(img);
+    // });
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Delete' && canvas.getActiveObject()) {
         canvas.remove(canvas.getActiveObject()!);
@@ -605,16 +591,15 @@ const CanvasComponent: React.FC = () => {
 
   return (
     <CanvasContainer ref={Container}>
-      <button
-        id="but"
-        onClick={() => {
-          console.log('temp', tempData);
-          console.log('requuest', requestData);
-          console.log('API DATA', data);
-        }}
-      >
-        GET DETAILS
-      </button>
+      {/* <button
+          id="but"
+          onClick={() => {
+            console.log('temp', tempData);
+            console.log('request', requestData);
+          }}
+        >
+          GET DETAILS
+        </button> */}
       <canvas id="canvas"></canvas>
     </CanvasContainer>
   );

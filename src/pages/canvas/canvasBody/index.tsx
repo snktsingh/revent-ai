@@ -59,7 +59,7 @@ import {
 const CanvasBody = () => {
   const slide = useAppSelector(state => state.slide);
   const dispatch = useAppDispatch();
-  const { canvasJS, requestData, tempData } = useAppSelector(
+  const { canvasJS, requestData, tempData, shapeName } = useAppSelector(
     state => state.canvas
   );
   const [activeLike, setActiveLike] = useState(false);
@@ -349,8 +349,13 @@ const CanvasBody = () => {
   };
 
   const handleRequest = () => {
+    const ReqData = {
+      companyName: 'Revent Ai',
+      shape: shapeName,
+      data: requestData,
+    };
     axios
-      .post('http://3.108.53.183:8080/api/ppt/generate-ppt', requestData)
+      .post('http://3.108.53.183:8080/api/ppt/generate-ppt', ReqData)
       .then(res => {
         return console.log(res);
       })
