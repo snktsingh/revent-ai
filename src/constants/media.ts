@@ -43,6 +43,7 @@ import Diamond from '../assets/shapes/diamond.svg';
 import CanvasOutlinedArrow from "../assets/shapes/outlinedArrow.svg";
 import CanvasLine from "../assets/shapes/outlinedline.svg";
 import DeleteX from "../assets/deleteX.svg";
+import AddPlus from "../assets/addPlus.svg";
 
 
 export {
@@ -91,4 +92,5 @@ export {
   CanvasOutlinedArrow,
   CanvasLine,
   DeleteX,
+  AddPlus
 };

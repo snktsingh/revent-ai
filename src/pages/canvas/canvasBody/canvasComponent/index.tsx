@@ -76,10 +76,10 @@ const CanvasComponent: React.FC = () => {
     borderColor,
     canvasJS,
     canvasList,
-    size,
+    size,       
     requestData,
     tempData,
-  } = useAppSelector(state => state.canvas);
+  } = useAppSelector(state => state.canvas);  
 
   const { itemKey } = useAppSelector(state => state.element);
 
