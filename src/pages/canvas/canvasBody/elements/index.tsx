@@ -1947,6 +1947,18 @@ export default function useAllElements() {
           object.setControlVisible('addPyramid', false);
         }
       }
+
+      if (object?.name === 'Funnel') {
+        let levels=0;
+        (object as fabric.Group).forEachObject((obj)=>{
+          levels++;
+        })
+        if(levels > 6){
+          object.setControlVisible('addFunnel', false);
+        }
+      }
+
+
      
 
     })
