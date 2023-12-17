@@ -14,7 +14,6 @@ export const SlideCountContainer = styled.div`
 `;
 export const SingleSliderContainer = styled.div`
   cursor: pointer;
-  
 `;
 export const EditSlideContainer = styled.div`
   padding: 2% 0% 3% 5%;
