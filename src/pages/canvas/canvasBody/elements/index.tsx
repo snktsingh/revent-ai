@@ -1820,9 +1820,9 @@ export default function useAllElements() {
       
       let processStepsTotal=0;
       let timelineLevels = 0;
+      let cycleSteps = 0;
       canvas.forEachObject((obj)=>{
         if(obj.name === 'ProcessBox'){
-          console.log({processStepsTotal})
           processStepsTotal++;
         }
         totalProcessSteps = processStepsTotal;
@@ -1831,6 +1831,11 @@ export default function useAllElements() {
           timelineLevels++
         }
         totalTimelineSteps = timelineLevels;
+
+        if(obj.name === 'Cycle_Circle'){
+          cycleSteps++
+        }
+        totalCycleSteps = cycleSteps;
 
       })
 
@@ -1866,6 +1871,13 @@ export default function useAllElements() {
        
         if(totalTimelineSteps >= 6){
           object.setControlVisible('addTimeline', false);
+        }
+      }
+
+      if (object?.name === 'Cycle_Container') {
+       
+        if(totalCycleSteps >= 6){
+          object.setControlVisible('addCycle', false);
         }
       }
 
@@ -1979,7 +1991,7 @@ export default function useAllElements() {
           selectedObject.setControlVisible('addFunnel', false);
         }
 
-        if (selectedObject?.name === 'Cycle_Container') {
+        if (selectedObject?.name === 'Cycle_Container' && totalCycleSteps < 6) {
           selectedObject.setControlVisible('addCycle', true);
         } else {
           selectedObject.setControlVisible('addCycle', false);
