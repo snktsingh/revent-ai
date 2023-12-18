@@ -1166,7 +1166,6 @@ export default function useAllElements() {
     });
 
     canvas?.renderAll();
-    setTotalTimelineSteps((p) => p + 1);
   };
 
   const addTimeline = (canvas: fabric.Canvas | null) => {
@@ -1820,6 +1819,7 @@ export default function useAllElements() {
     canvas.on('object:added', (event) => {
       
       let processStepsTotal=0;
+      let timelineLevels = 0;
       canvas.forEachObject((obj)=>{
         if(obj.name === 'ProcessBox'){
           console.log({processStepsTotal})
@@ -1827,7 +1827,10 @@ export default function useAllElements() {
         }
         totalProcessSteps = processStepsTotal;
 
-        
+        if(obj.name === 'timeLineCircle'){
+          timelineLevels++
+        }
+        totalTimelineSteps = timelineLevels;
 
       })
 
@@ -1858,6 +1861,14 @@ export default function useAllElements() {
           object.setControlVisible('addProcess', false);
         }
       }
+
+      if (object?.name === 'Timeline_Container') {
+       
+        if(totalTimelineSteps >= 6){
+          object.setControlVisible('addTimeline', false);
+        }
+      }
+
     })
 
 
@@ -1956,7 +1967,7 @@ export default function useAllElements() {
           selectedObject.setControlVisible('addProcess', false);
         }
 
-        if (selectedObject?.name === 'Timeline_Container') {
+        if (selectedObject?.name === 'Timeline_Container' && totalTimelineSteps < 6) {
           selectedObject.setControlVisible('addTimeline', true);
         } else {
           selectedObject.setControlVisible('addTimeline', false);
