@@ -25,9 +25,7 @@ export default function useAllElements() {
 
   const [totalPyramidLevels, setTotalPyramidLevels] = useState<number>(2);
   const [totalFunnelLevels, setTotalFunnelLevels] = useState<number>(2);
-  const [totalProcessSteps, setTotalProcessSteps] = useState<number>(2);
-  const [totalTimelineSteps, setTotalTimelineSteps] = useState<number>(2);
-  const [totalCycleSteps, setTotalCycleSteps] = useState<number>(3);
+  
 
   const title = new fabric.IText('Click to add a title', {
     left: 30,
@@ -1306,7 +1304,6 @@ export default function useAllElements() {
     canvas.add(text);
 
     canvas.renderAll();
-    setTotalProcessSteps((p) => p + 1);
   };
 
   function addProcess(canvas: fabric.Canvas | null) {
@@ -1816,7 +1813,52 @@ export default function useAllElements() {
     let addIcon = new Image();
     addIcon.src = AddPlus;
 
+    let totalProcessSteps = 2;
+    let totalTimelineSteps = 2;
+    let totalCycleSteps = 3;
+    
+    canvas.on('object:added', (event) => {
+      
+      let processStepsTotal=0;
+      canvas.forEachObject((obj)=>{
+        if(obj.name === 'ProcessBox'){
+          console.log({processStepsTotal})
+          processStepsTotal++;
+        }
+        totalProcessSteps = processStepsTotal;
 
+        
+
+      })
+
+      const object = canvas.getActiveObject();
+      if (object?.name === 'PYRAMID') {
+        let levels=0;
+        (object as fabric.Group).forEachObject((obj)=>{
+          levels++;
+        })
+        if(levels >= 6){
+          object.setControlVisible('addPyramid', false);
+        }
+      }
+
+      if (object?.name === 'Funnel') {
+        let levels=0;
+        (object as fabric.Group).forEachObject((obj)=>{
+          levels++;
+        })
+        if(levels > 6){
+          object.setControlVisible('addFunnel', false);
+        }
+      }
+
+      if (object?.name === 'Process_Container') {
+       
+        if(processStepsTotal >= 6){
+          object.setControlVisible('addProcess', false);
+        }
+      }
+    })
 
 
     //pyramid
@@ -1908,7 +1950,7 @@ export default function useAllElements() {
           selectedObject.setControlVisible('addPyramid', false);
         }
 
-        if (selectedObject?.name === 'Process_Container') {
+        if (selectedObject?.name === 'Process_Container' && totalProcessSteps < 6) {
           selectedObject.setControlVisible('addProcess', true);
         } else {
           selectedObject.setControlVisible('addProcess', false);
@@ -1934,34 +1976,7 @@ export default function useAllElements() {
       }
     });
 
-    canvas.on('object:added', (event) => {
-
-
-      const object = canvas.getActiveObject();
-      if (object?.name === 'PYRAMID') {
-        let levels=0;
-        (object as fabric.Group).forEachObject((obj)=>{
-          levels++;
-        })
-        if(levels >= 6){
-          object.setControlVisible('addPyramid', false);
-        }
-      }
-
-      if (object?.name === 'Funnel') {
-        let levels=0;
-        (object as fabric.Group).forEachObject((obj)=>{
-          levels++;
-        })
-        if(levels > 6){
-          object.setControlVisible('addFunnel', false);
-        }
-      }
-
-
-     
-
-    })
+    
 
     function renderPyramidAddIcon(
       ctx: CanvasRenderingContext2D,
