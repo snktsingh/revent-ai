@@ -399,6 +399,13 @@ export const ContentElements: ContentEle = {
   handleFontFamily: ()=>{}
 };
 
+interface variantsType {
+  addVariantsCanvas : Function
+}
+export const variantsFunction: variantsType = {
+   addVariantsCanvas : () => {}
+}
+
 export const TABLE = 'TABLE';
 export const FUNNEL = 'FUNNEL';
 export const CYCLE = 'CYCLE';

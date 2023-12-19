@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { fabric } from 'fabric';
+import variantsData from '../../data/variants.json';
 
 export interface TableDetails {
   row: number;
@@ -29,6 +30,7 @@ export interface CanvasSate {
   requestData: any[];
   tempData: any[];
   shapeName: string;
+  variants: any[]
 }
 const canvas = new fabric.Canvas(null);
 const canvasJSON = canvas.toObject();
@@ -46,6 +48,7 @@ export const initialState: CanvasSate = {
   requestData: [],
   tempData: [],
   shapeName: '',
+  variants:[]
 };
 
 export const CanvasReducer = createSlice({
@@ -206,6 +209,30 @@ export const CanvasReducer = createSlice({
         size: action.payload,
       };
     },
+    getVariants(state) {
+      return {...state, variants : variantsData}
+    },
+    setVariantAsCanvas(state,action) {
+      console.log("set variant as canvas",action);
+      // const canvas = new fabric.Canvas(null);
+      // canvas.loadFromJSON(state.canvasJS.canvas,()=>{
+      //   console.log({canvas});
+      //   fabric.Image.fromURL(action.payload, (img) => {
+      //     img.set({
+      //       left: 100, // Set the left position of the image
+      //       top: 100, // Set the top position of the image
+      //       scaleX: 0.5, // Set scale factor if needed
+      //       scaleY: 0.5,
+      //     });
+        
+      //     canvas.add(img); 
+      //   });
+      //   canvas.renderAll();
+      // });
+      const updatedCanvas = state.canvasJS.canvas;
+      console.log(updatedCanvas);
+      updateCanvasInList({id:state.canvasJS.id,updatedCanvas})
+    }
   },
 });
 
@@ -227,6 +254,8 @@ export const {
   setRequest,
   setTempData,
   setShapeName,
+  getVariants,
+  setVariantAsCanvas
 } = CanvasReducer.actions;
 
 export default CanvasReducer.reducer;

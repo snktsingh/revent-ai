@@ -15,11 +15,24 @@ import { Drawer } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { toggleVariantSlide } from '@/redux/reducers/elements';
 import { Logo } from '@/constants/media';
+import { useEffect } from 'react';
+import { getVariants, setVariantAsCanvas } from '@/redux/reducers/canvas';
+import { variantsFunction } from '../elementData';
 
 export const CanvasVariant = () => {
   const dispatch = useAppDispatch();
   const { openVariant } = useAppSelector(state => state.element);
+  const { variants } = useAppSelector(state => state.canvas);
   const array: number[] = [1, 2, 3];
+
+  useEffect(()=>{
+    dispatch(getVariants());
+  },[]);
+
+  const handleVariants = (url:string)=>{
+    variantsFunction.addVariantsCanvas(url);
+  }
+
   return (
     <div>
       <VariantButton onClick={() => dispatch(toggleVariantSlide())}>
@@ -67,14 +80,24 @@ export const CanvasVariant = () => {
                 Refresh
               </RefreshBtn>
             </ButtonContainer>
-            {array.map(el => {
+            {variants.map(el => {
+              return (
+                <VariantSlide key={el.id} onClick={()=> handleVariants(el.imagesUrl)}>
+                  <div>{el.id}</div>
+                  <VariantSlideCard>
+                    <img src={el.imagesUrl} alt={el.id} style={{width:'100%',height:'100%',objectFit:'cover'}}/>
+                  </VariantSlideCard>
+                </VariantSlide>
+              );
+            })}
+            {/* {array.map(el => {
               return (
                 <VariantSlide key={el}>
                   <div>{el}</div>
                   <VariantSlideCard></VariantSlideCard>
                 </VariantSlide>
               );
-            })}
+            })} */}
 
             <LogoContainer>
               <div>

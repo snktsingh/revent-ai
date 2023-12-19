@@ -66,6 +66,7 @@ export const VariantSlide = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-around;
+  cursor: pointer;
   div {
     color: ${theme.colorSchemes.light.palette.common.darkGrey};
     font-family: 'Roboto';
@@ -81,6 +82,7 @@ export const VariantSlideCard = styled.div`
   flex-shrink: 0;
   border-radius: 5px;
   background: ${theme.colorSchemes.light.palette.common.border};
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 `;
 export const ButtonContainer = styled.div`
   width: 90%;

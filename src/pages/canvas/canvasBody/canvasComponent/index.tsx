@@ -6,6 +6,7 @@ import {
   ShapesData,
   colorChange,
   elementData,
+  variantsFunction,
 } from '../elementData';
 import { CanvasContainer } from './style';
 import useAllShapes from '../shapes';
@@ -170,9 +171,10 @@ const CanvasComponent: React.FC = () => {
       canvasJS.canvas,
       () => {
         canvasRef.current = newCanvas;
+        const aspectRatio = 16 / 9;
         newCanvas.setDimensions({
-          width: 970,
-          height: 500,
+          width: 800,
+          height: 800/aspectRatio,
         });
         newCanvas.setBackgroundColor(
           `${theme.colorSchemes.light.palette.common.white}`,
@@ -250,10 +252,10 @@ const CanvasComponent: React.FC = () => {
           const id = canvasJS.id;
           dispatch(updateCanvasInList({ id, updatedCanvas }));
         });
-        newCanvas.on('object:moving', handleAllElements);
-        newCanvas.on('object:moving', function (options) {
-          handleObjectMoving(options, newCanvas);
-        });
+        // newCanvas.on('object:moving', handleAllElements);
+        // newCanvas.on('object:moving', function (options) {
+        //   handleObjectMoving(options, newCanvas);
+        // });
 
         handleAddCustomIcon(newCanvas);
         newCanvas.renderAll();
@@ -589,13 +591,34 @@ const CanvasComponent: React.FC = () => {
     addProcess(canvas);
   };
 
+  variantsFunction.addVariantsCanvas = (url:string) => {
+    canvasRef.current?.clear();
+    
+    fabric.Image.fromURL(url, (img) => {
+      // Adjust the image properties as needed
+      img.set({
+        left: 0, // Set the left position of the image
+        top: 0, // Set the top position of the image
+        scaleX: 0.55, // Set scale factor if needed
+        scaleY: 0.55,
+        // Other properties like width, height, etc.
+        
+      });
+    
+      canvasRef.current?.add(img); // Add the image to the canvas
+    });
+    canvasRef.current?.renderAll();
+    console.log(canvasRef.current?.toObject())
+  }
+
   return (
     <CanvasContainer ref={Container}>
       {/* <button
           id="but"
           onClick={() => {
-            console.log('temp', tempData);
-            console.log('request', requestData);
+            // console.log('temp', tempData);
+            // console.log('request', requestData);
+            console.log(canvasRef.current?.toJSON())
           }}
         >
           GET DETAILS

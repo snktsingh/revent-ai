@@ -1,0 +1,17 @@
+[
+    {
+        "id":1,
+        "pptUrl": "https://revent-ppt-output.s3.amazonaws.com/Bullet point-15027848396683938414.pptx",
+        "imagesUrl": "http://localhost:3000/src/assets/canvas/sampleVariant1.jpg"
+    },
+    {
+        "id":2,
+        "pptUrl": "https://revent-ppt-output.s3.amazonaws.com/Bullet point-15027848396683938414.pptx",
+        "imagesUrl": "http://localhost:3000/src/assets/canvas/sampleVariant2.jpg"
+    },
+    {
+        "id":3,
+        "pptUrl": "https://revent-ppt-output.s3.amazonaws.com/Bullet point-15027848396683938414.pptx",
+        "imagesUrl": "http://localhost:3000/src/assets/canvas/sampleVariant3.jpg"
+    }
+]
