@@ -22,14 +22,14 @@ import MenuItem from '@mui/material/MenuItem';
 import React from 'react';
 import { CanvasHeaderInput } from '@/constants/elements/Input/style';
 import { ContentElements } from '../canvasBody/elementData';
+import { useAppSelector } from '@/redux/store';
 
 const MainCanvasHeader = () => {
   const { handle } = useCanvas();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [anchorE2, setAnchorE2] = React.useState<null | HTMLElement>(null);
   const [openWarning, setOpenWarning] = React.useState(false);
-
-  
+  const { pptUrl } = useAppSelector(state => state.thunk);
 
   const handleWarningOpen = () => {
     setOpenWarning(true);
@@ -66,7 +66,9 @@ const MainCanvasHeader = () => {
         <MainIconButton>
           <Stack direction="row" spacing={1}>
             <img src={Present} />
-            <ButtonName onClick={()=> ContentElements.openFullScreen()}>Present</ButtonName>
+            <ButtonName onClick={() => ContentElements.openFullScreen()}>
+              Present
+            </ButtonName>
           </Stack>
         </MainIconButton>
         <VerticalDivider />
@@ -92,7 +94,11 @@ const MainCanvasHeader = () => {
           <MenuItem onClick={handleShareClose}>
             <Stack direction="row" spacing={2}>
               <img src={PPT} width="10%" />
-              <h4>Download PPT</h4>
+              <h4>
+                <a href={pptUrl} target="_blank">
+                  Download PPT
+                </a>
+              </h4>
             </Stack>
           </MenuItem>
         </Menu>

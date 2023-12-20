@@ -55,6 +55,8 @@ import {
   setTableDetails,
   setTempData,
 } from '@/redux/reducers/canvas';
+import { ToastContainer, toast } from 'react-toastify';
+import { fetchSlideImg } from '@/redux/thunk/thunk';
 
 const CanvasBody = () => {
   const slide = useAppSelector(state => state.slide);
@@ -348,6 +350,12 @@ const CanvasBody = () => {
     }
   };
 
+  const ReqData = {
+    companyName: 'Revent Ai',
+    shape: shapeName,
+    data: requestData,
+  };
+
   const handleRequest = () => {
     const ReqData = {
       companyName: 'Revent Ai',
@@ -357,7 +365,7 @@ const CanvasBody = () => {
     axios
       .post('http://3.108.53.183:8080/api/ppt/generate-ppt', ReqData)
       .then(res => {
-        return console.log(res);
+        toast.success('Slide regenerated');
       })
       .catch(err => {
         return console.log(err.data.message);
@@ -366,6 +374,7 @@ const CanvasBody = () => {
 
   return (
     <BodyContainer>
+      <ToastContainer />
       <Grid container>
         <Grid xs={2}>
           <SlideList />
@@ -411,7 +420,7 @@ const CanvasBody = () => {
                 <Button
                   variant="contained"
                   size="small"
-                  onClick={handleRequest}
+                  onClick={() => dispatch(fetchSlideImg(ReqData))}
                 >
                   Regenerate
                 </Button>

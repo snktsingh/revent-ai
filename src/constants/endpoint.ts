@@ -1,7 +1,8 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+export const API_BASE_URL = 'http://3.108.53.183:8080/api/';
 
-const ENDPOINT = {
+export const ENDPOINT = {
   TEST: `${API_BASE_URL}/test`,
+  GEN_PPT: 'ppt/generate-ppt',
 } as const;
 
 export const ROUTES = {
