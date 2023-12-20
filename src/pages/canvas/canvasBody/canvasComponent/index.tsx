@@ -601,6 +601,8 @@ const CanvasComponent: React.FC = () => {
         top: 0, // Set the top position of the image
         scaleX: 0.55, // Set scale factor if needed
         scaleY: 0.55,
+        hasControls: false,
+        selectable:false
         // Other properties like width, height, etc.
         
       });
