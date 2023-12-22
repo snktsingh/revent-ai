@@ -1239,8 +1239,8 @@ export default function useAllElements() {
     addCircle(130, mTop + 20 + 26);
     addCircle(321, mTop + 20 + 26);
     addText(102, mTop + 20, 100, 14, 'Add Timeline','TimeLineHeading');
-    addText(301, mTop + 20, 100, 14, 'Add Timeline','TimeLineHeading');
     addText(111, mTop + 20 + 79, 150, 16, 'Add Text','TimeLineText');
+    addText(301, mTop + 20, 100, 14, 'Add Timeline','TimeLineHeading');
     addText(307, mTop + 20 + 79, 150, 16, 'Add Text','TimeLineText');
   };
 

@@ -77,7 +77,7 @@ const CanvasComponent: React.FC = () => {
     borderColor,
     canvasJS,
     canvasList,
-    size,       
+    size,
     requestData,
     tempData,
   } = useAppSelector(state => state.canvas);
@@ -87,7 +87,7 @@ const CanvasComponent: React.FC = () => {
   const { itemKey } = useAppSelector(state => state.element);
 
   // useEffect(() => {
-    
+
 
   //   for (let i = 0; i < tempData.length; i++) {
   //     if (tempData[i].type === 'textbox' || tempData[i].type === 'i-text') {
@@ -98,10 +98,10 @@ const CanvasComponent: React.FC = () => {
   //         itemKey == 4 ||
   //         itemKey == 5
   //       ) {
-          
+
   //         dispatch(setRequest([...requestData, { text: tempData[i].text }]));
   //       } else if (itemKey == 15) {
-          
+
   //         dispatch(setShapeName('Pyramid'));
   //         dispatch(setRequest([...requestData, { text: tempData[i].text }]));
   //       } else if (itemKey == 14) {
@@ -117,7 +117,7 @@ const CanvasComponent: React.FC = () => {
   //         dispatch(setShapeName('Cycle'));
   //         dispatch(setRequest([...requestData, { text: tempData[i].text }]));
   //       }
-       
+
 
   //     }
   //   }
@@ -181,7 +181,7 @@ const CanvasComponent: React.FC = () => {
         const aspectRatio = 16 / 9;
         newCanvas.setDimensions({
           width: 800,
-          height: 800/aspectRatio,
+          height: 800 / aspectRatio,
         });
         newCanvas.setBackgroundColor(
           `${theme.colorSchemes.light.palette.common.white}`,
@@ -204,7 +204,7 @@ const CanvasComponent: React.FC = () => {
         //     hasControls: false,
         //     selectable:false
         //   });
-        
+
         //   newCanvas.add(img); // Add the image to the canvas
         // });
 
@@ -331,7 +331,7 @@ const CanvasComponent: React.FC = () => {
 
     return () => {
       newCanvas.dispose();
-      window.removeEventListener('resize', () => {});
+      window.removeEventListener('resize', () => { });
     };
   }, [canvasJS, imageUrl]);
 
@@ -379,50 +379,63 @@ const CanvasComponent: React.FC = () => {
     });
   };
 
-  function getElementsData(canvasData: any[]){
-      console.log({canvasData})
-      let data:any[]=[]
-      canvasData.forEach((obj)=>{
-        if(obj.name === 'pyramidTextbox'){
-           dispatch(setShapeName("Pyramid"));
-           data.push({text:obj.text})
-        }
+  function getElementsData(canvasData: any[]) {
+    console.log({ canvasData })
+    let data: any[] = [];
+    let timelineContent: any[] = []
+    canvasData.forEach((obj) => {
+      if (obj.name === 'pyramidTextbox') {
+        dispatch(setShapeName("Pyramid"));
+        data.push({ text: obj.text })
+      }
 
-        if(obj.name === 'Funnel_Text'){
-           dispatch(setShapeName("Funnel"));
-           data.push({text:obj.text})
-        }
+      if (obj.name === 'Funnel_Text') {
+        dispatch(setShapeName("Funnel"));
+        data.push({ text: obj.text })
+      }
 
-        if(obj.name === 'Cycle_Text'){
-           dispatch(setShapeName("Cycle"));
-           data.push({text:obj.text})
-        }
+      if (obj.name === 'Cycle_Text') {
+        dispatch(setShapeName("Cycle"));
+        data.push({ text: obj.text })
+      }
 
-        if(obj.name === 'ProcessText'){
-           dispatch(setShapeName("Process"));
-           data.push({text:obj.text})
-        }
-        
+      if (obj.name === 'ProcessText') {
+        dispatch(setShapeName("Process"));
+        data.push({ text: obj.text })
+      }
 
-        if(obj.name === 'TimeLineHeading'){
-           dispatch(setShapeName("Timeline"));
-           data.push({heading:obj.text})
-        }
-        if(obj.name === 'TimeLineText'){
-           dispatch(setShapeName("Timeline"));
-           data.push({text:obj.text})
-        }
 
-        if(obj.name === 'bullet'){
-           dispatch(setShapeName("Bullet point"));
-           let text = obj.text.split("\n");
-           text.forEach((element:string) => {
-             data.push({heading:element})
-           });
+      if (obj.name === 'TimeLineHeading') {
+        dispatch(setShapeName("Timeline"));
+        timelineContent.push(obj)
+      }
+      if (obj.name === 'TimeLineText') {
+        dispatch(setShapeName("Timeline"));
+        timelineContent.push(obj)
+      }
+
+      if (obj.name === 'bullet') {
+        dispatch(setShapeName("Bullet point"));
+        let text = obj.text.split("\n");
+        text.forEach((element: string) => {
+          data.push({ heading: element })
+        });
+      }
+
+    });
+    if (timelineContent.length > 0) {
+      data = timelineContent.reduce((acc, obj, index, arr) => {
+        if (obj.name === 'TimeLineHeading') {
+          const nextObj = arr[index + 1]; // Get the next object
+          if (nextObj && nextObj.name === 'TimeLineText') {
+            acc.push({ heading: obj.text, text: nextObj.text });
+          }
         }
-        
-      })
-      dispatch(setRequest(data))
+        return acc;
+      }, []);
+    }
+
+    dispatch(setRequest(data))
   }
 
   elementData[1].onClick = () => {
@@ -670,9 +683,9 @@ const CanvasComponent: React.FC = () => {
     addProcess(canvas);
   };
 
-  variantsFunction.addVariantsCanvas = (url:string) => {
+  variantsFunction.addVariantsCanvas = (url: string) => {
     canvasRef.current?.clear();
-    
+
     fabric.Image.fromURL(url, (img) => {
       // Adjust the image properties as needed
       img.set({
@@ -681,9 +694,9 @@ const CanvasComponent: React.FC = () => {
         scaleX: 1.1, // Set scale factor if needed
         scaleY: 1.1,
         hasControls: false,
-        selectable:false
+        selectable: false
       });
-    
+
       canvasRef.current?.add(img); // Add the image to the canvas
     });
     canvasRef.current?.renderAll();

@@ -80,7 +80,7 @@ export const CanvasVariant = () => {
                 Refresh
               </RefreshBtn>
             </ButtonContainer>
-            {variants.map(el => {
+            {variants.map((el:any) => {
               return (
                 <VariantSlide key={el.id} onClick={()=> handleVariants(el.imagesUrl)}>
                   <div>{el.id}</div>

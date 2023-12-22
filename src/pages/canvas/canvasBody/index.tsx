@@ -1,6 +1,8 @@
 import {
+  Backdrop,
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -146,6 +148,16 @@ const CanvasBody = () => {
     setOpenDialog(false);
   };
 
+  //BackDrop
+
+  const [openBackdrop, setOpenBackdrop] = React.useState(false);
+  const handleCloseBackdrop = () => {
+    setOpenBackdrop(false);
+  };
+  const handleOpenBackdrop = () => {
+    setOpenBackdrop(true);
+  };
+
   const [rows, setRows] = useState('');
   const [columns, setColumns] = useState('');
   const [cellWidth, setCellWidth] = useState('120');
@@ -170,21 +182,6 @@ const CanvasBody = () => {
           +cellWidth,
           +cellHeight
         );
-        break;
-      case FUNNEL:
-        ContentElements.handleFunnel(+elemSize, +elemWidth);
-        break;
-      case PYRAMID:
-        ContentElements.handlePyramid(elemSize, elemWidth);
-        break;
-      case CYCLE:
-        ContentElements.handleCycle(steps);
-        break;
-      case PROCESS:
-        ContentElements.handleProcess(steps);
-        break;
-      case TIMELINE:
-        ContentElements.handleTimeline(steps);
         break;
       default:
         break;
@@ -239,94 +236,6 @@ const CanvasBody = () => {
             />
           </Box>
         );
-      case FUNNEL:
-        return (
-          <Box display={'flex'} gap={'10px'} mt={'10px'}>
-            <FormControl size="small" fullWidth>
-              <InputLabel id="demo-simple-select-label">Levels</InputLabel>
-              <Select
-                labelId="demo-select-small-label"
-                id="demo-select-small"
-                value={elemSize}
-                label="Steps"
-                onChange={e => setElemSize(+e.target.value)}
-              >
-                <MenuItem value="">
-                  <em>Levels</em>
-                </MenuItem>
-                <MenuItem value={3}>3</MenuItem>
-                <MenuItem value={4}>4</MenuItem>
-                <MenuItem value={5}>5</MenuItem>
-              </Select>
-            </FormControl>
-
-            <TextField
-              label="Width"
-              variant="outlined"
-              value={elemWidth}
-              onChange={e => setElemWidth(+e.target.value)}
-              required
-              type="number"
-              size="small"
-              InputProps={{ inputProps: { min: 1 } }}
-            />
-          </Box>
-        );
-      case PYRAMID:
-        return (
-          <Box display={'flex'} gap={'10px'} mt={'10px'}>
-            <FormControl size="small" fullWidth>
-              <InputLabel id="demo-simple-select-label">Levels</InputLabel>
-              <Select
-                labelId="demo-select-small-label"
-                id="demo-select-small"
-                value={elemSize}
-                label="Steps"
-                onChange={e => setElemSize(+e.target.value)}
-              >
-                <MenuItem value="">
-                  <em>Levels</em>
-                </MenuItem>
-                <MenuItem value={3}>3</MenuItem>
-                <MenuItem value={4}>4</MenuItem>
-                <MenuItem value={5}>5</MenuItem>
-              </Select>
-            </FormControl>
-            <TextField
-              label="Width"
-              variant="outlined"
-              value={elemWidth}
-              onChange={e => setElemWidth(+e.target.value)}
-              required
-              type="number"
-              size="small"
-              InputProps={{ inputProps: { min: 1 } }}
-            />
-          </Box>
-        );
-      case CYCLE:
-      case TIMELINE:
-      case PROCESS:
-        return (
-          <FormControl style={{ marginTop: '10px' }} fullWidth>
-            <InputLabel id="demo-simple-select-label">Steps</InputLabel>
-            <Select
-              labelId="demo-select-small-label"
-              id="demo-select-small"
-              value={steps}
-              label="Steps"
-              onChange={e => setSteps(+e.target.value)}
-            >
-              <MenuItem value="">
-                <em>Steps</em>
-              </MenuItem>
-              <MenuItem value={3}>3</MenuItem>
-              <MenuItem value={4}>4</MenuItem>
-              <MenuItem value={5}>5</MenuItem>
-              <MenuItem value={6}>6</MenuItem>
-            </Select>
-          </FormControl>
-        );
       default:
         return 'Something went wrong';
     }
@@ -336,16 +245,6 @@ const CanvasBody = () => {
     switch (elementName) {
       case TABLE:
         return 'Please Provide Table Details: Rows, Columns, Width, and Height';
-      case FUNNEL:
-        return 'Please provide Funnel details';
-      case PYRAMID:
-        return 'Please provide Pyramid details';
-      case CYCLE:
-        return 'Please provide Cycle details';
-      case TIMELINE:
-        return 'Please provide Timeline Steps';
-      case PROCESS:
-        return 'Please provide Process Steps';
       default:
         return 'Something went wrong';
     }
@@ -364,13 +263,16 @@ const CanvasBody = () => {
       data: requestData,
     };
     console.log({ReqData})
+    handleOpenBackdrop();
     axios
       .post('http://3.108.53.183:8080/api/ppt/generate-ppt', ReqData)
       .then(res => {
         variantsFunction.addVariantsCanvas(res.data?.imagesUrl[0]);
+        handleCloseBackdrop();
         return console.log(res);
       })
       .catch(err => {
+        handleCloseBackdrop();
         return console.log(err.message);
       });
   };
@@ -423,7 +325,7 @@ const CanvasBody = () => {
                 <Button
                   variant="contained"
                   size="small"
-                  onClick={() => dispatch(fetchSlideImg(ReqData))}
+                  onClick={() => handleRequest()}
                 >
                   Regenerate
                 </Button>
@@ -554,6 +456,13 @@ const CanvasBody = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={openBackdrop}
+        onClick={handleCloseBackdrop}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </BodyContainer>
   );
 };
