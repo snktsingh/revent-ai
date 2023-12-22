@@ -39,6 +39,7 @@ import {
   TABLE,
   TIMELINE,
   elementData,
+  variantsFunction,
 } from './elementData';
 import React, { useState } from 'react';
 import { CanvasNotes } from './canvasNotes';
@@ -354,13 +355,15 @@ const CanvasBody = () => {
       shape: shapeName,
       data: requestData,
     };
+    console.log({ReqData})
     axios
       .post('http://3.108.53.183:8080/api/ppt/generate-ppt', ReqData)
       .then(res => {
+        variantsFunction.addVariantsCanvas(res.data?.imagesUrl[0]);
         return console.log(res);
       })
       .catch(err => {
-        return console.log(err.data.message);
+        return console.log(err.message);
       });
   };
 

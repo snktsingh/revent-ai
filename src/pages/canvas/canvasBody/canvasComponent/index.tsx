@@ -86,36 +86,42 @@ const CanvasComponent: React.FC = () => {
 
   const { itemKey } = useAppSelector(state => state.element);
 
-  useEffect(() => {
-    for (let i = 0; i < tempData.length; i++) {
-      if (tempData[i].type === 'textbox' || tempData[i].type === 'i-text') {
-        if (
-          itemKey == 1 ||
-          itemKey == 2 ||
-          itemKey == 3 ||
-          itemKey == 4 ||
-          itemKey == 5
-        ) {
-          dispatch(setRequest([...requestData, { text: tempData[i].text }]));
-        } else if (itemKey == 15) {
-          dispatch(setShapeName('Pyramid'));
-          dispatch(setRequest([...requestData, { text: tempData[i].text }]));
-        } else if (itemKey == 14) {
-          dispatch(setShapeName('Funnel'));
-          dispatch(setRequest([...requestData, { text: tempData[i].text }]));
-        } else if (itemKey == 13) {
-          dispatch(setShapeName('Timeline'));
-          dispatch(setRequest([...requestData, { text: tempData[i].text }]));
-        } else if (itemKey == 12) {
-          dispatch(setShapeName('Process'));
-          dispatch(setRequest([...requestData, { text: tempData[i].text }]));
-        } else if (itemKey == 11) {
-          dispatch(setShapeName('Cycle'));
-          dispatch(setRequest([...requestData, { text: tempData[i].text }]));
-        }
-      }
-    }
-  }, [tempData]);
+  // useEffect(() => {
+    
+
+  //   for (let i = 0; i < tempData.length; i++) {
+  //     if (tempData[i].type === 'textbox' || tempData[i].type === 'i-text') {
+  //       if (
+  //         itemKey == 1 ||
+  //         itemKey == 2 ||
+  //         itemKey == 3 ||
+  //         itemKey == 4 ||
+  //         itemKey == 5
+  //       ) {
+          
+  //         dispatch(setRequest([...requestData, { text: tempData[i].text }]));
+  //       } else if (itemKey == 15) {
+          
+  //         dispatch(setShapeName('Pyramid'));
+  //         dispatch(setRequest([...requestData, { text: tempData[i].text }]));
+  //       } else if (itemKey == 14) {
+  //         dispatch(setShapeName('Funnel'));
+  //         dispatch(setRequest([...requestData, { text: tempData[i].text }]));
+  //       } else if (itemKey == 13) {
+  //         dispatch(setShapeName('Timeline'));
+  //         dispatch(setRequest([...requestData, { text: tempData[i].text }]));
+  //       } else if (itemKey == 12) {
+  //         dispatch(setShapeName('Process'));
+  //         dispatch(setRequest([...requestData, { text: tempData[i].text }]));
+  //       } else if (itemKey == 11) {
+  //         dispatch(setShapeName('Cycle'));
+  //         dispatch(setRequest([...requestData, { text: tempData[i].text }]));
+  //       }
+       
+
+  //     }
+  //   }
+  // }, [tempData]);
 
   const handleAllElements = (event: fabric.IEvent) => {
     const { target } = event;
@@ -187,6 +193,20 @@ const CanvasComponent: React.FC = () => {
 
         CustomBorderIcons(newCanvas);
 
+        // fabric.Image.fromURL('https://revent-ppt-output.s3.amazonaws.com/Pyramid-16652250149910895367_0.png', (img) => {
+        //   // Adjust the image properties as needed
+        //   img.set({
+        //     left: 0, // Set the left position of the image
+        //     top: 0, // Set the top position of the image
+        //     scaleX: 1, // Set scale factor if needed
+        //     scaleY: 1,
+        //     hasControls: false,
+        //     selectable:false
+        //   });
+        
+        //   newCanvas.add(img); // Add the image to the canvas
+        // });
+
         newCanvas.on('mouse:up', event => {
           CanvasClick(newCanvas, event);
         });
@@ -210,8 +230,9 @@ const CanvasComponent: React.FC = () => {
             'className',
           ]);
           const id = canvasJS.id;
-          dispatch(setTempData(newCanvas.toObject(['name']).objects));
-          console.log(newCanvas.toObject(['name']).objects);
+          // dispatch(setTempData(newCanvas.toObject(['name']).objects));
+          // console.log(newCanvas.toObject(['name']).objects);
+          getElementsData(updatedCanvas?.objects);
           // dispatch(setRequest(newCanvas.toObject(['name']).objects));
           dispatch(updateCanvasInList({ id, updatedCanvas }));
         });
@@ -225,6 +246,7 @@ const CanvasComponent: React.FC = () => {
             'className',
           ]);
           const id = canvasJS.id;
+          getElementsData(updatedCanvas?.objects);
           dispatch(updateCanvasInList({ id, updatedCanvas }));
         });
 
@@ -237,7 +259,7 @@ const CanvasComponent: React.FC = () => {
             'className',
           ]);
           const id = canvasJS.id;
-          console.log(newCanvas.toObject());
+          getElementsData(updatedCanvas?.objects);
           dispatch(updateCanvasInList({ id, updatedCanvas }));
         });
 
@@ -250,12 +272,13 @@ const CanvasComponent: React.FC = () => {
             'className',
           ]);
           const id = canvasJS.id;
+          getElementsData(updatedCanvas?.objects);
           dispatch(updateCanvasInList({ id, updatedCanvas }));
         });
         // newCanvas.on('object:moving', handleAllElements);
-        // newCanvas.on('object:moving', function (options) {
-        //   handleObjectMoving(options, newCanvas);
-        // });
+        newCanvas.on('object:moving', function (options) {
+          handleObjectMoving(options, newCanvas);
+        });
 
         handleAddCustomIcon(newCanvas);
         newCanvas.renderAll();
@@ -345,6 +368,52 @@ const CanvasComponent: React.FC = () => {
       },
     });
   };
+
+  function getElementsData(canvasData: any[]){
+      console.log({canvasData})
+      let data:any[]=[]
+      canvasData.forEach((obj)=>{
+        if(obj.name === 'pyramidTextbox'){
+           dispatch(setShapeName("Pyramid"));
+           data.push({text:obj.text})
+        }
+
+        if(obj.name === 'Funnel_Text'){
+           dispatch(setShapeName("Funnel"));
+           data.push({text:obj.text})
+        }
+
+        if(obj.name === 'Cycle_Text'){
+           dispatch(setShapeName("Cycle"));
+           data.push({text:obj.text})
+        }
+
+        if(obj.name === 'ProcessText'){
+           dispatch(setShapeName("Process"));
+           data.push({text:obj.text})
+        }
+        
+
+        if(obj.name === 'TimeLineHeading'){
+           dispatch(setShapeName("Timeline"));
+           data.push({heading:obj.text})
+        }
+        if(obj.name === 'TimeLineText'){
+           dispatch(setShapeName("Timeline"));
+           data.push({text:obj.text})
+        }
+
+        if(obj.name === 'bullet'){
+           dispatch(setShapeName("Bullet point"));
+           let text = obj.text.split("\n");
+           text.forEach((element:string) => {
+             data.push({heading:element})
+           });
+        }
+        
+      })
+      dispatch(setRequest(data))
+  }
 
   elementData[1].onClick = () => {
     canvasRef.current?.add(title);
@@ -599,12 +668,10 @@ const CanvasComponent: React.FC = () => {
       img.set({
         left: 0, // Set the left position of the image
         top: 0, // Set the top position of the image
-        scaleX: 0.55, // Set scale factor if needed
-        scaleY: 0.55,
+        scaleX: 1.1, // Set scale factor if needed
+        scaleY: 1.1,
         hasControls: false,
         selectable:false
-        // Other properties like width, height, etc.
-        
       });
     
       canvasRef.current?.add(img); // Add the image to the canvas

@@ -608,6 +608,15 @@ export default function useAllElements() {
         fill: 'transparent',
         stroke: 'black',
       });
+      const text = new fabric.Textbox('Add Text', {
+        fontSize: 18,
+        left: 274,
+        top: 137,
+        width: 100,
+        name: 'pyramidTextbox',
+      });
+
+      textsList.push(text);
       levels.push(triangle);
       for (let i = 1; i < n; i++) {
         let trapezoid = new fabric.Polygon(
@@ -643,15 +652,7 @@ export default function useAllElements() {
         levels.push(trapezoid);
       }
 
-      const text = new fabric.Textbox('Add Text', {
-        fontSize: 18,
-        left: 274,
-        top: 137,
-        width: 100,
-        name: 'pyramidTextbox',
-      });
-
-      textsList.push(text);
+      
       return levels;
     }
 
@@ -666,6 +667,8 @@ export default function useAllElements() {
     canvas?.add(group);
 
     textsList.forEach(el => {
+      console.log(el);
+      
       canvas?.add(el);
     });
 
@@ -1127,7 +1130,8 @@ export default function useAllElements() {
       top: number,
       width: number,
       fontSize: number,
-      textContent: string
+      textContent: string,
+      timelineName:string
     ) {
       let text = new fabric.Textbox(textContent, {
         fontSize,
@@ -1137,7 +1141,7 @@ export default function useAllElements() {
         left,
         width,
         fill: 'black',
-        name: 'TimeLineText',
+        name: timelineName,
       });
       return canvas?.add(text);
     }
@@ -1147,14 +1151,16 @@ export default function useAllElements() {
       mainContainer.top + 20,
       100,
       14,
-      'Add Timeline'
+      'Add Timeline',
+      'TimeLineHeading'
     );
     addText(
       lastCircle.left + 170,
       mainContainer.top + 20 + 79,
       150,
       16,
-      'Add Text'
+      'Add Text',
+      'TimeLineText'
     );
 
     canvas.forEachObject(obj => {
@@ -1174,7 +1180,8 @@ export default function useAllElements() {
       top: number,
       width: number,
       fontSize: number,
-      textContent: string
+      textContent: string,
+      timelineName:string
     ) {
       let text = new fabric.Textbox(textContent, {
         fontSize,
@@ -1184,7 +1191,7 @@ export default function useAllElements() {
         left,
         width,
         fill: 'black',
-        name: 'TimeLineText',
+        name: timelineName,
       });
       return canvas?.add(text);
     }
@@ -1231,10 +1238,10 @@ export default function useAllElements() {
     addLine(170, mTop + 20 + 45, 200);
     addCircle(130, mTop + 20 + 26);
     addCircle(321, mTop + 20 + 26);
-    addText(102, mTop + 20, 100, 14, 'Add Timeline');
-    addText(301, mTop + 20, 100, 14, 'Add Timeline');
-    addText(111, mTop + 20 + 79, 150, 16, 'Add Text');
-    addText(307, mTop + 20 + 79, 150, 16, 'Add Text');
+    addText(102, mTop + 20, 100, 14, 'Add Timeline','TimeLineHeading');
+    addText(301, mTop + 20, 100, 14, 'Add Timeline','TimeLineHeading');
+    addText(111, mTop + 20 + 79, 150, 16, 'Add Text','TimeLineText');
+    addText(307, mTop + 20 + 79, 150, 16, 'Add Text','TimeLineText');
   };
 
   //Process
@@ -1611,6 +1618,20 @@ export default function useAllElements() {
           }
 
           if (
+            obj.name == 'TimeLineHeading' &&
+            obj.intersectsWithObject(movedObject, true, true)
+          ) {
+            obj
+              .set({
+                left: obj.left! + deltaX,
+                top: obj.top! + deltaY,
+              })
+              .setCoords();
+            left = obj.left! + deltaX;
+            top = obj.top! + deltaY;
+          }
+
+          if (
             obj.name == 'timeLineCircle' &&
             obj.intersectsWithObject(movedObject, true, true)
           ) {
@@ -1962,6 +1983,21 @@ export default function useAllElements() {
       addCycleStep(canvas);
       return true;
     }
+    //List
+    fabric.Object.prototype.controls.addList = new fabric.Control({
+      x: -0.5,
+      y: -0.5,
+      offsetY: -16,
+      offsetX: 16,
+      cursorStyle: 'pointer',
+      render: renderListAddIcon,
+      mouseUpHandler: addList,
+      visible: false,
+    });
+    function addList() {
+      console.log('list container')
+      return true;
+    }
 
     canvas.on('selection:created', event => {
       if (event.selected && event.selected.length > 0) {
@@ -1995,6 +2031,12 @@ export default function useAllElements() {
           selectedObject.setControlVisible('addCycle', true);
         } else {
           selectedObject.setControlVisible('addCycle', false);
+        }
+
+        if (selectedObject?.name === 'List_Container' ) {
+          selectedObject.setControlVisible('addList', true);
+        } else {
+          selectedObject.setControlVisible('addList', false);
         }
       }
     });
@@ -2056,6 +2098,19 @@ export default function useAllElements() {
       ctx.restore();
     }
     function renderCycleAddIcon(
+      ctx: CanvasRenderingContext2D,
+      left: number,
+      top: number,
+      fabricObject: fabric.Object
+    ) {
+      var size = 24;
+      ctx.save();
+      ctx.translate(left, top);
+      ctx.rotate(fabric.util.degreesToRadians(fabricObject.angle || 0));
+      ctx.drawImage(addIcon, -size / 2, -size / 2, size, size);
+      ctx.restore();
+    }
+    function renderListAddIcon(
       ctx: CanvasRenderingContext2D,
       left: number,
       top: number,
