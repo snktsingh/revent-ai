@@ -56,6 +56,8 @@ import {
   setTableDetails,
   setTempData,
 } from '@/redux/reducers/canvas';
+import { ToastContainer, toast } from 'react-toastify';
+import { fetchSlideImg } from '@/redux/thunk/thunk';
 
 const CanvasBody = () => {
   const slide = useAppSelector(state => state.slide);
@@ -349,6 +351,12 @@ const CanvasBody = () => {
     }
   };
 
+  const ReqData = {
+    companyName: 'Revent Ai',
+    shape: shapeName,
+    data: requestData,
+  };
+
   const handleRequest = () => {
     const ReqData = {
       companyName: 'Revent Ai',
@@ -369,6 +377,7 @@ const CanvasBody = () => {
 
   return (
     <BodyContainer>
+      <ToastContainer />
       <Grid container>
         <Grid xs={2}>
           <SlideList />
@@ -414,7 +423,7 @@ const CanvasBody = () => {
                 <Button
                   variant="contained"
                   size="small"
-                  onClick={handleRequest}
+                  onClick={() => dispatch(fetchSlideImg(ReqData))}
                 >
                   Regenerate
                 </Button>

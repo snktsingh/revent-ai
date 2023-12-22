@@ -65,7 +65,6 @@ const CanvasComponent: React.FC = () => {
     addTimeline,
     addProcess,
     addList,
-    addPyramidLevel,
     handleObjectMoving,
     handleAddCustomIcon,
     handleSelectionCreated,
@@ -81,8 +80,9 @@ const CanvasComponent: React.FC = () => {
     size,       
     requestData,
     tempData,
-    shapeName,
   } = useAppSelector(state => state.canvas);
+
+  const { pptUrl, imageUrl } = useAppSelector(state => state.thunk);
 
   const { itemKey } = useAppSelector(state => state.element);
 
@@ -168,6 +168,7 @@ const CanvasComponent: React.FC = () => {
       canvasRef.current.renderAll();
     }
   };
+
   useEffect(() => {
     const newCanvas = new fabric.Canvas('canvas');
     newCanvas.clear();
@@ -291,16 +292,25 @@ const CanvasComponent: React.FC = () => {
     );
 
     const canvas = canvasRef.current!;
-    // const url =
-    //   'https://www.google.com/imgres?imgurl=https%3A%2F%2Fbuffer.com%2Flibrary%2Fcontent%2Fimages%2Fsize%2Fw1200%2F2023%2F10%2Ffree-images.jpg&tbnid=ivTDs79HInLVcM&vet=12ahUKEwjAieatj5KDAxUoRmwGHbhJCKkQMygBegQIARB1..i&imgrefurl=https%3A%2F%2Fbuffer.com%2Flibrary%2Ffree-images%2F&docid=U9G_8UXPMlqatM&w=1200&h=800&q=images&ved=2ahUKEwjAieatj5KDAxUoRmwGHbhJCKkQMygBegQIARB1';
-    // fabric.Image.fromURL(url, img => {
-    //   canvas.add(img);
-    // });
 
     // const base64 = canvas.toDataURL({ format: 'jpeg', quality: 0.8 });
     // fabric.Image.fromURL(base64, img => {
     //   canvas.add(img);
     // });
+
+    const setResImage = (img: string) => {
+      if (canvasRef.current) {
+        canvasRef.current.clear();
+      }
+      fabric.Image.fromURL(`${img}`, img => {
+        newCanvas.add(img);
+      });
+    };
+
+    if (imageUrl !== '') {
+      setResImage(imageUrl);
+    }
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Delete' && canvas.getActiveObject()) {
         canvas.remove(canvas.getActiveObject()!);
@@ -323,7 +333,7 @@ const CanvasComponent: React.FC = () => {
       newCanvas.dispose();
       window.removeEventListener('resize', () => {});
     };
-  }, [canvasJS]);
+  }, [canvasJS, imageUrl]);
 
   ContentElements.handleFontSize = () => {
     const element = canvasRef.current?.getActiveObject();

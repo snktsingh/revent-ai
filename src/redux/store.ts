@@ -2,13 +2,15 @@ import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import slideReducer from './reducers/slide';
 import ElementReducer from './reducers/elements';
-import CanvasReducer  from './reducers/canvas';
+import CanvasReducer from './reducers/canvas';
+import ThunkReducer from './thunk/thunk';
 
 export const store = configureStore({
   reducer: {
     slide: slideReducer,
     element: ElementReducer,
-    canvas : CanvasReducer,
+    canvas: CanvasReducer,
+    thunk: ThunkReducer,
   },
 });
 
