@@ -15,7 +15,7 @@ import { theme } from '@/constants/theme';
 import {
   setActiveCanvas,
   setCanvas,
-  setRequest,
+  setRequestData,
   setShapeName,
   setTempData,
   updateCanvasInList,
@@ -368,40 +368,48 @@ const CanvasComponent: React.FC = () => {
   function getElementsData(canvasData: any[]) {
     console.log({ canvasData })
     let data: any[] = [];
+    let name: string = '';
     let timelineContent: any[] = []
     canvasData.forEach((obj) => {
       if (obj.name === 'pyramidTextbox') {
         dispatch(setShapeName("Pyramid"));
+        name = "Pyramid";
         data.push({ text: obj.text })
       }
 
       if (obj.name === 'Funnel_Text') {
         dispatch(setShapeName("Funnel"));
+        name = "Funnel";
         data.push({ text: obj.text })
       }
 
       if (obj.name === 'Cycle_Text') {
         dispatch(setShapeName("Cycle"));
+        name = "Cycle";
         data.push({ text: obj.text })
       }
 
       if (obj.name === 'ProcessText') {
         dispatch(setShapeName("Process"));
+        name = "Process";
         data.push({ text: obj.text })
       }
 
 
       if (obj.name === 'TimeLineHeading') {
         dispatch(setShapeName("Timeline"));
+        name = "Timeline";
         timelineContent.push(obj)
       }
       if (obj.name === 'TimeLineText') {
         dispatch(setShapeName("Timeline"));
+        name = "Timeline"
         timelineContent.push(obj)
       }
 
       if (obj.name === 'bullet') {
         dispatch(setShapeName("Bullet point"));
+        name = "Bullet point";
         let text = obj.text.split("\n");
         text.forEach((element: string) => {
           data.push({ heading: element })
@@ -421,7 +429,11 @@ const CanvasComponent: React.FC = () => {
       }, []);
     }
 
-    dispatch(setRequest(data))
+    dispatch(setRequestData({
+      companyName: 'Revent',
+      shape: name,
+      data: data,
+    }))
   }
 
   elementData[1].onClick = () => {

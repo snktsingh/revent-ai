@@ -72,7 +72,7 @@ export const CanvasReducer = createSlice({
       // state.canvasJS = canvasJSON;
       // state.canvasList.push(canvasJSON);
     },
-    setRequest: (state, action) => {
+    setRequestData: (state, action) => {
       return {
         ...state,
         requestData: action.payload
@@ -268,7 +268,7 @@ export const {
   handleSize,
   handleInputSize,
   setCanvasData,
-  setRequest,
+  setRequestData,
   setTempData,
   setShapeName,
   getVariants,

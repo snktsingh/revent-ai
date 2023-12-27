@@ -54,7 +54,7 @@ import {
   TableDetails,
   copyCanvasCopy,
   setCanvas,
-  setRequest,
+  setRequestData,
   setTableDetails,
   setTempData,
 } from '@/redux/reducers/canvas';
@@ -250,31 +250,20 @@ const CanvasBody = () => {
     }
   };
 
-  const ReqData = {
-    companyName: 'Revent Ai',
-    shape: shapeName,
-    data: requestData,
-  };
+
 
   const handleRequest = () => {
-    const ReqData = {
-      companyName: 'Revent Ai',
-      shape: shapeName,
-      data: requestData,
-    };
-    console.log({ReqData})
+    console.log({ requestData })
     handleOpenBackdrop();
-    axios
-      .post('http://3.108.53.183:8080/api/ppt/generate-ppt', ReqData)
-      .then(res => {
-        variantsFunction.addVariantsCanvas(res.data?.imagesUrl[0]);
-        handleCloseBackdrop();
-        return console.log(res);
-      })
-      .catch(err => {
-        handleCloseBackdrop();
-        return console.log(err.message);
-      });
+    
+    dispatch(fetchSlideImg(requestData)).then((res) => {
+      variantsFunction.addVariantsCanvas(res.payload?.imagesUrl[0]);
+      handleCloseBackdrop();
+      console.log(res);
+    }).catch((error) => {
+      handleCloseBackdrop();
+      console.error(error.message);
+    });
   };
 
   return (
