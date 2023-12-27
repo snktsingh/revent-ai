@@ -23,8 +23,7 @@ export interface RectContainer extends fabric.Rect {
 export default function useAllElements() {
   const dispatch = useAppDispatch();
 
-  const [totalPyramidLevels, setTotalPyramidLevels] = useState<number>(2);
-  const [totalFunnelLevels, setTotalFunnelLevels] = useState<number>(2);
+  
   
 
   const title = new fabric.IText('Click to add a title', {
@@ -727,7 +726,6 @@ export default function useAllElements() {
 
     canvas.add(text);
     canvas.requestRenderAll();
-    setTotalFunnelLevels((p) => p + 1);
   }
 
   const addFunnel = (canvas: fabric.Canvas | null) => {
@@ -1037,7 +1035,6 @@ export default function useAllElements() {
     }
 
     canvas?.renderAll();
-    setTotalPyramidLevels((p) => p + 1);
   }
 
   const addCycle = (canvas: fabric.Canvas | null) => {
@@ -1836,12 +1833,16 @@ export default function useAllElements() {
     let totalProcessSteps = 2;
     let totalTimelineSteps = 2;
     let totalCycleSteps = 3;
+    let totalFunnelLevels =2;
+    let totalPyramidLevels =2;
     
     canvas.on('object:added', (event) => {
       
       let processStepsTotal=0;
       let timelineLevels = 0;
       let cycleSteps = 0;
+      let pLevels=0;
+      let fLevels = 0;
       canvas.forEachObject((obj)=>{
         if(obj.name === 'ProcessBox'){
           processStepsTotal++;
@@ -1857,6 +1858,16 @@ export default function useAllElements() {
           cycleSteps++
         }
         totalCycleSteps = cycleSteps;
+
+        if(obj.name === 'Pyramid_LEVEL'){
+          pLevels++;
+        }
+        totalPyramidLevels = pLevels;
+
+        if(obj.name === 'Funnel_Level'){
+          fLevels++;
+        }
+        totalFunnelLevels = fLevels;
 
       })
 
@@ -2021,7 +2032,7 @@ export default function useAllElements() {
           selectedObject.setControlVisible('addTimeline', false);
         }
 
-        if (selectedObject?.name === 'Funnel') {
+        if (selectedObject?.name === 'Funnel' && totalFunnelLevels < 6) {
           selectedObject.setControlVisible('addFunnel', true);
         } else {
           selectedObject.setControlVisible('addFunnel', false);

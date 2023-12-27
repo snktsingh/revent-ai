@@ -24,7 +24,9 @@ import WebFont from 'webfontloader';
 
 const CanvasComponent: React.FC = () => {
   const canvasRef = useRef<fabric.Canvas | null>(null);
+  const FabricRef = useRef<fabric.Canvas | null>(null);
   const Container = useRef<HTMLDivElement | null>(null);
+
   const [canvasDimensions, setCanvasDimensions] = useState({
     width: 0,
     height: 0,
@@ -149,11 +151,12 @@ const CanvasComponent: React.FC = () => {
   };
 
   const updateCanvasDimensions = () => {
-    const canvasWidthPercentage = 65;
-    const canvasHeightPercentage = 65;
+    const aspectRatio = 16 / 9;
+    const canvasWidthPercentage = 58;
+    const canvasHeightPercentage = 58 / aspectRatio;
 
     const windowWidth = window.innerWidth;
-    const windowHeight = window.innerHeight;
+    const windowHeight = window.innerWidth;
 
     const canvasWidth = (canvasWidthPercentage / 100) * windowWidth;
     const canvasHeight = (canvasHeightPercentage / 100) * windowHeight;
@@ -171,6 +174,7 @@ const CanvasComponent: React.FC = () => {
 
   useEffect(() => {
     const newCanvas = new fabric.Canvas('canvas');
+    FabricRef.current = newCanvas;
     newCanvas.clear();
     console.log(canvasList);
     console.log(newCanvas.toObject());
@@ -178,11 +182,6 @@ const CanvasComponent: React.FC = () => {
       canvasJS.canvas,
       () => {
         canvasRef.current = newCanvas;
-        const aspectRatio = 16 / 9;
-        newCanvas.setDimensions({
-          width: 800,
-          height: 800 / aspectRatio,
-        });
         newCanvas.setBackgroundColor(
           `${theme.colorSchemes.light.palette.common.white}`,
           newCanvas.renderAll.bind(newCanvas)
@@ -193,20 +192,6 @@ const CanvasComponent: React.FC = () => {
         newCanvas.selectionLineWidth = 1;
 
         CustomBorderIcons(newCanvas);
-
-        // fabric.Image.fromURL('https://revent-ppt-output.s3.amazonaws.com/Pyramid-16652250149910895367_0.png', (img) => {
-        //   // Adjust the image properties as needed
-        //   img.set({
-        //     left: 0, // Set the left position of the image
-        //     top: 0, // Set the top position of the image
-        //     scaleX: 1, // Set scale factor if needed
-        //     scaleY: 1,
-        //     hasControls: false,
-        //     selectable:false
-        //   });
-
-        //   newCanvas.add(img); // Add the image to the canvas
-        // });
 
         newCanvas.on('mouse:up', event => {
           CanvasClick(newCanvas, event);
@@ -283,13 +268,24 @@ const CanvasComponent: React.FC = () => {
 
         handleAddCustomIcon(newCanvas);
         newCanvas.renderAll();
-
+      
         canvasRef.current = newCanvas;
       },
       (error: Error) => {
         console.error('Error loading canvas:', error);
       }
     );
+    fabric.Image.fromURL('https://revent-ppt-output.s3.amazonaws.com/Cycle-2405295753215880444_0.png', (img) => {
+      // Adjust the image properties as needed
+      img.set({
+        left: 0, // Set the left position of the image
+        top: 0, // Set the top position of the image
+        scaleX: 1.01, // Set scale factor if needed
+        scaleY: 1.01,
+      });
+
+      newCanvas?.add(img); // Add the image to the canvas
+    });
 
     const canvas = canvasRef.current!;
 
@@ -579,19 +575,24 @@ const CanvasComponent: React.FC = () => {
     }
   };
 
+
   //FULLSCREEN
   ContentElements.openFullScreen = () => {
     const element = document.getElementById('canvas');
+    let currentCanvasIndex = 0;
     const handleKeyDown = (event: any) => {
       if (!document.fullscreenElement) return;
 
       if (event.keyCode === 37 && currentCanvasIndex > 0) {
         // Left arrow key
         console.log('left');
-
         currentCanvasIndex--;
-        dispatch(setCanvas(canvasList[currentCanvasIndex]));
-        dispatch(setActiveCanvas(canvasList[currentCanvasIndex].id));
+
+        document.exitFullscreen().then(() => {
+          dispatch(setCanvas(canvasList[currentCanvasIndex]));
+          dispatch(setActiveCanvas(canvasList[currentCanvasIndex].id));
+        })
+        element?.requestFullscreen();
       } else if (
         event.keyCode === 39 &&
         currentCanvasIndex < canvasList.length - 1
@@ -599,13 +600,15 @@ const CanvasComponent: React.FC = () => {
         // Right arrow key
         console.log('right');
         currentCanvasIndex++;
+
         dispatch(setCanvas(canvasList[currentCanvasIndex]));
         dispatch(setActiveCanvas(canvasList[currentCanvasIndex].id));
+        
       }
     };
 
-    let currentCanvasIndex = 0;
     dispatch(setCanvas(canvasList[currentCanvasIndex]));
+
 
     const enterFullScreen = () => {
       element?.requestFullscreen();
@@ -619,6 +622,7 @@ const CanvasComponent: React.FC = () => {
 
     const fullscreenChange = () => {
       if (!document.fullscreenElement) {
+        enterFullScreen()
         window.removeEventListener('keydown', handleKeyDown);
       } else {
         window.addEventListener('keydown', handleKeyDown);
@@ -691,10 +695,8 @@ const CanvasComponent: React.FC = () => {
       img.set({
         left: 0, // Set the left position of the image
         top: 0, // Set the top position of the image
-        scaleX: 1.1, // Set scale factor if needed
-        scaleY: 1.1,
-        hasControls: false,
-        selectable: false
+        scaleX: 0.93, // Set scale factor if needed
+        scaleY: 0.93,
       });
 
       canvasRef.current?.add(img); // Add the image to the canvas
@@ -705,16 +707,6 @@ const CanvasComponent: React.FC = () => {
 
   return (
     <CanvasContainer ref={Container}>
-      {/* <button
-          id="but"
-          onClick={() => {
-            // console.log('temp', tempData);
-            // console.log('request', requestData);
-            console.log(canvasRef.current?.toJSON())
-          }}
-        >
-          GET DETAILS
-        </button> */}
       <canvas id="canvas"></canvas>
     </CanvasContainer>
   );
