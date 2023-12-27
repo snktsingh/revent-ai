@@ -275,17 +275,7 @@ const CanvasComponent: React.FC = () => {
         console.error('Error loading canvas:', error);
       }
     );
-    fabric.Image.fromURL('https://revent-ppt-output.s3.amazonaws.com/Cycle-2405295753215880444_0.png', (img) => {
-      // Adjust the image properties as needed
-      img.set({
-        left: 0, // Set the left position of the image
-        top: 0, // Set the top position of the image
-        scaleX: 1.01, // Set scale factor if needed
-        scaleY: 1.01,
-      });
-
-      newCanvas?.add(img); // Add the image to the canvas
-    });
+    
 
     const canvas = canvasRef.current!;
 

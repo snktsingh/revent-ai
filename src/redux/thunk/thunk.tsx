@@ -24,6 +24,7 @@ export const fetchSlideImg = createAsyncThunk(
     const res = await generateInstance.post(`${ENDPOINT.GEN_PPT}`, req);
     toast.success('Slide Regenerated');
     return res.data;
+    
   }
 );
 
