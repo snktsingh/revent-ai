@@ -257,9 +257,9 @@ const CanvasBody = () => {
     handleOpenBackdrop();
     
     dispatch(fetchSlideImg(requestData)).then((res) => {
-      variantsFunction.addVariantsCanvas(res.payload?.imagesUrl[0]);
-      handleCloseBackdrop();
+      variantsFunction.addVariantsCanvas(res.payload?.imagesUrl);
       console.log(res);
+      handleCloseBackdrop();
     }).catch((error) => {
       handleCloseBackdrop();
       console.error(error.message);
