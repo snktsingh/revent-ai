@@ -21,11 +21,13 @@ import {
   updateCanvasInList,
 } from '@/redux/reducers/canvas';
 import WebFont from 'webfontloader';
+import FullscreenCanvas from './fullscreenCanvas';
 
 const CanvasComponent: React.FC = () => {
   const canvasRef = useRef<fabric.Canvas | null>(null);
   const FabricRef = useRef<fabric.Canvas | null>(null);
   const Container = useRef<HTMLDivElement | null>(null);
+  
 
   const [canvasDimensions, setCanvasDimensions] = useState({
     width: 0,
@@ -172,6 +174,7 @@ const CanvasComponent: React.FC = () => {
     }
   };
 
+  
   useEffect(() => {
     const newCanvas = new fabric.Canvas('canvas');
     FabricRef.current = newCanvas;
@@ -186,16 +189,13 @@ const CanvasComponent: React.FC = () => {
           `${theme.colorSchemes.light.palette.common.white}`,
           newCanvas.renderAll.bind(newCanvas)
         );
-
+        newCanvas.enableRetinaScaling = true;
         newCanvas.selectionColor = 'transparent';
         newCanvas.selectionBorderColor = `${theme.colorSchemes.light.palette.primary.main}`;
         newCanvas.selectionLineWidth = 1;
 
         CustomBorderIcons(newCanvas);
 
-        newCanvas.on('mouse:up', event => {
-          CanvasClick(newCanvas, event);
-        });
         newCanvas.on('mouse:up', event => {
           CanvasClick(newCanvas, event);
         });
@@ -268,14 +268,14 @@ const CanvasComponent: React.FC = () => {
 
         handleAddCustomIcon(newCanvas);
         newCanvas.renderAll();
-      
+
         canvasRef.current = newCanvas;
       },
       (error: Error) => {
         console.error('Error loading canvas:', error);
       }
     );
-    
+
 
     const canvas = canvasRef.current!;
 
@@ -316,6 +316,7 @@ const CanvasComponent: React.FC = () => {
     window.addEventListener('keydown', handleKeyDown);
 
     return () => {
+      window.removeEventListener('keydown', handleKeyDown);
       newCanvas.dispose();
       window.removeEventListener('resize', () => { });
     };
@@ -578,67 +579,7 @@ const CanvasComponent: React.FC = () => {
   };
 
 
-  //FULLSCREEN
-  ContentElements.openFullScreen = () => {
-    const element = document.getElementById('canvas');
-    let currentCanvasIndex = 0;
-    const handleKeyDown = (event: any) => {
-      if (!document.fullscreenElement) return;
-
-      if (event.keyCode === 37 && currentCanvasIndex > 0) {
-        // Left arrow key
-        console.log('left');
-        currentCanvasIndex--;
-
-        document.exitFullscreen().then(() => {
-          dispatch(setCanvas(canvasList[currentCanvasIndex]));
-          dispatch(setActiveCanvas(canvasList[currentCanvasIndex].id));
-        })
-        element?.requestFullscreen();
-      } else if (
-        event.keyCode === 39 &&
-        currentCanvasIndex < canvasList.length - 1
-      ) {
-        // Right arrow key
-        console.log('right');
-        currentCanvasIndex++;
-
-        dispatch(setCanvas(canvasList[currentCanvasIndex]));
-        dispatch(setActiveCanvas(canvasList[currentCanvasIndex].id));
-        
-      }
-    };
-
-    dispatch(setCanvas(canvasList[currentCanvasIndex]));
-
-
-    const enterFullScreen = () => {
-      element?.requestFullscreen();
-      window.addEventListener('keydown', handleKeyDown);
-    };
-
-    const exitFullScreen = () => {
-      document.exitFullscreen();
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-
-    const fullscreenChange = () => {
-      if (!document.fullscreenElement) {
-        enterFullScreen()
-        window.removeEventListener('keydown', handleKeyDown);
-      } else {
-        window.addEventListener('keydown', handleKeyDown);
-      }
-    };
-
-    if (!document.fullscreenElement) {
-      enterFullScreen();
-    } else {
-      exitFullScreen();
-    }
-
-    document.addEventListener('fullscreenchange', fullscreenChange);
-  };
+ 
 
   ContentElements.handleBold = () => {
     let activeObj = canvasRef.current?.getActiveObjects() as any;
@@ -691,27 +632,34 @@ const CanvasComponent: React.FC = () => {
 
   variantsFunction.addVariantsCanvas = (url: string) => {
     canvasRef.current?.clear();
+    canvasRef.current?.setBackgroundColor(
+      `${theme.colorSchemes.light.palette.common.white}`,
+      canvasRef.current.renderAll.bind(canvasRef.current)
+    )
 
-    fabric.Image.fromURL(url, (img) => {
-      // Adjust the image properties as needed
-      img.set({
-        left: 0, // Set the left position of the image
-        top: 0, // Set the top position of the image
-        scaleX: 0.93, // Set scale factor if needed
-        scaleY: 0.93,
-      });
-
-      canvasRef.current?.add(img); // Add the image to the canvas
+  fabric.Image.fromURL(url, (img) => {
+    // Adjust the image properties as needed
+    img.set({
+      left: 0, // Set the left position of the image
+      top: 0, // Set the top position of the image
+      scaleX: 0.93, // Set scale factor if needed
+      scaleY: 0.93,
     });
-    canvasRef.current?.renderAll();
-    console.log(canvasRef.current?.toObject())
-  }
 
-  return (
-    <CanvasContainer ref={Container}>
-      <canvas id="canvas"></canvas>
-    </CanvasContainer>
-  );
+    canvasRef.current?.add(img); // Add the image to the canvas
+  });
+  canvasRef.current?.renderAll();
+  console.log(canvasRef.current?.toObject())
+}
+
+return (
+  <CanvasContainer ref={Container}>
+    <canvas id="canvas"></canvas>
+    <div style={{ position: 'absolute', left: -10000 }}>
+        <FullscreenCanvas/>
+    </div>
+  </CanvasContainer>
+);
 };
 
 export default CanvasComponent;

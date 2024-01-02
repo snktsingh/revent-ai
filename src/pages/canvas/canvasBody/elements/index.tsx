@@ -8,6 +8,7 @@ import {
 import { theme } from '@/constants/theme';
 import { handleInputSize, updateCanvasInList } from '@/redux/reducers/canvas';
 import { useAppDispatch } from '@/redux/store';
+import { IText } from 'fabric/fabric-impl';
 
 export interface IExtendedTextboxOptions extends fabric.ITextboxOptions {
   listType?: string;
@@ -32,7 +33,7 @@ export default function useAllElements() {
     fontSize: 30,
     fontWeight: 'bold',
     fontFamily: 'Red Hat Display, sans-serif',
-    type: 'textbox',
+    type: 'i-text',
     name: 'title',
   });
 
@@ -2247,6 +2248,11 @@ export default function useAllElements() {
           }
         });
         canvas.remove(object)
+        canvas.requestRenderAll()
+      }
+    
+      if((object as IText)?.text == 'Click to add a title'){
+        object.selectable = !object.selectable;
         canvas.requestRenderAll()
       }
     }
