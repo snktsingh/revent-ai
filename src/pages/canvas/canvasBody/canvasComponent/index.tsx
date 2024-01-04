@@ -439,18 +439,30 @@ const CanvasComponent: React.FC = () => {
 
   elementData[1].onClick = () => {
     canvasRef.current?.add(title);
+    title.selectAll();
+    canvasRef.current?.setActiveObject(title);
+    canvasRef.current?.renderAll();
   };
 
   elementData[2].onClick = () => {
     canvasRef.current?.add(subtitle);
+    subtitle.selectAll();
+    canvasRef.current?.setActiveObject(subtitle);
+    canvasRef.current?.renderAll();
   };
 
   elementData[3].onClick = () => {
     canvasRef.current?.add(heading);
+    heading.selectAll();
+    canvasRef.current?.setActiveObject(heading);
+    canvasRef.current?.renderAll();
   };
 
   elementData[4].onClick = () => {
     canvasRef.current?.add(paragraph);
+    paragraph.selectAll();
+    canvasRef.current?.setActiveObject(paragraph);
+    canvasRef.current?.renderAll();
   };
 
   elementData[5].onClick = () => {

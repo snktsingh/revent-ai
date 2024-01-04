@@ -226,7 +226,7 @@ export default function useAllElements() {
             objectsToDelete.push('ProcessBox', 'ProcessText', 'ProcessArrow');
             break;
           case 'Timeline_Container':
-            objectsToDelete.push('timeLineCircle', 'TimeLineText', 'TimeLineDirection');
+            objectsToDelete.push('timeLineCircle', 'TimeLineText', 'TimeLineDirection','TimeLineHeading');
             break;
           case 'PYRAMID':
             objectsToDelete.push('Pyramid_LEVEL', 'pyramidTextbox');
@@ -796,8 +796,8 @@ export default function useAllElements() {
       return canvas?.add(text);
     }
 
-    addText(376, 268, 'Level 1');
-    addText(377, 319, 'Level 2');
+    addText(376, 268, 'Add Text');
+    addText(377, 319, 'Add Text');
 
     canvas?.requestRenderAll();
   };
@@ -2209,7 +2209,7 @@ export default function useAllElements() {
     });
   };
 
-  //Canvas Click Event 
+  //Canvas Click Mouse Up Event 
 
   function CanvasClick(canvas: fabric.Canvas, event: fabric.IEvent<MouseEvent>) {
     let object = event.target;
@@ -2250,11 +2250,12 @@ export default function useAllElements() {
         canvas.remove(object)
         canvas.requestRenderAll()
       }
-    
-      if((object as IText)?.text == 'Click to add a title'){
-        object.selectable = !object.selectable;
-        canvas.requestRenderAll()
+      let textBox = (object as IText);
+      if(textBox?.text == 'Click to add a title' || textBox?.text ==  'Click to add a subtitle'  || textBox?.text == 'Click to add a heading' || textBox?.text == 'Click to add a paragraph' || textBox?.text == 'Click to add a bullet point' || textBox.text == 'Add Text'){
+        textBox.selectAll();
+        canvas.renderAll()
       }
+
     }
   }
 

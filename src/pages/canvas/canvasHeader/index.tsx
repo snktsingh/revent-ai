@@ -61,8 +61,8 @@ const MainCanvasHeader = () => {
         </Stack>
       </MainIconButton>
       <Stack direction="row" spacing={1}></Stack>
+        <CanvasHeaderInput placeholder="Untitled presentation" />
       <Stack direction="row" spacing={1}>
-        <CanvasHeaderInput placeholder="untitled.pptx" />
         <MainIconButton>
           <Stack direction="row" spacing={1}>
             <img src={Present} />
