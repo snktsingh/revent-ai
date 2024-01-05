@@ -1,5 +1,5 @@
 import ENDPOINT from '@/constants/endpoint';
-import { generateInstance } from '@/utils/fetch-utils';
+import { FetchUtils, generateInstance } from '@/utils/fetch-utils';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -21,10 +21,9 @@ const initialState: ISlideRequests = {
 export const fetchSlideImg = createAsyncThunk(
   'slide/fetchimage-ppt',
   async (req: IShapeRequest) => {
-    const res = await generateInstance.post(`${ENDPOINT.GEN_PPT}`, req);
+    const res = await FetchUtils.postRequest(`${ENDPOINT.GEN_PPT}`, req);
     toast.success('Slide Regenerated');
     return res.data;
-    
   }
 );
 
