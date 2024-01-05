@@ -12,10 +12,14 @@ export default function useAllShapes() {
     name: 'Rect_Shape',
   });
 
-  const addLine = new fabric.Line([10, 10, 50, 50], {
+  const addLine = new fabric.Line([0, 150, 150, 150], {
     stroke: 'black',
-    strokeWidth: 2,
+    strokeWidth: 1,
     name: 'Line_Shape',
+    left:120,
+    top:100,
+    lockMovementY:false,
+    
   });
 
   const addCircle = new fabric.Circle({

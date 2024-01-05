@@ -22,6 +22,7 @@ import {
 } from '@/redux/reducers/canvas';
 import WebFont from 'webfontloader';
 import FullscreenCanvas from './fullscreenCanvas';
+import { Canvas_Arrow } from '@/constants/media';
 
 const CanvasComponent: React.FC = () => {
   const canvasRef = useRef<fabric.Canvas | null>(null);
@@ -531,17 +532,26 @@ const CanvasComponent: React.FC = () => {
   ShapesData[0].onClick = () => {
     if (canvasRef.current) {
       canvasRef.current.add(addRectangle);
+      canvasRef.current.renderAll();
     }
   };
   ShapesData[1].onClick = () => {
+    
     if (canvasRef.current) {
-      // canvasRef.current.add(addLine);
+      fabric.loadSVGFromString(Canvas_Arrow,(objects,options)=>{
+        const obj = fabric.util.groupSVGElements(objects, options);
+        obj.top = 100;
+        obj.left = 120;
+        canvasRef.current?.add(obj)
+        canvasRef.current?.renderAll();
+      })
     }
   };
 
   ShapesData[2].onClick = () => {
     if (canvasRef.current) {
       canvasRef.current.add(addLine);
+      canvasRef.current.renderAll();
     }
   };
 
