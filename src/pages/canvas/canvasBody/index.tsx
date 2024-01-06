@@ -67,6 +67,7 @@ const CanvasBody = () => {
   const { canvasJS, requestData, tempData, shapeName } = useAppSelector(
     state => state.canvas
   );
+  const {isLoading} = useAppSelector(state => state.thunk);
   const [activeLike, setActiveLike] = useState(false);
   const [activeDislike, setActiveDislike] = useState(false);
   const [elementName, setElementName] = useState<string>('');
@@ -119,28 +120,18 @@ const CanvasBody = () => {
     handleClickOpenDialog();
   };
   elementData[10].onClick = () => {
-    // setElementName(CYCLE);
-    // handleClickOpenDialog();
     ContentElements.handleCycle();
   };
   elementData[11].onClick = () => {
-    // setElementName(PROCESS);
-    // handleClickOpenDialog();
     ContentElements.handleProcess();
   };
   elementData[12].onClick = () => {
-    // setElementName(TIMELINE);
-    // handleClickOpenDialog();
     ContentElements.handleTimeline();
   };
   elementData[13].onClick = () => {
-    // setElementName(FUNNEL);
-    // handleClickOpenDialog();
     ContentElements.handleFunnel();
   };
   elementData[14].onClick = () => {
-    // setElementName(PYRAMID);
-    // handleClickOpenDialog();
     ContentElements.handlePyramid();
   };
 
@@ -148,15 +139,7 @@ const CanvasBody = () => {
     setOpenDialog(false);
   };
 
-  //BackDrop
-
-  const [openBackdrop, setOpenBackdrop] = React.useState(false);
-  const handleCloseBackdrop = () => {
-    setOpenBackdrop(false);
-  };
-  const handleOpenBackdrop = () => {
-    setOpenBackdrop(true);
-  };
+  
 
   const [rows, setRows] = useState('');
   const [columns, setColumns] = useState('');
@@ -253,17 +236,8 @@ const CanvasBody = () => {
 
 
   const handleRequest = () => {
-    console.log({ requestData })
-    handleOpenBackdrop();
-    
-    dispatch(fetchSlideImg(requestData)).then((res) => {
-      variantsFunction.addVariantsCanvas(res.payload?.imagesUrl);
-      console.log(res);
-      handleCloseBackdrop();
-    }).catch((error) => {
-      handleCloseBackdrop();
-      console.error(error.message);
-    });
+    console.log({ requestData })    
+    dispatch(fetchSlideImg(requestData))
   };
 
   return (
@@ -447,8 +421,7 @@ const CanvasBody = () => {
       </Dialog>
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={openBackdrop}
-        onClick={handleCloseBackdrop}
+        open={isLoading}
       >
         <CircularProgress color="inherit" />
       </Backdrop>

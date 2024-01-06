@@ -483,7 +483,7 @@ export default function useAllElements() {
             left: cell.left! + cellPadding,
             top: cell.top! + cellPadding,
             selectable: true,
-            backgroundColor: 'white',
+            backgroundColor: theme.colorSchemes.light.palette.common.white,
             name: 'Table_Text'
           });
 
@@ -549,7 +549,6 @@ export default function useAllElements() {
         lastLevel = obj;
       });
     }
-    console.log({ lastLevel, lastText })
     if (lastLevel && lastText) {
       let trapezoid = new fabric.Polygon(
         [
@@ -667,8 +666,6 @@ export default function useAllElements() {
     canvas?.add(group);
 
     textsList.forEach(el => {
-      console.log(el);
-      
       canvas?.add(el);
     });
 
@@ -1288,11 +1285,13 @@ export default function useAllElements() {
 
     let text = new fabric.Textbox('Add Text', {
       fontSize: 14,
-      left: rect.left! + 10,
-      top: rect.top! + 10,
-      fill: 'white',
+      left: rect.left! + 5,
+      top: rect.top! + 5,
+      fill: theme.colorSchemes.light.palette.common.white,
       width: 140,
       name: 'ProcessText',
+      hasBorders:false,
+      hasControls:false
     });
 
     canvas.forEachObject(obj => {
@@ -1334,7 +1333,7 @@ export default function useAllElements() {
         fontSize: 14,
         left,
         top,
-        fill: 'white',
+        fill: theme.colorSchemes.light.palette.common.white,
         width: 140,
         name: 'ProcessText',
       });
@@ -2007,7 +2006,6 @@ export default function useAllElements() {
       visible: false,
     });
     function addList() {
-      console.log('list container')
       return true;
     }
 
@@ -2050,6 +2048,10 @@ export default function useAllElements() {
         } else {
           selectedObject.setControlVisible('addList', false);
         }
+
+       
+
+
       }
     });
 

@@ -6,7 +6,6 @@ import {
   ShapesData,
   colorChange,
   elementData,
-  variantsFunction,
 } from '../elementData';
 import { CanvasContainer } from './style';
 import useAllShapes from '../shapes';
@@ -28,7 +27,7 @@ const CanvasComponent: React.FC = () => {
   const canvasRef = useRef<fabric.Canvas | null>(null);
   const FabricRef = useRef<fabric.Canvas | null>(null);
   const Container = useRef<HTMLDivElement | null>(null);
-  
+
 
   const [canvasDimensions, setCanvasDimensions] = useState({
     width: 0,
@@ -85,9 +84,10 @@ const CanvasComponent: React.FC = () => {
     size,
     requestData,
     tempData,
+    canvasImage
   } = useAppSelector(state => state.canvas);
 
-  const { pptUrl, imageUrl } = useAppSelector(state => state.thunk);
+  const { pptUrl, imageUrl, variants } = useAppSelector(state => state.thunk);
 
   const { itemKey } = useAppSelector(state => state.element);
 
@@ -175,13 +175,17 @@ const CanvasComponent: React.FC = () => {
     }
   };
 
-  
+
   useEffect(() => {
     const newCanvas = new fabric.Canvas('canvas');
     FabricRef.current = newCanvas;
     newCanvas.clear();
-    console.log(canvasList);
-    console.log(newCanvas.toObject());
+    fabric.Object.prototype.set({
+      cornerStyle: 'circle',
+      padding: 5,
+      transparentCorners: false,
+      cornerSize: 10,
+    })
     newCanvas.loadFromJSON(
       canvasJS.canvas,
       () => {
@@ -190,10 +194,11 @@ const CanvasComponent: React.FC = () => {
           `${theme.colorSchemes.light.palette.common.white}`,
           newCanvas.renderAll.bind(newCanvas)
         );
+
         newCanvas.enableRetinaScaling = true;
         newCanvas.selectionColor = 'transparent';
-        newCanvas.selectionBorderColor = `${theme.colorSchemes.light.palette.primary.main}`;
-        newCanvas.selectionLineWidth = 1;
+        newCanvas.selectionBorderColor = theme.colorSchemes.light.palette.common.steelBlue;
+        newCanvas.selectionLineWidth = 0.5;
 
         CustomBorderIcons(newCanvas);
 
@@ -217,10 +222,7 @@ const CanvasComponent: React.FC = () => {
             'className',
           ]);
           const id = canvasJS.id;
-          // dispatch(setTempData(newCanvas.toObject(['name']).objects));
-          // console.log(newCanvas.toObject(['name']).objects);
           getElementsData(updatedCanvas?.objects);
-          // dispatch(setRequest(newCanvas.toObject(['name']).objects));
           dispatch(updateCanvasInList({ id, updatedCanvas }));
         });
 
@@ -536,9 +538,9 @@ const CanvasComponent: React.FC = () => {
     }
   };
   ShapesData[1].onClick = () => {
-    
+
     if (canvasRef.current) {
-      fabric.loadSVGFromString(Canvas_Arrow,(objects,options)=>{
+      fabric.loadSVGFromString(Canvas_Arrow, (objects, options) => {
         const obj = fabric.util.groupSVGElements(objects, options);
         obj.top = 100;
         obj.left = 120;
@@ -601,7 +603,7 @@ const CanvasComponent: React.FC = () => {
   };
 
 
- 
+
 
   ContentElements.handleBold = () => {
     let activeObj = canvasRef.current?.getActiveObjects() as any;
@@ -652,36 +654,36 @@ const CanvasComponent: React.FC = () => {
     addProcess(canvas);
   };
 
-  variantsFunction.addVariantsCanvas = (url: string) => {
+  useEffect(() => {
     canvasRef.current?.clear();
     canvasRef.current?.setBackgroundColor(
       `${theme.colorSchemes.light.palette.common.white}`,
       canvasRef.current.renderAll.bind(canvasRef.current)
     )
 
-  fabric.Image.fromURL(url, (img) => {
-    // Adjust the image properties as needed
-    img.set({
-      left: 0, // Set the left position of the image
-      top: 0, // Set the top position of the image
-      scaleX: 0.93, // Set scale factor if needed
-      scaleY: 0.93,
+    fabric.Image.fromURL(canvasImage, (img) => {
+      // Adjust the image properties as needed
+      img.set({
+        left: 0, // Set the left position of the image
+        top: 0, // Set the top position of the image
+        scaleX: 0.93, // Set scale factor if needed
+        scaleY: 0.93,
+      });
+
+      canvasRef.current?.add(img); // Add the image to the canvas
     });
+    canvasRef.current?.renderAll();
+  }, [canvasImage]);
 
-    canvasRef.current?.add(img); // Add the image to the canvas
-  });
-  canvasRef.current?.renderAll();
-  console.log(canvasRef.current?.toObject())
-}
 
-return (
-  <CanvasContainer ref={Container}>
-    <canvas id="canvas"></canvas>
-    <div style={{ position: 'absolute', left: -10000 }}>
-        <FullscreenCanvas/>
-    </div>
-  </CanvasContainer>
-);
+  return (
+    <CanvasContainer ref={Container}>
+      <canvas id="canvas"></canvas>
+      <div style={{ position: 'absolute', left: -10000 }}>
+        <FullscreenCanvas />
+      </div>
+    </CanvasContainer>
+  );
 };
 
 export default CanvasComponent;

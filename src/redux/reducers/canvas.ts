@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { fabric } from 'fabric';
 import variantsData from '../../data/variants.json';
+import { useSelector } from 'react-redux';
 
 export interface TableDetails {
   row: number;
@@ -36,8 +37,8 @@ export interface CanvasSate {
   canvasData: string[];
   tempData: any[];
   shapeName: string;
-  variants: any[];
-  requestData: IShapeRequest
+  requestData: IShapeRequest,
+  canvasImage:string,
 }
 const canvas = new fabric.Canvas(null);
 const canvasJSON = canvas.toObject();
@@ -54,12 +55,12 @@ export const initialState: CanvasSate = {
   canvasData: [],
   tempData: [],
   shapeName: '',
-  variants:[],
   requestData : {
     companyName: '',
     shape: '',
     data: [],
-  }
+  },
+  canvasImage:''
 };
 
 export const CanvasReducer = createSlice({
@@ -154,7 +155,6 @@ export const CanvasReducer = createSlice({
     },
     copyCanvasCopy(state, action) {
       const id = action.payload;
-      console.log(id);
 
       const selectedCanvasIndex = state.canvasList.findIndex(
         canvas => canvas.id === id
@@ -226,29 +226,15 @@ export const CanvasReducer = createSlice({
         size: action.payload,
       };
     },
-    getVariants(state) {
-      return {...state, variants : variantsData}
-    },
     setVariantAsCanvas(state,action) {
-      console.log("set variant as canvas",action);
-      // const canvas = new fabric.Canvas(null);
-      // canvas.loadFromJSON(state.canvasJS.canvas,()=>{
-      //   console.log({canvas});
-      //   fabric.Image.fromURL(action.payload, (img) => {
-      //     img.set({
-      //       left: 100, // Set the left position of the image
-      //       top: 100, // Set the top position of the image
-      //       scaleX: 0.5, // Set scale factor if needed
-      //       scaleY: 0.5,
-      //     });
-        
-      //     canvas.add(img); 
-      //   });
-      //   canvas.renderAll();
-      // });
       const updatedCanvas = state.canvasJS.canvas;
-      console.log(updatedCanvas);
       updateCanvasInList({id:state.canvasJS.id,updatedCanvas})
+    },
+    setVariantImageAsMain(state,action) {
+      return {
+        ...state,
+        canvasImage: action.payload
+      }
     }
   },
 });
@@ -271,8 +257,8 @@ export const {
   setRequestData,
   setTempData,
   setShapeName,
-  getVariants,
-  setVariantAsCanvas
+  setVariantAsCanvas,
+  setVariantImageAsMain
 } = CanvasReducer.actions;
 
 export default CanvasReducer.reducer;

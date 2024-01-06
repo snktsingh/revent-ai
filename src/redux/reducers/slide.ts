@@ -30,8 +30,6 @@ export const slideReducer = createSlice({
     addSlide: (state, action) => {
       state.listOfSlides.push(action.payload);
       state.nextKey = state.nextKey + 1;
-      // console.log(state.nextKey);
-      // console.log(state.listOfSlides);
     },
     deleteSlide: (state, action) => {
       state.listOfSlides.splice(action.payload - 1, 1);

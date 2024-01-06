@@ -1,12 +1,18 @@
 import ENDPOINT from '@/constants/endpoint';
 import { FetchUtils, generateInstance } from '@/utils/fetch-utils';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
-import { toast } from 'react-toastify';
+import { setVariantImageAsMain } from '../reducers/canvas';
+
+export interface VariantsType {
+  pptUrl: string;
+  imagesUrl:string;
+}
 
 interface ISlideRequests {
   pptUrl: string;
   imageUrl: string;
+  variants : VariantsType[];
+  isLoading : boolean;
 }
 
 interface IShapeRequest {
@@ -14,15 +20,20 @@ interface IShapeRequest {
   shape: string;
   data: string[];
 }
+
 const initialState: ISlideRequests = {
   pptUrl: '',
   imageUrl: '',
+  variants :[],
+  isLoading: false
 };
+
+
 export const fetchSlideImg = createAsyncThunk(
   'slide/fetchimage-ppt',
-  async (req: IShapeRequest) => {
+  async (req: IShapeRequest,{dispatch}) => {
     const res = await FetchUtils.postRequest(`${ENDPOINT.GEN_PPT}`, req);
-    toast.success('Slide Regenerated');
+    dispatch(setVariantImageAsMain(res.data.imageUrl));
     return res.data;
   }
 );
@@ -36,10 +47,20 @@ const thunkSlice = createSlice({
       .addCase(fetchSlideImg.pending, (state, action) => {
         state.pptUrl = '';
         state.imageUrl = '';
+        state.variants = [];
+        state.isLoading = true;
       })
       .addCase(fetchSlideImg.fulfilled, (state, action) => {
         state.pptUrl = action.payload.pptUrl;
-        state.imageUrl = action.payload.imagesUrl[0];
+        state.imageUrl = action.payload.imagesUrl;
+        state.variants = action.payload.variants;
+        state.isLoading = false;
+      })
+      .addCase(fetchSlideImg.rejected, (state, action)=>{
+        state.imageUrl = '';
+        state.pptUrl = '';
+        state.isLoading = false;
+        state.variants = [];
       });
   },
 });

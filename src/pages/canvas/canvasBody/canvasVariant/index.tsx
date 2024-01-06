@@ -16,21 +16,19 @@ import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { toggleVariantSlide } from '@/redux/reducers/elements';
 import { Logo } from '@/constants/media';
 import { useEffect } from 'react';
-import { getVariants, setVariantAsCanvas } from '@/redux/reducers/canvas';
 import { variantsFunction } from '../elementData';
+import { VariantsType } from '@/redux/thunk/thunk';
+import { setVariantImageAsMain } from '@/redux/reducers/canvas';
 
 export const CanvasVariant = () => {
   const dispatch = useAppDispatch();
   const { openVariant } = useAppSelector(state => state.element);
-  const { variants } = useAppSelector(state => state.canvas);
+  const { variants } = useAppSelector(state => state.thunk);
   const array: number[] = [1, 2, 3];
 
-  useEffect(()=>{
-    dispatch(getVariants());
-  },[]);
 
-  const handleVariants = (url:string)=>{
-    variantsFunction.addVariantsCanvas(url);
+  const handleVariants = (url: string) => {
+    dispatch(setVariantImageAsMain(url));
   }
 
   return (
@@ -80,24 +78,28 @@ export const CanvasVariant = () => {
                 Refresh
               </RefreshBtn>
             </ButtonContainer>
-            {variants.map((el:any) => {
-              return (
-                <VariantSlide key={el.id} onClick={()=> handleVariants(el.imagesUrl)}>
-                  <div>{el.id}</div>
-                  <VariantSlideCard>
-                    <img src={el.imagesUrl} alt={el.id} style={{width:'100%',height:'100%',objectFit:'cover'}}/>
-                  </VariantSlideCard>
-                </VariantSlide>
-              );
-            })}
-            {/* {array.map(el => {
-              return (
-                <VariantSlide key={el}>
-                  <div>{el}</div>
-                  <VariantSlideCard></VariantSlideCard>
-                </VariantSlide>
-              );
-            })} */}
+            {
+              variants.length > 0 ?
+                variants.map((el: VariantsType, i: number) => {
+                  return (
+                    <VariantSlide key={el.imagesUrl} onClick={() => handleVariants(el.imagesUrl)}>
+                      <div>{i + 1}</div>
+                      <VariantSlideCard>
+                        <img src={el.imagesUrl} alt={`Variant ${i + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      </VariantSlideCard>
+                    </VariantSlide>
+                  );
+                })
+                :
+                array.map(el => {
+                  return (
+                    <VariantSlide key={el}>
+                      <div>{el}</div>
+                      <VariantSlideCard></VariantSlideCard>
+                    </VariantSlide>
+                  );
+                })
+            }
 
             <LogoContainer>
               <div>

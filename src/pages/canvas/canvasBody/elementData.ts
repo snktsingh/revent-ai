@@ -402,9 +402,7 @@ export const ContentElements: ContentEle = {
 interface variantsType {
   addVariantsCanvas : Function
 }
-export const variantsFunction: variantsType = {
-   addVariantsCanvas : () => {}
-}
+
 
 export const TABLE = 'TABLE';
 export const FUNNEL = 'FUNNEL';
