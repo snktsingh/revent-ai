@@ -16,7 +16,6 @@ import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { toggleVariantSlide } from '@/redux/reducers/elements';
 import { Logo } from '@/constants/media';
 import { useEffect } from 'react';
-import { variantsFunction } from '../elementData';
 import { VariantsType } from '@/redux/thunk/thunk';
 import { setVariantImageAsMain } from '@/redux/reducers/canvas';
 

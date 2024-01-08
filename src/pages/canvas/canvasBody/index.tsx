@@ -41,7 +41,6 @@ import {
   TABLE,
   TIMELINE,
   elementData,
-  variantsFunction,
 } from './elementData';
 import React, { useState } from 'react';
 import { CanvasNotes } from './canvasNotes';
