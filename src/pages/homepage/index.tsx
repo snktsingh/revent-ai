@@ -24,12 +24,16 @@ import {
   MissionQuote,
   MobileCardContainer,
   MobileContainer,
+  UploadContainer,
+  UploadSubtitle,
+  UploadTitle,
   VideoTitle,
 } from './style';
 import { useForm, ValidationError } from '@formspree/react';
 import Menu from '../../assets/menu.svg';
 import { Box, Button, CardMedia, Grid, Stack, TextField } from '@mui/material';
 import {
+  CustomButton,
   CustomDivider,
   CustomOutlinedButton,
   GridJustify,
@@ -57,6 +61,7 @@ import HeroText from '../../assets/heroText.gif';
 import Link from '@mui/material/Link';
 import { UserLink } from '../canvas/canvasHeader/style';
 import { ToastContainer, toast } from 'react-toastify';
+import { Folder, Scratch, Wand } from '@/constants/media';
 
 const Home = () => {
   const [data, handleSubmit] = useForm('mbjvbjvd');
@@ -187,26 +192,54 @@ const Home = () => {
                   </Stack>
                 </GridRowCenter>
               </MainContainer>
-              {/* <ChildContainer>
-            <LightHeading>Get Started</LightHeading>
-            <GridRowCenter>
-              <Grid container spacing={4}>
-                <Grid item xs={6}>
-                  <span>
-                    <Wrapper>
-                      <h1>Transform</h1>
+              <ChildContainer>
+                <UploadTitle>Get Started</UploadTitle>
+                <Stack direction="row" width="80vw" spacing={13}>
+                  <UploadContainer>
+                    <>
+                      <UploadSubtitle>Transform</UploadSubtitle>
                       <p>an exisiting presentation</p>
+                    </>
+                    <br />
+                    <span>
+                      <img src={Folder} width="30%" />
                       <br />
-                      <img src={Folder} />
-                    </Wrapper>
-                  </span>
-                </Grid>
-                <Grid item xs={6}>
-                  asdasds
-                </Grid>
-              </Grid>
-            </GridRowCenter>
-          </ChildContainer> */}
+                      <br />
+                      <span>
+                        <b>Drag and Drop</b>
+                        <br />
+                        <span>
+                          your presentation here <br />
+                          or click to Browse
+                        </span>
+                      </span>
+                    </span>
+
+                    <br />
+                    <br />
+                    <>File should be .ppt or .pptx</>
+                  </UploadContainer>
+
+                  <UploadContainer>
+                    <>
+                      <UploadSubtitle>Create</UploadSubtitle>
+                      <p>A New Presentation</p>
+                    </>
+                    <span>
+                      <img src={Scratch} width="50%" />
+                    </span>
+                    <br />
+                  </UploadContainer>
+                </Stack>
+                <br />
+                <br />
+                <CustomButton variant="contained">
+                  <Stack direction="row" spacing={3}>
+                    <img src={Wand} />
+                    <p>Generate with Revent</p>
+                  </Stack>
+                </CustomButton>
+              </ChildContainer>
               <ChildContainer ref={workingRef}>
                 <ContactGrid container spacing={4}>
                   <StackColCenter direction="row" spacing={3}>

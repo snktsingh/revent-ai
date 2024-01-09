@@ -11,6 +11,7 @@ export const PrimaryLink = styled(Link)`
 export const GridRowCenter = styled(Grid)`
   display: flex;
   justify-content: center;
+  width: 100%;
 `;
 export const GridColCenter = styled(Grid)`
   display: flex;

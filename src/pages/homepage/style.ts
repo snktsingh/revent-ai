@@ -191,3 +191,23 @@ export const MobileCardContainer = styled.div`
   border-radius: 50px;
   padding: 5% 10%;
 `;
+export const UploadTitle = styled.span`
+  font-size: 6vh;
+  font-weight: lighter;
+`;
+export const UploadContainer = styled.span`
+  border-style: dashed;
+  padding: 5%;
+  width: 40%;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 6% !important;
+  cursor: pointer;
+`;
+export const UploadSubtitle = styled.span`
+  font-size: 2.5rem;
+  font-weight: 600;
+`;
