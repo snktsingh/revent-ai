@@ -33,7 +33,6 @@ export default function useAllElements() {
     fontSize: 30,
     fontWeight: 'bold',
     fontFamily: 'Red Hat Display, sans-serif',
-    type: 'i-text',
     name: 'title',
   });
 

@@ -186,6 +186,7 @@ const CanvasComponent: React.FC = () => {
       transparentCorners: false,
       cornerSize: 10,
     })
+    fabric.Object.prototype.objectCaching = false;
     newCanvas.loadFromJSON(
       canvasJS.canvas,
       () => {
@@ -440,6 +441,8 @@ const CanvasComponent: React.FC = () => {
     }))
   }
 
+  
+
   elementData[1].onClick = () => {
     canvasRef.current?.add(title);
     title.selectAll();
@@ -454,35 +457,35 @@ const CanvasComponent: React.FC = () => {
     canvasRef.current?.renderAll();
   };
 
-  elementData[3].onClick = () => {
-    canvasRef.current?.add(heading);
-    heading.selectAll();
-    canvasRef.current?.setActiveObject(heading);
-    canvasRef.current?.renderAll();
-  };
+  // elementData[3].onClick = () => {
+  //   canvasRef.current?.add(heading);
+  //   heading.selectAll();
+  //   canvasRef.current?.setActiveObject(heading);
+  //   canvasRef.current?.renderAll();
+  // };
 
-  elementData[4].onClick = () => {
+  elementData[3].onClick = () => {
     canvasRef.current?.add(paragraph);
     paragraph.selectAll();
     canvasRef.current?.setActiveObject(paragraph);
     canvasRef.current?.renderAll();
   };
 
-  elementData[5].onClick = () => {
+  elementData[4].onClick = () => {
     canvasRef.current?.add(BulletText);
   };
 
-  elementData[6].onClick = () => {
+  elementData[5].onClick = () => {
     ImageUploader(canvas);
   };
-  elementData[8].onClick = () => {
+  elementData[7].onClick = () => {
     let text = addQuotes();
     canvasRef.current?.add(text);
     canvasRef.current?.setActiveObject(text);
     text?.enterEditing();
     canvas?.renderAll();
   };
-  elementData[9].onClick = () => {
+  elementData[8].onClick = () => {
     addList(canvas);
   };
 

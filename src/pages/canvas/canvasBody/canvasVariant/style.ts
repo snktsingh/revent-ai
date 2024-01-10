@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 export const VariantButton = styled.button`
   position: fixed;
-  bottom: 45%;
+  bottom: 48%;
   right: 0px;
   cursor: pointer;
   transform: translate(40%, 40%) rotate(-90deg);
@@ -18,7 +18,6 @@ export const VariantButton = styled.button`
   color: ${theme.colorSchemes.light.palette.common.black};
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  
 `;
 export const DrawerMainContainer = styled.div`
   width: 100%;
@@ -32,7 +31,7 @@ export const DrawerBtnContainer = styled.div`
 `;
 export const DrawerVariantButton = styled.button`
   position: relative;
-  top: 41%;
+  top: 45%;
   right: 0;
   transform: translate(-10%, -10%) rotate(-90deg);
   background: #fff;

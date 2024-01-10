@@ -66,6 +66,7 @@ const CanvasBody = () => {
   const { canvasJS, requestData, tempData, shapeName } = useAppSelector(
     state => state.canvas
   );
+  const {variants} = useAppSelector(state => state.thunk);
   const {isLoading} = useAppSelector(state => state.thunk);
   const [activeLike, setActiveLike] = useState(false);
   const [activeDislike, setActiveDislike] = useState(false);
@@ -114,23 +115,23 @@ const CanvasBody = () => {
     setOpenDialog(true);
   };
 
-  elementData[7].onClick = () => {
+  elementData[6].onClick = () => {
     setElementName(TABLE);
     handleClickOpenDialog();
   };
-  elementData[10].onClick = () => {
+  elementData[9].onClick = () => {
     ContentElements.handleCycle();
   };
-  elementData[11].onClick = () => {
+  elementData[10].onClick = () => {
     ContentElements.handleProcess();
   };
-  elementData[12].onClick = () => {
+  elementData[11].onClick = () => {
     ContentElements.handleTimeline();
   };
-  elementData[13].onClick = () => {
+  elementData[12].onClick = () => {
     ContentElements.handleFunnel();
   };
-  elementData[14].onClick = () => {
+  elementData[13].onClick = () => {
     ContentElements.handlePyramid();
   };
 
@@ -382,8 +383,7 @@ const CanvasBody = () => {
           </EditSlideContainer>
           <CanvasNotes />
         </Grid>
-        {/* <CanavasVariant /> */}
-        <CanvasVariant />
+        {  <CanvasVariant />}
       </Grid>
       <Templates />
       <PopUpModal content={slide.slideKey} />

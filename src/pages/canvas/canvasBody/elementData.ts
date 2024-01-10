@@ -57,13 +57,13 @@ export const elementData: IElementData[] = [
     subtitle: 'Add Subtitle to the Canvas',
     onClick: () => {},
   },
-  {
-    key: 4,
-    icon: AddHeading,
-    title: 'Heading',
-    subtitle: 'Add Heading to the Canvas',
-    onClick: () => {},
-  },
+  // {
+  //   key: 4,
+  //   icon: AddHeading,
+  //   title: 'Heading',
+  //   subtitle: 'Add Heading to the Canvas',
+  //   onClick: () => {},
+  // },
   {
     key: 5,
     icon: AddParagraph,
