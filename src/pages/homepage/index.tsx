@@ -201,8 +201,10 @@ const Home = () => {
                       <p>an exisiting presentation</p>
                     </>
                     <br />
+                    <br />
                     <span>
                       <img src={Folder} width="30%" />
+                      <br />
                       <br />
                       <br />
                       <span>
@@ -220,11 +222,14 @@ const Home = () => {
                     <>File should be .ppt or .pptx</>
                   </UploadContainer>
 
-                  <UploadContainer>
+                  <UploadContainer
+                    onClick={() => window.location.replace('/canvas')}
+                  >
                     <>
                       <UploadSubtitle>Create</UploadSubtitle>
                       <p>A New Presentation</p>
                     </>
+                    <br />
                     <span>
                       <img src={Scratch} width="50%" />
                     </span>
