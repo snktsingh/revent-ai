@@ -2,19 +2,19 @@ import { theme } from '@/constants/theme';
 import { Button, styled as Mstyled } from '@mui/material';
 import styled from 'styled-components';
 
-export const VariantButton = styled.button`
+export const VariantButton = styled.div`
   position: fixed;
-  bottom: 48%;
+  top: 45%;
   right: 0px;
   cursor: pointer;
-  transform: translate(40%, 40%) rotate(-90deg);
-  background: #fff;
+  /* transform: translate(40%, 40%) rotate(-90deg); */
+  /* background: #fff;
   font-family: 'Roboto';
   border-radius: 12px 12px 0 0;
   padding: 6px 20px;
   border-top: 1px solid #dfdfdf;
   border-right: 1px solid #dfdfdf;
-  border-left: 1px solid #dfdfdf;
+  border-left: 1px solid #dfdfdf; */
   color: ${theme.colorSchemes.light.palette.common.black};
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

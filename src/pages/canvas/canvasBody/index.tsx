@@ -48,7 +48,6 @@ import SlideList from './slideList';
 import Templates from './templates';
 import { ThumbDownAltRounded, Widgets } from '@mui/icons-material';
 import CanvasComponent from './canvasComponent';
-import { CanvasVariant } from './canvasVariant';
 import {
   TableDetails,
   copyCanvasCopy,
@@ -383,7 +382,6 @@ const CanvasBody = () => {
           </EditSlideContainer>
           <CanvasNotes />
         </Grid>
-        {  <CanvasVariant />}
       </Grid>
       <Templates />
       <PopUpModal content={slide.slideKey} />
