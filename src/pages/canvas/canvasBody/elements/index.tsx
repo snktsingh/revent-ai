@@ -1385,51 +1385,9 @@ export default function useAllElements() {
     addText(96, 146);
     addText(326, 146);
   }
-
+//*****************************************************List element**********************************************************
   const addList = (canvas: fabric.Canvas | null) => {
-    // const fileInput = document.createElement('input');
-    // fileInput.type = 'file';
-    // fileInput.accept = 'image/**';
-    // fileInput.click();
-    // let file;
-    // let reader = new FileReader();
-    // fileInput.addEventListener('change', e => {
-    //   file = (e.target as HTMLInputElement)?.files?.[0];
-    //   if (file) {
-    //     reader.onload = () => {
-    //       if (canvas) {
-    //         fabric.Image.fromURL(reader.result as string, img => {
-    //           const fixedWidth = 100; // Set the fixed width you desire
-    //           const fixedHeight = 120; // Set the fixed height you desire
-    //           img.scaleToWidth(fixedWidth);
-    //           img.scaleToHeight(fixedHeight);
-    //           img.set({
-    //             left: 100,
-    //             top: 100,
-    //             name: 'listImage',
-    //           });
-    //           const text = new fabric.Textbox('Text', {
-    //             fontSize: 20,
-    //             width: 100,
-    //             height: 100,
-    //             fill: 'black',
-    //             left: 100,
-    //             top: 230,
-    //             textAlign: 'center',
-    //             name: 'listText',
-    //           });
-
-    //           canvas?.add(img);
-    //           canvas?.add(text);
-    //           canvas?.renderAll();
-    //         });
-    //       }
-    //     };
-    //     reader.readAsDataURL(file);
-    //   }
-    // });
-
-    const mainListContainer = new fabric.Rect({
+   const mainListContainer = new fabric.Rect({
       left: 33,
       top: 23,
       width: 200,
@@ -1461,9 +1419,14 @@ export default function useAllElements() {
       hoverCursor: 'pointer',
       name: 'ListAddImageText'
     });
-
-    canvas?.add(mainListContainer);
-    canvas?.add(addImage);
+    let group = new fabric.Group([mainListContainer,addImage],{
+      left:33,
+      top:23,
+      name:'LIST_ELEMENT'
+    });
+    // canvas?.add(mainListContainer);
+    // canvas?.add(addImage);
+    canvas?.add(group)
     canvas?.add(text);
     canvas?.renderAll();
   };
@@ -2215,7 +2178,9 @@ export default function useAllElements() {
   function CanvasClick(canvas: fabric.Canvas, event: fabric.IEvent<MouseEvent>) {
     let object = event.target;
     if (object) {
-      if (object?.name === "ListAddImageText") {
+      console.log(object)
+      if (object?.name === "LIST_ELEMENT") {
+        
         const fileInput = document.createElement('input');
         fileInput.type = 'file';
         fileInput.accept = 'image/**';
@@ -2233,22 +2198,27 @@ export default function useAllElements() {
                   img.scaleToWidth(fixedWidth);
                   img.scaleToHeight(fixedHeight);
                   img.set({
-                    left: object && object.left !== undefined ? object.left - 48 : 0,
-                    top: object && object.top !== undefined ? object.top - 78 : 0,
+                    left: object && object.left !== undefined ? object.left + 1 : 0,
+                    top: object && object.top !== undefined ? object.top + 1 : 0,
                     name: 'listImage',
 
                   });
-
                   canvas?.add(img);
                   canvas?.bringForward(img)
-
+                  
                 });
+                console.log(object)
               }
             };
             reader.readAsDataURL(file);
           }
         });
-        canvas.remove(object)
+        canvas.remove(object);
+        let container = (object as fabric.Group)._objects[0];
+        container.set({
+          width:400
+        })
+        canvas.add(container);
         canvas.requestRenderAll()
       }
       let textBox = (object as IText);
@@ -2256,8 +2226,8 @@ export default function useAllElements() {
         textBox.selectAll();
         canvas.renderAll()
       }
-
     }
+    
   }
 
   return {

@@ -41,7 +41,19 @@ export const fetchSlideImg = createAsyncThunk(
 const thunkSlice = createSlice({
   name: 'singleSlideData',
   initialState,
-  reducers: {},
+  reducers: {
+    swapMainCanvas(state,action){
+      const {canvasLink,index,pptLink} = action.payload;
+      console.log(action.payload)
+      let variants = [...state.variants];
+      variants[index].pptUrl = state.pptUrl;
+      variants[index].imagesUrl = state.imageUrl;
+      
+          state.imageUrl = canvasLink;
+          state.pptUrl = pptLink;
+          state.variants = variants;
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(fetchSlideImg.pending, (state, action) => {
@@ -65,4 +77,5 @@ const thunkSlice = createSlice({
   },
 });
 
+export const { swapMainCanvas }=  thunkSlice.actions;
 export default thunkSlice.reducer;

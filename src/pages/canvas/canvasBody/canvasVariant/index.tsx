@@ -16,18 +16,19 @@ import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { toggleVariantSlide } from '@/redux/reducers/elements';
 import { Logo, varianButtonSvg } from '@/constants/media';
 import { useEffect } from 'react';
-import { VariantsType } from '@/redux/thunk/thunk';
-import { setVariantImageAsMain } from '@/redux/reducers/canvas';
+import { VariantsType, swapMainCanvas } from '@/redux/thunk/thunk';
+import canvas, { setVariantImageAsMain } from '@/redux/reducers/canvas';
 
 export const CanvasVariant = () => {
   const dispatch = useAppDispatch();
   const { openVariant } = useAppSelector(state => state.element);
   const { variants } = useAppSelector(state => state.thunk);
   const array: number[] = [1, 2, 3];
+ 
 
-
-  const handleVariants = (url: string) => {
-    dispatch(setVariantImageAsMain(url));
+  const handleVariants = (CanvasURL: string, pptURL : string, index : number) => {
+    dispatch(swapMainCanvas({canvasLink: CanvasURL,index:index,pptLink:pptURL}))
+    dispatch(setVariantImageAsMain(CanvasURL));
   }
 
   return (
@@ -82,7 +83,7 @@ export const CanvasVariant = () => {
               variants.length > 0 ?
                 variants.map((el: VariantsType, i: number) => {
                   return (
-                    <VariantSlide key={el.imagesUrl} onClick={() => handleVariants(el.imagesUrl)}>
+                    <VariantSlide key={el.imagesUrl} onClick={() => handleVariants(el.imagesUrl,el.pptUrl,i)}>
                       <div>{i + 1}</div>
                       <VariantSlideCard>
                         <img src={el.imagesUrl} alt={`Variant ${i + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
