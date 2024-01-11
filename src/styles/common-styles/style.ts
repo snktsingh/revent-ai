@@ -60,9 +60,10 @@ export const CommonLink = styled.p`
   font-size: 110%;
 `;
 export const CustomButton = styled(Button)`
-  padding: 12px 20px !important;
-  border-radius: 10px !important;
-  font-size: 18px !important;
+  padding: 12px !important;
+  border-radius: 6px !important;
+  font-size: 14px !important;
+  width: 200px;
 `;
 export const CustomOutlinedButton = styled(Button)`
   border: 2px solid ${theme.colorSchemes.light.palette.primary.main} !important;
