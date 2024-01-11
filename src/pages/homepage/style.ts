@@ -196,8 +196,8 @@ export const UploadTitle = styled.span`
   font-weight: lighter;
 `;
 export const UploadContainer = styled.span`
-  border-style: dashed;
-  padding: 5%;
+  border: 2px dashed #ccc;
+  padding: 5% 5% 2%;
   width: 40%;
   border-radius: 10px;
   display: flex;
@@ -205,7 +205,7 @@ export const UploadContainer = styled.span`
   flex-direction: column;
   justify-content: center;
   margin-top: 6% !important;
-  cursor: pointer;
+  height: 45vh;
 `;
 export const UploadSubtitle = styled.span`
   font-size: 2.5rem;

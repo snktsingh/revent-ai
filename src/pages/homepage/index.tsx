@@ -61,9 +61,18 @@ import HeroText from '../../assets/heroText.gif';
 import Link from '@mui/material/Link';
 import { UserLink } from '../canvas/canvasHeader/style';
 import { ToastContainer, toast } from 'react-toastify';
-import { Folder, Scratch, Wand } from '@/constants/media';
+import {
+  CancelUpload,
+  Folder,
+  Scratch,
+  UploadTick,
+  Wand,
+} from '@/constants/media';
 
-const Home = () => {
+interface FileUploadProps {
+  onFileSelect: (file: File) => void;
+}
+const Home = ({ onFileSelect }: FileUploadProps) => {
   const [data, handleSubmit] = useForm('mbjvbjvd');
   const [data2, handleEmailSubmit] = useForm('xrgwdbzz');
 
@@ -135,6 +144,42 @@ const Home = () => {
     }, 1200);
   }
 
+  const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+
+    if (files && files.length > 0) {
+      const selected = files[0];
+      setSelectedFile(selected);
+      onFileSelect(selected);
+    }
+  };
+
+  const handleContainerClick = () => {
+    // Trigger the input click when the container is clicked
+    if (inputRef.current) {
+      inputRef.current.click();
+    }
+  };
+
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  };
+
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+
+    const files = event.dataTransfer.files;
+
+    if (files && files.length > 0) {
+      const droppedFile = files[0];
+      setSelectedFile(droppedFile);
+      onFileSelect(droppedFile);
+    }
+  };
+
+  const inputRef = React.createRef<HTMLInputElement>();
   return (
     <>
       <ToastContainer position="top-center" autoClose={1000} />
@@ -200,30 +245,75 @@ const Home = () => {
                       <UploadSubtitle>Transform</UploadSubtitle>
                       <p>an exisiting presentation</p>
                     </>
-                    <br />
-                    <br />
-                    <span>
-                      <img src={Folder} width="30%" />
-                      <br />
-                      <br />
-                      <br />
-                      <span>
-                        <b>Drag and Drop</b>
+                    <div
+                      style={{
+                        cursor: 'pointer',
+                      }}
+                      onClick={handleContainerClick}
+                      onDragOver={handleDragOver}
+                      onDrop={handleDrop}
+                    >
+                      <input
+                        type="file"
+                        accept=".docx"
+                        onChange={handleFileChange}
+                        ref={inputRef}
+                        style={{ display: 'none' }}
+                      />
+                      {selectedFile ? (
+                        <></>
+                      ) : (
+                        <>
+                          <br />
+                          <br />
+                          <img src={Folder} width="30px" />
+                          <br />
+                          <br />
+                          <span>
+                            <b>Drag and Drop</b>
+                            <br />
+                            <span>
+                              your presentation here <br />
+                              or click to Browse
+                            </span>
+                          </span>
+                          <br />
+                          <br />
+                          <br />
+                          <>File should be .ppt or .pptx</>
+                        </>
+                      )}
+                    </div>
+                    {selectedFile === null ? (
+                      <></>
+                    ) : (
+                      <span
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}
+                      >
                         <br />
-                        <span>
-                          your presentation here <br />
-                          or click to Browse
-                        </span>
+                        <img src={UploadTick} width="40px" />
+                        <br />
+                        <b>File Uploaded</b>
+                        <p>{selectedFile.name}</p>
+                        <br />
+                        <img
+                          src={CancelUpload}
+                          width="40px"
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => setSelectedFile(null)}
+                        />
                       </span>
-                    </span>
-
-                    <br />
-                    <br />
-                    <>File should be .ppt or .pptx</>
+                    )}
                   </UploadContainer>
 
                   <UploadContainer
                     onClick={() => window.location.replace('/canvas')}
+                    style={{ cursor: 'pointer' }}
                   >
                     <>
                       <UploadSubtitle>Create</UploadSubtitle>
@@ -238,12 +328,28 @@ const Home = () => {
                 </Stack>
                 <br />
                 <br />
-                <CustomButton variant="contained">
-                  <Stack direction="row" spacing={3}>
-                    <img src={Wand} />
-                    <p>Generate with Revent</p>
-                  </Stack>
-                </CustomButton>
+                <span
+                  style={{
+                    display: 'flex',
+                    marginLeft: '10%',
+                    flexDirection: 'column',
+                    width: '25%',
+                    alignItems: 'center',
+                  }}
+                >
+                  <CustomButton variant="contained">
+                    <Stack direction="row" spacing={2}>
+                      <img src={Wand} />
+                      <p>Generate with Revent</p>
+                    </Stack>
+                  </CustomButton>
+                  <ContainerDescription
+                    onClick={handleWorking}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    See How it works ?
+                  </ContainerDescription>
+                </span>
               </ChildContainer>
               <ChildContainer ref={workingRef}>
                 <ContactGrid container spacing={4}>
@@ -517,7 +623,7 @@ const Home = () => {
           <img src={Banner} width="60%" />
           <br />
           <Description>
-            Elevating your presentatiosn
+            Elevating your presentation
             <br />
             with seamless design, powered by AI.
           </Description>
