@@ -72,7 +72,7 @@ import {
 interface FileUploadProps {
   onFileSelect: (file: File) => void;
 }
-const Home = ({ onFileSelect }: FileUploadProps) => {
+const Home = ({ onFileSelect }: any) => {
   const [data, handleSubmit] = useForm('mbjvbjvd');
   const [data2, handleEmailSubmit] = useForm('xrgwdbzz');
 
