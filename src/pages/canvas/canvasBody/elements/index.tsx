@@ -24,8 +24,8 @@ export interface RectContainer extends fabric.Rect {
 export default function useAllElements() {
   const dispatch = useAppDispatch();
 
-  
-  
+
+
 
   const title = new fabric.IText('Click to add a title', {
     left: 30,
@@ -176,7 +176,7 @@ export default function useAllElements() {
     });
   };
 
-  //custom border icons
+  //**************************************************Custom Border Icons********************************************************
   const CustomBorderIcons = (canvas: fabric.Canvas | null) => {
     var img = new Image();
     img.src = DeleteX;
@@ -225,7 +225,7 @@ export default function useAllElements() {
             objectsToDelete.push('ProcessBox', 'ProcessText', 'ProcessArrow');
             break;
           case 'Timeline_Container':
-            objectsToDelete.push('timeLineCircle', 'TimeLineText', 'TimeLineDirection','TimeLineHeading');
+            objectsToDelete.push('timeLineCircle', 'TimeLineText', 'TimeLineDirection', 'TimeLineHeading');
             break;
           case 'PYRAMID':
             objectsToDelete.push('Pyramid_LEVEL', 'pyramidTextbox');
@@ -410,7 +410,7 @@ export default function useAllElements() {
     }
   };
 
-  //Quotes
+  //*****************************************************Quotes element**********************************************************
 
   const addQuotes = () => {
     let text = new fabric.IText('❝Click to add a quote❞', {
@@ -430,7 +430,7 @@ export default function useAllElements() {
     return text;
   };
 
-  //table
+//*****************************************************Table element**********************************************************
   const fabricDblClick = function (obj: any, handler: any) {
     return function () {
       if (obj.clicked) handler(obj);
@@ -531,8 +531,7 @@ export default function useAllElements() {
     createTable();
   };
 
-  //pyramid
-
+  //*****************************************************Pyramid element**********************************************************
   const addPyramidLevel = (canvas: fabric.Canvas) => {
 
     let lastLevel: any;
@@ -650,7 +649,7 @@ export default function useAllElements() {
         levels.push(trapezoid);
       }
 
-      
+
       return levels;
     }
 
@@ -671,7 +670,7 @@ export default function useAllElements() {
     canvas?.requestRenderAll();
   };
 
-  //funnel
+  //*****************************************************Funnel element**********************************************************
 
   function addFunnelLev(canvas: fabric.Canvas) {
     let lastLevel: any;
@@ -798,7 +797,7 @@ export default function useAllElements() {
     canvas?.requestRenderAll();
   };
 
-  //CYCLE
+  //*****************************************************Cycle element**********************************************************
 
   const addArrow = (left: number, top: number, angle: number) => {
     const ArrowPoints = [
@@ -1083,7 +1082,7 @@ export default function useAllElements() {
     canvas?.requestRenderAll();
   };
 
-  //Timeline
+  //*****************************************************Timeline element**********************************************************
 
   const addTimelineStep = (canvas: fabric.Canvas) => {
     let lastCircle: any;
@@ -1125,7 +1124,7 @@ export default function useAllElements() {
       width: number,
       fontSize: number,
       textContent: string,
-      timelineName:string
+      timelineName: string
     ) {
       let text = new fabric.Textbox(textContent, {
         fontSize,
@@ -1175,7 +1174,7 @@ export default function useAllElements() {
       width: number,
       fontSize: number,
       textContent: string,
-      timelineName:string
+      timelineName: string
     ) {
       let text = new fabric.Textbox(textContent, {
         fontSize,
@@ -1232,13 +1231,13 @@ export default function useAllElements() {
     addLine(170, mTop + 20 + 45, 200);
     addCircle(130, mTop + 20 + 26);
     addCircle(321, mTop + 20 + 26);
-    addText(102, mTop + 20, 100, 14, 'Add Timeline','TimeLineHeading');
-    addText(111, mTop + 20 + 79, 150, 16, 'Add Text','TimeLineText');
-    addText(301, mTop + 20, 100, 14, 'Add Timeline','TimeLineHeading');
-    addText(307, mTop + 20 + 79, 150, 16, 'Add Text','TimeLineText');
+    addText(102, mTop + 20, 100, 14, 'Add Timeline', 'TimeLineHeading');
+    addText(111, mTop + 20 + 79, 150, 16, 'Add Text', 'TimeLineText');
+    addText(301, mTop + 20, 100, 14, 'Add Timeline', 'TimeLineHeading');
+    addText(307, mTop + 20 + 79, 150, 16, 'Add Text', 'TimeLineText');
   };
 
-  //Process
+  //*****************************************************Process element**********************************************************
 
   const addProcessSteps = (canvas: fabric.Canvas) => {
     let lastRect: any;
@@ -1289,8 +1288,8 @@ export default function useAllElements() {
       fill: theme.colorSchemes.light.palette.common.white,
       width: 140,
       name: 'ProcessText',
-      hasBorders:false,
-      hasControls:false
+      hasBorders: false,
+      hasControls: false
     });
 
     canvas.forEachObject(obj => {
@@ -1385,9 +1384,9 @@ export default function useAllElements() {
     addText(96, 146);
     addText(326, 146);
   }
-//*****************************************************List element**********************************************************
+  //*****************************************************List element**********************************************************
   const addList = (canvas: fabric.Canvas | null) => {
-   const mainListContainer = new fabric.Rect({
+    const mainListContainer = new fabric.Rect({
       left: 33,
       top: 23,
       width: 200,
@@ -1419,10 +1418,10 @@ export default function useAllElements() {
       hoverCursor: 'pointer',
       name: 'ListAddImageText'
     });
-    let group = new fabric.Group([mainListContainer,addImage],{
-      left:33,
-      top:23,
-      name:'LIST_ELEMENT'
+    let group = new fabric.Group([mainListContainer, addImage], {
+      left: 33,
+      top: 23,
+      name: 'LIST_ELEMENT'
     });
     // canvas?.add(mainListContainer);
     // canvas?.add(addImage);
@@ -1795,38 +1794,38 @@ export default function useAllElements() {
     let totalProcessSteps = 2;
     let totalTimelineSteps = 2;
     let totalCycleSteps = 3;
-    let totalFunnelLevels =2;
-    let totalPyramidLevels =2;
-    
+    let totalFunnelLevels = 2;
+    let totalPyramidLevels = 2;
+
     canvas.on('object:added', (event) => {
-      
-      let processStepsTotal=0;
+
+      let processStepsTotal = 0;
       let timelineLevels = 0;
       let cycleSteps = 0;
-      let pLevels=0;
+      let pLevels = 0;
       let fLevels = 0;
-      canvas.forEachObject((obj)=>{
-        if(obj.name === 'ProcessBox'){
+      canvas.forEachObject((obj) => {
+        if (obj.name === 'ProcessBox') {
           processStepsTotal++;
         }
         totalProcessSteps = processStepsTotal;
 
-        if(obj.name === 'timeLineCircle'){
+        if (obj.name === 'timeLineCircle') {
           timelineLevels++
         }
         totalTimelineSteps = timelineLevels;
 
-        if(obj.name === 'Cycle_Circle'){
+        if (obj.name === 'Cycle_Circle') {
           cycleSteps++
         }
         totalCycleSteps = cycleSteps;
 
-        if(obj.name === 'Pyramid_LEVEL'){
+        if (obj.name === 'Pyramid_LEVEL') {
           pLevels++;
         }
         totalPyramidLevels = pLevels;
 
-        if(obj.name === 'Funnel_Level'){
+        if (obj.name === 'Funnel_Level') {
           fLevels++;
         }
         totalFunnelLevels = fLevels;
@@ -1835,42 +1834,42 @@ export default function useAllElements() {
 
       const object = canvas.getActiveObject();
       if (object?.name === 'PYRAMID') {
-        let levels=0;
-        (object as fabric.Group).forEachObject((obj)=>{
+        let levels = 0;
+        (object as fabric.Group).forEachObject((obj) => {
           levels++;
         })
-        if(levels >= 6){
+        if (levels >= 6) {
           object.setControlVisible('addPyramid', false);
         }
       }
 
       if (object?.name === 'Funnel') {
-        let levels=0;
-        (object as fabric.Group).forEachObject((obj)=>{
+        let levels = 0;
+        (object as fabric.Group).forEachObject((obj) => {
           levels++;
         })
-        if(levels > 6){
+        if (levels > 6) {
           object.setControlVisible('addFunnel', false);
         }
       }
 
       if (object?.name === 'Process_Container') {
-       
-        if(processStepsTotal >= 6){
+
+        if (processStepsTotal >= 6) {
           object.setControlVisible('addProcess', false);
         }
       }
 
       if (object?.name === 'Timeline_Container') {
-       
-        if(totalTimelineSteps >= 6){
+
+        if (totalTimelineSteps >= 6) {
           object.setControlVisible('addTimeline', false);
         }
       }
 
       if (object?.name === 'Cycle_Container') {
-       
-        if(totalCycleSteps >= 6){
+
+        if (totalCycleSteps >= 6) {
           object.setControlVisible('addCycle', false);
         }
       }
@@ -2005,19 +2004,16 @@ export default function useAllElements() {
           selectedObject.setControlVisible('addCycle', false);
         }
 
-        if (selectedObject?.name === 'List_Container' ) {
+        if (selectedObject?.name === 'List_Container') {
           selectedObject.setControlVisible('addList', true);
         } else {
           selectedObject.setControlVisible('addList', false);
         }
 
-       
-
-
       }
     });
 
-    
+
 
     function renderPyramidAddIcon(
       ctx: CanvasRenderingContext2D,
@@ -2173,14 +2169,14 @@ export default function useAllElements() {
     });
   };
 
-  //Canvas Click Mouse Up Event 
-
+   
+  //*******************************************Canvas Click Mouse Up Event**********************************************
   function CanvasClick(canvas: fabric.Canvas, event: fabric.IEvent<MouseEvent>) {
     let object = event.target;
     if (object) {
       console.log(object)
       if (object?.name === "LIST_ELEMENT") {
-        
+
         const fileInput = document.createElement('input');
         fileInput.type = 'file';
         fileInput.accept = 'image/**';
@@ -2193,41 +2189,44 @@ export default function useAllElements() {
             reader.onload = () => {
               if (canvas) {
                 fabric.Image.fromURL(reader.result as string, img => {
-                  const fixedWidth = 195; // Set the fixed width you desire
+                  const fixedWidth = 197; // Set the fixed width you desire
                   const fixedHeight = 200; // Set the fixed height you desire
-                  img.scaleToWidth(fixedWidth);
-                  img.scaleToHeight(fixedHeight);
+                  // img.scaleToWidth(fixedWidth);
+                  // img.scaleToHeight(fixedHeight);
+                  const scaleX = fixedWidth / img.width!;
+                  const scaleY = fixedHeight / img.height!;
+                  let container = (object as fabric.Group)._objects[1];
+                  let TextElement = (object as fabric.Group)._objects[1];
+                  (object as fabric.Group).removeWithUpdate(TextElement);
+                  (object as fabric.Group).set({
+                    name:'List_Container'
+                  });
                   img.set({
-                    left: object && object.left !== undefined ? object.left + 1 : 0,
-                    top: object && object.top !== undefined ? object.top + 1 : 0,
+                    left: object && object.left !== undefined ? object.left + 2 : 0,
+                    top: object && object.top !== undefined ? object.top + 2 : 0,
                     name: 'listImage',
-
+                    scaleX,
+                    scaleY,
                   });
                   canvas?.add(img);
-                  canvas?.bringForward(img)
-                  
+                  canvas.sendBackwards(img);
+                  object && canvas.bringForward(object);
+                  object?.setCoords();
                 });
-                console.log(object)
               }
-            };
+            }; 
             reader.readAsDataURL(file);
           }
         });
-        canvas.remove(object);
-        let container = (object as fabric.Group)._objects[0];
-        container.set({
-          width:400
-        })
-        canvas.add(container);
         canvas.requestRenderAll()
       }
       let textBox = (object as IText);
-      if(textBox?.text == 'Click to add a title' || textBox?.text ==  'Click to add a subtitle'  || textBox?.text == 'Click to add a heading' || textBox?.text == 'Click to add a paragraph' || textBox?.text == 'Click to add a bullet point' || textBox.text == 'Add Text'){
+      if (textBox?.text == 'Click to add a title' || textBox?.text == 'Click to add a subtitle' || textBox?.text == 'Click to add a heading' || textBox?.text == 'Click to add a paragraph' || textBox?.text == 'Click to add a bullet point' || textBox.text == 'Add Text') {
         textBox.selectAll();
         canvas.renderAll()
       }
     }
-    
+
   }
 
   return {
