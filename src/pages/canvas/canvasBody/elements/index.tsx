@@ -3,7 +3,8 @@ import { fabric } from 'fabric';
 import {
   Copy,
   DeleteX,
-  AddPlus
+  AddPlus,
+  imageIcon
 } from '@/constants/media';
 import { theme } from '@/constants/theme';
 import { handleInputSize, updateCanvasInList } from '@/redux/reducers/canvas';
@@ -1790,6 +1791,8 @@ export default function useAllElements() {
   const handleAddCustomIcon = (canvas: fabric.Canvas) => {
     let addIcon = new Image();
     addIcon.src = AddPlus;
+    let addImageIcon = new Image();
+    addImageIcon.src = imageIcon;
 
     let totalProcessSteps = 2;
     let totalTimelineSteps = 2;
@@ -1872,6 +1875,10 @@ export default function useAllElements() {
         if (totalCycleSteps >= 6) {
           object.setControlVisible('addCycle', false);
         }
+      }
+
+      if (object?.name === 'List_Container') {
+          object.setControlVisible('addCycle', false);
       }
 
     })
@@ -1969,6 +1976,25 @@ export default function useAllElements() {
     function addList() {
       return true;
     }
+    
+    //List Image
+    fabric.Object.prototype.controls.addImage = new fabric.Control({
+      x: 0.3,
+      y: -0.5,
+      offsetY: -16,
+      offsetX: 16,
+      cursorStyle: 'pointer',
+      render: renderListImageIcon,
+      mouseUpHandler: addListImage,
+      visible: false,
+    });
+    function addListImage() {
+      let selectedElement = canvas.getActiveObject();
+      addImage(canvas,selectedElement!)
+      return true;
+    }
+    
+  
 
     canvas.on('selection:created', event => {
       if (event.selected && event.selected.length > 0) {
@@ -2006,7 +2032,9 @@ export default function useAllElements() {
 
         if (selectedObject?.name === 'List_Container') {
           selectedObject.setControlVisible('addList', true);
+          selectedObject.setControlVisible('addImage', true);
         } else {
+          selectedObject.setControlVisible('addImage', false);
           selectedObject.setControlVisible('addList', false);
         }
 
@@ -2095,8 +2123,22 @@ export default function useAllElements() {
       ctx.drawImage(addIcon, -size / 2, -size / 2, size, size);
       ctx.restore();
     }
+    function renderListImageIcon(
+      ctx: CanvasRenderingContext2D,
+      left: number,
+      top: number,
+      fabricObject: fabric.Object
+    ) {
+      var size = 20;
+      ctx.save();
+      ctx.translate(left, top);
+      ctx.rotate(fabric.util.degreesToRadians(fabricObject.angle || 0));
+      ctx.drawImage(addImageIcon, -size / 2, -size / 2, size, size);
+      ctx.restore();
+    }
     canvas?.requestRenderAll();
   };
+    
 
   const handleSelectionCreated = (
     canvas: fabric.Canvas,
@@ -2168,64 +2210,74 @@ export default function useAllElements() {
       }
     });
   };
-
+  
+  const addImage = (canvas: fabric.Canvas, object: fabric.Object) => {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/**';
+    fileInput.click();
+    let file;
+    let reader = new FileReader();
+    fileInput.addEventListener('change', e => {
+      file = (e.target as HTMLInputElement)?.files?.[0];
+      if (file) {
+        reader.onload = () => {
+          if (canvas) {
+            fabric.Image.fromURL(reader.result as string, img => {
+              const fixedWidth = 197; // Set the fixed width you desire
+              const fixedHeight = 200; // Set the fixed height you desire
+              // img.scaleToWidth(fixedWidth);
+              // img.scaleToHeight(fixedHeight);
+              const scaleX = fixedWidth / img.width!;
+              const scaleY = fixedHeight / img.height!;
+              let container = (object as fabric.Group)._objects[1];
+              let TextElement = (object as fabric.Group)._objects[1];
+              (object as fabric.Group).removeWithUpdate(TextElement);
+              (object as fabric.Group).set({
+                name:'List_Container'
+              });
+              img.set({
+                left: object && object.left !== undefined ? object.left + 2 : 0,
+                top: object && object.top !== undefined ? object.top + 2 : 0,
+                name: 'listImage',
+                scaleX,
+                scaleY,
+              });
+              canvas?.add(img);
+              canvas.sendBackwards(img);
+              object && canvas.bringForward(object);
+              object?.setCoords();
+            });
+          }
+        }; 
+        reader.readAsDataURL(file);
+      }
+    });
+  }
    
   //*******************************************Canvas Click Mouse Up Event**********************************************
   function CanvasClick(canvas: fabric.Canvas, event: fabric.IEvent<MouseEvent>) {
     let object = event.target;
     if (object) {
-      console.log(object)
       if (object?.name === "LIST_ELEMENT") {
-
-        const fileInput = document.createElement('input');
-        fileInput.type = 'file';
-        fileInput.accept = 'image/**';
-        fileInput.click();
-        let file;
-        let reader = new FileReader();
-        fileInput.addEventListener('change', e => {
-          file = (e.target as HTMLInputElement)?.files?.[0];
-          if (file) {
-            reader.onload = () => {
-              if (canvas) {
-                fabric.Image.fromURL(reader.result as string, img => {
-                  const fixedWidth = 197; // Set the fixed width you desire
-                  const fixedHeight = 200; // Set the fixed height you desire
-                  // img.scaleToWidth(fixedWidth);
-                  // img.scaleToHeight(fixedHeight);
-                  const scaleX = fixedWidth / img.width!;
-                  const scaleY = fixedHeight / img.height!;
-                  let container = (object as fabric.Group)._objects[1];
-                  let TextElement = (object as fabric.Group)._objects[1];
-                  (object as fabric.Group).removeWithUpdate(TextElement);
-                  (object as fabric.Group).set({
-                    name:'List_Container'
-                  });
-                  img.set({
-                    left: object && object.left !== undefined ? object.left + 2 : 0,
-                    top: object && object.top !== undefined ? object.top + 2 : 0,
-                    name: 'listImage',
-                    scaleX,
-                    scaleY,
-                  });
-                  canvas?.add(img);
-                  canvas.sendBackwards(img);
-                  object && canvas.bringForward(object);
-                  object?.setCoords();
-                });
-              }
-            }; 
-            reader.readAsDataURL(file);
-          }
-        });
+        addImage(canvas,object)
         canvas.requestRenderAll()
       }
       let textBox = (object as IText);
-      if (textBox?.text == 'Click to add a title' || textBox?.text == 'Click to add a subtitle' || textBox?.text == 'Click to add a heading' || textBox?.text == 'Click to add a paragraph' || textBox?.text == 'Click to add a bullet point' || textBox.text == 'Add Text') {
-        textBox.selectAll();
-        canvas.renderAll()
+      if (textBox?.text == 'Click to add a title' || textBox?.text == 'Click to add a subtitle' || textBox?.text == 'Click to add a heading' || textBox?.text == 'Click to add a paragraph' || textBox?.text == 'Click to add a bullet point' || textBox.text == 'Add Text') {        
+            // Clear the placeholder text and make it selectable
+            textBox.text = '';
+            textBox.selectable = true;
+        
+            // Set focus on the textbox
+            textBox.enterEditing();
+            canvas.renderAll()
       }
     }
+  }
+
+  //*****************************************************selection:cleared**********************************************************
+  function canvasSelectionCleared(){
 
   }
 
