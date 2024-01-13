@@ -68,7 +68,7 @@ const CanvasComponent: React.FC = () => {
     addCycle,
     addTimeline,
     addProcess,
-    addList,
+    addListElement,
     handleObjectMoving,
     handleAddCustomIcon,
     handleSelectionCreated,
@@ -486,7 +486,7 @@ const CanvasComponent: React.FC = () => {
     canvas?.renderAll();
   };
   elementData[8].onClick = () => {
-    addList(canvas);
+    addListElement(canvas,33,23);
   };
 
   colorChange.colorFillChange = () => {

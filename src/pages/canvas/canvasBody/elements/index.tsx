@@ -1386,10 +1386,9 @@ export default function useAllElements() {
     addText(326, 146);
   }
   //*****************************************************List element**********************************************************
-  const addList = (canvas: fabric.Canvas | null) => {
+  const addListElement = (canvas: fabric.Canvas | null, left : number, top : number) => {
     const mainListContainer = new fabric.Rect({
-      left: 33,
-      top: 23,
+      
       width: 200,
       height: 250,
       fill: 'transparent',
@@ -1974,6 +1973,8 @@ export default function useAllElements() {
       visible: false,
     });
     function addList() {
+      let activeElement = canvas.getActiveObject();
+      addListElement(canvas,activeElement?.left!+200,activeElement?.top!)
       return true;
     }
     
@@ -1990,7 +1991,10 @@ export default function useAllElements() {
     });
     function addListImage() {
       let selectedElement = canvas.getActiveObject();
-      addImage(canvas,selectedElement!)
+      addImage(canvas,selectedElement!);
+      selectedElement && (selectedElement as fabric.Group).remove((selectedElement as fabric.Group)._objects[1]);
+      (selectedElement as fabric.Group).setCoords();
+      canvas.renderAll();
       return true;
     }
     
@@ -2243,8 +2247,7 @@ export default function useAllElements() {
                 scaleX,
                 scaleY,
               });
-              canvas?.add(img);
-              canvas.sendBackwards(img);
+              object && (object as fabric.Group).addWithUpdate(img)
               object && canvas.bringForward(object);
               object?.setCoords();
             });
@@ -2302,7 +2305,7 @@ export default function useAllElements() {
     addCycle,
     addTimeline,
     addProcess,
-    addList,
+    addListElement,
     addPyramidLevel,
     handleObjectMoving,
     handleAddCustomIcon,
