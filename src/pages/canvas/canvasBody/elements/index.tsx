@@ -1388,7 +1388,7 @@ export default function useAllElements() {
   //*****************************************************List element**********************************************************
   const addListElement = (canvas: fabric.Canvas | null, left : number, top : number) => {
     const mainListContainer = new fabric.Rect({
-      
+
       width: 200,
       height: 250,
       fill: 'transparent',
@@ -1397,17 +1397,7 @@ export default function useAllElements() {
       name: 'List_Container',
     });
 
-    const text = new fabric.Textbox('Text', {
-      fontSize: 20,
-      width: 200,
-      height: 100,
-      fill: 'black',
-      left: mainListContainer.left,
-      top: mainListContainer.getScaledHeight() + mainListContainer.top! - 30,
-      textAlign: 'center',
-      name: 'listText',
-    });
-
+    
     const addImage = new fabric.Text('+ Add Image', {
       top: mainListContainer.top! + 80,
       left: mainListContainer.left! + 50,
@@ -1419,10 +1409,22 @@ export default function useAllElements() {
       name: 'ListAddImageText'
     });
     let group = new fabric.Group([mainListContainer, addImage], {
-      left: 33,
-      top: 23,
+      left,
+      top,
       name: 'LIST_ELEMENT'
     });
+
+    const text = new fabric.Textbox('Text', {
+      fontSize: 20,
+      width: 180,
+      height: 100,
+      fill: 'black',
+      left: group.left!+8,
+      top: group.getScaledHeight() - 10,
+      textAlign: 'center',
+      name: 'listText',
+    });
+
     // canvas?.add(mainListContainer);
     // canvas?.add(addImage);
     canvas?.add(group)
@@ -1725,7 +1727,7 @@ export default function useAllElements() {
           lastTop: movedObject.top,
         });
 
-      } else if (movedObject.name === 'List_Container') {
+      } else if (movedObject.name === 'List_Container' || movedObject.name === 'LIST_ELEMENT' ) {
         const lastLeft = movedObject.get('lastLeft') || movedObject.left;
         const lastTop = movedObject.get('lastTop') || movedObject.top;
 
@@ -1974,7 +1976,7 @@ export default function useAllElements() {
     });
     function addList() {
       let activeElement = canvas.getActiveObject();
-      addListElement(canvas,activeElement?.left!+200,activeElement?.top!)
+      addListElement(canvas,activeElement?.getScaledWidth()!+70,activeElement?.top!)
       return true;
     }
     
