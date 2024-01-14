@@ -2250,7 +2250,7 @@ export default function useAllElements() {
                 scaleY,
               });
               object && (object as fabric.Group).addWithUpdate(img)
-              object && canvas.bringForward(object);
+              object && canvas.sendBackwards(object);
               object?.setCoords();
             });
           }
