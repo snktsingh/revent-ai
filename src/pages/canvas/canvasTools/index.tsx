@@ -1,4 +1,12 @@
-import { Autocomplete, Button, Divider, IconButton, Input, Menu, Paper, Stack, TextField } from '@mui/material';
+import {
+  Autocomplete,
+  Button,
+  Divider,
+  IconButton,
+  Menu,
+  Stack,
+  TextField,
+} from '@mui/material';
 import {
   BorderColorDiv,
   ColorDiv,
@@ -7,7 +15,6 @@ import {
   ColorMenuContainer,
   ColorSection,
   FontTool,
-  FontsInput,
   IconsContainer,
   InputForSize,
   MainToolContainer,
@@ -27,11 +34,7 @@ import ColorLensOutlinedIcon from '@mui/icons-material/ColorLensOutlined';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { addSlide } from '@/redux/reducers/slide';
 import { toggleTemplateVisibility } from '@/redux/reducers/elements';
-import {
-  SelectMenuItem,
-  ToolOutlinedButton,
-  ToolOutlinedSelect,
-} from '../style';
+import { ToolOutlinedButton, ToolOutlinedSelect } from '../style';
 import {
   AddOutlined,
   FormatBoldRounded,
@@ -69,7 +72,6 @@ interface FontItem {
   subsets: string[];
   variants: string[];
   version: string;
-  // Add other properties as needed
 }
 
 const CanvasTools = () => {
@@ -153,24 +155,21 @@ const CanvasTools = () => {
   };
 
   useEffect(() => {
-
-    fetch(`https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyAQsGKSth3gRPYEmNuIqIBrk_32GqB6W38&sort=alpha`)
-      .then((res) => res.json()).then((res) => {
+    fetch(
+      `https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyAQsGKSth3gRPYEmNuIqIBrk_32GqB6W38&sort=alpha`
+    )
+      .then(res => res.json())
+      .then(res => {
         // setGoogleFonts(res.items);
         const fonts: FontItem[] = res.items.slice(start, end);
         setFilteredFonts(fonts);
         // setGoogleFonts((prevFonts) => [...prevFonts, ...fonts]);
-        setGoogleFonts(res.items)
-
+        setGoogleFonts(res.items);
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
-
-      })
-
+      });
   }, [start, end]);
-
-
 
   useEffect(() => {
     colorChange.colorFillChange();
@@ -196,22 +195,21 @@ const CanvasTools = () => {
     WebFont.load({
       google: {
         families: [fontfamily],
-      }
+      },
     });
-  }
-
+  };
 
   const searchFonts = (value: string) => {
     if (value === '') {
       const fonts: FontItem[] = googleFonts.slice(0, 200);
       setFilteredFonts(fonts);
     } else {
-      const filtered = googleFonts.filter((font) =>
+      const filtered = googleFonts.filter(font =>
         font.family.toLowerCase().includes(value.toLowerCase())
       );
       setFilteredFonts(filtered);
     }
-  }
+  };
 
   return (
     <MainToolContainer>
@@ -225,14 +223,16 @@ const CanvasTools = () => {
         >
           <Stack direction="row" spacing={1}>
             <img src={Template} />
-            <p>Change Template</p>
+            <p>Change Theme</p>
           </Stack>
         </ToolOutlinedButton>
-        <ToolOutlinedButton onClick={() => {
-          dispatch(addCanvas());
-          console.log(canvasList);
-          dispatch(addSlide(obj));
-        }}>
+        <ToolOutlinedButton
+          onClick={() => {
+            dispatch(addCanvas());
+            console.log(canvasList);
+            dispatch(addSlide(obj));
+          }}
+        >
           <Stack direction="row" spacing={1}>
             <img src={Add} />
             <p>New Slide</p>
@@ -266,7 +266,6 @@ const CanvasTools = () => {
           </SelectMenuItem>
         </ToolOutlinedSelect> */}
 
-
         <Autocomplete
           sx={{ width: 200 }}
           size="small"
@@ -276,19 +275,21 @@ const CanvasTools = () => {
           }}
           inputValue={searchFont}
           onInputChange={(event, newInputValue) => {
-            searchFonts(newInputValue );
+            searchFonts(newInputValue);
           }}
-          options={filteredFonts.map((el) => el.family) || []}
-          renderInput={(params) => {
-            return (<TextField
-              {...params}
-              label="Select a font"
-              variant="outlined"
-              placeholder="Search fonts"
-            />)
+          options={filteredFonts.map(el => el.family) || []}
+          renderInput={params => {
+            return (
+              <TextField
+                {...params}
+                label="Select a font"
+                variant="outlined"
+                placeholder="Search fonts"
+              />
+            );
           }}
           renderOption={(props, option) => {
-            loadFont(option)
+            loadFont(option);
             return (
               <MenuItem {...props} style={{ fontFamily: option }}>
                 {option}
@@ -297,20 +298,31 @@ const CanvasTools = () => {
           }}
         />
 
-        <IconButton size="small" onClick={() => {
-          dispatch(handleSize(-1))
-          ContentElements.handleFontSize()
-        }} disabled={size === 1}>
+        <IconButton
+          size="small"
+          onClick={() => {
+            dispatch(handleSize(-1));
+            ContentElements.handleFontSize();
+          }}
+          disabled={size === 1}
+        >
           <RemoveOutlined />
         </IconButton>
-        <InputForSize value={size} type='number' onChange={(e) => {
-          dispatch(handleInputSize(+e.target.value))
-          ContentElements.handleFontSize()
-        }} />
-        <IconButton size="small" onClick={() => {
-          dispatch(handleSize(1))
-          ContentElements.handleFontSize()
-        }}>
+        <InputForSize
+          value={size}
+          type="number"
+          onChange={e => {
+            dispatch(handleInputSize(+e.target.value));
+            ContentElements.handleFontSize();
+          }}
+        />
+        <IconButton
+          size="small"
+          onClick={() => {
+            dispatch(handleSize(1));
+            ContentElements.handleFontSize();
+          }}
+        >
           <AddOutlined />
         </IconButton>
         <ColorDiv onClick={handleTextColorClick}>
@@ -344,7 +356,10 @@ const CanvasTools = () => {
               <ColorGrid>
                 {shadesData.map(color => {
                   return (
-                    <span key={color.shade1} style={{ display: 'flex', flexDirection: 'column' }}>
+                    <span
+                      key={color.shade1}
+                      style={{ display: 'flex', flexDirection: 'column' }}
+                    >
                       <ColorItem
                         key={color.shade1}
                         style={{ backgroundColor: color.shade1 }}
@@ -452,7 +467,8 @@ const CanvasTools = () => {
                     {shadesData.map(color => {
                       return (
                         <span
-                          key={color.shade1} style={{ display: 'flex', flexDirection: 'column' }}
+                          key={color.shade1}
+                          style={{ display: 'flex', flexDirection: 'column' }}
                         >
                           <ColorItem
                             key={color.shade1}
@@ -554,7 +570,10 @@ const CanvasTools = () => {
             <ColorGrid>
               {shadesData.map(color => {
                 return (
-                  <span key={color.shade1} style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span
+                    key={color.shade1}
+                    style={{ display: 'flex', flexDirection: 'column' }}
+                  >
                     <ColorItem
                       key={color.shade1}
                       style={{ backgroundColor: color.shade1 }}
@@ -631,7 +650,7 @@ const CanvasTools = () => {
         </ToolOutlinedSelect>
         <ToolOutlinedSelect
           inputProps={{ 'aria-label': 'Without label' }}
-        // defaultValue={1}
+          // defaultValue={1}
         >
           <MenuItem value={1}>
             <FormatListBulletedIcon style={{ display: 'flex' }} />
