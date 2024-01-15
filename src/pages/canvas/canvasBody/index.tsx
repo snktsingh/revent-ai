@@ -65,7 +65,7 @@ const CanvasBody = () => {
   const { canvasJS, requestData, tempData, shapeName } = useAppSelector(
     state => state.canvas
   );
-  const {variants} = useAppSelector(state => state.thunk);
+  const {isRegenerateDisabled} = useAppSelector(state => state.slide);
   const {isLoading} = useAppSelector(state => state.thunk);
   const [activeLike, setActiveLike] = useState(false);
   const [activeDislike, setActiveDislike] = useState(false);
@@ -144,9 +144,7 @@ const CanvasBody = () => {
   const [columns, setColumns] = useState('');
   const [cellWidth, setCellWidth] = useState('120');
   const [cellHeight, setCellHeight] = useState('35');
-  const [elemSize, setElemSize] = useState(3);
-  const [elemWidth, setElemWidth] = useState(120);
-  const [steps, setSteps] = useState<number>(3);
+
 
   const handleElementData = () => {
     let newTableData: TableDetails = {
@@ -238,7 +236,7 @@ const CanvasBody = () => {
     console.log({ requestData })    
     dispatch(fetchSlideImg(requestData))
   };
-
+  console.log(isRegenerateDisabled)
   return (
     <BodyContainer>
       <ToastContainer />
@@ -288,6 +286,7 @@ const CanvasBody = () => {
                   variant="contained"
                   size="small"
                   onClick={() => handleRequest()}
+                  disabled={isRegenerateDisabled}
                 >
                   Regenerate
                 </Button>

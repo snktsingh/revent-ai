@@ -22,6 +22,7 @@ import {
 import WebFont from 'webfontloader';
 import FullscreenCanvas from './fullscreenCanvas';
 import { Canvas_Arrow } from '@/constants/media';
+import { toggleRegenerateButton } from '@/redux/reducers/slide';
 
 const CanvasComponent: React.FC = () => {
   const canvasRef = useRef<fabric.Canvas | null>(null);
@@ -229,6 +230,11 @@ const CanvasComponent: React.FC = () => {
           ]);
           const id = canvasJS.id;
           getElementsData(updatedCanvas?.objects);
+          if(updatedCanvas?.objects.length > 1){
+            dispatch(toggleRegenerateButton(false));
+          }else{
+            dispatch(toggleRegenerateButton(true));
+          }
           dispatch(updateCanvasInList({ id, updatedCanvas }));
         });
 
@@ -242,6 +248,11 @@ const CanvasComponent: React.FC = () => {
           ]);
           const id = canvasJS.id;
           getElementsData(updatedCanvas?.objects);
+          if(updatedCanvas?.objects.length > 1){
+            dispatch(toggleRegenerateButton(false));
+          }else{
+            dispatch(toggleRegenerateButton(true));
+          }
           dispatch(updateCanvasInList({ id, updatedCanvas }));
         });
 
