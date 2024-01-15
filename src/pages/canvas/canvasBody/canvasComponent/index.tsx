@@ -289,6 +289,12 @@ const CanvasComponent: React.FC = () => {
         canvasRef.current.clear();
       }
       fabric.Image.fromURL(`${img}`, img => {
+        img.set({
+          left: 0,
+          top: 0,
+          scaleX: 0.93,
+          scaleY: 0.93,
+        });
         newCanvas.add(img);
       });
     };
@@ -662,15 +668,13 @@ const CanvasComponent: React.FC = () => {
     );
 
     fabric.Image.fromURL(canvasImage, img => {
-      // Adjust the image properties as needed
       img.set({
-        left: 0, // Set the left position of the image
-        top: 0, // Set the top position of the image
-        scaleX: 0.93, // Set scale factor if needed
+        left: 0,
+        top: 0,
+        scaleX: 0.93,
         scaleY: 0.93,
       });
-
-      canvasRef.current?.add(img); // Add the image to the canvas
+      canvasRef.current?.add(img);
     });
     canvasRef.current?.renderAll();
   }, [canvasImage]);
