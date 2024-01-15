@@ -243,7 +243,7 @@ const Home = ({ onFileSelect }: any) => {
                   <UploadContainer>
                     <>
                       <UploadSubtitle>Transform</UploadSubtitle>
-                      <p>an exisiting presentation</p>
+                      <p>an exisiting document</p>
                     </>
                     <div
                       style={{
@@ -255,7 +255,7 @@ const Home = ({ onFileSelect }: any) => {
                     >
                       <input
                         type="file"
-                        accept=".docx"
+                        accept=".pdf,.docx,.doc"
                         onChange={handleFileChange}
                         ref={inputRef}
                         style={{ display: 'none' }}
@@ -273,14 +273,14 @@ const Home = ({ onFileSelect }: any) => {
                             <b>Drag and Drop</b>
                             <br />
                             <span>
-                              your presentation here <br />
+                              your document here <br />
                               or click to Browse
                             </span>
                           </span>
                           <br />
                           <br />
                           <br />
-                          <>File should be .ppt or .pptx</>
+                          <>File should be .pdf, .doc or .docx</>
                         </>
                       )}
                     </div>

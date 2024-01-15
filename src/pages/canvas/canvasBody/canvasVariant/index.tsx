@@ -15,28 +15,30 @@ import { Drawer } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { toggleVariantSlide } from '@/redux/reducers/elements';
 import { Logo, varianButtonSvg } from '@/constants/media';
-import { useEffect } from 'react';
 import { VariantsType, swapMainCanvas } from '@/redux/thunk/thunk';
-import canvas, { setVariantImageAsMain } from '@/redux/reducers/canvas';
+import { setVariantImageAsMain } from '@/redux/reducers/canvas';
 
 export const CanvasVariant = () => {
   const dispatch = useAppDispatch();
   const { openVariant } = useAppSelector(state => state.element);
   const { variants } = useAppSelector(state => state.thunk);
   const array: number[] = [1, 2, 3];
- 
 
-  const handleVariants = (CanvasURL: string, pptURL : string, index : number) => {
-    dispatch(swapMainCanvas({canvasLink: CanvasURL,index:index,pptLink:pptURL}))
+  const handleVariants = (CanvasURL: string, pptURL: string, index: number) => {
+    dispatch(
+      swapMainCanvas({ canvasLink: CanvasURL, index: index, pptLink: pptURL })
+    );
     dispatch(setVariantImageAsMain(CanvasURL));
-  }
+  };
 
   return (
     <div>
-     { variants.length>0 && <VariantButton onClick={() => dispatch(toggleVariantSlide())}>
-      <img src={varianButtonSvg} alt="varintButton" />
-      </VariantButton>}
-    
+      {variants.length > 0 && (
+        <VariantButton onClick={() => dispatch(toggleVariantSlide())}>
+          <img src={varianButtonSvg} alt="varintButton" />
+        </VariantButton>
+      )}
+
       <Drawer
         anchor="right"
         open={openVariant}
@@ -64,7 +66,7 @@ export const CanvasVariant = () => {
               <div>1</div>
               <VariantSlideCard></VariantSlideCard>
             </VariantSlide>
-            <Text>Grid Variants</Text>
+            {/* <Text>Grid Variants</Text>
             {array.map(el => {
               return (
                 <VariantSlide key={el}>
@@ -72,35 +74,43 @@ export const CanvasVariant = () => {
                   <VariantSlideCard></VariantSlideCard>
                 </VariantSlide>
               );
-            })}
+            })} */}
             <ButtonContainer>
               <p>Variants</p>
               <RefreshBtn variant="contained" size="small">
                 Refresh
               </RefreshBtn>
             </ButtonContainer>
-            {
-              variants.length > 0 ?
-                variants.map((el: VariantsType, i: number) => {
+            {variants.length > 0
+              ? variants.map((el: VariantsType, i: number) => {
                   return (
-                    <VariantSlide key={el.imagesUrl} onClick={() => handleVariants(el.imagesUrl,el.pptUrl,i)}>
+                    <VariantSlide
+                      key={el.imagesUrl}
+                      onClick={() => handleVariants(el.imagesUrl, el.pptUrl, i)}
+                    >
                       <div>{i + 1}</div>
                       <VariantSlideCard>
-                        <img src={el.imagesUrl} alt={`Variant ${i + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        <img
+                          src={el.imagesUrl}
+                          alt={`Variant ${i + 1}`}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                          }}
+                        />
                       </VariantSlideCard>
                     </VariantSlide>
                   );
                 })
-                :
-                array.map(el => {
+              : array.map(el => {
                   return (
                     <VariantSlide key={el}>
                       <div>{el}</div>
                       <VariantSlideCard></VariantSlideCard>
                     </VariantSlide>
                   );
-                })
-            }
+                })}
 
             <LogoContainer>
               <div>

@@ -25,7 +25,6 @@ import {
   StarIcon,
   TriangleIcon,
 } from '@/constants/media';
-import { Table } from '@mui/material';
 
 interface IElementData {
   key: number;
@@ -373,36 +372,35 @@ interface ContentEle {
   handleBold: Function;
   handleItalic: Function;
   handleUnderlIne: Function;
-  handleOpenTable:Function;
-  handleFunnel : Function;
-  handlePyramid : Function;
-  handleCycle : Function;
-  handleProcess : Function;
-  handleTimeline : Function;
-  handleFontSize : Function;
-  handleFontFamily : Function;
+  handleOpenTable: Function;
+  handleFunnel: Function;
+  handlePyramid: Function;
+  handleCycle: Function;
+  handleProcess: Function;
+  handleTimeline: Function;
+  handleFontSize: Function;
+  handleFontFamily: Function;
 }
 
 export const ContentElements: ContentEle = {
-  addTitle: () => { },
-  openFullScreen: () => { },
-  handleBold: () => { },
-  handleItalic: () => { },
-  handleUnderlIne: () => { },
-  handleOpenTable:()=>{},
-  handleFunnel: ()=> {},
-  handlePyramid: ()=>{},
-  handleCycle: ()=>{},
-  handleProcess: ()=>{},
-  handleTimeline: ()=>{},
-  handleFontSize : ()=>{},
-  handleFontFamily: ()=>{}
+  addTitle: () => {},
+  openFullScreen: () => {},
+  handleBold: () => {},
+  handleItalic: () => {},
+  handleUnderlIne: () => {},
+  handleOpenTable: () => {},
+  handleFunnel: () => {},
+  handlePyramid: () => {},
+  handleCycle: () => {},
+  handleProcess: () => {},
+  handleTimeline: () => {},
+  handleFontSize: () => {},
+  handleFontFamily: () => {},
 };
 
 interface variantsType {
-  addVariantsCanvas : Function
+  addVariantsCanvas: Function;
 }
-
 
 export const TABLE = 'TABLE';
 export const FUNNEL = 'FUNNEL';

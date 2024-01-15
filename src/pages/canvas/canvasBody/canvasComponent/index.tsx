@@ -28,7 +28,6 @@ const CanvasComponent: React.FC = () => {
   const FabricRef = useRef<fabric.Canvas | null>(null);
   const Container = useRef<HTMLDivElement | null>(null);
 
-
   const [canvasDimensions, setCanvasDimensions] = useState({
     width: 0,
     height: 0,
@@ -86,7 +85,7 @@ const CanvasComponent: React.FC = () => {
     size,
     requestData,
     tempData,
-    canvasImage
+    canvasImage,
   } = useAppSelector(state => state.canvas);
 
   const { pptUrl, imageUrl, variants } = useAppSelector(state => state.thunk);
@@ -94,7 +93,6 @@ const CanvasComponent: React.FC = () => {
   const { itemKey } = useAppSelector(state => state.element);
 
   // useEffect(() => {
-
 
   //   for (let i = 0; i < tempData.length; i++) {
   //     if (tempData[i].type === 'textbox' || tempData[i].type === 'i-text') {
@@ -124,7 +122,6 @@ const CanvasComponent: React.FC = () => {
   //         dispatch(setShapeName('Cycle'));
   //         dispatch(setRequest([...requestData, { text: tempData[i].text }]));
   //       }
-
 
   //     }
   //   }
@@ -177,7 +174,6 @@ const CanvasComponent: React.FC = () => {
     }
   };
 
-
   useEffect(() => {
     const newCanvas = new fabric.Canvas('canvas');
     FabricRef.current = newCanvas;
@@ -187,7 +183,7 @@ const CanvasComponent: React.FC = () => {
       padding: 5,
       transparentCorners: false,
       cornerSize: 10,
-    })
+    });
     fabric.Object.prototype.objectCaching = false;
     newCanvas.loadFromJSON(
       canvasJS.canvas,
@@ -200,7 +196,8 @@ const CanvasComponent: React.FC = () => {
 
         newCanvas.enableRetinaScaling = true;
         newCanvas.selectionColor = 'transparent';
-        newCanvas.selectionBorderColor = theme.colorSchemes.light.palette.common.steelBlue;
+        newCanvas.selectionBorderColor =
+          theme.colorSchemes.light.palette.common.steelBlue;
         newCanvas.selectionLineWidth = 0.5;
 
         CustomBorderIcons(newCanvas);
@@ -288,7 +285,6 @@ const CanvasComponent: React.FC = () => {
       }
     );
 
-
     const canvas = canvasRef.current!;
 
     // const base64 = canvas.toDataURL({ format: 'jpeg', quality: 0.8 });
@@ -301,6 +297,12 @@ const CanvasComponent: React.FC = () => {
         canvasRef.current.clear();
       }
       fabric.Image.fromURL(`${img}`, img => {
+        img.set({
+          left: 0,
+          top: 0,
+          scaleX: 0.93,
+          scaleY: 0.93,
+        });
         newCanvas.add(img);
       });
     };
@@ -326,11 +328,10 @@ const CanvasComponent: React.FC = () => {
     };
 
     window.addEventListener('keydown', handleKeyDown);
-
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
       newCanvas.dispose();
-      window.removeEventListener('resize', () => { });
+      window.removeEventListener('resize', () => {});
     };
   }, [canvasJS, imageUrl]);
 
@@ -379,56 +380,60 @@ const CanvasComponent: React.FC = () => {
   };
 
   function getElementsData(canvasData: any[]) {
-    console.log({ canvasData })
+    console.log({ canvasData });
     let data: any[] = [];
     let name: string = '';
-    let timelineContent: any[] = []
-    canvasData.forEach((obj) => {
-      if (obj.name === 'pyramidTextbox') {
-        dispatch(setShapeName("Pyramid"));
-        name = "Pyramid";
-        data.push({ text: obj.text })
+    let title: string = '';
+    let subTitle: string = '';
+    let timelineContent: any[] = [];
+    canvasData.forEach(obj => {
+      if (obj.name === 'title') {
+        dispatch(setShapeName('Cover'));
+        name = 'Cover';
+        title = obj.text;
       }
-
+      if (obj.name === 'subTitle') {
+        dispatch(setShapeName('Cover'));
+        name = 'Cover';
+        subTitle = obj.text;
+      }
       if (obj.name === 'Funnel_Text') {
-        dispatch(setShapeName("Funnel"));
-        name = "Funnel";
-        data.push({ text: obj.text })
+        dispatch(setShapeName('Funnel'));
+        name = 'Funnel';
+        data.push({ text: obj.text });
       }
 
       if (obj.name === 'Cycle_Text') {
-        dispatch(setShapeName("Cycle"));
-        name = "Cycle";
-        data.push({ text: obj.text })
+        dispatch(setShapeName('Cycle'));
+        name = 'Cycle';
+        data.push({ text: obj.text });
       }
 
       if (obj.name === 'ProcessText') {
-        dispatch(setShapeName("Process"));
-        name = "Process";
-        data.push({ text: obj.text })
+        dispatch(setShapeName('Process'));
+        name = 'Process';
+        data.push({ text: obj.text });
       }
-
 
       if (obj.name === 'TimeLineHeading') {
-        dispatch(setShapeName("Timeline"));
-        name = "Timeline";
-        timelineContent.push(obj)
+        dispatch(setShapeName('Timeline'));
+        name = 'Timeline';
+        timelineContent.push(obj);
       }
       if (obj.name === 'TimeLineText') {
-        dispatch(setShapeName("Timeline"));
-        name = "Timeline"
-        timelineContent.push(obj)
+        dispatch(setShapeName('Timeline'));
+        name = 'Timeline';
+        timelineContent.push(obj);
       }
 
       if (obj.name === 'bullet') {
-        dispatch(setShapeName("Bullet point"));
-        name = "Bullet point";
-        let text = obj.text.split("\n");
+        dispatch(setShapeName('Bullet point'));
+        name = 'Bullet point';
+        let text = obj.text.split('\n');
         text.forEach((element: string) => {
-          data.push({ heading: element })
+          data.push({ heading: element });
         });
       }
-
     });
     if (timelineContent.length > 0) {
       data = timelineContent.reduce((acc, obj, index, arr) => {
@@ -442,14 +447,16 @@ const CanvasComponent: React.FC = () => {
       }, []);
     }
 
-    dispatch(setRequestData({
-      companyName: 'Revent',
-      shape: name,
-      data: data,
-    }))
+    dispatch(
+      setRequestData({
+        companyName: 'Revent',
+        shape: name,
+        data: data,
+        title: title,
+        subTitle: subTitle,
+      })
+    );
   }
-
-  
 
   elementData[1].onClick = () => {
     canvasRef.current?.add(title);
@@ -494,7 +501,7 @@ const CanvasComponent: React.FC = () => {
     canvas?.renderAll();
   };
   elementData[8].onClick = () => {
-    addListElement(canvas,33,23);
+    addListElement(canvas, 33, 23);
   };
 
   colorChange.colorFillChange = () => {
@@ -549,15 +556,14 @@ const CanvasComponent: React.FC = () => {
     }
   };
   ShapesData[1].onClick = () => {
-
     if (canvasRef.current) {
       fabric.loadSVGFromString(Canvas_Arrow, (objects, options) => {
         const obj = fabric.util.groupSVGElements(objects, options);
         obj.top = 100;
         obj.left = 120;
-        canvasRef.current?.add(obj)
+        canvasRef.current?.add(obj);
         canvasRef.current?.renderAll();
-      })
+      });
     }
   };
 
@@ -613,9 +619,6 @@ const CanvasComponent: React.FC = () => {
     }
   };
 
-
-
-
   ContentElements.handleBold = () => {
     let activeObj = canvasRef.current?.getActiveObjects() as any;
     const canvas = canvasRef.current;
@@ -670,22 +673,19 @@ const CanvasComponent: React.FC = () => {
     canvasRef.current?.setBackgroundColor(
       `${theme.colorSchemes.light.palette.common.white}`,
       canvasRef.current.renderAll.bind(canvasRef.current)
-    )
+    );
 
-    fabric.Image.fromURL(canvasImage, (img) => {
-      // Adjust the image properties as needed
+    fabric.Image.fromURL(canvasImage, img => {
       img.set({
-        left: 0, // Set the left position of the image
-        top: 0, // Set the top position of the image
-        scaleX: 0.93, // Set scale factor if needed
+        left: 0,
+        top: 0,
+        scaleX: 0.93,
         scaleY: 0.93,
       });
-
-      canvasRef.current?.add(img); // Add the image to the canvas
+      canvasRef.current?.add(img);
     });
     canvasRef.current?.renderAll();
   }, [canvasImage]);
-
 
   return (
     <CanvasContainer ref={Container}>

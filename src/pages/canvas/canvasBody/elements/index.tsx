@@ -1,11 +1,6 @@
 import React, { useState } from 'react';
 import { fabric } from 'fabric';
-import {
-  Copy,
-  DeleteX,
-  AddPlus,
-  imageIcon
-} from '@/constants/media';
+import { Copy, DeleteX, AddPlus, imageIcon } from '@/constants/media';
 import { theme } from '@/constants/theme';
 import { handleInputSize, updateCanvasInList } from '@/redux/reducers/canvas';
 import { useAppDispatch } from '@/redux/store';
@@ -24,9 +19,6 @@ export interface RectContainer extends fabric.Rect {
 }
 export default function useAllElements() {
   const dispatch = useAppDispatch();
-
-
-
 
   const title = new fabric.IText('Click to add a title', {
     left: 30,
@@ -226,7 +218,12 @@ export default function useAllElements() {
             objectsToDelete.push('ProcessBox', 'ProcessText', 'ProcessArrow');
             break;
           case 'Timeline_Container':
-            objectsToDelete.push('timeLineCircle', 'TimeLineText', 'TimeLineDirection', 'TimeLineHeading');
+            objectsToDelete.push(
+              'timeLineCircle',
+              'TimeLineText',
+              'TimeLineDirection',
+              'TimeLineHeading'
+            );
             break;
           case 'PYRAMID':
             objectsToDelete.push('Pyramid_LEVEL', 'pyramidTextbox');
@@ -432,6 +429,7 @@ export default function useAllElements() {
   };
 
   //*****************************************************Table element**********************************************************
+  //*****************************************************Table element**********************************************************
   const fabricDblClick = function (obj: any, handler: any) {
     return function () {
       if (obj.clicked) handler(obj);
@@ -451,13 +449,9 @@ export default function useAllElements() {
     cellHeight: number,
     canvas: fabric.Canvas | null
   ) => {
-
-
     const cellPadding = 6;
     const tableLeft = 50;
     const tableTop = 50;
-
-
 
     function createTable() {
       const tableElements = [];
@@ -484,7 +478,7 @@ export default function useAllElements() {
             top: cell.top! + cellPadding,
             selectable: true,
             backgroundColor: theme.colorSchemes.light.palette.common.white,
-            name: 'Table_Text'
+            name: 'Table_Text',
           });
 
           tableElements.push(cell);
@@ -497,7 +491,7 @@ export default function useAllElements() {
         top: tableTop,
         hasBorders: true,
         hasControls: true,
-        name: 'Table_Container'
+        name: 'Table_Container',
       });
 
       canvas?.add(tableGroup);
@@ -534,7 +528,6 @@ export default function useAllElements() {
 
   //*****************************************************Pyramid element**********************************************************
   const addPyramidLevel = (canvas: fabric.Canvas) => {
-
     let lastLevel: any;
     let lastText: any;
     canvas.forEachObject(obj => {
@@ -580,9 +573,7 @@ export default function useAllElements() {
       canvas.add(text);
       canvas?.requestRenderAll();
     }
-
   };
-
 
   const addPyramid = (canvas: fabric.Canvas | null) => {
     let x1 = -140;
@@ -649,7 +640,6 @@ export default function useAllElements() {
         textsList.push(text);
         levels.push(trapezoid);
       }
-
 
       return levels;
     }
@@ -1290,7 +1280,7 @@ export default function useAllElements() {
       width: 140,
       name: 'ProcessText',
       hasBorders: false,
-      hasControls: false
+      hasControls: false,
     });
 
     canvas.forEachObject(obj => {
@@ -1386,9 +1376,12 @@ export default function useAllElements() {
     addText(326, 146);
   }
   //*****************************************************List element**********************************************************
-  const addListElement = (canvas: fabric.Canvas | null, left: number, top: number) => {
+  const addListElement = (
+    canvas: fabric.Canvas | null,
+    left: number,
+    top: number
+  ) => {
     const mainListContainer = new fabric.Rect({
-
       width: 200,
       height: 250,
       fill: 'transparent',
@@ -1396,7 +1389,6 @@ export default function useAllElements() {
       stroke: '#cbcbcb',
       name: 'List_Container',
     });
-
 
     const addImage = new fabric.Text('+ Add Image', {
       top: mainListContainer.top! + 80,
@@ -1406,12 +1398,12 @@ export default function useAllElements() {
       hasControls: false,
       selectable: false,
       hoverCursor: 'pointer',
-      name: 'ListAddImageText'
+      name: 'ListAddImageText',
     });
     let group = new fabric.Group([mainListContainer, addImage], {
       left,
       top,
-      name: 'LIST_ELEMENT'
+      name: 'LIST_ELEMENT',
     });
 
     const text = new fabric.Textbox('Text', {
@@ -1427,7 +1419,7 @@ export default function useAllElements() {
 
     // canvas?.add(mainListContainer);
     // canvas?.add(addImage);
-    canvas?.add(group)
+    canvas?.add(group);
     canvas?.add(text);
     canvas?.renderAll();
   };
@@ -1472,8 +1464,6 @@ export default function useAllElements() {
             left = obj.left! + deltaX;
             top = obj.top! + deltaY;
           }
-
-
         });
 
         movedObject.set({
@@ -1726,8 +1716,10 @@ export default function useAllElements() {
           lastLeft: movedObject.left,
           lastTop: movedObject.top,
         });
-
-      } else if (movedObject.name === 'List_Container' || movedObject.name === 'LIST_ELEMENT') {
+      } else if (
+        movedObject.name === 'List_Container' ||
+        movedObject.name === 'LIST_ELEMENT'
+      ) {
         const lastLeft = movedObject.get('lastLeft') || movedObject.left;
         const lastTop = movedObject.get('lastTop') || movedObject.top;
 
@@ -1801,26 +1793,25 @@ export default function useAllElements() {
     let totalFunnelLevels = 2;
     let totalPyramidLevels = 2;
 
-    canvas.on('object:added', (event) => {
-
+    canvas.on('object:added', event => {
       let processStepsTotal = 0;
       let timelineLevels = 0;
       let cycleSteps = 0;
       let pLevels = 0;
       let fLevels = 0;
-      canvas.forEachObject((obj) => {
+      canvas.forEachObject(obj => {
         if (obj.name === 'ProcessBox') {
           processStepsTotal++;
         }
         totalProcessSteps = processStepsTotal;
 
         if (obj.name === 'timeLineCircle') {
-          timelineLevels++
+          timelineLevels++;
         }
         totalTimelineSteps = timelineLevels;
 
         if (obj.name === 'Cycle_Circle') {
-          cycleSteps++
+          cycleSteps++;
         }
         totalCycleSteps = cycleSteps;
 
@@ -1833,15 +1824,14 @@ export default function useAllElements() {
           fLevels++;
         }
         totalFunnelLevels = fLevels;
-
-      })
+      });
 
       const object = canvas.getActiveObject();
       if (object?.name === 'PYRAMID') {
         let levels = 0;
-        (object as fabric.Group).forEachObject((obj) => {
+        (object as fabric.Group).forEachObject(obj => {
           levels++;
-        })
+        });
         if (levels >= 6) {
           object.setControlVisible('addPyramid', false);
         }
@@ -1849,30 +1839,27 @@ export default function useAllElements() {
 
       if (object?.name === 'Funnel') {
         let levels = 0;
-        (object as fabric.Group).forEachObject((obj) => {
+        (object as fabric.Group).forEachObject(obj => {
           levels++;
-        })
+        });
         if (levels > 6) {
           object.setControlVisible('addFunnel', false);
         }
       }
 
       if (object?.name === 'Process_Container') {
-
         if (processStepsTotal >= 6) {
           object.setControlVisible('addProcess', false);
         }
       }
 
       if (object?.name === 'Timeline_Container') {
-
         if (totalTimelineSteps >= 6) {
           object.setControlVisible('addTimeline', false);
         }
       }
 
       if (object?.name === 'Cycle_Container') {
-
         if (totalCycleSteps >= 6) {
           object.setControlVisible('addCycle', false);
         }
@@ -1881,9 +1868,7 @@ export default function useAllElements() {
       if (object?.name === 'List_Container') {
         object.setControlVisible('addCycle', false);
       }
-
-    })
-
+    });
 
     //pyramid
     fabric.Object.prototype.controls.addPyramid = new fabric.Control({
@@ -1976,7 +1961,11 @@ export default function useAllElements() {
     });
     function addList() {
       let activeElement = canvas.getActiveObject();
-      addListElement(canvas, activeElement?.getScaledWidth()! + 70, activeElement?.top!)
+      addListElement(
+        canvas,
+        activeElement?.getScaledWidth()! + 70,
+        activeElement?.top!
+      );
       return true;
     }
 
@@ -1994,13 +1983,14 @@ export default function useAllElements() {
     function addListImage() {
       let selectedElement = canvas.getActiveObject();
       addImage(canvas, selectedElement!);
-      selectedElement && (selectedElement as fabric.Group).remove((selectedElement as fabric.Group)._objects[1]);
+      selectedElement &&
+        (selectedElement as fabric.Group).remove(
+          (selectedElement as fabric.Group)._objects[1]
+        );
       (selectedElement as fabric.Group).setCoords();
       canvas.renderAll();
       return true;
     }
-
-
 
     canvas.on('selection:created', event => {
       if (event.selected && event.selected.length > 0) {
@@ -2012,13 +2002,19 @@ export default function useAllElements() {
           selectedObject.setControlVisible('addPyramid', false);
         }
 
-        if (selectedObject?.name === 'Process_Container' && totalProcessSteps < 6) {
+        if (
+          selectedObject?.name === 'Process_Container' &&
+          totalProcessSteps < 6
+        ) {
           selectedObject.setControlVisible('addProcess', true);
         } else {
           selectedObject.setControlVisible('addProcess', false);
         }
 
-        if (selectedObject?.name === 'Timeline_Container' && totalTimelineSteps < 6) {
+        if (
+          selectedObject?.name === 'Timeline_Container' &&
+          totalTimelineSteps < 6
+        ) {
           selectedObject.setControlVisible('addTimeline', true);
         } else {
           selectedObject.setControlVisible('addTimeline', false);
@@ -2043,11 +2039,8 @@ export default function useAllElements() {
           selectedObject.setControlVisible('addImage', false);
           selectedObject.setControlVisible('addList', false);
         }
-
       }
     });
-
-
 
     function renderPyramidAddIcon(
       ctx: CanvasRenderingContext2D,
@@ -2145,7 +2138,6 @@ export default function useAllElements() {
     canvas?.requestRenderAll();
   };
 
-
   const handleSelectionCreated = (
     canvas: fabric.Canvas,
     event: fabric.IEvent<MouseEvent>
@@ -2240,7 +2232,7 @@ export default function useAllElements() {
               let TextElement = (object as fabric.Group)._objects[1];
               (object as fabric.Group).removeWithUpdate(TextElement);
               (object as fabric.Group).set({
-                name: 'List_Container'
+                name: 'List_Container',
               });
               img.set({
                 left: object && object.left !== undefined ? object.left + 2 : 0,
@@ -2249,7 +2241,7 @@ export default function useAllElements() {
                 scaleX,
                 scaleY,
               });
-              object && (object as fabric.Group).addWithUpdate(img)
+              object && (object as fabric.Group).addWithUpdate(img);
               object && canvas.sendBackwards(object);
               object?.setCoords();
             });
@@ -2258,15 +2250,18 @@ export default function useAllElements() {
         reader.readAsDataURL(file);
       }
     });
-  }
+  };
 
   //*******************************************Canvas Click Mouse Up Event**********************************************
-  function CanvasClick(canvas: fabric.Canvas, event: fabric.IEvent<MouseEvent>) {
+  function CanvasClick(
+    canvas: fabric.Canvas,
+    event: fabric.IEvent<MouseEvent>
+  ) {
     let object = event.target;
     if (object) {
-      if (object?.name === "LIST_ELEMENT") {
-        addImage(canvas, object)
-        canvas.requestRenderAll()
+      if (object?.name === 'LIST_ELEMENT') {
+        addImage(canvas, object);
+        canvas.requestRenderAll();
       }
       
     }
@@ -2320,9 +2315,7 @@ export default function useAllElements() {
   }
 
   //*****************************************************selection:cleared**********************************************************
-  function canvasSelectionCleared() {
-
-  }
+  function canvasSelectionCleared() {}
 
   return {
     title,
