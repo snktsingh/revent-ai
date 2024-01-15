@@ -15,9 +15,8 @@ import { Drawer } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { toggleVariantSlide } from '@/redux/reducers/elements';
 import { Logo, varianButtonSvg } from '@/constants/media';
-import { useEffect } from 'react';
 import { VariantsType, swapMainCanvas } from '@/redux/thunk/thunk';
-import canvas, { setVariantImageAsMain } from '@/redux/reducers/canvas';
+import { setVariantImageAsMain } from '@/redux/reducers/canvas';
 
 export const CanvasVariant = () => {
   const dispatch = useAppDispatch();

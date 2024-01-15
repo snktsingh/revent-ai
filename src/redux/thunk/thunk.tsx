@@ -5,14 +5,14 @@ import { setVariantImageAsMain } from '../reducers/canvas';
 
 export interface VariantsType {
   pptUrl: string;
-  imagesUrl:string;
+  imagesUrl: string;
 }
 
 interface ISlideRequests {
   pptUrl: string;
   imageUrl: string;
-  variants : VariantsType[];
-  isLoading : boolean;
+  variants: VariantsType[];
+  isLoading: boolean;
 }
 
 interface IShapeRequest {
@@ -24,14 +24,13 @@ interface IShapeRequest {
 const initialState: ISlideRequests = {
   pptUrl: '',
   imageUrl: '',
-  variants :[],
-  isLoading: false
+  variants: [],
+  isLoading: false,
 };
-
 
 export const fetchSlideImg = createAsyncThunk(
   'slide/fetchimage-ppt',
-  async (req: IShapeRequest,{dispatch}) => {
+  async (req: IShapeRequest, { dispatch }) => {
     const res = await FetchUtils.postRequest(`${ENDPOINT.GEN_PPT}`, req);
     dispatch(setVariantImageAsMain(res.data.imageUrl));
     return res.data;
@@ -42,16 +41,15 @@ const thunkSlice = createSlice({
   name: 'singleSlideData',
   initialState,
   reducers: {
-    swapMainCanvas(state,action){
-      const {canvasLink,index,pptLink} = action.payload;
-      console.log(action.payload)
+    swapMainCanvas(state, action) {
+      const { canvasLink, index, pptLink } = action.payload;
+      console.log(action.payload);
       let variants = [...state.variants];
       variants[index].pptUrl = state.pptUrl;
       variants[index].imagesUrl = state.imageUrl;
-      
-          state.imageUrl = canvasLink;
-          state.pptUrl = pptLink;
-          state.variants = variants;
+      state.imageUrl = canvasLink;
+      state.pptUrl = pptLink;
+      state.variants = variants;
     },
   },
   extraReducers(builder) {
@@ -68,7 +66,7 @@ const thunkSlice = createSlice({
         state.variants = action.payload.variants;
         state.isLoading = false;
       })
-      .addCase(fetchSlideImg.rejected, (state, action)=>{
+      .addCase(fetchSlideImg.rejected, (state, action) => {
         state.imageUrl = '';
         state.pptUrl = '';
         state.isLoading = false;
@@ -77,5 +75,5 @@ const thunkSlice = createSlice({
   },
 });
 
-export const { swapMainCanvas }=  thunkSlice.actions;
+export const { swapMainCanvas } = thunkSlice.actions;
 export default thunkSlice.reducer;

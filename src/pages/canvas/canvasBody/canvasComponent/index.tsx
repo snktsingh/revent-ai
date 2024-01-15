@@ -314,7 +314,6 @@ const CanvasComponent: React.FC = () => {
     };
 
     window.addEventListener('keydown', handleKeyDown);
-
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
       newCanvas.dispose();
@@ -370,14 +369,20 @@ const CanvasComponent: React.FC = () => {
     console.log({ canvasData });
     let data: any[] = [];
     let name: string = '';
+    let title: string = '';
+    let subTitle: string = '';
     let timelineContent: any[] = [];
     canvasData.forEach(obj => {
-      if (obj.name === 'pyramidTextbox') {
-        dispatch(setShapeName('Pyramid'));
-        name = 'Pyramid';
-        data.push({ text: obj.text });
+      if (obj.name === 'title') {
+        dispatch(setShapeName('Cover'));
+        name = 'Cover';
+        title = obj.text;
       }
-
+      if (obj.name === 'subTitle') {
+        dispatch(setShapeName('Cover'));
+        name = 'Cover';
+        subTitle = obj.text;
+      }
       if (obj.name === 'Funnel_Text') {
         dispatch(setShapeName('Funnel'));
         name = 'Funnel';
@@ -433,6 +438,8 @@ const CanvasComponent: React.FC = () => {
         companyName: 'Revent',
         shape: name,
         data: data,
+        title: title,
+        subTitle: subTitle,
       })
     );
   }
