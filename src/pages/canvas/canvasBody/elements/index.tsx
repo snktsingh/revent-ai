@@ -431,7 +431,7 @@ export default function useAllElements() {
     return text;
   };
 
-//*****************************************************Table element**********************************************************
+  //*****************************************************Table element**********************************************************
   const fabricDblClick = function (obj: any, handler: any) {
     return function () {
       if (obj.clicked) handler(obj);
@@ -1386,7 +1386,7 @@ export default function useAllElements() {
     addText(326, 146);
   }
   //*****************************************************List element**********************************************************
-  const addListElement = (canvas: fabric.Canvas | null, left : number, top : number) => {
+  const addListElement = (canvas: fabric.Canvas | null, left: number, top: number) => {
     const mainListContainer = new fabric.Rect({
 
       width: 200,
@@ -1397,7 +1397,7 @@ export default function useAllElements() {
       name: 'List_Container',
     });
 
-    
+
     const addImage = new fabric.Text('+ Add Image', {
       top: mainListContainer.top! + 80,
       left: mainListContainer.left! + 50,
@@ -1419,7 +1419,7 @@ export default function useAllElements() {
       width: 180,
       height: 100,
       fill: 'black',
-      left: group.left!+8,
+      left: group.left! + 8,
       top: group.getScaledHeight() - 10,
       textAlign: 'center',
       name: 'listText',
@@ -1727,7 +1727,7 @@ export default function useAllElements() {
           lastTop: movedObject.top,
         });
 
-      } else if (movedObject.name === 'List_Container' || movedObject.name === 'LIST_ELEMENT' ) {
+      } else if (movedObject.name === 'List_Container' || movedObject.name === 'LIST_ELEMENT') {
         const lastLeft = movedObject.get('lastLeft') || movedObject.left;
         const lastTop = movedObject.get('lastTop') || movedObject.top;
 
@@ -1879,7 +1879,7 @@ export default function useAllElements() {
       }
 
       if (object?.name === 'List_Container') {
-          object.setControlVisible('addCycle', false);
+        object.setControlVisible('addCycle', false);
       }
 
     })
@@ -1976,10 +1976,10 @@ export default function useAllElements() {
     });
     function addList() {
       let activeElement = canvas.getActiveObject();
-      addListElement(canvas,activeElement?.getScaledWidth()!+70,activeElement?.top!)
+      addListElement(canvas, activeElement?.getScaledWidth()! + 70, activeElement?.top!)
       return true;
     }
-    
+
     //List Image
     fabric.Object.prototype.controls.addImage = new fabric.Control({
       x: 0.3,
@@ -1993,14 +1993,14 @@ export default function useAllElements() {
     });
     function addListImage() {
       let selectedElement = canvas.getActiveObject();
-      addImage(canvas,selectedElement!);
+      addImage(canvas, selectedElement!);
       selectedElement && (selectedElement as fabric.Group).remove((selectedElement as fabric.Group)._objects[1]);
       (selectedElement as fabric.Group).setCoords();
       canvas.renderAll();
       return true;
     }
-    
-  
+
+
 
     canvas.on('selection:created', event => {
       if (event.selected && event.selected.length > 0) {
@@ -2144,7 +2144,7 @@ export default function useAllElements() {
     }
     canvas?.requestRenderAll();
   };
-    
+
 
   const handleSelectionCreated = (
     canvas: fabric.Canvas,
@@ -2216,7 +2216,7 @@ export default function useAllElements() {
       }
     });
   };
-  
+
   const addImage = (canvas: fabric.Canvas, object: fabric.Object) => {
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
@@ -2240,7 +2240,7 @@ export default function useAllElements() {
               let TextElement = (object as fabric.Group)._objects[1];
               (object as fabric.Group).removeWithUpdate(TextElement);
               (object as fabric.Group).set({
-                name:'List_Container'
+                name: 'List_Container'
               });
               img.set({
                 left: object && object.left !== undefined ? object.left + 2 : 0,
@@ -2254,35 +2254,73 @@ export default function useAllElements() {
               object?.setCoords();
             });
           }
-        }; 
+        };
         reader.readAsDataURL(file);
       }
     });
   }
-   
+
   //*******************************************Canvas Click Mouse Up Event**********************************************
   function CanvasClick(canvas: fabric.Canvas, event: fabric.IEvent<MouseEvent>) {
     let object = event.target;
     if (object) {
       if (object?.name === "LIST_ELEMENT") {
-        addImage(canvas,object)
+        addImage(canvas, object)
         canvas.requestRenderAll()
       }
+      
+    }
+  };
+
+  const textEnteringEvent = (canvas: fabric.Canvas, object: fabric.Textbox | fabric.Text | fabric.IText) =>{
+    if(object){
       let textBox = (object as IText);
-      if (textBox?.text == 'Click to add a title' || textBox?.text == 'Click to add a subtitle' || textBox?.text == 'Click to add a heading' || textBox?.text == 'Click to add a paragraph' || textBox?.text == 'Click to add a bullet point' || textBox.text == 'Add Text') {        
-            // Clear the placeholder text and make it selectable
-            textBox.text = '';
-            textBox.selectable = true;
-        
-            // Set focus on the textbox
-            textBox.enterEditing();
-            canvas.renderAll()
+      if (textBox?.text == 'Click to add a title' || textBox?.text == 'Click to add a subtitle' || textBox?.text == 'Click to add a heading' || textBox?.text == 'Click to add a paragraph' || textBox?.text == 'Click to add a bullet point' || textBox.text == 'Add Text') {
+        // Clear the placeholder text and make it selectable
+        textBox.text = '                                    ';
+
+        // Set focus on the textbox
+        canvas.renderAll()
       }
     }
   }
 
+  const textExitedEvent = (canvas : fabric.Canvas, object: fabric.Textbox | fabric.Text | fabric.IText) => {
+    
+      let textBox = object;
+      switch (textBox.name) {
+        case 'title':
+          if(textBox.text == '                                    '){
+            textBox.text = 'Click to add a title';
+          }
+          canvas.renderAll();
+          break;
+        case 'subTitle':
+          if(textBox.text == '                                    '){
+            textBox.text = 'Click to add a subtitle';
+          }
+          canvas.renderAll();
+          break;
+        case 'paragraphbox':
+          if(textBox.text == '                                    '){
+            textBox.text = 'Click to add a paragraph';
+          }
+          canvas.renderAll();
+          break;
+        case 'bullet':
+          if(textBox.text == '                                    '){
+            textBox.text = 'Click to add a bullet point';
+          }
+          canvas.renderAll();
+          break;   
+        default:
+          break;
+      }
+
+  }
+
   //*****************************************************selection:cleared**********************************************************
-  function canvasSelectionCleared(){
+  function canvasSelectionCleared() {
 
   }
 
@@ -2312,6 +2350,8 @@ export default function useAllElements() {
     handleObjectMoving,
     handleAddCustomIcon,
     handleSelectionCreated,
-    CanvasClick
+    CanvasClick,
+    textEnteringEvent,
+    textExitedEvent
   };
 }
