@@ -206,9 +206,7 @@ const CanvasComponent: React.FC = () => {
         newCanvas.on('mouse:up', event => {
           CanvasClick(newCanvas, event);
         });
-        newCanvas.on('text:editing:entered',(event)=>{
-          textEnteringEvent(canvas,(event.target as fabric.Text));
-        })
+        
         newCanvas.on('text:editing:exited',(event)=>{
           textExitedEvent(canvas,(event.target as fabric.Text));
         })

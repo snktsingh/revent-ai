@@ -37,6 +37,7 @@ export default function useAllElements() {
     fontSize: 20,
     fontFamily: 'Arial',
     name: 'subTitle',
+    fill: theme.colorSchemes.light.palette.common.border
   });
 
   const heading = new fabric.IText('Click to add a heading', {
@@ -47,6 +48,7 @@ export default function useAllElements() {
     fontFamily: 'Arial',
     fontWeight: 'bold',
     name: 'headingbox',
+    fill: theme.colorSchemes.light.palette.common.border
   });
 
   const paragraph = new fabric.IText('Click to add a paragraph', {
@@ -57,6 +59,7 @@ export default function useAllElements() {
     fontSize: 16, // Adjust the font size as needed
     fontFamily: 'Arial',
     name: 'paragraphbox',
+    fill: theme.colorSchemes.light.palette.common.border
   });
 
   paragraph.setControlsVisibility({
@@ -136,6 +139,7 @@ export default function useAllElements() {
     listBullet: '\u2022',
     listCounter: 0,
     name: 'bullet',
+    fill: theme.colorSchemes.light.palette.common.border
   } as IExtendedTextboxOptions);
   BulletText._renderTextLine = renderTextLine;
 
@@ -2264,6 +2268,7 @@ export default function useAllElements() {
   ) {
     let object = event.target;
     if (object) {
+      textEnteringEvent(canvas,(object as fabric.Text))
       if (object?.name === 'LIST_ELEMENT') {
         addImage(canvas, object);
         canvas.requestRenderAll();
