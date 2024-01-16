@@ -27,6 +27,7 @@ export default function useAllElements() {
     fontWeight: 'bold',
     fontFamily: 'Red Hat Display, sans-serif',
     name: 'title',
+    fill: theme.colorSchemes.light.palette.common.border
   });
 
   const subtitle = new fabric.IText('Click to add a subtitle', {
@@ -1255,16 +1256,17 @@ export default function useAllElements() {
 
     const Arrow = new fabric.Polygon(ArrowPoints, {
       fill: theme.colorSchemes.light.palette.common.steelBlue,
-      left: lastRect.left + 170,
+      left: lastRect.left + 130,
       top: mainContainer.top + 40,
       angle: 0,
       name: 'ProcessArrow',
+      width: 20
     });
 
     let rect = new fabric.Rect({
       left: Arrow.left! + 60,
       top: mainContainer.top + 20,
-      width: 150,
+      width: 110,
       height: 100,
       fill: theme.colorSchemes.light.palette.primary.main,
       rx: 10,
@@ -1277,7 +1279,7 @@ export default function useAllElements() {
       left: rect.left! + 5,
       top: rect.top! + 5,
       fill: theme.colorSchemes.light.palette.common.white,
-      width: 140,
+      width: 100,
       name: 'ProcessText',
       hasBorders: false,
       hasControls: false,
@@ -1291,11 +1293,13 @@ export default function useAllElements() {
       }
     });
 
+
     canvas.add(rect);
     canvas.add(Arrow);
     canvas.add(text);
 
     canvas.renderAll();
+
   };
 
   function addProcess(canvas: fabric.Canvas | null) {
@@ -1323,7 +1327,7 @@ export default function useAllElements() {
         left,
         top,
         fill: theme.colorSchemes.light.palette.common.white,
-        width: 140,
+        width: 100,
         name: 'ProcessText',
       });
       return canvas?.add(text);
@@ -1345,15 +1349,16 @@ export default function useAllElements() {
         top,
         angle,
         name: 'ProcessArrow',
+        width: 20
       });
 
       return Arrow;
     };
 
     const mainProcessContainer = new fabric.Rect({
-      left: 70,
+      left: 20,
       top: 120,
-      width: 550,
+      width: 510,
       height: 150,
       fill: 'transparent',
       strokeWidth: 1,
@@ -1364,16 +1369,16 @@ export default function useAllElements() {
     canvas?.add(mainProcessContainer);
     canvas?.setActiveObject(mainProcessContainer);
 
-    canvas?.add(addArrow(250, mainProcessContainer.top! + 40, 0));
+    canvas?.add(addArrow(145, mainProcessContainer.top! + 40, 0));
     addRectangle(
-      mainProcessContainer.left! + 10,
+      mainProcessContainer.left!,
       mainProcessContainer.top! + 20,
-      150,
+      110,
       100
     );
-    addRectangle(310, mainProcessContainer.top! + 20, 150, 100);
-    addText(96, 146);
-    addText(326, 146);
+    addRectangle(205, mainProcessContainer.top! + 20, 110, 100);
+    addText(26, 146);
+    addText(210, 146);
   }
   //*****************************************************List element**********************************************************
   const addListElement = (
@@ -2263,59 +2268,77 @@ export default function useAllElements() {
         addImage(canvas, object);
         canvas.requestRenderAll();
       }
-      
+
     }
   };
 
-  const textEnteringEvent = (canvas: fabric.Canvas, object: fabric.Textbox | fabric.Text | fabric.IText) =>{
-    if(object){
-      let textBox = (object as IText);
-      if (textBox?.text == 'Click to add a title' || textBox?.text == 'Click to add a subtitle' || textBox?.text == 'Click to add a heading' || textBox?.text == 'Click to add a paragraph' || textBox?.text == 'Click to add a bullet point' || textBox.text == 'Add Text') {
+  const textEnteringEvent = (canvas: fabric.Canvas, object: fabric.Textbox | fabric.Text | fabric.IText) => {
+    if (object) {
+      let textBox = object;
+      if (textBox?.text == 'Click to add a title' || textBox?.text == 'Click to add a subtitle' || textBox?.text == 'Click to add a heading' || textBox?.text == 'Click to add a paragraph' || textBox?.text == 'Click to add a bullet point') {
         // Clear the placeholder text and make it selectable
-        textBox.text = '                                    ';
-
+        textBox.text = '';
         // Set focus on the textbox
+        textBox.set({
+          fill: theme.colorSchemes.light.palette.common.black
+        })
+        canvas.renderAll()
+        console.log({ textBox })
+      } else if (textBox.text == 'Add Text') {
+        textBox.text = '';
+        // Set focus on the textbox
+        
         canvas.renderAll()
       }
     }
   }
 
-  const textExitedEvent = (canvas : fabric.Canvas, object: fabric.Textbox | fabric.Text | fabric.IText) => {
-    
-      let textBox = object;
-      switch (textBox.name) {
-        case 'title':
-          if(textBox.text == '                                    '){
-            textBox.text = 'Click to add a title';
-          }
-          canvas.renderAll();
-          break;
-        case 'subTitle':
-          if(textBox.text == '                                    '){
-            textBox.text = 'Click to add a subtitle';
-          }
-          canvas.renderAll();
-          break;
-        case 'paragraphbox':
-          if(textBox.text == '                                    '){
-            textBox.text = 'Click to add a paragraph';
-          }
-          canvas.renderAll();
-          break;
-        case 'bullet':
-          if(textBox.text == '                                    '){
-            textBox.text = 'Click to add a bullet point';
-          }
-          canvas.renderAll();
-          break;   
-        default:
-          break;
-      }
+  const textExitedEvent = (canvas: fabric.Canvas, object: fabric.Textbox | fabric.Text | fabric.IText) => {
 
+    let textBox = object;
+    switch (textBox.name) {
+      case 'title':
+        if (textBox.text == '') {
+          textBox.text = 'Click to add a title';
+          textBox.set({
+            fill: theme.colorSchemes.light.palette.common.border
+          })
+        }
+        canvas.renderAll();
+        break;
+      case 'subTitle':
+        if (textBox.text == '') {
+          textBox.text = 'Click to add a subtitle';
+          textBox.set({
+            fill: theme.colorSchemes.light.palette.common.border
+          })
+        }
+        canvas.renderAll();
+        break;
+      case 'paragraphbox':
+        if (textBox.text == '') {
+          textBox.text = 'Click to add a paragraph';
+          textBox.set({
+            fill: theme.colorSchemes.light.palette.common.border
+          })
+        }
+        canvas.renderAll();
+        break;
+      case 'bullet':
+        if (textBox.text == '') {
+          textBox.text = 'Click to add a bullet point';
+          textBox.set({
+            fill: theme.colorSchemes.light.palette.common.border
+          })
+        }
+        canvas.renderAll();
+        break;
+      default:
+        break;
+    }
+    console.log(textBox)
   }
 
-  //*****************************************************selection:cleared**********************************************************
-  function canvasSelectionCleared() {}
 
   return {
     title,

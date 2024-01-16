@@ -236,7 +236,6 @@ const CanvasBody = () => {
     console.log({ requestData })    
     dispatch(fetchSlideImg(requestData))
   };
-  console.log(isRegenerateDisabled)
   return (
     <BodyContainer>
       <ToastContainer />
