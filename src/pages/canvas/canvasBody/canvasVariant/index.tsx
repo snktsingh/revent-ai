@@ -17,19 +17,11 @@ import { toggleVariantSlide } from '@/redux/reducers/elements';
 import { Logo, varianButtonSvg } from '@/constants/media';
 import { VariantsType, swapMainCanvas } from '@/redux/thunk/thunk';
 import { setVariantImageAsMain } from '@/redux/reducers/canvas';
+import useVariants from './container';
 
 export const CanvasVariant = () => {
   const dispatch = useAppDispatch();
-  const { openVariant } = useAppSelector(state => state.element);
-  const { variants } = useAppSelector(state => state.thunk);
-  const array: number[] = [1, 2, 3];
-
-  const handleVariants = (CanvasURL: string, pptURL: string, index: number) => {
-    dispatch(
-      swapMainCanvas({ canvasLink: CanvasURL, index: index, pptLink: pptURL })
-    );
-    dispatch(setVariantImageAsMain(CanvasURL));
-  };
+  const { variants, openVariant, array, handleVariants } = useVariants();
 
   return (
     <div>
