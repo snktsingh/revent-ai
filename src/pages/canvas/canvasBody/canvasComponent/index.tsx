@@ -14,6 +14,7 @@ import { theme } from '@/constants/theme';
 import {
   setActiveCanvas,
   setCanvas,
+  setCanvasImageUrl,
   setRequestData,
   setShapeName,
   setTempData,
@@ -244,6 +245,8 @@ const CanvasComponent: React.FC = () => {
             dispatch(toggleRegenerateButton(true));
           }
           dispatch(updateCanvasInList({ id, updatedCanvas }));
+          let dataUrl = newCanvas.toDataURL();
+          dispatch(setCanvasImageUrl(dataUrl))
         });
 
         newCanvas.on('object:removed', e => {
@@ -262,6 +265,8 @@ const CanvasComponent: React.FC = () => {
             dispatch(toggleRegenerateButton(true));
           }
           dispatch(updateCanvasInList({ id, updatedCanvas }));
+          let dataUrl = newCanvas.toDataURL();
+          dispatch(setCanvasImageUrl(dataUrl))
         });
 
         newCanvas.on('object:modified', e => {
@@ -275,6 +280,8 @@ const CanvasComponent: React.FC = () => {
           const id = canvasJS.id;
           getElementsData(updatedCanvas?.objects);
           dispatch(updateCanvasInList({ id, updatedCanvas }));
+          let dataUrl = newCanvas.toDataURL();
+          dispatch(setCanvasImageUrl(dataUrl))
         });
 
         newCanvas.on('selection:cleared', e => {
@@ -288,10 +295,14 @@ const CanvasComponent: React.FC = () => {
           const id = canvasJS.id;
           getElementsData(updatedCanvas?.objects);
           dispatch(updateCanvasInList({ id, updatedCanvas }));
+          let dataUrl = newCanvas.toDataURL();
+          dispatch(setCanvasImageUrl(dataUrl))
         });
         // newCanvas.on('object:moving', handleAllElements);
         newCanvas.on('object:moving', function (options) {
           handleObjectMoving(options, newCanvas);
+          let dataUrl = newCanvas.toDataURL();
+          dispatch(setCanvasImageUrl(dataUrl))
         });
 
         handleAddCustomIcon(newCanvas);
@@ -313,7 +324,6 @@ const CanvasComponent: React.FC = () => {
 
     const setResImage = (img: string) => {
       if (canvasRef.current) {
-        canvasRef.current.clear();
         fabric.Image.fromURL(`${img}`, img => {
           img.set({
             left: 0,

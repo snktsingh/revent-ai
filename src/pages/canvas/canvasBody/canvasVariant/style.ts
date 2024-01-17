@@ -75,6 +75,16 @@ export const VariantSlide = styled.div`
     line-height: normal;
   }
 `;
+export const OriginalSlideCard = styled.div`
+  margin: 10px 0px 0px 7%;
+  display: flex;
+  width: 90%;
+  justify-content: space-around;
+  cursor: pointer;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+
+`;
 export const VariantSlideCard = styled.div`
   width: 90%;
   height: 12vh;

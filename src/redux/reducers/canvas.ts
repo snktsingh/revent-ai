@@ -25,6 +25,11 @@ interface IShapeRequest {
   data: string[];
 }
 
+interface OriginalSlideType{
+  originalUrl:string,
+  originalJSON:object
+}
+
 export interface CanvasSate {
   color: string;
   textColor: string;
@@ -39,6 +44,8 @@ export interface CanvasSate {
   shapeName: string;
   requestData: IShapeRequest,
   canvasImage:string,
+  originalSlide: OriginalSlideType,
+  canvasImageURl : string
 }
 const canvas = new fabric.Canvas(null);
 const canvasJSON = canvas.toObject();
@@ -60,7 +67,12 @@ export const initialState: CanvasSate = {
     shape: '',
     data: [],
   },
-  canvasImage:''
+  canvasImage:'',
+  originalSlide:{
+    originalUrl:'',
+    originalJSON:{}
+  },
+  canvasImageURl:''
 };
 
 export const CanvasReducer = createSlice({
@@ -235,6 +247,12 @@ export const CanvasReducer = createSlice({
         ...state,
         canvasImage: action.payload
       }
+    },
+    setOriginalSlide(state,action){
+      state.originalSlide = action.payload
+    },
+    setCanvasImageUrl(state,action){
+      state.canvasImageURl = action.payload
     }
   },
 });
@@ -258,7 +276,9 @@ export const {
   setTempData,
   setShapeName,
   setVariantAsCanvas,
-  setVariantImageAsMain
+  setVariantImageAsMain,
+  setCanvasImageUrl,
+  setOriginalSlide
 } = CanvasReducer.actions;
 
 export default CanvasReducer.reducer;

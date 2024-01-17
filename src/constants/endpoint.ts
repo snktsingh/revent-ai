@@ -1,4 +1,4 @@
-export const API_BASE_URL = 'http://3.108.53.183:8080/api/';
+export const API_BASE_URL = 'http://api.revent.ai:8080/api/';
 
 export const ENDPOINT = {
   TEST: `${API_BASE_URL}/test`,

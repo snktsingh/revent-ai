@@ -27,7 +27,7 @@ export default function useAllElements() {
     fontWeight: 'bold',
     fontFamily: 'Red Hat Display, sans-serif',
     name: 'title',
-    fill: theme.colorSchemes.light.palette.common.border
+    fill: '#404040'
   });
 
   const subtitle = new fabric.IText('Click to add a subtitle', {
@@ -37,7 +37,7 @@ export default function useAllElements() {
     fontSize: 20,
     fontFamily: 'Arial',
     name: 'subTitle',
-    fill: theme.colorSchemes.light.palette.common.border
+    fill: '#404040'
   });
 
   const heading = new fabric.IText('Click to add a heading', {
@@ -48,7 +48,7 @@ export default function useAllElements() {
     fontFamily: 'Arial',
     fontWeight: 'bold',
     name: 'headingbox',
-    fill: theme.colorSchemes.light.palette.common.border
+    fill: '#404040'
   });
 
   const paragraph = new fabric.IText('Click to add a paragraph', {
@@ -59,7 +59,7 @@ export default function useAllElements() {
     fontSize: 16, // Adjust the font size as needed
     fontFamily: 'Arial',
     name: 'paragraphbox',
-    fill: theme.colorSchemes.light.palette.common.border
+    fill: '#404040'
   });
 
   paragraph.setControlsVisibility({
@@ -139,7 +139,7 @@ export default function useAllElements() {
     listBullet: '\u2022',
     listCounter: 0,
     name: 'bullet',
-    fill: theme.colorSchemes.light.palette.common.border
+    fill: '#404040'
   } as IExtendedTextboxOptions);
   BulletText._renderTextLine = renderTextLine;
 
@@ -2277,9 +2277,10 @@ export default function useAllElements() {
     }
   };
 
-  const textEnteringEvent = (canvas: fabric.Canvas, object: fabric.Textbox | fabric.Text | fabric.IText) => {
+  const textEnteringEvent = (canvas: fabric.Canvas, object: fabric.Object) => {
     if (object) {
-      let textBox = object;
+      
+      let textBox = (object as fabric.Textbox);
       if (textBox?.text == 'Click to add a title' || textBox?.text == 'Click to add a subtitle' || textBox?.text == 'Click to add a heading' || textBox?.text == 'Click to add a paragraph' || textBox?.text == 'Click to add a bullet point') {
         // Clear the placeholder text and make it selectable
         textBox.text = '';
@@ -2288,7 +2289,6 @@ export default function useAllElements() {
           fill: theme.colorSchemes.light.palette.common.black
         })
         canvas.renderAll()
-        console.log({ textBox })
       } else if (textBox.text == 'Add Text') {
         textBox.text = '';
         // Set focus on the textbox
@@ -2306,7 +2306,7 @@ export default function useAllElements() {
         if (textBox.text == '') {
           textBox.text = 'Click to add a title';
           textBox.set({
-            fill: theme.colorSchemes.light.palette.common.border
+            fill: '#404040'
           })
         }
         canvas.renderAll();
@@ -2315,7 +2315,7 @@ export default function useAllElements() {
         if (textBox.text == '') {
           textBox.text = 'Click to add a subtitle';
           textBox.set({
-            fill: theme.colorSchemes.light.palette.common.border
+            fill: '#404040'
           })
         }
         canvas.renderAll();
@@ -2324,7 +2324,7 @@ export default function useAllElements() {
         if (textBox.text == '') {
           textBox.text = 'Click to add a paragraph';
           textBox.set({
-            fill: theme.colorSchemes.light.palette.common.border
+            fill: '#404040'
           })
         }
         canvas.renderAll();
@@ -2333,7 +2333,7 @@ export default function useAllElements() {
         if (textBox.text == '') {
           textBox.text = 'Click to add a bullet point';
           textBox.set({
-            fill: theme.colorSchemes.light.palette.common.border
+            fill: '#404040'
           })
         }
         canvas.renderAll();

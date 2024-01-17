@@ -5,6 +5,7 @@ import {
   DrawerVariant,
   DrawerVariantButton,
   LogoContainer,
+  OriginalSlideCard,
   RefreshBtn,
   Text,
   VariantButton,
@@ -16,12 +17,13 @@ import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { toggleVariantSlide } from '@/redux/reducers/elements';
 import { Logo, varianButtonSvg } from '@/constants/media';
 import { VariantsType, swapMainCanvas } from '@/redux/thunk/thunk';
-import { setVariantImageAsMain } from '@/redux/reducers/canvas';
+import { setCanvas, setVariantImageAsMain } from '@/redux/reducers/canvas';
 
 export const CanvasVariant = () => {
   const dispatch = useAppDispatch();
   const { openVariant } = useAppSelector(state => state.element);
   const { variants } = useAppSelector(state => state.thunk);
+  const { originalSlide } = useAppSelector(state => state.canvas);
   const array: number[] = [1, 2, 3];
 
   const handleVariants = (CanvasURL: string, pptURL: string, index: number) => {
@@ -31,13 +33,23 @@ export const CanvasVariant = () => {
     dispatch(setVariantImageAsMain(CanvasURL));
   };
 
+  const handleApplyOriginalAsMain = ()=>{
+    dispatch(setCanvas({id:1,canvas:originalSlide.originalJSON}))
+  }
+
+  
+
   return (
     <div>
-      {variants.length > 0 && (
+      {/* {variants.length > 0 && (
         <VariantButton onClick={() => dispatch(toggleVariantSlide())}>
-          <img src={varianButtonSvg} alt="varintButton" />
+          <img src={varianButtonSvg} alt="variantButton" />
         </VariantButton>
-      )}
+      )} */}
+        <VariantButton onClick={() => dispatch(toggleVariantSlide())}>
+          <img src={varianButtonSvg} alt="variantButton" />
+        </VariantButton>
+        
 
       <Drawer
         anchor="right"
@@ -61,11 +73,12 @@ export const CanvasVariant = () => {
             <DrawerVariantButton>Variants</DrawerVariantButton>
           </DrawerBtnContainer>
           <DrawerVariant>
-            <Text>Original Slide</Text>
-            <VariantSlide>
-              <div>1</div>
-              <VariantSlideCard></VariantSlideCard>
-            </VariantSlide>
+          {originalSlide.originalUrl !== '' && <>
+              <Text>Original Slide</Text>
+              <OriginalSlideCard onClick={handleApplyOriginalAsMain}>
+                <img src={originalSlide.originalUrl} alt="image" style={{ width: '100%', height: '100%', objectFit: 'cover', }} />
+              </OriginalSlideCard>
+            </>}
             {/* <Text>Grid Variants</Text>
             {array.map(el => {
               return (
