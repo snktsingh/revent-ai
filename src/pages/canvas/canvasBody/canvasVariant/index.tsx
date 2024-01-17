@@ -13,31 +13,16 @@ import {
   VariantSlideCard,
 } from './style';
 import { Drawer } from '@mui/material';
-import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { useAppDispatch } from '@/redux/store';
 import { toggleVariantSlide } from '@/redux/reducers/elements';
 import { Logo, varianButtonSvg } from '@/constants/media';
-import { VariantsType, swapMainCanvas } from '@/redux/thunk/thunk';
-import { setCanvas, setVariantImageAsMain } from '@/redux/reducers/canvas';
+import { VariantsType } from '@/redux/thunk/thunk';
+import useVariants from './container';
 
 export const CanvasVariant = () => {
   const dispatch = useAppDispatch();
-  const { openVariant } = useAppSelector(state => state.element);
-  const { variants } = useAppSelector(state => state.thunk);
-  const { originalSlide } = useAppSelector(state => state.canvas);
-  const array: number[] = [1, 2, 3];
+  const { variants, openVariant, array, handleVariants, handleApplyOriginalAsMain, originalSlide } = useVariants();
 
-  const handleVariants = (CanvasURL: string, pptURL: string, index: number) => {
-    dispatch(
-      swapMainCanvas({ canvasLink: CanvasURL, index: index, pptLink: pptURL })
-    );
-    dispatch(setVariantImageAsMain(CanvasURL));
-  };
-
-  const handleApplyOriginalAsMain = ()=>{
-    dispatch(setCanvas({id:1,canvas:originalSlide.originalJSON}))
-  }
-
-  
 
   return (
     <div>
