@@ -415,7 +415,7 @@ const CanvasBody = () => {
         </DialogActions>
       </Dialog>
       <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1,top:'14%',left:'17%',bottom:'6%' }}
         open={isLoading}
       >
         <CircularProgress color="inherit" />

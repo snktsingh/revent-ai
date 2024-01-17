@@ -209,10 +209,20 @@ const CanvasComponent: React.FC = () => {
         
         newCanvas.on('text:editing:exited',(event)=>{
           textExitedEvent(canvas,(event.target as fabric.Text));
+          const updatedCanvas = newCanvas?.toObject([
+            'listType',
+            'listBullet',
+            'listCounter',
+            'name',
+            'className',
+          ]);
+          const id = canvasJS.id;
+          dispatch(updateCanvasInList({ id, updatedCanvas }));
         })
 
         newCanvas.on('selection:created', function (event) {
           handleSelectionCreated(canvas, event);
+          
         });
         updateCanvasDimensions();
 
@@ -304,16 +314,17 @@ const CanvasComponent: React.FC = () => {
     const setResImage = (img: string) => {
       if (canvasRef.current) {
         canvasRef.current.clear();
-      }
-      fabric.Image.fromURL(`${img}`, img => {
-        img.set({
-          left: 0,
-          top: 0,
-          scaleX: 0.93,
-          scaleY: 0.93,
+        fabric.Image.fromURL(`${img}`, img => {
+          img.set({
+            left: 0,
+            top: 0,
+            scaleX: 0.93,
+            scaleY: 0.93,
+          });
+          newCanvas.add(img);
         });
-        newCanvas.add(img);
-      });
+        canvasRef.current.renderAll();
+      }
     };
 
     if (imageUrl !== '') {
@@ -678,6 +689,7 @@ const CanvasComponent: React.FC = () => {
   };
 
   useEffect(() => {
+    console.log(canvasImage)
     canvasRef.current?.clear();
     canvasRef.current?.setBackgroundColor(
       `${theme.colorSchemes.light.palette.common.white}`,
