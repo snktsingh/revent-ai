@@ -17,7 +17,7 @@ const useVariants = () => {
   };
 
   const handleApplyOriginalAsMain = ()=>{
-    dispatch(setCanvas({id:1,canvas:originalSlide.originalJSON}))
+    dispatch(setCanvas({id:1,canvas:originalSlide.originalJSON}));
   }
   return { variants, array, openVariant, handleVariants, originalSlide, handleApplyOriginalAsMain };
 };
