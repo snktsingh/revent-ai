@@ -34,14 +34,14 @@ import {
   useTimelineElement,
   useListElement,
   useImageElement,
-  useDelAndCopy
+  useDelAndCopy,
 } from '../elements/elementExports';
 import {
   useCanvasClickEvent,
   useObjectMovingEvent,
   useSelectionCreatedEvent,
   useTextEvents,
-} from '../events/eventExports'
+} from '../events/eventExports';
 
 const CanvasComponent: React.FC = () => {
   const canvasRef = useRef<fabric.Canvas | null>(null);
@@ -67,8 +67,6 @@ const CanvasComponent: React.FC = () => {
   const { handleSelectionCreated } = useSelectionCreatedEvent();
   const { textExitedEvent } = useTextEvents();
   const { CanvasClick } = useCanvasClickEvent();
-
-
 
   const dispatch = useAppDispatch();
   const {
@@ -176,8 +174,8 @@ const CanvasComponent: React.FC = () => {
 
   const updateCanvasDimensions = () => {
     const aspectRatio = 16 / 9;
-    const canvasWidthPercentage = 58;
-    const canvasHeightPercentage = 58 / aspectRatio;
+    const canvasWidthPercentage = 62;
+    const canvasHeightPercentage = 62 / aspectRatio;
 
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerWidth;
@@ -198,7 +196,7 @@ const CanvasComponent: React.FC = () => {
 
   useEffect(() => {
     const newCanvas = new fabric.Canvas('canvas');
-    
+
     newCanvas.clear();
     fabric.Object.prototype.set({
       cornerStyle: 'circle',
@@ -218,7 +216,8 @@ const CanvasComponent: React.FC = () => {
 
         newCanvas.enableRetinaScaling = true;
         newCanvas.selectionColor = 'transparent';
-        newCanvas.selectionBorderColor = theme.colorSchemes.light.palette.common.steelBlue;
+        newCanvas.selectionBorderColor =
+          theme.colorSchemes.light.palette.common.steelBlue;
         newCanvas.selectionLineWidth = 0.5;
 
         CustomBorderIcons(newCanvas);
@@ -227,8 +226,8 @@ const CanvasComponent: React.FC = () => {
           CanvasClick(newCanvas, event);
         });
 
-        newCanvas.on('text:editing:exited', (event) => {
-          textExitedEvent(canvas, (event.target as fabric.Text));
+        newCanvas.on('text:editing:exited', event => {
+          textExitedEvent(canvas, event.target as fabric.Text);
           const updatedCanvas = newCanvas?.toObject([
             'listType',
             'listBullet',
@@ -238,11 +237,10 @@ const CanvasComponent: React.FC = () => {
           ]);
           const id = canvasJS.id;
           dispatch(updateCanvasInList({ id, updatedCanvas }));
-        })
+        });
 
         newCanvas.on('selection:created', function (event) {
           handleSelectionCreated(canvas, event);
-
         });
         updateCanvasDimensions();
 
@@ -263,14 +261,13 @@ const CanvasComponent: React.FC = () => {
           ]);
           const id = canvasJS.id;
           getElementsData(updatedCanvas?.objects);
-          console.log({updatedCanvas})
+          console.log({ updatedCanvas });
           if (updatedCanvas?.objects.length > 1) {
             dispatch(toggleRegenerateButton(false));
           } else {
             dispatch(toggleRegenerateButton(true));
           }
           dispatch(updateCanvasInList({ id, updatedCanvas }));
-          
         });
 
         newCanvas.on('object:removed', e => {
@@ -289,7 +286,6 @@ const CanvasComponent: React.FC = () => {
             dispatch(toggleRegenerateButton(true));
           }
           dispatch(updateCanvasInList({ id, updatedCanvas }));
-          
         });
 
         newCanvas.on('object:modified', e => {
@@ -303,7 +299,6 @@ const CanvasComponent: React.FC = () => {
           const id = canvasJS.id;
           getElementsData(updatedCanvas?.objects);
           dispatch(updateCanvasInList({ id, updatedCanvas }));
-          
         });
 
         newCanvas.on('selection:cleared', e => {
@@ -317,13 +312,10 @@ const CanvasComponent: React.FC = () => {
           const id = canvasJS.id;
           getElementsData(updatedCanvas?.objects);
           dispatch(updateCanvasInList({ id, updatedCanvas }));
-          
-          
         });
         // newCanvas.on('object:moving', handleAllElements);
         newCanvas.on('object:moving', function (options) {
           handleObjectMoving(options, newCanvas);
-          
         });
 
         handleAddCustomIcon(newCanvas);
@@ -355,7 +347,7 @@ const CanvasComponent: React.FC = () => {
     window.addEventListener('keydown', handleKeyDown);
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('resize', () => { });
+      window.removeEventListener('resize', () => {});
       newCanvas.dispose();
     };
   }, [canvasJS]);
@@ -366,7 +358,6 @@ const CanvasComponent: React.FC = () => {
       `${theme.colorSchemes.light.palette.common.white}`,
       canvasRef.current.renderAll.bind(canvasRef.current)
     );
-    
 
     fabric.Image.fromURL(canvasImage || imageUrl, img => {
       img.set({
@@ -378,7 +369,7 @@ const CanvasComponent: React.FC = () => {
       canvasRef.current?.add(img);
     });
     canvasRef.current?.renderAll();
-  }, [canvasImage,imageUrl]);
+  }, [canvasImage, imageUrl]);
 
   ContentElements.handleFontSize = () => {
     const element = canvasRef.current?.getActiveObject();
@@ -448,7 +439,7 @@ const CanvasComponent: React.FC = () => {
         name = 'Pyramid';
         data.push({ text: obj.text });
       }
-      
+
       if (obj.name === 'Funnel_Text') {
         dispatch(setShapeName('Funnel'));
         name = 'Funnel';
@@ -480,10 +471,10 @@ const CanvasComponent: React.FC = () => {
 
       if (obj.name === 'bullet') {
         dispatch(setShapeName('Bullet point'));
-        name = 'Bullet point';
+        name = 'BulletPoint';
         let text = obj.text.split('\n');
         text.forEach((element: string) => {
-          data.push({ heading: element });
+          data.push({ text: element });
         });
       }
     });
@@ -719,8 +710,6 @@ const CanvasComponent: React.FC = () => {
   ContentElements.handleProcess = () => {
     addProcess(canvas);
   };
-
-  
 
   return (
     <CanvasContainer ref={Container}>
