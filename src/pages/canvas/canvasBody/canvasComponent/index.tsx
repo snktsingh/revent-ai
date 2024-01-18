@@ -363,8 +363,8 @@ const CanvasComponent: React.FC = () => {
       img.set({
         left: 0,
         top: 0,
-        scaleX: 0.93,
-        scaleY: 0.93,
+        scaleX: 0.95,
+        scaleY: 0.95,
       });
       canvasRef.current?.add(img);
     });
