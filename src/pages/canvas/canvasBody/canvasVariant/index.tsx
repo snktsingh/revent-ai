@@ -26,16 +26,11 @@ export const CanvasVariant = () => {
 
   return (
     <div>
-      {/* {variants.length > 0 && (
+      {variants.length > 0 && (
         <VariantButton onClick={() => dispatch(toggleVariantSlide())}>
           <img src={varianButtonSvg} alt="variantButton" />
         </VariantButton>
-      )} */}
-        <VariantButton onClick={() => dispatch(toggleVariantSlide())}>
-          <img src={varianButtonSvg} alt="variantButton" />
-        </VariantButton>
-        
-
+      )}
       <Drawer
         anchor="right"
         open={openVariant}
@@ -58,7 +53,7 @@ export const CanvasVariant = () => {
             <DrawerVariantButton>Variants</DrawerVariantButton>
           </DrawerBtnContainer>
           <DrawerVariant>
-          {originalSlide.originalUrl !== '' && <>
+            {originalSlide.originalUrl !== '' && <>
               <Text>Original Slide</Text>
               <OriginalSlideCard onClick={handleApplyOriginalAsMain}>
                 <img src={originalSlide.originalUrl} alt="image" style={{ width: '100%', height: '100%', objectFit: 'cover', }} />
@@ -81,34 +76,34 @@ export const CanvasVariant = () => {
             </ButtonContainer>
             {variants.length > 0
               ? variants.map((el: VariantsType, i: number) => {
-                  return (
-                    <VariantSlide
-                      key={el.imagesUrl}
-                      onClick={() => handleVariants(el.imagesUrl, el.pptUrl, i)}
-                    >
-                      <div>{i + 1}</div>
-                      <VariantSlideCard>
-                        <img
-                          src={el.imagesUrl}
-                          alt={`Variant ${i + 1}`}
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'cover',
-                          }}
-                        />
-                      </VariantSlideCard>
-                    </VariantSlide>
-                  );
-                })
+                return (
+                  <VariantSlide
+                    key={el.imagesUrl}
+                    onClick={() => handleVariants(el.imagesUrl, el.pptUrl, i)}
+                  >
+                    <div>{i + 1}</div>
+                    <VariantSlideCard>
+                      <img
+                        src={el.imagesUrl}
+                        alt={`Variant ${i + 1}`}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                        }}
+                      />
+                    </VariantSlideCard>
+                  </VariantSlide>
+                );
+              })
               : array.map(el => {
-                  return (
-                    <VariantSlide key={el}>
-                      <div>{el}</div>
-                      <VariantSlideCard></VariantSlideCard>
-                    </VariantSlide>
-                  );
-                })}
+                return (
+                  <VariantSlide key={el}>
+                    <div>{el}</div>
+                    <VariantSlideCard></VariantSlideCard>
+                  </VariantSlide>
+                );
+              })}
 
             <LogoContainer>
               <div>

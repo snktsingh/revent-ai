@@ -24,6 +24,18 @@ import WebFont from 'webfontloader';
 import FullscreenCanvas from './fullscreenCanvas';
 import { Canvas_Arrow } from '@/constants/media';
 import { toggleRegenerateButton } from '@/redux/reducers/slide';
+import {
+  useTableElement,
+  useProcessElement,
+  usePyramidElement,
+  useCustomSelectionIcons,
+  useFunnelElement,
+  useCycleElement,
+  useTimelineElement,
+  useListElement,
+  useImageElement,
+  useDelAndCopy
+} from '../elements/elementExports';
 
 const CanvasComponent: React.FC = () => {
   const canvasRef = useRef<fabric.Canvas | null>(null);
@@ -34,6 +46,17 @@ const CanvasComponent: React.FC = () => {
     width: 0,
     height: 0,
   });
+  const { handleAddCustomIcon } = useCustomSelectionIcons();
+  const { addTable } = useTableElement();
+  const { addProcess } = useProcessElement();
+  const { addPyramid } = usePyramidElement();
+  const { addFunnel } = useFunnelElement();
+  const { addCycle } = useCycleElement();
+  const { addTimeline } = useTimelineElement();
+  const { addListElement } = useListElement();
+  const { imageUploader } = useImageElement();
+  const { CustomBorderIcons } = useDelAndCopy();
+
 
   const dispatch = useAppDispatch();
   const {
@@ -55,23 +78,13 @@ const CanvasComponent: React.FC = () => {
     paragraph,
     BulletText,
     addQuotes,
-    ImageUploader,
-    CustomBorderIcons,
     ColorFillForObjects,
     ColorForText,
     ColorForBorder,
     handleBold,
     handleItalic,
     handleUnderLine,
-    addTable,
-    addFunnel,
-    addPyramid,
-    addCycle,
-    addTimeline,
-    addProcess,
-    addListElement,
     handleObjectMoving,
-    handleAddCustomIcon,
     handleSelectionCreated,
     CanvasClick,
     textEnteringEvent,
@@ -207,9 +220,9 @@ const CanvasComponent: React.FC = () => {
         newCanvas.on('mouse:up', event => {
           CanvasClick(newCanvas, event);
         });
-        
-        newCanvas.on('text:editing:exited',(event)=>{
-          textExitedEvent(canvas,(event.target as fabric.Text));
+
+        newCanvas.on('text:editing:exited', (event) => {
+          textExitedEvent(canvas, (event.target as fabric.Text));
           const updatedCanvas = newCanvas?.toObject([
             'listType',
             'listBullet',
@@ -223,7 +236,7 @@ const CanvasComponent: React.FC = () => {
 
         newCanvas.on('selection:created', function (event) {
           handleSelectionCreated(canvas, event);
-          
+
         });
         updateCanvasDimensions();
 
@@ -239,9 +252,9 @@ const CanvasComponent: React.FC = () => {
           ]);
           const id = canvasJS.id;
           getElementsData(updatedCanvas?.objects);
-          if(updatedCanvas?.objects.length > 1){
+          if (updatedCanvas?.objects.length > 1) {
             dispatch(toggleRegenerateButton(false));
-          }else{
+          } else {
             dispatch(toggleRegenerateButton(true));
           }
           dispatch(updateCanvasInList({ id, updatedCanvas }));
@@ -259,9 +272,9 @@ const CanvasComponent: React.FC = () => {
           ]);
           const id = canvasJS.id;
           getElementsData(updatedCanvas?.objects);
-          if(updatedCanvas?.objects.length > 1){
+          if (updatedCanvas?.objects.length > 1) {
             dispatch(toggleRegenerateButton(false));
-          }else{
+          } else {
             dispatch(toggleRegenerateButton(true));
           }
           dispatch(updateCanvasInList({ id, updatedCanvas }));
@@ -308,6 +321,8 @@ const CanvasComponent: React.FC = () => {
         handleAddCustomIcon(newCanvas);
         newCanvas.renderAll();
 
+
+
         canvasRef.current = newCanvas;
       },
       (error: Error) => {
@@ -316,30 +331,6 @@ const CanvasComponent: React.FC = () => {
     );
 
     const canvas = canvasRef.current!;
-
-    // const base64 = canvas.toDataURL({ format: 'jpeg', quality: 0.8 });
-    // fabric.Image.fromURL(base64, img => {
-    //   canvas.add(img);
-    // });
-
-    const setResImage = (img: string) => {
-      if (canvasRef.current) {
-        fabric.Image.fromURL(`${img}`, img => {
-          img.set({
-            left: 0,
-            top: 0,
-            scaleX: 0.93,
-            scaleY: 0.93,
-          });
-          newCanvas.add(img);
-        });
-        canvasRef.current.renderAll();
-      }
-    };
-
-    if (imageUrl !== '') {
-      setResImage(imageUrl);
-    }
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Delete' && canvas.getActiveObject()) {
@@ -361,9 +352,9 @@ const CanvasComponent: React.FC = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
       newCanvas.dispose();
-      window.removeEventListener('resize', () => {});
+      window.removeEventListener('resize', () => { });
     };
-  }, [canvasJS, imageUrl]);
+  }, [canvasJS]);
 
   ContentElements.handleFontSize = () => {
     const element = canvasRef.current?.getActiveObject();
@@ -521,7 +512,7 @@ const CanvasComponent: React.FC = () => {
   };
 
   elementData[5].onClick = () => {
-    ImageUploader(canvas);
+    imageUploader(canvas);
   };
   elementData[7].onClick = () => {
     let text = addQuotes();
@@ -695,6 +686,7 @@ const CanvasComponent: React.FC = () => {
   };
   //addProcess
   ContentElements.handleProcess = () => {
+    console.log('thinnava')
     addProcess(canvas);
   };
 
