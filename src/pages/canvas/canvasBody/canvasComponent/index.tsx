@@ -479,11 +479,11 @@ const CanvasComponent: React.FC = () => {
       }
 
       if (obj.name === 'bullet') {
-        dispatch(setShapeName('Bullet point'));
-        name = 'Bullet point';
+        dispatch(setShapeName('BulletPoint'));
+        name = 'BulletPoint';
         let text = obj.text.split('\n');
         text.forEach((element: string) => {
-          data.push({ heading: element });
+          data.push({ text: element });
         });
       }
     });
