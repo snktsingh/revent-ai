@@ -63,11 +63,16 @@ import { fetchSlideImg } from '@/redux/thunk/thunk';
 const CanvasBody = () => {
   const slide = useAppSelector(state => state.slide);
   const dispatch = useAppDispatch();
-  const { canvasJS, requestData, tempData, shapeName,canvasImageURl,canvasList } = useAppSelector(
-    state => state.canvas
-  );
-  const {isRegenerateDisabled} = useAppSelector(state => state.slide);
-  const {isLoading} = useAppSelector(state => state.thunk);
+  const {
+    canvasJS,
+    requestData,
+    tempData,
+    shapeName,
+    canvasImageURl,
+    canvasList,
+  } = useAppSelector(state => state.canvas);
+  const { isRegenerateDisabled } = useAppSelector(state => state.slide);
+  const { isLoading } = useAppSelector(state => state.thunk);
   const [activeLike, setActiveLike] = useState(false);
   const [activeDislike, setActiveDislike] = useState(false);
   const [elementName, setElementName] = useState<string>('');
@@ -139,13 +144,10 @@ const CanvasBody = () => {
     setOpenDialog(false);
   };
 
-  
-
   const [rows, setRows] = useState('');
   const [columns, setColumns] = useState('');
   const [cellWidth, setCellWidth] = useState('120');
   const [cellHeight, setCellHeight] = useState('35');
-
 
   const handleElementData = () => {
     let newTableData: TableDetails = {
@@ -231,24 +233,21 @@ const CanvasBody = () => {
     }
   };
 
-
-
   const handleRequest = () => {
-    console.log({ requestData })  
-    
+    console.log({ requestData });
     dispatch(setOriginalSlide(canvasList[0].canvas));
     dispatch(fetchSlideImg(requestData));
   };
   return (
     <BodyContainer>
-      <ToastContainer />
+      <ToastContainer autoClose={800} />
       <Grid container>
         <Grid xs={2}>
           <SlideList />
         </Grid>
         <Grid xs={8}>
           <EditSlideContainer>
-            <Stack direction="row" justifyContent="space-between" width={'91.5%'}>
+            <Stack direction="row" justifyContent="space-between" width={'98%'}>
               <span>
                 <IconButton onClick={() => dispatch(openModal())}>
                   <img src={Delete} />
@@ -418,7 +417,13 @@ const CanvasBody = () => {
         </DialogActions>
       </Dialog>
       <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1,top:'14%',left:'17%',bottom:'6%' }}
+        sx={{
+          color: '#fff',
+          zIndex: theme => theme.zIndex.drawer + 1,
+          top: '14%',
+          left: '17%',
+          bottom: '6%',
+        }}
         open={isLoading}
       >
         <CircularProgress color="inherit" />
