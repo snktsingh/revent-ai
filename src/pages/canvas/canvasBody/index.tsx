@@ -236,8 +236,8 @@ const CanvasBody = () => {
   const handleRequest = () => {
     console.log({ requestData })  
     
-    dispatch(setOriginalSlide({originalUrl: canvasImageURl, originalJSON: canvasList[0].canvas}))  
-    dispatch(fetchSlideImg(requestData))
+    dispatch(setOriginalSlide({originalUrl: canvasImageURl, originalJSON: canvasList[0].canvas}));
+    dispatch(fetchSlideImg(requestData));
   };
   return (
     <BodyContainer>

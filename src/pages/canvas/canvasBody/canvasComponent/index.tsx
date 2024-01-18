@@ -36,6 +36,12 @@ import {
   useImageElement,
   useDelAndCopy
 } from '../elements/elementExports';
+import {
+  useCanvasClickEvent,
+  useObjectMovingEvent,
+  useSelectionCreatedEvent,
+  useTextEvents,
+} from '../events/eventExports'
 
 const CanvasComponent: React.FC = () => {
   const canvasRef = useRef<fabric.Canvas | null>(null);
@@ -56,6 +62,12 @@ const CanvasComponent: React.FC = () => {
   const { addListElement } = useListElement();
   const { imageUploader } = useImageElement();
   const { CustomBorderIcons } = useDelAndCopy();
+
+  const { handleObjectMoving } = useObjectMovingEvent();
+  const { handleSelectionCreated } = useSelectionCreatedEvent();
+  const { textExitedEvent } = useTextEvents();
+  const { CanvasClick } = useCanvasClickEvent();
+
 
 
   const dispatch = useAppDispatch();
@@ -84,11 +96,6 @@ const CanvasComponent: React.FC = () => {
     handleBold,
     handleItalic,
     handleUnderLine,
-    handleObjectMoving,
-    handleSelectionCreated,
-    CanvasClick,
-    textEnteringEvent,
-    textExitedEvent
   } = useAllElements();
 
   const {
@@ -320,10 +327,6 @@ const CanvasComponent: React.FC = () => {
 
         handleAddCustomIcon(newCanvas);
         newCanvas.renderAll();
-
-
-
-        canvasRef.current = newCanvas;
       },
       (error: Error) => {
         console.error('Error loading canvas:', error);
