@@ -25,11 +25,6 @@ interface IShapeRequest {
   data: string[];
 }
 
-interface OriginalSlideType{
-  originalUrl:string,
-  originalJSON:object
-}
-
 export interface CanvasSate {
   color: string;
   textColor: string;
@@ -42,10 +37,10 @@ export interface CanvasSate {
   canvasData: string[];
   tempData: any[];
   shapeName: string;
-  requestData: IShapeRequest,
-  canvasImage:string,
-  originalSlide: OriginalSlideType,
-  canvasImageURl : string
+  requestData: IShapeRequest;
+  canvasImage: string;
+  originalCanvasSlide: object;
+  canvasImageURl: string;
 }
 const canvas = new fabric.Canvas(null);
 const canvasJSON = canvas.toObject();
@@ -62,17 +57,14 @@ export const initialState: CanvasSate = {
   canvasData: [],
   tempData: [],
   shapeName: '',
-  requestData : {
+  requestData: {
     companyName: '',
     shape: '',
     data: [],
   },
-  canvasImage:'',
-  originalSlide:{
-    originalUrl:'',
-    originalJSON:{}
-  },
-  canvasImageURl:''
+  canvasImage: '',
+  originalCanvasSlide: {},
+  canvasImageURl: '',
 };
 
 export const CanvasReducer = createSlice({
@@ -88,8 +80,8 @@ export const CanvasReducer = createSlice({
     setRequestData: (state, action) => {
       return {
         ...state,
-        requestData: action.payload
-      }
+        requestData: action.payload,
+      };
     },
     setShapeName: (state, action) => {
       state.shapeName = action.payload;
@@ -100,8 +92,8 @@ export const CanvasReducer = createSlice({
     setCanvas: (state, action) => {
       return {
         ...state,
-        canvasJS : action.payload
-      }
+        canvasJS: action.payload,
+      };
     },
     setCanvasData: (state, action) => {
       state.canvasData = action.payload;
@@ -238,22 +230,22 @@ export const CanvasReducer = createSlice({
         size: action.payload,
       };
     },
-    setVariantAsCanvas(state,action) {
+    setVariantAsCanvas(state, action) {
       const updatedCanvas = state.canvasJS.canvas;
-      updateCanvasInList({id:state.canvasJS.id,updatedCanvas})
+      updateCanvasInList({ id: state.canvasJS.id, updatedCanvas });
     },
-    setVariantImageAsMain(state,action) {
+    setVariantImageAsMain(state, action) {
       return {
         ...state,
-        canvasImage: action.payload
-      }
+        canvasImage: action.payload,
+      };
     },
-    setOriginalSlide(state,action){
-      state.originalSlide = action.payload
+    setOriginalSlide(state, action) {
+      state.originalCanvasSlide = action.payload;
     },
-    setCanvasImageUrl(state,action){
-      state.canvasImageURl = action.payload
-    }
+    setCanvasImageUrl(state, action) {
+      state.canvasImageURl = action.payload;
+    },
   },
 });
 
@@ -278,7 +270,7 @@ export const {
   setVariantAsCanvas,
   setVariantImageAsMain,
   setCanvasImageUrl,
-  setOriginalSlide
+  setOriginalSlide,
 } = CanvasReducer.actions;
 
 export default CanvasReducer.reducer;

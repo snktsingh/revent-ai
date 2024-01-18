@@ -33,6 +33,7 @@ export const fetchSlideImg = createAsyncThunk(
   async (req: IShapeRequest, { dispatch }) => {
     const res = await FetchUtils.postRequest(`${ENDPOINT.GEN_PPT}`, req);
     dispatch(setVariantImageAsMain(res.data.imageUrl));
+    console.log(res.data)
     return res.data;
   }
 );

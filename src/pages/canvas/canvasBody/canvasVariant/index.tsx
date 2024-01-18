@@ -18,10 +18,19 @@ import { toggleVariantSlide } from '@/redux/reducers/elements';
 import { Logo, varianButtonSvg } from '@/constants/media';
 import { VariantsType } from '@/redux/thunk/thunk';
 import useVariants from './container';
+import { useEffect } from 'react';
 
 export const CanvasVariant = () => {
   const dispatch = useAppDispatch();
-  const { variants, openVariant, array, handleVariants, handleApplyOriginalAsMain, originalSlide } = useVariants();
+  const { 
+    variants,
+    openVariant,
+    array,
+    handleVariants,
+    handleApplyOriginalAsMain,
+    originalImageUrl 
+  } = useVariants();
+
 
 
   return (
@@ -53,10 +62,10 @@ export const CanvasVariant = () => {
             <DrawerVariantButton>Variants</DrawerVariantButton>
           </DrawerBtnContainer>
           <DrawerVariant>
-            {originalSlide.originalUrl !== '' && <>
+            {originalImageUrl && <>
               <Text>Original Slide</Text>
               <OriginalSlideCard onClick={handleApplyOriginalAsMain}>
-                <img src={originalSlide.originalUrl} alt="image" style={{ width: '100%', height: '100%', objectFit: 'cover', }} />
+                <img src={originalImageUrl} alt="image" style={{ width: '100%', height: '100%', objectFit: 'cover', }} />
               </OriginalSlideCard>
             </>}
             {/* <Text>Grid Variants</Text>

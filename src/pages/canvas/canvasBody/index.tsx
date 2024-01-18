@@ -63,7 +63,7 @@ import { fetchSlideImg } from '@/redux/thunk/thunk';
 const CanvasBody = () => {
   const slide = useAppSelector(state => state.slide);
   const dispatch = useAppDispatch();
-  const { canvasJS, requestData, tempData, shapeName,canvasImageURl,originalSlide,canvasList } = useAppSelector(
+  const { canvasJS, requestData, tempData, shapeName,canvasImageURl,canvasList } = useAppSelector(
     state => state.canvas
   );
   const {isRegenerateDisabled} = useAppSelector(state => state.slide);
@@ -236,7 +236,7 @@ const CanvasBody = () => {
   const handleRequest = () => {
     console.log({ requestData })  
     
-    dispatch(setOriginalSlide({originalUrl: canvasImageURl, originalJSON: canvasList[0].canvas}));
+    dispatch(setOriginalSlide(canvasList[0].canvas));
     dispatch(fetchSlideImg(requestData));
   };
   return (

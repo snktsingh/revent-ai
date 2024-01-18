@@ -198,7 +198,7 @@ const CanvasComponent: React.FC = () => {
 
   useEffect(() => {
     const newCanvas = new fabric.Canvas('canvas');
-    FabricRef.current = newCanvas;
+    
     newCanvas.clear();
     fabric.Object.prototype.set({
       cornerStyle: 'circle',
@@ -206,7 +206,7 @@ const CanvasComponent: React.FC = () => {
       transparentCorners: false,
       cornerSize: 10,
     });
-    fabric.Object.prototype.objectCaching = false;
+    // fabric.Object.prototype.objectCaching = false;
     newCanvas.loadFromJSON(
       canvasJS.canvas,
       () => {
@@ -218,8 +218,7 @@ const CanvasComponent: React.FC = () => {
 
         newCanvas.enableRetinaScaling = true;
         newCanvas.selectionColor = 'transparent';
-        newCanvas.selectionBorderColor =
-          theme.colorSchemes.light.palette.common.steelBlue;
+        newCanvas.selectionBorderColor = theme.colorSchemes.light.palette.common.steelBlue;
         newCanvas.selectionLineWidth = 0.5;
 
         CustomBorderIcons(newCanvas);
@@ -249,6 +248,11 @@ const CanvasComponent: React.FC = () => {
 
         window.addEventListener('resize', updateCanvasDimensions);
 
+        if (newCanvas.toObject()?.objects.length > 1) {
+          dispatch(toggleRegenerateButton(false));
+        } else {
+          dispatch(toggleRegenerateButton(true));
+        }
         newCanvas.on('object:added', e => {
           const updatedCanvas = newCanvas?.toObject([
             'listType',
@@ -259,14 +263,14 @@ const CanvasComponent: React.FC = () => {
           ]);
           const id = canvasJS.id;
           getElementsData(updatedCanvas?.objects);
+          console.log({updatedCanvas})
           if (updatedCanvas?.objects.length > 1) {
             dispatch(toggleRegenerateButton(false));
           } else {
             dispatch(toggleRegenerateButton(true));
           }
           dispatch(updateCanvasInList({ id, updatedCanvas }));
-          let dataUrl = newCanvas.toDataURL();
-          dispatch(setCanvasImageUrl(dataUrl))
+          
         });
 
         newCanvas.on('object:removed', e => {
@@ -285,8 +289,7 @@ const CanvasComponent: React.FC = () => {
             dispatch(toggleRegenerateButton(true));
           }
           dispatch(updateCanvasInList({ id, updatedCanvas }));
-          let dataUrl = newCanvas.toDataURL();
-          dispatch(setCanvasImageUrl(dataUrl))
+          
         });
 
         newCanvas.on('object:modified', e => {
@@ -300,8 +303,7 @@ const CanvasComponent: React.FC = () => {
           const id = canvasJS.id;
           getElementsData(updatedCanvas?.objects);
           dispatch(updateCanvasInList({ id, updatedCanvas }));
-          let dataUrl = newCanvas.toDataURL();
-          dispatch(setCanvasImageUrl(dataUrl))
+          
         });
 
         newCanvas.on('selection:cleared', e => {
@@ -315,14 +317,13 @@ const CanvasComponent: React.FC = () => {
           const id = canvasJS.id;
           getElementsData(updatedCanvas?.objects);
           dispatch(updateCanvasInList({ id, updatedCanvas }));
-          let dataUrl = newCanvas.toDataURL();
-          dispatch(setCanvasImageUrl(dataUrl))
+          
+          
         });
         // newCanvas.on('object:moving', handleAllElements);
         newCanvas.on('object:moving', function (options) {
           handleObjectMoving(options, newCanvas);
-          let dataUrl = newCanvas.toDataURL();
-          dispatch(setCanvasImageUrl(dataUrl))
+          
         });
 
         handleAddCustomIcon(newCanvas);
@@ -354,10 +355,30 @@ const CanvasComponent: React.FC = () => {
     window.addEventListener('keydown', handleKeyDown);
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
-      newCanvas.dispose();
       window.removeEventListener('resize', () => { });
+      newCanvas.dispose();
     };
   }, [canvasJS]);
+
+  useEffect(() => {
+    canvasRef.current?.clear();
+    canvasRef.current?.setBackgroundColor(
+      `${theme.colorSchemes.light.palette.common.white}`,
+      canvasRef.current.renderAll.bind(canvasRef.current)
+    );
+    
+
+    fabric.Image.fromURL(canvasImage || imageUrl, img => {
+      img.set({
+        left: 0,
+        top: 0,
+        scaleX: 0.93,
+        scaleY: 0.93,
+      });
+      canvasRef.current?.add(img);
+    });
+    canvasRef.current?.renderAll();
+  }, [canvasImage,imageUrl]);
 
   ContentElements.handleFontSize = () => {
     const element = canvasRef.current?.getActiveObject();
@@ -421,6 +442,13 @@ const CanvasComponent: React.FC = () => {
         name = 'Cover';
         subTitle = obj.text;
       }
+
+      if (obj.name === 'pyramidTextbox') {
+        dispatch(setShapeName('Cover'));
+        name = 'Pyramid';
+        data.push({ text: obj.text });
+      }
+      
       if (obj.name === 'Funnel_Text') {
         dispatch(setShapeName('Funnel'));
         name = 'Funnel';
@@ -689,29 +717,10 @@ const CanvasComponent: React.FC = () => {
   };
   //addProcess
   ContentElements.handleProcess = () => {
-    console.log('thinnava')
     addProcess(canvas);
   };
 
-  useEffect(() => {
-    console.log(canvasImage)
-    canvasRef.current?.clear();
-    canvasRef.current?.setBackgroundColor(
-      `${theme.colorSchemes.light.palette.common.white}`,
-      canvasRef.current.renderAll.bind(canvasRef.current)
-    );
-
-    fabric.Image.fromURL(canvasImage, img => {
-      img.set({
-        left: 0,
-        top: 0,
-        scaleX: 0.93,
-        scaleY: 0.93,
-      });
-      canvasRef.current?.add(img);
-    });
-    canvasRef.current?.renderAll();
-  }, [canvasImage]);
+  
 
   return (
     <CanvasContainer ref={Container}>
