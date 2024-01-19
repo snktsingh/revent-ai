@@ -358,18 +358,27 @@ const CanvasComponent: React.FC = () => {
       `${theme.colorSchemes.light.palette.common.white}`,
       canvasRef.current.renderAll.bind(canvasRef.current)
     );
-
     fabric.Image.fromURL(canvasImage || imageUrl, img => {
+      const canvasWidth = canvasRef.current?.width || 0;
+      const canvasHeight = canvasRef.current?.height || 0;
+      const scaleWidth = canvasWidth / img.width!;
+      const scaleHeight = canvasHeight / img.height!;
+      const scale = Math.max(scaleWidth, scaleHeight);
       img.set({
         left: 0,
         top: 0,
-        scaleX: 0.95,
-        scaleY: 0.95,
+        scaleX: scale,
+        scaleY: scale,
       });
       canvasRef.current?.add(img);
+      canvasRef.current?.renderAll();
     });
-    canvasRef.current?.renderAll();
-  }, [canvasImage, imageUrl]);
+  }, [
+    canvasImage,
+    imageUrl,
+    canvasRef.current?.width,
+    canvasRef.current?.height,
+  ]);
 
   ContentElements.handleFontSize = () => {
     const element = canvasRef.current?.getActiveObject();
