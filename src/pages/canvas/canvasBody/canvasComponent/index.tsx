@@ -174,8 +174,8 @@ const CanvasComponent: React.FC = () => {
 
   const updateCanvasDimensions = () => {
     const aspectRatio = 16 / 9;
-    const canvasWidthPercentage = 62;
-    const canvasHeightPercentage = 62 / aspectRatio;
+    const canvasWidthPercentage = 58;
+    const canvasHeightPercentage = 58 / aspectRatio;
 
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerWidth;

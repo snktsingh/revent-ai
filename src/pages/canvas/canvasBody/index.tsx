@@ -247,7 +247,7 @@ const CanvasBody = () => {
         </Grid>
         <Grid xs={8}>
           <EditSlideContainer>
-            <Stack direction="row" justifyContent="space-between" width={'98%'}>
+            <Stack direction="row" justifyContent="space-between" width={'91.51%'}>
               <span>
                 <IconButton onClick={() => dispatch(openModal())}>
                   <img src={Delete} />

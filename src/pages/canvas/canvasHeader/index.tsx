@@ -104,8 +104,8 @@ const MainCanvasHeader = () => {
         </Menu>
         <MainIconButton onClick={handleClick}>
           <Stack direction="row" spacing={1}>
-            <ButtonName>Sam Fisher</ButtonName>
-            <UserAvatar>SF</UserAvatar>
+            <ButtonName>Rashesh Majithia</ButtonName>
+            <UserAvatar>RM</UserAvatar>
           </Stack>
         </MainIconButton>
         <Menu
