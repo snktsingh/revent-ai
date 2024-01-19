@@ -7,12 +7,12 @@ import { getSlidekey } from '@/redux/reducers/slide';
 import { setActiveCanvas, setCanvas } from '@/redux/reducers/canvas';
 import { fabric } from 'fabric';
 
-
-
 export default function SlideList() {
   const dispatch = useAppDispatch();
   const slide = useAppSelector(state => state.slide);
-  const {canvasList,canvasJS,activeCanvasID} = useAppSelector(state => state.canvas);
+  const { canvasList, canvasJS, activeCanvasID } = useAppSelector(
+    state => state.canvas
+  );
   const [isClicked, setIsClicked] = useState<number>(0);
   const handleCardClick = (id: number) => {
     dispatch(setActiveCanvas(id));
@@ -50,31 +50,38 @@ export default function SlideList() {
           urls.push('error'); // Push placeholder for error cases
         }
       }
+      console.log(urls);
       setImageURLs(urls);
     };
 
     loadImages();
   }, [canvasList]);
 
-
   return (
     <SlideContainer>
-      {canvasList.map((canvas,index) => {
+      {canvasList.map((canvas, index) => {
         return (
           <div key={canvas.id}>
             <SingleSliderContainer
               onClick={() => {
-                dispatch(setCanvas(canvas))
+                dispatch(setCanvas(canvas));
                 handleCardClick(canvas.id);
-          
               }}
             >
               <Stack direction="row" spacing={1}>
                 <p>{index + 1}</p>
                 <ListSlideCard
                   className={activeCanvasID == canvas.id ? 'clicked-card' : ''}
-                  >
-                 <img src={imageURLs[index] || 'placeholder-for-error'} alt={`canvas-${index}`} style={{width:'100%',objectFit:'contain',height:'100%'}} />
+                >
+                  <img
+                    src={imageURLs[index] || 'placeholder-for-error'}
+                    alt={`canvas-${index}`}
+                    style={{
+                      width: '100%',
+                      objectFit: 'contain',
+                      height: '100%',
+                    }}
+                  />
                 </ListSlideCard>
               </Stack>
             </SingleSliderContainer>
