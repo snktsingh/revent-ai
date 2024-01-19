@@ -1,9 +1,5 @@
 import { fabric } from "fabric";
-import { IExtendedTextboxOptions } from "../../elements";
-interface FabricObject extends fabric.Object {
-    lastLeft: number;
-    lastTop: number;
-  }
+import { FabricObject } from "@/interface/fabricTypes";
 
 export function useObjectMovingEvent(){
       const handleObjectMoving = (

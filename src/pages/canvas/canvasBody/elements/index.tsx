@@ -6,18 +6,11 @@ import { handleInputSize, updateCanvasInList } from '@/redux/reducers/canvas';
 import { useAppDispatch } from '@/redux/store';
 import { IText } from 'fabric/fabric-impl';
 import { useListElement } from './listElement';
+import { IExtendedTextBoxOptions } from '@/interface/fabricTypes';
 
-export interface IExtendedTextboxOptions extends fabric.ITextboxOptions {
-  listType?: string;
-  listBullet?: string;
-  listCounter?: number;
-  _renderTextLine?: Function;
-}
 
-export interface RectContainer extends fabric.Rect {
-  id: string;
-  name: string;
-}
+
+
 export default function useAllElements() {
  
   const title = new fabric.Textbox('Click to add a title', {
@@ -141,7 +134,7 @@ export default function useAllElements() {
     listCounter: 0,
     name: 'bullet',
     fill: '#404040'
-  } as IExtendedTextboxOptions);
+  } as IExtendedTextBoxOptions);
   BulletText._renderTextLine = renderTextLine;
 
 

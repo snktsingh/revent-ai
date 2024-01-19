@@ -2,24 +2,7 @@ import ENDPOINT from '@/constants/endpoint';
 import { FetchUtils, generateInstance } from '@/utils/fetch-utils';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { setVariantImageAsMain } from '../reducers/canvas';
-
-export interface VariantsType {
-  pptUrl: string;
-  imagesUrl: string;
-}
-
-interface ISlideRequests {
-  pptUrl: string;
-  imageUrl: string;
-  variants: VariantsType[];
-  isLoading: boolean;
-}
-
-interface IShapeRequest {
-  companyName: string;
-  shape: string;
-  data: string[];
-}
+import { IShapeRequest, ISlideRequests } from '@/interface/storeTypes';
 
 const initialState: ISlideRequests = {
   pptUrl: '',

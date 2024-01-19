@@ -1,29 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { CanvasItem, CanvasJSON, IShapeRequest, TableDetails } from '@/interface/storeTypes';
+import { createSlice } from '@reduxjs/toolkit';
 import { fabric } from 'fabric';
-import variantsData from '../../data/variants.json';
-import { useSelector } from 'react-redux';
-
-export interface TableDetails {
-  row: number;
-  col: number;
-  width: number;
-  height: number;
-}
-interface CanvasItem {
-  id: number; // Use number as ID type
-  canvas: object;
-}
-
-interface CanvasJSON {
-  id: number;
-  canvas: object | null;
-}
-
-interface IShapeRequest {
-  companyName: string;
-  shape: string;
-  data: string[];
-}
 
 export interface CanvasSate {
   color: string;

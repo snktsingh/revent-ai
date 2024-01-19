@@ -1,7 +1,7 @@
+import { IExtendedTextBoxOptions } from "@/interface/fabricTypes";
 import { handleInputSize } from "@/redux/reducers/canvas";
 import { useAppDispatch } from "@/redux/store";
 import { fabric } from "fabric";
-import { IExtendedTextboxOptions } from "../../elements";
 export function useSelectionCreatedEvent(){
 
     const dispatch = useAppDispatch();
@@ -19,7 +19,7 @@ export function useSelectionCreatedEvent(){
         }
     
         canvas.forEachObject(function (obj) {
-          const extendedTextbox = obj as IExtendedTextboxOptions;
+          const extendedTextbox = obj as IExtendedTextBoxOptions;
           if (extendedTextbox?.listType == 'bullet') {
             const renderTextLine = function (
               this: any,

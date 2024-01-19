@@ -42,16 +42,14 @@ import {
   useSelectionCreatedEvent,
   useTextEvents,
 } from '../events/eventExports';
+import { useCanvasComponent } from './container';
 
 const CanvasComponent: React.FC = () => {
   const canvasRef = useRef<fabric.Canvas | null>(null);
   const FabricRef = useRef<fabric.Canvas | null>(null);
   const Container = useRef<HTMLDivElement | null>(null);
 
-  const [canvasDimensions, setCanvasDimensions] = useState({
-    width: 0,
-    height: 0,
-  });
+  
   const { handleAddCustomIcon } = useCustomSelectionIcons();
   const { addTable } = useTableElement();
   const { addProcess } = useProcessElement();
@@ -67,6 +65,14 @@ const CanvasComponent: React.FC = () => {
   const { handleSelectionCreated } = useSelectionCreatedEvent();
   const { textExitedEvent } = useTextEvents();
   const { CanvasClick } = useCanvasClickEvent();
+
+  const { 
+    handleAllElements, 
+    updateCanvasDimensions,
+    updateCanvasSlideData,
+    getElementsData,
+    customFabricProperties
+   } = useCanvasComponent();
 
   const dispatch = useAppDispatch();
   const {
@@ -147,52 +153,9 @@ const CanvasComponent: React.FC = () => {
   //   }
   // }, [tempData]);
 
-  const handleAllElements = (event: fabric.IEvent) => {
-    const { target } = event;
-    const canvas = canvasRef.current;
+ 
 
-    if (!canvas || !target) return;
-
-    // Define canvas boundaries
-    const canvasWidth = canvas.width || 0;
-    const canvasHeight = canvas.height || 0;
-
-    // Prevent objects from going beyond the canvas boundaries
-    target.setCoords();
-    if (target.left! < 0) {
-      target.left! = 0;
-    } else if (target.left! + target.width! > canvasWidth) {
-      target.left! = canvasWidth - target.width!;
-    }
-
-    if (target.top! < 0) {
-      target.top! = 0;
-    } else if (target.top! + target.height! > canvasHeight) {
-      target.top! = canvasHeight - target.height!;
-    }
-  };
-
-  const updateCanvasDimensions = () => {
-    const aspectRatio = 16 / 9;
-    const canvasWidthPercentage = 58;
-    const canvasHeightPercentage = 58 / aspectRatio;
-
-    const windowWidth = window.innerWidth;
-    const windowHeight = window.innerWidth;
-
-    const canvasWidth = (canvasWidthPercentage / 100) * windowWidth;
-    const canvasHeight = (canvasHeightPercentage / 100) * windowHeight;
-
-    setCanvasDimensions({ width: canvasWidth, height: canvasHeight });
-
-    if (canvasRef.current) {
-      canvasRef.current.setDimensions({
-        width: canvasWidth,
-        height: canvasHeight,
-      });
-      canvasRef.current.renderAll();
-    }
-  };
+ 
 
   useEffect(() => {
     const newCanvas = new fabric.Canvas('canvas');
@@ -204,7 +167,7 @@ const CanvasComponent: React.FC = () => {
       transparentCorners: false,
       cornerSize: 10,
     });
-    // fabric.Object.prototype.objectCaching = false;
+    fabric.Object.prototype.objectCaching = false;
     newCanvas.loadFromJSON(
       canvasJS.canvas,
       () => {
@@ -227,93 +190,52 @@ const CanvasComponent: React.FC = () => {
         });
 
         newCanvas.on('text:editing:exited', event => {
-          textExitedEvent(canvas, event.target as fabric.Text);
-          const updatedCanvas = newCanvas?.toObject([
-            'listType',
-            'listBullet',
-            'listCounter',
-            'name',
-            'className',
-          ]);
-          const id = canvasJS.id;
-          dispatch(updateCanvasInList({ id, updatedCanvas }));
+          textExitedEvent(newCanvas, event.target as fabric.Text);
+          updateCanvasSlideData(newCanvas, canvasJS.id);
         });
 
         newCanvas.on('selection:created', function (event) {
           handleSelectionCreated(canvas, event);
         });
-        updateCanvasDimensions();
+        updateCanvasDimensions(newCanvas);
 
-        window.addEventListener('resize', updateCanvasDimensions);
+        window.addEventListener('resize', () => updateCanvasDimensions(newCanvas));
 
-        if (newCanvas.toObject()?.objects.length > 1) {
+        if (newCanvas.toObject(customFabricProperties)?.objects.length > 1) {
           dispatch(toggleRegenerateButton(false));
         } else {
           dispatch(toggleRegenerateButton(true));
         }
         newCanvas.on('object:added', e => {
-          const updatedCanvas = newCanvas?.toObject([
-            'listType',
-            'listBullet',
-            'listCounter',
-            'name',
-            'className',
-          ]);
-          const id = canvasJS.id;
-          getElementsData(updatedCanvas?.objects);
-          console.log({ updatedCanvas });
-          if (updatedCanvas?.objects.length > 1) {
+          updateCanvasSlideData(newCanvas, canvasJS.id);
+          getElementsData(newCanvas.toObject(customFabricProperties)?.objects);
+          if (newCanvas.toObject()?.objects.length > 1) {
             dispatch(toggleRegenerateButton(false));
           } else {
             dispatch(toggleRegenerateButton(true));
           }
-          dispatch(updateCanvasInList({ id, updatedCanvas }));
         });
 
         newCanvas.on('object:removed', e => {
-          const updatedCanvas = newCanvas?.toObject([
-            'listType',
-            'listBullet',
-            'listCounter',
-            'name',
-            'className',
-          ]);
-          const id = canvasJS.id;
-          getElementsData(updatedCanvas?.objects);
-          if (updatedCanvas?.objects.length > 1) {
+          updateCanvasSlideData(newCanvas, canvasJS.id);
+          getElementsData(newCanvas.toObject(customFabricProperties)?.objects);
+          if (newCanvas.toObject()?.objects.length > 1) {
             dispatch(toggleRegenerateButton(false));
           } else {
             dispatch(toggleRegenerateButton(true));
           }
-          dispatch(updateCanvasInList({ id, updatedCanvas }));
         });
 
         newCanvas.on('object:modified', e => {
-          const updatedCanvas = newCanvas?.toObject([
-            'listType',
-            'listBullet',
-            'listCounter',
-            'name',
-            'className',
-          ]);
-          const id = canvasJS.id;
-          getElementsData(updatedCanvas?.objects);
-          dispatch(updateCanvasInList({ id, updatedCanvas }));
+          updateCanvasSlideData(newCanvas, canvasJS.id);
+          getElementsData(newCanvas.toObject(customFabricProperties)?.objects);
         });
 
         newCanvas.on('selection:cleared', e => {
-          const updatedCanvas = newCanvas?.toObject([
-            'listType',
-            'listBullet',
-            'listCounter',
-            'name',
-            'className',
-          ]);
-          const id = canvasJS.id;
-          getElementsData(updatedCanvas?.objects);
-          dispatch(updateCanvasInList({ id, updatedCanvas }));
+          updateCanvasSlideData(newCanvas, canvasJS.id);
+          getElementsData(newCanvas.toObject(customFabricProperties)?.objects);
         });
-        // newCanvas.on('object:moving', handleAllElements);
+        // newCanvas.on('object:moving', (event: fabric.IEvent) => handleAllElements(event,newCanvas));
         newCanvas.on('object:moving', function (options) {
           handleObjectMoving(options, newCanvas);
         });
@@ -424,91 +346,7 @@ const CanvasComponent: React.FC = () => {
     });
   };
 
-  function getElementsData(canvasData: any[]) {
-    console.log({ canvasData });
-    let data: any[] = [];
-    let name: string = '';
-    let title: string = '';
-    let subTitle: string = '';
-    let timelineContent: any[] = [];
-    canvasData.forEach(obj => {
-      if (obj.name === 'title') {
-        dispatch(setShapeName('Cover'));
-        name = 'Cover';
-        title = obj.text;
-      }
-      if (obj.name === 'subTitle') {
-        dispatch(setShapeName('Cover'));
-        name = 'Cover';
-        subTitle = obj.text;
-      }
-
-      if (obj.name === 'pyramidTextbox') {
-        dispatch(setShapeName('Cover'));
-        name = 'Pyramid';
-        data.push({ text: obj.text });
-      }
-
-      if (obj.name === 'Funnel_Text') {
-        dispatch(setShapeName('Funnel'));
-        name = 'Funnel';
-        data.push({ text: obj.text });
-      }
-
-      if (obj.name === 'Cycle_Text') {
-        dispatch(setShapeName('Cycle'));
-        name = 'Cycle';
-        data.push({ text: obj.text });
-      }
-
-      if (obj.name === 'ProcessText') {
-        dispatch(setShapeName('Process'));
-        name = 'Process';
-        data.push({ text: obj.text });
-      }
-
-      if (obj.name === 'TimeLineHeading') {
-        dispatch(setShapeName('Timeline'));
-        name = 'Timeline';
-        timelineContent.push(obj);
-      }
-      if (obj.name === 'TimeLineText') {
-        dispatch(setShapeName('Timeline'));
-        name = 'Timeline';
-        timelineContent.push(obj);
-      }
-
-      if (obj.name === 'bullet') {
-        dispatch(setShapeName('BulletPoint'));
-        name = 'BulletPoint';
-        let text = obj.text.split('\n');
-        text.forEach((element: string) => {
-          data.push({ text: element });
-        });
-      }
-    });
-    if (timelineContent.length > 0) {
-      data = timelineContent.reduce((acc, obj, index, arr) => {
-        if (obj.name === 'TimeLineHeading') {
-          const nextObj = arr[index + 1]; // Get the next object
-          if (nextObj && nextObj.name === 'TimeLineText') {
-            acc.push({ heading: obj.text, text: nextObj.text });
-          }
-        }
-        return acc;
-      }, []);
-    }
-
-    dispatch(
-      setRequestData({
-        companyName: 'Revent',
-        shape: name,
-        data: data,
-        title: title,
-        subTitle: subTitle,
-      })
-    );
-  }
+  
 
   elementData[1].onClick = () => {
     canvasRef.current?.add(title);

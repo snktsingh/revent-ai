@@ -45,6 +45,7 @@ export default function SlideList() {
         try {
           const imageURL = await getImg(canvas.canvas);
           urls.push(imageURL);
+          console.log({imageURL})
         } catch (error) {
           console.error(error);
           urls.push('error'); // Push placeholder for error cases
