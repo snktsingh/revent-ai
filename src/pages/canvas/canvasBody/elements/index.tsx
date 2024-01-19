@@ -1,14 +1,6 @@
-import React, { useState } from 'react';
-import { fabric } from 'fabric';
-import { Copy, DeleteX, AddPlus, imageIcon } from '@/constants/media';
 import { theme } from '@/constants/theme';
-import { handleInputSize, updateCanvasInList } from '@/redux/reducers/canvas';
-import { useAppDispatch } from '@/redux/store';
-import { IText } from 'fabric/fabric-impl';
-import { useListElement } from './listElement';
 import { IExtendedTextBoxOptions } from '@/interface/fabricTypes';
-
-
+import { fabric } from 'fabric';
 
 
 export default function useAllElements() {

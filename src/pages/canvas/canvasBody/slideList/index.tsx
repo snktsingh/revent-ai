@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { SlideContainer } from './style';
-import { Stack } from '@mui/material';
-import { ListSlideCard, SingleSliderContainer } from '../style';
-import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { getSlidekey } from '@/redux/reducers/slide';
 import { setActiveCanvas, setCanvas } from '@/redux/reducers/canvas';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { Stack } from '@mui/material';
 import { fabric } from 'fabric';
+import { useEffect, useState } from 'react';
+import { ListSlideCard, SingleSliderContainer } from '../style';
+import { SlideContainer } from './style';
 
 export default function SlideList() {
   const dispatch = useAppDispatch();

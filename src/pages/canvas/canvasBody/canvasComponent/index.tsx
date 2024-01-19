@@ -1,40 +1,31 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { fabric } from 'fabric';
+import { Canvas_Arrow } from '@/constants/media';
+import { theme } from '@/constants/theme';
+import {
+  updateCanvasInList
+} from '@/redux/reducers/canvas';
+import { toggleRegenerateButton } from '@/redux/reducers/slide';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { fabric } from 'fabric';
+import React, { useEffect, useRef } from 'react';
+import WebFont from 'webfontloader';
 import {
   ContentElements,
   ShapesData,
   colorChange,
   elementData,
 } from '../elementData';
-import { CanvasContainer } from './style';
-import useAllShapes from '../shapes';
 import useAllElements from '../elements';
-import { theme } from '@/constants/theme';
 import {
-  setActiveCanvas,
-  setCanvas,
-  setCanvasImageUrl,
-  setRequestData,
-  setShapeName,
-  setTempData,
-  updateCanvasInList,
-} from '@/redux/reducers/canvas';
-import WebFont from 'webfontloader';
-import FullscreenCanvas from './fullscreenCanvas';
-import { Canvas_Arrow } from '@/constants/media';
-import { toggleRegenerateButton } from '@/redux/reducers/slide';
-import {
-  useTableElement,
+  useCustomSelectionIcons,
+  useCycleElement,
+  useDelAndCopy,
+  useFunnelElement,
+  useImageElement,
+  useListElement,
   useProcessElement,
   usePyramidElement,
-  useCustomSelectionIcons,
-  useFunnelElement,
-  useCycleElement,
+  useTableElement,
   useTimelineElement,
-  useListElement,
-  useImageElement,
-  useDelAndCopy,
 } from '../elements/elementExports';
 import {
   useCanvasClickEvent,
@@ -42,7 +33,10 @@ import {
   useSelectionCreatedEvent,
   useTextEvents,
 } from '../events/eventExports';
+import useAllShapes from '../shapes';
 import { useCanvasComponent } from './container';
+import FullscreenCanvas from './fullscreenCanvas';
+import { CanvasContainer } from './style';
 
 const CanvasComponent: React.FC = () => {
   const canvasRef = useRef<fabric.Canvas | null>(null);

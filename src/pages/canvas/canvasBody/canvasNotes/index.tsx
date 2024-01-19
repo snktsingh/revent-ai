@@ -1,14 +1,9 @@
-import React from 'react';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { InputBase } from '@mui/material';
 import {
   AddNotesContainer,
-  NotesBodyContainer,
-  NotesHeading,
-  NotesHeadingContainer,
+  NotesBodyContainer
 } from './style';
-import { NotesIcon } from '@/constants/media';
-import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { toggleNotesSlide } from '@/redux/reducers/elements';
-import { Input, InputBase } from '@mui/material';
 
 export const CanvasNotes = () => {
   const dispatch = useAppDispatch();

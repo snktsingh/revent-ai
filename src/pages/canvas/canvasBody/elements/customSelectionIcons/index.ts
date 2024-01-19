@@ -1,13 +1,12 @@
 import { AddPlus, imageIcon } from '@/constants/media';
 import { fabric } from 'fabric';
 import {
-  useTableElement,
+  useCycleElement,
+  useFunnelElement,
+  useListElement,
   useProcessElement,
   usePyramidElement,
-  useFunnelElement,
-  useCycleElement,
-  useTimelineElement,
-  useListElement,
+  useTimelineElement
 } from '../elementExports';
 export const useCustomSelectionIcons = () => {
   const { addProcessSteps } = useProcessElement();

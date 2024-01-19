@@ -1,3 +1,9 @@
+import { Logo, varianButtonSvg } from '@/constants/media';
+import { VariantsType } from '@/interface/storeTypes';
+import { toggleVariantSlide } from '@/redux/reducers/elements';
+import { useAppDispatch } from '@/redux/store';
+import { Drawer } from '@mui/material';
+import useVariants from './container';
 import {
   ButtonContainer,
   DrawerBtnContainer,
@@ -12,13 +18,6 @@ import {
   VariantSlide,
   VariantSlideCard,
 } from './style';
-import { Drawer } from '@mui/material';
-import { useAppDispatch } from '@/redux/store';
-import { toggleVariantSlide } from '@/redux/reducers/elements';
-import { Logo, varianButtonSvg } from '@/constants/media';
-import { VariantsType } from '@/redux/thunk/thunk';
-import useVariants from './container';
-import { useEffect } from 'react';
 
 export const CanvasVariant = () => {
   const dispatch = useAppDispatch();
