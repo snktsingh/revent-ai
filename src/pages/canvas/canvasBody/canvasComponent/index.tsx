@@ -303,13 +303,7 @@ const CanvasComponent: React.FC = () => {
       (element as any).set('fontSize', size);
     }
     canvasRef.current?.renderAll();
-    const updatedCanvas = canvasRef.current?.toObject([
-      'listType',
-      'listBullet',
-      'listCounter',
-      'name',
-      'className',
-    ]);
+    const updatedCanvas = canvasRef.current?.toObject(customFabricProperties);
     const id = canvasJS.id;
     dispatch(updateCanvasInList({ id, updatedCanvas }));
   };
@@ -326,13 +320,7 @@ const CanvasComponent: React.FC = () => {
             (element as any).set('fontFamily', fontFamily);
           }
           canvasRef.current?.renderAll();
-          const updatedCanvas = canvasRef.current?.toObject([
-            'listType',
-            'listBullet',
-            'listCounter',
-            'name',
-            'className',
-          ]);
+          const updatedCanvas = canvasRef.current?.toObject(customFabricProperties);
           const id = canvasJS.id;
           dispatch(updateCanvasInList({ id, updatedCanvas }));
         }
@@ -342,12 +330,12 @@ const CanvasComponent: React.FC = () => {
 
   
 
-  elementData[1].onClick = () => {
-    canvasRef.current?.add(title);
-    title.selectAll();
-    canvasRef.current?.setActiveObject(title);
-    canvasRef.current?.renderAll();
-  };
+  // elementData[1].onClick = () => {
+  //   canvasRef.current?.add(title);
+  //   title.selectAll();
+  //   canvasRef.current?.setActiveObject(title);
+  //   canvasRef.current?.renderAll();
+  // };
 
   elementData[2].onClick = () => {
     canvasRef.current?.add(subtitle);
@@ -392,13 +380,7 @@ const CanvasComponent: React.FC = () => {
     const selectedObject = canvasRef.current?.getActiveObject();
     const canvas = canvasRef.current;
     ColorFillForObjects(selectedObject, canvas, color);
-    const updatedCanvas = canvasRef.current?.toObject([
-      'listType',
-      'listBullet',
-      'listCounter',
-      'name',
-      'className',
-    ]);
+    const updatedCanvas = canvasRef.current?.toObject(customFabricProperties);
     const id = canvasJS.id;
     dispatch(updateCanvasInList({ id, updatedCanvas }));
   };
@@ -407,13 +389,7 @@ const CanvasComponent: React.FC = () => {
     const selectedObject = canvasRef.current?.getActiveObject();
     const canvas = canvasRef.current;
     ColorForText(selectedObject, canvas, textColor);
-    const updatedCanvas = canvasRef.current?.toObject([
-      'listType',
-      'listBullet',
-      'listCounter',
-      'name',
-      'className',
-    ]);
+    const updatedCanvas = canvasRef.current?.toObject(customFabricProperties);
     const id = canvasJS.id;
     dispatch(updateCanvasInList({ id, updatedCanvas }));
   };
@@ -422,13 +398,7 @@ const CanvasComponent: React.FC = () => {
     const selectedObject = canvasRef.current?.getActiveObject();
     const canvas = canvasRef.current;
     ColorForBorder(selectedObject, canvas, borderColor);
-    const updatedCanvas = canvasRef.current?.toObject([
-      'listType',
-      'listBullet',
-      'listCounter',
-      'name',
-      'className',
-    ]);
+    const updatedCanvas = canvasRef.current?.toObject(customFabricProperties);
     const id = canvasJS.id;
     dispatch(updateCanvasInList({ id, updatedCanvas }));
   };
