@@ -68,17 +68,7 @@ const CanvasComponent: React.FC = () => {
    } = useCanvasComponent();
 
   const dispatch = useAppDispatch();
-  const {
-    addRectangle,
-    addCircle,
-    addTriangle,
-    addRightArrow,
-    addStar,
-    addLine,
-    addLeftArrow,
-    addHexagon,
-    addPolygon,
-  } = useAllShapes();
+  
 
   const {
     title,
@@ -356,76 +346,7 @@ const CanvasComponent: React.FC = () => {
     dispatch(updateCanvasInList({ id, updatedCanvas }));
   };
 
-  ShapesData[0].onClick = () => {
-    if (canvasRef.current) {
-      canvasRef.current.add(addRectangle);
-      canvasRef.current.renderAll();
-    }
-  };
-  ShapesData[1].onClick = () => {
-    if (canvasRef.current) {
-      fabric.loadSVGFromString(Canvas_Arrow, (objects, options) => {
-        const obj = fabric.util.groupSVGElements(objects, options);
-        obj.top = 100;
-        obj.left = 120;
-        canvasRef.current?.add(obj);
-        canvasRef.current?.renderAll();
-      });
-    }
-  };
-
-  ShapesData[2].onClick = () => {
-    if (canvasRef.current) {
-      canvasRef.current.add(addLine);
-      canvasRef.current.renderAll();
-    }
-  };
-
-  ShapesData[3].onClick = () => {
-    if (canvasRef.current) {
-      canvasRef.current.add(addCircle);
-      canvasRef.current.renderAll();
-    }
-  };
-
-  ShapesData[4].onClick = () => {
-    if (canvasRef.current) {
-      canvasRef.current.add(addTriangle);
-      canvasRef.current.renderAll();
-    }
-  };
-  ShapesData[5].onClick = () => {
-    if (canvasRef.current) {
-      canvasRef.current.add(addStar);
-      canvasRef.current.renderAll();
-    }
-  };
-
-  ShapesData[6].onClick = () => {
-    if (canvasRef.current) {
-      canvasRef.current.add(addRightArrow);
-      canvasRef.current.renderAll();
-    }
-  };
-
-  ShapesData[7].onClick = () => {
-    if (canvasRef.current) {
-      canvasRef.current.add(addLeftArrow);
-      canvasRef.current.renderAll();
-    }
-  };
-
-  ShapesData[8].onClick = () => {
-    if (canvasRef.current) {
-      canvasRef.current?.add(addHexagon);
-    }
-  };
-  ShapesData[9].onClick = () => {
-    if (canvasRef.current) {
-      canvasRef.current?.add(addPolygon);
-    }
-  };
-
+  
   ContentElements.handleBold = () => {
     let activeObj = canvasRef.current?.getActiveObjects() as any;
     const canvas = canvasRef.current;

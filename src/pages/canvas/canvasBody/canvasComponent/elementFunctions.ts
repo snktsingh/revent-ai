@@ -1,7 +1,9 @@
 import { fabric } from "fabric";
-import { elementData } from "../elementData";
+import { ShapesData, elementData } from "../elementData";
 import useAllElements from "../elements";
 import { useListElement, useImageElement } from "../elements/elementExports";
+import useAllShapes from "../shapes";
+import { Canvas_Arrow } from "@/constants/media";
 
 export const useElementFunctions = (canvas : fabric.Canvas | null ) => {
 
@@ -12,6 +14,18 @@ export const useElementFunctions = (canvas : fabric.Canvas | null ) => {
         BulletText,
         addQuotes
     } = useAllElements();
+
+    const {
+        addRectangle,
+        addCircle,
+        addTriangle,
+        addRightArrow,
+        addStar,
+        addLine,
+        addLeftArrow,
+        addHexagon,
+        addPolygon,
+      } = useAllShapes();
 
     const { addListElement } = useListElement();
     const { imageUploader } = useImageElement();
@@ -61,5 +75,78 @@ export const useElementFunctions = (canvas : fabric.Canvas | null ) => {
       elementData[8].onClick = () => {
         addListElement(canvas, 33, 23);
       };
+
+
+
+      ShapesData[0].onClick = () => {
+        if (canvas) {
+          canvas.add(addRectangle);
+          canvas.renderAll();
+        }
+      };
+      ShapesData[1].onClick = () => {
+        if (canvas) {
+          fabric.loadSVGFromString(Canvas_Arrow, (objects, options) => {
+            const obj = fabric.util.groupSVGElements(objects, options);
+            obj.top = 100;
+            obj.left = 120;
+            canvas?.add(obj);
+            canvas?.renderAll();
+          });
+        }
+      };
+    
+      ShapesData[2].onClick = () => {
+        if (canvas) {
+          canvas.add(addLine);
+          canvas.renderAll();
+        }
+      };
+    
+      ShapesData[3].onClick = () => {
+        if (canvas) {
+          canvas.add(addCircle);
+          canvas.renderAll();
+        }
+      };
+    
+      ShapesData[4].onClick = () => {
+        if (canvas) {
+          canvas.add(addTriangle);
+          canvas.renderAll();
+        }
+      };
+      ShapesData[5].onClick = () => {
+        if (canvas) {
+          canvas.add(addStar);
+          canvas.renderAll();
+        }
+      };
+    
+      ShapesData[6].onClick = () => {
+        if (canvas) {
+          canvas.add(addRightArrow);
+          canvas.renderAll();
+        }
+      };
+    
+      ShapesData[7].onClick = () => {
+        if (canvas) {
+          canvas.add(addLeftArrow);
+          canvas.renderAll();
+        }
+      };
+    
+      ShapesData[8].onClick = () => {
+        if (canvas) {
+          canvas?.add(addHexagon);
+        }
+      };
+      ShapesData[9].onClick = () => {
+        if (canvas) {
+          canvas?.add(addPolygon);
+        }
+      };
+    
 
 }
