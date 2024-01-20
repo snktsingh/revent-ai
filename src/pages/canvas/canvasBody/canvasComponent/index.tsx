@@ -1,4 +1,3 @@
-import { Canvas_Arrow } from '@/constants/media';
 import { theme } from '@/constants/theme';
 import {
   updateCanvasInList
@@ -10,21 +9,12 @@ import React, { useEffect, useRef } from 'react';
 import WebFont from 'webfontloader';
 import {
   ContentElements,
-  ShapesData,
   colorChange
 } from '../elementData';
 import useAllElements from '../elements';
 import {
   useCustomSelectionIcons,
-  useCycleElement,
-  useDelAndCopy,
-  useFunnelElement,
-  useImageElement,
-  useListElement,
-  useProcessElement,
-  usePyramidElement,
-  useTableElement,
-  useTimelineElement,
+  useDelAndCopy
 } from '../elements/elementExports';
 import {
   useCanvasClickEvent,
@@ -32,7 +22,6 @@ import {
   useSelectionCreatedEvent,
   useTextEvents,
 } from '../events/eventExports';
-import useAllShapes from '../shapes';
 import { useCanvasComponent } from './container';
 import { useElementFunctions } from './elementFunctions';
 import FullscreenCanvas from './fullscreenCanvas';
@@ -46,12 +35,6 @@ const CanvasComponent: React.FC = () => {
   const ElementFunctions = useElementFunctions(canvasRef.current);
 
   const { handleAddCustomIcon } = useCustomSelectionIcons();
-  const { addTable } = useTableElement();
-  const { addProcess } = useProcessElement();
-  const { addPyramid } = usePyramidElement();
-  const { addFunnel } = useFunnelElement();
-  const { addCycle } = useCycleElement();
-  const { addTimeline } = useTimelineElement();
   const { CustomBorderIcons } = useDelAndCopy();
 
   const { handleObjectMoving } = useObjectMovingEvent();
@@ -363,38 +346,7 @@ const CanvasComponent: React.FC = () => {
     handleUnderLine(activeObj, canvas);
   };
 
-  //fabric table
-  const canvas = canvasRef.current;
-  ContentElements.handleOpenTable = (
-    rows: number,
-    cols: number,
-    cellWidth: number,
-    cellHeight: number
-  ) => {
-    addTable(rows, cols, cellWidth, cellHeight, canvas);
-  };
-
-  //fabric Funnel
-  ContentElements.handleFunnel = () => {
-    addFunnel(canvas);
-  };
-
-  //fabric Pyramid
-  ContentElements.handlePyramid = () => {
-    addPyramid(canvas);
-  };
-  //addCycle
-  ContentElements.handleCycle = (levels: number) => {
-    addCycle(canvas);
-  };
-  //addTimeline
-  ContentElements.handleTimeline = () => {
-    addTimeline(canvas);
-  };
-  //addProcess
-  ContentElements.handleProcess = () => {
-    addProcess(canvas);
-  };
+ 
 
   return (
     <CanvasContainer ref={Container}>
