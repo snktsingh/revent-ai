@@ -1,17 +1,8 @@
 import { theme } from '@/constants/theme';
-import {
-  updateCanvasInList
-} from '@/redux/reducers/canvas';
 import { toggleRegenerateButton } from '@/redux/reducers/slide';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { fabric } from 'fabric';
 import React, { useEffect, useRef } from 'react';
-import WebFont from 'webfontloader';
-import {
-  ContentElements,
-  colorChange
-} from '../elementData';
-import useAllElements from '../elements';
 import {
   useCustomSelectionIcons,
   useDelAndCopy
@@ -43,7 +34,6 @@ const CanvasComponent: React.FC = () => {
   const { CanvasClick } = useCanvasClickEvent();
 
   const { 
-    handleAllElements, 
     updateCanvasDimensions,
     updateCanvasSlideData,
     getElementsData,
@@ -52,76 +42,11 @@ const CanvasComponent: React.FC = () => {
 
   const dispatch = useAppDispatch();
   
-
-  const {
-    title,
-    subtitle,
-    heading,
-    paragraph,
-    BulletText,
-    addQuotes,
-    ColorFillForObjects,
-    ColorForText,
-    ColorForBorder,
-    handleBold,
-    handleItalic,
-    handleUnderLine,
-  } = useAllElements();
-
-  const {
-    color,
-    textColor,
-    borderColor,
-    canvasJS,
-    canvasList,
-    size,
-    requestData,
-    tempData,
-    canvasImage,
-  } = useAppSelector(state => state.canvas);
+  const { canvasJS, canvasImage } = useAppSelector(state => state.canvas);
 
   const { pptUrl, imageUrl, variants } = useAppSelector(state => state.thunk);
 
   const { itemKey } = useAppSelector(state => state.element);
-
-  // useEffect(() => {
-
-  //   for (let i = 0; i < tempData.length; i++) {
-  //     if (tempData[i].type === 'textbox' || tempData[i].type === 'i-text') {
-  //       if (
-  //         itemKey == 1 ||
-  //         itemKey == 2 ||
-  //         itemKey == 3 ||
-  //         itemKey == 4 ||
-  //         itemKey == 5
-  //       ) {
-
-  //         dispatch(setRequest([...requestData, { text: tempData[i].text }]));
-  //       } else if (itemKey == 15) {
-
-  //         dispatch(setShapeName('Pyramid'));
-  //         dispatch(setRequest([...requestData, { text: tempData[i].text }]));
-  //       } else if (itemKey == 14) {
-  //         dispatch(setShapeName('Funnel'));
-  //         dispatch(setRequest([...requestData, { text: tempData[i].text }]));
-  //       } else if (itemKey == 13) {
-  //         dispatch(setShapeName('Timeline'));
-  //         dispatch(setRequest([...requestData, { text: tempData[i].text }]));
-  //       } else if (itemKey == 12) {
-  //         dispatch(setShapeName('Process'));
-  //         dispatch(setRequest([...requestData, { text: tempData[i].text }]));
-  //       } else if (itemKey == 11) {
-  //         dispatch(setShapeName('Cycle'));
-  //         dispatch(setRequest([...requestData, { text: tempData[i].text }]));
-  //       }
-
-  //     }
-  //   }
-  // }, [tempData]);
-
- 
-
- 
 
   useEffect(() => {
     const newCanvas = new fabric.Canvas('canvas');
@@ -268,85 +193,7 @@ const CanvasComponent: React.FC = () => {
     canvasRef.current?.height,
   ]);
 
-  ContentElements.handleFontSize = () => {
-    const element = canvasRef.current?.getActiveObject();
-
-    if (element?.type == 'text' || element?.type == 'textbox') {
-      (element as any).set('fontSize', size);
-    }
-    canvasRef.current?.renderAll();
-    const updatedCanvas = canvasRef.current?.toObject(customFabricProperties);
-    const id = canvasJS.id;
-    dispatch(updateCanvasInList({ id, updatedCanvas }));
-  };
-
-  ContentElements.handleFontFamily = (fontFamily: string) => {
-    WebFont.load({
-      google: {
-        families: [fontFamily],
-      },
-      active: () => {
-        if (canvasRef.current) {
-          const element = canvasRef.current?.getActiveObject();
-          if (element?.type == 'text' || element?.type == 'textbox') {
-            (element as any).set('fontFamily', fontFamily);
-          }
-          canvasRef.current?.renderAll();
-          const updatedCanvas = canvasRef.current?.toObject(customFabricProperties);
-          const id = canvasJS.id;
-          dispatch(updateCanvasInList({ id, updatedCanvas }));
-        }
-      },
-    });
-  };
-
   
-
-  colorChange.colorFillChange = () => {
-    const selectedObject = canvasRef.current?.getActiveObject();
-    const canvas = canvasRef.current;
-    ColorFillForObjects(selectedObject, canvas, color);
-    const updatedCanvas = canvasRef.current?.toObject(customFabricProperties);
-    const id = canvasJS.id;
-    dispatch(updateCanvasInList({ id, updatedCanvas }));
-  };
-
-  colorChange.colorTextChange = () => {
-    const selectedObject = canvasRef.current?.getActiveObject();
-    const canvas = canvasRef.current;
-    ColorForText(selectedObject, canvas, textColor);
-    const updatedCanvas = canvasRef.current?.toObject(customFabricProperties);
-    const id = canvasJS.id;
-    dispatch(updateCanvasInList({ id, updatedCanvas }));
-  };
-
-  colorChange.colorBorderChange = () => {
-    const selectedObject = canvasRef.current?.getActiveObject();
-    const canvas = canvasRef.current;
-    ColorForBorder(selectedObject, canvas, borderColor);
-    const updatedCanvas = canvasRef.current?.toObject(customFabricProperties);
-    const id = canvasJS.id;
-    dispatch(updateCanvasInList({ id, updatedCanvas }));
-  };
-
-  
-  ContentElements.handleBold = () => {
-    let activeObj = canvasRef.current?.getActiveObjects() as any;
-    const canvas = canvasRef.current;
-    handleBold(activeObj, canvas);
-  };
-  ContentElements.handleItalic = () => {
-    let activeObj = canvasRef.current?.getActiveObjects() as any;
-    const canvas = canvasRef.current;
-    handleItalic(activeObj, canvas);
-  };
-  ContentElements.handleUnderlIne = () => {
-    let activeObj = canvasRef.current?.getActiveObjects() as any;
-    const canvas = canvasRef.current;
-    handleUnderLine(activeObj, canvas);
-  };
-
- 
 
   return (
     <CanvasContainer ref={Container}>

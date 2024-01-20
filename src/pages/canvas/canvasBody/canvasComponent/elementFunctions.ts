@@ -1,13 +1,52 @@
 import { fabric } from 'fabric';
-import { ContentElements, ShapesData, elementData } from '../elementData';
+import {
+  ContentElements,
+  ShapesData,
+  colorChange,
+  elementData,
+} from '../elementData';
 import useAllElements from '../elements';
-import { useListElement, useImageElement, useTableElement, useProcessElement, usePyramidElement, useFunnelElement, useCycleElement, useTimelineElement } from '../elements/elementExports';
+import {
+  useListElement,
+  useImageElement,
+  useTableElement,
+  useProcessElement,
+  usePyramidElement,
+  useFunnelElement,
+  useCycleElement,
+  useTimelineElement,
+} from '../elements/elementExports';
 import useAllShapes from '../shapes';
 import { Canvas_Arrow } from '@/constants/media';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import WebFont from 'webfontloader';
+import { updateCanvasInList } from '@/redux/reducers/canvas';
+import { useCanvasComponent } from './container';
 
 export const useElementFunctions = (canvas: fabric.Canvas | null) => {
-  const { title, subtitle, paragraph, BulletText, addQuotes } =
-    useAllElements();
+  const dispatch = useAppDispatch();
+  const { 
+    canvasJS, 
+    color,
+    textColor,
+    borderColor,
+    size, 
+} = useAppSelector(state => state.canvas);
+
+  const { customFabricProperties } = useCanvasComponent();
+  const {
+    title,
+    subtitle,
+    paragraph,
+    BulletText,
+    addQuotes,
+    ColorFillForObjects,
+    ColorForText,
+    ColorForBorder,
+    handleBold,
+    handleItalic,
+    handleUnderLine,
+  } = useAllElements();
 
   const {
     addRectangle,
@@ -176,5 +215,74 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
   //addProcess
   ContentElements.handleProcess = () => {
     addProcess(canvas);
+  };
+
+  ContentElements.handleFontSize = () => {
+    const element = canvas?.getActiveObject();
+
+    if (element?.type == 'text' || element?.type == 'textbox') {
+      (element as any).set('fontSize', size);
+    }
+    canvas?.renderAll();
+    const updatedCanvas = canvas?.toObject(customFabricProperties);
+    const id = canvasJS.id;
+    dispatch(updateCanvasInList({ id, updatedCanvas }));
+  };
+
+  ContentElements.handleFontFamily = (fontFamily: string) => {
+    WebFont.load({
+      google: {
+        families: [fontFamily],
+      },
+      active: () => {
+        if (canvas) {
+          const element = canvas?.getActiveObject();
+          if (element?.type == 'text' || element?.type == 'textbox') {
+            (element as any).set('fontFamily', fontFamily);
+          }
+          canvas?.renderAll();
+          const updatedCanvas = canvas?.toObject(customFabricProperties);
+          const id = canvasJS.id;
+          dispatch(updateCanvasInList({ id, updatedCanvas }));
+        }
+      },
+    });
+  };
+
+  colorChange.colorFillChange = () => {
+    const selectedObject = canvas?.getActiveObject();
+    ColorFillForObjects(selectedObject, canvas, color);
+    const updatedCanvas = canvas?.toObject(customFabricProperties);
+    const id = canvasJS.id;
+    dispatch(updateCanvasInList({ id, updatedCanvas }));
+  };
+
+  colorChange.colorTextChange = () => {
+    const selectedObject = canvas?.getActiveObject();
+    ColorForText(selectedObject, canvas, textColor);
+    const updatedCanvas = canvas?.toObject(customFabricProperties);
+    const id = canvasJS.id;
+    dispatch(updateCanvasInList({ id, updatedCanvas }));
+  };
+
+  colorChange.colorBorderChange = () => {
+    const selectedObject = canvas?.getActiveObject();
+    ColorForBorder(selectedObject, canvas, borderColor);
+    const updatedCanvas = canvas?.toObject(customFabricProperties);
+    const id = canvasJS.id;
+    dispatch(updateCanvasInList({ id, updatedCanvas }));
+  };
+
+  ContentElements.handleBold = () => {
+    let activeObj = canvas?.getActiveObjects() as any;
+    handleBold(activeObj, canvas);
+  };
+  ContentElements.handleItalic = () => {
+    let activeObj = canvas?.getActiveObjects() as any;
+    handleItalic(activeObj, canvas);
+  };
+  ContentElements.handleUnderlIne = () => {
+    let activeObj = canvas?.getActiveObjects() as any;
+    handleUnderLine(activeObj, canvas);
   };
 };
