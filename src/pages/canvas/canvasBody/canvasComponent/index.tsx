@@ -11,8 +11,7 @@ import WebFont from 'webfontloader';
 import {
   ContentElements,
   ShapesData,
-  colorChange,
-  elementData,
+  colorChange
 } from '../elementData';
 import useAllElements from '../elements';
 import {
@@ -35,6 +34,7 @@ import {
 } from '../events/eventExports';
 import useAllShapes from '../shapes';
 import { useCanvasComponent } from './container';
+import { useElementFunctions } from './elementFunctions';
 import FullscreenCanvas from './fullscreenCanvas';
 import { CanvasContainer } from './style';
 
@@ -43,7 +43,8 @@ const CanvasComponent: React.FC = () => {
   const FabricRef = useRef<fabric.Canvas | null>(null);
   const Container = useRef<HTMLDivElement | null>(null);
 
-  
+  const ElementFunctions = useElementFunctions(canvasRef.current);
+
   const { handleAddCustomIcon } = useCustomSelectionIcons();
   const { addTable } = useTableElement();
   const { addProcess } = useProcessElement();
@@ -51,8 +52,6 @@ const CanvasComponent: React.FC = () => {
   const { addFunnel } = useFunnelElement();
   const { addCycle } = useCycleElement();
   const { addTimeline } = useTimelineElement();
-  const { addListElement } = useListElement();
-  const { imageUploader } = useImageElement();
   const { CustomBorderIcons } = useDelAndCopy();
 
   const { handleObjectMoving } = useObjectMovingEvent();
@@ -329,52 +328,6 @@ const CanvasComponent: React.FC = () => {
   };
 
   
-
-  // elementData[1].onClick = () => {
-  //   canvasRef.current?.add(title);
-  //   title.selectAll();
-  //   canvasRef.current?.setActiveObject(title);
-  //   canvasRef.current?.renderAll();
-  // };
-
-  elementData[2].onClick = () => {
-    canvasRef.current?.add(subtitle);
-    subtitle.selectAll();
-    canvasRef.current?.setActiveObject(subtitle);
-    canvasRef.current?.renderAll();
-  };
-
-  // elementData[3].onClick = () => {
-  //   canvasRef.current?.add(heading);
-  //   heading.selectAll();
-  //   canvasRef.current?.setActiveObject(heading);
-  //   canvasRef.current?.renderAll();
-  // };
-
-  elementData[3].onClick = () => {
-    canvasRef.current?.add(paragraph);
-    paragraph.selectAll();
-    canvasRef.current?.setActiveObject(paragraph);
-    canvasRef.current?.renderAll();
-  };
-
-  elementData[4].onClick = () => {
-    canvasRef.current?.add(BulletText);
-  };
-
-  elementData[5].onClick = () => {
-    imageUploader(canvas);
-  };
-  elementData[7].onClick = () => {
-    let text = addQuotes();
-    canvasRef.current?.add(text);
-    canvasRef.current?.setActiveObject(text);
-    text?.enterEditing();
-    canvas?.renderAll();
-  };
-  elementData[8].onClick = () => {
-    addListElement(canvas, 33, 23);
-  };
 
   colorChange.colorFillChange = () => {
     const selectedObject = canvasRef.current?.getActiveObject();
