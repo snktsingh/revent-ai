@@ -16,6 +16,7 @@ import {
   useCycleElement,
   useTimelineElement,
   useQuoteElement,
+  useBulletOrNumberedText,
 } from '../elements/elementExports';
 import useAllShapes from '../shapes';
 import { Canvas_Arrow } from '@/constants/media';
@@ -39,7 +40,6 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
     title,
     subtitle,
     paragraph,
-    BulletText,
     ColorFillForObjects,
     ColorForText,
     ColorForBorder,
@@ -69,6 +69,7 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
   const { addCycle } = useCycleElement();
   const { addTimeline } = useTimelineElement();
   const { addQuotes } = useQuoteElement();
+  const { BulletText } = useBulletOrNumberedText();
 
   elementData[1].onClick = () => {
     canvas?.add(title);

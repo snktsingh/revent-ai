@@ -9,6 +9,7 @@ import { useListElement } from './listElement';
 import { useImageElement } from './imageElement';
 import { useDelAndCopy } from './deleteAndCopyElements';
 import { useQuoteElement } from './quoteElement';
+import { useBulletOrNumberedText } from './BulletOrNumberElement';
 
 export {
     useTableElement,
@@ -21,5 +22,6 @@ export {
     useListElement,
     useImageElement,
     useDelAndCopy,
-    useQuoteElement
+    useQuoteElement,
+    useBulletOrNumberedText
 };

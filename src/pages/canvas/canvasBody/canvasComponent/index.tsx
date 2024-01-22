@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { fabric } from 'fabric';
 import React, { useEffect, useRef } from 'react';
 import {
+  useBulletOrNumberedText,
   useCustomSelectionIcons,
   useDelAndCopy
 } from '../elements/elementExports';
@@ -17,6 +18,7 @@ import { useCanvasComponent } from './container';
 import { useElementFunctions } from './elementFunctions';
 import FullscreenCanvas from './fullscreenCanvas';
 import { CanvasContainer } from './style';
+import { IExtendedTextBoxOptions } from '@/interface/fabricTypes';
 
 const CanvasComponent: React.FC = () => {
   const canvasRef = useRef<fabric.Canvas | null>(null);
@@ -27,7 +29,7 @@ const CanvasComponent: React.FC = () => {
 
   const { handleAddCustomIcon } = useCustomSelectionIcons();
   const { CustomBorderIcons } = useDelAndCopy();
-
+  const { renderBulletOrNumTextLine} = useBulletOrNumberedText()
   const { handleObjectMoving } = useObjectMovingEvent();
   const { handleSelectionCreated } = useSelectionCreatedEvent();
   const { textExitedEvent } = useTextEvents();
@@ -73,6 +75,14 @@ const CanvasComponent: React.FC = () => {
         newCanvas.selectionLineWidth = 0.5;
 
         CustomBorderIcons(newCanvas);
+
+        newCanvas.forEachObject((obj)=>{
+          if(obj){
+            if((obj as IExtendedTextBoxOptions)?.listType == 'bullet') {
+              (obj as IExtendedTextBoxOptions)._renderTextLine = renderBulletOrNumTextLine;
+            }
+          }
+        })
 
         newCanvas.on('mouse:up', event => {
           CanvasClick(newCanvas, event);
