@@ -21,7 +21,7 @@ export function useTextEvents(){
             canvas.renderAll()
           }
         }
-      }
+      };
     
       const textExitedEvent = (canvas: fabric.Canvas, object: fabric.Textbox | fabric.Text | fabric.IText) => {
     
@@ -67,6 +67,6 @@ export function useTextEvents(){
             break;
         }
         console.log(textBox)
-      }
+      };
     return { textEnteringEvent, textExitedEvent };
 }

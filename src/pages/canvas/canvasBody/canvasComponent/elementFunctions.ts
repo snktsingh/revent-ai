@@ -15,6 +15,7 @@ import {
   useFunnelElement,
   useCycleElement,
   useTimelineElement,
+  useQuoteElement,
 } from '../elements/elementExports';
 import useAllShapes from '../shapes';
 import { Canvas_Arrow } from '@/constants/media';
@@ -39,7 +40,6 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
     subtitle,
     paragraph,
     BulletText,
-    addQuotes,
     ColorFillForObjects,
     ColorForText,
     ColorForBorder,
@@ -68,6 +68,7 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
   const { addFunnel } = useFunnelElement();
   const { addCycle } = useCycleElement();
   const { addTimeline } = useTimelineElement();
+  const { addQuotes } = useQuoteElement();
 
   elementData[1].onClick = () => {
     canvas?.add(title);
@@ -105,10 +106,7 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
     imageUploader(canvas);
   };
   elementData[7].onClick = () => {
-    let text = addQuotes();
-    canvas?.add(text);
-    canvas?.setActiveObject(text);
-    text?.enterEditing();
+    addQuotes(canvas);
     canvas?.renderAll();
   };
   elementData[8].onClick = () => {

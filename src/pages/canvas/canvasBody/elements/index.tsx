@@ -216,25 +216,6 @@ export default function useAllElements() {
     }
   };
 
-  //*****************************************************Quotes element**********************************************************
-
-  const addQuotes = () => {
-    let text = new fabric.IText('❝Click to add a quote❞', {
-      left: 150,
-      top: 200,
-      width: 300,
-      height: 40,
-      fill: 'black',
-      fontSize: 28,
-      hasRotatingPoint: false,
-      selectable: true,
-      name: 'quotes',
-      cursorColor: theme.colorSchemes.light.palette.primary.main,
-      type: 'textbox',
-    });
-
-    return text;
-  };  
 
 
 
@@ -244,7 +225,6 @@ export default function useAllElements() {
     heading,
     paragraph,
     BulletText,
-    addQuotes,
     ColorFillForObjects,
     ColorForText,
     ColorForBorder,
