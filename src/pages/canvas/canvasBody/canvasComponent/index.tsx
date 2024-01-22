@@ -46,8 +46,6 @@ const CanvasComponent: React.FC = () => {
 
   const { pptUrl, imageUrl, variants } = useAppSelector(state => state.thunk);
 
-  const { itemKey } = useAppSelector(state => state.element);
-
   useEffect(() => {
     const newCanvas = new fabric.Canvas('canvas');
 

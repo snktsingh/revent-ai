@@ -9,6 +9,7 @@ export function useTextEvents(){
             // Clear the placeholder text and make it selectable
             textBox.text = '';
             // Set focus on the textbox
+            textBox.enterEditing();
             textBox.set({
               fill: theme.colorSchemes.light.palette.common.black
             })
