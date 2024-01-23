@@ -1,9 +1,7 @@
+import { IListofSlides } from '@/interface/storeTypes';
 import { createSlice } from '@reduxjs/toolkit';
 
-interface IListofSlides {
-  key: number;
-  name: string;
-}
+
 export interface TestState {
   listOfSlides: IListofSlides[];
   slideKey: number;

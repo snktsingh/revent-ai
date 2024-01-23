@@ -9,6 +9,7 @@ export function useTextEvents(){
             // Clear the placeholder text and make it selectable
             textBox.text = '';
             // Set focus on the textbox
+            textBox.enterEditing();
             textBox.set({
               fill: theme.colorSchemes.light.palette.common.black
             })
@@ -20,7 +21,7 @@ export function useTextEvents(){
             canvas.renderAll()
           }
         }
-      }
+      };
     
       const textExitedEvent = (canvas: fabric.Canvas, object: fabric.Textbox | fabric.Text | fabric.IText) => {
     
@@ -66,6 +67,6 @@ export function useTextEvents(){
             break;
         }
         console.log(textBox)
-      }
+      };
     return { textEnteringEvent, textExitedEvent };
 }

@@ -8,6 +8,8 @@ import { useTimelineElement } from './timelineElement';
 import { useListElement } from './listElement';
 import { useImageElement } from './imageElement';
 import { useDelAndCopy } from './deleteAndCopyElements';
+import { useQuoteElement } from './quoteElement';
+import { useBulletOrNumberedText } from './BulletOrNumberElement';
 
 export {
     useTableElement,
@@ -19,5 +21,7 @@ export {
     useTimelineElement,
     useListElement,
     useImageElement,
-    useDelAndCopy
+    useDelAndCopy,
+    useQuoteElement,
+    useBulletOrNumberedText
 };

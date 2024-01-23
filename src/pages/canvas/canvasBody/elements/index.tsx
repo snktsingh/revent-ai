@@ -1,23 +1,5 @@
-import React, { useState } from 'react';
 import { fabric } from 'fabric';
-import { Copy, DeleteX, AddPlus, imageIcon } from '@/constants/media';
-import { theme } from '@/constants/theme';
-import { handleInputSize, updateCanvasInList } from '@/redux/reducers/canvas';
-import { useAppDispatch } from '@/redux/store';
-import { IText } from 'fabric/fabric-impl';
-import { useListElement } from './listElement';
 
-export interface IExtendedTextboxOptions extends fabric.ITextboxOptions {
-  listType?: string;
-  listBullet?: string;
-  listCounter?: number;
-  _renderTextLine?: Function;
-}
-
-export interface RectContainer extends fabric.Rect {
-  id: string;
-  name: string;
-}
 export default function useAllElements() {
  
   const title = new fabric.Textbox('Click to add a title', {
@@ -81,71 +63,9 @@ export default function useAllElements() {
     this.fontSize = newFontSize;
   });
 
-  const text = `Click to add a bullet point`;
-
-  const renderTextLine = function (
-    this: any,
-    method: any,
-    ctx: any,
-    line: any,
-    left: any,
-    top: any,
-    lineIndex: any
-  ) {
-    const style0 = this.getCompleteStyleDeclaration(lineIndex, 0);
-
-    // Determine the list type
-    const bullet =
-      this.listType === 'numbered'
-        ? [this.listCounter + '.']
-        : [this.listBullet];
-
-    const bulletLeft = left - style0.fontSize - 2;
-
-    if (line.length) {
-      if (!this.isWrapping) {
-        this._renderChars(method, ctx, bullet, bulletLeft, top, lineIndex);
-        this.isWrapping = !this.isEndOfWrapping(lineIndex);
-        if (!this.isWrapping) {
-          if (this.listType === 'numbered') {
-            this.listCounter++;
-          }
-        }
-      } else if (this.isEndOfWrapping(lineIndex)) {
-        this.isWrapping = false;
-        if (this.listType === 'numbered') {
-          this.listCounter++;
-        }
-      }
-    }
-
-    if (lineIndex === this.textLines.length - 1) {
-      this.isWrapping = false;
-      this.listCounter = 1;
-    }
-
-    this._renderChars(method, ctx, line, left, top, lineIndex);
-  };
-
-  const BulletText = new fabric.Textbox(text, {
-    fontFamily: 'sans-serif',
-    lineHeight: 1.4,
-    left: 50,
-    top: 50,
-    width: 450,
-    fontSize: 20,
-    objectCaching: false,
-    isWrapping: false,
-    listType: 'bullet',
-    listBullet: '\u2022',
-    listCounter: 0,
-    name: 'bullet',
-    fill: '#404040'
-  } as IExtendedTextboxOptions);
-  BulletText._renderTextLine = renderTextLine;
 
 
-
+ 
   const ColorFillForObjects = (
     selectedObject: fabric.Object | null | undefined,
     canvas: fabric.Canvas | null,
@@ -231,35 +151,12 @@ export default function useAllElements() {
     }
   };
 
-  //*****************************************************Quotes element**********************************************************
-
-  const addQuotes = () => {
-    let text = new fabric.IText('❝Click to add a quote❞', {
-      left: 150,
-      top: 200,
-      width: 300,
-      height: 40,
-      fill: 'black',
-      fontSize: 28,
-      hasRotatingPoint: false,
-      selectable: true,
-      name: 'quotes',
-      cursorColor: theme.colorSchemes.light.palette.primary.main,
-      type: 'textbox',
-    });
-
-    return text;
-  };  
-
-
 
   return {
     title,
     subtitle,
     heading,
     paragraph,
-    BulletText,
-    addQuotes,
     ColorFillForObjects,
     ColorForText,
     ColorForBorder,

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { fabric } from 'fabric';
-import { ContentElements } from '../../elementData';
-import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { setActiveCanvas, setCanvas } from '@/redux/reducers/canvas';
 import { theme } from '@/constants/theme';
+import { setActiveCanvas, setCanvas } from '@/redux/reducers/canvas';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { fabric } from 'fabric';
+import { useEffect, useState } from 'react';
+import { ContentElements } from '../../elementData';
 
 const FullscreenCanvas = () => {
     const [fullscreenCanvas, setFullscreenCanvas] = useState<fabric.Canvas | null>(null);

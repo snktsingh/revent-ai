@@ -49,7 +49,6 @@ import Templates from './templates';
 import { ThumbDownAltRounded, Widgets } from '@mui/icons-material';
 import CanvasComponent from './canvasComponent';
 import {
-  TableDetails,
   copyCanvasCopy,
   setCanvas,
   setOriginalSlide,
@@ -59,6 +58,7 @@ import {
 } from '@/redux/reducers/canvas';
 import { ToastContainer, toast } from 'react-toastify';
 import { fetchSlideImg } from '@/redux/thunk/thunk';
+import { TableDetails } from '@/interface/storeTypes';
 
 const CanvasBody = () => {
   const slide = useAppSelector(state => state.slide);
