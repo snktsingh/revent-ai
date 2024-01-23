@@ -17,9 +17,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         <BrowserRouter>
           <Auth0Provider
             domain="dev-qpotj6mrcodhw84w.us.auth0.com"
-            clientId="OyB6ngw5kRsG7BYQBl4LI93skFS7KnGT"
+            clientId="gLA2jBKZO9mYOZ9KNmnms5Qm9VMBG6O9"
             authorizationParams={{
-              redirect_uri: 'https://reventai.vercel.app/dashboard',
+              redirect_uri: window.location.origin + '/dashboard',
             }}
           >
             <Router />
