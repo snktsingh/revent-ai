@@ -13,8 +13,12 @@ import LoginImage from '../../assets/Login.gif';
 import Logo from '../../assets/logo.svg';
 import { CommonLink, CustomButton } from '@/styles/common-styles/style';
 import Link from '@mui/material/Link';
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const Login = () => {
+  const { loginWithRedirect } = useAuth0();
+
   return (
     <div>
       <Grid container>
@@ -63,11 +67,25 @@ const Login = () => {
                 fullWidth
               />
               <CommonLink>Forgot Password ?</CommonLink>
-              <CustomButton variant="contained" size="large" fullWidth>
-                <Link href="/dashboard" style={{ color: 'white' }}>
-                  Login
-                </Link>
+              <CustomButton
+                variant="contained"
+                size="large"
+                fullWidth
+                onClick={() => loginWithRedirect()}
+              >
+                Login
               </CustomButton>
+              {/* <GoogleOAuthProvider clientId="274064975268-8i9v2id2g6f0i9lt6lolehjpolcu41gh.apps.googleusercontent.com">
+                <GoogleLogin
+                  onSuccess={credentialResponse => {
+                    console.log(credentialResponse);
+                  }}
+                  onError={() => {
+                    console.log('Login Failed');
+                  }}
+                />
+              </GoogleOAuthProvider> */}
+
               <SignUp>
                 <Link href="/signup">
                   Not registered ? Create a new account
