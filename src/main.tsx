@@ -19,7 +19,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
             domain="dev-qpotj6mrcodhw84w.us.auth0.com"
             clientId="OyB6ngw5kRsG7BYQBl4LI93skFS7KnGT"
             authorizationParams={{
-              redirect_uri: 'http://localhost:3000/dashboard',
+              redirect_uri: 'https://reventai.vercel.app/dashboard',
             }}
           >
             <Router />
