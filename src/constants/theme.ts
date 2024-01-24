@@ -8,7 +8,7 @@ declare module '@mui/material/styles/createPalette' {
     buttonHover: string;
     border: string;
     subtitle: string;
-    steelBlue:string
+    steelBlue: string;
   }
 }
 
@@ -38,7 +38,7 @@ export const theme = extendTheme({
           buttonHover: '#5373BC',
           border: '#D9D9D9',
           subtitle: '#CCCCCC',
-          steelBlue: '#B0BCDE'
+          steelBlue: '#B0BCDE',
         },
         primary: {
           main: '#004FBA',

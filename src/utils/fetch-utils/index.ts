@@ -28,7 +28,7 @@ generateInstance.interceptors.response.use(
   },
   error => {
     const responseStatusCode = error.response;
-    toast.error('Request Timed Out');
+    toast.error(error.response.data.errorMessage);
     switch (responseStatusCode.status) {
       case 404: {
         toast.error('URL does not exist on specified resource');
