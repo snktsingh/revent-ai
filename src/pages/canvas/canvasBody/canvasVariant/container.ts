@@ -1,6 +1,5 @@
-import { setCanvas, setVariantImageAsMain } from '@/redux/reducers/canvas';
+import { setCanvas, setVariantImageAsMain, toggleSelectedOriginalCanvas } from '@/redux/reducers/canvas';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { swapMainCanvas } from '@/redux/thunk/thunk';
 import { fabric } from "fabric";
 import { useEffect, useState } from 'react';
 
@@ -9,17 +8,16 @@ const useVariants = () => {
   const [originalImageUrl,setOriginalImageUrl] = useState<string>('');
   const { openVariant } = useAppSelector(state => state.element);
   const { variants } = useAppSelector(state => state.thunk);
-  const { originalCanvasSlide } = useAppSelector(state => state.canvas);
+  const { originalCanvasSlide, canvasImage, selectedOriginalCanvas } = useAppSelector(state => state.canvas);
   const array: number[] = [1, 2, 3];
 
   const handleVariants = (CanvasURL: string, pptURL: string, index: number) => {
+    dispatch(toggleSelectedOriginalCanvas(false));
     dispatch(setVariantImageAsMain(CanvasURL));
-    dispatch(
-      swapMainCanvas({ canvasLink: CanvasURL, index: index, pptLink: pptURL })
-    );
   };
 
   const handleApplyOriginalAsMain = ()=>{
+    dispatch(toggleSelectedOriginalCanvas(true))
     dispatch(setCanvas({id:1,canvas:originalCanvasSlide}));
   };
 
@@ -57,6 +55,6 @@ const useVariants = () => {
   useEffect(()=>{
     getCanvasImageFromJSON(originalCanvasSlide);
   },[originalCanvasSlide]);
-  return { variants, array, openVariant, handleVariants, originalCanvasSlide, handleApplyOriginalAsMain, originalImageUrl };
+  return { variants, array, openVariant, handleVariants, originalCanvasSlide, handleApplyOriginalAsMain, originalImageUrl, canvasImage, selectedOriginalCanvas };
 };
 export default useVariants;

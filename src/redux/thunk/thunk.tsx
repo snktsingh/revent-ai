@@ -15,7 +15,7 @@ export const fetchSlideImg = createAsyncThunk(
   'slide/fetchimage-ppt',
   async (req: IShapeRequest, { dispatch }) => {
     const res = await FetchUtils.postRequest(`${ENDPOINT.GEN_PPT}`, req);
-    dispatch(setVariantImageAsMain(res.data.imageUrl));
+    dispatch(setVariantImageAsMain(res.data.variants[0].imagesUrl));
     console.log(res.data)
     return res.data;
   }
@@ -24,18 +24,7 @@ export const fetchSlideImg = createAsyncThunk(
 const thunkSlice = createSlice({
   name: 'singleSlideData',
   initialState,
-  reducers: {
-    swapMainCanvas(state, action) {
-      const { canvasLink, index, pptLink } = action.payload;
-      console.log(action.payload);
-      let variants = [...state.variants];
-      variants[index].pptUrl = state.pptUrl;
-      variants[index].imagesUrl = state.imageUrl;
-      state.imageUrl = canvasLink;
-      state.pptUrl = pptLink;
-      state.variants = variants;
-    },
-  },
+  reducers: {},
   extraReducers(builder) {
     builder
       .addCase(fetchSlideImg.pending, (state, action) => {
@@ -59,5 +48,4 @@ const thunkSlice = createSlice({
   },
 });
 
-export const { swapMainCanvas } = thunkSlice.actions;
 export default thunkSlice.reducer;

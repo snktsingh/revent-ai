@@ -28,6 +28,8 @@ export const CanvasVariant = () => {
     handleVariants,
     handleApplyOriginalAsMain,
     originalImageUrl,
+    canvasImage,
+    selectedOriginalCanvas
   } = useVariants();
 
   return (
@@ -62,7 +64,7 @@ export const CanvasVariant = () => {
             {originalImageUrl && (
               <>
                 <Text>Original Slide</Text>
-                <OriginalSlideCard onClick={handleApplyOriginalAsMain}>
+                <OriginalSlideCard onClick={handleApplyOriginalAsMain} className={selectedOriginalCanvas ? 'clicked-card' : ''}>
                   <img
                     src={originalImageUrl}
                     alt="image"
@@ -70,6 +72,7 @@ export const CanvasVariant = () => {
                       width: '100%',
                       height: '100%',
                       objectFit: 'cover',
+                      borderRadius:'3%'
                     }}
                   />
                 </OriginalSlideCard>
@@ -98,7 +101,7 @@ export const CanvasVariant = () => {
                       onClick={() => handleVariants(el.imagesUrl, el.pptUrl, i)}
                     >
                       <div>{i + 1}</div>
-                      <VariantSlideCard>
+                      <VariantSlideCard className={el.imagesUrl == canvasImage && !selectedOriginalCanvas ? 'clicked-card' : '' }>
                         <img
                           src={el.imagesUrl}
                           alt={`Variant ${i + 1}`}
@@ -106,6 +109,7 @@ export const CanvasVariant = () => {
                             width: '100%',
                             height: '100%',
                             objectFit: 'cover',
+                            borderRadius:'3%'
                           }}
                         />
                       </VariantSlideCard>

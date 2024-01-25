@@ -104,6 +104,10 @@ export const useCanvasComponent = () => {
         name = 'Process';
         data.push({ text: obj.text });
       }
+      if (obj.name === 'paragraphbox') {
+        name = 'Paragraph';
+        data.push({ text: obj.text });
+      }
 
       if (obj.name === 'TimeLineHeading') {
         name = 'Timeline';
