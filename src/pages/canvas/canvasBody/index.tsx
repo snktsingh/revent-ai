@@ -45,7 +45,7 @@ import {
 import React, { useState } from 'react';
 import { CanvasNotes } from './canvasNotes';
 import SlideList from './slideList';
-import Templates from './templates';
+import Templates from './themes';
 import { ThumbDownAltRounded, Widgets } from '@mui/icons-material';
 import CanvasComponent from './canvasComponent';
 import {
@@ -247,7 +247,11 @@ const CanvasBody = () => {
         </Grid>
         <Grid xs={8}>
           <EditSlideContainer>
-            <Stack direction="row" justifyContent="space-between" width={'91.51%'}>
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              width={'91.51%'}
+            >
               <span>
                 <IconButton onClick={() => dispatch(openModal())}>
                   <img src={Delete} />

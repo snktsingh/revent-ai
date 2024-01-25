@@ -25,7 +25,6 @@ import { ContentElements } from '../canvasBody/elementData';
 import { useAppSelector } from '@/redux/store';
 
 const MainCanvasHeader = () => {
-  const { handle } = useCanvas();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [anchorE2, setAnchorE2] = React.useState<null | HTMLElement>(null);
   const [openWarning, setOpenWarning] = React.useState(false);
@@ -61,7 +60,7 @@ const MainCanvasHeader = () => {
         </Stack>
       </MainIconButton>
       <Stack direction="row" spacing={1}></Stack>
-        <CanvasHeaderInput placeholder="Untitled presentation" />
+      <CanvasHeaderInput placeholder="Untitled presentation" />
       <Stack direction="row" spacing={1}>
         <MainIconButton>
           <Stack direction="row" spacing={1}>
