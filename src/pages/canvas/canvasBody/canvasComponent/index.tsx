@@ -196,9 +196,7 @@ const CanvasComponent: React.FC = () => {
     });
   }, [
     canvasImage,
-    imageUrl,
-    canvasRef.current?.width,
-    canvasRef.current?.height,
+    imageUrl
   ]);
 
   

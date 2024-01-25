@@ -17,6 +17,16 @@ export const useQuoteElement = () => {
       type: 'textbox',
     });
 
+    let authorText = new fabric.Textbox('- Optional Author Name',{
+      left: 258,
+      top: 250,
+      width: 250,
+      height: 20,
+      fill: 'black',
+      fontSize: 18,
+      name: 'quotesAuthor',
+    })
+
     const mainListContainer = new fabric.Rect({
       width: 200,
       height: 200,
@@ -45,7 +55,7 @@ export const useQuoteElement = () => {
 
 
 
-    canvas?.add(text,group)
+    canvas?.add(text,group,authorText)
   };  
   return { addQuotes };
 }

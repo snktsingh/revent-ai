@@ -10,6 +10,7 @@ export function useCanvasClickEvent() {
     event: fabric.IEvent<MouseEvent>
   ) {
     let object = event.target;
+    console.log(object)
     if (object) {
       textEnteringEvent(canvas, object as fabric.Text);
       if (object?.name === 'LIST_ELEMENT') {

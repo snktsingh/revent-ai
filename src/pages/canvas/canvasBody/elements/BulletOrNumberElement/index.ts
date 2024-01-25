@@ -19,16 +19,20 @@ export const useBulletOrNumberedText = () => {
         this.listType === 'numbered'
           ? [this.listCounter + '.']
           : [this.listBullet];
-        console.log({method, ctx, line, left, top, lineIndex})
       const bulletLeft = left - style0.fontSize - 2;
   
       if (line.length) {
         if (!this.isWrapping) {
-          this._renderChars(method, ctx, bullet, bulletLeft, top, lineIndex);
-          this.isWrapping = !this.isEndOfWrapping(lineIndex);
-          if (!this.isWrapping) {
-            if (this.listType === 'numbered') {
-              this.listCounter++;
+          if(this.tabPressed){
+            this._renderChars(method, ctx, bullet, bulletLeft+10, top, lineIndex);
+            this.isWrapping = !this.isEndOfWrapping(lineIndex);
+          }else{
+            this._renderChars(method, ctx, bullet, bulletLeft, top, lineIndex);
+            this.isWrapping = !this.isEndOfWrapping(lineIndex);
+            if (!this.isWrapping) {
+              if (this.listType === 'numbered') {
+                this.listCounter++;
+              }
             }
           }
         } else if (this.isEndOfWrapping(lineIndex)) {
@@ -46,8 +50,21 @@ export const useBulletOrNumberedText = () => {
   
       this._renderChars(method, ctx, line, left, top, lineIndex);
     };
+
+    class CustomTextbox extends fabric.Textbox implements IExtendedTextBoxOptions {
+      tabPressed: boolean = false;
+    
+      onKeyDown(e: any): void {
+        if (e.keyCode === 9) {
+          console.log('Tab pressed');
+          this.tabPressed = true;
+          e.preventDefault();
+          this.canvas?.renderAll();
+        }
+      }
+    }
   
-    const BulletText = new fabric.Textbox(text, {
+    const BulletText = new CustomTextbox(text, {
       fontFamily: 'sans-serif',
       lineHeight: 1.4,
       left: 50,
@@ -63,6 +80,16 @@ export const useBulletOrNumberedText = () => {
       fill: '#404040'
     } as IExtendedTextBoxOptions);
     BulletText._renderTextLine = renderBulletOrNumTextLine;
+
+    // fabric.Textbox.prototype.onKeyDown = function (e: any) {
+    //   if (e.keyCode === 9) {
+    //     this.tabPressed = true; // Set a flag when Tab key is pressed
+    //     e.preventDefault(); // Prevent the default tab behavior
+    //     this.canvas?.renderAll();
+    //   }
+    // };
+
+    
 
     return { BulletText, renderBulletOrNumTextLine };
 };
