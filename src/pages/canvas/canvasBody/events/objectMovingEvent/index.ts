@@ -1,5 +1,6 @@
 import { fabric } from "fabric";
 import { FabricObject } from "@/interface/fabricTypes";
+import { FUNNEL, FunnelBase, FunnelLevel, FunnelText } from "@/constants/elementNames";
 
 export function useObjectMovingEvent(){
       const handleObjectMoving = (
@@ -229,7 +230,7 @@ export function useObjectMovingEvent(){
               lastLeft: movedObject.left,
               lastTop: movedObject.top,
             });
-          } else if (movedObject.name === 'Funnel') {
+          } else if (movedObject.name?.split("_")[0] === FUNNEL) {
             const lastLeft = movedObject.get('lastLeft') || movedObject.left;
             const lastTop = movedObject.get('lastTop') || movedObject.top;
     
@@ -241,7 +242,7 @@ export function useObjectMovingEvent(){
               let top;
     
               if (
-                obj.name === 'Funnel_Text' &&
+                obj.name === `${FunnelText}_${movedObject.name?.split("_")[1]}` &&
                 obj.intersectsWithObject(movedObject, true, true)
               ) {
                 obj
@@ -255,7 +256,7 @@ export function useObjectMovingEvent(){
               }
     
               if (
-                obj.name == 'Funnel_Level' &&
+                obj.name == `${FunnelLevel}_${movedObject.name?.split("_")[1]}` &&
                 obj.intersectsWithObject(movedObject, true, true)
               ) {
                 obj
@@ -269,7 +270,7 @@ export function useObjectMovingEvent(){
               }
     
               if (
-                obj.name == 'Funnel_Base' &&
+                obj.name == `${FunnelBase}_${movedObject.name?.split("_")[1]}` &&
                 obj.intersectsWithObject(movedObject, true, true)
               ) {
                 obj

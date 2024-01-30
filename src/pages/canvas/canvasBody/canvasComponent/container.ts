@@ -69,6 +69,7 @@ export const useCanvasComponent = () => {
   };
 
   function getElementsData(canvasData: any[]) {
+    console.log({canvasData})
     let data: any[] = [];
     let name: string = '';
     let title: string = '';

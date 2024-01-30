@@ -4,6 +4,8 @@ import slideReducer from './reducers/slide';
 import ElementReducer from './reducers/elements';
 import CanvasReducer from './reducers/canvas';
 import ThunkReducer from './thunk/thunk';
+import apiDataReducer from './reducers/apiData';
+import elementsIdsReducer from './reducers/elementsCount';
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +13,8 @@ export const store = configureStore({
     element: ElementReducer,
     canvas: CanvasReducer,
     thunk: ThunkReducer,
+    apiData: apiDataReducer,
+    elementsIds: elementsIdsReducer,
   },
 });
 

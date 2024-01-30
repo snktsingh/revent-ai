@@ -1,12 +1,21 @@
+import { FUNNEL, FunnelBase, FunnelLevel, FunnelText } from "@/constants/elementNames";
+import { updateFunnelId } from "@/redux/reducers/elementsCount";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { fabric } from "fabric";
 export function useFunnelElement(){
+
+    const { funnelId } = useAppSelector(state => state.elementsIds);
+    const dispatch = useAppDispatch();
     function addFunnelLevels(canvas: fabric.Canvas) {
         let lastLevel: any;
     
         let funnelGroup = canvas.getActiveObject();
-        if (funnelGroup?.name === 'Funnel' && funnelGroup.type == 'group') {
+        let elementName = funnelGroup?.name?.split('_');
+        let elementID = elementName && elementName[1];
+        if ( elementName && funnelGroup && elementName[0] ===  FUNNEL && funnelGroup.type == 'group') {
+          
           (funnelGroup as fabric.Group).forEachObject(object => {
-            if (object.name == 'Funnel_Level') {
+            if (object.name == `${FunnelLevel}_${elementID}`) {
               lastLevel = object;
             }
           });
@@ -22,7 +31,7 @@ export function useFunnelElement(){
           {
             fill: 'transparent',
             stroke: 'black',
-            name: 'Funnel_Level',
+            name: `${FunnelLevel}_${elementID}`,
             top: funnelGroup?.top! - 50,
             left: funnelGroup?.left! - 20,
           }
@@ -32,7 +41,7 @@ export function useFunnelElement(){
     
         let texts: any[] = [];
         canvas.forEachObject((object, i) => {
-          if (object.name == 'Funnel_Text') {
+          if (object.name == `${FunnelText}_${elementID}`) {
             texts.push(object);
             object.set({ top: object.top! - 50 }); // Adjust the shift amount as needed
             object.setCoords(); // Update object coordinates
@@ -45,13 +54,13 @@ export function useFunnelElement(){
           width: 140,
           editable: true,
           textAlign: 'center',
-          name: 'Funnel_Text',
+          name: `${FunnelText}_${elementID}`,
         });
     
         canvas.add(text);
         canvas.requestRenderAll();
       }
-    
+    //new funnel
       const addFunnel = (canvas: fabric.Canvas | null) => {
         function createLevels(n: number) {
           let x1 = -80;
@@ -72,7 +81,7 @@ export function useFunnelElement(){
                 fill: 'transparent',
                 stroke: 'black',
                 top: trapTop,
-                name: 'Funnel_Level',
+                name: `${FunnelLevel}_${funnelId}`,
               }
             );
     
@@ -91,7 +100,7 @@ export function useFunnelElement(){
             height: 100,
             top: -10,
             left: -80,
-            name: 'Funnel_Base',
+            name: `${FunnelBase}_${funnelId}`,
           });
           levels.push(rect);
     
@@ -101,7 +110,7 @@ export function useFunnelElement(){
         let group = new fabric.Group(Funnel, {
           left: 325,
           top: 253,
-          name: 'Funnel',
+          name: `${FUNNEL}_${funnelId}`,
         });
     
         canvas?.add(group);
@@ -114,7 +123,7 @@ export function useFunnelElement(){
             width: 140,
             editable: true,
             textAlign: 'center',
-            name: 'Funnel_Text',
+            name: `${FunnelText}_${funnelId}`,
           });
           return canvas?.add(text);
         }
@@ -122,7 +131,8 @@ export function useFunnelElement(){
         addText(376, 268, 'Add Text');
         addText(377, 319, 'Add Text');
     
-        canvas?.requestRenderAll();
+        canvas?.renderAll();
+        dispatch(updateFunnelId());
       };
 
       return { addFunnel, addFunnelLevels };

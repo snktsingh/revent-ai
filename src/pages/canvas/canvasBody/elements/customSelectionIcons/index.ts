@@ -8,6 +8,7 @@ import {
   usePyramidElement,
   useTimelineElement
 } from '../elementExports';
+import { FUNNEL } from '@/constants/elementNames';
 export const useCustomSelectionIcons = () => {
   const { addProcessSteps } = useProcessElement();
   const { addPyramidLevel } = usePyramidElement();
@@ -65,7 +66,7 @@ export const useCustomSelectionIcons = () => {
       selectedObject?.setControlVisible('addTimeline', false);
     }
 
-    if (selectedObject?.name === 'Funnel' && fLevels < 6) {
+    if (selectedObject?.name?.split('_')[0] === FUNNEL && fLevels < 6) {
       selectedObject.setControlVisible('addFunnel', true);
     } else {
       selectedObject?.setControlVisible('addFunnel', false);
