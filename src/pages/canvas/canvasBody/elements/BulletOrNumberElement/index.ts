@@ -81,15 +81,6 @@ export const useBulletOrNumberedText = () => {
     } as IExtendedTextBoxOptions);
     BulletText._renderTextLine = renderBulletOrNumTextLine;
 
-    // fabric.Textbox.prototype.onKeyDown = function (e: any) {
-    //   if (e.keyCode === 9) {
-    //     this.tabPressed = true; // Set a flag when Tab key is pressed
-    //     e.preventDefault(); // Prevent the default tab behavior
-    //     this.canvas?.renderAll();
-    //   }
-    // };
-
-    
 
     return { BulletText, renderBulletOrNumTextLine };
 };

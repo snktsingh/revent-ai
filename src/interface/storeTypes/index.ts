@@ -43,4 +43,20 @@ export interface IShapeRequest {
     shape: string;
     data: string[];
   };
+
+
+export interface ApiElement {
+  companyName: string;
+  shape: string;
+  data: string[];
+  title:string;
+  subTitle:string;
+  templateName:string;
+}
+export interface APIRequest {
+  companyName : string;
+  themeColor : string;
+  imagesCount:string;
+  elements : ApiElement[];
+}
   

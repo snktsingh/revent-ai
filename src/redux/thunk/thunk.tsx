@@ -14,7 +14,7 @@ const initialState: ISlideRequests = {
 export const fetchSlideImg = createAsyncThunk(
   'slide/fetchimage-ppt',
   async (req: IShapeRequest, { dispatch }) => {
-    const res = await FetchUtils.postRequest(`${ENDPOINT.GEN_PPT}`, req);
+    const res = await FetchUtils.postRequest(`${ENDPOINT.GEN_PPT_MULTI}`, req);
     dispatch(setVariantImageAsMain(res.data.variants[0].imagesUrl));
     console.log(res.data)
     return res.data;
