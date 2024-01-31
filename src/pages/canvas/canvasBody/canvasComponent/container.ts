@@ -1,3 +1,4 @@
+import { PYRAMID_TEXT } from '@/constants/elementNames';
 import { APIRequest, ApiElement, DataRequest } from '@/interface/storeTypes';
 import { setRequestData } from '@/redux/reducers/apiData';
 import { updateCanvasInList } from '@/redux/reducers/canvas';
@@ -102,24 +103,33 @@ export const useCanvasComponent = () => {
     canvasData.forEach(canvasObject => {
       if (canvasObject.type === 'textbox' && canvasObject.name) {
 
+        const elementID = canvasObject.name.split('_')[1];
+        
         if(canvasObject.name.startsWith('FunnelText_')){
-          const funnelNumber = canvasObject.name.split('_')[1];
-  
-          const funnelElement = getOrCreateElement('Funnel', funnelNumber,outputFormat);
-  
+          const funnelElement = getOrCreateElement('Funnel', elementID, outputFormat);
           funnelElement.data.push({
             name: canvasObject.text,
             heading: '', 
             subHeading: '', 
             text: canvasObject.text,
           });
-        }
         };
 
-        
+        if(canvasObject.name.startsWith(PYRAMID_TEXT)){
+          const PyramidElement = getOrCreateElement('Pyramid', elementID, outputFormat);
+          PyramidElement.data.push({
+            name: canvasObject.text,
+            heading: '', 
+            subHeading: '', 
+            text: canvasObject.text,
+          });
+        }
+      };
+
+
     });
 
-    
+    console.log({outputFormat});
     dispatch(setRequestData(outputFormat))
     
   }
