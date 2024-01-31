@@ -1,4 +1,4 @@
-import { PYRAMID_TEXT } from '@/constants/elementNames';
+import { CYCLE_TEXT, PYRAMID_TEXT } from '@/constants/elementNames';
 import { APIRequest, ApiElement, DataRequest } from '@/interface/storeTypes';
 import { setRequestData } from '@/redux/reducers/apiData';
 import { updateCanvasInList } from '@/redux/reducers/canvas';
@@ -123,7 +123,18 @@ export const useCanvasComponent = () => {
             subHeading: '', 
             text: canvasObject.text,
           });
-        }
+        };
+
+        if(canvasObject.name.startsWith(CYCLE_TEXT)){
+          const cycleElement = getOrCreateElement('Cycle', elementID, outputFormat);
+          cycleElement.data.push({
+            name: canvasObject.text,
+            heading: '', 
+            subHeading: '', 
+            text: canvasObject.text,
+          });
+        };
+
       };
 
 
