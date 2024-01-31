@@ -1,6 +1,6 @@
 import { fabric } from "fabric";
 import { FabricObject } from "@/interface/fabricTypes";
-import { FUNNEL, FunnelBase, FunnelLevel, FunnelText, PYRAMID, PYRAMID_TEXT } from "@/constants/elementNames";
+import { CYCLE, CYCLE_ARROW, CYCLE_CIRCLE, CYCLE_TEXT, FUNNEL, FUNNEL_BASE, FUNNEL_LEVEL, FUNNEL_TEXT, PYRAMID, PYRAMID_TEXT } from "@/constants/elementNames";
 
 export function useObjectMovingEvent(){
       const handleObjectMoving = (
@@ -174,7 +174,7 @@ export function useObjectMovingEvent(){
               lastLeft: movedObject.left,
               lastTop: movedObject.top,
             });
-          } else if (movedObject.name === 'Cycle_Container') {
+          } else if (objectName[0] === CYCLE) {
             const lastLeft = movedObject.get('lastLeft') || movedObject.left;
             const lastTop = movedObject.get('lastTop') || movedObject.top;
     
@@ -186,7 +186,7 @@ export function useObjectMovingEvent(){
               let top;
     
               if (
-                obj.name === 'Cycle_Circle' &&
+                obj.name === `${CYCLE_CIRCLE}_${objectID}` &&
                 obj.intersectsWithObject(movedObject, true, true)
               ) {
                 obj
@@ -200,7 +200,7 @@ export function useObjectMovingEvent(){
               }
     
               if (
-                obj.name == 'Cycle_Text' &&
+                obj.name == `${CYCLE_TEXT}_${objectID}` &&
                 obj.intersectsWithObject(movedObject, true, true)
               ) {
                 obj
@@ -214,7 +214,7 @@ export function useObjectMovingEvent(){
               }
     
               if (
-                obj.name == 'Cycle_Arrow' &&
+                obj.name == `${CYCLE_ARROW}_${objectID}` &&
                 obj.intersectsWithObject(movedObject, true, true)
               ) {
                 obj
@@ -232,7 +232,7 @@ export function useObjectMovingEvent(){
               lastLeft: movedObject.left,
               lastTop: movedObject.top,
             });
-          } else if (movedObject.name?.split("_")[0] === FUNNEL) {
+          } else if (objectName[0] === FUNNEL) {
             const lastLeft = movedObject.get('lastLeft') || movedObject.left;
             const lastTop = movedObject.get('lastTop') || movedObject.top;
     
@@ -244,7 +244,7 @@ export function useObjectMovingEvent(){
               let top;
     
               if (
-                obj.name === `${FunnelText}_${movedObject.name?.split("_")[1]}` &&
+                obj.name === `${FUNNEL_TEXT}_${objectID}` &&
                 obj.intersectsWithObject(movedObject, true, true)
               ) {
                 obj
@@ -258,7 +258,7 @@ export function useObjectMovingEvent(){
               }
     
               if (
-                obj.name == `${FunnelLevel}_${movedObject.name?.split("_")[1]}` &&
+                obj.name == `${FUNNEL_LEVEL}_${objectID}` &&
                 obj.intersectsWithObject(movedObject, true, true)
               ) {
                 obj
@@ -272,7 +272,7 @@ export function useObjectMovingEvent(){
               }
     
               if (
-                obj.name == `${FunnelBase}_${movedObject.name?.split("_")[1]}` &&
+                obj.name == `${FUNNEL_BASE}_${objectID}` &&
                 obj.intersectsWithObject(movedObject, true, true)
               ) {
                 obj
