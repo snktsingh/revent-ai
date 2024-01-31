@@ -1,6 +1,6 @@
 import { fabric } from "fabric";
 import { FabricObject } from "@/interface/fabricTypes";
-import { FUNNEL, FunnelBase, FunnelLevel, FunnelText } from "@/constants/elementNames";
+import { FUNNEL, FunnelBase, FunnelLevel, FunnelText, PYRAMID, PYRAMID_TEXT } from "@/constants/elementNames";
 
 export function useObjectMovingEvent(){
       const handleObjectMoving = (
@@ -8,10 +8,12 @@ export function useObjectMovingEvent(){
         canvas: fabric.Canvas
       ) => {
         const movedObject = options.target as FabricObject | undefined;
-        if (movedObject) {
+        const objectName = movedObject?.name?.split('_');
+        const objectID = objectName && objectName[1];
+        if (movedObject && objectName) {
           movedObject.setCoords();
     
-          if (movedObject?.name === 'PYRAMID') {
+          if (objectName[0] === PYRAMID) {
             const lastLeft = movedObject.get('lastLeft') || movedObject.left;
             const lastTop = movedObject.get('lastTop') || movedObject.top;
     
@@ -23,14 +25,14 @@ export function useObjectMovingEvent(){
               let top;
     
               if (
-                obj.name === 'pyramidTextbox' &&
+                obj.name === `${PYRAMID_TEXT}_${objectID}` &&
                 obj.intersectsWithObject(movedObject!, true, true)
               ) {
                 obj
                   .set({
                     left: obj.left! + deltaX,
                     top: obj.top! + deltaY,
-                    name: 'pyramidTextbox',
+                    name: `${PYRAMID_TEXT}_${objectID}`,
                   })
                   .setCoords();
                 left = obj.left! + deltaX;

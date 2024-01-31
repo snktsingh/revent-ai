@@ -1,6 +1,13 @@
+import { PYRAMID, PYRAMID_LEVEL, PYRAMID_TEXT } from '@/constants/elementNames';
+import { updatePyramidId } from '@/redux/reducers/elementsCount';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { fabric } from 'fabric';
+
 export function usePyramidElement() {
+  const dispatch = useAppDispatch();
+  const { pyramidId } = useAppSelector(state => state.elementsIds)
   const addPyramidLevel = (canvas: fabric.Canvas) => {
+
     let lastLevel: any;
     let lastText: any;
     canvas.forEachObject(obj => {
@@ -47,7 +54,7 @@ export function usePyramidElement() {
       canvas?.requestRenderAll();
     }
   };
-
+//new pyramid
   const addPyramid = (canvas: fabric.Canvas | null) => {
     let x1 = -140;
     let x2 = 140;
@@ -75,7 +82,7 @@ export function usePyramidElement() {
         left: 274,
         top: 137,
         width: 100,
-        name: 'pyramidTextbox',
+        name: `${PYRAMID_TEXT}_${pyramidId}`,
       });
 
       textsList.push(text);
@@ -93,7 +100,7 @@ export function usePyramidElement() {
             fill: 'transparent',
             stroke: 'black',
             top: trapTop,
-            name: 'Pyramid_LEVEL',
+            name: `${PYRAMID_LEVEL}_${pyramidId}`,
           }
         );
 
@@ -102,7 +109,7 @@ export function usePyramidElement() {
           left: 274,
           top: 213,
           width: 100,
-          name: 'pyramidTextbox',
+          name: `${PYRAMID_TEXT}_${pyramidId}`,
         });
 
         trapTop = trapTop + 60;
@@ -122,7 +129,7 @@ export function usePyramidElement() {
     group = new fabric.Group(pyramidLevels, {
       left: 173,
       top: 46,
-      name: 'PYRAMID',
+      name: `${PYRAMID}_${pyramidId}`,
     });
 
     canvas?.add(group);
@@ -132,6 +139,7 @@ export function usePyramidElement() {
     });
 
     canvas?.requestRenderAll();
+    dispatch(updatePyramidId());
   };
   return { addPyramid, addPyramidLevel }
 }

@@ -100,22 +100,23 @@ export const useCanvasComponent = () => {
       elements: [],
     };
     canvasData.forEach(canvasObject => {
-      if (
-        canvasObject.type === 'textbox' &&
-        canvasObject.name &&
-        canvasObject.name.startsWith('FunnelText_')
-      ) {
-        const funnelNumber = canvasObject.name.split('_')[1];
+      if (canvasObject.type === 'textbox' && canvasObject.name) {
 
-        const funnelElement = getOrCreateElement('Funnel', funnelNumber,outputFormat);
+        if(canvasObject.name.startsWith('FunnelText_')){
+          const funnelNumber = canvasObject.name.split('_')[1];
+  
+          const funnelElement = getOrCreateElement('Funnel', funnelNumber,outputFormat);
+  
+          funnelElement.data.push({
+            name: canvasObject.text,
+            heading: '', 
+            subHeading: '', 
+            text: canvasObject.text,
+          });
+        }
+        };
 
-        funnelElement.data.push({
-          name: canvasObject.text,
-          heading: '', // Add your logic to extract heading
-          subHeading: '', // Add your logic to extract subHeading
-          text: canvasObject.text,
-        });
-      }
+        
     });
 
     
