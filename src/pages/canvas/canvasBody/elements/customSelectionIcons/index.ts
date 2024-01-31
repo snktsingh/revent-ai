@@ -8,7 +8,7 @@ import {
   usePyramidElement,
   useTimelineElement
 } from '../elementExports';
-import { FUNNEL } from '@/constants/elementNames';
+import { CYCLE, FUNNEL, PYRAMID } from '@/constants/elementNames';
 export const useCustomSelectionIcons = () => {
   const { addProcessSteps } = useProcessElement();
   const { addPyramidLevel } = usePyramidElement();
@@ -46,9 +46,10 @@ export const useCustomSelectionIcons = () => {
 
     // Custom controls setup for different elements
     setupCustomControls(canvas);
-
+    const objectName = selectedObject?.name?.split('_');
     // Adjust controls based on the type of the selected object
-    if (selectedObject?.name === 'PYRAMID' && pLevels < 6) {
+  if(objectName && selectedObject){
+    if (objectName[0] === PYRAMID && pLevels < 6) {
       selectedObject.setControlVisible('addPyramid', true);
     } else {
       selectedObject?.setControlVisible('addPyramid', false);
@@ -66,13 +67,13 @@ export const useCustomSelectionIcons = () => {
       selectedObject?.setControlVisible('addTimeline', false);
     }
 
-    if (selectedObject?.name?.split('_')[0] === FUNNEL && fLevels < 6) {
+    if (objectName[0] === FUNNEL && fLevels < 6) {
       selectedObject.setControlVisible('addFunnel', true);
     } else {
       selectedObject?.setControlVisible('addFunnel', false);
     }
 
-    if (selectedObject?.name === 'Cycle_Container' && cycleSteps < 6) {
+    if (objectName[0] === CYCLE && cycleSteps < 6) {
       selectedObject.setControlVisible('addCycle', true);
     } else {
       selectedObject?.setControlVisible('addCycle', false);
@@ -85,6 +86,8 @@ export const useCustomSelectionIcons = () => {
       selectedObject?.setControlVisible('addImage', false);
       selectedObject?.setControlVisible('addList', false);
     }
+
+  }
   };
 
   const countObjects = (canvas: fabric.Canvas, objectType: string): number => {

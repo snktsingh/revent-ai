@@ -1,4 +1,4 @@
-import { FUNNEL, FunnelBase, FunnelLevel, FunnelText } from "@/constants/elementNames";
+import { FUNNEL, FUNNEL_BASE, FUNNEL_LEVEL, FUNNEL_TEXT } from "@/constants/elementNames";
 import { updateFunnelId } from "@/redux/reducers/elementsCount";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { fabric } from "fabric";
@@ -15,7 +15,7 @@ export function useFunnelElement(){
         if ( elementName && funnelGroup && elementName[0] ===  FUNNEL && funnelGroup.type == 'group') {
           
           (funnelGroup as fabric.Group).forEachObject(object => {
-            if (object.name == `${FunnelLevel}_${elementID}`) {
+            if (object.name == `${FUNNEL_LEVEL}_${elementID}`) {
               lastLevel = object;
             }
           });
@@ -31,7 +31,7 @@ export function useFunnelElement(){
           {
             fill: 'transparent',
             stroke: 'black',
-            name: `${FunnelLevel}_${elementID}`,
+            name: `${FUNNEL_LEVEL}_${elementID}`,
             top: funnelGroup?.top! - 50,
             left: funnelGroup?.left! - 20,
           }
@@ -41,7 +41,7 @@ export function useFunnelElement(){
     
         let texts: any[] = [];
         canvas.forEachObject((object, i) => {
-          if (object.name == `${FunnelText}_${elementID}`) {
+          if (object.name == `${FUNNEL_TEXT}_${elementID}`) {
             texts.push(object);
             object.set({ top: object.top! - 50 }); // Adjust the shift amount as needed
             object.setCoords(); // Update object coordinates
@@ -54,7 +54,7 @@ export function useFunnelElement(){
           width: 140,
           editable: true,
           textAlign: 'center',
-          name: `${FunnelText}_${elementID}`,
+          name: `${FUNNEL_TEXT}_${elementID}`,
         });
     
         canvas.add(text);
@@ -81,7 +81,7 @@ export function useFunnelElement(){
                 fill: 'transparent',
                 stroke: 'black',
                 top: trapTop,
-                name: `${FunnelLevel}_${funnelId}`,
+                name: `${FUNNEL_LEVEL}_${funnelId}`,
               }
             );
     
@@ -100,7 +100,7 @@ export function useFunnelElement(){
             height: 100,
             top: -10,
             left: -80,
-            name: `${FunnelBase}_${funnelId}`,
+            name: `${FUNNEL_BASE}_${funnelId}`,
           });
           levels.push(rect);
     
@@ -123,7 +123,7 @@ export function useFunnelElement(){
             width: 140,
             editable: true,
             textAlign: 'center',
-            name: `${FunnelText}_${funnelId}`,
+            name: `${FUNNEL_TEXT}_${funnelId}`,
           });
           return canvas?.add(text);
         }
