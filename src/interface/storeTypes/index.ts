@@ -45,10 +45,16 @@ export interface IShapeRequest {
   };
 
 
+export interface DataRequest {
+  name: string;
+  heading: string;
+  subHeading: string;
+  text: string;
+}
+
 export interface ApiElement {
-  companyName: string;
   shape: string;
-  data: string[];
+  data: DataRequest[];
   title:string;
   subTitle:string;
   templateName:string;

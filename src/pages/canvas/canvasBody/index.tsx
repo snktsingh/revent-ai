@@ -65,7 +65,6 @@ const CanvasBody = () => {
   const dispatch = useAppDispatch();
   const {
     canvasJS,
-    requestData,
     tempData,
     shapeName,
     canvasImageURl,
@@ -73,6 +72,7 @@ const CanvasBody = () => {
   } = useAppSelector(state => state.canvas);
   const { isRegenerateDisabled } = useAppSelector(state => state.slide);
   const { isLoading } = useAppSelector(state => state.thunk);
+  const { requestData } = useAppSelector(state => state.apiData);
   const [activeLike, setActiveLike] = useState(false);
   const [activeDislike, setActiveDislike] = useState(false);
   const [elementName, setElementName] = useState<string>('');

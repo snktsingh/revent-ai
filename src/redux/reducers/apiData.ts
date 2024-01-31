@@ -1,5 +1,5 @@
 import { APIRequest } from '@/interface/storeTypes';
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface apiDataInitialState {
   requestData: APIRequest | null;
@@ -13,7 +13,7 @@ export const apiDataReducer = createSlice({
   name: 'apiData',
   initialState,
   reducers: {
-    setRequestData(state, action) {
+    setRequestData(state, action : PayloadAction<APIRequest>)  {
       state.requestData = action.payload;
     },
   },

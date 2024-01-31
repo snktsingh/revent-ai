@@ -1,4 +1,6 @@
-import { setRequestData, updateCanvasInList } from '@/redux/reducers/canvas';
+import { APIRequest, ApiElement, DataRequest } from '@/interface/storeTypes';
+import { setRequestData } from '@/redux/reducers/apiData';
+import { updateCanvasInList } from '@/redux/reducers/canvas';
 import { useAppDispatch } from '@/redux/store';
 import { fabric } from 'fabric';
 import { useState } from 'react';
@@ -68,85 +70,57 @@ export const useCanvasComponent = () => {
     dispatch(updateCanvasInList({ id, updatedCanvas }));
   };
 
+
+  const getOrCreateElement = (shape: string, title: string, outputFormat : APIRequest)  => {
+    const existingElement = outputFormat.elements.find(
+      (element: any) => element.shape === shape && element.title === title
+    );
+
+    if (existingElement) {
+      return existingElement;
+    } else {
+      const newElement : ApiElement = {
+        shape,
+        title,
+        subTitle: '',
+        templateName: '',
+        data: [] as DataRequest[],
+        
+      };
+      outputFormat.elements.push(newElement);
+      return newElement;
+    }
+  };
+
   function getElementsData(canvasData: any[]) {
-    console.log({canvasData})
-    let data: any[] = [];
-    let name: string = '';
-    let title: string = '';
-    let subTitle: string = '';
-    let timelineContent: any[] = [];
-    canvasData.forEach(obj => {
-      if (obj.name === 'title') {
-        name = 'Cover';
-        title = obj.text;
-      }
-      if (obj.name === 'subTitle') {
-        name = 'Cover';
-        subTitle = obj.text;
-      }
+    const outputFormat: APIRequest = {
+      companyName: 'Any Sample Name',
+      themeColor: '#E54B4B',
+      imagesCount: '',
+      elements: [],
+    };
+    canvasData.forEach(canvasObject => {
+      if (
+        canvasObject.type === 'textbox' &&
+        canvasObject.name &&
+        canvasObject.name.startsWith('FunnelText_')
+      ) {
+        const funnelNumber = canvasObject.name.split('_')[1];
 
-      if (obj.name === 'pyramidTextbox') {
-        name = 'Pyramid';
-        data.push({ text: obj.text });
-      }
+        const funnelElement = getOrCreateElement('Funnel', funnelNumber,outputFormat);
 
-      if (obj.name === 'Funnel_Text') {
-        name = 'Funnel';
-        data.push({ text: obj.text });
-      }
-
-      if (obj.name === 'Cycle_Text') {
-        name = 'Cycle';
-        data.push({ text: obj.text });
-      }
-
-      if (obj.name === 'ProcessText') {
-        name = 'Process';
-        data.push({ text: obj.text });
-      }
-      if (obj.name === 'paragraphbox') {
-        name = 'Paragraph';
-        data.push({ text: obj.text });
-      }
-
-      if (obj.name === 'TimeLineHeading') {
-        name = 'Timeline';
-        timelineContent.push(obj);
-      }
-      if (obj.name === 'TimeLineText') {
-        name = 'Timeline';
-        timelineContent.push(obj);
-      }
-
-      if (obj.name === 'bullet') {
-        name = 'BulletPoint';
-        let text = obj.text.split('\n');
-        text.forEach((element: string) => {
-          data.push({ text: element });
+        funnelElement.data.push({
+          name: canvasObject.text,
+          heading: '', // Add your logic to extract heading
+          subHeading: '', // Add your logic to extract subHeading
+          text: canvasObject.text,
         });
       }
     });
-    if (timelineContent.length > 0) {
-      data = timelineContent.reduce((acc, obj, index, arr) => {
-        if (obj.name === 'TimeLineHeading') {
-          const nextObj = arr[index + 1]; // Get the next object
-          if (nextObj && nextObj.name === 'TimeLineText') {
-            acc.push({ heading: obj.text, text: nextObj.text });
-          }
-        }
-        return acc;
-      }, []);
-    }
 
-    dispatch(
-      setRequestData({
-        companyName: 'Revent',
-        shape: name,
-        data: data,
-        title: title,
-        subTitle: subTitle,
-      })
-    );
+    
+    dispatch(setRequestData(outputFormat))
+    
   }
 
   return {
@@ -154,6 +128,6 @@ export const useCanvasComponent = () => {
     updateCanvasDimensions,
     updateCanvasSlideData,
     getElementsData,
-    customFabricProperties
+    customFabricProperties,
   };
 };
