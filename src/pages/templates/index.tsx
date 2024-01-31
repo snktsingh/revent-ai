@@ -9,9 +9,9 @@ import {
 import Link from '@mui/material/Link';
 import { Stack, Card, CardContent, Button } from '@mui/material';
 import { CardContainer, TextInput } from '../dashboard/style';
-import { WatchRounded } from '@mui/icons-material';
 import { CustomButton } from '@/styles/common-styles/style';
 import ReventingLoader from '@/common-ui/loader';
+import ConversionToJson from '@/components/pptToJson';
 const Templates = () => {
   const [loading, setLoading] = useState(false);
   if (loading == true) {

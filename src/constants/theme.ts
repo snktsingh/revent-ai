@@ -1,4 +1,7 @@
-import { experimental_extendTheme as extendTheme } from '@mui/material/styles';
+import {
+  createTheme,
+  experimental_extendTheme as extendTheme,
+} from '@mui/material/styles';
 
 declare module '@mui/material/styles/createPalette' {
   interface CommonColors {

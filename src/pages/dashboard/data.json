@@ -1,0 +1,54 @@
+{
+  "themes": [
+    {
+      "title": "Blank Presentation",
+      "link": "/templates"
+    },
+    {
+      "title": "Revent Ai",
+      "link": ""
+    },
+    {
+      "title": "Trident",
+      "link": ""
+    },
+    {
+      "title": "Deloitte",
+      "link": ""
+    },
+    {
+      "title": "PWC",
+      "link": ""
+    },
+    {
+      "title": "Abstract",
+      "link": ""
+    }
+  ],
+  "recent": [
+    {
+      "title": "Revent Ai",
+      "link": "/canvas"
+    },
+    {
+      "title": "Revent Ai",
+      "link": "/canvas"
+    },
+    {
+      "title": "Revent Ai",
+      "link": "/canvas"
+    },
+    {
+      "title": "Revent Ai",
+      "link": "/canvas"
+    },
+    {
+      "title": "Revent Ai",
+      "link": "/canvas"
+    },
+    {
+      "title": "Revent Ai",
+      "link": "/canvas"
+    }
+  ]
+}

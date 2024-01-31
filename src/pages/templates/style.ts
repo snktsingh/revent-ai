@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const TemplateContainer = styled.div`
-  padding: 6%;
+  padding: 3%;
 `;
 export const TemplateTitle = styled.span`
   display: flex;

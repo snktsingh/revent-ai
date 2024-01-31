@@ -1,100 +1,78 @@
-import { Card, CardContent, Input, Stack, TextField } from '@mui/material';
-import Link from '@mui/material/Link';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material';
 import {
   CardContainer,
+  CardLink,
+  CardTitle,
   MainContainer,
+  PreviewCard,
   Subtitle,
-  TextInput,
   Title,
 } from './style';
-import { Add } from '@/constants/media';
+import slideData from './data.json';
 
 const Dashboard = () => {
   return (
     <MainContainer>
       <span style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Title>Create a Presentation</Title>
-        <TextInput label="Search Presentation" />
+        <TextField
+          id="outlined-basic"
+          label="Search presentation"
+          variant="outlined"
+        />
       </span>
       <br />
-      <Stack direction="row" spacing={4}>
-        <Link href="/templates">
+      <CardContainer>
+        {slideData.themes.map((slide, index) => {
+          return (
+            <CardTitle>
+              <CardLink href={slide.link}>
+                <PreviewCard />
+                {slide.title}
+              </CardLink>
+            </CardTitle>
+          );
+        })}
+      </CardContainer>
+      <Accordion aria-controls="panel1a-content" id="panel1a-header">
+        <AccordionSummary>
+          <Subtitle>More Templates</Subtitle>
+        </AccordionSummary>
+        <AccordionDetails>
           <CardContainer>
-            <Card sx={{ width: 270, height: 150 }}>
-              <CardContent
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  height: '100%',
-                }}
-              >
-                <img src={Add} />
-              </CardContent>
-            </Card>
-            <p>Blank Presentation</p>
+            {slideData.themes.map((slide, index) => {
+              return (
+                <CardTitle>
+                  <CardLink href={slide.link}>
+                    <PreviewCard />
+                    {slide.title}
+                  </CardLink>
+                </CardTitle>
+              );
+            })}
           </CardContainer>
-        </Link>
-        <CardContainer>
-          <Card sx={{ width: 270, height: 150 }}>
-            <CardContent></CardContent>
-          </Card>
-          <p>Abstract</p>
-        </CardContainer>
-        <CardContainer>
-          <Card sx={{ width: 270, height: 150 }}>
-            <CardContent></CardContent>
-          </Card>
-          <p>Abstract</p>
-        </CardContainer>
-        <CardContainer>
-          <Card sx={{ width: 270, height: 150 }}>
-            <CardContent></CardContent>
-          </Card>
-          <p>Abstract</p>
-        </CardContainer>
-        <CardContainer>
-          <Card sx={{ width: 270, height: 150 }}>
-            <CardContent></CardContent>
-          </Card>
-          <p>Abstract</p>
-        </CardContainer>
-      </Stack>
-      <br />
-      <Subtitle>More Templates</Subtitle>
+        </AccordionDetails>
+      </Accordion>
       <Title>Recent Presentation</Title>
-      <Stack direction="row" spacing={4}>
-        <CardContainer>
-          <Card sx={{ width: 270, height: 150 }}>
-            <CardContent>Add New</CardContent>
-          </Card>
-          <p>Presentation</p>
-        </CardContainer>
-        <CardContainer>
-          <Card sx={{ width: 270, height: 150 }}>
-            <CardContent></CardContent>
-          </Card>
-          <p>Abstract</p>
-        </CardContainer>
-        <CardContainer>
-          <Card sx={{ width: 270, height: 150 }}>
-            <CardContent></CardContent>
-          </Card>
-          <p>Abstract</p>
-        </CardContainer>
-        <CardContainer>
-          <Card sx={{ width: 270, height: 150 }}>
-            <CardContent></CardContent>
-          </Card>
-          <p>Abstract</p>
-        </CardContainer>
-        <CardContainer>
-          <Card sx={{ width: 270, height: 150 }}>
-            <CardContent></CardContent>
-          </Card>
-          <p>Abstract</p>
-        </CardContainer>
-      </Stack>
+      <CardContainer>
+        {slideData.recent.map((slide, index) => {
+          return (
+            <CardTitle>
+              <CardLink href={slide.link}>
+                <PreviewCard />
+                {slide.title}
+              </CardLink>
+            </CardTitle>
+          );
+        })}
+      </CardContainer>
     </MainContainer>
   );
 };
