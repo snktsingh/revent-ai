@@ -1,4 +1,4 @@
-import { CYCLE_TEXT, PYRAMID_TEXT } from '@/constants/elementNames';
+import { CYCLE_TEXT, FUNNEL_TEXT, PROCESS_TEXT, PYRAMID_TEXT } from '@/constants/elementNames';
 import { APIRequest, ApiElement, DataRequest } from '@/interface/storeTypes';
 import { setRequestData } from '@/redux/reducers/apiData';
 import { updateCanvasInList } from '@/redux/reducers/canvas';
@@ -105,7 +105,7 @@ export const useCanvasComponent = () => {
 
         const elementID = canvasObject.name.split('_')[1];
         
-        if(canvasObject.name.startsWith('FunnelText_')){
+        if(canvasObject.name.startsWith(FUNNEL_TEXT)){
           const funnelElement = getOrCreateElement('Funnel', elementID, outputFormat);
           funnelElement.data.push({
             name: canvasObject.text,
@@ -128,6 +128,16 @@ export const useCanvasComponent = () => {
         if(canvasObject.name.startsWith(CYCLE_TEXT)){
           const cycleElement = getOrCreateElement('Cycle', elementID, outputFormat);
           cycleElement.data.push({
+            name: canvasObject.text,
+            heading: '', 
+            subHeading: '', 
+            text: canvasObject.text,
+          });
+        };
+
+        if(canvasObject.name.startsWith(PROCESS_TEXT)){
+          const processElement = getOrCreateElement('Process', elementID, outputFormat);
+          processElement.data.push({
             name: canvasObject.text,
             heading: '', 
             subHeading: '', 
