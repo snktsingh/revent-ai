@@ -11,11 +11,11 @@ export function useFunnelElement(){
     
         let funnelGroup = canvas.getActiveObject();
         let elementName = funnelGroup?.name?.split('_');
-        let elementID = elementName && elementName[1];
+        let currentID = elementName && elementName[1];
         if ( elementName && funnelGroup && elementName[0] ===  FUNNEL && funnelGroup.type == 'group') {
           
           (funnelGroup as fabric.Group).forEachObject(object => {
-            if (object.name == `${FUNNEL_LEVEL}_${elementID}`) {
+            if (object.name == `${FUNNEL_LEVEL}_${currentID}`) {
               lastLevel = object;
             }
           });
@@ -31,7 +31,7 @@ export function useFunnelElement(){
           {
             fill: 'transparent',
             stroke: 'black',
-            name: `${FUNNEL_LEVEL}_${elementID}`,
+            name: `${FUNNEL_LEVEL}_${currentID}`,
             top: funnelGroup?.top! - 50,
             left: funnelGroup?.left! - 20,
           }
@@ -41,7 +41,7 @@ export function useFunnelElement(){
     
         let texts: any[] = [];
         canvas.forEachObject((object, i) => {
-          if (object.name == `${FUNNEL_TEXT}_${elementID}`) {
+          if (object.name == `${FUNNEL_TEXT}_${currentID}`) {
             texts.push(object);
             object.set({ top: object.top! - 50 }); // Adjust the shift amount as needed
             object.setCoords(); // Update object coordinates
@@ -54,7 +54,7 @@ export function useFunnelElement(){
           width: 140,
           editable: true,
           textAlign: 'center',
-          name: `${FUNNEL_TEXT}_${elementID}`,
+          name: `${FUNNEL_TEXT}_${currentID}`,
         });
     
         canvas.add(text);

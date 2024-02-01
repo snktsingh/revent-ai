@@ -1,6 +1,6 @@
 import { fabric } from "fabric";
 import { FabricObject } from "@/interface/fabricTypes";
-import { CYCLE, CYCLE_ARROW, CYCLE_CIRCLE, CYCLE_TEXT, FUNNEL, FUNNEL_BASE, FUNNEL_LEVEL, FUNNEL_TEXT, PYRAMID, PYRAMID_TEXT } from "@/constants/elementNames";
+import { CYCLE, CYCLE_ARROW, CYCLE_CIRCLE, CYCLE_TEXT, FUNNEL, FUNNEL_BASE, FUNNEL_LEVEL, FUNNEL_TEXT, PROCESS, PROCESS_ARROW, PROCESS_BOX, PROCESS_TEXT, PYRAMID, PYRAMID_TEXT } from "@/constants/elementNames";
 
 export function useObjectMovingEvent(){
       const handleObjectMoving = (
@@ -44,7 +44,7 @@ export function useObjectMovingEvent(){
               lastLeft: movedObject.left,
               lastTop: movedObject.top,
             });
-          } else if (movedObject?.name === 'Process_Container') {
+          } else if (objectName[0] === PROCESS) {
             const lastLeft = movedObject.get('lastLeft') || movedObject.left;
             const lastTop = movedObject.get('lastTop') || movedObject.top;
     
@@ -56,7 +56,7 @@ export function useObjectMovingEvent(){
               let top;
     
               if (
-                obj.name === 'ProcessBox' &&
+                obj.name === `${PROCESS_BOX}_${objectID}` &&
                 obj.intersectsWithObject(movedObject, true, true)
               ) {
                 obj
@@ -70,7 +70,7 @@ export function useObjectMovingEvent(){
               }
     
               if (
-                obj.name == 'ProcessText' &&
+                obj.name ==  `${PROCESS_TEXT}_${objectID}` &&
                 obj.intersectsWithObject(movedObject, true, true)
               ) {
                 obj
@@ -84,7 +84,7 @@ export function useObjectMovingEvent(){
               }
     
               if (
-                obj.name == 'ProcessArrow' &&
+                obj.name ==  `${PROCESS_ARROW}_${objectID}` &&
                 obj.intersectsWithObject(movedObject, true, true)
               ) {
                 obj

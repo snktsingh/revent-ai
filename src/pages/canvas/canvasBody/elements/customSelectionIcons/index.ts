@@ -8,7 +8,7 @@ import {
   usePyramidElement,
   useTimelineElement
 } from '../elementExports';
-import { CYCLE, FUNNEL, PYRAMID } from '@/constants/elementNames';
+import { CYCLE, FUNNEL, PROCESS, PYRAMID } from '@/constants/elementNames';
 export const useCustomSelectionIcons = () => {
   const { addProcessSteps } = useProcessElement();
   const { addPyramidLevel } = usePyramidElement();
@@ -55,7 +55,7 @@ export const useCustomSelectionIcons = () => {
       selectedObject?.setControlVisible('addPyramid', false);
     }
 
-    if (selectedObject?.name === 'Process_Container' && processStepsTotal < 6) {
+    if (objectName[0] === PROCESS && processStepsTotal < 6) {
       selectedObject.setControlVisible('addProcess', true);
     } else {
       selectedObject?.setControlVisible('addProcess', false);

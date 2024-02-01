@@ -30,26 +30,26 @@ export function useCycleElement(){
     
       function addCycleSteps(canvas: fabric.Canvas) {
         const activeCycle = canvas.getActiveObject();
-        const cycleID : number = +activeCycle?.name?.split('_')[1]!;
+        const currentID : number = +activeCycle?.name?.split('_')[1]!;
         let mainContainer: fabric.Object;
         let arrows: fabric.Object[] = [];
         let Circles: fabric.Object[] = [];
         let texts: fabric.Object[] = [];
         canvas.forEachObject(obj => {
-          if (obj.name == `${CYCLE}_${cycleID}`) {
+          if (obj.name == `${CYCLE}_${currentID}`) {
             mainContainer = obj;
             canvas.remove(obj);
           }
     
-          if (obj.name == `${CYCLE_ARROW}_${cycleID}`) {
+          if (obj.name == `${CYCLE_ARROW}_${currentID}`) {
             arrows.push(obj);
             canvas.remove(obj);
           }
-          if (obj.name == `${CYCLE_CIRCLE}_${cycleID}`) {
+          if (obj.name == `${CYCLE_CIRCLE}_${currentID}`) {
             Circles.push(obj);
             canvas.remove(obj);
           }
-          if (obj.name == `${CYCLE_TEXT}_${cycleID}`) {
+          if (obj.name == `${CYCLE_TEXT}_${currentID}`) {
             texts.push(obj);
           }
         });
@@ -60,7 +60,7 @@ export function useCycleElement(){
             stroke: theme.colorSchemes.light.palette.primary.main,
             top,
             left,
-            name: `${CYCLE_CIRCLE}_${cycleID}`,
+            name: `${CYCLE_CIRCLE}_${currentID}`,
           });
           return canvas.add(circle);
         };
@@ -73,7 +73,7 @@ export function useCycleElement(){
             fill: theme.colorSchemes.light.palette.common.white,
             top,
             left,
-            name: `${CYCLE_TEXT}_${cycleID}`,
+            name: `${CYCLE_TEXT}_${currentID}`,
           });
           return canvas.add(text);
         };
@@ -99,10 +99,10 @@ export function useCycleElement(){
             addCircle(305, 259);
             addCircle(178, 148);
             addCircle(436, 148);
-            canvas?.add(addArrow(242, 132, 311, cycleID));
-            canvas?.add(addArrow(428, 85, 29, cycleID));
-            canvas?.add(addArrow(279, 298, 221, cycleID));
-            canvas?.add(addArrow(466, 263, 124, cycleID));
+            canvas?.add(addArrow(242, 132, 311, currentID));
+            canvas?.add(addArrow(428, 85, 29, currentID));
+            canvas?.add(addArrow(279, 298, 221, currentID));
+            canvas?.add(addArrow(466, 263, 124, currentID));
             canvas.bringToFront(texts[0]);
             canvas.bringToFront(texts[1]);
             canvas.bringToFront(texts[2]);
@@ -141,11 +141,11 @@ export function useCycleElement(){
             addCircle(191, 133);
             addCircle(262, 307);
             addCircle(452, 307);
-            canvas?.add(addArrow(256, 116, -51, cycleID));
-            canvas?.add(addArrow(465, 76, 31, cycleID));
-            canvas?.add(addArrow(251, 320, 232, cycleID));
-            canvas?.add(addArrow(560, 265, 114, cycleID));
-            canvas?.add(addArrow(426, 394, 179, cycleID));
+            canvas?.add(addArrow(256, 116, -51, currentID));
+            canvas?.add(addArrow(465, 76, 31, currentID));
+            canvas?.add(addArrow(251, 320, 232, currentID));
+            canvas?.add(addArrow(560, 265, 114, currentID));
+            canvas?.add(addArrow(426, 394, 179, currentID));
             canvas.bringToFront(texts[0]);
             canvas.bringToFront(texts[1]);
             canvas.bringToFront(texts[2]);
@@ -191,12 +191,12 @@ export function useCycleElement(){
             addCircle(571, 169);
             addCircle(261, 327);
             addCircle(461, 332);
-            canvas?.add(addArrow(388, 38, 358, cycleID));
-            canvas?.add(addArrow(211, 140, 311, cycleID));
-            canvas?.add(addArrow(584, 102, 51, cycleID));
-            canvas?.add(addArrow(234, 336, 235, cycleID));
-            canvas?.add(addArrow(614, 301, 124, cycleID));
-            canvas?.add(addArrow(436, 408, 180, cycleID));
+            canvas?.add(addArrow(388, 38, 358, currentID));
+            canvas?.add(addArrow(211, 140, 311, currentID));
+            canvas?.add(addArrow(584, 102, 51, currentID));
+            canvas?.add(addArrow(234, 336, 235, currentID));
+            canvas?.add(addArrow(614, 301, 124, currentID));
+            canvas?.add(addArrow(436, 408, 180, currentID));
             canvas.bringToFront(texts[0]);
             canvas.bringToFront(texts[1]);
             canvas.bringToFront(texts[2]);

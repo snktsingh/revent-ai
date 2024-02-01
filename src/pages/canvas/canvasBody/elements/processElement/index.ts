@@ -1,16 +1,22 @@
+import { PROCESS, PROCESS_ARROW, PROCESS_BOX, PROCESS_TEXT } from "@/constants/elementNames";
 import { theme } from "@/constants/theme";
+import { updateProcessId } from "@/redux/reducers/elementsCount";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { fabric } from "fabric";
 export const useProcessElement = () => {
-
+    const dispatch = useAppDispatch();
+    const { processId } = useAppSelector(state => state.elementsIds);
     const addProcessSteps = (canvas: fabric.Canvas) => {
+        const activeProcess = canvas.getActiveObject();
+        const currentID = activeProcess?.name?.split("_")[1];
         let lastRect: any;
         let mainContainer: any;
     
         canvas.forEachObject(obj => {
-          if (obj.name === 'ProcessBox') {
+          if (obj.name ===  `${PROCESS_BOX}_${currentID}`) {
             lastRect = obj;
           }
-          if (obj.name == 'Process_Container') {
+          if (obj.name ==  `${PROCESS}_${currentID}`) {
             mainContainer = obj;
           }
         });
@@ -30,7 +36,7 @@ export const useProcessElement = () => {
           left: lastRect.left + 130,
           top: mainContainer.top + 40,
           angle: 0,
-          name: 'ProcessArrow',
+          name: `${PROCESS_ARROW}_${currentID}`,
           width: 20
         });
     
@@ -42,7 +48,7 @@ export const useProcessElement = () => {
           fill: theme.colorSchemes.light.palette.primary.main,
           rx: 10,
           ry: 10,
-          name: 'ProcessBox',
+          name: `${PROCESS_BOX}_${currentID}`,
         });
     
         let text = new fabric.Textbox('Add Text', {
@@ -51,15 +57,15 @@ export const useProcessElement = () => {
           top: rect.top! + 5,
           fill: theme.colorSchemes.light.palette.common.white,
           width: 100,
-          name: 'ProcessText',
+          name: `${PROCESS_TEXT}_${currentID}`,
           hasBorders: false,
           hasControls: false,
         });
     
         canvas.forEachObject(obj => {
-          if (obj.name == 'Process_Container') {
+          if (obj.name == `${PROCESS}_${currentID}`) {
             obj.set({
-              width: obj.width! + 150,
+              width: obj.width! + 200,
             });
           }
         });
@@ -72,6 +78,7 @@ export const useProcessElement = () => {
         canvas.renderAll();
     
       };
+      // new process
     
       function addProcess(canvas: fabric.Canvas | null) {
         function addRectangle(
@@ -88,7 +95,7 @@ export const useProcessElement = () => {
             fill: theme.colorSchemes.light.palette.primary.main,
             rx: 10,
             ry: 10,
-            name: 'ProcessBox',
+            name: `${PROCESS_BOX}_${processId}`,
           });
           return canvas?.add(rect);
         }
@@ -99,7 +106,7 @@ export const useProcessElement = () => {
             top,
             fill: theme.colorSchemes.light.palette.common.white,
             width: 100,
-            name: 'ProcessText',
+            name: `${PROCESS_TEXT}_${processId}`,
           });
           return canvas?.add(text);
         }
@@ -119,7 +126,7 @@ export const useProcessElement = () => {
             left,
             top,
             angle,
-            name: 'ProcessArrow',
+            name: `${PROCESS_ARROW}_${processId}`,
             width: 20
           });
     
@@ -129,12 +136,12 @@ export const useProcessElement = () => {
         const mainProcessContainer = new fabric.Rect({
           left: 20,
           top: 120,
-          width: 510,
+          width: 310,
           height: 150,
           fill: 'transparent',
           strokeWidth: 1,
           stroke: 'transparent',
-          name: 'Process_Container',
+          name: `${PROCESS}_${processId}`,
         });
     
         canvas?.add(mainProcessContainer);
@@ -150,6 +157,8 @@ export const useProcessElement = () => {
         addRectangle(205, mainProcessContainer.top! + 20, 110, 100);
         addText(26, 146);
         addText(210, 146);
+        canvas?.renderAll();
+        dispatch(updateProcessId());
       };
 
       return { addProcess, addProcessSteps }
