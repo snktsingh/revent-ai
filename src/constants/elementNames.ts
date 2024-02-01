@@ -22,6 +22,13 @@ const PROCESS_TEXT = 'ProcessText';
 const PROCESS_ARROW = 'ProcessArrow';
 const PROCESS_BOX = 'ProcessBox';
 
+//Timeline 
+const TIMELINE = 'TIMELINE';
+const TIMELINE_TEXT = 'TimelineText';
+const TIMELINE_HEADING = 'TimeLineHeading';
+const TIMELINE_CIRCLE = 'TimelineCircle';
+const TIMELINE_DIRECTION = 'TimeLineDirection';
+
 //Table
 const TABLE = 'TABLE';
 
@@ -41,5 +48,10 @@ export {
     PROCESS_ARROW,
     PROCESS_TEXT,
     PROCESS_BOX,
-    TABLE
+    TABLE,
+    TIMELINE,
+    TIMELINE_CIRCLE,
+    TIMELINE_DIRECTION,
+    TIMELINE_HEADING,
+    TIMELINE_TEXT
 };

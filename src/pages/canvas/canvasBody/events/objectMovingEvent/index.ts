@@ -1,6 +1,6 @@
 import { fabric } from "fabric";
 import { FabricObject } from "@/interface/fabricTypes";
-import { CYCLE, CYCLE_ARROW, CYCLE_CIRCLE, CYCLE_TEXT, FUNNEL, FUNNEL_BASE, FUNNEL_LEVEL, FUNNEL_TEXT, PROCESS, PROCESS_ARROW, PROCESS_BOX, PROCESS_TEXT, PYRAMID, PYRAMID_TEXT } from "@/constants/elementNames";
+import { CYCLE, CYCLE_ARROW, CYCLE_CIRCLE, CYCLE_TEXT, FUNNEL, FUNNEL_BASE, FUNNEL_LEVEL, FUNNEL_TEXT, PROCESS, PROCESS_ARROW, PROCESS_BOX, PROCESS_TEXT, PYRAMID, PYRAMID_TEXT, TIMELINE, TIMELINE_CIRCLE, TIMELINE_DIRECTION, TIMELINE_HEADING, TIMELINE_TEXT } from "@/constants/elementNames";
 
 export function useObjectMovingEvent(){
       const handleObjectMoving = (
@@ -102,7 +102,7 @@ export function useObjectMovingEvent(){
               lastLeft: movedObject.left,
               lastTop: movedObject.top,
             });
-          } else if (movedObject.name === 'Timeline_Container') {
+          } else if (objectName[0] === TIMELINE) {
             const lastLeft = movedObject.get('lastLeft') || movedObject.left;
             const lastTop = movedObject.get('lastTop') || movedObject.top;
     
@@ -114,7 +114,7 @@ export function useObjectMovingEvent(){
               let top;
     
               if (
-                obj.name === 'TimeLineDirection' &&
+                obj.name === `${TIMELINE_DIRECTION}_${objectID}` &&
                 obj.intersectsWithObject(movedObject, true, true)
               ) {
                 obj
@@ -128,7 +128,7 @@ export function useObjectMovingEvent(){
               }
     
               if (
-                obj.name == 'TimeLineText' &&
+                obj.name == `${TIMELINE_TEXT}_${objectID}` &&
                 obj.intersectsWithObject(movedObject, true, true)
               ) {
                 obj
@@ -142,7 +142,7 @@ export function useObjectMovingEvent(){
               }
     
               if (
-                obj.name == 'TimeLineHeading' &&
+                obj.name == `${TIMELINE_HEADING}_${objectID}` &&
                 obj.intersectsWithObject(movedObject, true, true)
               ) {
                 obj
@@ -156,7 +156,7 @@ export function useObjectMovingEvent(){
               }
     
               if (
-                obj.name == 'timeLineCircle' &&
+                obj.name == `${TIMELINE_CIRCLE}_${objectID}` &&
                 obj.intersectsWithObject(movedObject, true, true)
               ) {
                 obj

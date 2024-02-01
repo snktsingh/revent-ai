@@ -1,4 +1,12 @@
-import { CYCLE_TEXT, FUNNEL_TEXT, PROCESS_TEXT, PYRAMID_TEXT } from '@/constants/elementNames';
+import {
+  CYCLE_TEXT,
+  FUNNEL_TEXT,
+  PROCESS_TEXT,
+  PYRAMID_TEXT,
+  TIMELINE_HEADING,
+  TIMELINE_TEXT,
+} from '@/constants/elementNames';
+import { TimelineDataType } from '@/interface/elDataTypes';
 import { APIRequest, ApiElement, DataRequest } from '@/interface/storeTypes';
 import { setRequestData } from '@/redux/reducers/apiData';
 import { updateCanvasInList } from '@/redux/reducers/canvas';
@@ -71,8 +79,11 @@ export const useCanvasComponent = () => {
     dispatch(updateCanvasInList({ id, updatedCanvas }));
   };
 
-
-  const getOrCreateElement = (shape: string, title: string, outputFormat : APIRequest)  => {
+  const getOrCreateElement = (
+    shape: string,
+    title: string,
+    outputFormat: APIRequest
+  ) => {
     const existingElement = outputFormat.elements.find(
       (element: any) => element.shape === shape && element.title === title
     );
@@ -80,13 +91,12 @@ export const useCanvasComponent = () => {
     if (existingElement) {
       return existingElement;
     } else {
-      const newElement : ApiElement = {
+      const newElement: ApiElement = {
         shape,
         title,
         subTitle: '',
         templateName: '',
         data: [] as DataRequest[],
-        
       };
       outputFormat.elements.push(newElement);
       return newElement;
@@ -100,59 +110,114 @@ export const useCanvasComponent = () => {
       imagesCount: '',
       elements: [],
     };
+    let timelineData : TimelineDataType[] = [];
     canvasData.forEach(canvasObject => {
       if (canvasObject.type === 'textbox' && canvasObject.name) {
-
         const elementID = canvasObject.name.split('_')[1];
-        
-        if(canvasObject.name.startsWith(FUNNEL_TEXT)){
-          const funnelElement = getOrCreateElement('Funnel', elementID, outputFormat);
+
+        if (canvasObject.name.startsWith(FUNNEL_TEXT)) {
+          const funnelElement = getOrCreateElement(
+            'Funnel',
+            elementID,
+            outputFormat
+          );
           funnelElement.data.push({
             name: canvasObject.text,
-            heading: '', 
-            subHeading: '', 
+            heading: '',
+            subHeading: '',
             text: canvasObject.text,
           });
-        };
+        }
 
-        if(canvasObject.name.startsWith(PYRAMID_TEXT)){
-          const PyramidElement = getOrCreateElement('Pyramid', elementID, outputFormat);
+        if (canvasObject.name.startsWith(PYRAMID_TEXT)) {
+          const PyramidElement = getOrCreateElement(
+            'Pyramid',
+            elementID,
+            outputFormat
+          );
           PyramidElement.data.push({
             name: canvasObject.text,
-            heading: '', 
-            subHeading: '', 
+            heading: '',
+            subHeading: '',
             text: canvasObject.text,
           });
-        };
+        }
 
-        if(canvasObject.name.startsWith(CYCLE_TEXT)){
-          const cycleElement = getOrCreateElement('Cycle', elementID, outputFormat);
+        if (canvasObject.name.startsWith(CYCLE_TEXT)) {
+          const cycleElement = getOrCreateElement(
+            'Cycle',
+            elementID,
+            outputFormat
+          );
           cycleElement.data.push({
             name: canvasObject.text,
-            heading: '', 
-            subHeading: '', 
+            heading: '',
+            subHeading: '',
             text: canvasObject.text,
           });
-        };
+        }
 
-        if(canvasObject.name.startsWith(PROCESS_TEXT)){
-          const processElement = getOrCreateElement('Process', elementID, outputFormat);
+        if (canvasObject.name.startsWith(PROCESS_TEXT)) {
+          const processElement = getOrCreateElement(
+            'Process',
+            elementID,
+            outputFormat
+          );
           processElement.data.push({
             name: canvasObject.text,
-            heading: '', 
-            subHeading: '', 
+            heading: '',
+            subHeading: '',
             text: canvasObject.text,
           });
-        };
+        }
 
-      };
-
-
+        if (
+          canvasObject.name.startsWith(TIMELINE_TEXT) ||
+          canvasObject.name.startsWith(TIMELINE_HEADING)
+        ) {
+          timelineData.push({ content: canvasObject.text, id: elementID });
+        }
+      }
     });
 
-    console.log({outputFormat});
-    dispatch(setRequestData(outputFormat))
-    
+    const organizedTimelineData: OrganizedTimelineData = {};
+
+    timelineData.forEach((item, index) => {
+      if (!organizedTimelineData[item.id]) {
+        organizedTimelineData[item.id] = [];
+      }
+
+      if (index % 2 === 0) {
+        const newTimeline : DataRequest = {
+          heading: item.content,
+          text: '',
+          name:'',
+          subHeading:'',
+        };
+
+        organizedTimelineData[item.id].push(newTimeline);
+      } else {
+        const lastTimeline =
+          organizedTimelineData[item.id][
+            organizedTimelineData[item.id].length - 1
+          ];
+        if (lastTimeline) {
+          lastTimeline.text = item.content;
+        }
+      }
+    });
+    type OrganizedTimelineData = Record<string, DataRequest[]>;
+
+   Object.entries(organizedTimelineData).forEach(
+      ([id, content]) => {
+         const timelineElementData = getOrCreateElement('Timeline', id , outputFormat);
+         timelineElementData.data = content;
+
+      }
+    );
+
+    console.log({ outputFormat });
+    dispatch(setRequestData(outputFormat));
   }
 
   return {

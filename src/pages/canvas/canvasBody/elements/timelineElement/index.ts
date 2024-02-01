@@ -1,16 +1,22 @@
+import { TIMELINE, TIMELINE_CIRCLE, TIMELINE_DIRECTION, TIMELINE_HEADING, TIMELINE_TEXT } from "@/constants/elementNames";
 import { theme } from "@/constants/theme";
+import { updateTimelineId } from "@/redux/reducers/elementsCount";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { fabric } from "fabric";
 export function useTimelineElement(){
-
+  const dispatch = useAppDispatch();
+  const { timelineId } = useAppSelector(state => state.elementsIds);
     const addTimelineSteps = (canvas: fabric.Canvas) => {
+        const activeTimeline = canvas?.getActiveObject();
+        const currentID = activeTimeline?.name?.split("_")[1];
         let lastCircle: any;
         let mainContainer: any;
     
         canvas.forEachObject(obj => {
-          if (obj.name == 'timeLineCircle') {
+          if (obj.name == `${TIMELINE_CIRCLE}_${currentID}`) {
             lastCircle = obj;
           }
-          if (obj.name == 'Timeline_Container') {
+          if (obj.name == `${TIMELINE}_${currentID}`) {
             mainContainer = obj;
           }
         });
@@ -20,7 +26,7 @@ export function useTimelineElement(){
           top: mainContainer.top + 20 + 45,
           strokeWidth: 3,
           stroke: theme.colorSchemes.light.palette.common.steelBlue,
-          name: 'TimeLineDirection',
+          name: `${TIMELINE_DIRECTION}_${currentID}`,
         });
     
         canvas?.add(line);
@@ -31,7 +37,7 @@ export function useTimelineElement(){
           top: mainContainer.top + 20 + 26,
           left: lastCircle.left + 180,
           stroke: theme.colorSchemes.light.palette.common.black,
-          name: 'timeLineCircle',
+          name: `${TIMELINE_CIRCLE}_${currentID}`,
         });
     
         canvas?.add(circle);
@@ -63,7 +69,7 @@ export function useTimelineElement(){
           100,
           14,
           'Add Timeline',
-          'TimeLineHeading'
+          `${TIMELINE_HEADING}_${currentID}`
         );
         addText(
           lastCircle.left + 170,
@@ -71,20 +77,20 @@ export function useTimelineElement(){
           150,
           16,
           'Add Text',
-          'TimeLineText'
+          `${TIMELINE_TEXT}_${currentID}`
         );
     
         canvas.forEachObject(obj => {
-          if (obj.name == 'Timeline_Container') {
+          if (obj.name == `${TIMELINE}_${currentID}`) {
             obj.set({
-              width: obj.width! + 100,
+              width: obj.width! + 180,
             });
           }
         });
     
         canvas?.renderAll();
       };
-    
+    // new timeline
       const addTimeline = (canvas: fabric.Canvas | null) => {
         function addText(
           left: number,
@@ -113,7 +119,7 @@ export function useTimelineElement(){
             top,
             strokeWidth: 3,
             stroke: theme.colorSchemes.light.palette.common.steelBlue,
-            name: 'TimeLineDirection',
+            name:`${TIMELINE_DIRECTION}_${timelineId}`,
           });
           return canvas?.add(line);
         }
@@ -125,7 +131,7 @@ export function useTimelineElement(){
             top,
             left,
             stroke: theme.colorSchemes.light.palette.common.black,
-            name: 'timeLineCircle',
+            name: `${TIMELINE_CIRCLE}_${timelineId}`,
           });
           return canvas?.add(circle);
         }
@@ -133,12 +139,12 @@ export function useTimelineElement(){
         const mainTimelineContainer = new fabric.Rect({
           left: 20,
           top: 120,
-          width: 550,
+          width: 450,
           height: 150,
           fill: 'transparent',
           strokeWidth: 1,
           stroke: 'transparent',
-          name: 'Timeline_Container',
+          name: `${TIMELINE}_${timelineId}`,
         });
     
         canvas?.add(mainTimelineContainer);
@@ -149,10 +155,12 @@ export function useTimelineElement(){
         addLine(170, mTop + 20 + 45, 200);
         addCircle(130, mTop + 20 + 26);
         addCircle(321, mTop + 20 + 26);
-        addText(102, mTop + 20, 100, 14, 'Add Timeline', 'TimeLineHeading');
-        addText(111, mTop + 20 + 79, 150, 16, 'Add Text', 'TimeLineText');
-        addText(301, mTop + 20, 100, 14, 'Add Timeline', 'TimeLineHeading');
-        addText(307, mTop + 20 + 79, 150, 16, 'Add Text', 'TimeLineText');
+        addText(102, mTop + 20, 100, 14, 'Add Timeline', `${TIMELINE_HEADING}_${timelineId}`);
+        addText(111, mTop + 20 + 79, 150, 16, 'Add Text', `${TIMELINE_TEXT}_${timelineId}`);
+        addText(301, mTop + 20, 100, 14, 'Add Timeline', `${TIMELINE_HEADING}_${timelineId}`);
+        addText(307, mTop + 20 + 79, 150, 16, 'Add Text', `${TIMELINE_TEXT}_${timelineId}`);
+        canvas?.renderAll();
+        dispatch(updateTimelineId());
       };
       return { addTimeline, addTimelineSteps };
 }
