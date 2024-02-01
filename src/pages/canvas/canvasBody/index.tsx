@@ -1,3 +1,16 @@
+import { TABLE } from '@/constants/elementNames';
+import PopUpModal from '@/constants/elements/modal';
+import { AddElement, Copy, Delete } from '@/constants/media';
+import { TableDetails } from '@/interface/storeTypes';
+import {
+  copyCanvasCopy,
+  setOriginalSlide
+} from '@/redux/reducers/canvas';
+import { openModal, setMenuItemKey } from '@/redux/reducers/elements';
+import { searchElement } from '@/redux/reducers/slide';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { fetchSlideImg } from '@/redux/thunk/thunk';
+import { ThumbDownAltRounded } from '@mui/icons-material';
 import {
   Backdrop,
   Box,
@@ -7,18 +20,23 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControl,
   Grid,
   IconButton,
   InputBase,
-  InputLabel,
   Menu,
   MenuItem,
-  Select,
   Stack,
-  TextField,
+  TextField
 } from '@mui/material';
-import axios from 'axios';
+import React, { useState } from 'react';
+import { ToastContainer } from 'react-toastify';
+import CanvasComponent from './canvasComponent';
+import { CanvasNotes } from './canvasNotes';
+import {
+  ContentElements,
+  elementData,
+} from './elementData';
+import SlideList from './slideList';
 import {
   BodyContainer,
   EditSlideContainer,
@@ -27,38 +45,7 @@ import {
   ElementTitle,
   LikeButton,
 } from './style';
-import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { AddElement, Copy, Delete } from '@/constants/media';
-import { openModal, setMenuItemKey } from '@/redux/reducers/elements';
-import PopUpModal from '@/constants/elements/modal';
-import { searchElement } from '@/redux/reducers/slide';
-import {
-  CYCLE,
-  ContentElements,
-  FUNNEL,
-  PROCESS,
-  PYRAMID,
-  TABLE,
-  TIMELINE,
-  elementData,
-} from './elementData';
-import React, { useState } from 'react';
-import { CanvasNotes } from './canvasNotes';
-import SlideList from './slideList';
 import Templates from './themes';
-import { ThumbDownAltRounded, Widgets } from '@mui/icons-material';
-import CanvasComponent from './canvasComponent';
-import {
-  copyCanvasCopy,
-  setCanvas,
-  setOriginalSlide,
-  setRequestData,
-  setTableDetails,
-  setTempData,
-} from '@/redux/reducers/canvas';
-import { ToastContainer, toast } from 'react-toastify';
-import { fetchSlideImg } from '@/redux/thunk/thunk';
-import { TableDetails } from '@/interface/storeTypes';
 
 const CanvasBody = () => {
   const slide = useAppSelector(state => state.slide);

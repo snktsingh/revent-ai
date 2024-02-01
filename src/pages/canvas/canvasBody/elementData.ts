@@ -402,9 +402,4 @@ interface variantsType {
   addVariantsCanvas: Function;
 }
 
-export const TABLE = 'TABLE';
-export const FUNNEL = 'FUNNEL';
-export const CYCLE = 'CYCLE';
-export const PROCESS = 'PROCESS';
-export const TIMELINE = 'TIMELINE';
-export const PYRAMID = 'PYRAMID';
+

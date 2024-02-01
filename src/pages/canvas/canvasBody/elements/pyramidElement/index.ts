@@ -7,16 +7,18 @@ export function usePyramidElement() {
   const dispatch = useAppDispatch();
   const { pyramidId } = useAppSelector(state => state.elementsIds)
   const addPyramidLevel = (canvas: fabric.Canvas) => {
-
+    const activePyramid = canvas.getActiveObject();
+    const ID = activePyramid?.name?.split("_")[1];
+    console.log(activePyramid)
     let lastLevel: any;
     let lastText: any;
     canvas.forEachObject(obj => {
-      if (obj.name == 'pyramidTextbox') {
+      if (obj.name == `${PYRAMID_TEXT}_${ID}`) { 
         lastText = obj;
       }
     });
     let activeObject = canvas.getActiveObject();
-    if (activeObject?.type == 'group' && activeObject.name === 'PYRAMID') {
+    if (activeObject?.type == 'group' && activeObject.name?.startsWith(PYRAMID)) {
       (activeObject as fabric.Group).forEachObject(obj => {
         lastLevel = obj;
       });
@@ -37,7 +39,7 @@ export function usePyramidElement() {
             (activeObject as fabric.Group).top! -
             1,
           left: (activeObject as fabric.Group).left! - 40,
-          name: 'Pyramid_LEVEL',
+          name: `${PYRAMID_LEVEL}_${ID}`,
         }
       );
 
@@ -46,7 +48,7 @@ export function usePyramidElement() {
         left: lastText.left,
         top: trapezoid.top! + 20,
         width: 100,
-        name: 'pyramidTextbox',
+        name: `${PYRAMID_TEXT}_${ID}`,
       });
 
       (activeObject as fabric.Group).addWithUpdate(trapezoid);

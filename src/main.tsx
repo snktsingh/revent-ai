@@ -17,7 +17,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
       <CssVarsProvider theme={theme}>
-        <ThemeProvider theme={elementTheme}>
+        {/* <ThemeProvider theme={elementTheme}> */}
           <BrowserRouter>
             <Auth0Provider
               domain="dev-qpotj6mrcodhw84w.us.auth0.com"
@@ -29,7 +29,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
               <Router />
             </Auth0Provider>
           </BrowserRouter>
-        </ThemeProvider>
+        {/* </ThemeProvider> */}
       </CssVarsProvider>
     </Provider>
   </React.StrictMode>
