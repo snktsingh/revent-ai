@@ -105,12 +105,12 @@ export const useCanvasComponent = () => {
 
   function getElementsData(canvasData: any[]) {
     const outputFormat: APIRequest = {
-      companyName: 'Any Sample Name',
+      companyName: 'Trident',
       themeColor: '#E54B4B',
       imagesCount: '',
       elements: [],
     };
-    let timelineData : TimelineDataType[] = [];
+    let timelineData: TimelineDataType[] = [];
     canvasData.forEach(canvasObject => {
       if (canvasObject.type === 'textbox' && canvasObject.name) {
         const elementID = canvasObject.name.split('_')[1];
@@ -188,11 +188,11 @@ export const useCanvasComponent = () => {
       }
 
       if (index % 2 === 0) {
-        const newTimeline : DataRequest = {
+        const newTimeline: DataRequest = {
           heading: item.content,
           text: '',
-          name:'',
-          subHeading:'',
+          name: '',
+          subHeading: '',
         };
 
         organizedTimelineData[item.id].push(newTimeline);
@@ -208,13 +208,14 @@ export const useCanvasComponent = () => {
     });
     type OrganizedTimelineData = Record<string, DataRequest[]>;
 
-   Object.entries(organizedTimelineData).forEach(
-      ([id, content]) => {
-         const timelineElementData = getOrCreateElement('Timeline', id , outputFormat);
-         timelineElementData.data = content;
-
-      }
-    );
+    Object.entries(organizedTimelineData).forEach(([id, content]) => {
+      const timelineElementData = getOrCreateElement(
+        'Timeline',
+        id,
+        outputFormat
+      );
+      timelineElementData.data = content;
+    });
 
     console.log({ outputFormat });
     dispatch(setRequestData(outputFormat));

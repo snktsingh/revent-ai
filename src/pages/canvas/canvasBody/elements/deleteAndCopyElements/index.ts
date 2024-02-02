@@ -1,3 +1,4 @@
+import { CYCLE, CYCLE_ARROW, CYCLE_CIRCLE, CYCLE_TEXT, FUNNEL, FUNNEL_BASE, FUNNEL_LEVEL, FUNNEL_TEXT, PROCESS, PROCESS_ARROW, PROCESS_BOX, PROCESS_TEXT, PYRAMID, PYRAMID_LEVEL, PYRAMID_TEXT, TIMELINE, TIMELINE_CIRCLE, TIMELINE_DIRECTION, TIMELINE_HEADING, TIMELINE_TEXT } from '@/constants/elementNames';
 import { Copy, DeleteX } from '@/constants/media';
 import { fabric } from 'fabric';
 export function useDelAndCopy() {
@@ -44,31 +45,46 @@ export function useDelAndCopy() {
     // Function to handle the delete action
     function deleteObject(eventData: MouseEvent): boolean {
       const activeObject = canvas?.getActiveObject();
-
+      const currentElID = activeObject?.name?.split("_")[1];
       if (activeObject) {
         const objectsToDelete: string[] = [];
 
         // Determine objects to delete based on the type of the active object
         switch (activeObject.name) {
-          case 'Process_Container':
-            objectsToDelete.push('ProcessBox', 'ProcessText', 'ProcessArrow');
-            break;
-          case 'Timeline_Container':
+          case `${PROCESS}_${currentElID}`:
             objectsToDelete.push(
-              'timeLineCircle',
-              'TimeLineText',
-              'TimeLineDirection',
-              'TimeLineHeading'
+              `${PROCESS_BOX}_${currentElID}`, 
+              `${PROCESS_TEXT}_${currentElID}`, 
+              `${PROCESS_ARROW}_${currentElID}`
+              );
+            break;
+          case `${TIMELINE}_${currentElID}`:
+            objectsToDelete.push(
+              `${TIMELINE_CIRCLE}_${currentElID}`,
+              `${TIMELINE_TEXT}_${currentElID}`,
+              `${TIMELINE_DIRECTION}_${currentElID}`,
+              `${TIMELINE_HEADING}_${currentElID}`
             );
             break;
-          case 'PYRAMID':
-            objectsToDelete.push('Pyramid_LEVEL', 'pyramidTextbox');
+          case `${PYRAMID}_${currentElID}`:
+            objectsToDelete.push(
+              `${PYRAMID_LEVEL}_${currentElID}`, 
+              `${PYRAMID_TEXT}_${currentElID}`
+              );
             break;
-          case 'Funnel':
-            objectsToDelete.push('Funnel_Text', 'Funnel_Base', 'Funnel_Level');
+          case `${FUNNEL}_${currentElID}`:
+            objectsToDelete.push(
+              `${FUNNEL_TEXT}_${currentElID}`, 
+              `${FUNNEL_BASE}_${currentElID}`, 
+              `${FUNNEL_LEVEL}_${currentElID}`
+              );
             break;
-          case 'Cycle_Container':
-            objectsToDelete.push('Cycle_Arrow', 'Cycle_Circle', 'Cycle_Text');
+          case `${CYCLE}_${currentElID}`:
+            objectsToDelete.push(
+              `${CYCLE_ARROW}_${currentElID}`, 
+              `${CYCLE_CIRCLE}_${currentElID}`, 
+              `${CYCLE_TEXT}_${currentElID}`
+              );
             break;
           case 'List_Container':
             objectsToDelete.push('listText', 'listImage', 'ListAddImageText');
