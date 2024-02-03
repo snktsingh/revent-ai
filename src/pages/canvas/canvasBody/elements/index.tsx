@@ -1,3 +1,4 @@
+import { PARAGRAPH, SUBTITLE, TITLE } from '@/constants/elementNames';
 import { fabric } from 'fabric';
 
 export default function useAllElements() {
@@ -9,7 +10,7 @@ export default function useAllElements() {
     width:300,
     fontWeight: 'bold',
     fontFamily: 'Red Hat Display, sans-serif',
-    name: 'title',
+    name: TITLE,
     fill: '#404040',
   });
 
@@ -19,7 +20,7 @@ export default function useAllElements() {
     width: 200,
     fontSize: 20,
     fontFamily: 'Arial',
-    name: 'subTitle',
+    name: SUBTITLE,
     fill: '#404040'
   });
 
@@ -41,7 +42,7 @@ export default function useAllElements() {
     lineHeight: 1.5,
     fontSize: 16, // Adjust the font size as needed
     fontFamily: 'Arial',
-    name: 'paragraphbox',
+    name: PARAGRAPH,
     fill: '#404040'
   });
 

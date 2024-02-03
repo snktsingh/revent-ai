@@ -45,24 +45,25 @@ export interface IShapeRequest {
   };
 
 
-export interface DataRequest {
+export interface DataRequestType {
   name: string;
   heading: string;
   subHeading: string;
   text: string;
-}
+};
 
-export interface ApiElement {
+export interface ReqElementType {
   shape: string;
-  data: DataRequest[];
+  data: DataRequestType[];
   title:string;
   subTitle:string;
   templateName:string;
-}
+  elementId?: string
+};
 export interface APIRequest {
   companyName : string;
   themeColor : string;
   imagesCount:string;
-  elements : ApiElement[];
-}
-  
+  elements : ReqElementType[];
+};
+

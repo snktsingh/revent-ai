@@ -32,6 +32,13 @@ const TIMELINE_DIRECTION = 'TimeLineDirection';
 //Table
 const TABLE = 'TABLE';
 
+
+//Text
+const TITLE = 'TITLE';
+const SUBTITLE = 'SUBTITLE';
+const PARAGRAPH = 'PARAGRAPH';
+const BULLET_POINTS = 'BulletPoints';
+
 export {
     FUNNEL,
     FUNNEL_TEXT,
@@ -53,5 +60,9 @@ export {
     TIMELINE_CIRCLE,
     TIMELINE_DIRECTION,
     TIMELINE_HEADING,
-    TIMELINE_TEXT
+    TIMELINE_TEXT,
+    TITLE,
+    SUBTITLE,
+    PARAGRAPH,
+    BULLET_POINTS
 };

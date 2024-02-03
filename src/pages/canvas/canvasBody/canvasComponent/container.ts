@@ -1,13 +1,20 @@
 import {
   CYCLE_TEXT,
   FUNNEL_TEXT,
+  PARAGRAPH,
   PROCESS_TEXT,
   PYRAMID_TEXT,
+  SUBTITLE,
   TIMELINE_HEADING,
   TIMELINE_TEXT,
+  TITLE,
 } from '@/constants/elementNames';
 import { TimelineDataType } from '@/interface/elDataTypes';
-import { APIRequest, ApiElement, DataRequest } from '@/interface/storeTypes';
+import {
+  APIRequest,
+  DataRequestType,
+  ReqElementType,
+} from '@/interface/storeTypes';
 import { setRequestData } from '@/redux/reducers/apiData';
 import { updateCanvasInList } from '@/redux/reducers/canvas';
 import { useAppDispatch } from '@/redux/store';
@@ -81,22 +88,24 @@ export const useCanvasComponent = () => {
 
   const getOrCreateElement = (
     shape: string,
-    title: string,
+    elementId: string,
     outputFormat: APIRequest
   ) => {
     const existingElement = outputFormat.elements.find(
-      (element: any) => element.shape === shape && element.title === title
+      (element: any) =>
+        element.shape === shape && element.elementId === elementId
     );
 
     if (existingElement) {
       return existingElement;
     } else {
-      const newElement: ApiElement = {
+      const newElement: ReqElementType = {
         shape,
-        title,
+        title: '',
         subTitle: '',
         templateName: '',
-        data: [] as DataRequest[],
+        elementId,
+        data: [],
       };
       outputFormat.elements.push(newElement);
       return newElement;
@@ -114,109 +123,80 @@ export const useCanvasComponent = () => {
     canvasData.forEach(canvasObject => {
       if (canvasObject.type === 'textbox' && canvasObject.name) {
         const elementID = canvasObject.name.split('_')[1];
-
-        if (canvasObject.name.startsWith(FUNNEL_TEXT)) {
-          const funnelElement = getOrCreateElement(
-            'Funnel',
-            elementID,
-            outputFormat
-          );
-          funnelElement.data.push({
-            name: canvasObject.text,
-            heading: '',
-            subHeading: '',
-            text: canvasObject.text,
-          });
+        let elementType: string | null = null;
+        
+        switch (true) {
+            case canvasObject.name.startsWith(FUNNEL_TEXT):
+                elementType = 'Funnel';
+                break;
+        
+            case canvasObject.name.startsWith(PYRAMID_TEXT):
+                elementType = 'Pyramid';
+                break;
+        
+            case canvasObject.name.startsWith(CYCLE_TEXT):
+                elementType = 'Cycle';
+                break;
+        
+            case canvasObject.name.startsWith(PROCESS_TEXT):
+                elementType = 'Process';
+                break;
         }
-
-        if (canvasObject.name.startsWith(PYRAMID_TEXT)) {
-          const PyramidElement = getOrCreateElement(
-            'Pyramid',
-            elementID,
-            outputFormat
-          );
-          PyramidElement.data.push({
-            name: canvasObject.text,
-            heading: '',
-            subHeading: '',
-            text: canvasObject.text,
-          });
-        }
-
-        if (canvasObject.name.startsWith(CYCLE_TEXT)) {
-          const cycleElement = getOrCreateElement(
-            'Cycle',
-            elementID,
-            outputFormat
-          );
-          cycleElement.data.push({
-            name: canvasObject.text,
-            heading: '',
-            subHeading: '',
-            text: canvasObject.text,
-          });
-        }
-
-        if (canvasObject.name.startsWith(PROCESS_TEXT)) {
-          const processElement = getOrCreateElement(
-            'Process',
-            elementID,
-            outputFormat
-          );
-          processElement.data.push({
-            name: canvasObject.text,
-            heading: '',
-            subHeading: '',
-            text: canvasObject.text,
-          });
-        }
-
-        if (
-          canvasObject.name.startsWith(TIMELINE_TEXT) ||
-          canvasObject.name.startsWith(TIMELINE_HEADING)
+        
+        if (elementType) {
+            const element = getOrCreateElement(elementType, elementID, outputFormat);
+            element.data.push({
+                name: canvasObject.text,
+                heading: '',
+                subHeading: '',
+                text: canvasObject.text,
+            });
+        } else if (
+            canvasObject.name.startsWith(TIMELINE_TEXT) ||
+            canvasObject.name.startsWith(TIMELINE_HEADING)
         ) {
-          timelineData.push({ content: canvasObject.text, id: elementID });
+            timelineData.push({ content: canvasObject.text, id: elementID });
+        } else if (canvasObject.name === TITLE || canvasObject.name === SUBTITLE) {
+            const titleData = getOrCreateElement('theme', '1', outputFormat);
+            titleData[canvasObject.name === 'title' ? 'title' : 'subTitle'] = canvasObject.text;
+        } else if ( canvasObject.name === PARAGRAPH ) {
+            const paragraphData = getOrCreateElement('Paragraph', '1', outputFormat);
+            paragraphData.data.push({
+              name: canvasObject.text,
+              heading: '',
+              subHeading: '',
+              text: canvasObject.text,
+          });
         }
       }
     });
+
+    type OrganizedTimelineData = Record<string, DataRequestType[]>;
 
     const organizedTimelineData: OrganizedTimelineData = {};
-
+    
     timelineData.forEach((item, index) => {
-      if (!organizedTimelineData[item.id]) {
-        organizedTimelineData[item.id] = [];
-      }
-
+      const id = item.id;
+      const timelineArray = organizedTimelineData[id] || (organizedTimelineData[id] = []);
+    
       if (index % 2 === 0) {
-        const newTimeline: DataRequest = {
-          heading: item.content,
-          text: '',
-          name: '',
-          subHeading: '',
-        };
-
-        organizedTimelineData[item.id].push(newTimeline);
+        timelineArray.push({ heading: item.content, text: '', name: '', subHeading: '' });
       } else {
-        const lastTimeline =
-          organizedTimelineData[item.id][
-            organizedTimelineData[item.id].length - 1
-          ];
-        if (lastTimeline) {
-          lastTimeline.text = item.content;
-        }
+        const lastTimeline = timelineArray[timelineArray.length - 1];
+        lastTimeline && (lastTimeline.text = item.content);
       }
     });
-    type OrganizedTimelineData = Record<string, DataRequest[]>;
-
+    
     Object.entries(organizedTimelineData).forEach(([id, content]) => {
-      const timelineElementData = getOrCreateElement(
-        'Timeline',
-        id,
-        outputFormat
-      );
-      timelineElementData.data = content;
+      getOrCreateElement('Timeline', id, outputFormat).data = content;
     });
-
+    
+    const modifiedRequestFormat = outputFormat.elements.map(element => {
+      const { elementId, ...rest } = element;
+      return rest;
+    });
+    outputFormat.elements = modifiedRequestFormat;
+    
     console.log({ outputFormat });
     dispatch(setRequestData(outputFormat));
   }
