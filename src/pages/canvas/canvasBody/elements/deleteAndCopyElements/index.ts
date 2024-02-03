@@ -1,4 +1,25 @@
-import { CYCLE, CYCLE_ARROW, CYCLE_CIRCLE, CYCLE_TEXT, FUNNEL, FUNNEL_BASE, FUNNEL_LEVEL, FUNNEL_TEXT, PROCESS, PROCESS_ARROW, PROCESS_BOX, PROCESS_TEXT, PYRAMID, PYRAMID_LEVEL, PYRAMID_TEXT, TIMELINE, TIMELINE_CIRCLE, TIMELINE_DIRECTION, TIMELINE_HEADING, TIMELINE_TEXT } from '@/constants/elementNames';
+import {
+  CYCLE,
+  CYCLE_ARROW,
+  CYCLE_CIRCLE,
+  CYCLE_TEXT,
+  FUNNEL,
+  FUNNEL_BASE,
+  FUNNEL_LEVEL,
+  FUNNEL_TEXT,
+  PROCESS,
+  PROCESS_ARROW,
+  PROCESS_BOX,
+  PROCESS_TEXT,
+  PYRAMID,
+  PYRAMID_LEVEL,
+  PYRAMID_TEXT,
+  TIMELINE,
+  TIMELINE_CIRCLE,
+  TIMELINE_DIRECTION,
+  TIMELINE_HEADING,
+  TIMELINE_TEXT,
+} from '@/constants/elementNames';
 import { Copy, DeleteX } from '@/constants/media';
 import { fabric } from 'fabric';
 export function useDelAndCopy() {
@@ -45,7 +66,7 @@ export function useDelAndCopy() {
     // Function to handle the delete action
     function deleteObject(eventData: MouseEvent): boolean {
       const activeObject = canvas?.getActiveObject();
-      const currentElID = activeObject?.name?.split("_")[1];
+      const currentElID = activeObject?.name?.split('_')[1];
       if (activeObject) {
         const objectsToDelete: string[] = [];
 
@@ -53,10 +74,10 @@ export function useDelAndCopy() {
         switch (activeObject.name) {
           case `${PROCESS}_${currentElID}`:
             objectsToDelete.push(
-              `${PROCESS_BOX}_${currentElID}`, 
-              `${PROCESS_TEXT}_${currentElID}`, 
+              `${PROCESS_BOX}_${currentElID}`,
+              `${PROCESS_TEXT}_${currentElID}`,
               `${PROCESS_ARROW}_${currentElID}`
-              );
+            );
             break;
           case `${TIMELINE}_${currentElID}`:
             objectsToDelete.push(
@@ -68,23 +89,23 @@ export function useDelAndCopy() {
             break;
           case `${PYRAMID}_${currentElID}`:
             objectsToDelete.push(
-              `${PYRAMID_LEVEL}_${currentElID}`, 
+              `${PYRAMID_LEVEL}_${currentElID}`,
               `${PYRAMID_TEXT}_${currentElID}`
-              );
+            );
             break;
           case `${FUNNEL}_${currentElID}`:
             objectsToDelete.push(
-              `${FUNNEL_TEXT}_${currentElID}`, 
-              `${FUNNEL_BASE}_${currentElID}`, 
+              `${FUNNEL_TEXT}_${currentElID}`,
+              `${FUNNEL_BASE}_${currentElID}`,
               `${FUNNEL_LEVEL}_${currentElID}`
-              );
+            );
             break;
           case `${CYCLE}_${currentElID}`:
             objectsToDelete.push(
-              `${CYCLE_ARROW}_${currentElID}`, 
-              `${CYCLE_CIRCLE}_${currentElID}`, 
+              `${CYCLE_ARROW}_${currentElID}`,
+              `${CYCLE_CIRCLE}_${currentElID}`,
               `${CYCLE_TEXT}_${currentElID}`
-              );
+            );
             break;
           case 'List_Container':
             objectsToDelete.push('listText', 'listImage', 'ListAddImageText');
@@ -100,9 +121,14 @@ export function useDelAndCopy() {
         deleteObjectsByName(objectsToDelete);
 
         // Remove the active object from the canvas
-        canvas?.remove(activeObject);
+        const activeObjects = canvas?.getActiveObjects();
+
+        activeObjects?.forEach(object => {
+          canvas?.remove(object);
+        });
+
         canvas?.discardActiveObject();
-        canvas?.renderAll();
+        canvas?.requestRenderAll();
       }
 
       return true;
