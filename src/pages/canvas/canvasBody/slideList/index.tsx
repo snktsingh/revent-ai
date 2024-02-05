@@ -5,6 +5,7 @@ import { fabric } from 'fabric';
 import { useEffect, useState } from 'react';
 import { ListSlideCard, SingleSliderContainer } from '../style';
 import { SlideContainer } from './style';
+import SvgViewer from '@/components/canvasSvgViewer';
 
 export default function SlideList() {
   const dispatch = useAppDispatch();
@@ -17,7 +18,7 @@ export default function SlideList() {
     dispatch(setActiveCanvas(id));
   };
 
-  const [imageURLs, setImageURLs] = useState<string[]>([]); // State to hold image URLs
+  const [svgURLs, setsvgURLs] = useState<string[]>([]); // State to hold svg URLs
 
   const getImg = async (canvasJson: Object) => {
     const canvas = new fabric.Canvas(null);
@@ -27,8 +28,8 @@ export default function SlideList() {
         canvas.loadFromJSON(canvasJson, () => {
           canvas.width = 970;
           canvas.height = 500;
-          const imageURL = canvas.toDataURL();
-          resolve(imageURL);
+          const svgURL = canvas.toSVG();
+          resolve(svgURL);
         });
       } catch (error) {
         console.log(error);
@@ -38,21 +39,21 @@ export default function SlideList() {
   };
 
   useEffect(() => {
-    const loadImages = async () => {
+    const loadSvgs = async () => {
       const urls: string[] = [];
       for (const canvas of canvasList) {
         try {
-          const imageURL = await getImg(canvas.canvas);
-          urls.push(imageURL);
+          const svgURL = await getImg(canvas.canvas);
+          urls.push(svgURL);
         } catch (error) {
           console.error(error);
           urls.push('error'); // Push placeholder for error cases
         }
       }
-      setImageURLs(urls);
+      setsvgURLs(urls);
     };
 
-    loadImages();
+    loadSvgs();
   }, [canvasList]);
 
   return (
@@ -71,15 +72,16 @@ export default function SlideList() {
                 <ListSlideCard
                   className={activeCanvasID == canvas.id ? 'clicked-card' : ''}
                 >
-                  <img
-                    src={imageURLs[index] || 'placeholder-for-error'}
+                  {/* <img
+                    src={svgURLs[index] || 'placeholder-for-error'}
                     alt={`canvas-${index}`}
                     style={{
                       width: '100%',
                       objectFit: 'contain',
                       height: '100%',
                     }}
-                  />
+                  /> */}
+              <SvgViewer svgContent={svgURLs[index]}/>
                 </ListSlideCard>
               </Stack>
             </SingleSliderContainer>
