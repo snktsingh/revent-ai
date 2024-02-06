@@ -72,7 +72,8 @@ export default function useAllElements() {
     canvas: fabric.Canvas | null,
     color: string
   ) => {
-    if (selectedObject?.type == 'shape') {
+    const shape = selectedObject?.name?.split('_')[1]
+    if ( selectedObject && shape == 'Shape') {
       selectedObject.set('fill', color);
       canvas?.renderAll();
     } else if (

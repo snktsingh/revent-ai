@@ -114,8 +114,8 @@ export const useCanvasComponent = () => {
 
   function getElementsData(canvasData: any[]) {
     const outputFormat: APIRequest = {
-      companyName: 'Trident',
-      themeColor: '#E54B4B',
+      companyName: 'TRIDENT',
+      themeColor: '#007AFF',
       imagesCount: '',
       elements: [],
     };
