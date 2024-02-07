@@ -8,7 +8,7 @@ const useVariants = () => {
   const [originalImageUrl,setOriginalImageUrl] = useState<string>('');
   const { openVariant } = useAppSelector(state => state.element);
   const { variants } = useAppSelector(state => state.thunk);
-  const { originalCanvasSlide, canvasImage, selectedOriginalCanvas } = useAppSelector(state => state.canvas);
+  const { originalCanvasSlide, variantImage, selectedOriginalCanvas } = useAppSelector(state => state.canvas);
   const array: number[] = [1, 2, 3];
 
   const handleVariants = (CanvasURL: string, pptURL: string, index: number) => {
@@ -17,7 +17,8 @@ const useVariants = () => {
   };
 
   const handleApplyOriginalAsMain = ()=>{
-    dispatch(toggleSelectedOriginalCanvas(true))
+    dispatch(toggleSelectedOriginalCanvas(true));
+    dispatch(setVariantImageAsMain(''));
     dispatch(setCanvas({id:1,canvas:originalCanvasSlide}));
   };
 
@@ -55,6 +56,6 @@ const useVariants = () => {
   useEffect(()=>{
     getCanvasImageFromJSON(originalCanvasSlide);
   },[originalCanvasSlide]);
-  return { variants, array, openVariant, handleVariants, originalCanvasSlide, handleApplyOriginalAsMain, originalImageUrl, canvasImage, selectedOriginalCanvas };
+  return { variants, array, openVariant, handleVariants, originalCanvasSlide, handleApplyOriginalAsMain, originalImageUrl, variantImage, selectedOriginalCanvas };
 };
 export default useVariants;

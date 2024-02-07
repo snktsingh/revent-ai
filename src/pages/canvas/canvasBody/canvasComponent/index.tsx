@@ -44,7 +44,7 @@ const CanvasComponent: React.FC = () => {
 
   const dispatch = useAppDispatch();
   
-  const { canvasJS, canvasImage } = useAppSelector(state => state.canvas);
+  const { canvasJS, variantImage } = useAppSelector(state => state.canvas);
 
   const { pptUrl, imageUrl, variants } = useAppSelector(state => state.thunk);
 
@@ -179,7 +179,7 @@ const CanvasComponent: React.FC = () => {
       `${theme.colorSchemes.light.palette.common.white}`,
       canvasRef.current.renderAll.bind(canvasRef.current)
     );
-    fabric.Image.fromURL(canvasImage || imageUrl, img => {
+    fabric.Image.fromURL(variantImage, img => {
       const canvasWidth = canvasRef.current?.width || 0;
       const canvasHeight = canvasRef.current?.height || 0;
       const scaleWidth = canvasWidth / img.width!;
@@ -194,10 +194,7 @@ const CanvasComponent: React.FC = () => {
       canvasRef.current?.add(img);
       canvasRef.current?.renderAll();
     });
-  }, [
-    canvasImage,
-    imageUrl
-  ]);
+  }, [variantImage]);
 
   
 
