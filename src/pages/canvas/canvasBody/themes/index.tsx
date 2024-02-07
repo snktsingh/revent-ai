@@ -18,9 +18,11 @@ import { useTheme } from '@mui/material/styles';
 import { toggleTemplateVisibility } from '@/redux/reducers/elements';
 import { Add, Theme1, Theme2, Theme3 } from '@/constants/media';
 import { useState } from 'react';
+import { setNewTheme } from '@/redux/reducers/theme';
 
 export default function Templates() {
   const element = useAppSelector(state => state.element);
+  const toggleTheme = useAppSelector(state => state.slideTheme);
   const dispatch = useAppDispatch();
 
   const theme = useTheme();
@@ -73,7 +75,7 @@ export default function Templates() {
         </IconButton>
       </DrawerHeader>
       <SingleSliderContainer>
-        <Button>
+        <Button onClick={() => dispatch(setNewTheme(true))}>
           <Stack direction="row" spacing={1}>
             <img src={Add} />
             <span>Add New Theme</span>

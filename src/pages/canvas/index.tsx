@@ -1,3 +1,4 @@
+import CanvasThemes from '@/common-ui/addTheme';
 import CanvasBody from './canvasBody';
 import { CanvasVariant } from './canvasBody/canvasVariant';
 import MainCanvasHeader from './canvasHeader';
@@ -10,6 +11,7 @@ const MainCanvas = () => {
       <CanvasTools />
       <CanvasBody />
       <CanvasVariant />
+      <CanvasThemes />
     </div>
   );
 };

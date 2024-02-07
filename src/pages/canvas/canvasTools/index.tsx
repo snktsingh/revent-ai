@@ -348,7 +348,6 @@ const CanvasTools = () => {
                     />
                   );
                 })}
-                {/* Add more recent colors here */}
               </ColorGrid>
             </ColorSection>
             <ColorSection>
