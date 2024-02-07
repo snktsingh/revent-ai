@@ -221,7 +221,6 @@ const CanvasBody = () => {
   };
 
   const handleRequest = () => {
-    let data = 
     dispatch(setOriginalSlide(canvasList[0].canvas));
     dispatch(fetchSlideImg(requestData));
   };

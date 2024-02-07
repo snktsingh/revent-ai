@@ -1,4 +1,5 @@
 import {
+  BULLET_POINTS,
   CYCLE_TEXT,
   FUNNEL_TEXT,
   PARAGRAPH,
@@ -9,7 +10,10 @@ import {
   TIMELINE_TEXT,
   TITLE,
 } from '@/constants/elementNames';
-import { TimelineDataType } from '@/interface/elDataTypes';
+import {
+  BulletPointsFunctionType,
+  TimelineDataType,
+} from '@/interface/elDataTypes';
 import {
   APIRequest,
   DataRequestType,
@@ -113,13 +117,16 @@ export const useCanvasComponent = () => {
   };
 
   function getElementsData(canvasData: any[]) {
+    console.log({canvasData});
     const outputFormat: APIRequest = {
-      companyName: 'Trident',
-      themeColor: '#E54B4B',
+      companyName: 'REVENT',
+      themeColor: '#004FBA',
       imagesCount: '',
       elements: [],
     };
     let timelineData: TimelineDataType[] = [];
+    let titleText : string = '';
+    let subTitleText : string = '';
     canvasData.forEach(canvasObject => {
       if (canvasObject.type === 'textbox' && canvasObject.name) {
         const elementID = canvasObject.name.split('_')[1];
@@ -179,9 +186,47 @@ export const useCanvasComponent = () => {
             subHeading: '',
             text: canvasObject.text,
           });
+        } else if (
+          canvasObject.name.startsWith(TIMELINE_TEXT) ||
+          canvasObject.name.startsWith(TIMELINE_HEADING)
+        ) {
+          timelineData.push({ content: canvasObject.text, id: elementID });
+        } else if (
+          canvasObject.name === TITLE ||
+          canvasObject.name === SUBTITLE
+        ) {
+            (canvasObject.name === TITLE) ? titleText = canvasObject.text : subTitleText = canvasObject.text;
+        } else if (canvasObject.name === PARAGRAPH) {
+          const paragraphData = getOrCreateElement(
+            'Paragraph',
+            '1',
+            outputFormat
+          );
+          paragraphData.data.push({
+            name: canvasObject.text,
+            heading: '',
+            subHeading: '',
+            text: canvasObject.text,
+          });
+        } else if (canvasObject?.name === BULLET_POINTS) {
+          const { mainBulletPoints, nestedBulletPoints } =
+            segregateBulletPoints(canvasObject.text);
+          const bulletsData = mainBulletPoints.map((text, index) => {
+            const heading = '';
+            // const name = '';
+            // const subHeading = '';
+            return { heading:text, text };
+          });
+          const Bullets = getOrCreateElement('BulletPoint','1',outputFormat);
+          // Bullets.data = bulletsData;
         }
       }
     });
+
+    if(outputFormat.elements.length > 0 && titleText && subTitleText) {
+      outputFormat.elements[0].title = titleText;
+      outputFormat.elements[0].subTitle = subTitleText;
+    }
 
     type OrganizedTimelineData = Record<string, DataRequestType[]>;
 
@@ -214,9 +259,42 @@ export const useCanvasComponent = () => {
       return rest;
     });
     outputFormat.elements = modifiedRequestFormat;
-
     console.log({ outputFormat });
     dispatch(setRequestData(outputFormat));
+  }
+
+  function segregateBulletPoints(text: string): BulletPointsFunctionType {
+    const lines: string[] = text.split('\n');
+    let mainBulletPoints: string[] = [];
+    let currentMainBulletPoint: string = '';
+    let nestedBulletPoints: { [key: string]: string[] } = {};
+
+    lines.forEach((line: string) => {
+      const trimmedLine: string = line.trim();
+      const spacesBeforeText: number = line.length - trimmedLine.length;
+
+      if (spacesBeforeText === 0) {
+        // Main bullet point
+        if (currentMainBulletPoint !== '') {
+          mainBulletPoints.push(currentMainBulletPoint.trim());
+        }
+        currentMainBulletPoint = trimmedLine;
+      } else {
+        // Nested bullet point
+        if (currentMainBulletPoint !== '') {
+          if (!nestedBulletPoints[currentMainBulletPoint]) {
+            nestedBulletPoints[currentMainBulletPoint] = [];
+          }
+          nestedBulletPoints[currentMainBulletPoint].push(trimmedLine);
+        }
+      }
+    });
+
+    if (currentMainBulletPoint !== '') {
+      mainBulletPoints.push(currentMainBulletPoint.trim());
+    }
+
+    return { mainBulletPoints, nestedBulletPoints };
   }
 
   return {

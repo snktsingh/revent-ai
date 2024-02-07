@@ -15,7 +15,7 @@ export interface CanvasSate {
   tempData: any[];
   shapeName: string;
   requestData: IShapeRequest;
-  canvasImage: string;
+  variantImage: string;
   originalCanvasSlide: object;
   canvasImageURl: string;
   selectedOriginalCanvas: boolean
@@ -40,7 +40,7 @@ export const initialState: CanvasSate = {
     shape: '',
     data: [],
   },
-  canvasImage: '',
+  variantImage: '',
   originalCanvasSlide: {},
   canvasImageURl: '',
   selectedOriginalCanvas: false,
@@ -214,10 +214,7 @@ export const CanvasReducer = createSlice({
       updateCanvasInList({ id: state.canvasJS.id, updatedCanvas });
     },
     setVariantImageAsMain(state, action) {
-      return {
-        ...state,
-        canvasImage: action.payload,
-      };
+      state.variantImage = action.payload;
     },
     setOriginalSlide(state, action) {
       state.originalCanvasSlide = action.payload;

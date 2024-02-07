@@ -4,3 +4,7 @@ export interface TimelineDataType {
 };
 
 
+export interface BulletPointsFunctionType {
+    mainBulletPoints: string[];
+    nestedBulletPoints: { [key: string]: string[] };
+};
