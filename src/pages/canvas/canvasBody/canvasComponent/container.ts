@@ -105,8 +105,8 @@ export const useCanvasComponent = () => {
     } else {
       const newElement: ReqElementType = {
         shape,
-        title: 'Revent',
-        subTitle: 'AI',
+        title: '',
+        subTitle: '',
         templateName: '',
         elementId,
         data: [],
@@ -168,9 +168,11 @@ export const useCanvasComponent = () => {
           canvasObject.name === TITLE ||
           canvasObject.name === SUBTITLE
         ) {
-          const titleData = getOrCreateElement('theme', '1', outputFormat);
-          titleData[canvasObject.name === 'title' ? 'title' : 'subTitle'] =
-            canvasObject.text;
+          
+          if(outputFormat.elements.length > 0) {
+            outputFormat.elements[0][canvasObject.name === TITLE ? 'title' : 'subTitle'] =
+              canvasObject.text;
+          }
         } else if (canvasObject.name === PARAGRAPH) {
           const paragraphData = getOrCreateElement(
             'Paragraph',
