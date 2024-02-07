@@ -117,6 +117,7 @@ export const useCanvasComponent = () => {
   };
 
   function getElementsData(canvasData: any[]) {
+    console.log({canvasData});
     const outputFormat: APIRequest = {
       companyName: 'REVENT',
       themeColor: '#004FBA',
@@ -124,6 +125,8 @@ export const useCanvasComponent = () => {
       elements: [],
     };
     let timelineData: TimelineDataType[] = [];
+    let titleText : string = '';
+    let subTitleText : string = '';
     canvasData.forEach(canvasObject => {
       if (canvasObject.type === 'textbox' && canvasObject.name) {
         const elementID = canvasObject.name.split('_')[1];
@@ -168,11 +171,7 @@ export const useCanvasComponent = () => {
           canvasObject.name === TITLE ||
           canvasObject.name === SUBTITLE
         ) {
-          
-          if(outputFormat.elements.length > 0) {
-            outputFormat.elements[0][canvasObject.name === TITLE ? 'title' : 'subTitle'] =
-              canvasObject.text;
-          }
+            (canvasObject.name === TITLE) ? titleText = canvasObject.text : subTitleText = canvasObject.text;
         } else if (canvasObject.name === PARAGRAPH) {
           const paragraphData = getOrCreateElement(
             'Paragraph',
@@ -199,6 +198,11 @@ export const useCanvasComponent = () => {
         }
       }
     });
+
+    if(outputFormat.elements.length > 0 && titleText && subTitleText) {
+      outputFormat.elements[0].title = titleText;
+      outputFormat.elements[0].subTitle = subTitleText;
+    }
 
     type OrganizedTimelineData = Record<string, DataRequestType[]>;
 
@@ -231,7 +235,6 @@ export const useCanvasComponent = () => {
       return rest;
     });
     outputFormat.elements = modifiedRequestFormat;
-
     console.log({ outputFormat });
     dispatch(setRequestData(outputFormat));
   }
