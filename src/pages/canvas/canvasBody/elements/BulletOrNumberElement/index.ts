@@ -1,3 +1,4 @@
+import { BULLET_POINTS } from "@/constants/elementNames";
 import { IExtendedTextBoxOptions } from "@/interface/fabricTypes";
 import { fabric } from "fabric";
 export const useBulletOrNumberedText = () => {
@@ -76,7 +77,7 @@ export const useBulletOrNumberedText = () => {
       listType: 'bullet',
       listBullet: '\u2022',
       listCounter: 0,
-      name: 'bullet',
+      name: BULLET_POINTS,
       fill: '#404040'
     } as IExtendedTextBoxOptions);
     BulletText._renderTextLine = renderBulletOrNumTextLine;
