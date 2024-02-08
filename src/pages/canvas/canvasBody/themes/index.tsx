@@ -17,13 +17,15 @@ import { ListSlideCard, SingleSliderContainer } from '../style';
 import { useTheme } from '@mui/material/styles';
 import { toggleTemplateVisibility } from '@/redux/reducers/elements';
 import { Add, Theme1, Theme2, Theme3 } from '@/constants/media';
-import { useState } from 'react';
-import { setNewTheme } from '@/redux/reducers/theme';
+import { useEffect, useState } from 'react';
+import { setNewTheme, setThemeCode } from '@/redux/reducers/theme';
+import { getAllThemes } from '@/redux/thunk/thunk';
 
 export default function Templates() {
   const element = useAppSelector(state => state.element);
   const toggleTheme = useAppSelector(state => state.slideTheme);
   const dispatch = useAppDispatch();
+  const thunk = useAppSelector(state => state.thunk);
 
   const theme = useTheme();
 
@@ -47,7 +49,12 @@ export default function Templates() {
 
   const handleClose = () => {
     setOpen(false);
+    dispatch(setThemeCode(''));
   };
+
+  useEffect(() => {
+    dispatch(getAllThemes());
+  }, []);
 
   return (
     <Drawer
@@ -82,36 +89,38 @@ export default function Templates() {
           </Stack>
         </Button>
         <br />
-        <ListSlideCard onClick={handleClickOpen}>
-          <img src={Theme1} width="100%" height="100%" />
-        </ListSlideCard>
-        <br />
-        <ListSlideCard onClick={handleClickOpen}>
-          <img src={Theme2} width="100%" height="100%" />
-        </ListSlideCard>
-        <br />
-        <ListSlideCard onClick={handleClickOpen}>
-          <img src={Theme3} width="100%" height="100%" />
-        </ListSlideCard>
-        <Dialog
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">{'Are you sure ?'}</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              Selecting this theme will change the current slide contents
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>No</Button>
-            <Button onClick={handleClose} autoFocus>
-              Yes
-            </Button>
-          </DialogActions>
-        </Dialog>
+        {thunk.isThemeLoading ? (
+          <h4>Loading...</h4>
+        ) : (
+          <>
+            {thunk.themesList.map(themes => {
+              return (
+                <ListSlideCard onClick={handleClickOpen}>
+                  <img src={themes.thumbnailUrl} width="100%" height="100%" />
+                </ListSlideCard>
+              );
+            })}
+            <Dialog
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">
+                {'Are you sure ?'}
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Selecting this theme will change the current slide contents
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose}>No</Button>
+                <Button autoFocus>Yes</Button>
+              </DialogActions>
+            </Dialog>
+          </>
+        )}
       </SingleSliderContainer>
     </Drawer>
   );

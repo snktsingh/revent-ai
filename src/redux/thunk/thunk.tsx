@@ -1,14 +1,16 @@
 import ENDPOINT from '@/constants/endpoint';
-import { FetchUtils, generateInstance } from '@/utils/fetch-utils';
+import { FetchUtils } from '@/utils/fetch-utils';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { setVariantImageAsMain } from '../reducers/canvas';
-import { APIRequest, IShapeRequest, ISlideRequests } from '@/interface/storeTypes';
+import { APIRequest, ISlideRequests } from '@/interface/storeTypes';
 
 const initialState: ISlideRequests = {
   pptUrl: '',
   imageUrl: '',
   variants: [],
   isLoading: false,
+  themesList: [],
+  isThemeLoading: false,
 };
 
 export const fetchSlideImg = createAsyncThunk(
@@ -16,10 +18,17 @@ export const fetchSlideImg = createAsyncThunk(
   async (req: APIRequest | null, { dispatch }) => {
     const res = await FetchUtils.postRequest(`${ENDPOINT.GEN_PPT_MULTI}`, req);
     dispatch(setVariantImageAsMain(res.data.variants[0].imagesUrl));
-    console.log(res.data)
+    console.log(res.data);
     return res.data;
   }
 );
+
+export const getAllThemes = createAsyncThunk('theme/getallThemes', async () => {
+  const res = await FetchUtils.getRequest(
+    `${ENDPOINT.THEMES.GET_ALL_THEMES}?companyName=TRIDENT`
+  );
+  return res.data;
+});
 
 const thunkSlice = createSlice({
   name: 'singleSlideData',
@@ -44,6 +53,17 @@ const thunkSlice = createSlice({
         state.pptUrl = '';
         state.isLoading = false;
         state.variants = [];
+      })
+      .addCase(getAllThemes.pending, state => {
+        state.isThemeLoading = true;
+      })
+      .addCase(getAllThemes.fulfilled, (state, action) => {
+        state.isThemeLoading = false;
+        state.themesList = action.payload;
+      })
+      .addCase(getAllThemes.rejected, state => {
+        state.themesList = [];
+        state.isThemeLoading = false;
       });
   },
 });

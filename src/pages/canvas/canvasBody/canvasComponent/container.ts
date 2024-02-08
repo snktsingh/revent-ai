@@ -21,7 +21,7 @@ import {
 } from '@/interface/storeTypes';
 import { setRequestData } from '@/redux/reducers/apiData';
 import { updateCanvasInList } from '@/redux/reducers/canvas';
-import { useAppDispatch } from '@/redux/store';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { fabric } from 'fabric';
 import { useState } from 'react';
 
@@ -38,6 +38,7 @@ export const useCanvasComponent = () => {
     height: 0,
   });
   const dispatch = useAppDispatch();
+  const themeCode = useAppSelector(state => state.slideTheme.themeCode);
 
   const handleAllElements = (event: fabric.IEvent, canvas: fabric.Canvas) => {
     const { target } = event;
@@ -117,16 +118,16 @@ export const useCanvasComponent = () => {
   };
 
   function getElementsData(canvasData: any[]) {
-    console.log({canvasData});
+    console.log({ canvasData });
     const outputFormat: APIRequest = {
       companyName: 'REVENT',
-      themeColor: '#004FBA',
+      themeColor: themeCode,
       imagesCount: '',
       elements: [],
     };
     let timelineData: TimelineDataType[] = [];
-    let titleText : string = '';
-    let subTitleText : string = '';
+    let titleText: string = '';
+    let subTitleText: string = '';
     canvasData.forEach(canvasObject => {
       if (canvasObject.type === 'textbox' && canvasObject.name) {
         const elementID = canvasObject.name.split('_')[1];
@@ -195,7 +196,9 @@ export const useCanvasComponent = () => {
           canvasObject.name === TITLE ||
           canvasObject.name === SUBTITLE
         ) {
-            (canvasObject.name === TITLE) ? titleText = canvasObject.text : subTitleText = canvasObject.text;
+          canvasObject.name === TITLE
+            ? (titleText = canvasObject.text)
+            : (subTitleText = canvasObject.text);
         } else if (canvasObject.name === PARAGRAPH) {
           const paragraphData = getOrCreateElement(
             'Paragraph',
@@ -215,15 +218,15 @@ export const useCanvasComponent = () => {
             const heading = '';
             // const name = '';
             // const subHeading = '';
-            return { heading:text, text };
+            return { heading: text, text };
           });
-          const Bullets = getOrCreateElement('BulletPoint','1',outputFormat);
+          const Bullets = getOrCreateElement('BulletPoint', '1', outputFormat);
           // Bullets.data = bulletsData;
         }
       }
     });
 
-    if(outputFormat.elements.length > 0 && titleText && subTitleText) {
+    if (outputFormat.elements.length > 0 && titleText && subTitleText) {
       outputFormat.elements[0].title = titleText;
       outputFormat.elements[0].subTitle = subTitleText;
     }

@@ -17,9 +17,7 @@ import {
   PreviewContainer,
   ThemeContainer,
 } from './style';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { ColorGrid, ColorItem } from '@/pages/canvas/canvasTools/style';
-import { ThemeColor } from '@/pages/canvas/canvasBody/elementData';
+
 import { setTextColor } from '@/redux/reducers/canvas';
 import ImageIcon from '@mui/icons-material/Image';
 import { CancelUpload } from '@/constants/media';
