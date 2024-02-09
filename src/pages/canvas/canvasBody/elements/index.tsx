@@ -7,11 +7,16 @@ export default function useAllElements() {
     left: 30,
     top: 30,
     fontSize: 30,
-    width:300,
+    width:400,
     fontWeight: 'bold',
     fontFamily: 'Red Hat Display, sans-serif',
     name: TITLE,
     fill: '#404040',
+    charSpacing:2,
+    cursorDelay:1,
+    hoverCursor: 'text',
+    textAlign :'center',
+    padding: 5
   });
 
   const subtitle = new fabric.Textbox('Click to add a subtitle', {

@@ -3,7 +3,7 @@ import { fabric } from 'fabric';
 
 export default function useAllShapes() {
   const addRectangle = new fabric.Rect({
-    width: 100,
+    width: 150,
     height: 100,
     fill: 'transparent',
     stroke: theme.colorSchemes.light.palette.primary.main,

@@ -54,9 +54,11 @@ const CanvasComponent: React.FC = () => {
     newCanvas.clear();
     fabric.Object.prototype.set({
       cornerStyle: 'circle',
-      padding: 5,
       transparentCorners: false,
-      cornerSize: 10,
+      cornerSize: 8,
+      cornerColor : 'white',
+      borderColor : 'grey',
+      cornerStrokeColor : 'grey'
     });
     fabric.Object.prototype.objectCaching = false;
     newCanvas.loadFromJSON(
