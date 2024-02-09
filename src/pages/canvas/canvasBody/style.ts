@@ -34,6 +34,6 @@ export const ElementTitle = styled.span`
 `;
 export const ElementSubtitle = styled.span`
   font-size: 0.6rem;
-  color: 'grey';
+  color: ${theme.colorSchemes.light.palette.common.subtext};
 `;
 export const LikeButton = styled(ThumbUpAltRounded)``;
