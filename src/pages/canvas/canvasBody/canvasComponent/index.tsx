@@ -167,9 +167,30 @@ const CanvasComponent: React.FC = () => {
       }
     };
 
+    const handleClickOutsideCanvas = (event: MouseEvent) => {
+      if (canvas && canvas.getActiveObject() && !isClickWithinCanvas(event, canvas)) {
+        canvas.discardActiveObject().renderAll();
+      }
+    };
+
+    const isClickWithinCanvas = (event: MouseEvent, canvas: fabric.Canvas) => {
+      const canvasBoundary = canvas.getElement().getBoundingClientRect();
+      const clickX = event.clientX;
+      const clickY = event.clientY;
+      return (
+        clickX >= canvasBoundary.left &&
+        clickX <= canvasBoundary.right &&
+        clickY >= canvasBoundary.top &&
+        clickY <= canvasBoundary.bottom
+      );
+    };
+
+    window.addEventListener('click', handleClickOutsideCanvas);
+
     window.addEventListener('keydown', handleKeyDown);
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('click', handleClickOutsideCanvas);
       window.removeEventListener('resize', () => {});
       newCanvas.dispose();
     };
