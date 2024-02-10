@@ -17,11 +17,11 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
       <CssVarsProvider theme={theme}>
-        <ThemeProvider theme={elementTheme}>
+        {/* <ThemeProvider theme={elementTheme}> */}
           <BrowserRouter>
             <Router />
           </BrowserRouter>
-        </ThemeProvider>
+        {/* </ThemeProvider> */}
       </CssVarsProvider>
     </Provider>
   </React.StrictMode>

@@ -50,7 +50,7 @@ const CanvasComponent: React.FC = () => {
 
   useEffect(() => {
     const newCanvas = new fabric.Canvas('canvas');
-
+    console.log('thinnava')
     newCanvas.clear();
     fabric.Object.prototype.set({
       cornerStyle: 'circle',
