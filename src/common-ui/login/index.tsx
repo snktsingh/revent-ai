@@ -60,14 +60,16 @@ const Login = () => {
                 fullWidth
               />
               <CommonLink>Forgot Password ?</CommonLink>
-              <CustomButton
-                variant="contained"
-                size="large"
-                fullWidth
-                onClick={() => loginWithRedirect()}
-              >
-                Login
-              </CustomButton>
+              <Link href="/dashboard">
+                <CustomButton
+                  variant="contained"
+                  size="large"
+                  fullWidth
+                  // onClick={() => loginWithRedirect()}
+                >
+                  Login
+                </CustomButton>
+              </Link>
               <SignUp>
                 <Link href="/signup">
                   Not registered ? Create a new account

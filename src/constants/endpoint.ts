@@ -4,6 +4,9 @@ export const ENDPOINT = {
   TEST: `${API_BASE_URL}/test`,
   GEN_PPT: 'ppt/generate-ppt',
   GEN_PPT_MULTI: 'ppt/generate-ppt-multi',
+  THEMES: {
+    GET_ALL_THEMES: '/template/get-themes',
+  },
 } as const;
 
 export const ROUTES = {

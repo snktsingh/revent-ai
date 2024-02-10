@@ -30,7 +30,7 @@ const Dashboard = () => {
       </span>
       <br />
       <CardContainer>
-        {slideData.themes.map((slide, index) => {
+        {slideData.templates.map((slide, index) => {
           return (
             <CardTitle>
               <CardLink href={slide.link}>
@@ -47,7 +47,7 @@ const Dashboard = () => {
         </AccordionSummary>
         <AccordionDetails>
           <CardContainer>
-            {slideData.themes.map((slide, index) => {
+            {slideData.templates.map((slide, index) => {
               return (
                 <CardTitle>
                   <CardLink href={slide.link}>

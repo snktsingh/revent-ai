@@ -1,27 +1,27 @@
 {
-  "themes": [
+  "templates": [
     {
       "title": "Blank Presentation",
       "link": "/templates"
     },
     {
-      "title": "Revent Ai",
+      "title": "Pitch Deck",
       "link": ""
     },
     {
-      "title": "Trident",
+      "title": "Sales Deck",
       "link": ""
     },
     {
-      "title": "Deloitte",
+      "title": "Status Report",
       "link": ""
     },
     {
-      "title": "PWC",
+      "title": "Training Deck",
       "link": ""
     },
     {
-      "title": "Abstract",
+      "title": "Financial Deck",
       "link": ""
     }
   ],

@@ -61,6 +61,7 @@ import {
 import FontDownloadOutlinedIcon from '@mui/icons-material/FontDownloadOutlined';
 import ColorizeOutlinedIcon from '@mui/icons-material/ColorizeOutlined';
 import WebFont from 'webfontloader';
+import { getAllThemes } from '@/redux/thunk/thunk';
 
 interface FontItem {
   category: string;
@@ -80,6 +81,7 @@ const CanvasTools = () => {
   const { color, textColor, borderColor, canvasList, size } = useAppSelector(
     state => state.canvas
   );
+  const tools = useAppSelector(state => state.thunk);
   const obj = { key: newKey.nextKey, name: `Slide ${newKey.nextKey}` };
   const ColorRef = useRef<HTMLInputElement | null>(null);
   const [inputColor, setInputColor] = useState<string>('');
@@ -219,7 +221,9 @@ const CanvasTools = () => {
         style={{ display: 'flex', alignItems: 'center' }}
       >
         <ToolOutlinedButton
-          onClick={() => dispatch(toggleTemplateVisibility())}
+          onClick={() => {
+            dispatch(toggleTemplateVisibility());
+          }}
         >
           <Stack direction="row" spacing={1}>
             <img src={Template} />
@@ -348,7 +352,6 @@ const CanvasTools = () => {
                     />
                   );
                 })}
-                {/* Add more recent colors here */}
               </ColorGrid>
             </ColorSection>
             <ColorSection>

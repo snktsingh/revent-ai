@@ -1,105 +1,64 @@
 import { Back, Wand } from '@/constants/media';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   ButtonContainer,
   TemplateContainer,
   TemplateTitle,
+  ThemeCard,
+  ThemeCardContainer,
+  ThemeCardTitle,
   Title,
 } from './style';
 import Link from '@mui/material/Link';
-import { Stack, Card, CardContent, Button } from '@mui/material';
-import { CardContainer, TextInput } from '../dashboard/style';
+import { Stack } from '@mui/material';
 import { CustomButton } from '@/styles/common-styles/style';
 import ReventingLoader from '@/common-ui/loader';
-import ConversionToJson from '@/components/pptToJson';
+import { themeData } from './data';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { getAllThemes } from '@/redux/thunk/thunk';
+
 const Templates = () => {
   const [loading, setLoading] = useState(false);
+  const thunk = useAppSelector(state => state.thunk);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getAllThemes());
+  }, []);
   if (loading == true) {
     return <ReventingLoader />;
   } else {
     return (
       <TemplateContainer>
-        <TemplateTitle>
-          <Link href="/dashboard">
-            <img src={Back} />
-          </Link>
-          <Title>Create your Presentations</Title>
-        </TemplateTitle>
-        <br />
-        <br />
-        <TextInput
-          fullWidth
-          placeholder="Enter the url for color schemes you want to add"
-        />
-        <br />
-        <br />
-        <br />
-        <h2>Templates</h2>
-        <Stack direction="row" spacing={4}>
-          <CardContainer>
-            <Card sx={{ width: 270, height: 150 }}>
-              <CardContent>Add New</CardContent>
-            </Card>
-            <p>Abstract</p>
-          </CardContainer>
-          <CardContainer>
-            <Card sx={{ width: 270, height: 150 }}>
-              <CardContent></CardContent>
-            </Card>
-            <p>Abstract</p>
-          </CardContainer>
-          <CardContainer>
-            <Card sx={{ width: 270, height: 150 }}>
-              <CardContent></CardContent>
-            </Card>
-            <p>Abstract</p>
-          </CardContainer>
-          <CardContainer>
-            <Card sx={{ width: 270, height: 150 }}>
-              <CardContent></CardContent>
-            </Card>
-            <p>Abstract</p>
-          </CardContainer>
-          <CardContainer>
-            <Card sx={{ width: 270, height: 150 }}>
-              <CardContent></CardContent>
-            </Card>
-            <p>Abstract</p>
-          </CardContainer>
-        </Stack>
-        <Stack direction="row" spacing={4}>
-          <CardContainer>
-            <Card sx={{ width: 270, height: 150 }}>
-              <CardContent>Add New</CardContent>
-            </Card>
-            <p>Abstract</p>
-          </CardContainer>
-          <CardContainer>
-            <Card sx={{ width: 270, height: 150 }}>
-              <CardContent></CardContent>
-            </Card>
-            <p>Abstract</p>
-          </CardContainer>
-          <CardContainer>
-            <Card sx={{ width: 270, height: 150 }}>
-              <CardContent></CardContent>
-            </Card>
-            <p>Abstract</p>
-          </CardContainer>
-          <CardContainer>
-            <Card sx={{ width: 270, height: 150 }}>
-              <CardContent></CardContent>
-            </Card>
-            <p>Abstract</p>
-          </CardContainer>
-          <CardContainer>
-            <Card sx={{ width: 270, height: 150 }}>
-              <CardContent></CardContent>
-            </Card>
-            <p>Abstract</p>
-          </CardContainer>
-        </Stack>
-        <br />
+        <span>
+          <TemplateTitle>
+            <Link href="/dashboard">
+              <img src={Back} />
+            </Link>
+            <Title>Create your Presentations</Title>
+          </TemplateTitle>
+          <br />
+          <br />
+          <h2>Themes</h2>
+          <ThemeCardContainer>
+            {thunk.isThemeLoading ? (
+              <h4>Loading...</h4>
+            ) : (
+              <>
+                {thunk.themesList.map(theme => {
+                  return (
+                    <ThemeCardTitle>
+                      <ThemeCard>
+                        <img src={theme.thumbnailUrl} width="100%" />
+                      </ThemeCard>
+                      {theme.title}
+                    </ThemeCardTitle>
+                  );
+                })}
+              </>
+            )}
+          </ThemeCardContainer>
+        </span>
         <ButtonContainer>
           <Stack direction="row" spacing={3}>
             <CustomButton variant="outlined">Generate Random</CustomButton>
