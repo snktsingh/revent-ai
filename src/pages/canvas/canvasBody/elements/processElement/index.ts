@@ -2,6 +2,7 @@ import { PROCESS, PROCESS_ARROW, PROCESS_BOX, PROCESS_TEXT } from "@/constants/e
 import { theme } from "@/constants/theme";
 import { updateProcessId } from "@/redux/reducers/elementsCount";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
+import AutoResizingTextbox from "@/utils/fabric-utils/AutoResizingTextbox";
 import { fabric } from "fabric";
 export const useProcessElement = () => {
     const dispatch = useAppDispatch();
@@ -51,15 +52,16 @@ export const useProcessElement = () => {
           name: `${PROCESS_BOX}_${currentID}`,
         });
     
-        let text = new fabric.Textbox('Add Text', {
+        let text = new AutoResizingTextbox('Add Text', {
           fontSize: 14,
           left: rect.left! + 5,
           top: rect.top! + 5,
           fill: theme.colorSchemes.light.palette.common.white,
-          width: 100,
+          width: 110,
+          height: 100,
           name: `${PROCESS_TEXT}_${currentID}`,
-          hasBorders: false,
-          hasControls: false,
+          fixedWidth: 200,
+          fixedHeight: 100
         });
     
         canvas.forEachObject(obj => {
@@ -100,13 +102,16 @@ export const useProcessElement = () => {
           return canvas?.add(rect);
         }
         function addText(left: number, top: number) {
-          const text = new fabric.Textbox('Add Text', {
+          const text = new AutoResizingTextbox('Add Text', {
             fontSize: 14,
             left,
             top,
             fill: theme.colorSchemes.light.palette.common.white,
-            width: 100,
+            width: 110,
+            height:100,
             name: `${PROCESS_TEXT}_${processId}`,
+            fixedHeight: 100,
+            fixedWidth: 200,
           });
           return canvas?.add(text);
         }
