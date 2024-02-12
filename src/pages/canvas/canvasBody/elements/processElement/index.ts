@@ -61,7 +61,8 @@ export const useProcessElement = () => {
           height: 100,
           name: `${PROCESS_TEXT}_${currentID}`,
           fixedWidth: 200,
-          fixedHeight: 100
+          fixedHeight: 100,
+          hasControls :false
         });
     
         canvas.forEachObject(obj => {
@@ -112,6 +113,7 @@ export const useProcessElement = () => {
             name: `${PROCESS_TEXT}_${processId}`,
             fixedHeight: 100,
             fixedWidth: 200,
+            hasControls :false,
           });
           return canvas?.add(text);
         }

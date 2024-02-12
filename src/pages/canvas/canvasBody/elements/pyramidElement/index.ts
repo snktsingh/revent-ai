@@ -1,24 +1,28 @@
 import { PYRAMID, PYRAMID_LEVEL, PYRAMID_TEXT } from '@/constants/elementNames';
 import { updatePyramidId } from '@/redux/reducers/elementsCount';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
+import AutoResizingTextbox from '@/utils/fabric-utils/AutoResizingTextbox';
 import { fabric } from 'fabric';
 
 export function usePyramidElement() {
   const dispatch = useAppDispatch();
-  const { pyramidId } = useAppSelector(state => state.elementsIds)
+  const { pyramidId } = useAppSelector(state => state.elementsIds);
   const addPyramidLevel = (canvas: fabric.Canvas) => {
     const activePyramid = canvas.getActiveObject();
-    const currentID = activePyramid?.name?.split("_")[1];
-    console.log(activePyramid)
+    const currentID = activePyramid?.name?.split('_')[1];
+    console.log(activePyramid);
     let lastLevel: any;
     let lastText: any;
     canvas.forEachObject(obj => {
-      if (obj.name == `${PYRAMID_TEXT}_${currentID}`) { 
+      if (obj.name == `${PYRAMID_TEXT}_${currentID}`) {
         lastText = obj;
       }
     });
     let activeObject = canvas.getActiveObject();
-    if (activeObject?.type == 'group' && activeObject.name?.startsWith(PYRAMID)) {
+    if (
+      activeObject?.type == 'group' &&
+      activeObject.name?.startsWith(PYRAMID)
+    ) {
       (activeObject as fabric.Group).forEachObject(obj => {
         lastLevel = obj;
       });
@@ -43,11 +47,13 @@ export function usePyramidElement() {
         }
       );
 
-      const text = new fabric.Textbox('Add Text', {
+      const text = new AutoResizingTextbox('Add Text', {
         fontSize: 18,
         left: lastText.left,
         top: trapezoid.top! + 20,
         width: 100,
+        fixedWidth: 100,
+        fixedHeight: 100,
         name: `${PYRAMID_TEXT}_${currentID}`,
       });
 
@@ -56,7 +62,7 @@ export function usePyramidElement() {
       canvas?.requestRenderAll();
     }
   };
-//new pyramid
+  //new pyramid
   const addPyramid = (canvas: fabric.Canvas | null) => {
     let x1 = -140;
     let x2 = 140;
@@ -79,12 +85,15 @@ export function usePyramidElement() {
         fill: 'transparent',
         stroke: 'black',
       });
-      const text = new fabric.Textbox('Add Text', {
+      const text = new AutoResizingTextbox('Add Text', {
         fontSize: 18,
         left: 274,
         top: 137,
         width: 100,
         name: `${PYRAMID_TEXT}_${pyramidId}`,
+        fixedWidth: 100,
+        fixedHeight: 200,
+        hasControls :false
       });
 
       textsList.push(text);
@@ -106,12 +115,15 @@ export function usePyramidElement() {
           }
         );
 
-        const text = new fabric.Textbox('Add Text', {
+        const text = new AutoResizingTextbox('Add Text', {
           fontSize: 18,
           left: 274,
           top: 213,
-          width: 100,
+          width: 140,
           name: `${PYRAMID_TEXT}_${pyramidId}`,
+          fixedWidth: 130,
+          fixedHeight: 50,
+          hasControls :false
         });
 
         trapTop = trapTop + 60;
@@ -143,5 +155,5 @@ export function usePyramidElement() {
     canvas?.requestRenderAll();
     dispatch(updatePyramidId());
   };
-  return { addPyramid, addPyramidLevel }
+  return { addPyramid, addPyramidLevel };
 }

@@ -39,6 +39,7 @@ export function useListElement(){
           top: group.getScaledHeight() - 10,
           textAlign: 'center',
           name: 'listText',
+          hasControls :false
         });
     
         // canvas?.add(mainListContainer);

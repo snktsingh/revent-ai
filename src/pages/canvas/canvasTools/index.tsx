@@ -653,7 +653,7 @@ const CanvasTools = () => {
         </ToolOutlinedSelect>
         <ToolOutlinedSelect
           inputProps={{ 'aria-label': 'Without label' }}
-          // defaultValue={1}
+          defaultValue={1}
         >
           <MenuItem value={1}>
             <FormatListBulletedIcon style={{ display: 'flex' }} />

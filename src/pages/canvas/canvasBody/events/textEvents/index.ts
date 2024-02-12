@@ -1,3 +1,4 @@
+import { BULLET_POINTS, PARAGRAPH, SUBTITLE, TITLE } from "@/constants/elementNames";
 import { theme } from "@/constants/theme";
 import { fabric } from "fabric";
 export function useTextEvents(){
@@ -17,7 +18,6 @@ export function useTextEvents(){
           } else if (textBox.text == 'Add Text') {
             textBox.text = '';
             // Set focus on the textbox
-            
             canvas.renderAll()
           }
         }
@@ -27,7 +27,7 @@ export function useTextEvents(){
     
         let textBox = object;
         switch (textBox.name) {
-          case 'title':
+          case TITLE:
             if (textBox.text == '') {
               textBox.text = 'Click to add a title';
               textBox.set({
@@ -36,7 +36,7 @@ export function useTextEvents(){
             }
             canvas.renderAll();
             break;
-          case 'subTitle':
+          case SUBTITLE:
             if (textBox.text == '') {
               textBox.text = 'Click to add a subtitle';
               textBox.set({
@@ -45,7 +45,7 @@ export function useTextEvents(){
             }
             canvas.renderAll();
             break;
-          case 'paragraphbox':
+          case PARAGRAPH:
             if (textBox.text == '') {
               textBox.text = 'Click to add a paragraph';
               textBox.set({
@@ -54,7 +54,7 @@ export function useTextEvents(){
             }
             canvas.renderAll();
             break;
-          case 'bullet':
+          case BULLET_POINTS:
             if (textBox.text == '') {
               textBox.text = 'Click to add a bullet point';
               textBox.set({

@@ -59,6 +59,7 @@ export function useTimelineElement(){
             width,
             fill: 'black',
             name: timelineName,
+            hasControls :false
           });
           return canvas?.add(text);
         }
@@ -109,6 +110,7 @@ export function useTimelineElement(){
             width,
             fill: 'black',
             name: timelineName,
+            hasControls :false,
           });
           return canvas?.add(text);
         }

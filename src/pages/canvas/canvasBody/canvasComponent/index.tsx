@@ -185,12 +185,12 @@ const CanvasComponent: React.FC = () => {
       );
     };
 
-    window.addEventListener('click', handleClickOutsideCanvas);
+    // window.addEventListener('click', handleClickOutsideCanvas);
 
     window.addEventListener('keydown', handleKeyDown);
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('click', handleClickOutsideCanvas);
+      // window.removeEventListener('click', handleClickOutsideCanvas);
       window.removeEventListener('resize', () => {});
       newCanvas.dispose();
     };
