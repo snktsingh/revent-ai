@@ -8,7 +8,7 @@ interface AutoResizingTextboxOptions extends fabric.ITextboxOptions {
 class AutoResizingTextbox extends fabric.Textbox {
     fixedWidth: number;
     fixedHeight: number;
-
+    
     constructor(text: string, options: AutoResizingTextboxOptions) {
         super(text, options);
         this.set({
@@ -17,13 +17,13 @@ class AutoResizingTextbox extends fabric.Textbox {
 
         this.fixedWidth = options.fixedWidth;
         this.fixedHeight = options.fixedHeight;
-
+        let originalFontSize = this?.fontSize;
         // Custom logic for resizing font size based on width and height
-        this.on('changed', this.adjustFontSizeWhileTyping.bind(this));
+        this.on('changed', this.adjustFontSizeWhileTyping.bind(this,originalFontSize));
     }
 
-    adjustFontSizeWhileTyping(): void {
-        const { fixedWidth, fixedHeight } = this;
+    adjustFontSizeWhileTyping(originalFontSize : any): void {
+        const { fixedWidth, fixedHeight,width } = this;
         let fontSize = this.fontSize ?? 16;
 
         // Calculate the current text dimensions
@@ -40,7 +40,14 @@ class AutoResizingTextbox extends fabric.Textbox {
             this.set('height', fixedHeight);
         }
 
+        
+
         this.set('fontSize', fontSize);
+
+        if(this?.text == '') {
+            this.set('width',width)
+            this.set('fontSize', originalFontSize);
+        }
         this.setCoords();
     }
 }
