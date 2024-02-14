@@ -350,6 +350,36 @@ export function useObjectMovingEvent(){
               lastLeft: movedObject.left,
               lastTop: movedObject.top,
             });
+          } else if (objectName[0] === 'TableContainer') {
+            const lastLeft = movedObject.get('lastLeft') || movedObject.left;
+            const lastTop = movedObject.get('lastTop') || movedObject.top;
+    
+            var deltaX = movedObject.left! - lastLeft!;
+            var deltaY = movedObject.top! - lastTop!;
+    
+            canvas.forEachObject(function (obj) {
+              let left;
+              let top;
+    
+              if (
+                obj.name === `TableText_` &&
+                obj.intersectsWithObject(movedObject, true, true)
+              ) {
+                obj
+                  .set({
+                    left: obj.left! + deltaX,
+                    top: obj.top! + deltaY,
+                  })
+                  .setCoords();
+                left = obj.left! + deltaX;
+                top = obj.top! + deltaY;
+              }
+            });
+    
+            movedObject.set({
+              lastLeft: movedObject.left,
+              lastTop: movedObject.top,
+            });
           }
         }
         canvas?.requestRenderAll();

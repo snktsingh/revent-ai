@@ -1,4 +1,5 @@
 import { theme } from "@/constants/theme";
+import AutoResizingTextbox from "@/utils/fabric-utils/AutoResizingTextbox";
 import { fabric } from "fabric";
 
 export const useTableElement = ()=> {
@@ -9,33 +10,36 @@ export const useTableElement = ()=> {
         const cellPadding = 6;
         const tableLeft = 50;
         const tableTop = 50;
-    
+        const cellWidth: number = 150;
+        const cellHeight: number= 50;
         function createTable() {
           const tableElements = [];
           const texts = [];
           for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 4; j++) {
               const cell = new fabric.Rect({
-                width: 120,
-                height: 40,
+                width: cellWidth,
+                height: cellHeight,
                 fill: 'transparent',
                 stroke: 'black',
-                left: tableLeft + j * 120,
-                top: tableTop + i * 40,
+                left: tableLeft + j * cellWidth,
+                top: tableTop + i * cellHeight,
                 selectable: false,
                 hasBorders: false,
               });
     
-              const text = new fabric.Textbox(`Row ${i + 1}, Col ${j + 1}`, {
-                width: 120 - 2 * cellPadding,
-                height: 40 - 2 * cellPadding,
+              const text = new AutoResizingTextbox(`Add Text`, {
+                width: cellWidth - 2 * cellPadding,
+                height: cellHeight - 2 * cellPadding,
                 fontSize: 18,
                 textAlign: 'center',
                 left: cell.left! + cellPadding,
                 top: cell.top! + cellPadding,
                 selectable: true,
                 backgroundColor: theme.colorSchemes.light.palette.common.white,
-                name: 'Table_Text',
+                name: 'TableText_',
+                fixedWidth : cellWidth- cellPadding,
+                fixedHeight : cellHeight - cellPadding
               });
     
               tableElements.push(cell);
@@ -48,7 +52,7 @@ export const useTableElement = ()=> {
             top: tableTop,
             hasBorders: true,
             hasControls: true,
-            name: 'Table_Container',
+            name: 'TableContainer_',
           });
     
           canvas?.add(tableGroup);
