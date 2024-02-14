@@ -108,7 +108,7 @@ const CanvasComponent: React.FC = () => {
           dispatch(toggleRegenerateButton(true));
         }
         newCanvas.on('object:added', e => {
-          console.log(newCanvas.toJSON());
+          // console.log(newCanvas.toJSON());
           updateCanvasSlideData(newCanvas, canvasJS.id);
           getElementsData(newCanvas.toObject(customFabricProperties)?.objects);
           if (newCanvas.toObject()?.objects.length > 1) {
@@ -139,7 +139,7 @@ const CanvasComponent: React.FC = () => {
         });
         // newCanvas.on('object:moving', (event: fabric.IEvent) => handleAllElements(event,newCanvas));
         newCanvas.on('object:moving', function (options) {
-          console.log(newCanvas.toJSON());
+          // console.log(newCanvas.toJSON());
           handleObjectMoving(options, newCanvas);
         });
 

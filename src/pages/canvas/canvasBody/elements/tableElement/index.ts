@@ -39,7 +39,10 @@ export const useTableElement = ()=> {
                 backgroundColor: theme.colorSchemes.light.palette.common.white,
                 name: 'TableText_',
                 fixedWidth : cellWidth- cellPadding,
-                fixedHeight : cellHeight - cellPadding
+                fixedHeight : cellHeight - cellPadding,
+                lockMovementX : true,
+                lockMovementY : true,
+                hasControls : false
               });
     
               tableElements.push(cell);
