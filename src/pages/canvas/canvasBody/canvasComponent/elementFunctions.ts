@@ -185,13 +185,8 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
   };
 
   //fabric table
-  ContentElements.handleOpenTable = (
-    rows: number,
-    cols: number,
-    cellWidth: number,
-    cellHeight: number
-  ) => {
-    addTable(rows, cols, cellWidth, cellHeight, canvas);
+  ContentElements.handleOpenTable = () => {
+    addTable(canvas);
   };
 
   //fabric Funnel

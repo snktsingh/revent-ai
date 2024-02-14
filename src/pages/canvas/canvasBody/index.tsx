@@ -109,7 +109,7 @@ const CanvasBody = () => {
 
   elementData[6].onClick = () => {
     setElementName(TABLE);
-    handleClickOpenDialog();
+    ContentElements.handleOpenTable();
   };
   elementData[9].onClick = () => {
     ContentElements.handleCycle();
@@ -125,99 +125,6 @@ const CanvasBody = () => {
   };
   elementData[13].onClick = () => {
     ContentElements.handlePyramid();
-  };
-
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-  };
-
-  const [rows, setRows] = useState('');
-  const [columns, setColumns] = useState('');
-  const [cellWidth, setCellWidth] = useState('120');
-  const [cellHeight, setCellHeight] = useState('35');
-
-  const handleElementData = () => {
-    let newTableData: TableDetails = {
-      row: +rows,
-      col: +columns,
-      width: +cellWidth,
-      height: +cellHeight,
-    };
-
-    switch (elementName) {
-      case TABLE:
-        ContentElements.handleOpenTable(
-          +rows,
-          +columns,
-          +cellWidth,
-          +cellHeight
-        );
-        break;
-      default:
-        break;
-    }
-    handleCloseDialog();
-  };
-
-  const DialogDetails = () => {
-    switch (elementName) {
-      case TABLE:
-        return (
-          <Box style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-            <TextField
-              label="Rows"
-              variant="outlined"
-              value={rows}
-              onChange={e => setRows(e.target.value)}
-              required
-              type="number"
-              size="small"
-              InputProps={{ inputProps: { min: 1 } }}
-            />
-            <TextField
-              label="Columns"
-              variant="outlined"
-              value={columns}
-              onChange={e => setColumns(e.target.value)}
-              required
-              type="number"
-              size="small"
-              InputProps={{ inputProps: { min: 1 } }}
-            />
-            <TextField
-              label="Cell Width"
-              variant="outlined"
-              value={cellWidth}
-              onChange={e => setCellWidth(e.target.value)}
-              required
-              type="number"
-              size="small"
-              InputProps={{ inputProps: { min: 1 } }}
-            />
-            <TextField
-              label="Cell Height"
-              variant="outlined"
-              value={cellHeight}
-              onChange={e => setCellHeight(e.target.value)}
-              required
-              type="number"
-              size="small"
-              InputProps={{ inputProps: { min: 1 } }}
-            />
-          </Box>
-        );
-      default:
-        return 'Something went wrong';
-    }
-  };
-
-  const DialogTitleContent = () => {
-    switch (elementName) {
-      case TABLE:
-        return 'Please Provide Table Details: Rows, Columns, Width, and Height';
-      default:
-        return 'Something went wrong';
-    }
   };
 
   const handleRequest = () => {
@@ -375,37 +282,6 @@ const CanvasBody = () => {
       </Grid>
       <Templates />
       <PopUpModal content={slide.slideKey} />
-
-      <Dialog
-        open={openDialog}
-        onClose={handleCloseDialog}
-        aria-labelledby="responsive-dialog-title"
-        BackdropProps={{
-          sx: { backgroundColor: 'transparent' },
-        }}
-      >
-        <DialogTitle id="responsive-dialog-title">
-          <DialogTitleContent />
-        </DialogTitle>
-        <DialogContent>
-          <Box>
-            <DialogDetails />
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={handleCloseDialog}>
-            Cancel
-          </Button>
-          <Button
-            variant="contained"
-            type="submit"
-            color="primary"
-            onClick={handleElementData}
-          >
-            Submit
-          </Button>
-        </DialogActions>
-      </Dialog>
       <Backdrop
         sx={{
           color: '#fff',

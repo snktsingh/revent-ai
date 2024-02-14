@@ -4,10 +4,6 @@ import { fabric } from "fabric";
 export const useTableElement = ()=> {
 
     const addTable = (
-        rows: number,
-        cols: number,
-        cellWidth: number,
-        cellHeight: number,
         canvas: fabric.Canvas | null
       ) => {
         const cellPadding = 6;
@@ -17,22 +13,22 @@ export const useTableElement = ()=> {
         function createTable() {
           const tableElements = [];
           const texts = [];
-          for (let i = 0; i < rows; i++) {
-            for (let j = 0; j < cols; j++) {
+          for (let i = 0; i < 4; i++) {
+            for (let j = 0; j < 4; j++) {
               const cell = new fabric.Rect({
-                width: cellWidth,
-                height: cellHeight,
+                width: 120,
+                height: 40,
                 fill: 'transparent',
                 stroke: 'black',
-                left: tableLeft + j * cellWidth,
-                top: tableTop + i * cellHeight,
+                left: tableLeft + j * 120,
+                top: tableTop + i * 40,
                 selectable: false,
                 hasBorders: false,
               });
     
               const text = new fabric.Textbox(`Row ${i + 1}, Col ${j + 1}`, {
-                width: cellWidth - 2 * cellPadding,
-                height: cellHeight - 2 * cellPadding,
+                width: 120 - 2 * cellPadding,
+                height: 40 - 2 * cellPadding,
                 fontSize: 18,
                 textAlign: 'center',
                 left: cell.left! + cellPadding,
