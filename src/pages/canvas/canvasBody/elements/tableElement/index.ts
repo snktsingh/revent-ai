@@ -1,3 +1,4 @@
+import { TABLE, TABLE_TEXT } from "@/constants/elementNames";
 import { theme } from "@/constants/theme";
 import AutoResizingTextbox from "@/utils/fabric-utils/AutoResizingTextbox";
 import { fabric } from "fabric";
@@ -28,21 +29,23 @@ export const useTableElement = ()=> {
                 hasBorders: false,
               });
     
-              const text = new AutoResizingTextbox(`Add Text`, {
-                width: cellWidth - 2 * cellPadding,
-                height: cellHeight - 2 * cellPadding,
-                fontSize: 18,
+              const text = new AutoResizingTextbox(``, {
+                width: cellWidth - 5 ,
+                height: cellHeight ,
+                fontSize: 28,
                 textAlign: 'center',
-                left: cell.left! + cellPadding,
+                left: cell.left!+2 ,
                 top: cell.top! + cellPadding,
                 selectable: true,
                 backgroundColor: theme.colorSchemes.light.palette.common.white,
-                name: 'TableText_',
+                name: `${TABLE_TEXT}_`,
                 fixedWidth : cellWidth- cellPadding,
                 fixedHeight : cellHeight - cellPadding,
                 lockMovementX : true,
                 lockMovementY : true,
-                hasControls : false
+                hasControls : false,
+                borderColor : 'transparent',
+                transparentCorners: true
               });
     
               tableElements.push(cell);
@@ -55,7 +58,7 @@ export const useTableElement = ()=> {
             top: tableTop,
             hasBorders: true,
             hasControls: true,
-            name: 'TableContainer_',
+            name: `${TABLE}_`,
           });
     
           canvas?.add(tableGroup);

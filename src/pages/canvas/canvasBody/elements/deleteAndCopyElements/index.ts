@@ -14,6 +14,8 @@ import {
   PYRAMID,
   PYRAMID_LEVEL,
   PYRAMID_TEXT,
+  TABLE,
+  TABLE_TEXT,
   TIMELINE,
   TIMELINE_CIRCLE,
   TIMELINE_DIRECTION,
@@ -110,8 +112,8 @@ export function useDelAndCopy() {
           case 'List_Container':
             objectsToDelete.push('listText', 'listImage', 'ListAddImageText');
             break;
-          case 'Table_Container':
-            objectsToDelete.push('Table_Text');
+          case `${TABLE}_`:
+            objectsToDelete.push(`${TABLE_TEXT}_`);
             break;
           default:
             break;

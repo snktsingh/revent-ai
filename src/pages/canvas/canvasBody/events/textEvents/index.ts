@@ -82,15 +82,15 @@ export function useTextEvents() {
         }
         canvas.renderAll();
         break;
-      case 'TableText_':
-        if (textBox.text == '') {
-          textBox.text = 'Add Text';
-          textBox.set({
-            fill: '#404040',
-          });
-        }
-        canvas.renderAll();
-        break;
+      // case 'TableText_':
+      //   if (textBox.text == '') {
+      //     textBox.text = 'Add Text';
+      //     textBox.set({
+      //       fill: '#404040',
+      //     });
+      //   }
+      //   canvas.renderAll();
+      //   break;
       default:
         break;
     }

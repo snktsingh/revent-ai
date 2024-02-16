@@ -121,7 +121,7 @@ export const useCanvasComponent = () => {
     console.log({ canvasData });
     const outputFormat: APIRequest = {
       companyName: 'REVENT',
-      themeColor: themeCode,
+      themeColor: themeCode || '#004FBA',
       imagesCount: '',
       elements: [],
     };
