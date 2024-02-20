@@ -4,30 +4,26 @@ import AutoResizingTextbox from '@/utils/fabric-utils/AutoResizingTextbox';
 import { fabric } from 'fabric';
 
 export const useTableElement = () => {
+  //adding Rows
   const addTableRow = (canvas: fabric.Canvas | null) => {
     if (!canvas) return [];
 
     const activeObject = canvas.getActiveObject();
     if (!activeObject || !(activeObject instanceof fabric.Group)) return;
-    
+
     const lastTextBox = canvas.getObjects().reduce((acc, obj) => {
       if (obj.name && obj.name.startsWith(`${TABLE_TEXT}_`)) {
         acc = obj;
       }
       return acc;
     }, null as fabric.Object | null);
-    console.log({lastTextBox});
     const [_, row, col] = (lastTextBox?.name || '').split('_');
     if (!lastTextBox) {
       console.error('Last text box not found');
       return;
     }
-    if (
-      activeObject?.type == 'group' &&
-      activeObject.name?.startsWith(TABLE)
-    ){
-       
-      for(let i = 1; i <= Number(col); i++){
+    if (activeObject?.type == 'group' && activeObject.name?.startsWith(TABLE)) {
+      for (let i = 1; i <= Number(col); i++) {
         const cell = new fabric.Rect({
           width: 150,
           height: 50,
@@ -48,7 +44,7 @@ export const useTableElement = () => {
           top: cell.top! + 6,
           selectable: true,
           backgroundColor: theme.colorSchemes.light.palette.common.white,
-          name: `${TABLE_TEXT}_${Number(row)+1}_${i}`,
+          name: `${TABLE_TEXT}_${Number(row) + 1}_${i}`,
           fixedWidth: 150 - 6,
           fixedHeight: 50 - 6,
           lockMovementX: true,
@@ -59,17 +55,66 @@ export const useTableElement = () => {
         });
 
         activeObject.addWithUpdate(cell);
-        canvas.add(text)
-      };
+        canvas.add(text);
+      }
       canvas.renderAll();
-      
     }
-
   };
-
+  //adding Columns
   const addTableColumn = (canvas: fabric.Canvas | null) => {
     if (!canvas) return [];
-    console.log(canvas.getActiveObject());
+    const activeObject = canvas.getActiveObject();
+    if (!activeObject || !(activeObject instanceof fabric.Group)) return;
+
+    const lastTextBox = canvas.getObjects().reduce((acc, obj) => {
+      if (obj.name && obj.name.startsWith(`${TABLE_TEXT}_`)) {
+        acc = obj;
+      }
+      return acc;
+    }, null as fabric.Object | null);
+    console.log({ lastTextBox });
+    const [_, row, col] = (lastTextBox?.name || '').split('_');
+    if (!lastTextBox) {
+      console.error('Last text box not found');
+      return;
+    }
+    if (activeObject?.type == 'group' && activeObject.name?.startsWith(TABLE)) {
+      for (let i = 1; i <= Number(row); i++) {
+        const cell = new fabric.Rect({
+          width: 150,
+          height: 50,
+          fill: 'transparent',
+          stroke: 'black',
+          left: lastTextBox?.left!+148.4,
+          top: activeObject?.top! + i * 50-50,
+          selectable: false,
+          hasBorders: false,
+        });
+
+        const text = new AutoResizingTextbox(``, {
+          width: 150 - 5,
+          height: 50,
+          fontSize: 28,
+          textAlign: 'center',
+          left: cell.left! + 2,
+          top: cell.top! + 6,
+          selectable: true,
+          backgroundColor: theme.colorSchemes.light.palette.common.white,
+          name: `${TABLE_TEXT}_${i}_${Number(col) + 1}`,
+          fixedWidth: 150 - 6,
+          fixedHeight: 50 - 6,
+          lockMovementX: true,
+          lockMovementY: true,
+          hasControls: false,
+          borderColor: 'transparent',
+          transparentCorners: true,
+        });
+
+        activeObject.addWithUpdate(cell);
+        canvas.add(text);
+      }
+      canvas.renderAll();
+    }
   };
 
   const addTable = (canvas: fabric.Canvas | null) => {
@@ -103,7 +148,7 @@ export const useTableElement = () => {
             top: cell.top! + cellPadding,
             selectable: true,
             backgroundColor: theme.colorSchemes.light.palette.common.white,
-            name: `${TABLE_TEXT}_${i+1}_${j+1}`,
+            name: `${TABLE_TEXT}_${i + 1}_${j + 1}`,
             fixedWidth: cellWidth - cellPadding,
             fixedHeight: cellHeight - cellPadding,
             lockMovementX: true,
