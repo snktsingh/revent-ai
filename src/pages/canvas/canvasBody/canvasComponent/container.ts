@@ -120,7 +120,7 @@ export const useCanvasComponent = () => {
   function getElementsData(canvasData: any[], themeCode: string) {
     console.log({ canvasData });
     const outputFormat: APIRequest = {
-      companyName: 'Revent',
+      companyName: 'REVENT',
       themeColor: themeCode,
       imagesCount: '',
       elements: [],
@@ -309,7 +309,7 @@ export const useCanvasComponent = () => {
 
     const keys: string[] = [];
     const firstRow = objects.filter(obj =>
-      obj.name?.startsWith(`${TABLE_TEXT}_0_`)
+      obj.name?.startsWith(`${TABLE_TEXT}_1_`)
     );
     firstRow.forEach(obj => {
       keys.push((obj as fabric.Textbox).text || '');
@@ -327,19 +327,21 @@ export const useCanvasComponent = () => {
         colCount = Math.max(colCount, colIndex + 1);
       }
     });
-    for (let i = 1; i < rowCount; i++) {
+    console.log({rowCount,colCount});
+    for (let i = 2; i < rowCount; i++) { // Assuming 4 rows
       const rowData: { [key: string]: any } = {};
-
+  
+      // Iterate through columns
       for (let j = 0; j < keys.length; j++) {
-        const textBoxName = `${TABLE_TEXT}_${i}_${j}`;
-        const textBox = objects.find(obj => obj.name === textBoxName) as
-          | fabric.Textbox
-          | undefined;
+        const textBoxName = `${TABLE_TEXT}_${i}_${j+1}`;
+        const textBox = objects.find((obj) => obj.name === textBoxName) as fabric.Textbox | undefined;
         if (textBox) {
+          // Assign text content to the corresponding key
           rowData[keys[j]] = textBox.text;
         }
       }
-
+  
+      // Add the row data to the table data array
       tableData.push(rowData);
     }
 

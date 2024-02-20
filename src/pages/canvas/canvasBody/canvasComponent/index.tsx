@@ -170,6 +170,7 @@ const CanvasComponent: React.FC = () => {
             newCanvas.toObject(customFabricProperties)?.objects,
             themeCode
           );
+          extractTableData(newCanvas);
         });
 
         newCanvas.on('selection:cleared', e => {
@@ -242,7 +243,7 @@ const CanvasComponent: React.FC = () => {
       window.removeEventListener('resize', () => {});
       newCanvas.dispose();
     };
-  }, []);
+  }, [canvasJS]);
 
   useEffect(() => {
     canvasRef.current?.clear();

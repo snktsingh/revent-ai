@@ -116,7 +116,7 @@ export const useTableElement = () => {
       canvas.renderAll();
     }
   };
-
+//add new table
   const addTable = (canvas: fabric.Canvas | null) => {
     const cellPadding = 6;
     const tableLeft = 50;
