@@ -8,7 +8,7 @@ interface slideThemes {
 
 const initialState: slideThemes = {
   openAddTheme: false,
-  themeCode: '',
+  themeCode: '#004FBA',
   jsonData: null,
 };
 

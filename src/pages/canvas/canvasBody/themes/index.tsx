@@ -19,14 +19,23 @@ import { toggleTemplateVisibility } from '@/redux/reducers/elements';
 import { Add, Theme1, Theme2, Theme3 } from '@/constants/media';
 import { useEffect, useState } from 'react';
 import { setNewTheme, setThemeCode } from '@/redux/reducers/theme';
-import { getAllThemes } from '@/redux/thunk/thunk';
+import { fetchSlideImg, getAllThemes } from '@/redux/thunk/thunk';
+import { setOriginalSlide, setRequestData } from '@/redux/reducers/canvas';
+import { useCanvasComponent } from '../canvasComponent/container';
+import CircularProgress from '@mui/material/CircularProgress';
+import { request } from 'http';
+import { toast } from 'react-toastify';
 
 export default function Templates() {
+  const { getElementsData, customFabricProperties } = useCanvasComponent();
   const element = useAppSelector(state => state.element);
-  const toggleTheme = useAppSelector(state => state.slideTheme);
+  const toggleTheme = useAppSelector(state => state.slideTheme.themeCode);
   const dispatch = useAppDispatch();
   const thunk = useAppSelector(state => state.thunk);
-
+  const { requestData } = useAppSelector(state => state.apiData);
+  const { canvasList, originalCanvasSlide } = useAppSelector(
+    state => state.canvas
+  );
   const theme = useTheme();
 
   const handleDrawerClose = () => {
@@ -41,10 +50,13 @@ export default function Templates() {
     justifyContent: 'space-between',
   }));
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
 
-  const handleClickOpen = () => {
+  const handleClickOpen = (themeCode: string) => {
     setOpen(true);
+    setTimeout(() => {
+      getElementsData(originalCanvasSlide.objects, themeCode);
+    }, 1000);
   };
 
   const handleClose = () => {
@@ -55,6 +67,15 @@ export default function Templates() {
   useEffect(() => {
     dispatch(getAllThemes());
   }, []);
+
+  const changeThemeRequest = () => {
+    if (requestData?.elements.length == 0) {
+      toast.warning('Canvas is empty');
+    } else {
+      dispatch(fetchSlideImg(requestData));
+    }
+    setOpen(false);
+  };
 
   return (
     <Drawer
@@ -95,7 +116,9 @@ export default function Templates() {
           <>
             {thunk.themesList.map(themes => {
               return (
-                <ListSlideCard onClick={handleClickOpen}>
+                <ListSlideCard
+                  onClick={() => handleClickOpen(themes.themeColor)}
+                >
                   <img src={themes.thumbnailUrl} width="100%" height="100%" />
                 </ListSlideCard>
               );
@@ -106,18 +129,22 @@ export default function Templates() {
               aria-labelledby="alert-dialog-title"
               aria-describedby="alert-dialog-description"
             >
-              <DialogTitle id="alert-dialog-title">
-                {'Are you sure ?'}
-              </DialogTitle>
-              <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                  Selecting this theme will change the current slide contents
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleClose}>No</Button>
-                <Button autoFocus>Yes</Button>
-              </DialogActions>
+              <>
+                <DialogTitle id="alert-dialog-title">
+                  {'Are you sure ?'}
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    Selecting this theme will change the current slide contents
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose}>No</Button>
+                  <Button autoFocus onClick={changeThemeRequest}>
+                    Yes
+                  </Button>
+                </DialogActions>
+              </>
             </Dialog>
           </>
         )}

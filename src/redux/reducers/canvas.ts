@@ -1,4 +1,9 @@
-import { CanvasItem, CanvasJSON, IShapeRequest, TableDetails } from '@/interface/storeTypes';
+import {
+  CanvasItem,
+  CanvasJSON,
+  IShapeRequest,
+  TableDetails,
+} from '@/interface/storeTypes';
 import { createSlice } from '@reduxjs/toolkit';
 import { fabric } from 'fabric';
 
@@ -16,9 +21,9 @@ export interface CanvasSate {
   shapeName: string;
   requestData: IShapeRequest;
   variantImage: string;
-  originalCanvasSlide: object;
+  originalCanvasSlide: any;
   canvasImageURl: string;
-  selectedOriginalCanvas: boolean
+  selectedOriginalCanvas: boolean;
 }
 const canvas = new fabric.Canvas(null);
 const canvasJSON = canvas.toObject();
@@ -222,9 +227,9 @@ export const CanvasReducer = createSlice({
     setCanvasImageUrl(state, action) {
       state.canvasImageURl = action.payload;
     },
-    toggleSelectedOriginalCanvas(state,action){
+    toggleSelectedOriginalCanvas(state, action) {
       state.selectedOriginalCanvas = action.payload;
-    }
+    },
   },
 });
 
@@ -250,7 +255,7 @@ export const {
   setVariantImageAsMain,
   setCanvasImageUrl,
   setOriginalSlide,
-  toggleSelectedOriginalCanvas
+  toggleSelectedOriginalCanvas,
 } = CanvasReducer.actions;
 
 export default CanvasReducer.reducer;
