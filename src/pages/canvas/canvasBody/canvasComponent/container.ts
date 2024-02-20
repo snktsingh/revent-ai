@@ -6,6 +6,7 @@ import {
   PROCESS_TEXT,
   PYRAMID_TEXT,
   SUBTITLE,
+  TABLE_TEXT,
   TIMELINE_HEADING,
   TIMELINE_TEXT,
   TITLE,
@@ -300,11 +301,58 @@ export const useCanvasComponent = () => {
     return { mainBulletPoints, nestedBulletPoints };
   }
 
+  const extractTableData = (canvas: fabric.Canvas | null) => {
+    if (!canvas) return [];
+
+    const tableData: { [key: string]: any }[] = [];
+
+    const objects = canvas.getObjects();
+
+    const keys: string[] = [];
+    const firstRow = objects.filter(obj =>
+      obj.name?.startsWith(`${TABLE_TEXT}_0_`)
+    );
+    firstRow.forEach(obj => {
+      keys.push((obj as fabric.Textbox).text || '');
+    });
+
+    let rowCount = 0;
+    let colCount = 0;
+
+    objects.forEach(obj => {
+      if (obj.name && obj.name.startsWith(`${TABLE_TEXT}_`)) {
+        const [_, rowIndexStr, colIndexStr] = obj.name.split('_');
+        const rowIndex = parseInt(rowIndexStr);
+        const colIndex = parseInt(colIndexStr);
+        rowCount = Math.max(rowCount, rowIndex + 1);
+        colCount = Math.max(colCount, colIndex + 1);
+      }
+    });
+    for (let i = 1; i < rowCount; i++) {
+      const rowData: { [key: string]: any } = {};
+
+      for (let j = 0; j < keys.length; j++) {
+        const textBoxName = `${TABLE_TEXT}_${i}_${j}`;
+        const textBox = objects.find(obj => obj.name === textBoxName) as
+          | fabric.Textbox
+          | undefined;
+        if (textBox) {
+          rowData[keys[j]] = textBox.text;
+        }
+      }
+
+      tableData.push(rowData);
+    }
+
+    console.log({ tableData });
+  };
+
   return {
     handleAllElements,
     updateCanvasDimensions,
     updateCanvasSlideData,
     getElementsData,
     customFabricProperties,
+    extractTableData,
   };
 };

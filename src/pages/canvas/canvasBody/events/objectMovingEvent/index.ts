@@ -362,7 +362,7 @@ export function useObjectMovingEvent(){
               let top;
     
               if (
-                obj.name === `${TABLE_TEXT}_` &&
+                obj.name?.startsWith(`${TABLE_TEXT}_`) &&
                 obj.intersectsWithObject(movedObject, true, true)
               ) {
                 obj

@@ -39,7 +39,8 @@ const CanvasComponent: React.FC = () => {
     updateCanvasDimensions,
     updateCanvasSlideData,
     getElementsData,
-    customFabricProperties
+    customFabricProperties,
+    extractTableData
    } = useCanvasComponent();
 
   const dispatch = useAppDispatch();
@@ -50,7 +51,6 @@ const CanvasComponent: React.FC = () => {
 
   useEffect(() => {
     const newCanvas = new fabric.Canvas('canvas');
-    console.log('thinnava')
     newCanvas.clear();
     fabric.Object.prototype.set({
       cornerStyle: 'circle',
@@ -111,6 +111,7 @@ const CanvasComponent: React.FC = () => {
           // console.log(newCanvas.toJSON());
           updateCanvasSlideData(newCanvas, canvasJS.id);
           getElementsData(newCanvas.toObject(customFabricProperties)?.objects);
+          extractTableData(newCanvas);
           if (newCanvas.toObject()?.objects.length > 1) {
             dispatch(toggleRegenerateButton(false));
           } else {
@@ -121,6 +122,7 @@ const CanvasComponent: React.FC = () => {
         newCanvas.on('object:removed', e => {
           updateCanvasSlideData(newCanvas, canvasJS.id);
           getElementsData(newCanvas.toObject(customFabricProperties)?.objects);
+          extractTableData(newCanvas);
           if (newCanvas.toObject()?.objects.length > 1) {
             dispatch(toggleRegenerateButton(false));
           } else {
@@ -131,6 +133,7 @@ const CanvasComponent: React.FC = () => {
         newCanvas.on('object:modified', e => {
           updateCanvasSlideData(newCanvas, canvasJS.id);
           getElementsData(newCanvas.toObject(customFabricProperties)?.objects);
+          extractTableData(newCanvas);
         });
 
         newCanvas.on('selection:cleared', e => {
