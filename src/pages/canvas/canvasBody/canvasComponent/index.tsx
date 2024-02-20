@@ -6,7 +6,7 @@ import React, { useEffect, useRef } from 'react';
 import {
   useBulletOrNumberedText,
   useCustomSelectionIcons,
-  useDelAndCopy
+  useDelAndCopy,
 } from '../elements/elementExports';
 import {
   useCanvasClickEvent,
@@ -19,6 +19,7 @@ import { useElementFunctions } from './elementFunctions';
 import FullscreenCanvas from './fullscreenCanvas';
 import { CanvasContainer } from './style';
 import { IExtendedTextBoxOptions } from '@/interface/fabricTypes';
+import ConversionToJson from '@/components/pptToJson';
 
 const CanvasComponent: React.FC = () => {
   const canvasRef = useRef<fabric.Canvas | null>(null);
@@ -29,13 +30,13 @@ const CanvasComponent: React.FC = () => {
 
   const { handleAddCustomIcon } = useCustomSelectionIcons();
   const { CustomBorderIcons } = useDelAndCopy();
-  const { renderBulletOrNumTextLine} = useBulletOrNumberedText()
+  const { renderBulletOrNumTextLine } = useBulletOrNumberedText();
   const { handleObjectMoving } = useObjectMovingEvent();
   const { handleSelectionCreated } = useSelectionCreatedEvent();
   const { textExitedEvent } = useTextEvents();
   const { CanvasClick } = useCanvasClickEvent();
-
-  const { 
+  const { jsonData } = useAppSelector(state => state.slideTheme);
+  const {
     updateCanvasDimensions,
     updateCanvasSlideData,
     getElementsData,
@@ -44,10 +45,40 @@ const CanvasComponent: React.FC = () => {
    } = useCanvasComponent();
 
   const dispatch = useAppDispatch();
-  
+
   const { canvasJS, variantImage } = useAppSelector(state => state.canvas);
 
   const { pptUrl, imageUrl, variants } = useAppSelector(state => state.thunk);
+
+  // useEffect(() => {
+  //   if (canvasRef.current) {
+  //     canvasRef.current.clear();
+  //     console.log(jsonData);
+  //     // canvasRef.current.loadFromJSON(
+  //     //   {
+  //     //     left: 34.27,
+  //     //     top: 2.83,
+  //     //     width: 450.15,
+  //     //     height: 63.11,
+  //     //     borderColor: '#000',
+  //     //     borderWidth: 0,
+  //     //     borderType: 'solid',
+  //     //     borderStrokeDasharray: '0',
+  //     //     fillColor: '',
+  //     //     isFlipV: false,
+  //     //     isFlipH: false,
+  //     //     rotate: 0,
+  //     //     vAlign: 'up',
+  //     //     name: 'TextBox 18',
+  //     //     type: 'text',
+  //     //     isVertical: false,
+  //     //   },
+  //     //   () => {
+  //     //     canvasRef.current?.renderAll();
+  //     //   }
+  //     // );
+  //   }
+  // }, [jsonData]);
 
   useEffect(() => {
     const newCanvas = new fabric.Canvas('canvas');
@@ -56,9 +87,9 @@ const CanvasComponent: React.FC = () => {
       cornerStyle: 'circle',
       transparentCorners: false,
       cornerSize: 8,
-      cornerColor : 'white',
-      borderColor : 'grey',
-      cornerStrokeColor : 'grey'
+      cornerColor: 'white',
+      borderColor: 'grey',
+      cornerStrokeColor: 'grey',
     });
     fabric.Object.prototype.objectCaching = false;
     newCanvas.loadFromJSON(
@@ -78,30 +109,28 @@ const CanvasComponent: React.FC = () => {
 
         CustomBorderIcons(newCanvas);
 
-        newCanvas.forEachObject((obj)=>{
-          if(obj){
-            if((obj as IExtendedTextBoxOptions)?.listType == 'bullet') {
-              (obj as IExtendedTextBoxOptions)._renderTextLine = renderBulletOrNumTextLine;
+        newCanvas.forEachObject(obj => {
+          if (obj) {
+            if ((obj as IExtendedTextBoxOptions)?.listType == 'bullet') {
+              (obj as IExtendedTextBoxOptions)._renderTextLine =
+                renderBulletOrNumTextLine;
             }
           }
-        })
-
+        });
         newCanvas.on('mouse:up', event => {
           CanvasClick(newCanvas, event);
         });
-
         newCanvas.on('text:editing:exited', event => {
           textExitedEvent(newCanvas, event.target as fabric.Text);
           updateCanvasSlideData(newCanvas, canvasJS.id);
         });
-
         newCanvas.on('selection:created', function (event) {
           handleSelectionCreated(canvas, event);
         });
         updateCanvasDimensions(newCanvas);
-
-        window.addEventListener('resize', () => updateCanvasDimensions(newCanvas));
-
+        window.addEventListener('resize', () =>
+          updateCanvasDimensions(newCanvas)
+        );
         if (newCanvas.toObject(customFabricProperties)?.objects.length > 1) {
           dispatch(toggleRegenerateButton(false));
         } else {
@@ -118,7 +147,6 @@ const CanvasComponent: React.FC = () => {
             dispatch(toggleRegenerateButton(true));
           }
         });
-
         newCanvas.on('object:removed', e => {
           updateCanvasSlideData(newCanvas, canvasJS.id);
           getElementsData(newCanvas.toObject(customFabricProperties)?.objects);
@@ -173,7 +201,11 @@ const CanvasComponent: React.FC = () => {
     };
 
     const handleClickOutsideCanvas = (event: MouseEvent) => {
-      if (canvas && canvas.getActiveObject() && !isClickWithinCanvas(event, canvas)) {
+      if (
+        canvas &&
+        canvas.getActiveObject() &&
+        !isClickWithinCanvas(event, canvas)
+      ) {
         canvas.discardActiveObject().renderAll();
       }
     };
@@ -224,10 +256,9 @@ const CanvasComponent: React.FC = () => {
     });
   }, [variantImage]);
 
-  
-
   return (
     <CanvasContainer ref={Container}>
+      {/* <ConversionToJson /> */}
       <canvas id="canvas"></canvas>
       <div style={{ position: 'absolute', left: -10000 }}>
         <FullscreenCanvas />

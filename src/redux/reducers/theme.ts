@@ -3,11 +3,13 @@ import { createSlice } from '@reduxjs/toolkit';
 interface slideThemes {
   openAddTheme: boolean;
   themeCode: string;
+  jsonData: any;
 }
 
 const initialState: slideThemes = {
   openAddTheme: false,
   themeCode: '',
+  jsonData: null,
 };
 
 export const themeReducer = createSlice({
@@ -20,8 +22,11 @@ export const themeReducer = createSlice({
     setThemeCode: (state, action) => {
       state.themeCode = action.payload;
     },
+    setPptData: (state, action) => {
+      state.jsonData = action.payload;
+    },
   },
 });
 
-export const { setNewTheme, setThemeCode } = themeReducer.actions;
+export const { setNewTheme, setThemeCode, setPptData } = themeReducer.actions;
 export default themeReducer.reducer;

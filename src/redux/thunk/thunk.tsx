@@ -24,9 +24,7 @@ export const fetchSlideImg = createAsyncThunk(
 );
 
 export const getAllThemes = createAsyncThunk('theme/getallThemes', async () => {
-  const res = await FetchUtils.getRequest(
-    `${ENDPOINT.THEMES.GET_ALL_THEMES}?companyName=TRIDENT`
-  );
+  const res = await FetchUtils.getRequest(`${ENDPOINT.THEMES.GET_ALL_THEMES}`);
   return res.data;
 });
 

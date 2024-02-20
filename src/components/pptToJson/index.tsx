@@ -1,9 +1,11 @@
 import React, { ChangeEvent, useState } from 'react';
 import { parse } from 'pptxtojson';
+import { useAppDispatch } from '@/redux/store';
+import { setPptData } from '@/redux/reducers/theme';
 
 const ConversionToJson: React.FC = () => {
   const [jsonData, setJsonData] = useState<any>(null); // Adjust type as per your JSON structure
-
+  const dispatch = useAppDispatch();
   const options = {
     slideFactor: 75 / 914400,
     fontsizeFactor: 100 / 96,
@@ -28,6 +30,7 @@ const ConversionToJson: React.FC = () => {
         try {
           const json = await parse(e.target?.result as ArrayBuffer, options);
           console.log(json);
+          dispatch(setPptData(json));
 
           resolve(json);
         } catch (error) {
