@@ -41,7 +41,8 @@ const CanvasComponent: React.FC = () => {
     updateCanvasSlideData,
     getElementsData,
     customFabricProperties,
-  } = useCanvasComponent();
+    extractTableData
+   } = useCanvasComponent();
 
   const dispatch = useAppDispatch();
 
@@ -81,7 +82,6 @@ const CanvasComponent: React.FC = () => {
 
   useEffect(() => {
     const newCanvas = new fabric.Canvas('canvas');
-    console.log('thinnava');
     newCanvas.clear();
     fabric.Object.prototype.set({
       cornerStyle: 'circle',

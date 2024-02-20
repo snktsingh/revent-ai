@@ -6,9 +6,10 @@ import {
   useListElement,
   useProcessElement,
   usePyramidElement,
+  useTableElement,
   useTimelineElement
 } from '../elementExports';
-import { CYCLE, FUNNEL, PROCESS, PYRAMID, TIMELINE } from '@/constants/elementNames';
+import { CYCLE, FUNNEL, PROCESS, PYRAMID, TABLE, TIMELINE } from '@/constants/elementNames';
 export const useCustomSelectionIcons = () => {
   const { addProcessSteps } = useProcessElement();
   const { addPyramidLevel } = usePyramidElement();
@@ -16,6 +17,7 @@ export const useCustomSelectionIcons = () => {
   const { addCycleSteps } = useCycleElement();
   const { addTimelineSteps } = useTimelineElement();
   const { addListElement, addImage } = useListElement();
+  const { addTableRow, addTableColumn } = useTableElement();
 
   let addIcon = new Image();
   addIcon.src = AddPlus;
@@ -77,6 +79,14 @@ export const useCustomSelectionIcons = () => {
       selectedObject.setControlVisible('addCycle', true);
     } else {
       selectedObject?.setControlVisible('addCycle', false);
+    }
+
+    if (objectName[0] === TABLE) {
+      selectedObject.setControlVisible('addTableRow', true);
+      selectedObject.setControlVisible('addTableColumn', true);
+    } else {
+      selectedObject?.setControlVisible('addTableRow', false);
+      selectedObject?.setControlVisible('addTableColumn', false);
     }
 
     if (selectedObject?.name === 'List_Container') {
@@ -201,6 +211,32 @@ export const useCustomSelectionIcons = () => {
       mouseUpHandler: addListImage,
       visible: false,
     });
+    // Table Row control setup
+    fabric.Object.prototype.controls.addTableRow = new fabric.Control({
+      x: -0.55,
+      y: 0.5,
+      offsetY: -16,
+      offsetX: 16,
+      cursorStyle: 'pointer',
+      render: (ctx, left, top, fabricObject) => {
+        renderCustomIcon(ctx, left, top, fabricObject, addIcon);
+      },
+      mouseUpHandler: addTableRowElement,
+      visible: false,
+    });
+    // Table Column control setup
+    fabric.Object.prototype.controls.addTableColumn = new fabric.Control({
+      x: 0.43,
+      y: -0.5,
+      offsetY: -16,
+      offsetX: 16,
+      cursorStyle: 'pointer',
+      render: (ctx, left, top, fabricObject) => {
+        renderCustomIcon(ctx, left, top, fabricObject, addIcon);
+      },
+      mouseUpHandler: addTableColumnElement,
+      visible: false,
+    });
 
     function addProcessBox() {
       addProcessSteps(canvas);
@@ -220,6 +256,14 @@ export const useCustomSelectionIcons = () => {
     };
     function addTimelineElement() {
       addTimelineSteps(canvas);
+      return true;
+    };
+    function addTableRowElement() {
+      addTableRow(canvas);
+      return true;
+    };
+    function addTableColumnElement() {
+      addTableColumn(canvas);
       return true;
     };
     function addList() {
