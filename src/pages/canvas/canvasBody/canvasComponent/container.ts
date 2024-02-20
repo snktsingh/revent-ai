@@ -38,7 +38,6 @@ export const useCanvasComponent = () => {
     height: 0,
   });
   const dispatch = useAppDispatch();
-  const themeCode = useAppSelector(state => state.slideTheme.themeCode);
 
   const handleAllElements = (event: fabric.IEvent, canvas: fabric.Canvas) => {
     const { target } = event;
@@ -117,11 +116,11 @@ export const useCanvasComponent = () => {
     }
   };
 
-  function getElementsData(canvasData: any[]) {
+  function getElementsData(canvasData: any[], themeCode: string) {
     console.log({ canvasData });
     const outputFormat: APIRequest = {
-      companyName: 'REVENT',
-      themeColor: themeCode || '#004FBA',
+      companyName: 'Revent',
+      themeColor: themeCode,
       imagesCount: '',
       elements: [],
     };

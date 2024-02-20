@@ -35,7 +35,7 @@ const CanvasComponent: React.FC = () => {
   const { handleSelectionCreated } = useSelectionCreatedEvent();
   const { textExitedEvent } = useTextEvents();
   const { CanvasClick } = useCanvasClickEvent();
-  const { jsonData } = useAppSelector(state => state.slideTheme);
+  const { jsonData, themeCode } = useAppSelector(state => state.slideTheme);
   const {
     updateCanvasDimensions,
     updateCanvasSlideData,
@@ -139,7 +139,12 @@ const CanvasComponent: React.FC = () => {
         newCanvas.on('object:added', e => {
           // console.log(newCanvas.toJSON());
           updateCanvasSlideData(newCanvas, canvasJS.id);
-          getElementsData(newCanvas.toObject(customFabricProperties)?.objects);
+          getElementsData(
+            newCanvas.toObject(customFabricProperties)?.objects,
+            themeCode
+          );
+          // console.log(newCanvas.toObject(customFabricProperties)?.objects);
+
           if (newCanvas.toObject()?.objects.length > 1) {
             dispatch(toggleRegenerateButton(false));
           } else {
@@ -148,7 +153,10 @@ const CanvasComponent: React.FC = () => {
         });
         newCanvas.on('object:removed', e => {
           updateCanvasSlideData(newCanvas, canvasJS.id);
-          getElementsData(newCanvas.toObject(customFabricProperties)?.objects);
+          getElementsData(
+            newCanvas.toObject(customFabricProperties)?.objects,
+            themeCode
+          );
           if (newCanvas.toObject()?.objects.length > 1) {
             dispatch(toggleRegenerateButton(false));
           } else {
@@ -158,12 +166,18 @@ const CanvasComponent: React.FC = () => {
 
         newCanvas.on('object:modified', e => {
           updateCanvasSlideData(newCanvas, canvasJS.id);
-          getElementsData(newCanvas.toObject(customFabricProperties)?.objects);
+          getElementsData(
+            newCanvas.toObject(customFabricProperties)?.objects,
+            themeCode
+          );
         });
 
         newCanvas.on('selection:cleared', e => {
           updateCanvasSlideData(newCanvas, canvasJS.id);
-          getElementsData(newCanvas.toObject(customFabricProperties)?.objects);
+          getElementsData(
+            newCanvas.toObject(customFabricProperties)?.objects,
+            themeCode
+          );
         });
         // newCanvas.on('object:moving', (event: fabric.IEvent) => handleAllElements(event,newCanvas));
         newCanvas.on('object:moving', function (options) {
@@ -228,7 +242,7 @@ const CanvasComponent: React.FC = () => {
       window.removeEventListener('resize', () => {});
       newCanvas.dispose();
     };
-  }, [canvasJS]);
+  }, []);
 
   useEffect(() => {
     canvasRef.current?.clear();

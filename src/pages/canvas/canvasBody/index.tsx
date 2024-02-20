@@ -2,10 +2,7 @@ import { TABLE } from '@/constants/elementNames';
 import PopUpModal from '@/constants/elements/modal';
 import { AddElement, Copy, Delete } from '@/constants/media';
 import { TableDetails } from '@/interface/storeTypes';
-import {
-  copyCanvasCopy,
-  setOriginalSlide
-} from '@/redux/reducers/canvas';
+import { copyCanvasCopy, setOriginalSlide } from '@/redux/reducers/canvas';
 import { openModal, setMenuItemKey } from '@/redux/reducers/elements';
 import { searchElement } from '@/redux/reducers/slide';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
@@ -26,16 +23,13 @@ import {
   Menu,
   MenuItem,
   Stack,
-  TextField
+  TextField,
 } from '@mui/material';
 import React, { useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import CanvasComponent from './canvasComponent';
 import { CanvasNotes } from './canvasNotes';
-import {
-  ContentElements,
-  elementData,
-} from './elementData';
+import { ContentElements, elementData } from './elementData';
 import SlideList from './slideList';
 import {
   BodyContainer,
@@ -46,17 +40,15 @@ import {
   LikeButton,
 } from './style';
 import Templates from './themes';
+import { useCanvasComponent } from './canvasComponent/container';
 
 const CanvasBody = () => {
   const slide = useAppSelector(state => state.slide);
+  const { getElementsData } = useCanvasComponent();
   const dispatch = useAppDispatch();
-  const {
-    canvasJS,
-    tempData,
-    shapeName,
-    canvasImageURl,
-    canvasList,
-  } = useAppSelector(state => state.canvas);
+  const { canvasJS, canvasList, originalCanvasSlide } = useAppSelector(
+    state => state.canvas
+  );
   const { isRegenerateDisabled } = useAppSelector(state => state.slide);
   const { isLoading } = useAppSelector(state => state.thunk);
   const { requestData } = useAppSelector(state => state.apiData);
