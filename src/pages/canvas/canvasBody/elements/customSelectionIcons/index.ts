@@ -217,12 +217,13 @@ export const useCustomSelectionIcons = () => {
       mouseUpHandler: addListImage,
       visible: false,
     });
+   
     // Table Add Row control setup
     fabric.Object.prototype.controls.addTableRow = new fabric.Control({
-      x: -0.55,
+      x: -0.52,
       y: 0.5,
-      offsetY: -16,
-      offsetX: 16,
+      // offsetY: -15,
+      // offsetX: 15,
       cursorStyle: 'pointer',
       render: (ctx, left, top, fabricObject) => {
         renderCustomIcon(ctx, left, top, fabricObject, addIcon);
@@ -232,10 +233,10 @@ export const useCustomSelectionIcons = () => {
     });
     // Table Add Column control setup
     fabric.Object.prototype.controls.addTableColumn = new fabric.Control({
-      x: 0.43,
-      y: -0.5,
-      offsetY: -16,
-      offsetX: 16,
+      x: 0.48,
+      y: -0.57,
+      // offsetY: -16,
+      // offsetX: 16,
       cursorStyle: 'pointer',
       render: (ctx, left, top, fabricObject) => {
         renderCustomIcon(ctx, left, top, fabricObject, addIcon);
