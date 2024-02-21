@@ -44,6 +44,7 @@ import CanvasOutlinedArrow from '../assets/shapes/outlinedArrow.svg';
 import CanvasLine from '../assets/shapes/outlinedline.svg';
 import DeleteX from '../assets/deleteX.svg';
 import AddPlus from '../assets/addPlus.svg';
+import MinusIcon from '../assets/minus.svg';
 import Folder from '../assets/folder.svg';
 import Scratch from '../assets/scratch.svg';
 import varianButtonSvg from '../assets/variantButton.svg';
@@ -113,4 +114,5 @@ export {
   Theme1,
   Theme2,
   Theme3,
+  MinusIcon
 };

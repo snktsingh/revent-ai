@@ -32,6 +32,7 @@ const TIMELINE_DIRECTION = 'TimeLineDirection';
 //Table
 const TABLE = 'TABLE';
 const TABLE_TEXT = 'TableText';
+const TABLE_CELL = 'TableCell';
 
 
 //Text
@@ -58,6 +59,7 @@ export {
     PROCESS_BOX,
     TABLE,
     TABLE_TEXT,
+    TABLE_CELL,
     TIMELINE,
     TIMELINE_CIRCLE,
     TIMELINE_DIRECTION,

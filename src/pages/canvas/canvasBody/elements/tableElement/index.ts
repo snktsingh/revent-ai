@@ -1,4 +1,4 @@
-import { TABLE, TABLE_TEXT } from '@/constants/elementNames';
+import { TABLE, TABLE_CELL, TABLE_TEXT } from '@/constants/elementNames';
 import { theme } from '@/constants/theme';
 import AutoResizingTextbox from '@/utils/fabric-utils/AutoResizingTextbox';
 import { fabric } from 'fabric';
@@ -33,6 +33,7 @@ export const useTableElement = () => {
           top: activeObject?.top! + Number(row) * 50,
           selectable: false,
           hasBorders: false,
+          name: `${TABLE_CELL}_${Number(row) + 1}_${i}`,
         });
 
         const text = new AutoResizingTextbox(``, {
@@ -72,7 +73,6 @@ export const useTableElement = () => {
       }
       return acc;
     }, null as fabric.Object | null);
-    console.log({ lastTextBox });
     const [_, row, col] = (lastTextBox?.name || '').split('_');
     if (!lastTextBox) {
       console.error('Last text box not found');
@@ -85,10 +85,11 @@ export const useTableElement = () => {
           height: 50,
           fill: 'transparent',
           stroke: 'black',
-          left: lastTextBox?.left!+148.4,
-          top: activeObject?.top! + i * 50-50,
+          left: lastTextBox?.left! + 148.4,
+          top: activeObject?.top! + i * 50 - 50,
           selectable: false,
           hasBorders: false,
+          name: `${TABLE_CELL}_${i}_${Number(row) + 1}`,
         });
 
         const text = new AutoResizingTextbox(``, {
@@ -116,7 +117,7 @@ export const useTableElement = () => {
       canvas.renderAll();
     }
   };
-//add new table
+  //add new table
   const addTable = (canvas: fabric.Canvas | null) => {
     const cellPadding = 6;
     const tableLeft = 50;
@@ -137,6 +138,7 @@ export const useTableElement = () => {
             top: tableTop + i * cellHeight,
             selectable: false,
             hasBorders: false,
+            name: `${TABLE_CELL}_${i + 1}_${j + 1}`,
           });
 
           const text = new AutoResizingTextbox(``, {
@@ -203,5 +205,81 @@ export const useTableElement = () => {
     createTable();
   };
 
-  return { addTable, addTableRow, addTableColumn };
+  const removeTableRow = (canvas: fabric.Canvas | null) => {
+    if (!canvas) return [];
+    const activeObject = canvas.getActiveObject();
+    if (!activeObject || !(activeObject instanceof fabric.Group)) return;
+
+    const lastTextBox = canvas.getObjects().reduce((acc, obj) => {
+      if (obj.name && obj.name.startsWith(`${TABLE_TEXT}_`)) {
+        acc = obj;
+      }
+      return acc;
+    }, null as fabric.Object | null);
+    const [_, row, col] = (lastTextBox?.name || '').split('_');
+    if (!lastTextBox) {
+      console.error('Last text box not found');
+      return;
+    }
+
+    canvas.getObjects().forEach(obj => {
+      if (obj.name && obj.name.startsWith(`${TABLE_TEXT}_${row}`)) {
+        canvas.remove(obj);
+      }
+    });
+
+    activeObject.forEachObject(obj => {
+      if (obj.name && obj.name.startsWith(`${TABLE_CELL}_${row}`)) {
+        activeObject.removeWithUpdate(obj);
+      }
+    });
+
+    canvas.renderAll();
+  };
+
+  const removeTableColumn = (canvas: fabric.Canvas | null) => {
+    if (!canvas) return [];
+    const activeObject = canvas.getActiveObject();
+    if (!activeObject || !(activeObject instanceof fabric.Group)) return;
+
+    const lastTextBox = canvas.getObjects().reduce((acc, obj) => {
+      if (obj.name && obj.name.startsWith(`${TABLE_TEXT}_`)) {
+        acc = obj;
+      }
+      return acc;
+    }, null as fabric.Object | null);
+    const [_, row, col] = (lastTextBox?.name || '').split('_');
+    if (!lastTextBox) {
+      console.error('Last text box not found');
+      return;
+    }
+
+    canvas.getObjects().forEach(obj => {
+      if (obj.name && obj.name.startsWith(`${TABLE_TEXT}_`)) {
+        const [_, i, j] = (obj?.name || '').split('_');
+        if(j == col){
+          canvas.remove(obj);
+        }
+      }
+    });
+
+    activeObject.forEachObject(obj => {
+      if (obj.name && obj.name.startsWith(`${TABLE_CELL}_`)) {
+        const [_, i, j] = (obj?.name || '').split('_');
+        if(j == col){
+          activeObject.removeWithUpdate(obj);
+        }
+      }
+    });
+
+    canvas.renderAll();
+  };
+
+  return {
+    addTable,
+    addTableRow,
+    addTableColumn,
+    removeTableColumn,
+    removeTableRow,
+  };
 };

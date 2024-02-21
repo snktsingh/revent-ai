@@ -1,4 +1,4 @@
-import { AddPlus, imageIcon } from '@/constants/media';
+import { AddPlus, MinusIcon, imageIcon } from '@/constants/media';
 import { fabric } from 'fabric';
 import {
   useCycleElement,
@@ -17,12 +17,14 @@ export const useCustomSelectionIcons = () => {
   const { addCycleSteps } = useCycleElement();
   const { addTimelineSteps } = useTimelineElement();
   const { addListElement, addImage } = useListElement();
-  const { addTableRow, addTableColumn } = useTableElement();
+  const { addTableRow, addTableColumn, removeTableColumn, removeTableRow } = useTableElement();
 
   let addIcon = new Image();
   addIcon.src = AddPlus;
   let addImageIcon = new Image();
   addImageIcon.src = imageIcon;
+  let minusIcon = new Image();
+  minusIcon.src = MinusIcon;
 
   const handleAddCustomIcon = (canvas: fabric.Canvas) => {
     // Event handler for when objects are selected
@@ -84,9 +86,13 @@ export const useCustomSelectionIcons = () => {
     if (objectName[0] === TABLE) {
       selectedObject.setControlVisible('addTableRow', true);
       selectedObject.setControlVisible('addTableColumn', true);
+      selectedObject.setControlVisible('removeTableRow', true);
+      selectedObject.setControlVisible('removeTableColumn', true);
     } else {
       selectedObject?.setControlVisible('addTableRow', false);
       selectedObject?.setControlVisible('addTableColumn', false);
+      selectedObject.setControlVisible('removeTableRow', false);
+      selectedObject.setControlVisible('removeTableColumn', false);
     }
 
     if (selectedObject?.name === 'List_Container') {
@@ -211,7 +217,7 @@ export const useCustomSelectionIcons = () => {
       mouseUpHandler: addListImage,
       visible: false,
     });
-    // Table Row control setup
+    // Table Add Row control setup
     fabric.Object.prototype.controls.addTableRow = new fabric.Control({
       x: -0.55,
       y: 0.5,
@@ -224,7 +230,7 @@ export const useCustomSelectionIcons = () => {
       mouseUpHandler: addTableRowElement,
       visible: false,
     });
-    // Table Column control setup
+    // Table Add Column control setup
     fabric.Object.prototype.controls.addTableColumn = new fabric.Control({
       x: 0.43,
       y: -0.5,
@@ -235,6 +241,32 @@ export const useCustomSelectionIcons = () => {
         renderCustomIcon(ctx, left, top, fabricObject, addIcon);
       },
       mouseUpHandler: addTableColumnElement,
+      visible: false,
+    });
+    // Table Remove Row control setup
+    fabric.Object.prototype.controls.removeTableRow = new fabric.Control({
+      x: -0.55,
+      y: 0.4,
+      offsetY: -16,
+      offsetX: 16,
+      cursorStyle: 'pointer',
+      render: (ctx, left, top, fabricObject) => {
+        renderCustomIcon(ctx, left, top, fabricObject, minusIcon);
+      },
+      mouseUpHandler: removeTableRowElement,
+      visible: false,
+    });
+    // Table Remove Column control setup
+    fabric.Object.prototype.controls.removeTableColumn = new fabric.Control({
+      x: 0.39,
+      y: -0.5,
+      offsetY: -16,
+      offsetX: 16,
+      cursorStyle: 'pointer',
+      render: (ctx, left, top, fabricObject) => {
+        renderCustomIcon(ctx, left, top, fabricObject, minusIcon);
+      },
+      mouseUpHandler: removeTableColumnElement,
       visible: false,
     });
 
@@ -264,6 +296,14 @@ export const useCustomSelectionIcons = () => {
     };
     function addTableColumnElement() {
       addTableColumn(canvas);
+      return true;
+    };
+    function removeTableRowElement() {
+      removeTableRow(canvas);
+      return true;
+    };
+    function removeTableColumnElement() {
+      removeTableColumn(canvas);
       return true;
     };
     function addList() {
