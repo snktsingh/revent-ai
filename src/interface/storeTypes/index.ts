@@ -65,4 +65,6 @@ export interface APIRequest {
   themeColor: string;
   imagesCount: string;
   elements: ReqElementType[];
+  title? : string,
+  subTitle? : string
 }

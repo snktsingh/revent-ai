@@ -168,13 +168,6 @@ export const useCanvasComponent = () => {
           canvasObject.name.startsWith(TIMELINE_HEADING)
         ) {
           timelineData.push({ content: canvasObject.text, id: elementID });
-        } else if (
-          canvasObject.name === TITLE ||
-          canvasObject.name === SUBTITLE
-        ) {
-          const titleData = getOrCreateElement('theme', '1', outputFormat);
-          titleData[canvasObject.name === 'title' ? 'title' : 'subTitle'] =
-            canvasObject.text;
         } else if (canvasObject.name === PARAGRAPH) {
           const paragraphData = getOrCreateElement(
             'Paragraph',
@@ -192,13 +185,6 @@ export const useCanvasComponent = () => {
           canvasObject.name.startsWith(TIMELINE_HEADING)
         ) {
           timelineData.push({ content: canvasObject.text, id: elementID });
-        } else if (
-          canvasObject.name === TITLE ||
-          canvasObject.name === SUBTITLE
-        ) {
-          canvasObject.name === TITLE
-            ? (titleText = canvasObject.text)
-            : (subTitleText = canvasObject.text);
         } else if (canvasObject.name === PARAGRAPH) {
           const paragraphData = getOrCreateElement(
             'Paragraph',
@@ -222,6 +208,10 @@ export const useCanvasComponent = () => {
           });
           const Bullets = getOrCreateElement('BulletPoint', '1', outputFormat);
           // Bullets.data = bulletsData;
+        } else if (canvasObject.name === TITLE) {
+           titleText = canvasObject.text;
+        } else if (canvasObject.name === SUBTITLE) {
+          subTitleText = canvasObject.text;
         }
       }
     });
@@ -256,6 +246,15 @@ export const useCanvasComponent = () => {
     Object.entries(organizedTimelineData).forEach(([id, content]) => {
       getOrCreateElement('Timeline', id, outputFormat).data = content;
     });
+
+    if (outputFormat.elements.length > 0) {
+      outputFormat['title'] = titleText;
+      outputFormat['subTitle'] = subTitleText;
+    } else {
+      const titleData = getOrCreateElement('cover', '1', outputFormat);
+      titleData['title'] = titleText;
+      titleData['subTitle'] = subTitleText;
+    }
 
     const modifiedRequestFormat = outputFormat.elements.map(element => {
       const { elementId, ...rest } = element;
@@ -327,20 +326,23 @@ export const useCanvasComponent = () => {
         colCount = Math.max(colCount, colIndex + 1);
       }
     });
-    console.log({rowCount,colCount});
-    for (let i = 2; i < rowCount; i++) { // Assuming 4 rows
+    console.log({ rowCount, colCount });
+    for (let i = 2; i < rowCount; i++) {
+      // Assuming 4 rows
       const rowData: { [key: string]: any } = {};
-  
+
       // Iterate through columns
       for (let j = 0; j < keys.length; j++) {
-        const textBoxName = `${TABLE_TEXT}_${i}_${j+1}`;
-        const textBox = objects.find((obj) => obj.name === textBoxName) as fabric.Textbox | undefined;
+        const textBoxName = `${TABLE_TEXT}_${i}_${j + 1}`;
+        const textBox = objects.find(obj => obj.name === textBoxName) as
+          | fabric.Textbox
+          | undefined;
         if (textBox) {
           // Assign text content to the corresponding key
           rowData[keys[j]] = textBox.text;
         }
       }
-  
+
       // Add the row data to the table data array
       tableData.push(rowData);
     }
