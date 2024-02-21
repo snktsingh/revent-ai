@@ -84,7 +84,7 @@ export default function Templates() {
         flexShrink: 3,
         '& .MuiDrawer-paper': {
           width: '17vw',
-          padding: '0vh 2vh',
+          padding: '0vh 2vh 14vh 2vh',
           marginTop: '13.5vh',
         },
       }}

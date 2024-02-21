@@ -46,7 +46,7 @@ const CanvasBody = () => {
   const slide = useAppSelector(state => state.slide);
   const { getElementsData } = useCanvasComponent();
   const dispatch = useAppDispatch();
-  const { canvasJS, canvasList, originalCanvasSlide } = useAppSelector(
+  const { canvasJS, canvasList, variantImage } = useAppSelector(
     state => state.canvas
   );
   const { isRegenerateDisabled } = useAppSelector(state => state.slide);
@@ -69,7 +69,9 @@ const CanvasBody = () => {
   const open = Boolean(anchorEl);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
+    {
+      !variantImage && setAnchorEl(event.currentTarget);
+    }
   };
   const handleClose = () => {
     setAnchorEl(null);

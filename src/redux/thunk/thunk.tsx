@@ -18,7 +18,6 @@ export const fetchSlideImg = createAsyncThunk(
   async (req: APIRequest | null, { dispatch }) => {
     const res = await FetchUtils.postRequest(`${ENDPOINT.GEN_PPT_MULTI}`, req);
     dispatch(setVariantImageAsMain(res.data.variants[0].imagesUrl));
-    console.log(res.data);
     return res.data;
   }
 );
