@@ -61,7 +61,12 @@ export function useDelAndCopy() {
         if (names.includes(obj.name || '')) {
           canvas.remove(obj);
         }
-      });
+        if(names.includes(TABLE)){
+          if(obj?.name?.startsWith(TABLE_TEXT)){
+            canvas.remove(obj);
+          }
+        }
+      }); 
       canvas?.renderAll();
     };
 
@@ -113,7 +118,7 @@ export function useDelAndCopy() {
             objectsToDelete.push('listText', 'listImage', 'ListAddImageText');
             break;
           case `${TABLE}_`:
-            objectsToDelete.push(`${TABLE_TEXT}_`);
+            objectsToDelete.push(TABLE);
             break;
           default:
             break;
