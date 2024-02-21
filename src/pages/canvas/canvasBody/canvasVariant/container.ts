@@ -1,25 +1,31 @@
-import { setCanvas, setVariantImageAsMain, toggleSelectedOriginalCanvas } from '@/redux/reducers/canvas';
+import {
+  setCanvas,
+  setVariantImageAsMain,
+  toggleSelectedOriginalCanvas,
+} from '@/redux/reducers/canvas';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { fabric } from "fabric";
+import { fabric } from 'fabric';
 import { useEffect, useState } from 'react';
 
 const useVariants = () => {
   const dispatch = useAppDispatch();
-  const [originalImageUrl,setOriginalImageUrl] = useState<string>('');
+  const [originalImageUrl, setOriginalImageUrl] = useState<string>('');
   const { openVariant } = useAppSelector(state => state.element);
   const { variants } = useAppSelector(state => state.thunk);
-  const { originalCanvasSlide, variantImage, selectedOriginalCanvas } = useAppSelector(state => state.canvas);
+  const { originalCanvasSlide, variantImage, selectedOriginalCanvas } =
+    useAppSelector(state => state.canvas);
   const array: number[] = [1, 2, 3];
 
   const handleVariants = (CanvasURL: string, pptURL: string, index: number) => {
+    console.log(CanvasURL);
     dispatch(toggleSelectedOriginalCanvas(false));
     dispatch(setVariantImageAsMain(CanvasURL));
   };
 
-  const handleApplyOriginalAsMain = ()=>{
+  const handleApplyOriginalAsMain = () => {
     dispatch(toggleSelectedOriginalCanvas(true));
-    dispatch(setVariantImageAsMain(''));
-    dispatch(setCanvas({id:1,canvas:originalCanvasSlide}));
+    dispatch(setCanvas({ id: 1, canvas: originalCanvasSlide }));
+    console.log(variantImage);
   };
 
   const getImg = async (canvasJson: Object) => {
@@ -40,22 +46,32 @@ const useVariants = () => {
     });
   };
 
-  const getCanvasImageFromJSON = async (JSONcanvas : object) => {
+  const getCanvasImageFromJSON = async (JSONcanvas: object) => {
     let url: string = '';
-      try {
-        const imageURL = await getImg(JSONcanvas);
-        url = imageURL;
-      } catch (error) {
-        console.error(error);
-        url = 'error'; // Push placeholder for error cases
-      }
-    
+    try {
+      const imageURL = await getImg(JSONcanvas);
+      url = imageURL;
+    } catch (error) {
+      console.error(error);
+      url = 'error'; // Push placeholder for error cases
+    }
+
     setOriginalImageUrl(url);
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     getCanvasImageFromJSON(originalCanvasSlide);
-  },[originalCanvasSlide]);
-  return { variants, array, openVariant, handleVariants, originalCanvasSlide, handleApplyOriginalAsMain, originalImageUrl, variantImage, selectedOriginalCanvas };
+  }, [originalCanvasSlide]);
+  return {
+    variants,
+    array,
+    openVariant,
+    handleVariants,
+    originalCanvasSlide,
+    handleApplyOriginalAsMain,
+    originalImageUrl,
+    variantImage,
+    selectedOriginalCanvas,
+  };
 };
 export default useVariants;

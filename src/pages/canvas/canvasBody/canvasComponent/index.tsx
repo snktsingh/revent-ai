@@ -20,6 +20,7 @@ import FullscreenCanvas from './fullscreenCanvas';
 import { CanvasContainer } from './style';
 import { IExtendedTextBoxOptions } from '@/interface/fabricTypes';
 import ConversionToJson from '@/components/pptToJson';
+import { setVariantImageAsMain } from '@/redux/reducers/canvas';
 
 const CanvasComponent: React.FC = () => {
   const canvasRef = useRef<fabric.Canvas | null>(null);
@@ -41,8 +42,8 @@ const CanvasComponent: React.FC = () => {
     updateCanvasSlideData,
     getElementsData,
     customFabricProperties,
-    extractTableData
-   } = useCanvasComponent();
+    extractTableData,
+  } = useCanvasComponent();
 
   const dispatch = useAppDispatch();
 
@@ -246,6 +247,8 @@ const CanvasComponent: React.FC = () => {
   }, [canvasJS]);
 
   useEffect(() => {
+    console.log('hitted');
+    dispatch(setVariantImageAsMain(''));
     canvasRef.current?.clear();
     canvasRef.current?.setBackgroundColor(
       `${theme.colorSchemes.light.palette.common.white}`,

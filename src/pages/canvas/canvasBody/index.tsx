@@ -41,6 +41,7 @@ import {
 } from './style';
 import Templates from './themes';
 import { useCanvasComponent } from './canvasComponent/container';
+import { Direction } from 'react-toastify/dist/utils';
 
 const CanvasBody = () => {
   const slide = useAppSelector(state => state.slide);
@@ -283,10 +284,13 @@ const CanvasBody = () => {
           top: '14%',
           left: '17%',
           bottom: '6%',
+          display: 'flex',
+          flexDirection: 'column',
         }}
         open={isLoading}
       >
         <CircularProgress color="inherit" />
+        <p>Regenerating the slide...</p>
       </Backdrop>
     </BodyContainer>
   );
