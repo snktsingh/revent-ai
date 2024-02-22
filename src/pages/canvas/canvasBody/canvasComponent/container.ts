@@ -201,13 +201,10 @@ export const useCanvasComponent = () => {
           const { mainBulletPoints, nestedBulletPoints } =
             segregateBulletPoints(canvasObject.text);
           const bulletsData = mainBulletPoints.map((text, index) => {
-            const heading = '';
-            // const name = '';
-            // const subHeading = '';
-            return { heading: text, text };
+             return { heading: text, text };
           });
           const Bullets = getOrCreateElement('BulletPoint', '1', outputFormat);
-          // Bullets.data = bulletsData;
+          Bullets.data = bulletsData;
         } else if (canvasObject.name === TITLE) {
            titleText = canvasObject.text;
         } else if (canvasObject.name === SUBTITLE) {
@@ -274,14 +271,13 @@ export const useCanvasComponent = () => {
     lines.forEach((line: string) => {
       const trimmedLine: string = line.trim();
       const spacesBeforeText: number = line.length - trimmedLine.length;
-
-      if (spacesBeforeText === 0) {
+      if (spacesBeforeText < 4) {
         // Main bullet point
         if (currentMainBulletPoint !== '') {
           mainBulletPoints.push(currentMainBulletPoint.trim());
         }
         currentMainBulletPoint = trimmedLine;
-      } else {
+      } else if(spacesBeforeText == 4) {
         // Nested bullet point
         if (currentMainBulletPoint !== '') {
           if (!nestedBulletPoints[currentMainBulletPoint]) {

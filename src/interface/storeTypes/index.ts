@@ -46,9 +46,9 @@ export interface IShapeRequest {
 }
 
 export interface DataRequestType {
-  name: string;
-  heading: string;
-  subHeading: string;
+  name?: string;
+  heading?: string;
+  subHeading?: string;
   text: string;
 }
 

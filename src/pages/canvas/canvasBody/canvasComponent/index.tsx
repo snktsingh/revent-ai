@@ -136,7 +136,7 @@ const CanvasComponent: React.FC = () => {
         window.addEventListener('resize', () =>
           updateCanvasDimensions(newCanvas)
         );
-        if (newCanvas.toObject(customFabricProperties)?.objects.length > 1) {
+        if (newCanvas.toObject(customFabricProperties)?.objects.length >= 1) {
           dispatch(toggleRegenerateButton(false));
         } else {
           dispatch(toggleRegenerateButton(true));
@@ -150,7 +150,7 @@ const CanvasComponent: React.FC = () => {
           );
           // console.log(newCanvas.toObject(customFabricProperties)?.objects);
 
-          if (newCanvas.toObject()?.objects.length > 1) {
+          if (newCanvas.toObject()?.objects.length >= 1) {
             dispatch(toggleRegenerateButton(false));
           } else {
             dispatch(toggleRegenerateButton(true));
@@ -162,7 +162,7 @@ const CanvasComponent: React.FC = () => {
             newCanvas.toObject(customFabricProperties)?.objects,
             themeCode
           );
-          if (newCanvas.toObject()?.objects.length > 1) {
+          if (newCanvas.toObject()?.objects.length >= 1) {
             dispatch(toggleRegenerateButton(false));
           } else {
             dispatch(toggleRegenerateButton(true));
@@ -251,28 +251,33 @@ const CanvasComponent: React.FC = () => {
   }, [canvasJS]);
 
   useEffect(() => {
-    console.log('hitted');
-    dispatch(setVariantImageAsMain(''));
-    canvasRef.current?.clear();
-    canvasRef.current?.setBackgroundColor(
-      `${theme.colorSchemes.light.palette.common.white}`,
-      canvasRef.current.renderAll.bind(canvasRef.current)
-    );
-    fabric.Image.fromURL(variantImage, img => {
-      const canvasWidth = canvasRef.current?.width || 0;
-      const canvasHeight = canvasRef.current?.height || 0;
-      const scaleWidth = canvasWidth / img.width!;
-      const scaleHeight = canvasHeight / img.height!;
-      const scale = Math.max(scaleWidth, scaleHeight);
-      img.set({
-        left: 0,
-        top: 0,
-        scaleX: scale,
-        scaleY: scale,
+    if (variantImage) {
+      // Clear the canvas and set its background color to white
+      canvasRef.current?.clear();
+      canvasRef.current?.setBackgroundColor(
+        `${theme.colorSchemes.light.palette.common.white}`,
+        canvasRef.current.renderAll.bind(canvasRef.current)
+      );
+  
+      // Load the image and adjust its size to fit the canvas
+      fabric.Image.fromURL(variantImage, img => {
+        const canvasWidth = canvasRef.current?.width || 0;
+        const canvasHeight = canvasRef.current?.height || 0;
+        const scaleWidth = canvasWidth / img.width!;
+        const scaleHeight = canvasHeight / img.height!;
+        const scale = Math.max(scaleWidth, scaleHeight);
+  
+        // Set image properties and add it to the canvas
+        img.set({
+          left: 0,
+          top: 0,
+          scaleX: scale,
+          scaleY: scale,
+        });
+        canvasRef.current?.add(img);
+        canvasRef.current?.renderAll();
       });
-      canvasRef.current?.add(img);
-      canvasRef.current?.renderAll();
-    });
+    }
   }, [variantImage]);
 
   return (

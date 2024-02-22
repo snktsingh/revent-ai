@@ -17,15 +17,14 @@ const useVariants = () => {
   const array: number[] = [1, 2, 3];
 
   const handleVariants = (CanvasURL: string, pptURL: string, index: number) => {
-    console.log(CanvasURL);
     dispatch(toggleSelectedOriginalCanvas(false));
     dispatch(setVariantImageAsMain(CanvasURL));
   };
 
   const handleApplyOriginalAsMain = () => {
+    dispatch(setVariantImageAsMain(''));
     dispatch(toggleSelectedOriginalCanvas(true));
     dispatch(setCanvas({ id: 1, canvas: originalCanvasSlide }));
-    console.log(variantImage);
   };
 
   const getImg = async (canvasJson: Object) => {
