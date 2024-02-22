@@ -18,25 +18,30 @@ export function useTextEvents() {
     if (object) {
       let textBox = object as fabric.Textbox;
       if (
-        textBox?.text == 'Click to add a title' ||
-        textBox?.text == 'Click to add a subtitle' ||
-        textBox?.text == 'Click to add a heading' ||
-        textBox?.text == 'Click to add a paragraph' ||
-        textBox?.text == 'Click to add a bullet point'
+        textBox?.text === 'Click to add a title' ||
+        textBox?.text === 'Click to add a subtitle' ||
+        textBox?.text === 'Click to add a heading' ||
+        textBox?.text === 'Click to add a paragraph' ||
+        textBox?.text === 'Click to add a bullet point'
       ) {
         // Clear the placeholder text and make it selectable
-        textBox.text = '';
-        // Set focus on the textbox
-        textBox.enterEditing();
+        // textBox.set({ text: '' });
+        // textBox.set({textLines : ['']})
         textBox.set({
           fill: theme.colorSchemes.light.palette.common.black,
         });
-        canvas.renderAll();
-      } else if (textBox.text == 'Add Text' || textBox.text === 'Add Timeline') {
-        textBox.text = '';
         // Set focus on the textbox
-        canvas.renderAll();
+        textBox.enterEditing();
+        textBox.selectAll()
+      } else if (textBox.text === 'Add Text' || textBox.text === 'Add Timeline') {
+        // textBox.set({ text: '' });
+        textBox.set({
+          fill: theme.colorSchemes.light.palette.common.black,
+        });
+        textBox.enterEditing();
+        textBox.selectAll()
       }
+      canvas.renderAll();
     }
   };
 
@@ -94,7 +99,11 @@ export function useTextEvents() {
       default:
         break;
     }
-    if (textBox.name?.startsWith(PYRAMID_TEXT) || textBox.name?.startsWith(FUNNEL_TEXT) || textBox.name?.startsWith(TIMELINE_TEXT)) {
+    if (
+      textBox.name?.startsWith(PYRAMID_TEXT) ||
+      textBox.name?.startsWith(FUNNEL_TEXT) ||
+      textBox.name?.startsWith(TIMELINE_TEXT)
+    ) {
       if (textBox.text == '') {
         textBox.text = 'Add Text';
         textBox.set({
@@ -102,7 +111,7 @@ export function useTextEvents() {
         });
       }
       canvas.renderAll();
-    }else if (textBox.name?.startsWith(TIMELINE_HEADING)) {
+    } else if (textBox.name?.startsWith(TIMELINE_HEADING)) {
       if (textBox.text == '') {
         textBox.text = 'Add Timeline';
         textBox.set({
@@ -110,7 +119,10 @@ export function useTextEvents() {
         });
       }
       canvas.renderAll();
-    }else if (textBox.name?.startsWith(CYCLE_TEXT) || textBox.name?.startsWith(PROCESS_TEXT)) {
+    } else if (
+      textBox.name?.startsWith(CYCLE_TEXT) ||
+      textBox.name?.startsWith(PROCESS_TEXT)
+    ) {
       if (textBox.text == '') {
         textBox.text = 'Add Text';
         textBox.set({

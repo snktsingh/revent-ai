@@ -34,7 +34,7 @@ const CanvasComponent: React.FC = () => {
   const { renderBulletOrNumTextLine } = useBulletOrNumberedText();
   const { handleObjectMoving } = useObjectMovingEvent();
   const { handleSelectionCreated } = useSelectionCreatedEvent();
-  const { textExitedEvent } = useTextEvents();
+  const { textExitedEvent, textEnteringEvent } = useTextEvents();
   const { CanvasClick } = useCanvasClickEvent();
   const { jsonData, themeCode } = useAppSelector(state => state.slideTheme);
   const {
@@ -123,6 +123,10 @@ const CanvasComponent: React.FC = () => {
         });
         newCanvas.on('text:editing:exited', event => {
           textExitedEvent(newCanvas, event.target as fabric.Text);
+          updateCanvasSlideData(newCanvas, canvasJS.id);
+        });
+        newCanvas.on('text:editing:entered', event => {
+          textEnteringEvent(newCanvas, event.target as fabric.Text);
           updateCanvasSlideData(newCanvas, canvasJS.id);
         });
         newCanvas.on('selection:created', function (event) {

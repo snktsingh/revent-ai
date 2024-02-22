@@ -11,7 +11,7 @@ export function useCanvasClickEvent() {
   ) {
     let object = event.target;
     if (object) {
-      textEnteringEvent(canvas, object as fabric.Text);
+      // textEnteringEvent(canvas, object as fabric.Text);
       if (object?.name === 'LIST_ELEMENT') {
         addImage(canvas, object);
         canvas.requestRenderAll();
