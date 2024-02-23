@@ -18,7 +18,7 @@ import { useTheme } from '@mui/material/styles';
 import { toggleTemplateVisibility } from '@/redux/reducers/elements';
 import { Add, Theme1, Theme2, Theme3 } from '@/constants/media';
 import { useEffect, useState } from 'react';
-import { setNewTheme, setThemeCode } from '@/redux/reducers/theme';
+import { setNewTheme, setThemeCode, setThemeName } from '@/redux/reducers/theme';
 import { fetchSlideImg, getAllThemes } from '@/redux/thunk/thunk';
 import { setOriginalSlide, setRequestData } from '@/redux/reducers/canvas';
 import { useCanvasComponent } from '../canvasComponent/container';
@@ -52,10 +52,12 @@ export default function Templates() {
 
   const [open, setOpen] = useState<boolean>(false);
 
-  const handleClickOpen = (themeCode: string) => {
+  const handleClickOpen = (themeCode: string, themeName : string) => {
+    console.log({themeCode,themeName})
+    dispatch(setThemeName(themeName));
     setOpen(true);
     setTimeout(() => {
-      getElementsData(originalCanvasSlide.objects, themeCode);
+      getElementsData(originalCanvasSlide.objects, themeCode, themeName);
     }, 1000);
   };
 
@@ -117,7 +119,7 @@ export default function Templates() {
             {thunk.themesList.map(themes => {
               return (
                 <ListSlideCard
-                  onClick={() => handleClickOpen(themes.themeColor)}
+                  onClick={() => handleClickOpen(themes.themeColor, themes.company)}
                 >
                   <img src={themes.thumbnailUrl} width="100%" height="100%" />
                 </ListSlideCard>

@@ -36,7 +36,7 @@ const CanvasComponent: React.FC = () => {
   const { handleSelectionCreated } = useSelectionCreatedEvent();
   const { textExitedEvent, textEnteringEvent } = useTextEvents();
   const { CanvasClick } = useCanvasClickEvent();
-  const { jsonData, themeCode } = useAppSelector(state => state.slideTheme);
+  const { jsonData, themeCode, themeName } = useAppSelector(state => state.slideTheme);
   const {
     updateCanvasDimensions,
     updateCanvasSlideData,
@@ -146,7 +146,7 @@ const CanvasComponent: React.FC = () => {
           updateCanvasSlideData(newCanvas, canvasJS.id);
           getElementsData(
             newCanvas.toObject(customFabricProperties)?.objects,
-            themeCode
+            themeCode, themeName
           );
           // console.log(newCanvas.toObject(customFabricProperties)?.objects);
 
@@ -160,7 +160,7 @@ const CanvasComponent: React.FC = () => {
           updateCanvasSlideData(newCanvas, canvasJS.id);
           getElementsData(
             newCanvas.toObject(customFabricProperties)?.objects,
-            themeCode
+            themeCode, themeName
           );
           if (newCanvas.toObject()?.objects.length >= 1) {
             dispatch(toggleRegenerateButton(false));
@@ -173,7 +173,7 @@ const CanvasComponent: React.FC = () => {
           updateCanvasSlideData(newCanvas, canvasJS.id);
           getElementsData(
             newCanvas.toObject(customFabricProperties)?.objects,
-            themeCode
+            themeCode, themeName
           );
           extractTableData(newCanvas);
         });
@@ -182,7 +182,7 @@ const CanvasComponent: React.FC = () => {
           updateCanvasSlideData(newCanvas, canvasJS.id);
           getElementsData(
             newCanvas.toObject(customFabricProperties)?.objects,
-            themeCode
+            themeCode, themeName
           );
         });
         // newCanvas.on('object:moving', (event: fabric.IEvent) => handleAllElements(event,newCanvas));

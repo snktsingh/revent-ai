@@ -4,11 +4,13 @@ interface slideThemes {
   openAddTheme: boolean;
   themeCode: string;
   jsonData: any;
+  themeName : string,
 }
 
 const initialState: slideThemes = {
   openAddTheme: false,
   themeCode: '#004FBA',
+  themeName :'REVENT',
   jsonData: null,
 };
 
@@ -22,11 +24,14 @@ export const themeReducer = createSlice({
     setThemeCode: (state, action) => {
       state.themeCode = action.payload;
     },
+    setThemeName: (state, action) => {
+      state.themeName = action.payload;
+    },
     setPptData: (state, action) => {
       state.jsonData = action.payload;
     },
   },
 });
 
-export const { setNewTheme, setThemeCode, setPptData } = themeReducer.actions;
+export const { setNewTheme, setThemeCode, setPptData, setThemeName } = themeReducer.actions;
 export default themeReducer.reducer;

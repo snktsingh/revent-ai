@@ -117,10 +117,10 @@ export const useCanvasComponent = () => {
     }
   };
 
-  function getElementsData(canvasData: any[], themeCode: string) {
+  function getElementsData(canvasData: any[], themeCode: string, themeName : string) {
     console.log({ canvasData });
     const outputFormat: APIRequest = {
-      companyName: 'REVENT',
+      companyName: themeName,
       themeColor: themeCode,
       imagesCount: '',
       elements: [],
