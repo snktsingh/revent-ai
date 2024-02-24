@@ -71,7 +71,7 @@ const CanvasBody = () => {
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     {
-      canvasJS.variants.length < 0 && setAnchorEl(event.currentTarget);
+      !canvasJS.variants.length && setAnchorEl(event.currentTarget);
     }
     
   };
