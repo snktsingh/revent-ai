@@ -8,7 +8,7 @@ export interface CanvasItem {
   id: number; // Use number as ID type
   canvas: object;
   notes? : string;
-  variants? : VariantsType[];
+  variants : VariantsType[];
   originalSlideData? : object;
 }
 

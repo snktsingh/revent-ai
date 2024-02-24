@@ -1,8 +1,9 @@
 import ENDPOINT from '@/constants/endpoint';
 import { FetchUtils } from '@/utils/fetch-utils';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { setVariantImageAsMain } from '../reducers/canvas';
+import { setVariantImageAsMain, updateCurrentCanvas } from '../reducers/canvas';
 import { APIRequest, ISlideRequests } from '@/interface/storeTypes';
+import { RootState } from '../store';
 
 const initialState: ISlideRequests = {
   pptUrl: '',
@@ -15,9 +16,12 @@ const initialState: ISlideRequests = {
 
 export const fetchSlideImg = createAsyncThunk(
   'slide/fetchimage-ppt',
-  async (req: APIRequest | null, { dispatch }) => {
+  async (req: APIRequest | null, { dispatch, getState  }) => {
     const res = await FetchUtils.postRequest(`${ENDPOINT.GEN_PPT_MULTI}`, req);
     dispatch(setVariantImageAsMain(res.data.variants[0].imagesUrl));
+    const currentCanvas = (getState() as RootState).canvas.canvasJS;
+    const updatedCanvasVariants = {...currentCanvas, variants : res.data.variants}
+    dispatch(updateCurrentCanvas(updatedCanvasVariants));
     return res.data;
   }
 );

@@ -2,7 +2,7 @@ import { TABLE } from '@/constants/elementNames';
 import PopUpModal from '@/constants/elements/modal';
 import { AddElement, Copy, Delete } from '@/constants/media';
 import { TableDetails } from '@/interface/storeTypes';
-import { copyCanvasCopy, setOriginalSlide } from '@/redux/reducers/canvas';
+import canvas, { copyCanvasCopy, setOriginalSlide } from '@/redux/reducers/canvas';
 import { openModal, setMenuItemKey } from '@/redux/reducers/elements';
 import { searchElement } from '@/redux/reducers/slide';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
@@ -71,8 +71,9 @@ const CanvasBody = () => {
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     {
-      !variantImage && setAnchorEl(event.currentTarget);
+      canvasJS.variants.length < 0 && setAnchorEl(event.currentTarget);
     }
+    
   };
   const handleClose = () => {
     setAnchorEl(null);

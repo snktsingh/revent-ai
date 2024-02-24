@@ -11,8 +11,7 @@ const useVariants = () => {
   const dispatch = useAppDispatch();
   const [originalImageUrl, setOriginalImageUrl] = useState<string>('');
   const { openVariant } = useAppSelector(state => state.element);
-  const { variants } = useAppSelector(state => state.thunk);
-  const { originalCanvasSlide, variantImage, selectedOriginalCanvas } =
+  const { originalCanvasSlide, variantImage, selectedOriginalCanvas, canvasJS } =
     useAppSelector(state => state.canvas);
   const array: number[] = [1, 2, 3];
 
@@ -62,7 +61,6 @@ const useVariants = () => {
     getCanvasImageFromJSON(originalCanvasSlide);
   }, [originalCanvasSlide]);
   return {
-    variants,
     array,
     openVariant,
     handleVariants,
@@ -71,6 +69,7 @@ const useVariants = () => {
     originalImageUrl,
     variantImage,
     selectedOriginalCanvas,
+    canvasJS
   };
 };
 export default useVariants;

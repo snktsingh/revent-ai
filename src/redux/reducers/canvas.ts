@@ -3,7 +3,7 @@ import {
   IShapeRequest,
   TableDetails,
 } from '@/interface/storeTypes';
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { fabric } from 'fabric';
 
 export interface CanvasSate {
@@ -207,7 +207,7 @@ export const CanvasReducer = createSlice({
 
       return state;
     },
-    updateCurrentCanvas(state,action) {
+    updateCurrentCanvas(state, action : PayloadAction<CanvasItem>) {
       const updatedList = state.canvasList.map(canvasItem => {
         if (canvasItem.id === action.payload.id) {
           return {

@@ -22,19 +22,19 @@ import {
 export const CanvasVariant = () => {
   const dispatch = useAppDispatch();
   const {
-    variants,
     openVariant,
     array,
     handleVariants,
     handleApplyOriginalAsMain,
     originalImageUrl,
     variantImage,
-    selectedOriginalCanvas
+    selectedOriginalCanvas,
+    canvasJS
   } = useVariants();
 
   return (
     <div>
-      {variants.length > 0 && (
+      {canvasJS.variants.length > 0 && (
         <VariantButton onClick={() => dispatch(toggleVariantSlide())}>
           <img src={varianButtonSvg} alt="variantButton" />
         </VariantButton>
@@ -93,8 +93,8 @@ export const CanvasVariant = () => {
                 Refresh
               </RefreshBtn>
             </ButtonContainer>
-            {variants.length > 0
-              ? variants.map((el: VariantsType, i: number) => {
+            {canvasJS.variants.length > 0
+              ? canvasJS.variants.map((el: VariantsType, i: number) => {
                   return (
                     <VariantSlide
                       key={el.imagesUrl}
@@ -116,7 +116,7 @@ export const CanvasVariant = () => {
                     </VariantSlide>
                   );
                 })
-              : array.map(el => {
+              : array.map((el : any) => {
                   return (
                     <VariantSlide key={el}>
                       <div>{el}</div>
