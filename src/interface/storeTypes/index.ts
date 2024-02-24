@@ -7,12 +7,11 @@ export interface TableDetails {
 export interface CanvasItem {
   id: number; // Use number as ID type
   canvas: object;
+  notes? : string;
+  variants? : VariantsType[];
+  originalSlideData? : object;
 }
 
-export interface CanvasJSON {
-  id: number;
-  canvas: object | null;
-}
 
 export interface IShapeRequest {
   companyName: string;

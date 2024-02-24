@@ -13,7 +13,6 @@ generateInstance.interceptors.request.use(config => {
 
 generateInstance.interceptors.response.use(
   response => {
-    console.log(response);
     const responsestatusCode = response.status;
     switch (responsestatusCode) {
       case 200: {

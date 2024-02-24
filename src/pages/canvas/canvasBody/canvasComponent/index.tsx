@@ -109,7 +109,7 @@ const CanvasComponent: React.FC = () => {
         newCanvas.selectionLineWidth = 0.5;
 
         CustomBorderIcons(newCanvas);
-
+        updateCanvasSlideData(newCanvas, canvasJS.id);
         newCanvas.forEachObject(obj => {
           if (obj) {
             if ((obj as IExtendedTextBoxOptions)?.listType == 'bullet') {

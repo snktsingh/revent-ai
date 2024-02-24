@@ -1,6 +1,5 @@
 import {
   CanvasItem,
-  CanvasJSON,
   IShapeRequest,
   TableDetails,
 } from '@/interface/storeTypes';
@@ -13,7 +12,7 @@ export interface CanvasSate {
   borderColor: string;
   tableDetails: TableDetails | null;
   canvasList: CanvasItem[];
-  canvasJS: CanvasJSON;
+  canvasJS: CanvasItem;
   activeCanvasID: number;
   size: number;
   canvasData: string[];
@@ -33,8 +32,8 @@ export const initialState: CanvasSate = {
   textColor: '',
   borderColor: '',
   tableDetails: null,
-  canvasList: [{ id: 1, canvas: canvasJSON }],
-  canvasJS: { id: 1, canvas: canvasJSON },
+  canvasList: [{ id: 1, canvas: canvasJSON, notes :'', variants : [], originalSlideData : {} }],
+  canvasJS: { id: 1, canvas: canvasJSON, notes :'', variants : [], originalSlideData : {} },
   activeCanvasID: 1,
   size: 1,
   canvasData: [],
@@ -92,6 +91,9 @@ export const CanvasReducer = createSlice({
         {
           id: canvasID,
           canvas: canvasJSON,
+          notes :'', 
+          variants : [], 
+          originalSlideData : {}
         },
       ];
 
@@ -102,6 +104,9 @@ export const CanvasReducer = createSlice({
         canvasJS: {
           id: canvasID,
           canvas: canvasJSON,
+          notes :'', 
+          variants : [], 
+          originalSlideData : {}
         },
       };
     },
@@ -202,6 +207,21 @@ export const CanvasReducer = createSlice({
 
       return state;
     },
+    updateCurrentCanvas(state,action) {
+      const updatedList = state.canvasList.map(canvasItem => {
+        if (canvasItem.id === action.payload.id) {
+          return {
+            ...canvasItem,
+            notes: action.payload.notes,
+            variants: action.payload.variants,
+            originalSlideData: action.payload.originalSlideData,
+          };
+        }
+        return canvasItem;
+      });
+      state.canvasJS = action.payload;
+      state.canvasList = updatedList;
+    },
     handleSize(state, action) {
       return {
         ...state,
@@ -242,6 +262,7 @@ export const {
   setBorderColor,
   setTableDetails,
   updateCanvasInList,
+  updateCurrentCanvas,
   copyCanvasCopy,
   deleteCanvasItem,
   setActiveCanvas,
