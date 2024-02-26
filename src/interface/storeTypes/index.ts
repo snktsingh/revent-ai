@@ -9,7 +9,7 @@ export interface CanvasItem {
   canvas: object;
   notes? : string;
   variants : VariantsType[];
-  originalSlideData? : object;
+  originalSlideData : object;
 }
 
 

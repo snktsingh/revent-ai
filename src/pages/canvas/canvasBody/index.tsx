@@ -2,7 +2,7 @@ import { TABLE } from '@/constants/elementNames';
 import PopUpModal from '@/constants/elements/modal';
 import { AddElement, Copy, Delete } from '@/constants/media';
 import { TableDetails } from '@/interface/storeTypes';
-import canvas, { copyCanvasCopy, setOriginalSlide } from '@/redux/reducers/canvas';
+import canvas, { copyCanvasCopy, setOriginalSlide, updateCurrentCanvas } from '@/redux/reducers/canvas';
 import { openModal, setMenuItemKey } from '@/redux/reducers/elements';
 import { searchElement } from '@/redux/reducers/slide';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
@@ -124,7 +124,8 @@ const CanvasBody = () => {
   };
 
   const handleRequest = () => {
-    dispatch(setOriginalSlide(canvasList[0].canvas));
+    const currentCanvas = {...canvasJS, originalSlideData : canvasList[canvasJS.id-1].canvas}
+    dispatch(updateCurrentCanvas(currentCanvas));
     dispatch(fetchSlideImg(requestData));
   };
   return (

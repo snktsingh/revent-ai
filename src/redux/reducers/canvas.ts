@@ -72,7 +72,7 @@ export const CanvasReducer = createSlice({
     setTempData: (state, action) => {
       state.tempData = action.payload;
     },
-    setCanvas: (state, action) => {
+    setCanvas: (state, action : PayloadAction<CanvasItem>) => {
       return {
         ...state,
         canvasJS: action.payload,

@@ -47,7 +47,7 @@ const CanvasComponent: React.FC = () => {
 
   const dispatch = useAppDispatch();
 
-  const { canvasJS, variantImage } = useAppSelector(state => state.canvas);
+  const { canvasJS, variantImage, selectedOriginalCanvas } = useAppSelector(state => state.canvas);
 
   const { pptUrl, imageUrl, variants } = useAppSelector(state => state.thunk);
 
@@ -96,6 +96,7 @@ const CanvasComponent: React.FC = () => {
     newCanvas.loadFromJSON(
       canvasJS.canvas,
       () => {
+        console.log('main canvas loaded');
         canvasRef.current = newCanvas;
         newCanvas.setBackgroundColor(
           `${theme.colorSchemes.light.palette.common.white}`,
@@ -109,7 +110,7 @@ const CanvasComponent: React.FC = () => {
         newCanvas.selectionLineWidth = 0.5;
 
         CustomBorderIcons(newCanvas);
-        updateCanvasSlideData(newCanvas, canvasJS.id);
+        
         newCanvas.forEachObject(obj => {
           if (obj) {
             if ((obj as IExtendedTextBoxOptions)?.listType == 'bullet') {
@@ -190,7 +191,7 @@ const CanvasComponent: React.FC = () => {
           // console.log(newCanvas.toJSON());
           handleObjectMoving(options, newCanvas);
         });
-
+        updateCanvasSlideData(newCanvas, canvasJS.id);
         handleAddCustomIcon(newCanvas);
         newCanvas.renderAll();
       },
@@ -248,9 +249,10 @@ const CanvasComponent: React.FC = () => {
       window.removeEventListener('resize', () => {});
       newCanvas.dispose();
     };
-  }, [canvasJS]);
+  }, [canvasJS.canvas, selectedOriginalCanvas]);
 
   useEffect(() => {
+    console.log('variant image loaded')
     if (variantImage) {
       // Clear the canvas and set its background color to white
       canvasRef.current?.clear();

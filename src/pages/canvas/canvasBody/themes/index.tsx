@@ -33,7 +33,7 @@ export default function Templates() {
   const dispatch = useAppDispatch();
   const thunk = useAppSelector(state => state.thunk);
   const { requestData } = useAppSelector(state => state.apiData);
-  const { canvasList, originalCanvasSlide } = useAppSelector(
+  const { canvasJS, originalCanvasSlide } = useAppSelector(
     state => state.canvas
   );
   const theme = useTheme();
@@ -57,7 +57,7 @@ export default function Templates() {
     dispatch(setThemeName(themeName));
     setOpen(true);
     setTimeout(() => {
-      getElementsData(originalCanvasSlide.objects, themeCode, themeName);
+      getElementsData((canvasJS.originalSlideData as any).objects, themeCode, themeName);
     }, 1000);
   };
 
@@ -120,6 +120,7 @@ export default function Templates() {
               return (
                 <ListSlideCard
                   onClick={() => handleClickOpen(themes.themeColor, themes.company)}
+                  key={themes.company}
                 >
                   <img src={themes.thumbnailUrl} width="100%" height="100%" />
                 </ListSlideCard>

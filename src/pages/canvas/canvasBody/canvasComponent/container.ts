@@ -21,7 +21,7 @@ import {
   ReqElementType,
 } from '@/interface/storeTypes';
 import { setRequestData } from '@/redux/reducers/apiData';
-import { updateCanvasInList } from '@/redux/reducers/canvas';
+import { setCanvas, updateCanvasInList } from '@/redux/reducers/canvas';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { fabric } from 'fabric';
 import { useState } from 'react';

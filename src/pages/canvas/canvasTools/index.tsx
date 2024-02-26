@@ -213,6 +213,11 @@ const CanvasTools = () => {
     }
   };
 
+  const handleAddNewSlide = () => {
+    dispatch(addCanvas());
+    dispatch(addSlide(obj));
+  };
+
   return (
     <MainToolContainer>
       <Stack
@@ -231,11 +236,7 @@ const CanvasTools = () => {
           </Stack>
         </ToolOutlinedButton>
         <ToolOutlinedButton
-          onClick={() => {
-            dispatch(addCanvas());
-            console.log(canvasList);
-            dispatch(addSlide(obj));
-          }}
+          onClick={handleAddNewSlide}
         >
           <Stack direction="row" spacing={1}>
             <img src={Add} />

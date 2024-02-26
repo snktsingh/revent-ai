@@ -2,6 +2,7 @@ import {
   setCanvas,
   setVariantImageAsMain,
   toggleSelectedOriginalCanvas,
+  updateCanvasInList,
 } from '@/redux/reducers/canvas';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { fabric } from 'fabric';
@@ -11,7 +12,7 @@ const useVariants = () => {
   const dispatch = useAppDispatch();
   const [originalImageUrl, setOriginalImageUrl] = useState<string>('');
   const { openVariant } = useAppSelector(state => state.element);
-  const { originalCanvasSlide, variantImage, selectedOriginalCanvas, canvasJS } =
+  const { originalCanvasSlide, variantImage, selectedOriginalCanvas, canvasJS, canvasList } =
     useAppSelector(state => state.canvas);
   const array: number[] = [1, 2, 3];
 
@@ -23,9 +24,12 @@ const useVariants = () => {
   const handleApplyOriginalAsMain = () => {
     dispatch(setVariantImageAsMain(''));
     dispatch(toggleSelectedOriginalCanvas(true));
-    dispatch(setCanvas({ id: 1, canvas: originalCanvasSlide }));
+    dispatch(updateCanvasInList({id : canvasJS.id, updatedCanvas : canvasJS.originalSlideData}));
+    let canvas = { ...canvasJS, canvas : canvasJS.originalSlideData };
+    dispatch(setCanvas(canvas))
+    console.log({variantImage})
   };
-
+  
   const getImg = async (canvasJson: Object) => {
     const canvas = new fabric.Canvas(null);
 
@@ -58,8 +62,8 @@ const useVariants = () => {
   };
 
   useEffect(() => {
-    getCanvasImageFromJSON(originalCanvasSlide);
-  }, [originalCanvasSlide]);
+    getCanvasImageFromJSON(canvasJS.originalSlideData);
+  }, [canvasJS.originalSlideData]);
   return {
     array,
     openVariant,
