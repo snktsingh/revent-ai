@@ -2,27 +2,7 @@
   "templates": [
     {
       "title": "Blank Presentation",
-      "link": "/templates"
-    },
-    {
-      "title": "Pitch Deck",
-      "link": ""
-    },
-    {
-      "title": "Sales Deck",
-      "link": ""
-    },
-    {
-      "title": "Status Report",
-      "link": ""
-    },
-    {
-      "title": "Training Deck",
-      "link": ""
-    },
-    {
-      "title": "Financial Deck",
-      "link": ""
+      "link": "/themes"
     }
   ],
   "recent": [

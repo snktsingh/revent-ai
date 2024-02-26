@@ -16,8 +16,10 @@ import {
   Title,
 } from './style';
 import slideData from './data.json';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   return (
     <MainContainer>
       <span style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -32,8 +34,8 @@ const Dashboard = () => {
       <CardContainer>
         {slideData.templates.map((slide, index) => {
           return (
-            <CardTitle>
-              <CardLink href={slide.link}>
+            <CardTitle onClick={() => navigate('/themes')}>
+              <CardLink>
                 <PreviewCard />
                 {slide.title}
               </CardLink>
@@ -41,7 +43,7 @@ const Dashboard = () => {
           );
         })}
       </CardContainer>
-      <Accordion aria-controls="panel1a-content" id="panel1a-header">
+      {/* <Accordion aria-controls="panel1a-content" id="panel1a-header">
         <AccordionSummary>
           <Subtitle>More Templates</Subtitle>
         </AccordionSummary>
@@ -59,9 +61,10 @@ const Dashboard = () => {
             })}
           </CardContainer>
         </AccordionDetails>
-      </Accordion>
+      </Accordion> */}
       <Title>Recent Presentation</Title>
-      <CardContainer>
+      No Recent Presentations
+      {/* <CardContainer>
         {slideData.recent.map((slide, index) => {
           return (
             <CardTitle>
@@ -72,7 +75,7 @@ const Dashboard = () => {
             </CardTitle>
           );
         })}
-      </CardContainer>
+      </CardContainer> */}
     </MainContainer>
   );
 };

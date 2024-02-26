@@ -13,7 +13,6 @@ export default function SlideList() {
   const { canvasList, canvasJS, activeCanvasID } = useAppSelector(
     state => state.canvas
   );
-  const [isClicked, setIsClicked] = useState<number>(0);
   const handleCardClick = (id: number) => {
     dispatch(setActiveCanvas(id));
   };

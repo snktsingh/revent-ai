@@ -23,8 +23,10 @@ import React from 'react';
 import { CanvasHeaderInput } from '@/constants/elements/Input/style';
 import { ContentElements } from '../canvasBody/elementData';
 import { useAppSelector } from '@/redux/store';
+import { useNavigate } from 'react-router-dom';
 
 const MainCanvasHeader = () => {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [anchorE2, setAnchorE2] = React.useState<null | HTMLElement>(null);
   const [openWarning, setOpenWarning] = React.useState(false);
@@ -133,9 +135,7 @@ const MainCanvasHeader = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleWarningClose}>Cancel</Button>
-          <Button>
-            <UserLink href="/templates">Go Back</UserLink>
-          </Button>
+          <Button onClick={() => navigate('/dashboard')}>Go Back</Button>
         </DialogActions>
       </Dialog>
     </HeaderContainer>

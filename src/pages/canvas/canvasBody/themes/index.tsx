@@ -16,20 +16,23 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { ListSlideCard, SingleSliderContainer } from '../style';
 import { useTheme } from '@mui/material/styles';
 import { toggleTemplateVisibility } from '@/redux/reducers/elements';
-import { Add, Theme1, Theme2, Theme3 } from '@/constants/media';
+import { Add } from '@/constants/media';
 import { useEffect, useState } from 'react';
-import { setNewTheme, setThemeCode, setThemeName } from '@/redux/reducers/theme';
+import {
+  setNewTheme,
+  setSelectedTheme,
+  setThemeCode,
+  setThemeName,
+} from '@/redux/reducers/theme';
 import { fetchSlideImg, getAllThemes } from '@/redux/thunk/thunk';
-import { setOriginalSlide, setRequestData } from '@/redux/reducers/canvas';
 import { useCanvasComponent } from '../canvasComponent/container';
-import CircularProgress from '@mui/material/CircularProgress';
-import { request } from 'http';
 import { toast } from 'react-toastify';
 
 export default function Templates() {
   const { getElementsData, customFabricProperties } = useCanvasComponent();
+  const [tempCode, setTempCode] = useState('');
   const element = useAppSelector(state => state.element);
-  const toggleTheme = useAppSelector(state => state.slideTheme.themeCode);
+  const { selectedThemeId } = useAppSelector(state => state.slideTheme);
   const dispatch = useAppDispatch();
   const thunk = useAppSelector(state => state.thunk);
   const { requestData } = useAppSelector(state => state.apiData);
@@ -52,12 +55,16 @@ export default function Templates() {
 
   const [open, setOpen] = useState<boolean>(false);
 
-  const handleClickOpen = (themeCode: string, themeName : string) => {
-    console.log({themeCode,themeName})
+  const handleClickOpen = (themeCode: string, themeName: string) => {
+    console.log({ themeCode, themeName });
     dispatch(setThemeName(themeName));
     setOpen(true);
     setTimeout(() => {
-      getElementsData((canvasJS.originalSlideData as any).objects, themeCode, themeName);
+      getElementsData(
+        (canvasJS.originalSlideData as any).objects,
+        themeCode,
+        themeName
+      );
     }, 1000);
   };
 
@@ -119,8 +126,16 @@ export default function Templates() {
             {thunk.themesList.map(themes => {
               return (
                 <ListSlideCard
-                  onClick={() => handleClickOpen(themes.themeColor, themes.company)}
+                  onClick={() => {
+                    handleClickOpen(themes.themeColor, themes.company);
+                    setTempCode(themes.templateName);
+                  }}
                   key={themes.company}
+                  className={
+                    selectedThemeId === themes.templateName
+                      ? 'clicked-card'
+                      : ''
+                  }
                 >
                   <img src={themes.thumbnailUrl} width="100%" height="100%" />
                 </ListSlideCard>
@@ -143,7 +158,13 @@ export default function Templates() {
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handleClose}>No</Button>
-                  <Button autoFocus onClick={changeThemeRequest}>
+                  <Button
+                    autoFocus
+                    onClick={() => {
+                      changeThemeRequest();
+                      dispatch(setSelectedTheme(tempCode));
+                    }}
+                  >
                     Yes
                   </Button>
                 </DialogActions>

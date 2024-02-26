@@ -2,7 +2,15 @@ import { TABLE } from '@/constants/elementNames';
 import PopUpModal from '@/constants/elements/modal';
 import { AddElement, Copy, Delete } from '@/constants/media';
 import { TableDetails } from '@/interface/storeTypes';
-import canvas, { copyCanvasCopy, setOriginalSlide, updateCurrentCanvas } from '@/redux/reducers/canvas';
+import canvas, {
+  copyCanvasCopy,
+  setCanvas,
+  setOriginalSlide,
+  setVariantImageAsMain,
+  toggleSelectedOriginalCanvas,
+  updateCanvasInList,
+  updateCurrentCanvas,
+} from '@/redux/reducers/canvas';
 import { openModal, setMenuItemKey } from '@/redux/reducers/elements';
 import { searchElement } from '@/redux/reducers/slide';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
@@ -16,6 +24,7 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  DialogContentText,
   DialogTitle,
   Grid,
   IconButton,
@@ -41,10 +50,18 @@ import {
 } from './style';
 import Templates from './themes';
 import { useCanvasComponent } from './canvasComponent/container';
-import { Direction } from 'react-toastify/dist/utils';
 
 const CanvasBody = () => {
   const slide = useAppSelector(state => state.slide);
+  const [redirectAlert, setRedirectAlert] = useState<boolean>(false);
+
+  const openRedirectAlert = () => {
+    setRedirectAlert(true);
+  };
+
+  const closeRedirectAert = () => {
+    setRedirectAlert(false);
+  };
   const { getElementsData } = useCanvasComponent();
   const dispatch = useAppDispatch();
   const { canvasJS, canvasList, variantImage } = useAppSelector(
@@ -66,14 +83,24 @@ const CanvasBody = () => {
     setActiveDislike(!activeDislike);
     setActiveLike(false);
   };
+
+  const handleRegeneration = (item: any) => {
+    if (variantImage === '' && canvasJS.variants.length === 0) {
+      handleClose();
+      item.onClick();
+      dispatch(setMenuItemKey(item.key));
+    } else {
+      handleClose();
+      openRedirectAlert();
+    }
+  };
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     {
-      !canvasJS.variants.length && setAnchorEl(event.currentTarget);
+      setAnchorEl(event.currentTarget);
     }
-    
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -103,30 +130,48 @@ const CanvasBody = () => {
     setOpenDialog(true);
   };
 
-  elementData[6].onClick = () => {
+  elementData[5].onClick = () => {
     setElementName(TABLE);
     ContentElements.handleOpenTable();
   };
-  elementData[9].onClick = () => {
+  elementData[8].onClick = () => {
     ContentElements.handleCycle();
   };
-  elementData[10].onClick = () => {
+  elementData[9].onClick = () => {
     ContentElements.handleProcess();
   };
-  elementData[11].onClick = () => {
+  elementData[10].onClick = () => {
     ContentElements.handleTimeline();
   };
-  elementData[12].onClick = () => {
+  elementData[11].onClick = () => {
     ContentElements.handleFunnel();
   };
-  elementData[13].onClick = () => {
+  elementData[12].onClick = () => {
     ContentElements.handlePyramid();
   };
 
   const handleRequest = () => {
-    const currentCanvas = {...canvasJS, originalSlideData : canvasList[canvasJS.id-1].canvas}
+    const currentCanvas = {
+      ...canvasJS,
+      originalSlideData: canvasList[canvasJS.id - 1].canvas,
+    };
     dispatch(updateCurrentCanvas(currentCanvas));
     dispatch(fetchSlideImg(requestData));
+    dispatch(toggleSelectedOriginalCanvas(false));
+  };
+
+  const handleRedirect = () => {
+    dispatch(setVariantImageAsMain(''));
+    dispatch(toggleSelectedOriginalCanvas(true));
+    dispatch(
+      updateCanvasInList({
+        id: canvasJS.id,
+        updatedCanvas: canvasJS.originalSlideData,
+      })
+    );
+    let canvas = { ...canvasJS, canvas: canvasJS.originalSlideData };
+    dispatch(setCanvas(canvas));
+    setRedirectAlert(false);
   };
   return (
     <BodyContainer>
@@ -156,7 +201,7 @@ const CanvasBody = () => {
                 </IconButton>
               </span>
               <span>
-                <IconButton onClick={handleLike}>
+                {/* <IconButton onClick={handleLike}>
                   <LikeButton
                     fontSize="small"
                     className={
@@ -175,7 +220,7 @@ const CanvasBody = () => {
                         : '"likeDislikeInActiveButton"'
                     }
                   />
-                </IconButton>{' '}
+                </IconButton>{' '} */}
                 &nbsp;
                 <Button
                   variant="contained"
@@ -187,55 +232,6 @@ const CanvasBody = () => {
                 </Button>
               </span>
             </Stack>
-
-            {/* <Card style={{ height: '70vh', width: '100%' }}>
-              <br />
-              <ReactGridLayout
-                layout={layout}
-                onLayoutChange={onLayoutChange}
-                {...props}
-              >
-                {generateDOM()}
-              </ReactGridLayout>
-              <InputBase
-                sx={{ ml: 3 }}
-                placeholder="/ Type to search elements..."
-                value={slide.listSearch}
-                onChange={handleElementSearch}
-              />
-
-              {slide.listSearch == '' ? (
-                <></>
-              ) : (
-                <div
-                  style={{
-                    overflowY: 'scroll',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'flex-start',
-                    width: '37vh',
-                  }}
-                >
-                  {filteredList.map((item, index) => {
-                    return (
-                      <MenuItem
-                        onClick={handleSlideListClose}
-                        style={{ display: 'flex', flexDirection: 'column' }}
-                        key={index}
-                      >
-                        <Stack direction="row" spacing={1}>
-                          <img src={item.icon} width="30vh" />
-                          <ElementContainer>
-                            <ElementTitle>{item.title}</ElementTitle>
-                            <ElementSubtitle>{item.subtitle}</ElementSubtitle>
-                          </ElementContainer>
-                        </Stack>
-                      </MenuItem>
-                    );
-                  })}
-                </div>
-              )}
-            </Card> */}
             <CanvasComponent />
             <Menu
               anchorEl={anchorEl}
@@ -254,11 +250,7 @@ const CanvasBody = () => {
               {filteredList.map((item, index) => {
                 return (
                   <MenuItem
-                    onClick={() => {
-                      handleClose();
-                      item.onClick();
-                      dispatch(setMenuItemKey(item.key));
-                    }}
+                    onClick={() => handleRegeneration(item)}
                     style={{ display: 'flex', flexDirection: 'column' }}
                     key={index}
                   >
@@ -279,6 +271,28 @@ const CanvasBody = () => {
       </Grid>
       <Templates />
       <PopUpModal content={slide.slideKey} />
+      <Dialog
+        open={redirectAlert}
+        onClose={closeRedirectAert}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {'Modification Detected !'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Changes cannot be applied on the current design. If you want to make
+            modifications Please visit the original slide from variants section.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeRedirectAert}>Close</Button>
+          <Button onClick={handleRedirect} autoFocus>
+            Make Modifications
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Backdrop
         sx={{
           color: '#fff',

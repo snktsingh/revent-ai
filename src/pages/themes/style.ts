@@ -22,7 +22,7 @@ export const ButtonContainer = styled.span`
 export const ThemeCard = styled(Card)`
   width: 14vw;
   height: 15vh;
-  margin: 5%;
+
   cursor: pointer;
 `;
 export const ThemeCardTitle = styled.span`

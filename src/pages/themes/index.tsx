@@ -16,11 +16,15 @@ import ReventingLoader from '@/common-ui/loader';
 import { themeData } from './data';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { getAllThemes } from '@/redux/thunk/thunk';
+import { setSelectedTheme, setThemeCode } from '@/redux/reducers/theme';
+import { useNavigate } from 'react-router-dom';
 
-const Templates = () => {
+const AppThemes = () => {
   const [loading, setLoading] = useState(false);
   const thunk = useAppSelector(state => state.thunk);
+  const { selectedThemeId } = useAppSelector(state => state.slideTheme);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getAllThemes());
@@ -32,9 +36,7 @@ const Templates = () => {
       <TemplateContainer>
         <span>
           <TemplateTitle>
-            <Link href="/dashboard">
-              <img src={Back} />
-            </Link>
+            <img src={Back} onClick={() => navigate('/dashboard')} />
             <Title>Create your Presentations</Title>
           </TemplateTitle>
           <br />
@@ -47,7 +49,17 @@ const Templates = () => {
               <>
                 {thunk.themesList.map(theme => {
                   return (
-                    <ThemeCardTitle>
+                    <ThemeCardTitle
+                      onClick={() => {
+                        dispatch(setSelectedTheme(theme.templateName));
+                        dispatch(setThemeCode(theme.themeColor));
+                      }}
+                      className={
+                        selectedThemeId === theme.templateName
+                          ? 'clicked-card'
+                          : ''
+                      }
+                    >
                       <ThemeCard>
                         <img src={theme.thumbnailUrl} width="100%" />
                       </ThemeCard>
@@ -61,8 +73,11 @@ const Templates = () => {
         </span>
         <ButtonContainer>
           <Stack direction="row" spacing={3}>
-            <CustomButton variant="outlined">Generate Random</CustomButton>
-            <CustomButton variant="contained" onClick={() => setLoading(true)}>
+            {/* <CustomButton variant="outlined">Generate Random</CustomButton> */}
+            <CustomButton
+              variant="contained"
+              onClick={() => navigate('/canvas')}
+            >
               <Stack direction="row" spacing={2}>
                 <img src={Wand} />
                 <p>Generate</p>
@@ -74,4 +89,4 @@ const Templates = () => {
     );
   }
 };
-export default Templates;
+export default AppThemes;
