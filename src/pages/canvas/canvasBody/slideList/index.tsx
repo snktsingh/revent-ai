@@ -62,7 +62,6 @@ export default function SlideList() {
           <div key={canvas.id}>
             <SingleSliderContainer
               onClick={() => {
-                console.log({currentCanvas : canvasJS})
                 dispatch(setCanvas(canvas));
                 handleCardClick(canvas.id);
               }}
