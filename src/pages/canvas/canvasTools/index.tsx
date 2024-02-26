@@ -93,6 +93,7 @@ const CanvasTools = () => {
   const [filteredFonts, setFilteredFonts] = useState<FontItem[]>([]);
   const [searchFont, setSearchFont] = useState<string>();
   const selectRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef(null);
 
   const [anchorShapesEl, setAnchorShapesEl] = useState<null | HTMLElement>(
     null
@@ -156,22 +157,6 @@ const CanvasTools = () => {
     dispatch(setBorderColor(e.target.value));
   };
 
-  useEffect(() => {
-    fetch(
-      `https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyAQsGKSth3gRPYEmNuIqIBrk_32GqB6W38&sort=alpha`
-    )
-      .then(res => res.json())
-      .then(res => {
-        // setGoogleFonts(res.items);
-        const fonts: FontItem[] = res.items.slice(start, end);
-        setFilteredFonts(fonts);
-        // setGoogleFonts((prevFonts) => [...prevFonts, ...fonts]);
-        setGoogleFonts(res.items);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }, [start, end]);
 
   useEffect(() => {
     colorChange.colorFillChange();
@@ -193,17 +178,28 @@ const CanvasTools = () => {
     dispatch(setColor(e.target.value));
   };
 
-  const loadFont = (fontfamily: string) => {
-    WebFont.load({
-      google: {
-        families: [fontfamily],
-      },
-    });
+  useEffect(() => {
+    fetchFonts(0, 200);
+  }, [])
+
+  const fetchFonts = (start: number, end: number) => {
+    fetch(
+      `https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyAQsGKSth3gRPYEmNuIqIBrk_32GqB6W38&sort=alpha`
+    )
+      .then(res => res.json())
+      .then(res => {
+        setGoogleFonts(res.items);
+        const fonts = res.items.slice(start, end);
+        setFilteredFonts(fonts);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
   const searchFonts = (value: string) => {
     if (value === '') {
-      const fonts: FontItem[] = googleFonts.slice(0, 200);
+      const fonts = googleFonts.slice(0, 200);
       setFilteredFonts(fonts);
     } else {
       const filtered = googleFonts.filter(font =>
@@ -213,9 +209,35 @@ const CanvasTools = () => {
     }
   };
 
+  const handleInputChange = (event: any, newInputValue: string) => {
+    setSearchFont(newInputValue);
+    searchFonts(newInputValue);
+  };
+
+  const loadFont = (fontFamily: string) => {
+    WebFont.load({
+      google: {
+        families: [fontFamily],
+      },
+    });
+  };
+
   const handleAddNewSlide = () => {
     dispatch(addCanvas());
     dispatch(addSlide(obj));
+  };
+  const handleScroll = () => {
+    if (
+      listRef.current &&
+      ((listRef.current as HTMLUListElement).scrollHeight) - (listRef.current as HTMLUListElement).scrollTop <=
+      (listRef.current as HTMLUListElement).clientHeight+1000
+    ) {
+      // Load more fonts when user reaches the end of the list
+      const start = filteredFonts.length;
+      const end = start + 200;
+      const additionalFonts = googleFonts.slice(start, end);
+      setFilteredFonts(prevFonts => [...prevFonts, ...additionalFonts]);
+    }
   };
 
   return (
@@ -243,33 +265,7 @@ const CanvasTools = () => {
             <p>New Slide</p>
           </Stack>
         </ToolOutlinedButton>
-        {/* <ToolOutlinedSelect
-          inputProps={{ 'aria-label': 'Without label' }}
-          defaultValue={0}
-          onScroll={handleScroll} ref={selectRef}
-          onChange={(e)=> ContentElements.handleFontFamily(e.target.value) }
-        >
-         
-          <FontsInput placeholder='search fonts' />
-        
-          {
-           googleFonts?.slice(0,200)?.map((el:any)=>{
-            
-            WebFont.load({
-              google: {
-                families: [el.family],
-              },
-              active: () => {
-                
-              },
-            });
-            return <SelectMenuItem key={el.family} value={el.family} style={{fontFamily:el.family}}>{el.family}</SelectMenuItem>
-            })
-          }
-           <SelectMenuItem disabled value={0} style={{width:'200px',visibility:'hidden'}} >
-            Font Style
-          </SelectMenuItem>
-        </ToolOutlinedSelect> */}
+
 
         <Autocomplete
           sx={{ width: 200 }}
@@ -279,9 +275,7 @@ const CanvasTools = () => {
             ContentElements.handleFontFamily(newValue);
           }}
           inputValue={searchFont}
-          onInputChange={(event, newInputValue) => {
-            searchFonts(newInputValue);
-          }}
+          onInputChange={handleInputChange}
           options={filteredFonts.map(el => el.family) || []}
           renderInput={params => {
             return (
@@ -301,7 +295,9 @@ const CanvasTools = () => {
               </MenuItem>
             );
           }}
+          ListboxProps={{ onScroll: handleScroll, ref: listRef }}
         />
+
 
         <IconButton
           size="small"
