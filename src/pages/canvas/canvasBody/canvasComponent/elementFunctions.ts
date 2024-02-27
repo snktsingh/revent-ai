@@ -27,13 +27,9 @@ import { useCanvasComponent } from './container';
 
 export const useElementFunctions = (canvas: fabric.Canvas | null) => {
   const dispatch = useAppDispatch();
-  const { 
-    canvasJS, 
-    color,
-    textColor,
-    borderColor,
-    size, 
-} = useAppSelector(state => state.canvas);
+  const { canvasJS, color, textColor, borderColor, size } = useAppSelector(
+    state => state.canvas
+  );
 
   const { customFabricProperties } = useCanvasComponent();
   const {
@@ -85,13 +81,6 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
     canvas?.renderAll();
   };
 
-  // elementData[3].onClick = () => {
-  //   canvas?.add(heading);
-  //   heading.selectAll();
-  //   canvas?.setActiveObject(heading);
-  //   canvas?.renderAll();
-  // };
-
   elementData[3].onClick = () => {
     canvas?.add(paragraph);
     paragraph.selectAll();
@@ -99,20 +88,103 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
     canvas?.renderAll();
   };
 
-  elementData[4].onClick = () => {
-    canvas?.add(BulletText);
-  };
+  // elementData[4].onClick = () => {
+  //   canvas?.add(BulletText);
+  // };
 
-  elementData[5].onClick = () => {
-    imageUploader(canvas);
-  };
-  elementData[7].onClick = () => {
-    addQuotes(canvas);
-    canvas?.renderAll();
-  };
-  elementData[8].onClick = () => {
-    addListElement(canvas, 33, 23);
-  };
+  // elementData[5].onClick = () => {
+  //   imageUploader(canvas);
+  // };
+  // elementData[7].onClick = () => {
+  //   addQuotes(canvas);
+  //   canvas?.renderAll();
+  // };
+  // elementData[8].onClick = () => {
+  //   addListElement(canvas, 33, 23);
+  // };
+
+  elementData.forEach(element => {
+    switch (element.title) {
+      case 'Title':
+        element.onClick = () => {
+          canvas?.add(title);
+          title.selectAll();
+          canvas?.setActiveObject(title);
+          canvas?.renderAll();
+        };
+        break;
+      case 'Subtitle':
+        element.onClick = () => {
+          canvas?.add(subtitle);
+          subtitle.selectAll();
+          canvas?.setActiveObject(subtitle);
+          canvas?.renderAll();
+        };
+        break;
+      case 'Paragraph':
+        element.onClick = () => {
+          canvas?.add(paragraph);
+          paragraph.selectAll();
+          canvas?.setActiveObject(paragraph);
+          canvas?.renderAll();
+        };
+        break;
+      case 'Bullet':
+        element.onClick = () => {
+          canvas?.add(BulletText);
+        };
+        break;
+      case 'Image':
+        element.onClick = () => {
+          imageUploader(canvas);
+        };
+        break;
+      case 'Table':
+        element.onClick = () => {
+          ContentElements.handleOpenTable();
+        };
+        break;
+      case 'Quotes':
+        element.onClick = () => {
+          addQuotes(canvas);
+        };
+        break;
+      case 'List':
+        element.onClick = () => {
+          addListElement(canvas, 33, 23);
+        };
+        break;
+      case 'Cycle':
+        element.onClick = () => {
+          ContentElements.handleCycle();
+        };
+        break;
+      case 'Process':
+        element.onClick = () => {
+          ContentElements.handleProcess();
+        };
+        break;
+      case 'Timeline':
+        element.onClick = () => {
+          ContentElements.handleTimeline();
+        };
+        break;
+      case 'Funnel':
+        element.onClick = () => {
+          ContentElements.handleFunnel();
+        };
+        break;
+      case 'Pyramid':
+        element.onClick = () => {
+          ContentElements.handlePyramid();
+        };
+        break;
+      default:
+        // Handle default case if needed
+        canvas?.renderAll();
+        break;
+    }
+  });
 
   ShapesData[0].onClick = () => {
     if (canvas) {

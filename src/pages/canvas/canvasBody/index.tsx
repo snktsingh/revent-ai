@@ -130,25 +130,26 @@ const CanvasBody = () => {
     setOpenDialog(true);
   };
 
-  elementData[5].onClick = () => {
-    setElementName(TABLE);
-    ContentElements.handleOpenTable();
-  };
-  elementData[8].onClick = () => {
-    ContentElements.handleCycle();
-  };
-  elementData[9].onClick = () => {
-    ContentElements.handleProcess();
-  };
-  elementData[10].onClick = () => {
-    ContentElements.handleTimeline();
-  };
-  elementData[11].onClick = () => {
-    ContentElements.handleFunnel();
-  };
-  elementData[12].onClick = () => {
-    ContentElements.handlePyramid();
-  };
+  // elementData[6].onClick = () => {
+  //   ContentElements.handleOpenTable();
+  // };
+  // elementData[8].onClick = () => {
+  //   ContentElements.handleCycle();
+  // };
+  // elementData[9].onClick = () => {
+  //   ContentElements.handleProcess();
+  // };
+  // elementData[10].onClick = () => {
+  //   ContentElements.handleTimeline();
+  // };
+  // elementData[11].onClick = () => {
+  //   ContentElements.handleFunnel();
+  // };
+  // elementData[12].onClick = () => {
+  //   ContentElements.handlePyramid();
+  // };
+
+
 
   const handleRequest = () => {
     const currentCanvas = {
