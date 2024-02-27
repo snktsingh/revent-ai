@@ -21,7 +21,6 @@ import {
   LineIcon,
   RectIcon,
   RightArrowIcon,
-  SaveTemplate,
   StarIcon,
   TitleSubIcon,
   TriangleIcon,
