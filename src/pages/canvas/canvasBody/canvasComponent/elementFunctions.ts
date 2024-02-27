@@ -42,6 +42,7 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
     handleBold,
     handleItalic,
     handleUnderLine,
+    addTitleAndSubTileSlide
   } = useAllElements();
 
   const {
@@ -179,8 +180,22 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
           ContentElements.handlePyramid();
         };
         break;
+      case 'Cover Slide':
+        element.onClick = () => {
+          addTitleAndSubTileSlide(100, 90, canvas, 'CoverSlideTitle', 'CoverSlideSubTitle' );
+        };
+        break;
+      case 'Section Slide':
+        element.onClick = () => {
+          addTitleAndSubTileSlide(100, 90, canvas, 'SectionSlideTitle', 'SectionSlideSubTitle');
+        };
+        break;
+      case 'Conclusion Slide':
+        element.onClick = () => {
+          addTitleAndSubTileSlide(100, 90, canvas, 'ConclusionSlideTitle', 'ConclusionSlideSubTitle');
+        };
+        break;
       default:
-        // Handle default case if needed
         canvas?.renderAll();
         break;
     }

@@ -2,20 +2,20 @@ import { PARAGRAPH, SUBTITLE, TITLE } from '@/constants/elementNames';
 import { fabric } from 'fabric';
 
 export default function useAllElements() {
- 
+
   const title = new fabric.Textbox('Click to add a title', {
     left: 30,
     top: 30,
     fontSize: 30,
-    width:400,
+    width: 400,
     fontWeight: 'bold',
     fontFamily: 'Red Hat Display, sans-serif',
     name: TITLE,
     fill: '#404040',
-    charSpacing:2,
-    cursorDelay:1,
+    charSpacing: 2,
+    cursorDelay: 1,
     hoverCursor: 'text',
-    textAlign :'center',
+    textAlign: 'center',
     padding: 5
   });
 
@@ -71,14 +71,14 @@ export default function useAllElements() {
 
 
 
- 
+
   const ColorFillForObjects = (
     selectedObject: fabric.Object | null | undefined,
     canvas: fabric.Canvas | null,
     color: string
   ) => {
     const shape = selectedObject?.name?.split('_')[1]
-    if ( selectedObject && shape == 'Shape') {
+    if (selectedObject && shape == 'Shape') {
       selectedObject.set('fill', color);
       canvas?.renderAll();
     } else if (
@@ -158,6 +158,47 @@ export default function useAllElements() {
     }
   };
 
+  const addTitleAndSubTileSlide = (
+    left: number, top: number, 
+    canvas: fabric.Canvas | null, 
+    titleName : string, 
+    subtitleName : string
+    ) => {
+    const title = new fabric.Textbox('Click to add a title', {
+      width: 600,
+      left,
+      top,
+      fontSize: 42,
+      fontWeight: 'bold',
+      fontFamily: 'sans-serif',
+      name: titleName,
+      fill: '#404040',
+      charSpacing: 2,
+      cursorDelay: 1,
+      hoverCursor: 'text',
+      textAlign: 'center',
+      padding: 5,
+      height : 200
+    });
+
+    const subtitle = new fabric.Textbox('Click to add a subtitle', {
+      width: 700,
+      left: left - 50,
+      top: top + 150,
+      fontSize: 28,
+      fontFamily: 'Arial',
+      hoverCursor: 'text',
+      textAlign: 'center',
+      name : subtitleName,
+      padding :2,
+      height : 300
+    });
+    
+
+    canvas?.add(title, subtitle);
+    canvas?.renderAll();
+  }
+
 
   return {
     title,
@@ -170,5 +211,6 @@ export default function useAllElements() {
     handleBold,
     handleItalic,
     handleUnderLine,
+    addTitleAndSubTileSlide
   };
 }

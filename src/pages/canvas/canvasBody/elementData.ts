@@ -23,6 +23,7 @@ import {
   RightArrowIcon,
   SaveTemplate,
   StarIcon,
+  TitleSubIcon,
   TriangleIcon,
 } from '@/constants/media';
 
@@ -44,6 +45,27 @@ export const elementData: IElementData[] = [
   // },
   {
     key: 2,
+    icon: TitleSubIcon,
+    title: 'Cover Slide',
+    subtitle: 'Add a cover slide at the top of your presentation',
+    onClick: () => {},
+  },
+  {
+    key: 15,
+    icon: TitleSubIcon,
+    title: 'Section Slide',
+    subtitle: 'Add a section break between slides',
+    onClick: () => {},
+  },
+  {
+    key: 16,
+    icon: TitleSubIcon,
+    title: 'Conclusion Slide',
+    subtitle: 'Suitable for Thank You and Contact Us Slides',
+    onClick: () => {},
+  },
+  {
+    key: 17,
     icon: AddTitle,
     title: 'Title',
     subtitle: 'Add a Title onto the canvas',
