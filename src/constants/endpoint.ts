@@ -14,7 +14,7 @@ export const ROUTES = {
   SIGNUP: '/signup',
   LOGIN: '/login',
   DASHBOARD: '/dashboard',
-  TEMPLATES: '/templates',
+  THEMES: '/themes',
   CANVAS: '/canvas',
 } as const;
 

@@ -41,6 +41,7 @@ export const PreviewCard = styled(Card)`
 `;
 export const CardTitle = styled.span`
   margin-bottom: 20px;
+  cursor: pointer;
 `;
 export const CardLink = styled(Link)`
   text-decoration: none !important;

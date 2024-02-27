@@ -35,13 +35,13 @@ interface IElementData {
 }
 
 export const elementData: IElementData[] = [
-  {
-    key: 1,
-    icon: SaveTemplate,
-    title: 'Save Template',
-    subtitle: 'Save the current slide as template',
-    onClick: () => {},
-  },
+  // {
+  //   key: 1,
+  //   icon: SaveTemplate,
+  //   title: 'Save Template',
+  //   subtitle: 'Save the current slide as template',
+  //   onClick: () => {},
+  // },
   {
     key: 2,
     icon: AddTitle,
@@ -401,5 +401,3 @@ export const ContentElements: ContentEle = {
 interface variantsType {
   addVariantsCanvas: Function;
 }
-
-

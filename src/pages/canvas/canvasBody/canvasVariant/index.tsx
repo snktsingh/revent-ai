@@ -89,9 +89,9 @@ export const CanvasVariant = () => {
             })} */}
             <ButtonContainer>
               <p>Variants</p>
-              <RefreshBtn variant="contained" size="small">
+              {/* <RefreshBtn variant="contained" size="small">
                 Refresh
-              </RefreshBtn>
+              </RefreshBtn> */}
             </ButtonContainer>
             {canvasJS.variants.length > 0
               ? canvasJS.variants.map((el: VariantsType, i: number) => {
