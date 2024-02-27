@@ -1,5 +1,5 @@
 import { IListofSlides } from '@/interface/storeTypes';
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 
 export interface TestState {
@@ -40,7 +40,7 @@ export const slideReducer = createSlice({
     searchElement: (state, action) => {
       state.listSearch = action.payload;
     },
-    toggleRegenerateButton(state,action){
+    toggleRegenerateButton(state,action : PayloadAction<boolean>){
       state.isRegenerateDisabled = action.payload
     }
   },

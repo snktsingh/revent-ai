@@ -4,7 +4,7 @@ import { AddElement, Copy, Delete } from '@/constants/media';
 import { TableDetails } from '@/interface/storeTypes';
 import canvas, { copyCanvasCopy, setOriginalSlide, updateCurrentCanvas } from '@/redux/reducers/canvas';
 import { openModal, setMenuItemKey } from '@/redux/reducers/elements';
-import { searchElement } from '@/redux/reducers/slide';
+import { searchElement, toggleRegenerateButton } from '@/redux/reducers/slide';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { fetchSlideImg } from '@/redux/thunk/thunk';
 import { ThumbDownAltRounded } from '@mui/icons-material';
@@ -25,7 +25,7 @@ import {
   Stack,
   TextField,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import CanvasComponent from './canvasComponent';
 import { CanvasNotes } from './canvasNotes';
@@ -47,7 +47,7 @@ const CanvasBody = () => {
   const slide = useAppSelector(state => state.slide);
   const { getElementsData } = useCanvasComponent();
   const dispatch = useAppDispatch();
-  const { canvasJS, canvasList, variantImage } = useAppSelector(
+  const { canvasJS, canvasList, selectedOriginalCanvas, variantImage } = useAppSelector(
     state => state.canvas
   );
   const { isRegenerateDisabled } = useAppSelector(state => state.slide);
@@ -128,6 +128,23 @@ const CanvasBody = () => {
     dispatch(updateCurrentCanvas(currentCanvas));
     dispatch(fetchSlideImg(requestData));
   };
+  useEffect(() => {
+    if (canvasJS) {
+      const canvasIsEmpty = (canvasList[canvasJS.id-1].canvas as any).objects.length === 0;
+      const variantsIsEmpty = canvasJS.variants.length === 0;
+      console.log({variantsIsEmpty, canvasIsEmpty})
+     if (variantsIsEmpty && canvasIsEmpty) {
+        dispatch(toggleRegenerateButton(true)); // Disable the button
+      }else if(selectedOriginalCanvas){
+        dispatch(toggleRegenerateButton(false)); // Enable the button
+      }else if(!variantsIsEmpty && !selectedOriginalCanvas){
+        dispatch(toggleRegenerateButton(true)); // Enable the button
+      }
+    }
+    console.log({isRegenerateDisabled})
+  }, [canvasJS, dispatch, variantImage, isRegenerateDisabled]);
+  
+
   return (
     <BodyContainer>
       <ToastContainer autoClose={800} />
@@ -181,7 +198,7 @@ const CanvasBody = () => {
                   variant="contained"
                   size="small"
                   onClick={() => handleRequest()}
-                  disabled={isRegenerateDisabled}
+                  disabled={ isRegenerateDisabled }
                 >
                   Regenerate
                 </Button>
