@@ -7,8 +7,10 @@ import {
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { fabric } from 'fabric';
 import { useEffect, useState } from 'react';
+import { useCanvasComponent } from '../canvasComponent/container';
 
 const useVariants = () => {
+  const { updateCanvasDimensions } = useCanvasComponent();
   const dispatch = useAppDispatch();
   const [originalImageUrl, setOriginalImageUrl] = useState<string>('');
   const { openVariant } = useAppSelector(state => state.element);
@@ -36,10 +38,9 @@ const useVariants = () => {
     return new Promise<string>((resolve, reject) => {
       try {
         canvas.loadFromJSON(canvasJson, () => {
-          canvas.width = 970;
-          canvas.height = 500;
-          const imageURL = canvas.toDataURL();
-          resolve(imageURL);
+          updateCanvasDimensions(canvas);
+          const svgURL = canvas.toSVG();
+          resolve(svgURL);
         });
       } catch (error) {
         console.log(error);

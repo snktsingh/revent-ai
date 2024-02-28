@@ -18,6 +18,7 @@ import {
   VariantSlide,
   VariantSlideCard,
 } from './style';
+import SvgViewer from '@/components/canvasSvgViewer';
 
 export const CanvasVariant = () => {
   const dispatch = useAppDispatch();
@@ -65,7 +66,7 @@ export const CanvasVariant = () => {
               <>
                 <Text>Original Slide</Text>
                 <OriginalSlideCard onClick={handleApplyOriginalAsMain} className={selectedOriginalCanvas ? 'clicked-card' : ''}>
-                  <img
+                  {/* <img
                     src={originalImageUrl}
                     alt="image"
                     style={{
@@ -74,7 +75,8 @@ export const CanvasVariant = () => {
                       objectFit: 'cover',
                       borderRadius:'3%'
                     }}
-                  />
+                  /> */}
+                  <SvgViewer svgContent={originalImageUrl}/>
                 </OriginalSlideCard>
               </>
             )}
