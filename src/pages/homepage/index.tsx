@@ -68,6 +68,7 @@ import {
   UploadTick,
   Wand,
 } from '@/constants/media';
+import { useNavigate } from 'react-router-dom';
 
 interface FileUploadProps {
   onFileSelect: (file: File) => void;
@@ -75,6 +76,7 @@ interface FileUploadProps {
 const Home = ({ onFileSelect }: any) => {
   const [data, handleSubmit] = useForm('mbjvbjvd');
   const [data2, handleEmailSubmit] = useForm('xrgwdbzz');
+  const navigate = useNavigate();
 
   const {
     aboutRef,
@@ -312,7 +314,7 @@ const Home = ({ onFileSelect }: any) => {
                   </UploadContainer>
 
                   <UploadContainer
-                    onClick={() => window.location.replace('/canvas')}
+                    onClick={() => navigate('/themes')}
                     style={{ cursor: 'pointer' }}
                   >
                     <>
