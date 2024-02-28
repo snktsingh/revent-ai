@@ -96,6 +96,7 @@ const CanvasComponent: React.FC = () => {
     newCanvas.loadFromJSON(
       canvasJS.canvas,
       () => {
+        updateCanvasDimensions(newCanvas);
         console.log('main canvas loaded');
         canvasRef.current = newCanvas;
         newCanvas.setBackgroundColor(
@@ -133,7 +134,6 @@ const CanvasComponent: React.FC = () => {
         newCanvas.on('selection:created', function (event) {
           handleSelectionCreated(canvas, event);
         });
-        updateCanvasDimensions(newCanvas);
         window.addEventListener('resize', () =>
           updateCanvasDimensions(newCanvas)
         );

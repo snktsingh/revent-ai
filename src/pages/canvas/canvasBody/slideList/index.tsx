@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { ListSlideCard, SingleSliderContainer } from '../style';
 import { SlideContainer } from './style';
 import SvgViewer from '@/components/canvasSvgViewer';
+import { useCanvasComponent } from '../canvasComponent/container';
 
 export default function SlideList() {
   const dispatch = useAppDispatch();
@@ -13,6 +14,7 @@ export default function SlideList() {
   const { canvasList, canvasJS, activeCanvasID } = useAppSelector(
     state => state.canvas
   );
+  const { updateCanvasDimensions } = useCanvasComponent()
   const handleCardClick = (id: number) => {
     dispatch(setActiveCanvas(id));
   };
@@ -25,8 +27,9 @@ export default function SlideList() {
     return new Promise<string>((resolve, reject) => {
       try {
         canvas.loadFromJSON(canvasJson, () => {
-          canvas.width = 970;
-          canvas.height = 500;
+          // canvas.width = 970;
+          // canvas.height = 500;
+          updateCanvasDimensions(canvas);
           const svgURL = canvas.toSVG();
           resolve(svgURL);
         });
