@@ -41,6 +41,13 @@ const SUBTITLE = 'SUBTITLE';
 const PARAGRAPH = 'PARAGRAPH';
 const BULLET_POINTS = 'BulletPoints';
 
+const COVER_SLIDE_TITLE = 'CoverSlideTitle';
+const COVER_SLIDE_SUBTITLE = 'CoverSlideSubtitle';
+const SECTION_SLIDE_TITLE = 'SectionSlideTitle';
+const SECTION_SLIDE_SUBTITLE = 'SectionSlideSubtitle';
+const CONCLUSION_SLIDE_TITLE = 'ConclusionSlideTitle';
+const CONCLUSION_SLIDE_SUBTITLE = 'ConclusionSlideSubtitle';
+
 export {
     FUNNEL,
     FUNNEL_TEXT,
@@ -68,5 +75,11 @@ export {
     TITLE,
     SUBTITLE,
     PARAGRAPH,
-    BULLET_POINTS
+    BULLET_POINTS,
+    COVER_SLIDE_TITLE,
+    COVER_SLIDE_SUBTITLE,
+    SECTION_SLIDE_TITLE,
+    SECTION_SLIDE_SUBTITLE,
+    CONCLUSION_SLIDE_TITLE,
+    CONCLUSION_SLIDE_SUBTITLE
 };

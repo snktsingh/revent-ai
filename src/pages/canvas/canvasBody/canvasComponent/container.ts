@@ -1,10 +1,16 @@
 import {
   BULLET_POINTS,
+  CONCLUSION_SLIDE_SUBTITLE,
+  CONCLUSION_SLIDE_TITLE,
+  COVER_SLIDE_SUBTITLE,
+  COVER_SLIDE_TITLE,
   CYCLE_TEXT,
   FUNNEL_TEXT,
   PARAGRAPH,
   PROCESS_TEXT,
   PYRAMID_TEXT,
+  SECTION_SLIDE_SUBTITLE,
+  SECTION_SLIDE_TITLE,
   SUBTITLE,
   TABLE_TEXT,
   TIMELINE_HEADING,
@@ -157,7 +163,7 @@ export const useCanvasComponent = () => {
             elementID,
             outputFormat
           );
-          element.data.push({
+          element.data?.push({
             name: canvasObject.text,
             heading: '',
             subHeading: '',
@@ -174,7 +180,7 @@ export const useCanvasComponent = () => {
             '1',
             outputFormat
           );
-          paragraphData.data.push({
+          paragraphData.data?.push({
             name: canvasObject.text,
             heading: '',
             subHeading: '',
@@ -191,7 +197,7 @@ export const useCanvasComponent = () => {
             '1',
             outputFormat
           );
-          paragraphData.data.push({
+          paragraphData.data?.push({
             name: canvasObject.text,
             heading: '',
             subHeading: '',
@@ -209,6 +215,28 @@ export const useCanvasComponent = () => {
            titleText = canvasObject.text;
         } else if (canvasObject.name === SUBTITLE) {
           subTitleText = canvasObject.text;
+        }else if(canvasObject.name === COVER_SLIDE_TITLE ){
+          const CoverSlide = getOrCreateElement('Cover', '1', outputFormat);
+          CoverSlide.title = canvasObject.text;  
+        }
+        else if(canvasObject.name === COVER_SLIDE_SUBTITLE ){
+          const CoverSlide = getOrCreateElement('Cover', '1', outputFormat);
+          CoverSlide.subTitle = canvasObject.text;  
+        }
+        else if(canvasObject.name === SECTION_SLIDE_TITLE ){
+          const SectionSlide = getOrCreateElement('Section', '1', outputFormat);
+          SectionSlide.title = canvasObject.text;  
+        }
+        else if(canvasObject.name === SECTION_SLIDE_SUBTITLE ){
+          const SectionSlide = getOrCreateElement('Section', '1', outputFormat);
+          SectionSlide.subTitle = canvasObject.text;  
+        }else if(canvasObject.name === CONCLUSION_SLIDE_TITLE ){
+          const ConclusionSlide = getOrCreateElement('Conclusion', '1', outputFormat);
+          ConclusionSlide.title = canvasObject.text;  
+        }
+        else if(canvasObject.name === CONCLUSION_SLIDE_SUBTITLE ){
+          const ConclusionSlide = getOrCreateElement('Conclusion', '1', outputFormat);
+          ConclusionSlide.subTitle = canvasObject.text;  
         }
       }
     });
@@ -254,8 +282,11 @@ export const useCanvasComponent = () => {
     }
 
     const modifiedRequestFormat = outputFormat.elements.map(element => {
-      const { elementId, ...rest } = element;
-      return rest;
+      const { elementId, data, title, subTitle, templateName, shape } = element;
+      if(shape === 'Cover' || shape === 'Section' || shape === 'Conclusion'){
+        return {title, subTitle, shape};
+      }
+      return {data, title, subTitle, templateName, shape};
     });
     outputFormat.elements = modifiedRequestFormat;
     console.log({ outputFormat });

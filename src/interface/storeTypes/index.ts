@@ -53,10 +53,10 @@ export interface DataRequestType {
 
 export interface ReqElementType {
   shape: string;
-  data: DataRequestType[];
+  data?: DataRequestType[];
   title: string;
   subTitle: string;
-  templateName: string;
+  templateName?: string;
   elementId?: string;
 }
 export interface APIRequest {

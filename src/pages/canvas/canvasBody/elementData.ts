@@ -44,28 +44,14 @@ export const elementData: IElementData[] = [
   //   onClick: () => {},
   // },
   {
-    key: 2,
+    key: 15,
     icon: TitleSubIcon,
     title: 'Cover Slide',
     subtitle: 'Add a cover slide at the top of your presentation',
     onClick: () => {},
   },
   {
-    key: 15,
-    icon: TitleSubIcon,
-    title: 'Section Slide',
-    subtitle: 'Add a section break between slides',
-    onClick: () => {},
-  },
-  {
-    key: 16,
-    icon: TitleSubIcon,
-    title: 'Conclusion Slide',
-    subtitle: 'Suitable for Thank You and Contact Us Slides',
-    onClick: () => {},
-  },
-  {
-    key: 17,
+    key: 2,
     icon: AddTitle,
     title: 'Title',
     subtitle: 'Add a Title onto the canvas',
@@ -90,6 +76,13 @@ export const elementData: IElementData[] = [
     icon: AddBullet,
     title: 'Bullet',
     subtitle: 'Add Bullet Points onto the canvas',
+    onClick: () => {},
+  },
+  {
+    key: 16,
+    icon: TitleSubIcon,
+    title: 'Section Slide',
+    subtitle: 'Add a section break between slides',
     onClick: () => {},
   },
   {
@@ -153,6 +146,13 @@ export const elementData: IElementData[] = [
     icon: AddPyramid,
     title: 'Pyramid',
     subtitle: 'Suitable for data in hierarchical order',
+    onClick: () => {},
+  },
+  {
+    key: 17,
+    icon: TitleSubIcon,
+    title: 'Conclusion Slide',
+    subtitle: 'Suitable for Thank You and Contact Us Slides',
     onClick: () => {},
   },
 ];

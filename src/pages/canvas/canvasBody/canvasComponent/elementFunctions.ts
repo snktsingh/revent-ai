@@ -24,6 +24,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/store';
 import WebFont from 'webfontloader';
 import { updateCanvasInList } from '@/redux/reducers/canvas';
 import { useCanvasComponent } from './container';
+import { CONCLUSION_SLIDE_SUBTITLE, CONCLUSION_SLIDE_TITLE, COVER_SLIDE_SUBTITLE, COVER_SLIDE_TITLE, SECTION_SLIDE_SUBTITLE, SECTION_SLIDE_TITLE } from '@/constants/elementNames';
 
 export const useElementFunctions = (canvas: fabric.Canvas | null) => {
   const dispatch = useAppDispatch();
@@ -182,17 +183,17 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
         break;
       case 'Cover Slide':
         element.onClick = () => {
-          addTitleAndSubTileSlide(100, 90, canvas, 'CoverSlideTitle', 'CoverSlideSubTitle' );
+          addTitleAndSubTileSlide(100, 90, canvas, COVER_SLIDE_TITLE, COVER_SLIDE_SUBTITLE );
         };
         break;
       case 'Section Slide':
         element.onClick = () => {
-          addTitleAndSubTileSlide(100, 90, canvas, 'SectionSlideTitle', 'SectionSlideSubTitle');
+          addTitleAndSubTileSlide(100, 90, canvas, SECTION_SLIDE_TITLE, SECTION_SLIDE_SUBTITLE);
         };
         break;
       case 'Conclusion Slide':
         element.onClick = () => {
-          addTitleAndSubTileSlide(100, 90, canvas, 'ConclusionSlideTitle', 'ConclusionSlideSubTitle');
+          addTitleAndSubTileSlide(100, 90, canvas, CONCLUSION_SLIDE_TITLE, CONCLUSION_SLIDE_SUBTITLE);
         };
         break;
       default:
