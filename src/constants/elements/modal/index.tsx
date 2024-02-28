@@ -25,13 +25,14 @@ const PopUpModal = (props: IPopUpModal) => {
       onClose={() => dispatch(closeModal())}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
+      
     >
       <DialogTitle id="alert-dialog-title">
-        <h3>Are you sure ?</h3>
+        <h3>Are you sure?</h3>
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          You want to delete the slide {canvasJS.id}
+        You want to delete slide {canvasJS.id}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
