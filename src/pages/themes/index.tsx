@@ -16,7 +16,11 @@ import ReventingLoader from '@/common-ui/loader';
 import { themeData } from './data';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { getAllThemes } from '@/redux/thunk/thunk';
-import { setSelectedTheme, setThemeCode } from '@/redux/reducers/theme';
+import {
+  setSelectedTheme,
+  setThemeCode,
+  setThemeName,
+} from '@/redux/reducers/theme';
 import { useNavigate } from 'react-router-dom';
 
 const AppThemes = () => {
@@ -53,6 +57,7 @@ const AppThemes = () => {
                       onClick={() => {
                         dispatch(setSelectedTheme(theme.templateName));
                         dispatch(setThemeCode(theme.themeColor));
+                        dispatch(setThemeName(theme.company));
                       }}
                       className={
                         selectedThemeId === theme.templateName
