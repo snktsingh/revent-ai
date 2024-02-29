@@ -61,19 +61,20 @@ import {
 import FontDownloadOutlinedIcon from '@mui/icons-material/FontDownloadOutlined';
 import ColorizeOutlinedIcon from '@mui/icons-material/ColorizeOutlined';
 import WebFont from 'webfontloader';
-import { getAllThemes } from '@/redux/thunk/thunk';
+import FontsData from '../../../data/fontsData.json';
 
 interface FontItem {
-  category: string;
   family: string;
-  files: { [key: string]: string };
-  kind: string;
-  lastModified: string;
-  menu: string;
-  subsets: string[];
   variants: string[];
+  subsets: string[];
   version: string;
+  lastModified: string;
+  files: { [key: string]: string };
+  category: string;
+  kind: string;
+  menu: string;
 }
+
 
 const CanvasTools = () => {
   const dispatch = useAppDispatch();
@@ -87,10 +88,10 @@ const CanvasTools = () => {
   const [inputColor, setInputColor] = useState<string>('');
   const [inputTextColor, setInputTextColor] = useState<string>('');
   const [inputBorderColor, setInputBorderColor] = useState<string>('');
-  const [googleFonts, setGoogleFonts] = useState<FontItem[]>([]);
+  const [googleFonts, setGoogleFonts] = useState<any[]>([]);
   const [start, setStart] = useState<number>(0);
   const [end, setEnd] = useState<number>(200);
-  const [filteredFonts, setFilteredFonts] = useState<FontItem[]>([]);
+  const [filteredFonts, setFilteredFonts] = useState<any[]>([]);
   const [searchFont, setSearchFont] = useState<string>();
   const selectRef = useRef<HTMLDivElement>(null);
   const listRef = useRef(null);
@@ -183,18 +184,9 @@ const CanvasTools = () => {
   }, [])
 
   const fetchFonts = (start: number, end: number) => {
-    fetch(
-      `https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyAQsGKSth3gRPYEmNuIqIBrk_32GqB6W38&sort=alpha`
-    )
-      .then(res => res.json())
-      .then(res => {
-        setGoogleFonts(res.items);
-        const fonts = res.items.slice(start, end);
-        setFilteredFonts(fonts);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    setGoogleFonts(FontsData.sort((a, b) => a.family.localeCompare(b.family)));
+    const fonts = FontsData.slice(start, end);
+    setFilteredFonts(fonts);
   };
 
   const searchFonts = (value: string) => {
