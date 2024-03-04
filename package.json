@@ -10,10 +10,12 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "vite --port 3001",
-    "build": "tsc && vite build",
+    "start:dev": "vite --mode dev --port  3001",
+    "start:prod": "vite --mode prod --port 3001",
+    "build": "tsc && vite build --mode prod",
     "preview": "vite preview"
   },
+  
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
