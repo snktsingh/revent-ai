@@ -1,3 +1,4 @@
+
 export const ENDPOINT = {
   GEN_PPT: 'ppt/generate-ppt',
   GEN_PPT_MULTI: 'ppt/generate-ppt-multi',
