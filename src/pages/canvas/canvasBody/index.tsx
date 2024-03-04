@@ -1,11 +1,8 @@
-import { TABLE } from '@/constants/elementNames';
 import PopUpModal from '@/constants/elements/modal';
 import { AddElement, Copy, Delete } from '@/constants/media';
-import { TableDetails } from '@/interface/storeTypes';
 import canvas, {
   copyCanvasCopy,
   setCanvas,
-  setOriginalSlide,
   setVariantImageAsMain,
   toggleSelectedOriginalCanvas,
   updateCanvasInList,
@@ -64,9 +61,8 @@ const CanvasBody = () => {
   };
   const { getElementsData } = useCanvasComponent();
   const dispatch = useAppDispatch();
-  const { canvasJS, canvasList, selectedOriginalCanvas, variantImage } = useAppSelector(
-    state => state.canvas
-  );
+  const { canvasJS, canvasList, selectedOriginalCanvas, variantImage } =
+    useAppSelector(state => state.canvas);
   const { isRegenerateDisabled } = useAppSelector(state => state.slide);
   const { isLoading } = useAppSelector(state => state.thunk);
   const { requestData } = useAppSelector(state => state.apiData);
@@ -149,8 +145,6 @@ const CanvasBody = () => {
   //   ContentElements.handlePyramid();
   // };
 
-
-
   const handleRequest = () => {
     const currentCanvas = {
       ...canvasJS,
@@ -176,20 +170,20 @@ const CanvasBody = () => {
   };
   useEffect(() => {
     if (canvasJS) {
-      const canvasIsEmpty = (canvasList[canvasJS.id-1].canvas as any).objects.length === 0;
+      const canvasIsEmpty =
+        (canvasList[canvasJS.id - 1].canvas as any).objects.length === 0;
       const variantsIsEmpty = canvasJS.variants.length === 0;
-      console.log({variantsIsEmpty, canvasIsEmpty})
-     if (variantsIsEmpty && canvasIsEmpty) {
+      console.log({ variantsIsEmpty, canvasIsEmpty });
+      if (variantsIsEmpty && canvasIsEmpty) {
         dispatch(toggleRegenerateButton(true)); // Disable the button
-      }else if(selectedOriginalCanvas){
+      } else if (selectedOriginalCanvas) {
         dispatch(toggleRegenerateButton(false)); // Enable the button
-      }else if(!variantsIsEmpty && !selectedOriginalCanvas){
+      } else if (!variantsIsEmpty && !selectedOriginalCanvas) {
         dispatch(toggleRegenerateButton(true)); // Enable the button
       }
     }
-    console.log({isRegenerateDisabled})
+    console.log({ isRegenerateDisabled });
   }, [canvasJS, dispatch, variantImage, isRegenerateDisabled]);
-  
 
   return (
     <BodyContainer>
@@ -244,7 +238,7 @@ const CanvasBody = () => {
                   variant="contained"
                   size="small"
                   onClick={() => handleRequest()}
-                  disabled={ isRegenerateDisabled }
+                  disabled={isRegenerateDisabled}
                 >
                   Regenerate
                 </Button>
