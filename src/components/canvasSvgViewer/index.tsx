@@ -5,7 +5,6 @@ interface SvgViewerProps {
 }
 
 const SvgViewer: React.FC<SvgViewerProps> = ({ svgContent }) => {
-    console.log({svgContent})
     const updatedSvgContent = svgContent && svgContent.replace(/width="[^"]*"/, 'width="100%"').replace(/height="[^"]*"/, 'height="100%"');
 
     return (

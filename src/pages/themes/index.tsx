@@ -66,7 +66,7 @@ const AppThemes = () => {
                       }
                     >
                       <ThemeCard>
-                        <img src={theme.thumbnailUrl} width="100%" />
+                        <img src={theme.thumbnailUrl} width="100%" height={'100%'} />
                       </ThemeCard>
                       {theme.title}
                     </ThemeCardTitle>
