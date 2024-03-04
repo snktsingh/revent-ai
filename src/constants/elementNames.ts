@@ -48,6 +48,13 @@ const SECTION_SLIDE_SUBTITLE = 'SectionSlideSubtitle';
 const CONCLUSION_SLIDE_TITLE = 'ConclusionSlideTitle';
 const CONCLUSION_SLIDE_SUBTITLE = 'ConclusionSlideSubtitle';
 
+//Quote 
+const QUOTE = 'QUOTE';
+const QUOTE_ADD_IMG_TEXT = 'QuoteAddImgText';
+const QUOTE_AUTHOR = 'QuoteAuthor';
+const QUOTE_IMG = 'QuoteImg';
+const QUOTE_IMG_CONTAINER = 'QuoteImgContainer';
+
 export {
     FUNNEL,
     FUNNEL_TEXT,
@@ -81,5 +88,10 @@ export {
     SECTION_SLIDE_TITLE,
     SECTION_SLIDE_SUBTITLE,
     CONCLUSION_SLIDE_TITLE,
-    CONCLUSION_SLIDE_SUBTITLE
+    CONCLUSION_SLIDE_SUBTITLE,
+    QUOTE,
+    QUOTE_AUTHOR,
+    QUOTE_IMG,
+    QUOTE_ADD_IMG_TEXT,
+    QUOTE_IMG_CONTAINER
 };
