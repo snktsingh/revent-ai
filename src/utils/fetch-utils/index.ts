@@ -1,4 +1,3 @@
-import { API_BASE_URL } from '@/constants/endpoint';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
