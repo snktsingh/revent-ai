@@ -83,8 +83,8 @@ export const useBulletOrNumberedText = () => {
   const BulletText = new CustomTextbox(text, {
     fontFamily: 'sans-serif',
     lineHeight: 1.4,
-    left: 50,
-    top: 50,
+    left: 100,
+    top: 150,
     width: 450,
     fontSize: 20,
     objectCaching: false,
