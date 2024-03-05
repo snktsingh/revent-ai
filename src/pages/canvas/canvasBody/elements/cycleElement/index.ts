@@ -2,6 +2,7 @@ import { CYCLE, CYCLE_ARROW, CYCLE_CIRCLE, CYCLE_TEXT } from "@/constants/elemen
 import { theme } from "@/constants/theme";
 import { updateCycleId } from "@/redux/reducers/elementsCount";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
+import AutoResizingTextbox from "@/utils/fabric-utils/AutoResizingTextbox";
 import { fabric } from "fabric";
 export function useCycleElement(){
   const dispatch = useAppDispatch();
@@ -66,7 +67,7 @@ export function useCycleElement(){
         };
     
         const addText = (left: number, top: number) => {
-          const text = new fabric.Textbox('Add Text', {
+          const text = new AutoResizingTextbox('Add Text', {
             width: 80,
             fontSize: 16,
             fontFamily: 'Arial',
@@ -74,6 +75,7 @@ export function useCycleElement(){
             top,
             left,
             name: `${CYCLE_TEXT}_${currentID}`,
+            fixedHeight : 60,
           });
           return canvas.add(text);
         };
@@ -246,16 +248,17 @@ export function useCycleElement(){
     
       const addCycle = (canvas: fabric.Canvas | null) => {
         function createCircleWithText(left: number, top: number) {
-          const text = new fabric.Textbox(`Add Text`, {
-            left: left + 20,
+          const text = new AutoResizingTextbox(`Add Text`, {
+            left: left + 15,
             top: top + 20,
             fontSize: 16,
             fontFamily: 'Arial',
             editable: true,
             width: 80,
-            height: 30,
+            height: 60,
             fill: theme.colorSchemes.light.palette.common.white,
             name: `${CYCLE_TEXT}_${cycleId}`,
+            fixedHeight : 60,
           });
     
           const circle = new fabric.Circle({

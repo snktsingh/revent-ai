@@ -33,7 +33,7 @@ export function useTextEvents() {
         // Set focus on the textbox
         textBox.enterEditing();
         textBox.selectAll()
-      } else if (textBox.text === 'Add Text' || textBox.text === 'Add Timeline') {
+      } else if (textBox.text === 'Add Text' && textBox.name?.startsWith(TIMELINE_TEXT) || textBox.text === 'Add Timeline' && textBox.name?.startsWith(TIMELINE_HEADING)) {
         // textBox.set({ text: '' });
         textBox.set({
           fill: theme.colorSchemes.light.palette.common.black,
