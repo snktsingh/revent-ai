@@ -14,10 +14,32 @@ import {
 import Email from '../../assets/email.svg';
 import Instagram from '../../assets/instagram.svg';
 import Facebook from '../../assets/facebook.svg';
-import Twitter from '../../assets/twitter.svg';
+import Youtube from '../../assets/youtube.svg';
 import Linkedin from '../../assets/linedin.svg';
 
 const Footer = () => {
+
+  const handleSocialLinks = (appName: string) => {
+    console.log("clicked")
+    switch (appName) {
+      case 'Instagram':
+        window.open('https://www.instagram.com/revent.ai?igsh=cmVjaGt6bG0xMzRz', '_blank');
+        break;
+      case 'Facebook':
+        window.open('https://www.linkedin.com/company/reventai/', '_blank');
+        break;
+      case 'Linkedin':
+        window.open('https://www.linkedin.com/company/reventai/', '_blank');
+        break;
+      case 'Youtube':
+        window.open('https://www.youtube.com/channel/UCbA7uPC7VU3Jdbdr87yeW_g', '_blank');
+        break;
+
+      default:
+        break;
+    }
+  }
+
   return (
     <>
       <DesktopContainer>
@@ -61,10 +83,10 @@ const Footer = () => {
               </Stack>
               <br />
               <Stack direction="row" spacing={2}>
-                <img src={Instagram} />
-                <img src={Facebook} />
-                <img src={Twitter} />
-                <img src={Linkedin} />
+                <img src={Instagram} style={{ cursor: 'pointer' }} onClick={() => handleSocialLinks('Instagram')} />
+                {/* <img src={Facebook} style={{ cursor: 'pointer' }} onClick={() => handleSocialLinks('Facebook')} /> */}
+                <img src={Youtube} style={{ cursor: 'pointer' }} onClick={() => handleSocialLinks('Youtube')} />
+                <img src={Linkedin} style={{ cursor: 'pointer' }} onClick={() => handleSocialLinks('Linkedin')} />
               </Stack>
             </GridLeft>
           </GridRowCenter>
@@ -116,10 +138,10 @@ const Footer = () => {
             spacing={2}
             style={{ display: 'flex', justifyContent: 'center' }}
           >
-            <img src={Instagram} />
-            <img src={Facebook} />
-            <img src={Twitter} />
-            <img src={Linkedin} />
+            <img src={Instagram} style={{ cursor: 'pointer' }} onClick={() => handleSocialLinks('Instagram')} />
+            {/* <img src={Facebook} style={{ cursor: 'pointer' }} onClick={() => handleSocialLinks('Facebook')} /> */}
+            <img src={Youtube} style={{ cursor: 'pointer' }} onClick={() => handleSocialLinks('Youtube')} />
+            <img src={Linkedin} style={{ cursor: 'pointer' }} onClick={() => handleSocialLinks('Linkedin')} />
           </Stack>
         </FooterContainer>
       </MobileContainer>
