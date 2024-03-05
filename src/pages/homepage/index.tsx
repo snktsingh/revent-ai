@@ -128,7 +128,15 @@ const Home = ({ onFileSelect }: any) => {
   const tryRef = useRef<HTMLDivElement>(null);
   const handleTry = () => {
     if (tryRef.current) {
-      tryRef.current.scrollIntoView();
+      const headerHeight = 150; 
+      const elementPosition =
+        tryRef.current.getBoundingClientRect().top + window.pageYOffset;
+      const offsetPosition = elementPosition - headerHeight;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth', 
+      });
     }
   };
 
@@ -380,7 +388,7 @@ const Home = ({ onFileSelect }: any) => {
                   </StackColCenter>
                 </ContactGrid>
               </ChildContainer>
-              <div ref={aboutRef}>
+              <div ref={aboutRef} >
                 <AboutContainer>
                   <CustomDivider>
                     <DividerText>About Us</DividerText>
