@@ -69,6 +69,7 @@ import {
   Wand,
 } from '@/constants/media';
 import { useNavigate } from 'react-router-dom';
+import Footer from '@/common-ui/footer';
 
 interface FileUploadProps {
   onFileSelect: (file: File) => void;
@@ -76,8 +77,8 @@ interface FileUploadProps {
 const Home = ({ onFileSelect }: any) => {
   const [data, handleSubmit] = useForm('mbjvbjvd');
   const [data2, handleEmailSubmit] = useForm('xrgwdbzz');
+  
   const navigate = useNavigate();
-
   const {
     aboutRef,
     servicesRef,
@@ -85,12 +86,18 @@ const Home = ({ onFileSelect }: any) => {
     mAboutRef,
     mContactRef,
     mServicesRef,
+    ourMissionRef,
+    getStartedRef,
+    howItWorksRef,
     handleMAbout,
     handleMContact,
     handleMServices,
     handleAbout,
     handleServices,
     handleContact,
+    handleOurMission,
+    handleGetStarted,
+    handleHowItWorks
   } = useRedirect();
 
   const [state, setState] = React.useState({
@@ -103,16 +110,16 @@ const Home = ({ onFileSelect }: any) => {
 
   const toggleDrawer =
     (anchor: Anchor, open: boolean) =>
-    (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event.type === 'keyRight' &&
-        ((event as React.KeyboardEvent).key === '' ||
-          (event as React.KeyboardEvent).key === '')
-      ) {
-        return;
-      }
-      setState({ ...state, [anchor]: open });
-    };
+      (event: React.KeyboardEvent | React.MouseEvent) => {
+        if (
+          event.type === 'keyRight' &&
+          ((event as React.KeyboardEvent).key === '' ||
+            (event as React.KeyboardEvent).key === '')
+        ) {
+          return;
+        }
+        setState({ ...state, [anchor]: open });
+      };
   const workingRef = useRef<HTMLDivElement>(null);
   const handleWorking = () => {
     if (workingRef.current) {
@@ -128,7 +135,15 @@ const Home = ({ onFileSelect }: any) => {
   const tryRef = useRef<HTMLDivElement>(null);
   const handleTry = () => {
     if (tryRef.current) {
-      tryRef.current.scrollIntoView();
+      const headerHeight = 150;
+      const elementPosition =
+        tryRef.current.getBoundingClientRect().top + window.pageYOffset;
+      const offsetPosition = elementPosition - headerHeight;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth',
+      });
     }
   };
 
@@ -202,7 +217,7 @@ const Home = ({ onFileSelect }: any) => {
             <GridRowCenter xs={3}>
               <StackColCenter direction="row" spacing={3}>
                 <UserLink>
-                  <UserLink href="/login">Sign In</UserLink>
+                  <UserLink href="#login">Sign In</UserLink>
                 </UserLink>
                 <Button variant="outlined" onClick={handleTry}>
                   Create Now
@@ -240,7 +255,7 @@ const Home = ({ onFileSelect }: any) => {
                 </GridRowCenter>
               </MainContainer>
               <ChildContainer>
-                <UploadTitle>Get Started</UploadTitle>
+                <UploadTitle ref={getStartedRef}>Get Started</UploadTitle>
                 <Stack direction="row" width="80vw" spacing={13}>
                   <UploadContainer>
                     <>
@@ -354,7 +369,7 @@ const Home = ({ onFileSelect }: any) => {
                 </span>
               </ChildContainer>
               <ChildContainer ref={workingRef}>
-                <ContactGrid container spacing={4}>
+                <ContactGrid container spacing={4} ref={howItWorksRef}>
                   <StackColCenter direction="row" spacing={3}>
                     <Grid xs={6}>
                       <VideoTitle>
@@ -380,7 +395,7 @@ const Home = ({ onFileSelect }: any) => {
                   </StackColCenter>
                 </ContactGrid>
               </ChildContainer>
-              <div ref={aboutRef}>
+              <div ref={aboutRef} >
                 <AboutContainer>
                   <CustomDivider>
                     <DividerText>About Us</DividerText>
@@ -397,7 +412,7 @@ const Home = ({ onFileSelect }: any) => {
                           Revent is for every founder, every pitch maker, and
                           essentially, every busy mind out there. Bringing
                           expert design capabilities at your fingertips to save
-                          crucial time. 
+                          crucial time.
                         </ContainerDescription>
                       </InfoContainer>
                     </GridRowCenter>
@@ -436,7 +451,7 @@ const Home = ({ onFileSelect }: any) => {
               </div>
               <br />
               <CustomDivider>
-                <DividerText>Our Mission</DividerText>
+                <DividerText ref={ourMissionRef}>Our Mission</DividerText>
               </CustomDivider>
               <br />
               <br />
@@ -662,7 +677,7 @@ const Home = ({ onFileSelect }: any) => {
               <ContainerDescription>
                 Revent is for every founder, every pitch maker, and essentially,
                 every busy mind out there. Bringing expert design capabilities
-                at your fingertips to save crucial time. 
+                at your fingertips to save crucial time.
               </ContainerDescription>
             </InfoContainer>
             <InfoContainer>
@@ -773,6 +788,20 @@ const Home = ({ onFileSelect }: any) => {
           </ContactGrid>
         </ChildContainer>
       </MobileContainer>
+      <Footer
+        handlers={{
+          handleMAbout,
+          handleMContact,
+          handleMServices,
+          handleAbout,
+          handleServices,
+          handleContact,
+          handleTry,
+          handleOurMission,
+          handleGetStarted,
+          handleHowItWorks
+        }}
+      />
     </>
   );
 };

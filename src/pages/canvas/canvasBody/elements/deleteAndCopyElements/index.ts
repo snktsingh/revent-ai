@@ -14,6 +14,9 @@ import {
   PYRAMID,
   PYRAMID_LEVEL,
   PYRAMID_TEXT,
+  QUOTE,
+  QUOTE_AUTHOR,
+  QUOTE_IMG,
   TABLE,
   TABLE_TEXT,
   TIMELINE,
@@ -119,6 +122,12 @@ export function useDelAndCopy() {
             break;
           case `${TABLE}_`:
             objectsToDelete.push(TABLE);
+            break;
+          case QUOTE:
+            objectsToDelete.push(QUOTE_IMG,QUOTE_AUTHOR);
+            break;
+          case QUOTE_AUTHOR:
+            objectsToDelete.push(QUOTE_IMG,QUOTE);
             break;
           default:
             break;

@@ -23,8 +23,7 @@ export const useBulletOrNumberedText = () => {
 
     if (line.length) {
       if (!this.isWrapping) {
-        if (this.tabPressed && lineIndex === this.selectionStartLine) {
-          console.log({ lineIndex, bulletLeft, method, ctx, bullet });
+        if (this.tabPressed ) {
           this._renderChars(
             method,
             ctx,
@@ -65,19 +64,14 @@ export const useBulletOrNumberedText = () => {
   {
     tabPressed: boolean = false;
 
-    onKeyDown(e: any): void {
-      if (e.keyCode === 9) {
-        console.log('Tab pressed');
-        this.tabPressed = true;
-        const currentText = this.text;
-
-        // Add 4 spaces and a bullet point
-        let modifiedText = currentText + '\n    • ';
-        this.text = modifiedText;
-        e.preventDefault();
-        this.canvas?.requestRenderAll();
-      }
-    }
+    // onKeyDown(e: any): void {
+    //   if (e.keyCode === 9) {
+    //     console.log('Tab pressed');
+    //     this.tabPressed = true;
+    //     e.preventDefault();
+    //     this.canvas?.requestRenderAll();
+    //   }
+    // }
   }
 
   const BulletText = new CustomTextbox(text, {

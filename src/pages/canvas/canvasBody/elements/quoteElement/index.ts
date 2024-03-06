@@ -1,3 +1,4 @@
+import { QUOTE, QUOTE_ADD_IMG_TEXT, QUOTE_AUTHOR, QUOTE_IMG, QUOTE_IMG_CONTAINER } from "@/constants/elementNames";
 import { theme } from "@/constants/theme";
 import { fabric } from "fabric";
 export const useQuoteElement = () => {
@@ -12,19 +13,19 @@ export const useQuoteElement = () => {
       fontSize: 28,
       hasRotatingPoint: false,
       selectable: true,
-      name: 'quotes',
+      name: QUOTE,
       cursorColor: theme.colorSchemes.light.palette.primary.main,
       type: 'textbox',
     });
 
-    let authorText = new fabric.Textbox('- Optional Author Name',{
+    let authorText = new fabric.Textbox('- Author Name',{
       left: 258,
       top: 250,
-      width: 250,
+      width: 200,
       height: 20,
       fill: 'black',
       fontSize: 18,
-      name: 'quotesAuthor',
+      name: QUOTE_AUTHOR,
     })
 
     const mainListContainer = new fabric.Rect({
@@ -33,7 +34,7 @@ export const useQuoteElement = () => {
       fill: 'transparent',
       strokeWidth: 1,
       stroke: '#cbcbcb',
-      name: 'List_Container',
+      name: QUOTE_IMG_CONTAINER,
       rx:5,
     });
 
@@ -45,15 +46,13 @@ export const useQuoteElement = () => {
       hasControls: false,
       selectable: false,
       hoverCursor: 'pointer',
-      name: 'ListAddImageText',
+      name: QUOTE_ADD_IMG_TEXT,
     });
     let group = new fabric.Group([mainListContainer, addImage], {
       left:450,
       top:120,
-      name: 'LIST_ELEMENT',
+      name: QUOTE_IMG,
     });
-
-
 
     canvas?.add(text,group,authorText)
   };  
