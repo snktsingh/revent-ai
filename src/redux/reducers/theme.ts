@@ -10,8 +10,8 @@ interface slideThemes {
 
 const initialState: slideThemes = {
   openAddTheme: false,
-  themeCode: '#81b523',
-  themeName: 'DELOITTE',
+  themeCode: '#004FBA',
+  themeName: 'REVENT',
   jsonData: null,
   selectedThemeId: '',
 };
