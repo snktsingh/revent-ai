@@ -1,7 +1,10 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-const ENDPOINT = {
-  TEST: `${API_BASE_URL}/test`,
+export const ENDPOINT = {
+  GEN_PPT: 'ppt/generate-ppt',
+  GEN_PPT_MULTI: 'ppt/generate-ppt-multi',
+  THEMES: {
+    GET_ALL_THEMES: '/template/get-all-themes',
+  },
 } as const;
 
 export const ROUTES = {
@@ -9,7 +12,7 @@ export const ROUTES = {
   SIGNUP: '/signup',
   LOGIN: '/login',
   DASHBOARD: '/dashboard',
-  TEMPLATES: '/templates',
+  THEMES: '/themes',
   CANVAS: '/canvas',
 } as const;
 

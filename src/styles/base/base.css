@@ -133,5 +133,6 @@ body {
   color: grey;
 }
 .clicked-card {
-  border: 2px solid #004fba;
+  border: 2.5px solid #004fba;
+  border-radius: 5px;
 }

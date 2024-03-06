@@ -15,12 +15,14 @@ import {
   AddTitle,
   ArrowIcon,
   CircleIcon,
+  Diamond,
+  Hexagon,
   LeftArrowIcon,
   LineIcon,
   RectIcon,
   RightArrowIcon,
-  SaveTemplate,
   StarIcon,
+  TitleSubIcon,
   TriangleIcon,
 } from '@/constants/media';
 
@@ -33,109 +35,123 @@ interface IElementData {
 }
 
 export const elementData: IElementData[] = [
+  // {
+  //   key: 1,
+  //   icon: SaveTemplate,
+  //   title: 'Save Template',
+  //   subtitle: 'Save the current slide as template',
+  //   onClick: () => {},
+  // },
   {
-    key: 1,
-    icon: SaveTemplate,
-    title: 'Save Template',
-    subtitle: 'Save the current slide as template',
+    key: 15,
+    icon: TitleSubIcon,
+    title: 'Cover Slide',
+    subtitle: 'Add a cover slide at the top of your presentation',
     onClick: () => {},
   },
   {
     key: 2,
     icon: AddTitle,
     title: 'Title',
-    subtitle: 'Save the current slide as template',
+    subtitle: 'Add a Title onto the canvas',
     onClick: () => {},
   },
   {
     key: 3,
     icon: AddSubtitle,
     title: 'Subtitle',
-    subtitle: 'Save the current slide as template',
+    subtitle: 'Add a Subtitle onto the canvas',
     onClick: () => {},
   },
   {
     key: 4,
-    icon: AddHeading,
-    title: 'Heading',
-    subtitle: 'Save the current slide as template',
+    icon: AddParagraph,
+    title: 'Paragraph',
+    subtitle: 'Add a Paragraph onto the canvas',
     onClick: () => {},
   },
   {
     key: 5,
-    icon: AddParagraph,
-    title: 'Paragraph',
-    subtitle: 'Save the current slide as template',
+    icon: AddBullet,
+    title: 'Bullet',
+    subtitle: 'Add Bullet Points onto the canvas',
+    onClick: () => {},
+  },
+  {
+    key: 16,
+    icon: TitleSubIcon,
+    title: 'Section Slide',
+    subtitle: 'Add a section break between slides',
     onClick: () => {},
   },
   {
     key: 6,
-    icon: AddBullet,
-    title: 'Bullet',
-    subtitle: 'Save the current slide as template',
+    icon: AddImage,
+    title: 'Image',
+    subtitle: 'Add Images onto the canvas',
     onClick: () => {},
   },
   {
     key: 7,
-    icon: AddImage,
-    title: 'Image',
-    subtitle: 'Save the current slide as template',
+    icon: AddTable,
+    title: 'Table',
+    subtitle: 'Add Tables onto the canvas',
     onClick: () => {},
   },
   {
     key: 8,
-    icon: AddTable,
-    title: 'Table',
-    subtitle: 'Save the current slide as template',
+    icon: AddQuote,
+    title: 'Quotes',
+    subtitle: 'Suitable for Client Testimonials, Management Commentary',
     onClick: () => {},
   },
   {
     key: 9,
-    icon: AddQuote,
-    title: 'Quotes',
-    subtitle: 'Save the current slide as template',
+    icon: AddList,
+    title: 'List',
+    subtitle: 'Suitable for Client Lists, Team Lists',
     onClick: () => {},
   },
   {
     key: 10,
-    icon: AddList,
-    title: 'List',
-    subtitle: 'Save the current slide as template',
+    icon: AddCycle,
+    title: 'Cycle',
+    subtitle: 'Suitable for cyclical processes',
     onClick: () => {},
   },
   {
     key: 11,
-    icon: AddCycle,
-    title: 'Cycle',
-    subtitle: 'Save the current slide as template',
+    icon: AddProcess,
+    title: 'Process',
+    subtitle: 'Suitable to demonstrate steps or order',
     onClick: () => {},
   },
   {
     key: 12,
-    icon: AddProcess,
-    title: 'Process',
-    subtitle: 'Save the current slide as template',
+    icon: AddTimeline,
+    title: 'Timeline',
+    subtitle: 'Suitable to show roadmaps and similar plans',
     onClick: () => {},
   },
   {
     key: 13,
-    icon: AddTimeline,
-    title: 'Timeline',
-    subtitle: 'Save the current slide as template',
+    icon: AddFunnel,
+    title: 'Funnel',
+    subtitle: 'Suitable for stages, pipelines relating to customers',
     onClick: () => {},
   },
   {
     key: 14,
-    icon: AddFunnel,
-    title: 'Funnel',
-    subtitle: 'Save the current slide as template',
+    icon: AddPyramid,
+    title: 'Pyramid',
+    subtitle: 'Suitable for data in hierarchical order',
     onClick: () => {},
   },
   {
-    key: 15,
-    icon: AddPyramid,
-    title: 'Pyramid',
-    subtitle: 'Save the current slide as template',
+    key: 17,
+    icon: TitleSubIcon,
+    title: 'Conclusion Slide',
+    subtitle: 'Suitable for Thank You and Contact Us Slides',
     onClick: () => {},
   },
 ];
@@ -194,6 +210,18 @@ export const ShapesData: Shapes[] = [
     id: 8,
     name: 'Left Arrow',
     icon: LeftArrowIcon,
+    onClick: () => {},
+  },
+  {
+    id: 9,
+    name: 'HexagonOutlinedIcon',
+    icon: Hexagon,
+    onClick: () => {},
+  },
+  {
+    id: 10,
+    name: 'Diamond',
+    icon: Diamond,
     onClick: () => {},
   },
 ];
@@ -340,43 +368,6 @@ export const shadesData: ShadesType[] = [
     shade6: '#e600e6',
     shade7: '#b300b3',
   },
-
-  // {
-  //   title: 'Green',
-  //   color: '#008000',
-  // },
-  // {
-  //   title: 'Blue',
-  //   color: '#0000ff',
-  // },
-  // {
-  //   title: 'Yellow',
-  //   color: '#ffff00',
-  // },
-  // {
-  //   title: 'Purple',
-  //   color: '#800080',
-  // },
-  // {
-  //   title: 'Orange',
-  //   color: '#ffA500',
-  // },
-  // {
-  //   title: 'Pink',
-  //   color: '#ffc0cb',
-  // },
-  // {
-  //   title: 'Brown',
-  //   color: '#a52a2a',
-  // },
-  // {
-  //   title: 'Black',
-  //   color: '#000000',
-  // },
-  // {
-  //   title: 'White',
-  //   color: '#ffffff',
-  // },
 ];
 interface ColorChangeType {
   colorFillChange: Function;
@@ -392,9 +383,35 @@ export let colorChange: ColorChangeType = {
 interface ContentEle {
   addTitle: Function;
   openFullScreen: Function;
+  handleBold: Function;
+  handleItalic: Function;
+  handleUnderlIne: Function;
+  handleOpenTable: Function;
+  handleFunnel: Function;
+  handlePyramid: Function;
+  handleCycle: Function;
+  handleProcess: Function;
+  handleTimeline: Function;
+  handleFontSize: Function;
+  handleFontFamily: Function;
 }
 
 export const ContentElements: ContentEle = {
   addTitle: () => {},
   openFullScreen: () => {},
+  handleBold: () => {},
+  handleItalic: () => {},
+  handleUnderlIne: () => {},
+  handleOpenTable: () => {},
+  handleFunnel: () => {},
+  handlePyramid: () => {},
+  handleCycle: () => {},
+  handleProcess: () => {},
+  handleTimeline: () => {},
+  handleFontSize: () => {},
+  handleFontFamily: () => {},
 };
+
+interface variantsType {
+  addVariantsCanvas: Function;
+}

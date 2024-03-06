@@ -1,3 +1,9 @@
+import { Logo, varianButtonSvg } from '@/constants/media';
+import { VariantsType } from '@/interface/storeTypes';
+import { toggleVariantSlide } from '@/redux/reducers/elements';
+import { useAppDispatch } from '@/redux/store';
+import { Drawer } from '@mui/material';
+import useVariants from './container';
 import {
   ButtonContainer,
   DrawerBtnContainer,
@@ -5,26 +11,35 @@ import {
   DrawerVariant,
   DrawerVariantButton,
   LogoContainer,
+  OriginalSlideCard,
   RefreshBtn,
   Text,
   VariantButton,
   VariantSlide,
   VariantSlideCard,
 } from './style';
-import { Drawer } from '@mui/material';
-import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { toggleVariantSlide } from '@/redux/reducers/elements';
-import { Logo } from '@/constants/media';
+import SvgViewer from '@/components/canvasSvgViewer';
 
-export const CanavasVariant = () => {
+export const CanvasVariant = () => {
   const dispatch = useAppDispatch();
-  const { openVariant } = useAppSelector(state => state.element);
-  const array: number[] = [1, 2, 3];
+  const {
+    openVariant,
+    array,
+    handleVariants,
+    handleApplyOriginalAsMain,
+    originalImageUrl,
+    variantImage,
+    selectedOriginalCanvas,
+    canvasJS
+  } = useVariants();
+
   return (
     <div>
-      <VariantButton onClick={() => dispatch(toggleVariantSlide())}>
-        Variants
-      </VariantButton>
+      {canvasJS.variants.length > 0 && (
+        <VariantButton onClick={() => dispatch(toggleVariantSlide())}>
+          <img src={varianButtonSvg} alt="variantButton" />
+        </VariantButton>
+      )}
       <Drawer
         anchor="right"
         open={openVariant}
@@ -47,12 +62,25 @@ export const CanavasVariant = () => {
             <DrawerVariantButton>Variants</DrawerVariantButton>
           </DrawerBtnContainer>
           <DrawerVariant>
-            <Text>Original Slide</Text>
-            <VariantSlide>
-              <div>1</div>
-              <VariantSlideCard></VariantSlideCard>
-            </VariantSlide>
-            <Text>Grid Variants</Text>
+            {originalImageUrl && (
+              <>
+                <Text>Original Slide</Text>
+                <OriginalSlideCard onClick={handleApplyOriginalAsMain} className={selectedOriginalCanvas ? 'clicked-card' : ''}>
+                  {/* <img
+                    src={originalImageUrl}
+                    alt="image"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      borderRadius:'3%'
+                    }}
+                  /> */}
+                  <SvgViewer svgContent={originalImageUrl}/>
+                </OriginalSlideCard>
+              </>
+            )}
+            {/* <Text>Grid Variants</Text>
             {array.map(el => {
               return (
                 <VariantSlide key={el}>
@@ -60,21 +88,44 @@ export const CanavasVariant = () => {
                   <VariantSlideCard></VariantSlideCard>
                 </VariantSlide>
               );
-            })}
+            })} */}
             <ButtonContainer>
               <p>Variants</p>
-              <RefreshBtn variant="contained" size="small">
+              {/* <RefreshBtn variant="contained" size="small">
                 Refresh
-              </RefreshBtn>
+              </RefreshBtn> */}
             </ButtonContainer>
-            {array.map(el => {
-              return (
-                <VariantSlide key={el}>
-                  <div>{el}</div>
-                  <VariantSlideCard></VariantSlideCard>
-                </VariantSlide>
-              );
-            })}
+            {canvasJS.variants.length > 0
+              ? canvasJS.variants.map((el: VariantsType, i: number) => {
+                  return (
+                    <VariantSlide
+                      key={el.imagesUrl}
+                      onClick={() => handleVariants(el.imagesUrl, el.pptUrl, i)}
+                    >
+                      <div>{i + 1}</div>
+                      <VariantSlideCard className={el.imagesUrl == variantImage && !selectedOriginalCanvas ? 'clicked-card' : '' }>
+                        <img
+                          src={el.imagesUrl}
+                          alt={`Variant ${i + 1}`}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            borderRadius:'3%'
+                          }}
+                        />
+                      </VariantSlideCard>
+                    </VariantSlide>
+                  );
+                })
+              : array.map((el : any) => {
+                  return (
+                    <VariantSlide key={el}>
+                      <div>{el}</div>
+                      <VariantSlideCard></VariantSlideCard>
+                    </VariantSlide>
+                  );
+                })}
 
             <LogoContainer>
               <div>

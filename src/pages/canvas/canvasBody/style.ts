@@ -14,15 +14,16 @@ export const SlideCountContainer = styled.div`
 `;
 export const SingleSliderContainer = styled.div`
   cursor: pointer;
-  
+  display: flex;
+  flex-direction: column;
 `;
 export const EditSlideContainer = styled.div`
   padding: 2% 0% 3% 5%;
 `;
 export const ListSlideCard = styled(Card)`
-  height: 14vh;
-  width: 100%;
-  padding: 5%;
+  height: fit-content;
+  width: fit-content;
+  margin-bottom: 2vh;
 `;
 
 export const ElementContainer = styled.div`
@@ -34,7 +35,6 @@ export const ElementTitle = styled.span`
 `;
 export const ElementSubtitle = styled.span`
   font-size: 0.6rem;
-  font-weight: 300;
-  color: ${theme.colorSchemes.light.palette.common.subtitle};
+  color: ${theme.colorSchemes.light.palette.common.subtext};
 `;
 export const LikeButton = styled(ThumbUpAltRounded)``;

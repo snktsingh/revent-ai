@@ -24,12 +24,16 @@ import {
   MissionQuote,
   MobileCardContainer,
   MobileContainer,
+  UploadContainer,
+  UploadSubtitle,
+  UploadTitle,
   VideoTitle,
 } from './style';
 import { useForm, ValidationError } from '@formspree/react';
 import Menu from '../../assets/menu.svg';
 import { Box, Button, CardMedia, Grid, Stack, TextField } from '@mui/material';
 import {
+  CustomButton,
   CustomDivider,
   CustomOutlinedButton,
   GridJustify,
@@ -57,11 +61,24 @@ import HeroText from '../../assets/heroText.gif';
 import Link from '@mui/material/Link';
 import { UserLink } from '../canvas/canvasHeader/style';
 import { ToastContainer, toast } from 'react-toastify';
+import {
+  CancelUpload,
+  Folder,
+  Scratch,
+  UploadTick,
+  Wand,
+} from '@/constants/media';
+import { useNavigate } from 'react-router-dom';
+import Footer from '@/common-ui/footer';
 
-const Home = () => {
+interface FileUploadProps {
+  onFileSelect: (file: File) => void;
+}
+const Home = ({ onFileSelect }: any) => {
   const [data, handleSubmit] = useForm('mbjvbjvd');
   const [data2, handleEmailSubmit] = useForm('xrgwdbzz');
-
+  
+  const navigate = useNavigate();
   const {
     aboutRef,
     servicesRef,
@@ -69,12 +86,18 @@ const Home = () => {
     mAboutRef,
     mContactRef,
     mServicesRef,
+    ourMissionRef,
+    getStartedRef,
+    howItWorksRef,
     handleMAbout,
     handleMContact,
     handleMServices,
     handleAbout,
     handleServices,
     handleContact,
+    handleOurMission,
+    handleGetStarted,
+    handleHowItWorks
   } = useRedirect();
 
   const [state, setState] = React.useState({
@@ -87,16 +110,16 @@ const Home = () => {
 
   const toggleDrawer =
     (anchor: Anchor, open: boolean) =>
-    (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event.type === 'keyRight' &&
-        ((event as React.KeyboardEvent).key === '' ||
-          (event as React.KeyboardEvent).key === '')
-      ) {
-        return;
-      }
-      setState({ ...state, [anchor]: open });
-    };
+      (event: React.KeyboardEvent | React.MouseEvent) => {
+        if (
+          event.type === 'keyRight' &&
+          ((event as React.KeyboardEvent).key === '' ||
+            (event as React.KeyboardEvent).key === '')
+        ) {
+          return;
+        }
+        setState({ ...state, [anchor]: open });
+      };
   const workingRef = useRef<HTMLDivElement>(null);
   const handleWorking = () => {
     if (workingRef.current) {
@@ -112,7 +135,15 @@ const Home = () => {
   const tryRef = useRef<HTMLDivElement>(null);
   const handleTry = () => {
     if (tryRef.current) {
-      tryRef.current.scrollIntoView();
+      const headerHeight = 150;
+      const elementPosition =
+        tryRef.current.getBoundingClientRect().top + window.pageYOffset;
+      const offsetPosition = elementPosition - headerHeight;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth',
+      });
     }
   };
 
@@ -130,6 +161,42 @@ const Home = () => {
     }, 1200);
   }
 
+  const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+
+    if (files && files.length > 0) {
+      const selected = files[0];
+      setSelectedFile(selected);
+      onFileSelect(selected);
+    }
+  };
+
+  const handleContainerClick = () => {
+    // Trigger the input click when the container is clicked
+    if (inputRef.current) {
+      inputRef.current.click();
+    }
+  };
+
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  };
+
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+
+    const files = event.dataTransfer.files;
+
+    if (files && files.length > 0) {
+      const droppedFile = files[0];
+      setSelectedFile(droppedFile);
+      onFileSelect(droppedFile);
+    }
+  };
+
+  const inputRef = React.createRef<HTMLInputElement>();
   return (
     <>
       <ToastContainer position="top-center" autoClose={1000} />
@@ -149,7 +216,9 @@ const Home = () => {
             </GridRowEven>
             <GridRowCenter xs={3}>
               <StackColCenter direction="row" spacing={3}>
-                <UserLink>Sign In</UserLink>
+                <UserLink>
+                  <UserLink >Sign In</UserLink>
+                </UserLink>
                 <Button variant="outlined" onClick={handleTry}>
                   Create Now
                 </Button>
@@ -186,27 +255,121 @@ const Home = () => {
                 </GridRowCenter>
               </MainContainer>
               {/* <ChildContainer>
-            <LightHeading>Get Started</LightHeading>
-            <GridRowCenter>
-              <Grid container spacing={4}>
-                <Grid item xs={6}>
-                  <span>
-                    <Wrapper>
-                      <h1>Transform</h1>
-                      <p>an exisiting presentation</p>
-                      <br />
-                      <img src={Folder} />
-                    </Wrapper>
-                  </span>
-                </Grid>
-                <Grid item xs={6}>
-                  asdasds
-                </Grid>
-              </Grid>
-            </GridRowCenter>
-          </ChildContainer> */}
+                <UploadTitle ref={getStartedRef}>Get Started</UploadTitle>
+                <Stack direction="row" width="80vw" spacing={13}>
+                  <UploadContainer>
+                    <>
+                      <UploadSubtitle>Transform</UploadSubtitle>
+                      <p>an exisiting document</p>
+                    </>
+                    <div
+                      style={{
+                        cursor: 'pointer',
+                      }}
+                      onClick={handleContainerClick}
+                      onDragOver={handleDragOver}
+                      onDrop={handleDrop}
+                    >
+                      <input
+                        type="file"
+                        accept=".pdf,.docx,.doc"
+                        onChange={handleFileChange}
+                        ref={inputRef}
+                        style={{ display: 'none' }}
+                      />
+                      {selectedFile ? (
+                        <></>
+                      ) : (
+                        <>
+                          <br />
+                          <br />
+                          <img src={Folder} width="30px" />
+                          <br />
+                          <br />
+                          <span>
+                            <b>Drag and Drop</b>
+                            <br />
+                            <span>
+                              your document here <br />
+                              or click to Browse
+                            </span>
+                          </span>
+                          <br />
+                          <br />
+                          <br />
+                          <>File should be .pdf, .doc or .docx</>
+                        </>
+                      )}
+                    </div>
+                    {selectedFile === null ? (
+                      <></>
+                    ) : (
+                      <span
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <br />
+                        <img src={UploadTick} width="40px" />
+                        <br />
+                        <b>File Uploaded</b>
+                        <p>{selectedFile.name}</p>
+                        <br />
+                        <img
+                          src={CancelUpload}
+                          width="40px"
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => setSelectedFile(null)}
+                        />
+                      </span>
+                    )}
+                  </UploadContainer>
+
+                  <UploadContainer
+                    onClick={() => navigate('/themes')}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <>
+                      <UploadSubtitle>Create</UploadSubtitle>
+                      <p>A New Presentation</p>
+                    </>
+                    <br />
+                    <span>
+                      <img src={Scratch} width="50%" />
+                    </span>
+                    <br />
+                  </UploadContainer>
+                </Stack>
+                <br />
+                <br />
+                <span
+                  style={{
+                    display: 'flex',
+                    marginLeft: '10%',
+                    flexDirection: 'column',
+                    width: '25%',
+                    alignItems: 'center',
+                  }}
+                >
+                  <CustomButton variant="contained">
+                    <Stack direction="row" spacing={2}>
+                      <img src={Wand} />
+                      <p>Generate with Revent</p>
+                    </Stack>
+                  </CustomButton>
+                  <ContainerDescription
+                    onClick={handleWorking}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    See How it works ?
+                  </ContainerDescription>
+                </span>
+              </ChildContainer> */}
               <ChildContainer ref={workingRef}>
-                <ContactGrid container spacing={4}>
+                <ContactGrid container spacing={4} ref={howItWorksRef}>
                   <StackColCenter direction="row" spacing={3}>
                     <Grid xs={6}>
                       <VideoTitle>
@@ -232,7 +395,7 @@ const Home = () => {
                   </StackColCenter>
                 </ContactGrid>
               </ChildContainer>
-              <div ref={aboutRef}>
+              <div ref={aboutRef} >
                 <AboutContainer>
                   <CustomDivider>
                     <DividerText>About Us</DividerText>
@@ -249,7 +412,7 @@ const Home = () => {
                           Revent is for every founder, every pitch maker, and
                           essentially, every busy mind out there. Bringing
                           expert design capabilities at your fingertips to save
-                          crucial time. 
+                          crucial time.
                         </ContainerDescription>
                       </InfoContainer>
                     </GridRowCenter>
@@ -288,7 +451,7 @@ const Home = () => {
               </div>
               <br />
               <CustomDivider>
-                <DividerText>Our Mission</DividerText>
+                <DividerText ref={ourMissionRef}>Our Mission</DividerText>
               </CustomDivider>
               <br />
               <br />
@@ -477,7 +640,7 @@ const Home = () => {
           <img src={Banner} width="60%" />
           <br />
           <Description>
-            Elevating your presentatiosn
+            Elevating your presentation
             <br />
             with seamless design, powered by AI.
           </Description>
@@ -514,7 +677,7 @@ const Home = () => {
               <ContainerDescription>
                 Revent is for every founder, every pitch maker, and essentially,
                 every busy mind out there. Bringing expert design capabilities
-                at your fingertips to save crucial time. 
+                at your fingertips to save crucial time.
               </ContainerDescription>
             </InfoContainer>
             <InfoContainer>
@@ -625,6 +788,20 @@ const Home = () => {
           </ContactGrid>
         </ChildContainer>
       </MobileContainer>
+      <Footer
+        handlers={{
+          handleMAbout,
+          handleMContact,
+          handleMServices,
+          handleAbout,
+          handleServices,
+          handleContact,
+          handleTry,
+          handleOurMission,
+          handleGetStarted,
+          handleHowItWorks
+        }}
+      />
     </>
   );
 };

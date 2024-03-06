@@ -1,493 +1,294 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { fabric } from 'fabric';
+import { theme } from '@/constants/theme';
+import { toggleRegenerateButton } from '@/redux/reducers/slide';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { setCanvas } from '@/redux/reducers/canvas';
+import { fabric } from 'fabric';
+import React, { useEffect, useRef } from 'react';
 import {
-  ContentElements,
-  ShapesData,
-  colorChange,
-  elementData,
-} from '../elementData';
-import { CanvasContainer, SearchInputContainer } from './style';
-import { Card, InputBase, MenuItem, Stack } from '@mui/material';
-import { searchElement } from '@/redux/reducers/slide';
-import { ElementContainer, ElementSubtitle, ElementTitle } from '../style';
-import { Copy } from '@/constants/media';
-
-interface CustomControl extends fabric.Control {
-  cornerSize?: number;
-}
+  useBulletOrNumberedText,
+  useCustomSelectionIcons,
+  useDelAndCopy,
+} from '../elements/elementExports';
+import {
+  useCanvasClickEvent,
+  useObjectMovingEvent,
+  useSelectionCreatedEvent,
+  useTextEvents,
+} from '../events/eventExports';
+import { useCanvasComponent } from './container';
+import { useElementFunctions } from './elementFunctions';
+import FullscreenCanvas from './fullscreenCanvas';
+import { CanvasContainer } from './style';
+import { IExtendedTextBoxOptions } from '@/interface/fabricTypes';
+import ConversionToJson from '@/components/pptToJson';
+import { setVariantImageAsMain } from '@/redux/reducers/canvas';
 
 const CanvasComponent: React.FC = () => {
   const canvasRef = useRef<fabric.Canvas | null>(null);
+  const FabricRef = useRef<fabric.Canvas | null>(null);
   const Container = useRef<HTMLDivElement | null>(null);
-  const canvasData = useAppSelector(state => state.canvas.canvasData);
-  const slide = useAppSelector(state => state.slide);
-  const { color, textColor, borderColor } = useAppSelector(
-    state => state.canvas
-  );
-  const dispatch = useAppDispatch();
-  const [filteredList, setFilteredList] = useState(elementData);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const filterData = (searchValue: string) => {
-    const filtered = elementData.filter(item =>
-      item.title.toLowerCase().includes(searchValue.toLowerCase())
-    );
-    setFilteredList(filtered);
-  };
 
-  const deleteIcon =
-    "data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3C!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'%3E%3Csvg version='1.1' id='Ebene_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='595.275px' height='595.275px' viewBox='200 215 230 470' xml:space='preserve'%3E%3Ccircle style='fill:%23F44336;' cx='299.76' cy='439.067' r='218.516'/%3E%3Cg%3E%3Crect x='267.162' y='307.978' transform='matrix(0.7071 -0.7071 0.7071 0.7071 -222.6202 340.6915)' style='fill:white;' width='65.545' height='262.18'/%3E%3Crect x='266.988' y='308.153' transform='matrix(0.7071 0.7071 -0.7071 0.7071 398.3889 -83.3116)' style='fill:white;' width='65.544' height='262.179'/%3E%3C/g%3E%3C/svg%3E";
+  const ElementFunctions = useElementFunctions(canvasRef.current);
+
+  const { handleAddCustomIcon } = useCustomSelectionIcons();
+  const { CustomBorderIcons } = useDelAndCopy();
+  const { renderBulletOrNumTextLine } = useBulletOrNumberedText();
+  const { handleObjectMoving } = useObjectMovingEvent();
+  const { handleSelectionCreated } = useSelectionCreatedEvent();
+  const { textExitedEvent, textEnteringEvent } = useTextEvents();
+  const { CanvasClick } = useCanvasClickEvent();
+  const { jsonData, themeCode, themeName } = useAppSelector(state => state.slideTheme);
+  const {
+    updateCanvasDimensions,
+    updateCanvasSlideData,
+    getElementsData,
+    customFabricProperties,
+    extractTableData,
+  } = useCanvasComponent();
+
+  const dispatch = useAppDispatch();
+
+  const { canvasJS, variantImage, selectedOriginalCanvas } = useAppSelector(state => state.canvas);
+
+  const { pptUrl, imageUrl, variants } = useAppSelector(state => state.thunk);
+
+  // useEffect(() => {
+  //   if (canvasRef.current) {
+  //     canvasRef.current.clear();
+  //     console.log(jsonData);
+  //     // canvasRef.current.loadFromJSON(
+  //     //   {
+  //     //     left: 34.27,
+  //     //     top: 2.83,
+  //     //     width: 450.15,
+  //     //     height: 63.11,
+  //     //     borderColor: '#000',
+  //     //     borderWidth: 0,
+  //     //     borderType: 'solid',
+  //     //     borderStrokeDasharray: '0',
+  //     //     fillColor: '',
+  //     //     isFlipV: false,
+  //     //     isFlipH: false,
+  //     //     rotate: 0,
+  //     //     vAlign: 'up',
+  //     //     name: 'TextBox 18',
+  //     //     type: 'text',
+  //     //     isVertical: false,
+  //     //   },
+  //     //   () => {
+  //     //     canvasRef.current?.renderAll();
+  //     //   }
+  //     // );
+  //   }
+  // }, [jsonData]);
 
   useEffect(() => {
-    const canvas = new fabric.Canvas('canvas', {
-      width: Container.current?.clientWidth || 0,
-      height: Container.current?.clientHeight || 0,
-      backgroundColor: 'white',
+    const newCanvas = new fabric.Canvas('canvas');
+    newCanvas.clear();
+    fabric.Object.prototype.set({
+      cornerStyle: 'circle',
+      transparentCorners: false,
+      cornerSize: 8,
+      cornerColor: 'white',
+      borderColor: 'grey',
+      cornerStrokeColor: 'grey',
     });
+    fabric.Object.prototype.objectCaching = false;
+    newCanvas.loadFromJSON(
+      canvasJS.canvas,
+      () => {
+        updateCanvasDimensions(newCanvas);
+        console.log('main canvas loaded');
+        canvasRef.current = newCanvas;
+        newCanvas.setBackgroundColor(
+          `${theme.colorSchemes.light.palette.common.white}`,
+          newCanvas.renderAll.bind(newCanvas)
+        );
 
-    canvas.selectionColor = '#cfd6e7'; // Color of the selection border
-    canvas.selectionBorderColor = '#043199'; // Border color when an object is selected
-    canvas.selectionLineWidth = 1;
-    fabric.Object.prototype.cornerColor = '#043199';
-    fabric.Object.prototype.borderColor = '#043199';
+        newCanvas.enableRetinaScaling = true;
+        newCanvas.selectionColor = 'transparent';
+        newCanvas.selectionBorderColor =
+          theme.colorSchemes.light.palette.common.steelBlue;
+        newCanvas.selectionLineWidth = 0.5;
 
-    window.addEventListener('resize', () => {
-      canvas.setDimensions({
-        width: Container.current?.clientWidth || 0,
-        height: Container.current?.clientHeight || 0,
-      });
-    });
-    canvasRef.current = canvas;
-    console.log(canvas);
-    dispatch(setCanvas(canvas.toDatalessJSON()));
-
-    // const handleSaveCanvasData = () => {
-    //   const canvas = new fabric.Canvas;
-    //   canvas.loadFromJSON(canvasData, () => {
-    //     // Do something with the loaded canvas data
-    //     console.log('Canvas data loaded:', canvas);
-    //   });
-    // };
-    elementData[1].onClick = () => {
-      const canvas = canvasRef.current;
-      const title = new fabric.IText('Click to Edit', {
-        left: 50,
-        top: 50,
-        width: 600,
-        fontSize: 30,
-        fontWeight: 'bold',
-        fontFamily: 'Arial',
-        type: 'text',
-      });
-
-      canvas?.add(title);
-    };
-
-    elementData[2].onClick = () => {
-      const canvas = canvasRef.current;
-      const subtitle = new fabric.IText('This is the subtitle', {
-        left: 100,
-        top: 100,
-        width: 200,
-        fontSize: 20,
-        fontFamily: 'Arial',
-        type: 'text',
-      });
-
-      canvas?.add(subtitle);
-    };
-
-    elementData[3].onClick = () => {
-      const canvas = canvasRef.current;
-      const heading = new fabric.IText('This is the heading', {
-        left: 100,
-        top: 50,
-        width: 300,
-        fontSize: 30,
-        fontFamily: 'Arial',
-        fontWeight: 'bold',
-        type: 'text',
-      });
-
-      canvas?.add(heading);
-    };
-
-    elementData[4].onClick = () => {
-      const canvas = canvasRef.current;
-      const paragraph = new fabric.Textbox(
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-        {
-          left: 100,
-          top: 150, // Adjust the position as needed
-          width: 600, // Adjust the width as needed
-          lineHeight: 1.5,
-          fontSize: 16, // Adjust the font size as needed
-          fontFamily: 'Arial',
-          type: 'text',
+        CustomBorderIcons(newCanvas);
+        
+        newCanvas.forEachObject(obj => {
+          if (obj) {
+            if ((obj as IExtendedTextBoxOptions)?.listType == 'bullet') {
+              (obj as IExtendedTextBoxOptions)._renderTextLine =
+                renderBulletOrNumTextLine;
+            }
+          }
+        });
+        newCanvas.on('mouse:up', event => {
+          CanvasClick(newCanvas, event);
+        });
+        newCanvas.on('text:editing:exited', event => {
+          textExitedEvent(newCanvas, event.target as fabric.Text);
+          updateCanvasSlideData(newCanvas, canvasJS.id);
+        });
+        newCanvas.on('text:editing:entered', event => {
+          textEnteringEvent(newCanvas, event.target as fabric.Text);
+          updateCanvasSlideData(newCanvas, canvasJS.id);
+        });
+        newCanvas.on('selection:created', function (event) {
+          handleSelectionCreated(canvas, event);
+        });
+        window.addEventListener('resize', () =>
+          updateCanvasDimensions(newCanvas)
+        );
+        if (newCanvas.toObject(customFabricProperties)?.objects.length >= 1) {
+          dispatch(toggleRegenerateButton(false));
+        } else {
+          dispatch(toggleRegenerateButton(true));
         }
+        newCanvas.on('object:added', e => {
+          // console.log(newCanvas.toJSON());
+          updateCanvasSlideData(newCanvas, canvasJS.id);
+          getElementsData(
+            newCanvas.toObject(customFabricProperties)?.objects,
+            themeCode, themeName
+          );
+          // console.log(newCanvas.toObject(customFabricProperties)?.objects);
+
+          if (newCanvas.toObject()?.objects.length >= 1) {
+            dispatch(toggleRegenerateButton(false));
+          } else {
+            dispatch(toggleRegenerateButton(true));
+          }
+        });
+        newCanvas.on('object:removed', e => {
+          updateCanvasSlideData(newCanvas, canvasJS.id);
+          getElementsData(
+            newCanvas.toObject(customFabricProperties)?.objects,
+            themeCode, themeName
+          );
+          if (newCanvas.toObject()?.objects.length >= 1) {
+            dispatch(toggleRegenerateButton(false));
+          } else {
+            dispatch(toggleRegenerateButton(true));
+          }
+        });
+
+        newCanvas.on('object:modified', e => {
+          updateCanvasSlideData(newCanvas, canvasJS.id);
+          getElementsData(
+            newCanvas.toObject(customFabricProperties)?.objects,
+            themeCode, themeName
+          );
+          extractTableData(newCanvas);
+        });
+
+        newCanvas.on('selection:cleared', e => {
+          updateCanvasSlideData(newCanvas, canvasJS.id);
+          getElementsData(
+            newCanvas.toObject(customFabricProperties)?.objects,
+            themeCode, themeName
+          );
+        });
+        // newCanvas.on('object:moving', (event: fabric.IEvent) => handleAllElements(event,newCanvas));
+        newCanvas.on('object:moving', function (options) {
+          // console.log(newCanvas.toJSON());
+          handleObjectMoving(options, newCanvas);
+        });
+        updateCanvasSlideData(newCanvas, canvasJS.id);
+        handleAddCustomIcon(newCanvas);
+        newCanvas.renderAll();
+      },
+      (error: Error) => {
+        console.error('Error loading canvas:', error);
+      }
+    );
+
+    const canvas = canvasRef.current!;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Delete' && canvas.getActiveObject()) {
+        canvas.remove(canvas.getActiveObject()!);
+        const groupObjects = (
+          canvas.getActiveObject() as fabric.Group
+        )?.getObjects();
+
+        groupObjects.forEach((obj: any) => {
+          canvas.remove(obj);
+        });
+
+        canvas.discardActiveObject();
+        canvas.renderAll();
+      }
+    };
+
+    const handleClickOutsideCanvas = (event: MouseEvent) => {
+      if (
+        canvas &&
+        canvas.getActiveObject() &&
+        !isClickWithinCanvas(event, canvas)
+      ) {
+        canvas.discardActiveObject().renderAll();
+      }
+    };
+
+    const isClickWithinCanvas = (event: MouseEvent, canvas: fabric.Canvas) => {
+      const canvasBoundary = canvas.getElement().getBoundingClientRect();
+      const clickX = event.clientX;
+      const clickY = event.clientY;
+      return (
+        clickX >= canvasBoundary.left &&
+        clickX <= canvasBoundary.right &&
+        clickY >= canvasBoundary.top &&
+        clickY <= canvasBoundary.bottom
       );
-
-      paragraph.setControlsVisibility({
-        tl: true,
-        tr: true,
-        br: true,
-        bl: true,
-        mt: true,
-        mb: true,
-        ml: true,
-        mr: true,
-      });
-
-      paragraph.on('scaling', function (this: fabric.Textbox) {
-        const scaleX = this.scaleX;
-        const scaleY = this.scaleY;
-        const newFontSize = (this.fontSize! * (scaleX! + scaleY!)) / 2;
-        this.fontSize = newFontSize;
-      });
-
-      canvas?.add(paragraph);
     };
 
-    elementData[5].onClick = () => {
-      const canvas = canvasRef.current;
-      const text = new fabric.IText('', {
-        left: 50,
-        top: 50,
-        width: 200,
-        fontSize: 16,
-      });
+    // window.addEventListener('click', handleClickOutsideCanvas);
 
-      const addBullet = (text: fabric.IText) => {
-        const bullet = '\u2022 '; // Unicode character for bullet point
-        text.text += bullet;
-        text.set('text', text.text); // Update the text
-      };
-
-      addBullet(text);
-
-      canvas?.add(text);
-    };
-    elementData[6].onClick = () => {};
-    elementData[7].onClick = () => {};
-
-    var img = new Image();
-    img.src = deleteIcon;
-
-    var cloneImg = new Image();
-    cloneImg.src = Copy;
-
-    fabric.Object.prototype.controls.deleteControl = new fabric.Control({
-      x: 0.5,
-      y: -0.5,
-      offsetY: -16,
-      offsetX: 16,
-      cursorStyle: 'pointer',
-      mouseUpHandler: deleteObject,
-      render: renderIcon,
-    });
-
-    fabric.Object.prototype.controls.clone = new fabric.Control({
-      x: -0.5,
-      y: -0.5,
-      offsetY: -16,
-      offsetX: -16,
-      cursorStyle: 'pointer',
-      mouseUpHandler: cloneObject,
-      render: renderCloneIcon,
-    });
-
-    function deleteObject(
-      eventData: MouseEvent,
-      transformData: fabric.Transform,
-      x: number,
-      y: number
-    ): boolean {
-      var target = transformData.target;
-
-      var canvas = target.canvas;
-      canvas?.remove(target);
-      canvas?.requestRenderAll();
-
-      return true;
-    }
-
-    function cloneObject(
-      eventData: MouseEvent,
-      transformData: fabric.Transform,
-      x: number,
-      y: number
-    ): boolean {
-      var target = transformData.target;
-      var canvas = target.canvas;
-      target.clone(function (cloned: fabric.Object) {
-        cloned.left! += 10;
-        cloned.top! += 10;
-        canvas?.add(cloned);
-      });
-      return true;
-    }
-
-    function renderIcon(
-      ctx: CanvasRenderingContext2D,
-      left: number,
-      top: number,
-      styleOverride: any,
-      fabricObject: fabric.Object
-    ) {
-      var size = 24;
-      ctx.save();
-      ctx.translate(left, top);
-      ctx.rotate(fabric.util.degreesToRadians(fabricObject.angle || 0));
-      ctx.drawImage(img, -size / 2, -size / 2, size, size);
-      ctx.restore();
-    }
-
-    function renderCloneIcon(
-      ctx: CanvasRenderingContext2D,
-      left: number,
-      top: number,
-      styleOverride: any,
-      fabricObject: fabric.Object
-    ) {
-      var size = 24;
-      ctx.save();
-      ctx.translate(left, top);
-      ctx.rotate(fabric.util.degreesToRadians(fabricObject.angle || 0));
-      ctx.drawImage(cloneImg, -size / 2, -size / 2, size, size);
-      ctx.restore();
-    }
-
+    window.addEventListener('keydown', handleKeyDown);
     return () => {
-      canvas.dispose();
+      window.removeEventListener('keydown', handleKeyDown);
+      // window.removeEventListener('click', handleClickOutsideCanvas);
       window.removeEventListener('resize', () => {});
+      newCanvas.dispose();
     };
-  }, []);
+  }, [canvasJS.canvas, selectedOriginalCanvas]);
 
-  colorChange.colorFillChange = () => {
-    const selectedObject = canvasRef.current?.getActiveObject();
-    if (selectedObject?.type == 'shape') {
-      console.log();
-
-      selectedObject.set('fill', color);
-      canvasRef.current?.renderAll();
-    } else if (selectedObject?.type == 'text') {
-      selectedObject.set('backgroundColor', color);
-      canvasRef.current?.renderAll();
-    }
-  };
-
-  colorChange.colorTextChange = () => {
-    const selectedObject = canvasRef.current?.getActiveObject();
-    if (selectedObject?.type == 'text') {
-      selectedObject.set('fill', textColor);
-      canvasRef.current?.renderAll();
-    }
-  };
-
-  colorChange.colorBorderChange = () => {
-    const selectedObject = canvasRef.current?.getActiveObject();
-    if (selectedObject) {
-      selectedObject.set('stroke', borderColor);
-      canvasRef.current?.renderAll();
-    }
-  };
-
-  ShapesData[0].onClick = () => {
-    if (canvasRef.current) {
-      console.log(canvasRef.current);
-      const rect = new fabric.Rect({
-        width: 100,
-        height: 100,
-        fill: 'transparent',
-        stroke: '#043199',
-        top: 100,
-        left: 100,
-        type: 'shape',
+  useEffect(() => {
+    console.log('variant image loaded')
+    if (variantImage) {
+      // Clear the canvas and set its background color to white
+      canvasRef.current?.clear();
+      canvasRef.current?.setBackgroundColor(
+        `${theme.colorSchemes.light.palette.common.white}`,
+        canvasRef.current.renderAll.bind(canvasRef.current)
+      );
+  
+      // Load the image and adjust its size to fit the canvas
+      fabric.Image.fromURL(variantImage, img => {
+        const canvasWidth = canvasRef.current?.width || 0;
+        const canvasHeight = canvasRef.current?.height || 0;
+        const scaleWidth = canvasWidth / img.width!;
+        const scaleHeight = canvasHeight / img.height!;
+        const scale = Math.max(scaleWidth, scaleHeight);
+  
+        // Set image properties and add it to the canvas
+        img.set({
+          left: 0,
+          top: 0,
+          scaleX: scale,
+          scaleY: scale,
+        });
+        canvasRef.current?.add(img);
+        canvasRef.current?.renderAll();
       });
-
-      canvasRef.current.add(rect);
-      canvasRef.current.renderAll();
     }
-  };
-
-  ShapesData[3].onClick = () => {
-    if (canvasRef.current) {
-      const circle = new fabric.Circle({
-        radius: 50,
-        fill: 'transparent',
-        stroke: '#043199',
-        top: 100,
-        left: 100,
-        type: 'shape',
-      });
-
-      canvasRef.current.add(circle);
-      canvasRef.current.renderAll();
-    }
-  };
-
-  ShapesData[4].onClick = () => {
-    if (canvasRef.current) {
-      const triangle = new fabric.Triangle({
-        width: 100,
-        height: 100,
-        fill: 'transparent',
-        stroke: '#043199',
-        top: 100,
-        left: 100,
-        type: 'shape',
-      });
-      canvasRef.current.add(triangle);
-      canvasRef.current.renderAll();
-    }
-  };
-  ShapesData[5].onClick = () => {
-    if (canvasRef.current) {
-      const centerX = 100; // X coordinate of the center of the star
-      const centerY = 100; // Y coordinate of the center of the star
-      const numPoints = 5; // Number of points on the star
-      const outerRadius = 50; // Outer radius of the star
-      const innerRadius = 20; // Inner radius of the star
-
-      const starPoints = [];
-
-      for (let i = 0; i < numPoints * 2; i++) {
-        const radius = i % 2 === 0 ? outerRadius : innerRadius;
-        const angle = (Math.PI / numPoints) * i;
-        const x = centerX + radius * Math.cos(angle);
-        const y = centerY + radius * Math.sin(angle);
-        starPoints.push({ x, y });
-      }
-
-      const star = new fabric.Polygon(starPoints, {
-        fill: 'transparent',
-        stroke: '#043199',
-        left: 50,
-        top: 50,
-        type: 'shape',
-      });
-
-      canvasRef.current.add(star);
-      canvasRef.current.renderAll();
-    }
-  };
-
-  ShapesData[6].onClick = () => {
-    if (canvasRef.current) {
-      const arrowPoints = [
-        { x: 100, y: 100 },
-        { x: 150, y: 100 },
-        { x: 150, y: 75 },
-        { x: 200, y: 125 },
-        { x: 150, y: 175 },
-        { x: 150, y: 150 },
-        { x: 100, y: 150 },
-      ];
-
-      const arrow = new fabric.Polygon(arrowPoints, {
-        fill: '#043199',
-        left: 50,
-        top: 50,
-        type: 'shape',
-      });
-
-      canvasRef.current.add(arrow);
-      canvasRef.current.renderAll();
-    }
-  };
-
-  ShapesData[7].onClick = () => {
-    if (canvasRef.current) {
-      const arrowPoints = [
-        { x: 100, y: 150 },
-        { x: 150, y: 150 },
-        { x: 150, y: 175 },
-        { x: 200, y: 125 },
-        { x: 150, y: 75 },
-        { x: 150, y: 100 },
-        { x: 100, y: 100 },
-      ];
-
-      const arrow = new fabric.Polygon(arrowPoints, {
-        fill: '#043199',
-        left: 50,
-        top: 50,
-        type: 'shape',
-      });
-
-      canvasRef.current.add(arrow);
-      canvasRef.current.renderAll();
-    }
-  };
-
-  const handleElementSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(searchElement(e.target.value));
-    filterData(slide.listSearch);
-  };
-
-  const handleSlideListClose = () => {
-    dispatch(searchElement(''));
-    setFilteredList(elementData);
-    setAnchorEl(null);
-  };
-
-  ContentElements.openFullScreen = () => {
-    const element = document.getElementById('canvas'); // Replace with your canvas element ID
-    canvasRef.current?.discardActiveObject();
-
-    if (element) {
-      if (document.fullscreenElement) {
-        document.exitFullscreen();
-      } else {
-        element.requestFullscreen();
-      }
-    }
-  };
+  }, [variantImage]);
 
   return (
     <CanvasContainer ref={Container}>
-      {/* <SearchInputContainer>
-        <InputBase
-          sx={{ ml: 3 }}
-          placeholder="/ Type to search elements..."
-          value={slide.listSearch}
-          onChange={handleElementSearch}
-        />
-
-        {slide.listSearch == '' ? (
-          <></>
-        ) : (
-          <div
-            style={{
-              overflowY: 'scroll',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'flex-start',
-              width: '17vw',
-            }}
-          >
-            {filteredList.map((item, index) => {
-              return (
-                <MenuItem
-                  onClick={handleSlideListClose}
-                  style={{ display: 'flex', flexDirection: 'column' }}
-                  key={index}
-                >
-                  <Stack direction="row" spacing={1}>
-                    <img src={item.icon} width="30vh" />
-                    <ElementContainer>
-                      <ElementTitle>{item.title}</ElementTitle>
-                      <ElementSubtitle>{item.subtitle}</ElementSubtitle>
-                    </ElementContainer>
-                  </Stack>
-                </MenuItem>
-              );
-            })}
-          </div>
-        )}
-      </SearchInputContainer> */}
+      {/* <ConversionToJson /> */}
       <canvas id="canvas"></canvas>
+      <div style={{ position: 'absolute', left: -10000 }}>
+        <FullscreenCanvas />
+      </div>
     </CanvasContainer>
   );
 };

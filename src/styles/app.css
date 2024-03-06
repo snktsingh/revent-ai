@@ -2,3 +2,9 @@
 @import 'base/base.css';
 @import url('https://fonts.googleapis.com/css2?family=Red Hat display&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+canvas {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  

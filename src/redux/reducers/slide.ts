@@ -1,14 +1,13 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { IListofSlides } from '@/interface/storeTypes';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface IListofSlides {
-  key: number;
-  name: string;
-}
+
 export interface TestState {
   listOfSlides: IListofSlides[];
   slideKey: number;
   nextKey: number;
   listSearch: string;
+  isRegenerateDisabled : boolean
 }
 
 const initialState: TestState = {
@@ -21,6 +20,7 @@ const initialState: TestState = {
   slideKey: 1,
   nextKey: 2,
   listSearch: '',
+  isRegenerateDisabled: true
 };
 
 export const slideReducer = createSlice({
@@ -30,8 +30,6 @@ export const slideReducer = createSlice({
     addSlide: (state, action) => {
       state.listOfSlides.push(action.payload);
       state.nextKey = state.nextKey + 1;
-      console.log(state.nextKey);
-      console.log(state.listOfSlides);
     },
     deleteSlide: (state, action) => {
       state.listOfSlides.splice(action.payload - 1, 1);
@@ -42,11 +40,14 @@ export const slideReducer = createSlice({
     searchElement: (state, action) => {
       state.listSearch = action.payload;
     },
+    toggleRegenerateButton(state,action : PayloadAction<boolean>){
+      state.isRegenerateDisabled = action.payload
+    }
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { addSlide, deleteSlide, getSlidekey, searchElement } =
+export const { addSlide, deleteSlide, getSlidekey, searchElement, toggleRegenerateButton } =
   slideReducer.actions;
 
 export default slideReducer.reducer;

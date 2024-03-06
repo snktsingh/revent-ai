@@ -1,4 +1,7 @@
-import { experimental_extendTheme as extendTheme } from '@mui/material/styles';
+import {
+  createTheme,
+  experimental_extendTheme as extendTheme,
+} from '@mui/material/styles';
 
 declare module '@mui/material/styles/createPalette' {
   interface CommonColors {
@@ -7,7 +10,8 @@ declare module '@mui/material/styles/createPalette' {
     lightGrey: string;
     buttonHover: string;
     border: string;
-    subtitle: string;
+    subtext: string;
+    steelBlue: string;
   }
 }
 
@@ -36,7 +40,8 @@ export const theme = extendTheme({
           background: '#F3F3F3',
           buttonHover: '#5373BC',
           border: '#D9D9D9',
-          subtitle: '#CCCCCC',
+          subtext: '#A9A9A9',
+          steelBlue: '#B0BCDE',
         },
         primary: {
           main: '#004FBA',

@@ -1,18 +1,14 @@
 import {
-  Box,
+  Autocomplete,
   Button,
   Divider,
   IconButton,
-  Input,
   Menu,
-  Popover,
   Stack,
+  TextField,
 } from '@mui/material';
 import {
-  AddColorButton,
-  AddColorIcon,
   BorderColorDiv,
-  ButtonContainer,
   ColorDiv,
   ColorGrid,
   ColorItem,
@@ -20,25 +16,13 @@ import {
   ColorSection,
   FontTool,
   IconsContainer,
+  InputForSize,
   MainToolContainer,
   SectionTitle,
   ShapeItem,
   ShapesCard,
-  TransparentButton,
 } from './style';
-import {
-  Add,
-  ArrowIcon,
-  CircleIcon,
-  LeftArrowIcon,
-  LineIcon,
-  RectIcon,
-  RightArrowIcon,
-  ShapesIcon,
-  StarIcon,
-  Template,
-  TriangleIcon,
-} from '@/constants/media';
+import { Add, ShapesIcon, Template } from '@/constants/media';
 import MenuItem from '@mui/material/MenuItem';
 import FormatAlignLeftIcon from '@mui/icons-material/FormatAlignLeft';
 import FormatAlignCenterIcon from '@mui/icons-material/FormatAlignCenter';
@@ -50,14 +34,9 @@ import ColorLensOutlinedIcon from '@mui/icons-material/ColorLensOutlined';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { addSlide } from '@/redux/reducers/slide';
 import { toggleTemplateVisibility } from '@/redux/reducers/elements';
-import {
-  SelectMenuItem,
-  ToolOutlinedButton,
-  ToolOutlinedSelect,
-} from '../style';
+import { ToolOutlinedButton, ToolOutlinedSelect } from '../style';
 import {
   AddOutlined,
-  Directions,
   FormatBoldRounded,
   FormatItalicRounded,
   FormatUnderlinedRounded,
@@ -65,31 +44,57 @@ import {
 } from '@mui/icons-material';
 import { useEffect, useRef, useState } from 'react';
 import {
-  ColorsData,
+  ContentElements,
   ShapesData,
   ThemeColor,
   colorChange,
   shadesData,
 } from '../canvasBody/elementData';
 import {
+  addCanvas,
+  handleInputSize,
+  handleSize,
   setBorderColor,
   setColor,
   setTextColor,
 } from '@/redux/reducers/canvas';
 import FontDownloadOutlinedIcon from '@mui/icons-material/FontDownloadOutlined';
 import ColorizeOutlinedIcon from '@mui/icons-material/ColorizeOutlined';
+import WebFont from 'webfontloader';
+import FontsData from '../../../data/fontsData.json';
+
+interface FontItem {
+  family: string;
+  variants: string[];
+  subsets: string[];
+  version: string;
+  lastModified: string;
+  files: { [key: string]: string };
+  category: string;
+  kind: string;
+  menu: string;
+}
+
 
 const CanvasTools = () => {
   const dispatch = useAppDispatch();
   const newKey = useAppSelector(state => state.slide);
-  const { color, textColor, borderColor } = useAppSelector(
+  const { color, textColor, borderColor, canvasList, size } = useAppSelector(
     state => state.canvas
   );
+  const tools = useAppSelector(state => state.thunk);
   const obj = { key: newKey.nextKey, name: `Slide ${newKey.nextKey}` };
   const ColorRef = useRef<HTMLInputElement | null>(null);
   const [inputColor, setInputColor] = useState<string>('');
   const [inputTextColor, setInputTextColor] = useState<string>('');
   const [inputBorderColor, setInputBorderColor] = useState<string>('');
+  const [googleFonts, setGoogleFonts] = useState<any[]>([]);
+  const [start, setStart] = useState<number>(0);
+  const [end, setEnd] = useState<number>(200);
+  const [filteredFonts, setFilteredFonts] = useState<any[]>([]);
+  const [searchFont, setSearchFont] = useState<string>();
+  const selectRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef(null);
 
   const [anchorShapesEl, setAnchorShapesEl] = useState<null | HTMLElement>(
     null
@@ -153,6 +158,7 @@ const CanvasTools = () => {
     dispatch(setBorderColor(e.target.value));
   };
 
+
   useEffect(() => {
     colorChange.colorFillChange();
   }, [color]);
@@ -173,6 +179,59 @@ const CanvasTools = () => {
     dispatch(setColor(e.target.value));
   };
 
+  useEffect(() => {
+    fetchFonts(0, 200);
+  }, [])
+
+  const fetchFonts = (start: number, end: number) => {
+    setGoogleFonts(FontsData.sort((a, b) => a.family.localeCompare(b.family)));
+    const fonts = FontsData.slice(start, end);
+    setFilteredFonts(fonts);
+  };
+
+  const searchFonts = (value: string) => {
+    if (value === '') {
+      const fonts = googleFonts.slice(0, 200);
+      setFilteredFonts(fonts);
+    } else {
+      const filtered = googleFonts.filter(font =>
+        font.family.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredFonts(filtered);
+    }
+  };
+
+  const handleInputChange = (event: any, newInputValue: string) => {
+    setSearchFont(newInputValue);
+    searchFonts(newInputValue);
+  };
+
+  const loadFont = (fontFamily: string) => {
+    WebFont.load({
+      google: {
+        families: [fontFamily],
+      },
+    });
+  };
+
+  const handleAddNewSlide = () => {
+    dispatch(addCanvas());
+    dispatch(addSlide(obj));
+  };
+  const handleScroll = () => {
+    if (
+      listRef.current &&
+      ((listRef.current as HTMLUListElement).scrollHeight) - (listRef.current as HTMLUListElement).scrollTop <=
+      (listRef.current as HTMLUListElement).clientHeight+1000
+    ) {
+      // Load more fonts when user reaches the end of the list
+      const start = filteredFonts.length;
+      const end = start + 200;
+      const additionalFonts = googleFonts.slice(start, end);
+      setFilteredFonts(prevFonts => [...prevFonts, ...additionalFonts]);
+    }
+  };
+
   return (
     <MainToolContainer>
       <Stack
@@ -181,34 +240,82 @@ const CanvasTools = () => {
         style={{ display: 'flex', alignItems: 'center' }}
       >
         <ToolOutlinedButton
-          onClick={() => dispatch(toggleTemplateVisibility())}
+          onClick={() => {
+            dispatch(toggleTemplateVisibility());
+          }}
         >
           <Stack direction="row" spacing={1}>
             <img src={Template} />
-            <p>Change Template</p>
+            <p>Change Theme</p>
           </Stack>
         </ToolOutlinedButton>
-        <ToolOutlinedButton onClick={() => dispatch(addSlide(obj))}>
+        <ToolOutlinedButton
+          onClick={handleAddNewSlide}
+        >
           <Stack direction="row" spacing={1}>
             <img src={Add} />
             <p>New Slide</p>
           </Stack>
         </ToolOutlinedButton>
-        <ToolOutlinedSelect
-          inputProps={{ 'aria-label': 'Without label' }}
-          defaultValue={0}
+
+
+        <Autocomplete
+          sx={{ width: 200 }}
+          size="small"
+          value={searchFont}
+          onChange={(event, newValue) => {
+            ContentElements.handleFontFamily(newValue);
+          }}
+          inputValue={searchFont}
+          onInputChange={handleInputChange}
+          options={filteredFonts.map(el => el.family) || []}
+          renderInput={params => {
+            return (
+              <TextField
+                {...params}
+                label="Select a font"
+                variant="outlined"
+                placeholder="Search fonts"
+              />
+            );
+          }}
+          renderOption={(props, option) => {
+            loadFont(option);
+            return (
+              <MenuItem {...props} style={{ fontFamily: option }}>
+                {option}
+              </MenuItem>
+            );
+          }}
+          ListboxProps={{ onScroll: handleScroll, ref: listRef }}
+        />
+
+
+        <IconButton
+          size="small"
+          onClick={() => {
+            dispatch(handleSize(-1));
+            ContentElements.handleFontSize();
+          }}
+          disabled={size === 1}
         >
-          <SelectMenuItem disabled value={0}>
-            Font Style
-          </SelectMenuItem>
-          <SelectMenuItem value={10}>Ten</SelectMenuItem>
-          <SelectMenuItem value={20}>Twenty</SelectMenuItem>
-          <SelectMenuItem value={30}>Thirty</SelectMenuItem>
-        </ToolOutlinedSelect>
-        <IconButton size="small">
           <RemoveOutlined />
         </IconButton>
-        <IconButton size="small">
+        <InputForSize
+          value={size}
+          type="number"
+          onChange={e => {
+            dispatch(handleInputSize(+e.target.value));
+            ContentElements.handleFontSize();
+          }}
+        />
+        <IconButton
+          size="small"
+          onClick={() => {
+            dispatch(handleSize(1));
+            ContentElements.handleFontSize();
+          }}
+        >
           <AddOutlined />
         </IconButton>
         <ColorDiv onClick={handleTextColorClick}>
@@ -234,7 +341,6 @@ const CanvasTools = () => {
                     />
                   );
                 })}
-                {/* Add more recent colors here */}
               </ColorGrid>
             </ColorSection>
             <ColorSection>
@@ -242,7 +348,10 @@ const CanvasTools = () => {
               <ColorGrid>
                 {shadesData.map(color => {
                   return (
-                    <span style={{ display: 'flex', flexDirection: 'column' }}>
+                    <span
+                      key={color.shade1}
+                      style={{ display: 'flex', flexDirection: 'column' }}
+                    >
                       <ColorItem
                         key={color.shade1}
                         style={{ backgroundColor: color.shade1 }}
@@ -303,14 +412,23 @@ const CanvasTools = () => {
         </Menu>
 
         <FontTool>
-          <Stack direction="row" spacing={1}>
-            <IconButton size="small">
+          <Stack direction="row" spacing={0}>
+            <IconButton
+              size="small"
+              onClick={() => ContentElements.handleBold()}
+            >
               <FormatBoldRounded />
             </IconButton>
-            <IconButton size="small">
+            <IconButton
+              size="small"
+              onClick={() => ContentElements.handleItalic()}
+            >
               <FormatItalicRounded />
             </IconButton>
-            <IconButton size="small">
+            <IconButton
+              size="small"
+              onClick={() => ContentElements.handleUnderlIne()}
+            >
               <FormatUnderlinedRounded />
             </IconButton>
             <IconButton onClick={handleColorClick}>
@@ -341,6 +459,7 @@ const CanvasTools = () => {
                     {shadesData.map(color => {
                       return (
                         <span
+                          key={color.shade1}
                           style={{ display: 'flex', flexDirection: 'column' }}
                         >
                           <ColorItem
@@ -443,7 +562,10 @@ const CanvasTools = () => {
             <ColorGrid>
               {shadesData.map(color => {
                 return (
-                  <span style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span
+                    key={color.shade1}
+                    style={{ display: 'flex', flexDirection: 'column' }}
+                  >
                     <ColorItem
                       key={color.shade1}
                       style={{ backgroundColor: color.shade1 }}

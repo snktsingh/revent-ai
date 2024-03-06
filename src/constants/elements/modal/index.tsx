@@ -1,3 +1,4 @@
+import { deleteCanvasItem } from '@/redux/reducers/canvas';
 import { closeModal } from '@/redux/reducers/elements';
 import { deleteSlide } from '@/redux/reducers/slide';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
@@ -17,6 +18,7 @@ const PopUpModal = (props: IPopUpModal) => {
   const isVisible = useAppSelector(state => state.element);
   const slideKey = useAppSelector(state => state.slide.slideKey);
   const dispatch = useAppDispatch();
+  const {canvasJS} = useAppSelector(state=> state.canvas);
   return (
     <Dialog
       open={isVisible.isModalVisible}
@@ -25,11 +27,11 @@ const PopUpModal = (props: IPopUpModal) => {
       aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title">
-        <h3>Are you sure ?</h3>
+        <h3>Are you sure?</h3>
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          You want to delete the slide {props.content}
+        You want to delete slide {canvasJS.id}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
@@ -37,7 +39,7 @@ const PopUpModal = (props: IPopUpModal) => {
         <Button
           onClick={() => {
             dispatch(closeModal());
-            dispatch(deleteSlide(slideKey));
+            dispatch(deleteCanvasItem(canvasJS.id));
           }}
         >
           Delete

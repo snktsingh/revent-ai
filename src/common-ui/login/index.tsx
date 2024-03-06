@@ -13,15 +13,15 @@ import LoginImage from '../../assets/Login.gif';
 import Logo from '../../assets/logo.svg';
 import { CommonLink, CustomButton } from '@/styles/common-styles/style';
 import Link from '@mui/material/Link';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const Login = () => {
+  const { loginWithRedirect } = useAuth0();
+
   return (
     <div>
       <Grid container>
         <LeftContainer xs={6}>
-          {/* <ImageContainer>
-            <img src={LoginBg} />
-          </ImageContainer> */}
           <ChildContainer>
             <Title>Transform ideas into stunning slides</Title>
             <Description>
@@ -30,9 +30,6 @@ const Login = () => {
             </Description>
             <img src={LoginImage} width="90%" />
           </ChildContainer>
-          {/* <Image2Container>
-            <img src={LoginBg} />
-          </Image2Container> */}
         </LeftContainer>
         <Grid xs={6}>
           <RightContainer>
@@ -63,11 +60,16 @@ const Login = () => {
                 fullWidth
               />
               <CommonLink>Forgot Password ?</CommonLink>
-              <CustomButton variant="contained" size="large" fullWidth>
-                <Link href="/dashboard" style={{ color: 'white' }}>
+              <Link href="/dashboard">
+                <CustomButton
+                  variant="contained"
+                  size="large"
+                  fullWidth
+                  // onClick={() => loginWithRedirect()}
+                >
                   Login
-                </Link>
-              </CustomButton>
+                </CustomButton>
+              </Link>
               <SignUp>
                 <Link href="/signup">
                   Not registered ? Create a new account

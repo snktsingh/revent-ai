@@ -7,9 +7,11 @@ export const CanvasHeaderInput = styled(InputBase)`
   border: 0px;
   font-size: 2vh !important;
   transition: border 0.5s !important;
+  padding-left: 0.5%;
 
   &:hover {
     border: 1px solid ${theme.colorSchemes.light.palette.common.white} !important;
     border-radius: 10px;
   }
+  
 `;

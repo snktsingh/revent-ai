@@ -20,7 +20,7 @@ export const ElementTitle = styled.span`
 export const ElementSubtitle = styled.span`
   font-size: 0.6rem;
   font-weight: 300;
-  color: ${theme.colorSchemes.light.palette.common.subtitle};
+  color: ${theme.colorSchemes.light.palette.common.subtext};
 `;
 export const SearchInputContainer = styled.div`
   position: relative;

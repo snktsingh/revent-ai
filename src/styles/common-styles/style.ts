@@ -11,6 +11,7 @@ export const PrimaryLink = styled(Link)`
 export const GridRowCenter = styled(Grid)`
   display: flex;
   justify-content: center;
+  width: 100%;
 `;
 export const GridColCenter = styled(Grid)`
   display: flex;
@@ -59,9 +60,8 @@ export const CommonLink = styled.p`
   font-size: 110%;
 `;
 export const CustomButton = styled(Button)`
-  padding: 12px 20px !important;
-  border-radius: 10px !important;
-  font-size: 18px !important;
+  border-radius: 6px !important;
+  font-size: 14px !important;
 `;
 export const CustomOutlinedButton = styled(Button)`
   border: 2px solid ${theme.colorSchemes.light.palette.primary.main} !important;

@@ -1,19 +1,23 @@
+import { theme } from '@/constants/theme';
 import { Button, styled as Mstyled } from '@mui/material';
 import styled from 'styled-components';
 
-export const VariantButton = styled.button`
+export const VariantButton = styled.div`
   position: fixed;
-  bottom: 45%;
+  top: 45%;
   right: 0px;
   cursor: pointer;
-  transform: translate(40%, 40%) rotate(-90deg);
-  background: #fff;
-  font-weight: 600;
+  /* transform: translate(40%, 40%) rotate(-90deg); */
+  /* background: #fff;
+  font-family: 'Roboto';
   border-radius: 12px 12px 0 0;
   padding: 6px 20px;
   border-top: 1px solid #dfdfdf;
   border-right: 1px solid #dfdfdf;
-  border-left: 1px solid #dfdfdf;
+  border-left: 1px solid #dfdfdf; */
+  color: ${theme.colorSchemes.light.palette.common.black};
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 `;
 export const DrawerMainContainer = styled.div`
   width: 100%;
@@ -27,20 +31,21 @@ export const DrawerBtnContainer = styled.div`
 `;
 export const DrawerVariantButton = styled.button`
   position: relative;
-  top: 41%;
+  top: 45%;
   right: 0;
   transform: translate(-10%, -10%) rotate(-90deg);
   background: #fff;
-  color: #2f2f2f;
-  font-weight: 600;
+  color: ${theme.colorSchemes.light.palette.common.black};
   border-radius: 12px 12px 0 0;
   padding: 6px 20px;
   border: none;
+  cursor: pointer;
+  font-family: 'Roboto';
 `;
 export const DrawerVariant = styled.div`
   width: 80%;
   height: 100%;
-  background: #fff;
+  background: ${theme.colorSchemes.light.palette.common.white};
   padding: 4px;
 
   overflow-y: scroll;
@@ -60,8 +65,9 @@ export const VariantSlide = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-around;
+  cursor: pointer;
   div {
-    color: #4d4d4d;
+    color: ${theme.colorSchemes.light.palette.common.darkGrey};
     font-family: 'Roboto';
     font-size: 0.6rem;
     font-style: normal;
@@ -69,12 +75,23 @@ export const VariantSlide = styled.div`
     line-height: normal;
   }
 `;
+export const OriginalSlideCard = styled.div`
+  margin: 10px 0px 0px 7%;
+  display: flex;
+  width: 90%;
+  justify-content: space-around;
+  cursor: pointer;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+
+`;
 export const VariantSlideCard = styled.div`
   width: 90%;
   height: 12vh;
   flex-shrink: 0;
   border-radius: 5px;
-  background: #d9d9d9;
+  background: ${theme.colorSchemes.light.palette.common.border};
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 `;
 export const ButtonContainer = styled.div`
   width: 90%;
@@ -85,10 +102,7 @@ export const ButtonContainer = styled.div`
   p {
     opacity: 50%;
     color: #222222;
-    font-family: 'Roboto';
     font-size: 0.7rem;
-    font-style: normal;
-    font-weight: 600;
   }
 `;
 export const RefreshBtn = Mstyled(Button)`
