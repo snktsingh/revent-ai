@@ -217,7 +217,7 @@ const Home = ({ onFileSelect }: any) => {
             <GridRowCenter xs={3}>
               <StackColCenter direction="row" spacing={3}>
                 <UserLink>
-                  <UserLink >Sign In</UserLink>
+                  <UserLink href="/login">Sign In</UserLink>
                 </UserLink>
                 <Button variant="outlined" onClick={handleTry}>
                   Create Now
@@ -254,7 +254,7 @@ const Home = ({ onFileSelect }: any) => {
                   </Stack>
                 </GridRowCenter>
               </MainContainer>
-              {/* <ChildContainer>
+              <ChildContainer>
                 <UploadTitle ref={getStartedRef}>Get Started</UploadTitle>
                 <Stack direction="row" width="80vw" spacing={13}>
                   <UploadContainer>
@@ -367,7 +367,7 @@ const Home = ({ onFileSelect }: any) => {
                     See How it works ?
                   </ContainerDescription>
                 </span>
-              </ChildContainer> */}
+              </ChildContainer>
               <ChildContainer ref={workingRef}>
                 <ContactGrid container spacing={4} ref={howItWorksRef}>
                   <StackColCenter direction="row" spacing={3}>
