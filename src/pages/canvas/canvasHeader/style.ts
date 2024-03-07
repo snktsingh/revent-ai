@@ -41,7 +41,7 @@ export const StyledMenu = styled(Menu)`
 export const StyledMenuItem = styled(MenuItem)`
   && {
     font-family: 'Roboto', sans-serif;
-    font-size: 16px;
+    font-size: 14px;
     padding: 10px 20px;
     color: #333333;
 

@@ -26,7 +26,8 @@ export default function useAllElements() {
     fontSize: 20,
     fontFamily: 'Arial',
     name: SUBTITLE,
-    fill: '#404040'
+    fill: '#404040',
+        
   });
 
   const heading = new fabric.Textbox('Click to add a heading', {

@@ -275,6 +275,10 @@ const CanvasComponent: React.FC = () => {
           top: 0,
           scaleX: scale,
           scaleY: scale,
+          selectable : false,
+          lockMovementX : true,
+          lockScalingY : true,
+          moveCursor : 'pointer'
         });
         canvasRef.current?.add(img);
         canvasRef.current?.renderAll();
