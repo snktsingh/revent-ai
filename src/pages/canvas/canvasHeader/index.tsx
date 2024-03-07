@@ -1,4 +1,4 @@
-import { HeaderContainer, UserAvatar, UserLink } from './style';
+import { HeaderContainer, StyledMenu, StyledMenuItem, UserAvatar, UserLink } from './style';
 import { CanvasBack, PDF, PPT, Present, Share } from '@/constants/media';
 import TitleInput from '@/constants/elements/Input';
 import {
@@ -14,6 +14,7 @@ import {
   DialogContentText,
   DialogActions,
   InputBase,
+  ListItemIcon,
 } from '@mui/material';
 import { ButtonName, MainIconButton } from '@/constants/elements/button/style';
 import VerticalDivider from '@/constants/elements/divider';
@@ -24,6 +25,9 @@ import { CanvasHeaderInput } from '@/constants/elements/Input/style';
 import { ContentElements } from '../canvasBody/elementData';
 import { useAppSelector } from '@/redux/store';
 import { useNavigate } from 'react-router-dom';
+import HomeIcon from '@mui/icons-material/Home';
+import SettingsIcon from '@mui/icons-material/Settings';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const MainCanvasHeader = () => {
   const navigate = useNavigate();
@@ -109,17 +113,32 @@ const MainCanvasHeader = () => {
             <UserAvatar>RM</UserAvatar>
           </Stack>
         </MainIconButton>
-        <Menu
-          id="basic-menu"
+        <StyledMenu
+          id="profile-menu"
           anchorEl={anchorEl}
           open={open}
           onClose={handleClose}
         >
-          <MenuItem onClick={handleClose}>
-            <UserLink href="/dashboard">Home</UserLink>
-          </MenuItem>
-          <MenuItem onClick={handleClose}>Logout</MenuItem>
-        </Menu>
+          <StyledMenuItem onClick={handleClose}>
+            <ListItemIcon>
+              <HomeIcon />
+            </ListItemIcon>
+            Home
+          </StyledMenuItem>
+          <StyledMenuItem onClick={handleClose}>
+            <ListItemIcon>
+              <SettingsIcon />
+            </ListItemIcon>
+            Account Settings
+          </StyledMenuItem>
+          <StyledMenuItem onClick={handleClose}>
+            <ListItemIcon>
+              <LogoutIcon />
+            </ListItemIcon>
+            Logout
+          </StyledMenuItem>
+        </StyledMenu>
+        );
       </Stack>
       <Dialog
         open={openWarning}
