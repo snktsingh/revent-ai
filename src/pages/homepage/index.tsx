@@ -627,7 +627,7 @@ const Home = ({ onFileSelect }: any) => {
       </DesktopContainer>
       <MobileContainer>
         <GridJustify container style={{ margin: '0% 0% 4% 0%' }}>
-          <Link href="/">
+          <Link to="/">
             <img src={Logo} width="80%" />
           </Link>
           {(['top'] as const).map(anchor => (
