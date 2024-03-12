@@ -138,7 +138,6 @@ const MainCanvasHeader = () => {
             Logout
           </StyledMenuItem>
         </StyledMenu>
-        );
       </Stack>
       <Dialog
         open={openWarning}

@@ -21,6 +21,7 @@ import { CanvasContainer } from './style';
 import { IExtendedTextBoxOptions } from '@/interface/fabricTypes';
 import ConversionToJson from '@/components/pptToJson';
 import { setVariantImageAsMain } from '@/redux/reducers/canvas';
+import axios from 'axios';
 
 const CanvasComponent: React.FC = () => {
   const canvasRef = useRef<fabric.Canvas | null>(null);
