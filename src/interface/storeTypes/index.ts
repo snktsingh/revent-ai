@@ -7,11 +7,10 @@ export interface TableDetails {
 export interface CanvasItem {
   id: number; // Use number as ID type
   canvas: object;
-  notes? : string;
-  variants : VariantsType[];
-  originalSlideData : object;
+  notes?: string;
+  variants: VariantsType[];
+  originalSlideData: object;
 }
-
 
 export interface IShapeRequest {
   companyName: string;
@@ -36,6 +35,7 @@ export interface ISlideRequests {
   isLoading: boolean;
   isThemeLoading: boolean;
   themesList: any[];
+  xsrfToken: string;
 }
 
 export interface IShapeRequest {
@@ -64,6 +64,6 @@ export interface APIRequest {
   themeColor: string;
   imagesCount: string;
   elements: ReqElementType[];
-  title? : string,
-  subTitle? : string
+  title?: string;
+  subTitle?: string;
 }

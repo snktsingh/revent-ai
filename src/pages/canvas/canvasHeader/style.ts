@@ -1,5 +1,6 @@
 import { theme } from '@/constants/theme';
-import { Avatar, Link, Menu, MenuItem } from '@mui/material';
+import { Avatar, Menu, MenuItem } from '@mui/material';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 export const HeaderContainer = styled.div`
