@@ -81,7 +81,7 @@ const CanvasBody = () => {
   };
 
   const handleRegeneration = (item: any) => {
-    if (variantImage === '' && canvasJS.variants.length === 0) {
+    if (canvasJS.variants.length === 0) {
       handleClose();
       item.onClick();
       dispatch(setMenuItemKey(item.key));
@@ -156,7 +156,7 @@ const CanvasBody = () => {
   };
 
   const handleRedirect = () => {
-    dispatch(setVariantImageAsMain(''));
+    // dispatch(setVariantImageAsMain(''));
     dispatch(toggleSelectedOriginalCanvas(true));
     dispatch(
       updateCanvasInList({

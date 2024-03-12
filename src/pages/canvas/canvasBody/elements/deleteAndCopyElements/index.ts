@@ -27,6 +27,7 @@ import {
 } from '@/constants/elementNames';
 import { Copy, DeleteX } from '@/constants/media';
 import { fabric } from 'fabric';
+
 export function useDelAndCopy() {
   const CustomBorderIcons = (canvas: fabric.Canvas | null) => {
     // Load icon images
@@ -43,7 +44,7 @@ export function useDelAndCopy() {
         offsetY: -16,
         offsetX: 16,
         cursorStyle: 'pointer',
-        mouseUpHandler: deleteObject,
+        mouseUpHandler: ()=> true,
         render: renderIcon(deleteIcon),
       });
 
@@ -54,133 +55,11 @@ export function useDelAndCopy() {
         offsetY: -16,
         offsetX: -16,
         cursorStyle: 'pointer',
-        mouseUpHandler: cloneObject,
+        mouseUpHandler: ()=> true,
         render: renderIcon(cloneIcon),
       });
 
-    // Function to delete objects based on their names
-    const deleteObjectsByName = (names: string[]) => {
-      canvas?.forEachObject(obj => {
-        if (names.includes(obj.name || '')) {
-          canvas.remove(obj);
-        }
-        if(names.includes(TABLE)){
-          if(obj?.name?.startsWith(TABLE_TEXT)){
-            canvas.remove(obj);
-          }
-        }
-      }); 
-      canvas?.renderAll();
-    };
-
-    // Function to handle the delete action
-    function deleteObject(eventData: MouseEvent): boolean {
-      const activeObject = canvas?.getActiveObject();
-      const currentElID = activeObject?.name?.split('_')[1];
-      if (activeObject) {
-        const objectsToDelete: string[] = [];
-
-        // Determine objects to delete based on the type of the active object
-        switch (activeObject.name) {
-          case `${PROCESS}_${currentElID}`:
-            objectsToDelete.push(
-              `${PROCESS_BOX}_${currentElID}`,
-              `${PROCESS_TEXT}_${currentElID}`,
-              `${PROCESS_ARROW}_${currentElID}`
-            );
-            break;
-          case `${TIMELINE}_${currentElID}`:
-            objectsToDelete.push(
-              `${TIMELINE_CIRCLE}_${currentElID}`,
-              `${TIMELINE_TEXT}_${currentElID}`,
-              `${TIMELINE_DIRECTION}_${currentElID}`,
-              `${TIMELINE_HEADING}_${currentElID}`
-            );
-            break;
-          case `${PYRAMID}_${currentElID}`:
-            objectsToDelete.push(
-              `${PYRAMID_LEVEL}_${currentElID}`,
-              `${PYRAMID_TEXT}_${currentElID}`
-            );
-            break;
-          case `${FUNNEL}_${currentElID}`:
-            objectsToDelete.push(
-              `${FUNNEL_TEXT}_${currentElID}`,
-              `${FUNNEL_BASE}_${currentElID}`,
-              `${FUNNEL_LEVEL}_${currentElID}`
-            );
-            break;
-          case `${CYCLE}_${currentElID}`:
-            objectsToDelete.push(
-              `${CYCLE_ARROW}_${currentElID}`,
-              `${CYCLE_CIRCLE}_${currentElID}`,
-              `${CYCLE_TEXT}_${currentElID}`
-            );
-            break;
-          case 'List_Container':
-            objectsToDelete.push('listText', 'listImage', 'ListAddImageText');
-            break;
-          case `${TABLE}_`:
-            objectsToDelete.push(TABLE);
-            break;
-          case QUOTE:
-            objectsToDelete.push(QUOTE_IMG,QUOTE_AUTHOR);
-            break;
-          case QUOTE_AUTHOR:
-            objectsToDelete.push(QUOTE_IMG,QUOTE);
-            break;
-          default:
-            break;
-        }
-
-        // Delete objects by name
-        deleteObjectsByName(objectsToDelete);
-
-        // Remove the active object from the canvas
-        const activeObjects = canvas?.getActiveObjects();
-
-        activeObjects?.forEach(object => {
-          canvas?.remove(object);
-        });
-
-        canvas?.discardActiveObject();
-        canvas?.requestRenderAll();
-      }
-
-      return true;
-    }
-
-    // Function to handle the clone action
-    function cloneObject(
-      eventData: MouseEvent,
-      transformData: fabric.Transform,
-      x: number,
-      y: number
-    ): boolean {
-      const target = transformData.target;
-      const canvas = target.canvas;
-
-      if (target instanceof fabric.Group) {
-        // Clone each object in the group
-        const groupObjects = target.getObjects();
-        groupObjects.forEach(obj => {
-          obj.clone(function (cloned: fabric.Object) {
-            cloned.left! += cloned.width! + 200;
-            cloned.top! += 200;
-            canvas?.add(cloned);
-          });
-        });
-      } else {
-        // Clone a single object
-        target.clone(function (cloned: fabric.Object) {
-          cloned.left! += 20;
-          cloned.top! += 20;
-          canvas?.add(cloned);
-        });
-      }
-
-      return true;
-    }
+    
 
     // Function to render custom icons on the canvas
     function renderIcon(icon: HTMLImageElement) {
@@ -203,5 +82,154 @@ export function useDelAndCopy() {
     // Render all objects on the canvas
     canvas?.renderAll();
   };
-  return { CustomBorderIcons };
+
+  // Function to handle the delete action
+  function deleteObject(canvas : fabric.Canvas | null): boolean {
+    const activeObject = canvas?.getActiveObject();
+    const currentElID = activeObject?.name?.split('_')[1];
+    if (activeObject) {
+      const objectsToDelete: string[] = [];
+
+      // Determine objects to delete based on the type of the active object
+      switch (activeObject.name) {
+        case `${PROCESS}_${currentElID}`:
+          objectsToDelete.push(
+            `${PROCESS_BOX}_${currentElID}`,
+            `${PROCESS_TEXT}_${currentElID}`,
+            `${PROCESS_ARROW}_${currentElID}`
+          );
+          break;
+        case `${TIMELINE}_${currentElID}`:
+          objectsToDelete.push(
+            `${TIMELINE_CIRCLE}_${currentElID}`,
+            `${TIMELINE_TEXT}_${currentElID}`,
+            `${TIMELINE_DIRECTION}_${currentElID}`,
+            `${TIMELINE_HEADING}_${currentElID}`
+          );
+          break;
+        case `${PYRAMID}_${currentElID}`:
+          objectsToDelete.push(
+            `${PYRAMID_LEVEL}_${currentElID}`,
+            `${PYRAMID_TEXT}_${currentElID}`
+          );
+          break;
+        case `${FUNNEL}_${currentElID}`:
+          objectsToDelete.push(
+            `${FUNNEL_TEXT}_${currentElID}`,
+            `${FUNNEL_BASE}_${currentElID}`,
+            `${FUNNEL_LEVEL}_${currentElID}`
+          );
+          break;
+        case `${CYCLE}_${currentElID}`:
+          objectsToDelete.push(
+            `${CYCLE_ARROW}_${currentElID}`,
+            `${CYCLE_CIRCLE}_${currentElID}`,
+            `${CYCLE_TEXT}_${currentElID}`
+          );
+          break;
+        case 'List_Container':
+          objectsToDelete.push('listText', 'listImage', 'ListAddImageText');
+          break;
+        case `${TABLE}_`:
+          objectsToDelete.push(TABLE);
+          break;
+        case QUOTE:
+          objectsToDelete.push(QUOTE_IMG,QUOTE_AUTHOR);
+          break;
+        case QUOTE_AUTHOR:
+          objectsToDelete.push(QUOTE_IMG,QUOTE);
+          break;
+        default:
+          break;
+      }
+
+      // Delete objects by name
+      deleteObjectsByName(objectsToDelete,canvas);
+
+      // Remove the active object from the canvas
+      const activeObjects = canvas?.getActiveObjects();
+
+      activeObjects?.forEach(object => {
+        canvas?.remove(object);
+      });
+
+      canvas?.discardActiveObject();
+      canvas?.requestRenderAll();
+    }
+
+    return true;
+  }
+
+  // Function to delete objects based on their names
+  const deleteObjectsByName = (names: string[], canvas : fabric.Canvas | null) => {
+    canvas?.forEachObject(obj => {
+      if (names.includes(obj.name || '')) {
+        canvas.remove(obj);
+      }
+      if(names.includes(TABLE)){
+        if(obj?.name?.startsWith(TABLE_TEXT)){
+          canvas.remove(obj);
+        }
+      }
+    }); 
+    canvas?.renderAll();
+  };
+
+  // // Function to handle the clone action
+  // function cloneObject(
+  //   eventData: MouseEvent,
+  //   transformData: fabric.Transform,
+  //   x: number,
+  //   y: number
+  // ): boolean {
+  //   const target = transformData.target;
+  //   const canvas = target.canvas;
+
+  //   if (target instanceof fabric.Group) {
+  //     // Clone each object in the group
+  //     const groupObjects = target.getObjects();
+  //     groupObjects.forEach(obj => {
+  //       obj.clone(function (cloned: fabric.Object) {
+  //         cloned.left! += cloned.width! + 200;
+  //         cloned.top! += 200;
+  //         canvas?.add(cloned);
+  //       });
+  //     });
+  //   } else {
+  //     // Clone a single object
+  //     target.clone(function (cloned: fabric.Object) {
+  //       cloned.left! += 20;
+  //       cloned.top! += 20;
+  //       canvas?.add(cloned);
+  //     });
+  //   }
+
+  //   return true;
+  // }
+
+ // Function to handle the clone action for multiple selected elements
+function handleCopyClick(selectedObjects: fabric.Object[], canvas: fabric.Canvas | null): void {
+  selectedObjects.forEach(target => {
+    if (target instanceof fabric.Group) {
+      // Clone each object in the group
+      const groupObjects = target.getObjects();
+      groupObjects.forEach(obj => {
+        obj.clone(function (cloned: fabric.Object) {
+          cloned.left! += cloned.width! + 200;
+          cloned.top! += 200;
+          canvas?.add(cloned);
+        });
+      });
+    } else {
+      // Clone a single object
+      target.clone(function (cloned: fabric.Object) {
+        cloned.left! += 20;
+        cloned.top! += 20;
+        canvas?.add(cloned);
+      });
+    }
+  });
+}
+
+  return { CustomBorderIcons, deleteObject, handleCopyClick };
 }
