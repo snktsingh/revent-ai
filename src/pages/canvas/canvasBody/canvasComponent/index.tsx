@@ -89,6 +89,7 @@ const CanvasComponent: React.FC = () => {
   // }, [jsonData]);
 
   useEffect(() => {
+    setShowOptions(false);
     const newCanvas = new fabric.Canvas('canvas');
     newCanvas.clear();
     fabric.Object.prototype.set({
@@ -199,7 +200,7 @@ const CanvasComponent: React.FC = () => {
           handleObjectMoving(options, newCanvas);
         });
         updateCanvasSlideData(newCanvas, canvasJS.id);
-        handleAddCustomIcon(newCanvas);
+        // handleAddCustomIcon(newCanvas);
         newCanvas.renderAll();
       },
       (error: Error) => {
@@ -288,6 +289,7 @@ const CanvasComponent: React.FC = () => {
   }, [canvasJS.canvas, selectedOriginalCanvas]);
 
   useEffect(() => {
+    setShowOptions(false);
     console.log('variant image loaded')
     if (variantImage) {
       // Clear the canvas and set its background color to white

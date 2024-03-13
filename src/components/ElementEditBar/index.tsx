@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { EditBarContainer, IconButton, SvgContainer } from './style';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
+
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import styled from 'styled-components';
-import { useDelAndCopy } from '@/pages/canvas/canvasBody/elements/deleteAndCopyElements';
+import { useEditBar } from './container';
+
 
 interface ElementEditBarProps {
     left: number;
@@ -15,7 +15,7 @@ interface ElementEditBarProps {
 
 const ElementEditBar: React.FC<ElementEditBarProps> = ({ left, top, canvas }) => {
 
-    const { deleteObject, handleCopyClick } = useDelAndCopy();
+    const { adjustControlsVisibility, handleCopyClick, deleteObject, plusIcon, checkElementForAddLevel } = useEditBar();
 
     const handleDelete = () => {
         deleteObject(canvas);
@@ -27,12 +27,17 @@ const ElementEditBar: React.FC<ElementEditBarProps> = ({ left, top, canvas }) =>
         }
     };
     const handleAdd = () => {
-
+        checkElementForAddLevel(canvas!);
     };
 
+    useEffect(() => {
+        adjustControlsVisibility(canvas!);
+    }, [canvas?.getActiveObject()]);
+
+    
     return (
         <EditBarContainer left={left} top={top}>
-            <IconButton onClick={handleAdd}>
+            <IconButton onClick={handleAdd} disabled={!plusIcon} style={{color : plusIcon? '' : '#e0e0e0'}}>
                 <AddOutlinedIcon />
             </IconButton>
             <IconButton onClick={handleCopy}>

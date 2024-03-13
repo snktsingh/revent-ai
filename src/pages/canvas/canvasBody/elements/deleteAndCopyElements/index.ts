@@ -223,8 +223,8 @@ function handleCopyClick(selectedObjects: fabric.Object[], canvas: fabric.Canvas
     } else {
       // Clone a single object
       target.clone(function (cloned: fabric.Object) {
-        cloned.left! += 20;
-        cloned.top! += 20;
+        cloned.left! += 50;
+        cloned.top! += 50;
         canvas?.add(cloned);
       });
     }
