@@ -9,6 +9,7 @@ import MainCanvas from '@/pages/canvas';
 import AppThemes from '@/pages/themes';
 import Home from '@/pages/homepage';
 import Protected from '@/protected';
+import UserSettings from '@/pages/userSettings';
 
 export const authRoutes: RouteObject[] = [
   { path: ROUTES.APP_ROOT, element: <Home /> },
@@ -17,6 +18,7 @@ export const authRoutes: RouteObject[] = [
   { path: ROUTES.DASHBOARD, element: <Dashboard /> },
   { path: ROUTES.THEMES, element: <AppThemes /> },
   { path: ROUTES.CANVAS, element: <MainCanvas /> },
+  { path: ROUTES.SETTINGS, element: <UserSettings /> },
   {
     path: '/*',
     element: <NotFound />,

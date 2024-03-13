@@ -15,7 +15,13 @@ interface ElementEditBarProps {
 
 const ElementEditBar: React.FC<ElementEditBarProps> = ({ left, top, canvas }) => {
 
-    const { adjustControlsVisibility, handleCopyClick, deleteObject, plusIcon, checkElementForAddLevel } = useEditBar();
+    const { 
+        adjustControlsVisibility, 
+        handleCopyClick, 
+        deleteObject, 
+        plusIcon, 
+        checkElementForAddLevel 
+    } = useEditBar();
 
     const handleDelete = () => {
         deleteObject(canvas);

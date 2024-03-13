@@ -19,6 +19,7 @@ export const ROUTES = {
   DASHBOARD: '/dashboard',
   THEMES: '/themes',
   CANVAS: '/canvas',
+  SETTINGS : '/settings'
 } as const;
 
 export default ENDPOINT;

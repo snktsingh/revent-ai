@@ -350,7 +350,6 @@ const CanvasComponent: React.FC = () => {
   }
 
   useEffect(() => {
-
   }, [selectedElementPosition])
 
   return (

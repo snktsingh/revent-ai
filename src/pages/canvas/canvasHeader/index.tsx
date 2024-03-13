@@ -66,6 +66,16 @@ const MainCanvasHeader = () => {
   const handleShareClose = () => {
     setAnchorE2(null);
   };
+
+  const handleNavigateHome = ()=> {
+    handleClose();
+    navigate('/home', { replace: true })
+  };
+  const handleNavigateSettings = ()=> {
+    handleClose();
+    navigate('/settings', { replace: true })
+  };
+
   return (
     <HeaderContainer>
       <MainIconButton onClick={handleWarningOpen}>
@@ -128,13 +138,13 @@ const MainCanvasHeader = () => {
           open={open}
           onClose={handleClose}
         >
-          <StyledMenuItem onClick={handleClose}>
+          <StyledMenuItem onClick={handleNavigateHome}>
             <ListItemIcon>
               <HomeIcon />
             </ListItemIcon>
             Home
           </StyledMenuItem>
-          <StyledMenuItem onClick={handleClose}>
+          <StyledMenuItem onClick={handleNavigateSettings}>
             <ListItemIcon>
               <SettingsIcon />
             </ListItemIcon>
