@@ -1,4 +1,10 @@
-import { HeaderContainer, StyledMenu, StyledMenuItem, UserAvatar, UserLink } from './style';
+import {
+  HeaderContainer,
+  StyledMenu,
+  StyledMenuItem,
+  UserAvatar,
+  UserLink,
+} from './style';
 import { CanvasBack, PDF, PPT, Present, Share } from '@/constants/media';
 import TitleInput from '@/constants/elements/Input';
 import {
@@ -28,6 +34,8 @@ import { useNavigate } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { replace } from 'lodash';
+import useCanvasHeader from './container';
 
 const MainCanvasHeader = () => {
   const navigate = useNavigate();
@@ -35,6 +43,7 @@ const MainCanvasHeader = () => {
   const [anchorE2, setAnchorE2] = React.useState<null | HTMLElement>(null);
   const [openWarning, setOpenWarning] = React.useState(false);
   const { pptUrl } = useAppSelector(state => state.thunk);
+  const { userLogout } = useCanvasHeader();
 
   const handleWarningOpen = () => {
     setOpenWarning(true);
@@ -131,7 +140,7 @@ const MainCanvasHeader = () => {
             </ListItemIcon>
             Account Settings
           </StyledMenuItem>
-          <StyledMenuItem onClick={handleClose}>
+          <StyledMenuItem onClick={userLogout}>
             <ListItemIcon>
               <LogoutIcon />
             </ListItemIcon>
@@ -153,7 +162,9 @@ const MainCanvasHeader = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleWarningClose}>Cancel</Button>
-          <Button onClick={() => navigate('/dashboard')}>Go Back</Button>
+          <Button onClick={() => navigate('/dashboard', { replace: true })}>
+            Go Back
+          </Button>
         </DialogActions>
       </Dialog>
     </HeaderContainer>

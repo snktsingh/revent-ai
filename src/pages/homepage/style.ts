@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import BannerBg from '../../assets/BannerBg.png';
 import LaunchBg from '../../assets/launchBg.svg';
 import { Button, Drawer, Grid } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { theme } from '@/constants/theme';
 export const Title = styled.h1`
   font-size: 85px !important;
   margin: 3%;
@@ -210,4 +212,8 @@ export const UploadContainer = styled.span`
 export const UploadSubtitle = styled.span`
   font-size: 2.5rem;
   font-weight: 600;
+`;
+export const UserLink = styled(Link)`
+  text-decoration: none;
+  color: ${theme.colorSchemes.light.palette.primary.main};
 `;

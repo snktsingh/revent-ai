@@ -1,4 +1,4 @@
-import { RouteObject, useRoutes } from 'react-router-dom';
+import { Navigate, RouteObject, useRoutes } from 'react-router-dom';
 import { ROUTES } from '../constants/endpoint';
 import App from '../pages/App';
 import NotFound from '../pages/notFound';
@@ -7,13 +7,12 @@ import SignUp from '@/common-ui/signup';
 import Dashboard from '@/pages/dashboard';
 import MainCanvas from '@/pages/canvas';
 import AppThemes from '@/pages/themes';
+import Home from '@/pages/homepage';
+import Protected from '@/protected';
 
-const allRoutes: RouteObject[] = [
-  {
-    path: ROUTES.APP_ROOT,
-    element: <App />,
-  },
-  { path: ROUTES.LOGIN, element: <Login /> },
+export const authRoutes: RouteObject[] = [
+  { path: ROUTES.APP_ROOT, element: <Home /> },
+  { path: ROUTES.LOGIN, element: <Navigate to={ROUTES.DASHBOARD} /> },
   { path: ROUTES.SIGNUP, element: <SignUp /> },
   { path: ROUTES.DASHBOARD, element: <Dashboard /> },
   { path: ROUTES.THEMES, element: <AppThemes /> },
@@ -24,7 +23,15 @@ const allRoutes: RouteObject[] = [
   },
 ];
 
-export default function Router() {
-  const route = useRoutes(allRoutes);
-  return route;
-}
+export const defaultRoutes: RouteObject[] = [
+  { path: ROUTES.APP_ROOT, element: <Home /> },
+  { path: ROUTES.LOGIN, element: <Login /> },
+  { path: ROUTES.SIGNUP, element: <SignUp /> },
+  { path: ROUTES.DASHBOARD, element: <Protected /> },
+  { path: ROUTES.THEMES, element: <Protected /> },
+  { path: ROUTES.CANVAS, element: <Protected /> },
+  {
+    path: '/*',
+    element: <NotFound />,
+  },
+];

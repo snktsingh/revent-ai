@@ -1,9 +1,13 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { Token } from '../localStorage/data';
 
 export const generateInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 30000,
+  headers: {
+    Authorization: 'Bearer ' + Token,
+  },
 });
 
 generateInstance.interceptors.request.use(config => {
@@ -26,7 +30,8 @@ generateInstance.interceptors.response.use(
   },
   error => {
     const responseStatusCode = error.response;
-    toast.error(error.response.data.errorMessage);
+    console.log(error);
+    // toast.error(error.message);
     switch (responseStatusCode.status) {
       case 404: {
         toast.error('URL does not exist on specified resource');
@@ -41,7 +46,7 @@ generateInstance.interceptors.response.use(
         break;
       }
       default: {
-        toast.error(error.response.data.message);
+        toast.error('Something went wrong !');
       }
     }
     if (error.response && error.response.data) {

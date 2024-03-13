@@ -32,7 +32,7 @@ import {
   TextField,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { ToastContainer } from 'react-toastify';
+import { Slide, ToastContainer } from 'react-toastify';
 import CanvasComponent from './canvasComponent';
 import { CanvasNotes } from './canvasNotes';
 import { ContentElements, elementData } from './elementData';
@@ -187,7 +187,12 @@ const CanvasBody = () => {
 
   return (
     <BodyContainer>
-      <ToastContainer autoClose={800} />
+      <ToastContainer
+        position="top-center"
+        autoClose={1000}
+        hideProgressBar
+        transition={Slide}
+      />
       <Grid container>
         <Grid xs={2}>
           <SlideList />
@@ -282,7 +287,7 @@ const CanvasBody = () => {
         </Grid>
       </Grid>
       <Templates />
-      <PopUpModal content={slide.slideKey} />
+      <PopUpModal />
       <Dialog
         open={redirectAlert}
         onClose={closeRedirectAert}
