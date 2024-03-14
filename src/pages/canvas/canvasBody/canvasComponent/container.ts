@@ -16,6 +16,7 @@ import {
   SECTION_SLIDE_SUBTITLE,
   SECTION_SLIDE_TITLE,
   SUBTITLE,
+  TABLE,
   TABLE_TEXT,
   TIMELINE_CIRCLE,
   TIMELINE_DIRECTION,
@@ -398,14 +399,21 @@ export const useCanvasComponent = () => {
       const boundingRect = selectedObject.getBoundingRect();
       const { left, top, width, height } = boundingRect;
 
+      
       // Set the position of the HTML elements based on x and y coordinates of the selected object
-      const positionTop = top - 35;
-      const positionLeft = left + (width - 140) / 2;
-
+      let positionTop = top - 35;
+      let positionLeft = left + (width - 140) / 2;
+      
+      
+      // Update position when the object is moved
+      if(selectedObject.name && selectedObject.name.startsWith(TABLE)){
+         positionTop = top - 35;
+         positionLeft = left + (width - 275) / 2;
+        
+      }
+      
       setSelectedElementPosition({ top: positionTop, left: positionLeft });
       setShowOptions(true);
-
-      // Update position when the object is moved
       selectedObject.on('moving', () => {
         const { left, top, width, height } = selectedObject.getBoundingRect();
         const newPositionTop = top - 35; // Recalculate position based on new coordinates

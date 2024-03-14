@@ -9,6 +9,7 @@ import {
   PROCESS_TEXT,
   PYRAMID,
   PYRAMID_TEXT,
+  TABLE,
   TIMELINE,
   TIMELINE_TEXT,
 } from '@/constants/elementNames';
@@ -24,6 +25,7 @@ import {
 
 export const useEditBar = () => {
   const [plusIcon, setPlusIcon] = useState<boolean>(false);
+  const [tableIcons, setTableIcon] = useState<boolean>(false);
 
   const { addProcessSteps } = useProcessElement();
   const { addPyramidLevel } = usePyramidElement();
@@ -56,7 +58,8 @@ export const useEditBar = () => {
     let pLevels = countObjects(canvas, `${PYRAMID_TEXT}_${currentElementId}`);
     let fLevels = countObjects(canvas, `${FUNNEL_TEXT}_${currentElementId}`);
 
-    let showPlusIcon = false; // Initialize the variable to track visibility state
+    let showPlusIcon = false; 
+    let showTableIcons = false; 
 
     if (objectName && selectedObject) {
       if (
@@ -82,7 +85,13 @@ export const useEditBar = () => {
       showPlusIcon = false; // Hide the plus icon if the limit is reached
     }
 
+    if(objectName && objectName[0] === TABLE){
+       showPlusIcon = true;
+       showTableIcons = true;
+    }
+
     setPlusIcon(showPlusIcon); // Update the plusIcon state based on the visibility state
+    setTableIcon(showTableIcons); // Update the tableIcons state based on the visibility state
   };
 
   const countObjects = (canvas: fabric.Canvas, objectType: string): number => {
@@ -145,5 +154,6 @@ export const useEditBar = () => {
     deleteObject,
     plusIcon,
     checkElementForAddLevel,
+    tableIcons
   };
 };
