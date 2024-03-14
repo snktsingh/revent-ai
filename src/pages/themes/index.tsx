@@ -7,6 +7,7 @@ import {
   ThemeCard,
   ThemeCardContainer,
   ThemeCardTitle,
+  ThemeImage,
   Title,
 } from './style';
 import Link from '@mui/material/Link';
@@ -66,7 +67,7 @@ const AppThemes = () => {
                       }
                     >
                       <ThemeCard>
-                        <img src={theme.thumbnailUrl} width="100%" height={'100%'} />
+                        <ThemeImage src={theme.thumbnailUrl} alt={theme.company} />
                       </ThemeCard>
                       {theme.title}
                     </ThemeCardTitle>

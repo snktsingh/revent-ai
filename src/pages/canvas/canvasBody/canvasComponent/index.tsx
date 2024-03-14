@@ -345,12 +345,18 @@ const CanvasComponent: React.FC = () => {
         const newPositionLeft = left + (width - 140) / 2;
         setSelectedElementPosition({ top: newPositionTop, left: newPositionLeft });
       });
+      selectedObject.on('scaling', () => {
+        const { left, top, width, height } = selectedObject.getBoundingRect();
+        const newPositionTop = top - 35; // Recalculate position based on new coordinates
+        const newPositionLeft = left + (width - 140) / 2;
+        setSelectedElementPosition({ top: newPositionTop, left: newPositionLeft });
+      });
 
     }
   }
 
   useEffect(() => {
-  }, [selectedElementPosition])
+  }, [selectedElementPosition,showOptions])
 
   return (
     <CanvasContainer >

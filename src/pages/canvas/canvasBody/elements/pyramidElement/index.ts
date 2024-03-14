@@ -93,7 +93,9 @@ export function usePyramidElement() {
         name: `${PYRAMID_TEXT}_${pyramidId}`,
         fixedWidth: 100,
         fixedHeight: 200,
-        hasControls :false
+        hasControls :false,
+        lockMovementX : true,
+        lockMovementY:true
       });
 
       textsList.push(text);
@@ -123,7 +125,9 @@ export function usePyramidElement() {
           name: `${PYRAMID_TEXT}_${pyramidId}`,
           fixedWidth: 130,
           fixedHeight: 50,
-          hasControls :false
+          hasControls :false,
+        lockMovementX : true,
+        lockMovementY:true
         });
 
         trapTop = trapTop + 60;

@@ -20,10 +20,10 @@ export const ButtonContainer = styled.span`
   justify-content: flex-end;
 `;
 export const ThemeCard = styled(Card)`
-  width: 14vw;
-  height: 15vh;
-
+  width: 230px;
+  height: 140px;
   cursor: pointer;
+  overflow: hidden;
 `;
 export const ThemeCardTitle = styled.span`
   margin-bottom: 40px;
@@ -31,7 +31,13 @@ export const ThemeCardTitle = styled.span`
   margin-right: 20px;
 `;
 export const ThemeCardContainer = styled.div`
-  width: 100%;
+  width: fit-content;
+  height: fit-content;
   display: flex;
   flex-wrap: wrap;
+`;
+export const ThemeImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 `;
