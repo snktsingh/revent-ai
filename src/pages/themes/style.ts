@@ -20,7 +20,7 @@ export const ButtonContainer = styled.span`
   justify-content: flex-end;
 `;
 export const ThemeCard = styled(Card)`
-  width: 230px;
+  width: 246px;
   height: 140px;
   cursor: pointer;
   overflow: hidden;
