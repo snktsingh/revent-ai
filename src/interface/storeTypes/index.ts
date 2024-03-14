@@ -66,4 +66,5 @@ export interface APIRequest {
   elements: ReqElementType[];
   title?: string;
   subTitle?: string;
+  slideNumber : number;
 }

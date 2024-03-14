@@ -29,11 +29,7 @@ const CanvasComponent: React.FC = () => {
   const FabricRef = useRef<fabric.Canvas | null>(null);
   const ContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const [showOptions, setShowOptions] = useState(false);
-  const [selectedElementPosition, setSelectedElementPosition] = useState({ top: 0, left: 0 });
-
-
-
+  
   const ElementFunctions = useElementFunctions(canvasRef.current);
 
   const { handleAddCustomIcon } = useCustomSelectionIcons();
@@ -50,6 +46,11 @@ const CanvasComponent: React.FC = () => {
     getElementsData,
     customFabricProperties,
     extractTableData,
+    handleElementBarSelection,
+    showOptions,
+    setShowOptions,
+    selectedElementPosition,
+    setSelectedElementPosition
   } = useCanvasComponent();
 
   const dispatch = useAppDispatch();
@@ -325,36 +326,7 @@ const CanvasComponent: React.FC = () => {
   }, [variantImage]);
 
 
-  const handleElementBarSelection = (event: fabric.IEvent) => {
-    if (event.selected) {
-      const selectedObject = event.selected[0];
-      const boundingRect = selectedObject.getBoundingRect();
-      const { left, top, width, height } = boundingRect;
-
-      // Set the position of the HTML elements based on x and y coordinates of the selected object
-      const positionTop = top - 35;
-      const positionLeft = left + (width - 140) / 2;
-
-      setSelectedElementPosition({ top: positionTop, left: positionLeft });
-      setShowOptions(true);
-
-      // Update position when the object is moved
-      selectedObject.on('moving', () => {
-        const { left, top, width, height } = selectedObject.getBoundingRect();
-        const newPositionTop = top - 35; // Recalculate position based on new coordinates
-        const newPositionLeft = left + (width - 140) / 2;
-        setSelectedElementPosition({ top: newPositionTop, left: newPositionLeft });
-      });
-      selectedObject.on('scaling', () => {
-        const { left, top, width, height } = selectedObject.getBoundingRect();
-        const newPositionTop = top - 35; // Recalculate position based on new coordinates
-        const newPositionLeft = left + (width - 140) / 2;
-        setSelectedElementPosition({ top: newPositionTop, left: newPositionLeft });
-      });
-
-    }
-  }
-
+  
   useEffect(() => {
   }, [selectedElementPosition,showOptions])
 
