@@ -26,7 +26,8 @@ const useLogin = () => {
           data
         );
         if (res.status === 200) {
-          setToLS('token', res.data.access_token);
+          console.log(res.data)
+          setToLS('token', res.data.accessToken);
           setToLS('isAuth', true);
           setTimeout(() => {
             window.location.replace(`${ROUTES.DASHBOARD}`);

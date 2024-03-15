@@ -392,7 +392,6 @@ export const useCanvasComponent = () => {
   const handleElementBarSelection = (event: fabric.IEvent) => {
     if (event.selected && event.selected.length > 0) {
       const selectedObject = event.selected[0];
-  
       if (selectedObject && selectedObject.name && checkElementsForEditBar(selectedObject.name)) {
         setShowOptions(false);
         return;

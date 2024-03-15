@@ -23,6 +23,7 @@ import ConversionToJson from '@/components/pptToJson';
 import { setVariantImageAsMain } from '@/redux/reducers/canvas';
 import axios from 'axios';
 import ElementEditBar from '@/components/ElementEditBar';
+import { useObjectScalingEvent } from '../events/objectScalingEvent';
 
 const CanvasComponent: React.FC = () => {
   const canvasRef = useRef<fabric.Canvas | null>(null);
@@ -36,6 +37,7 @@ const CanvasComponent: React.FC = () => {
   const { CustomBorderIcons } = useDelAndCopy();
   const { renderBulletOrNumTextLine } = useBulletOrNumberedText();
   const { handleObjectMoving } = useObjectMovingEvent();
+  const { handleObjectScaling } = useObjectScalingEvent();
   const { handleSelectionCreated } = useSelectionCreatedEvent();
   const { textExitedEvent, textEnteringEvent } = useTextEvents();
   const { CanvasClick } = useCanvasClickEvent();
@@ -199,6 +201,10 @@ const CanvasComponent: React.FC = () => {
         newCanvas.on('object:moving', function (options) {
           // console.log(newCanvas.toJSON());
           handleObjectMoving(options, newCanvas);
+        });
+        newCanvas.on('object:scaling', function (options) {
+          // console.log(newCanvas.toJSON());
+          handleObjectScaling(options, newCanvas);
         });
         updateCanvasSlideData(newCanvas, canvasJS.id);
         // handleAddCustomIcon(newCanvas);

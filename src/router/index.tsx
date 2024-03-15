@@ -32,6 +32,7 @@ export const defaultRoutes: RouteObject[] = [
   { path: ROUTES.DASHBOARD, element: <Protected /> },
   { path: ROUTES.THEMES, element: <Protected /> },
   { path: ROUTES.CANVAS, element: <Protected /> },
+  { path: ROUTES.SETTINGS, element: <UserSettings /> },
   {
     path: '/*',
     element: <NotFound />,
