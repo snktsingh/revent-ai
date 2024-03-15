@@ -390,48 +390,54 @@ export const useCanvasComponent = () => {
 
 
   const handleElementBarSelection = (event: fabric.IEvent) => {
-    if (event.selected) {
+    if (event.selected && event.selected.length > 0) {
       const selectedObject = event.selected[0];
-      if(selectedObject.name && checkElementsForEditBar(selectedObject?.name)){
+  
+      if (selectedObject && selectedObject.name && checkElementsForEditBar(selectedObject.name)) {
         setShowOptions(false);
         return;
       }
+  
       const boundingRect = selectedObject.getBoundingRect();
       const { left, top, width, height } = boundingRect;
-
       
-      // Set the position of the HTML elements based on x and y coordinates of the selected object
       let positionTop = top - 35;
       let positionLeft = left + (width - 140) / 2;
-      
-      
-      // Update position when the object is moved
-      if(selectedObject.name && selectedObject.name.startsWith(TABLE)){
-         positionTop = top - 35;
-         positionLeft = left + (width - 275) / 2;
-        
+  
+      if (selectedObject && selectedObject.name && selectedObject.name.startsWith(TABLE)) {
+        positionTop = top - 35;
+        positionLeft = left + (width - 275) / 2;
+  
+        const updateTablePosition = () => {
+          const boundingRect = selectedObject.getBoundingRect();
+          const { left, top, width, height } = boundingRect;
+          const newPositionTop = top - 35;
+          const newPositionLeft = left + (width - 275) / 2;
+          setSelectedElementPosition({ top: newPositionTop, left: newPositionLeft });
+        };
+  
+        selectedObject.on('moving', updateTablePosition);
+        selectedObject.on('scaling', updateTablePosition);
+      } else {
+        const updatePosition = () => {
+          const boundingRect = selectedObject.getBoundingRect();
+          const { left, top, width, height } = boundingRect;
+          const newPositionTop = top - 35;
+          const newPositionLeft = left + (width - 140) / 2;
+          setSelectedElementPosition({ top: newPositionTop, left: newPositionLeft });
+        };
+  
+        selectedObject.on('moving', updatePosition);
+        selectedObject.on('scaling', updatePosition);
       }
-      
+  
       setSelectedElementPosition({ top: positionTop, left: positionLeft });
       setShowOptions(true);
-      selectedObject.on('moving', () => {
-        const { left, top, width, height } = selectedObject.getBoundingRect();
-        const newPositionTop = top - 35; // Recalculate position based on new coordinates
-        const newPositionLeft = left + (width - 140) / 2;
-        setSelectedElementPosition({ top: newPositionTop, left: newPositionLeft });
-      });
-      selectedObject.on('scaling', () => {
-        const { left, top, width, height } = selectedObject.getBoundingRect();
-        const newPositionTop = top - 35; // Recalculate position based on new coordinates
-        const newPositionLeft = left + (width - 140) / 2;
-        setSelectedElementPosition({ top: newPositionTop, left: newPositionLeft });
-      });
-
     }
   };
+  
 
   function checkElementsForEditBar(elementName : string) : boolean {
-
     if(
       elementName.startsWith(PYRAMID_TEXT) ||
       elementName.startsWith(FUNNEL_TEXT) ||
@@ -451,6 +457,7 @@ export const useCanvasComponent = () => {
     };
     return false;
   };
+  
 
 
   return {

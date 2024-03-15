@@ -59,23 +59,29 @@ const ElementEditBar: React.FC<ElementEditBarProps> = ({ left, top, canvas }) =>
     return (
         <EditBarContainer left={left} top={top}>
             {!tableIcons && <Tooltip title="Add Level" placement="top">
-                <IconButton onClick={handleAdd} disabled={!plusIcon} style={{ color: plusIcon ? '' : '#e0e0e0' }}>
-                    <AddOutlinedIcon />
-                </IconButton>
+                <span>
+                    <IconButton onClick={handleAdd} disabled={!plusIcon} style={{ color: plusIcon ? '' : '#e0e0e0' }}>
+                        <AddOutlinedIcon />
+                    </IconButton>
+                </span>
             </Tooltip>}
             {tableIcons && <Tooltip title="Add Row" placement="top">
-                <IconButton onClick={handleAddTableRow} >
-                    <SvgContainer>
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="miter"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><rect x="3" y="3" width="18" height="18" rx="0"></rect><line x1="21" y1="9" x2="3" y2="9"></line><line x1="21" y1="15" x2="3" y2="15"></line></g></svg>
-                    </SvgContainer>
-                </IconButton>
+                <span>
+                    <IconButton onClick={handleAddTableRow} >
+                        <SvgContainer>
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="miter"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><rect x="3" y="3" width="18" height="18" rx="0"></rect><line x1="21" y1="9" x2="3" y2="9"></line><line x1="21" y1="15" x2="3" y2="15"></line></g></svg>
+                        </SvgContainer>
+                    </IconButton>
+                </span>
             </Tooltip>}
             {tableIcons && <Tooltip title="Remove Row" placement="top">
-                <IconButton onClick={handleRemoveTableRow}>
-                    <SvgContainer>
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M3 3v3m18-3v3m0 0v4a2 2 0 0 1-2 2H9m12-6H9M3 6v4a2 2 0 0 0 2 2h4M3 6h6m0-3v3m0 0v6m6-9v9m-6 3 3 3m0 0 3 3m-3-3 3-3m-3 3-3 3"></path></g></svg>
-                    </SvgContainer>
-                </IconButton>
+                <span>
+                    <IconButton onClick={handleRemoveTableRow}>
+                        <SvgContainer>
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M3 3v3m18-3v3m0 0v4a2 2 0 0 1-2 2H9m12-6H9M3 6v4a2 2 0 0 0 2 2h4M3 6h6m0-3v3m0 0v6m6-9v9m-6 3 3 3m0 0 3 3m-3-3 3-3m-3 3-3 3"></path></g></svg>
+                        </SvgContainer>
+                    </IconButton>
+                </span>
             </Tooltip>}
             <IconButton onClick={handleCopy}>
                 <SvgContainer>
@@ -88,18 +94,22 @@ const ElementEditBar: React.FC<ElementEditBarProps> = ({ left, top, canvas }) =>
                 </SvgContainer>
             </IconButton>
             {tableIcons && <Tooltip title="Remove Column" placement="top">
-                <IconButton onClick={handleRemoveTableCol}>
-                    <SvgContainer>
-                        <svg viewBox="0 0 24.00 24.00" xmlns="http://www.w3.org/2000/svg" fill="none"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M3 3h3M3 21h3m0 0h4a2 2 0 0 0 2-2V9M6 21V9m0-6h4a2 2 0 0 1 2 2v4M6 3v6M3 9h3m0 0h6m-9 6h9m3-6 3 3m0 0 3 3m-3-3 3-3m-3 3-3 3"></path></g></svg>
-                    </SvgContainer>
-                </IconButton>
+                <span>
+                    <IconButton onClick={handleRemoveTableCol}>
+                        <SvgContainer>
+                            <svg viewBox="0 0 24.00 24.00" xmlns="http://www.w3.org/2000/svg" fill="none"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M3 3h3M3 21h3m0 0h4a2 2 0 0 0 2-2V9M6 21V9m0-6h4a2 2 0 0 1 2 2v4M6 3v6M3 9h3m0 0h6m-9 6h9m3-6 3 3m0 0 3 3m-3-3 3-3m-3 3-3 3"></path></g></svg>
+                        </SvgContainer>
+                    </IconButton>
+                </span>
             </Tooltip>}
             {tableIcons && <Tooltip title="Add Column" placement="top">
-                <IconButton onClick={handleAddTableCol} >
-                    <SvgContainer>
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="miter"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><rect x="3" y="3" width="18" height="18" rx="0"></rect><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></g></svg>
-                    </SvgContainer>
-                </IconButton>
+                <span>
+                    <IconButton onClick={handleAddTableCol} >
+                        <SvgContainer>
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="miter"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><rect x="3" y="3" width="18" height="18" rx="0"></rect><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></g></svg>
+                        </SvgContainer>
+                    </IconButton>
+                </span>
             </Tooltip>}
         </EditBarContainer>
     );
