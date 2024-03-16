@@ -31,19 +31,16 @@ import { CanvasHeaderInput } from '@/constants/elements/Input/style';
 import { ContentElements } from '../canvasBody/elementData';
 import { useAppSelector } from '@/redux/store';
 import { useNavigate } from 'react-router-dom';
-import HomeIcon from '@mui/icons-material/Home';
-import SettingsIcon from '@mui/icons-material/Settings';
-import LogoutIcon from '@mui/icons-material/Logout';
 import { replace } from 'lodash';
 import useCanvasHeader from './container';
+import ProfileMenu from '@/common-ui/profileMenu';
 
 const MainCanvasHeader = () => {
   const navigate = useNavigate();
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [openProfileMenu, setOpenProfileMenu] = React.useState<null | HTMLElement>(null);
   const [anchorE2, setAnchorE2] = React.useState<null | HTMLElement>(null);
   const [openWarning, setOpenWarning] = React.useState(false);
   const { pptUrl } = useAppSelector(state => state.thunk);
-  const { userLogout } = useCanvasHeader();
 
   const handleWarningOpen = () => {
     setOpenWarning(true);
@@ -52,13 +49,13 @@ const MainCanvasHeader = () => {
   const handleWarningClose = () => {
     setOpenWarning(false);
   };
-  const open = Boolean(anchorEl);
+  
   const openShare = Boolean(anchorE2);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
+    setOpenProfileMenu(event.currentTarget);
   };
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleCloseProfileMenu = () => {
+    setOpenProfileMenu(null);
   };
   const handleShareClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorE2(event.currentTarget);
@@ -67,14 +64,7 @@ const MainCanvasHeader = () => {
     setAnchorE2(null);
   };
 
-  const handleNavigateHome = ()=> {
-    handleClose();
-    navigate('/home', { replace: true })
-  };
-  const handleNavigateSettings = ()=> {
-    handleClose();
-    navigate('/settings', { replace: true })
-  };
+
 
   return (
     <HeaderContainer>
@@ -132,31 +122,10 @@ const MainCanvasHeader = () => {
             <UserAvatar>RM</UserAvatar>
           </Stack>
         </MainIconButton>
-        <StyledMenu
-          id="profile-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-        >
-          <StyledMenuItem onClick={handleNavigateHome}>
-            <ListItemIcon>
-              <HomeIcon />
-            </ListItemIcon>
-            Home
-          </StyledMenuItem>
-          <StyledMenuItem onClick={handleNavigateSettings}>
-            <ListItemIcon>
-              <SettingsIcon />
-            </ListItemIcon>
-            Account Settings
-          </StyledMenuItem>
-          <StyledMenuItem onClick={userLogout}>
-            <ListItemIcon>
-              <LogoutIcon />
-            </ListItemIcon>
-            Logout
-          </StyledMenuItem>
-        </StyledMenu>
+          <ProfileMenu anchorElForProfileMenu={openProfileMenu} 
+          handleCloseProfileMenu={handleCloseProfileMenu} 
+          setAnchorElForProfileMenu={setOpenProfileMenu}
+          />
       </Stack>
       <Dialog
         open={openWarning}

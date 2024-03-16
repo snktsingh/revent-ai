@@ -108,7 +108,6 @@ const CanvasComponent: React.FC = () => {
       canvasJS.canvas,
       () => {
         updateCanvasDimensions(newCanvas);
-        console.log('main canvas loaded');
         canvasRef.current = newCanvas;
         newCanvas.setBackgroundColor(
           `${theme.colorSchemes.light.palette.common.white}`,
@@ -297,7 +296,6 @@ const CanvasComponent: React.FC = () => {
 
   useEffect(() => {
     setShowOptions(false);
-    console.log('variant image loaded')
     if (variantImage) {
       // Clear the canvas and set its background color to white
       canvasRef.current?.clear();

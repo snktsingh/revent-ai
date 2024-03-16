@@ -1,15 +1,16 @@
 import styled from 'styled-components';
-import { Avatar, Button, Divider, IconButton, Tab, Tabs, TextField } from '@mui/material';
+import { Avatar, Button, Divider, IconButton, InputAdornment, MenuItem, Select, Tab, Tabs, TextField } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PrivacyTipIcon from '@mui/icons-material/PrivacyTip';
 import { useState } from 'react';
-import { SettingsContainer, GridContainer, InputContainer, MenuButton, NavbarContainer, ProfileContainer, ProfileDetails, ProfileImage, StyledDivider, StyledTab, StyledTabs, UserLink } from './style';
+import { SettingsContainer, GridContainer, InputContainer, MenuButton, NavbarContainer, ProfileContainer, ProfileDetails, ProfileImage, StyledDivider, StyledTab, StyledTabs, UserLink, SideBar, MainSettingsContainer, RightSideContainer, ProfileImgContainer, ProfileTitle, ChevronIcon, StyledInput, Label, StyledSelect } from './style';
 import { Link } from 'react-router-dom';
 import { Logo } from '@/constants/media';
 import { GridRowCenter, GridRowEven, StackColCenter } from '@/styles/common-styles/style';
 import { ROUTES } from '@/constants/endpoint';
 import { theme } from '@/constants/theme';
+import ProfileMenu from '@/common-ui/profileMenu';
 
 
 const UserSettings: React.FC = () => {
@@ -18,7 +19,16 @@ const UserSettings: React.FC = () => {
   const [email, setEmail] = useState('admin@localhost.com');
   const [phone, setPhone] = useState('123-456-7890');
   const [editMode, setEditMode] = useState(false);
-  const [tab, setTab] = useState(0);
+  const [tab, setTab] = useState(1);
+
+  const [openProfileMenu, setOpenProfileMenu] = useState<null | HTMLElement>(null);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setOpenProfileMenu(event.currentTarget);
+  };
+  const handleCloseProfileMenu = () => {
+    setOpenProfileMenu(null);
+  };
 
   const handleEdit = () => {
     setEditMode(true);
@@ -43,97 +53,138 @@ const UserSettings: React.FC = () => {
             </Link>
           </GridRowCenter>
           <GridRowEven item xs={6}>
-            <MenuButton >Home</MenuButton>
-            <MenuButton >My Presentations</MenuButton>
-            <MenuButton>Dashboard</MenuButton>
+            <MenuButton >About Us</MenuButton>
+            <MenuButton >Services</MenuButton>
+            <MenuButton>Product</MenuButton>
+            <MenuButton >Get in Touch</MenuButton>
           </GridRowEven>
           <GridRowCenter xs={3}>
             <StackColCenter direction="row" spacing={3}>
-              <Link to={ROUTES.DASHBOARD}>
-                <Button>
-                  <Avatar
-                    sx={{
-                      fontSize: '12px',
-                      width: 28,
-                      height: 28,
-                      marginRight: '10px',
-                      bgcolor: `${theme.colorSchemes.light.palette.primary.main}`,
-                    }}
-                  >
-                    RM
-                  </Avatar>
-                  Rashesh Majithia
-                </Button>
-              </Link>
+              <Button onClick={handleClick}>
+                <Avatar
+                  sx={{
+                    fontSize: '12px',
+                    width: 28,
+                    height: 28,
+                    marginRight: '10px',
+                    bgcolor: `${theme.colorSchemes.light.palette.primary.main}`,
+                  }}
+                >
+                  RM
+                </Avatar>
+                Rashesh Majithia
+              </Button>
+              <ProfileMenu anchorElForProfileMenu={openProfileMenu}
+                handleCloseProfileMenu={handleCloseProfileMenu}
+                setAnchorElForProfileMenu={setOpenProfileMenu}
+              />
             </StackColCenter>
           </GridRowCenter>
         </GridContainer>
       </NavbarContainer>
-      <SettingsContainer>
-        <StyledTabs value={tab} onChange={handleTabChange} orientation="vertical">
-          <StyledTab icon={<SettingsIcon />} label="General Settings" />
-          <StyledTab icon={<PrivacyTipIcon />} label="Privacy Settings" />
-        </StyledTabs>
-        <StyledDivider orientation="vertical" flexItem />
-        <div>
-          {tab === 0 && (
-            <ProfileContainer>
-              <ProfileDetails>
-                <div>
-                  <strong>Edit</strong>
-                  {editMode ? (
-                    <IconButton onClick={handleSave}>
-                      Save
-                    </IconButton>
-                  ) : (
-                    <IconButton onClick={handleEdit}>
-                      <EditIcon />
-                    </IconButton>
-                  )}
-                </div>
-                <InputContainer>
-                  <TextField
-                    label="First Name"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    disabled={!editMode}
-                  />
-                </InputContainer>
-                <InputContainer>
-                  <TextField
-                    label="Last Name"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    disabled={!editMode}
-                  />
-                </InputContainer>
-                <InputContainer>
-                  <TextField
-                    label="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    disabled={!editMode}
-                  />
-                </InputContainer>
-                <InputContainer>
-                  <TextField
-                    label="Phone"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    disabled={!editMode}
-                  />
-                </InputContainer>
-              </ProfileDetails>
+      {/* main settings */}
+      <MainSettingsContainer>
+        <SettingsContainer>
+          <SideBar>
+            <ProfileImgContainer>
               <ProfileImage src="https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg" alt="Profile" />
-            </ProfileContainer>
-          )}
-          {tab === 1 && (
-            <div>
+              <ProfileTitle>Rashesh Majithia</ProfileTitle>
+            </ProfileImgContainer>
 
-            </div>
-          )}
-        </div>
-      </SettingsContainer>
+            <StyledTabs>
+              <StyledTab isActive={tab === 1} onClick={() => setTab(1)} endIcon={<ChevronIcon />}>General Settings</StyledTab>
+              <StyledTab isActive={tab === 2} endIcon={<ChevronIcon />} onClick={() => setTab(2)} >Privacy Settings</StyledTab>
+            </StyledTabs>
+          </SideBar>
+
+          <RightSideContainer>
+            {
+              tab === 1 && (
+                <ProfileContainer>
+
+                  <InputContainer>
+                    <Label>First Name</Label>
+                    <StyledInput
+                      variant="standard"
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <ChevronIcon />
+                          </InputAdornment>
+                        )
+                      }}
+                    />
+                  </InputContainer>
+                  <InputContainer>
+                    <Label>Last Name</Label>
+                    <StyledInput
+                      variant="standard"
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <ChevronIcon />
+                          </InputAdornment>
+                        )
+                      }}
+                    />
+                  </InputContainer>
+                  <InputContainer>
+                    <Label>Mobile Number</Label>
+                    <StyledInput
+                      variant="standard"
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <ChevronIcon />
+                          </InputAdornment>
+                        )
+                      }}
+                    />
+                  </InputContainer>
+                  <InputContainer>
+                    <Label>Email</Label>
+                    <StyledInput
+                      variant="standard"
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <ChevronIcon />
+                          </InputAdornment>
+                        )
+                      }}
+                    />
+                  </InputContainer>
+                  <InputContainer>
+                    <Label>Username</Label>
+                    <StyledInput
+                      variant="standard"
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <ChevronIcon />
+                          </InputAdornment>
+                        )
+                      }}
+                    />
+                  </InputContainer>
+                  <InputContainer>
+                    <Label>Select Preference</Label>
+                    <StyledSelect
+                      labelId="dropdown-label"
+                      variant="standard"
+                    >
+                      <MenuItem value="Personal">Personal</MenuItem>
+                      <MenuItem value="Work">Work</MenuItem>
+                      <MenuItem value="Academic">Academic</MenuItem>
+                    </StyledSelect>
+                  </InputContainer>
+
+                </ProfileContainer>
+              )
+            }
+          </RightSideContainer>
+        </SettingsContainer>
+      </MainSettingsContainer>
     </>
   );
 };

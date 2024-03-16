@@ -173,7 +173,6 @@ const CanvasBody = () => {
       const canvasIsEmpty =
         (canvasList[canvasJS.id - 1].canvas as any).objects.length === 0;
       const variantsIsEmpty = canvasJS.variants.length === 0;
-      console.log({ variantsIsEmpty, canvasIsEmpty });
       if (variantsIsEmpty && canvasIsEmpty) {
         dispatch(toggleRegenerateButton(true)); // Disable the button
       } else if (selectedOriginalCanvas) {
@@ -182,7 +181,6 @@ const CanvasBody = () => {
         dispatch(toggleRegenerateButton(true)); // Enable the button
       }
     }
-    console.log({ isRegenerateDisabled });
   }, [canvasJS, dispatch, variantImage, isRegenerateDisabled]);
 
   return (
