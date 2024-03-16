@@ -1,3 +1,4 @@
+import CreateIcon  from '@mui/icons-material/Create';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { theme } from '@/constants/theme';
 import { Button, Divider, Grid, Select, Tab, Tabs, TextField } from '@mui/material';
@@ -147,6 +148,14 @@ export const TabTitles = styled.div`
 `;
 
 export const ChevronIcon = styled(ChevronRightIcon)`
+  margin-left: 8px;
+  :hover {
+    background: none;
+    background-color: none;
+  }
+`;
+
+export const PencilIcon = styled(CreateIcon)`
   margin-left: 8px;
   :hover {
     background: none;

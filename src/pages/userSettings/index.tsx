@@ -4,21 +4,19 @@ import EditIcon from '@mui/icons-material/Edit';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PrivacyTipIcon from '@mui/icons-material/PrivacyTip';
 import { useState } from 'react';
-import { SettingsContainer, GridContainer, InputContainer, MenuButton, NavbarContainer, ProfileContainer, ProfileDetails, ProfileImage, StyledDivider, StyledTab, StyledTabs, UserLink, SideBar, MainSettingsContainer, RightSideContainer, ProfileImgContainer, ProfileTitle, ChevronIcon, StyledInput, Label, StyledSelect } from './style';
+import { SettingsContainer, GridContainer, InputContainer, MenuButton, NavbarContainer, ProfileContainer, ProfileDetails, ProfileImage, StyledDivider, StyledTab, StyledTabs, UserLink, SideBar, MainSettingsContainer, RightSideContainer, ProfileImgContainer, ProfileTitle, ChevronIcon, StyledInput, Label, StyledSelect, PencilIcon } from './style';
 import { Link } from 'react-router-dom';
 import { Logo } from '@/constants/media';
 import { GridRowCenter, GridRowEven, StackColCenter } from '@/styles/common-styles/style';
 import { ROUTES } from '@/constants/endpoint';
 import { theme } from '@/constants/theme';
 import ProfileMenu from '@/common-ui/profileMenu';
+import ProfileSettings from './profileSettings';
+import LinkedinSettings from './linkedinSettings';
 
 
 const UserSettings: React.FC = () => {
-  const [firstName, setFirstName] = useState('Admin');
-  const [lastName, setLastName] = useState('One');
-  const [email, setEmail] = useState('admin@localhost.com');
-  const [phone, setPhone] = useState('123-456-7890');
-  const [editMode, setEditMode] = useState(false);
+  
   const [tab, setTab] = useState(1);
 
   const [openProfileMenu, setOpenProfileMenu] = useState<null | HTMLElement>(null);
@@ -30,18 +28,32 @@ const UserSettings: React.FC = () => {
     setOpenProfileMenu(null);
   };
 
-  const handleEdit = () => {
-    setEditMode(true);
-  };
-
-  const handleSave = () => {
-    setEditMode(false);
-    // Add functionality to save changes
-  };
+  
 
   const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setTab(newValue);
   };
+
+  const TabComponents = () => {
+    switch (tab) {
+      case 1:
+        return (
+          <ProfileSettings/>
+        );
+      case 2:
+        return (
+          <LinkedinSettings/>
+        );
+      default:
+        return (
+          <div>
+            {/* Default content */}
+            <p>Default tab content</p>
+          </div>
+        );
+    }
+  };
+  
 
   return (
     <>
@@ -93,98 +105,16 @@ const UserSettings: React.FC = () => {
 
             <StyledTabs>
               <StyledTab isActive={tab === 1} onClick={() => setTab(1)} endIcon={<ChevronIcon />}>General Settings</StyledTab>
-              <StyledTab isActive={tab === 2} endIcon={<ChevronIcon />} onClick={() => setTab(2)} >Privacy Settings</StyledTab>
+              <StyledTab isActive={tab === 2} endIcon={<ChevronIcon />} onClick={() => setTab(2)} >Linkedin Profile</StyledTab>
+              <StyledTab isActive={tab === 3} endIcon={<ChevronIcon />} onClick={() => setTab(3)} >Company Details</StyledTab>
             </StyledTabs>
           </SideBar>
 
           <RightSideContainer>
-            {
-              tab === 1 && (
-                <ProfileContainer>
-
-                  <InputContainer>
-                    <Label>First Name</Label>
-                    <StyledInput
-                      variant="standard"
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <ChevronIcon />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  </InputContainer>
-                  <InputContainer>
-                    <Label>Last Name</Label>
-                    <StyledInput
-                      variant="standard"
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <ChevronIcon />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  </InputContainer>
-                  <InputContainer>
-                    <Label>Mobile Number</Label>
-                    <StyledInput
-                      variant="standard"
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <ChevronIcon />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  </InputContainer>
-                  <InputContainer>
-                    <Label>Email</Label>
-                    <StyledInput
-                      variant="standard"
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <ChevronIcon />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  </InputContainer>
-                  <InputContainer>
-                    <Label>Username</Label>
-                    <StyledInput
-                      variant="standard"
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <ChevronIcon />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  </InputContainer>
-                  <InputContainer>
-                    <Label>Select Preference</Label>
-                    <StyledSelect
-                      labelId="dropdown-label"
-                      variant="standard"
-                    >
-                      <MenuItem value="Personal">Personal</MenuItem>
-                      <MenuItem value="Work">Work</MenuItem>
-                      <MenuItem value="Academic">Academic</MenuItem>
-                    </StyledSelect>
-                  </InputContainer>
-
-                </ProfileContainer>
-              )
-            }
+          <TabComponents/>
           </RightSideContainer>
         </SettingsContainer>
-      </MainSettingsContainer>
+      </MainSettingsContainer >
     </>
   );
 };
