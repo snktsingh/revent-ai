@@ -13,6 +13,7 @@ import { theme } from '@/constants/theme';
 import ProfileMenu from '@/common-ui/profileMenu';
 import ProfileSettings from './profileSettings';
 import LinkedinSettings from './linkedinSettings';
+import CompanyDetails from './companySettings';
 
 
 const UserSettings: React.FC = () => {
@@ -43,6 +44,10 @@ const UserSettings: React.FC = () => {
       case 2:
         return (
           <LinkedinSettings/>
+        );
+      case 3:
+        return (
+          <CompanyDetails/>
         );
       default:
         return (
