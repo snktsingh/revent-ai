@@ -1,11 +1,14 @@
 import React, { useEffect, useRef } from 'react'
-import { StyledMenu, StyledMenuItem } from './style'
-import { ListItemIcon } from '@mui/material';
+import { AccountIcon, AccountInfo, AccountSection, EllipsisTypography, SectionTitle, StyledMenu, StyledMenuItem } from './style'
+import { ListItemIcon, Typography } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
 import useCanvasHeader from '@/pages/canvas/canvasHeader/container';
+import { AccountCircleRounded } from '@mui/icons-material';
+import Divider from '@mui/material/Divider';
+
 
 interface ProfileMenuProps {
     anchorElForProfileMenu: null | HTMLElement;
@@ -18,7 +21,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ anchorElForProfileMenu, handl
     const navigate = useNavigate();
     const open = Boolean(anchorElForProfileMenu);
 
-    const handleClose = () =>{
+    const handleClose = () => {
         handleCloseProfileMenu();
         setAnchorElForProfileMenu(null);
     }
@@ -31,7 +34,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ anchorElForProfileMenu, handl
         navigate('/settings', { replace: true });
     };
 
-   
+
     return (
         <StyledMenu
             id="profile-menu"
@@ -39,6 +42,18 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ anchorElForProfileMenu, handl
             open={open}
             onClose={handleClose}
         >
+            <div>
+            <SectionTitle variant="h6">Account</SectionTitle>
+            <AccountSection>
+                <AccountIcon sx={{ fontSize: 42 }}/>
+                
+                <AccountInfo>
+                    <Typography variant="subtitle1">Rashesh Majithia</Typography>
+                    <EllipsisTypography variant="body2" color="textSecondary">admin@localhost</EllipsisTypography>
+                </AccountInfo>
+            </AccountSection>
+            </div>
+            <Divider/>
             <StyledMenuItem onClick={handleNavigateHome}>
                 <ListItemIcon>
                     <HomeIcon />
@@ -51,6 +66,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ anchorElForProfileMenu, handl
                 </ListItemIcon>
                 Account Settings
             </StyledMenuItem>
+            <Divider/>
             <StyledMenuItem onClick={userLogout}>
                 <ListItemIcon>
                     <LogoutIcon />

@@ -58,8 +58,8 @@ export const useEditBar = () => {
     let pLevels = countObjects(canvas, `${PYRAMID_TEXT}_${currentElementId}`);
     let fLevels = countObjects(canvas, `${FUNNEL_TEXT}_${currentElementId}`);
 
-    let showPlusIcon = false; 
-    let showTableIcons = false; 
+    let showPlusIcon = false;
+    let showTableIcons = false;
 
     if (objectName && selectedObject) {
       if (
@@ -68,7 +68,7 @@ export const useEditBar = () => {
         (objectName[0] === TIMELINE && timelineLevels < 6) ||
         (objectName[0] === FUNNEL && fLevels < 6) ||
         (objectName[0] === CYCLE && cycleSteps < 6) ||
-        selectedObject.name === 'List_Container'
+        selectedObject.name === 'LIST_ELEMENT'
       ) {
         showPlusIcon = true; // Set the visibility state to true if any condition is met
       }
@@ -85,9 +85,9 @@ export const useEditBar = () => {
       showPlusIcon = false; // Hide the plus icon if the limit is reached
     }
 
-    if(objectName && objectName[0] === TABLE){
-       showPlusIcon = true;
-       showTableIcons = true;
+    if (objectName && objectName[0] === TABLE) {
+      showPlusIcon = true;
+      showTableIcons = true;
     }
 
     setPlusIcon(showPlusIcon); // Update the plusIcon state based on the visibility state
@@ -105,23 +105,21 @@ export const useEditBar = () => {
   };
 
   const checkElementForAddLevel = (canvas: fabric.Canvas) => {
-      const activeElement = canvas?.getActiveObject();
-      const elName = activeElement?.name?.split('_');
-      console.log(elName)
-    
-      elName && addElement(canvas,elName[0]);
-     
+    const activeElement = canvas?.getActiveObject();
+    const elName = activeElement?.name?.split('_');
+    console.log(elName);
+
+    elName && addElement(canvas, elName[0]);
   };
   const addElement = (canvas: fabric.Canvas | null, type: string) => {
     const activeElement = canvas?.getActiveObject();
     if (!activeElement) return false;
-
+    const lastListElement = canvas?.getObjects().find(obj => obj.name === 'LIST_ELEMENT');
     // Check the type of the active element
     if (activeElement.name?.startsWith(type) && canvas) {
       // Call the corresponding function based on the element type
       switch (type) {
         case 'PYRAMID':
-            console.log('pyramid')
           addPyramidLevel(canvas);
           break;
         case 'FUNNEL':
@@ -142,11 +140,37 @@ export const useEditBar = () => {
         case 'TABLE_COLUMN':
           addTableColumn(canvas);
           break;
+        case 'LIST':
+          addList(canvas,lastListElement);
+          break;
         default:
           break;
       }
     }
   };
+
+  function addList(canvas: fabric.Canvas, lastElement : fabric.Object | undefined) {
+    console.log({lastElement})
+    if (lastElement) {
+      const newX = lastElement.left! + lastElement.getScaledWidth() + 70;
+      const newY = lastElement.top;
+
+      addListElement(canvas, newX, newY!);
+    } else {
+      addListElement(canvas, 0, 0); 
+    }
+  }
+  function addListImage(canvas: fabric.Canvas) {
+    let selectedElement = canvas.getActiveObject();
+    addImage(canvas, selectedElement!);
+    selectedElement &&
+      (selectedElement as fabric.Group).remove(
+        (selectedElement as fabric.Group)._objects[1]
+      );
+    (selectedElement as fabric.Group).setCoords();
+    canvas.renderAll();
+    return true;
+  }
 
   return {
     adjustControlsVisibility,
@@ -154,6 +178,6 @@ export const useEditBar = () => {
     deleteObject,
     plusIcon,
     checkElementForAddLevel,
-    tableIcons
+    tableIcons,
   };
 };
