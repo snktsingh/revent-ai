@@ -13,6 +13,7 @@ const ProfileSettings : React.FC<ProfileSettingsType> = ({editMode}) => {
     const [username, setUsername] = useState('admin123');
     const [email, setEmail] = useState('admin@localhost.com');
     const [phone, setPhone] = useState('123-456-7890');
+    const [linkedinUrl, setLinkedinUrl] = useState('https://www.linkedin.com/in/example_username')
     
 
     return (
@@ -55,7 +56,7 @@ const ProfileSettings : React.FC<ProfileSettingsType> = ({editMode}) => {
                     // variant="standard"
                     value={phone}
                     disabled={editMode}
-                    onChange={(e) => setFirstName(e.target.value)}
+                    onChange={(e) => setPhone(e.target.value)}
                     // InputProps={{
                     //     endAdornment: (
                     //         <InputAdornment position="end">
@@ -71,7 +72,7 @@ const ProfileSettings : React.FC<ProfileSettingsType> = ({editMode}) => {
                     // variant="standard"
                     disabled={editMode}
                     value={email}
-                    onChange={(e) => setFirstName(e.target.value)}
+                    onChange={(e) => setEmail(e.target.value)}
                     // InputProps={{
                     //     endAdornment: (
                     //         <InputAdornment position="end">
@@ -115,8 +116,8 @@ const ProfileSettings : React.FC<ProfileSettingsType> = ({editMode}) => {
                 <Label>Linkedin Url</Label>
                 <StyledInput
                     // variant="standard"
-                    value={username}
-                    onChange={(e) => setFirstName(e.target.value)}
+                    value={linkedinUrl}
+                    onChange={(e) => setLinkedinUrl(e.target.value)}
                     disabled={editMode}
                     // InputProps={{
                     //     endAdornment: (
