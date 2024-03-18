@@ -9,6 +9,7 @@ import {
   Tab,
   Tabs,
   TextField,
+  Typography,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -24,10 +25,9 @@ export const MainSettingsContainer = styled.div`
 
 export const ProfileContainer = styled.div`
   width: 100%;
-  height: 70%;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  margin-top: 6%;
+  gap: 20px;
   margin-left: 7%;
   justify-content: center;
   align-items: center;
@@ -126,10 +126,10 @@ export const SideBar = styled.div`
 
 export const RightSideContainer = styled.div`
   width: 70%;
-  height: 80%;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
     rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
   border-radius: 4px;
+  padding-bottom: 2%;
 `;
 
 export const ProfileImgContainer = styled.div`
@@ -183,12 +183,39 @@ export const StyledInput = styled(TextField)`
     width: 250px;
     font-size: 16px;
   }
+  &&{
+    margin-top: 5px;
+  }
 `;
 
 export const StyledSelect = styled(Select)`
   & .MuiSelect-select.MuiSelect-select {
     padding-top: 12px;
-    width: 260px;
+    width: 230px;
     font-size: 16px;
+  }
+`;
+
+export const SectionTitle = styled(Typography)`
+  &&{
+      font-size: 1.1rem;
+      font-weight: 550;
+      font-family: 'Roboto', sans-serif;
+      padding: 4% 0 4% 6.5%;
+      text-transform:uppercase;
+  }
+`;
+
+export const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 3%;
+`;
+
+export const IconButton = styled(Button)`
+  && {
+    margin: 0 10px;
+    background-color: ${theme.colorSchemes.light.palette.primary.main};
   }
 `;
