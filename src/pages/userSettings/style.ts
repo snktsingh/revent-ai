@@ -1,7 +1,15 @@
-import CreateIcon  from '@mui/icons-material/Create';
+import CreateIcon from '@mui/icons-material/Create';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { theme } from '@/constants/theme';
-import { Button, Divider, Grid, Select, Tab, Tabs, TextField } from '@mui/material';
+import {
+  Button,
+  Divider,
+  Grid,
+  Select,
+  Tab,
+  Tabs,
+  TextField,
+} from '@mui/material';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -21,13 +29,9 @@ export const ProfileContainer = styled.div`
   grid-template-columns: repeat(2, 1fr);
   margin-top: 6%;
   margin-left: 7%;
-  justify-content: center; 
-  align-items: center; 
-
-  
+  justify-content: center;
+  align-items: center;
 `;
-
-
 
 export const ProfileImage = styled.img`
   width: 180px;
@@ -115,16 +119,16 @@ export const SettingsContainer = styled.div`
 export const SideBar = styled.div`
   width: 25%;
   height: 100%;
-  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
-    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
+    rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
   border-radius: 4px;
 `;
 
 export const RightSideContainer = styled.div`
   width: 70%;
   height: 80%;
-  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
-    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
+    rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
   border-radius: 4px;
 `;
 

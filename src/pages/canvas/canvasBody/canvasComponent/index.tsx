@@ -201,10 +201,10 @@ const CanvasComponent: React.FC = () => {
           // console.log(newCanvas.toJSON());
           handleObjectMoving(options, newCanvas);
         });
-        newCanvas.on('object:scaling', function (options) {
-          // console.log(newCanvas.toJSON());
-          handleObjectScaling(options, newCanvas);
-        });
+        // newCanvas.on('object:scaling', function (options) {
+        //   // console.log(newCanvas.toJSON());
+        //   handleObjectScaling(options, newCanvas);
+        // });
         updateCanvasSlideData(newCanvas, canvasJS.id);
         // handleAddCustomIcon(newCanvas);
         newCanvas.renderAll();

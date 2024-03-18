@@ -416,7 +416,6 @@ export const useCanvasComponent = () => {
         };
   
         selectedObject.on('moving', updateTablePosition);
-        selectedObject.on('scaling', updateTablePosition);
       } else {
         const updatePosition = () => {
           const boundingRect = selectedObject.getBoundingRect();
@@ -427,7 +426,6 @@ export const useCanvasComponent = () => {
         };
   
         selectedObject.on('moving', updatePosition);
-        selectedObject.on('scaling', updatePosition);
       }
   
       setSelectedElementPosition({ top: positionTop, left: positionLeft });
