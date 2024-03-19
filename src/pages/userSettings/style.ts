@@ -129,7 +129,30 @@ export const RightSideContainer = styled.div`
   box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
     rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
   border-radius: 4px;
-  padding-bottom: 2%;
+  padding-bottom: 3%;
+  position: relative; /* Needed for absolute positioning of background shapes */
+
+  /* &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 20px; 
+    background-color: #e0e0e0; 
+    z-index: -1; 
+  } */
+
+  /* &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 20px; 
+    background-color: 
+    z-index: -1; 
+  } */
 `;
 
 export const ProfileImgContainer = styled.div`
@@ -183,7 +206,7 @@ export const StyledInput = styled(TextField)`
     width: 250px;
     font-size: 16px;
   }
-  &&{
+  && {
     margin-top: 5px;
   }
 `;
@@ -196,13 +219,32 @@ export const StyledSelect = styled(Select)`
   }
 `;
 
+export const SectionTitleContainer = styled.div`
+    width: 100%;
+    color: ${theme.colorSchemes.light.palette.primary.main};
+
+    position: relative;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%; 
+      background-color: #e6edf8; 
+      z-index: -1;
+    }
+`; 
+
 export const SectionTitle = styled(Typography)`
-  &&{
-      font-size: 1.1rem;
-      font-weight: 550;
-      font-family: 'Roboto', sans-serif;
-      padding: 4% 0 4% 6.5%;
-      text-transform:uppercase;
+  && {
+    font-size: 1.1rem;
+    font-weight: 550;
+    font-family: 'Roboto', sans-serif;
+    margin: 2% 0 2% 6.5%;
+    text-transform: uppercase;
+    padding: 2% 0;
+    
   }
 `;
 
@@ -218,4 +260,34 @@ export const IconButton = styled(Button)`
     margin: 0 10px;
     background-color: ${theme.colorSchemes.light.palette.primary.main};
   }
+`;
+
+export const BackgroundShapeTop = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50px; /* Adjust height as needed */
+  background-color: #e0e0e0; /* Set color of the shape */
+  z-index: -1; /* Ensure the shape is behind the content */
+`;
+
+export const BackgroundShapeBottom = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50px; /* Adjust height as needed */
+  background-color: #e0e0e0; /* Set color of the shape */
+  z-index: -1; /* Ensure the shape is behind the content */
+`;
+
+export const DiagonalShape = styled.div`
+  position: absolute;
+  top: 50px; /* Ensure it starts after the top background shape */
+  left: 0;
+  width: 100%;
+  height: 100px; /* Adjust height as needed */
+  background: linear-gradient(to bottom right, transparent 49%, #e0e0e0 50%);
+  z-index: -1; /* Ensure the shape is behind the content */
 `;

@@ -4,7 +4,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PrivacyTipIcon from '@mui/icons-material/PrivacyTip';
 import { useState } from 'react';
-import { SettingsContainer, GridContainer, InputContainer, MenuButton, NavbarContainer, ProfileContainer, ProfileDetails, ProfileImage, StyledDivider, StyledTab, StyledTabs, UserLink, SideBar, MainSettingsContainer, RightSideContainer, ProfileImgContainer, ProfileTitle, ChevronIcon, StyledInput, Label, StyledSelect, PencilIcon, SectionTitle, ButtonContainer, IconButton } from './style';
+import { SettingsContainer, GridContainer, InputContainer, MenuButton, NavbarContainer, ProfileContainer, ProfileDetails, ProfileImage, StyledDivider, StyledTab, StyledTabs, UserLink, SideBar, MainSettingsContainer, RightSideContainer, ProfileImgContainer, ProfileTitle, ChevronIcon, StyledInput, Label, StyledSelect, PencilIcon, SectionTitle, ButtonContainer, IconButton, SectionTitleContainer } from './style';
 import { Link } from 'react-router-dom';
 import { Logo } from '@/constants/media';
 import { GridRowCenter, GridRowEven, StackColCenter } from '@/styles/common-styles/style';
@@ -126,9 +126,13 @@ const UserSettings: React.FC = () => {
           </SideBar>
 
           <RightSideContainer>
+            <SectionTitleContainer>
             <SectionTitle>Personal Details</SectionTitle>
+            </SectionTitleContainer>
             <ProfileSettings editMode={editMode} />
-            <SectionTitle >Company Details</SectionTitle>
+            <SectionTitleContainer>
+            <SectionTitle>Company Details</SectionTitle>
+            </SectionTitleContainer>
             <CompanyDetails editMode={editMode} />
 
             <ButtonContainer>

@@ -114,7 +114,7 @@ export const useEditBar = () => {
   const addElement = (canvas: fabric.Canvas | null, type: string) => {
     const activeElement = canvas?.getActiveObject();
     if (!activeElement) return false;
-    const lastListElement = canvas?.getObjects().find(obj => obj.name === 'LIST_ELEMENT');
+    const lastListElement = canvas?.getObjects().reverse().find(obj => obj.name === 'LIST_ELEMENT');
     // Check the type of the active element
     if (activeElement.name?.startsWith(type) && canvas) {
       // Call the corresponding function based on the element type
@@ -150,12 +150,21 @@ export const useEditBar = () => {
   };
 
   function addList(canvas: fabric.Canvas, lastElement : fabric.Object | undefined) {
-    console.log({lastElement})
-    if (lastElement) {
-      const newX = lastElement.left! + lastElement.getScaledWidth() + 70;
-      const newY = lastElement.top;
-
-      addListElement(canvas, newX, newY!);
+    if (lastElement && lastElement.left && lastElement.top) {
+      if(lastElement.left > 600 && lastElement.top < 240){
+        const newX = 33;
+        const newY = 245;
+  
+        addListElement(canvas, newX, newY!);
+        return;
+      }else if(lastElement.left > 600 && lastElement.top > 200){
+          console.log('maximum limit added')
+      }else{
+        const newX = lastElement.left + lastElement.getScaledWidth() + 50;
+        const newY = lastElement.top;
+  
+        addListElement(canvas, newX, newY);
+      }
     } else {
       addListElement(canvas, 0, 0); 
     }

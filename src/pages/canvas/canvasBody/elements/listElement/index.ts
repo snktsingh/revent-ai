@@ -1,3 +1,4 @@
+import AutoResizingTextbox from "@/utils/fabric-utils/AutoResizingTextbox";
 import { fabric } from "fabric";
 export function useListElement(){
     const addListElement = (
@@ -6,8 +7,8 @@ export function useListElement(){
         top: number
       ) => {
         const mainListContainer = new fabric.Rect({
-          width: 200,
-          height: 250,
+          width: 150,
+          height: 200,
           fill: 'transparent',
           strokeWidth: 1,
           stroke: '#cbcbcb',
@@ -16,27 +17,31 @@ export function useListElement(){
     
         const addImage = new fabric.Text('+ Add Image', {
           top: mainListContainer.top! + 80,
-          left: mainListContainer.left! + 50,
+          left: mainListContainer.left! + 40,
           fill: 'black',
-          fontSize: 20,
+          fontSize: 16,
           hasControls: false,
           selectable: false,
           hoverCursor: 'pointer',
           name: 'ListAddImageText',
+          
         });
         let group = new fabric.Group([mainListContainer, addImage], {
           left,
           top,
           name: 'LIST_ELEMENT',
+          moveCursor: 'pointer',
         });
     
-        const text = new fabric.Textbox('Text', {
-          fontSize: 20,
-          width: 180,
+        const text = new AutoResizingTextbox('Text', {
+          fontSize: 18,
+          width: 145,
           height: 100,
+          fixedWidth: 145,
+          fixedHeight: 100,
           fill: 'black',
-          left: group.left! + 8,
-          top: group.getScaledHeight() - 10,
+          left: left + 3,
+          top: top + 175,
           textAlign: 'center',
           name: 'listText',
           hasControls :false
