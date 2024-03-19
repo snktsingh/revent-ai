@@ -19,7 +19,7 @@ export function useListElement(){
           top: mainListContainer.top! + 80,
           left: mainListContainer.left! + 40,
           fill: 'black',
-          fontSize: 16,
+          fontSize: 14,
           hasControls: false,
           selectable: false,
           hoverCursor: 'pointer',
@@ -67,8 +67,8 @@ export function useListElement(){
             reader.onload = () => {
               if (canvas) {
                 fabric.Image.fromURL(reader.result as string, img => {
-                  const fixedWidth = 197; // Set the fixed width you desire
-                  const fixedHeight = 200; // Set the fixed height you desire
+                  const fixedWidth = 147; // Set the fixed width you desire
+                  const fixedHeight = 170; // Set the fixed height you desire
                   // img.scaleToWidth(fixedWidth);
                   // img.scaleToHeight(fixedHeight);
                   const scaleX = fixedWidth / img.width!;
