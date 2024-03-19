@@ -127,7 +127,7 @@ export function useDelAndCopy() {
             `${CYCLE_TEXT}_${currentElID}`
           );
           break;
-        case 'List_Container':
+        case 'LIST_ELEMENT':
           objectsToDelete.push('listText', 'listImage', 'ListAddImageText');
           break;
         case `${TABLE}_`:

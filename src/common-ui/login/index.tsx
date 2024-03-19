@@ -1,4 +1,4 @@
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, IconButton } from '@mui/material';
 import {
   ChildContainer,
   Description,
@@ -17,9 +17,17 @@ import Link from '@mui/material/Link';
 import { Slide, ToastContainer } from 'react-toastify';
 import useLogin from './container';
 import { useAppSelector } from '@/redux/store';
+import { useState } from 'react';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const Login = () => {
   const { email, setEmail, password, setPassword, handleLogin } = useLogin();
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
+
   const { isDisabled } = useAppSelector(state => state.apiData);
   return (
     <div>
@@ -70,10 +78,23 @@ const Login = () => {
                 id="fullWidth"
                 value={password}
                 name="password"
+                type={showPassword ? 'text' : 'password'}
                 label="Enter your Password"
                 variant="outlined"
                 fullWidth
                 onChange={e => setPassword(e.target.value)}
+                InputProps={{
+                        endAdornment: (
+                          <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                        )
+                    }}
               />
               <CommonLink>Forgot Password ?</CommonLink>
               <CustomButton
@@ -90,10 +111,10 @@ const Login = () => {
                 </Link>
               </SignUp>
             </Box>
-            <PassMessage>
+            {/* <PassMessage>
               * Password must be minimum of 8 characters and contain at least 1
               letter and 1 number.
-            </PassMessage>
+            </PassMessage> */}
           </RightContainer>
         </Grid>
       </Grid>

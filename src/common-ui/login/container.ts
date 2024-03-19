@@ -26,12 +26,11 @@ const useLogin = () => {
           data
         );
         if (res.status === 200) {
-          console.log(res.data,data)
           setToLS('token', res.data.accessToken);
           setToLS('isAuth', true);
-          // setTimeout(() => {
-          //   window.location.replace(`${ROUTES.DASHBOARD}`);
-          // }, 1000);
+          setTimeout(() => {
+            window.location.replace(`${ROUTES.DASHBOARD}`);
+          }, 1000);
         } else {
           throw new Error('Failed to log in');
         }

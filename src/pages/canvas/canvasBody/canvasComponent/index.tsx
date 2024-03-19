@@ -130,7 +130,7 @@ const CanvasComponent: React.FC = () => {
             }
           }
         });
-        newCanvas.on('mouse:up', event => {
+        newCanvas.on('mouse:dblclick', event => {
           CanvasClick(newCanvas, event);
         });
         newCanvas.on('text:editing:exited', event => {
