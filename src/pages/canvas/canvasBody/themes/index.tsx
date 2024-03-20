@@ -59,13 +59,12 @@ export default function Templates() {
     console.log({ themeCode, themeName });
     dispatch(setThemeName(themeName));
     setOpen(true);
-    setTimeout(() => {
-      getElementsData(
-        (canvasJS.originalSlideData as any).objects,
-        themeCode,
-        themeName
-      );
-    }, 1000);
+
+    getElementsData(
+      (canvasJS.originalSlideData as any).objects,
+      themeCode,
+      themeName
+    )
   };
 
   const handleClose = () => {
@@ -81,6 +80,7 @@ export default function Templates() {
     if (requestData?.elements.length == 0) {
       toast.warning('Canvas is empty');
     } else {
+      console.log({ changeTheme: canvasJS.originalSlideData })
       dispatch(fetchSlideImg(requestData));
     }
     setOpen(false);
@@ -123,14 +123,14 @@ export default function Templates() {
           <h4>Loading...</h4>
         ) : (
           <>
-            {thunk.themesList.map(themes => {
+            {thunk.themesList.map((themes, i) => {
               return (
                 <ListSlideCard
                   onClick={() => {
                     handleClickOpen(themes.themeColor, themes.company);
                     setTempCode(themes.templateName);
                   }}
-                  key={themes.company}
+                  key={themes.company + i}
                   className={
                     selectedThemeId === themes.templateName
                       ? 'clicked-card'
@@ -162,7 +162,7 @@ export default function Templates() {
                     autoFocus
                     onClick={() => {
                       changeThemeRequest();
-                      dispatch(setSelectedTheme(tempCode));
+                      // dispatch(setSelectedTheme(tempCode));
                     }}
                   >
                     Yes

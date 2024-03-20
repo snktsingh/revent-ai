@@ -51,9 +51,10 @@ const AppThemes = () => {
               <h4>Loading...</h4>
             ) : (
               <>
-                {thunk.themesList.map(theme => {
+                {thunk.themesList.map((theme,i) => {
                   return (
                     <ThemeCardTitle
+                      key={theme.company + i}
                       onClick={() => {
                         dispatch(setSelectedTheme(theme.templateName));
                         dispatch(setThemeCode(theme.themeColor));
