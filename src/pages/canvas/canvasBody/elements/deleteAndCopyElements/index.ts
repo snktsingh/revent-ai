@@ -34,7 +34,8 @@ import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { fabric } from 'fabric';
 
 export function useDelAndCopy() {
-  const { pyramidId, funnelId, timelineId, processId, cycleId } = useAppSelector(state => state.elementsIds);
+  const { pyramidId, funnelId, timelineId, processId, cycleId } =
+    useAppSelector(state => state.elementsIds);
   const dispatch = useAppDispatch();
   const CustomBorderIcons = (canvas: fabric.Canvas | null) => {
     // Load icon images
@@ -227,7 +228,7 @@ export function useDelAndCopy() {
         // Clone each object in the group
         target.clone(function (cloned: fabric.Object) {
           cloned.left! += cloned.width! + 20;
-          cloned.name = elName && elementGenerate(elName[0], cloned);
+          cloned.name = elName && elementNameGenerate(elName[0], cloned);
           canvas?.add(cloned);
           if (
             canvas &&
@@ -262,9 +263,10 @@ export function useDelAndCopy() {
         // Clone a single object
         if (target.name?.startsWith(TIMELINE)) {
           const elName = target.name?.split('_');
+          console.log(elName);
           target.clone(function (cloned: fabric.Object) {
             cloned.top! += cloned.height! + 10;
-            cloned.name = elName && elementGenerate(elName[0], cloned);
+            cloned.name = elName && elementNameGenerate(elName[0], cloned);
             canvas?.add(cloned);
             if (
               canvas &&
@@ -290,7 +292,7 @@ export function useDelAndCopy() {
           const elName = target.name?.split('_');
           target.clone(function (cloned: fabric.Object) {
             cloned.top! += cloned.height! + 10;
-            cloned.name = elName && elementGenerate(elName[0], cloned);
+            cloned.name = elName && elementNameGenerate(elName[0], cloned);
             canvas?.add(cloned);
             if (
               canvas &&
@@ -312,11 +314,11 @@ export function useDelAndCopy() {
             }
             canvas?.renderAll();
           });
-        }else if (target.name?.startsWith(CYCLE)) {
+        } else if (target.name?.startsWith(CYCLE)) {
           const elName = target.name?.split('_');
           target.clone(function (cloned: fabric.Object) {
             cloned.left! += cloned.width! + 10;
-            cloned.name = elName && elementGenerate(elName[0], cloned);
+            cloned.name = elName && elementNameGenerate(elName[0], cloned);
             canvas?.add(cloned);
             if (
               canvas &&
@@ -338,7 +340,7 @@ export function useDelAndCopy() {
             }
             canvas?.renderAll();
           });
-        }else {
+        } else {
           target.clone(function (cloned: fabric.Object) {
             cloned.left! += 50;
             cloned.top! += 50;
@@ -384,9 +386,19 @@ export function useDelAndCopy() {
           obj.name === `${TIMELINE_DIRECTION}_${id}` ||
           obj.name === `${TIMELINE_TEXT}_${id}`)
       ) {
+        let newElementName =
+          obj.name === `${TIMELINE_HEADING}_${id}`
+            ? `${TIMELINE_HEADING}_${timelineId}`
+            : obj.name === `${TIMELINE_CIRCLE}_${id}`
+            ? `${TIMELINE_CIRCLE}_${timelineId}`
+            : obj.name === `${TIMELINE_TEXT}_${id}`
+            ? `${TIMELINE_TEXT}_${timelineId}`
+            : obj.name === `${TIMELINE_DIRECTION}_${id}`
+            ? `${TIMELINE_DIRECTION}_${timelineId}`
+            : TIMELINE;
         obj.clone(function (cloned: fabric.Object) {
           cloned.top! += elHeight + 10;
-          cloned.name = `${TIMELINE}_${timelineId}`;
+          cloned.name = newElementName;
           canvas?.add(cloned);
         });
       } else if (
@@ -395,9 +407,17 @@ export function useDelAndCopy() {
           obj.name === `${PROCESS_BOX}_${id}` ||
           obj.name === `${PROCESS_TEXT}_${id}`)
       ) {
+        let newElementName =
+          obj.name === `${PROCESS_ARROW}_${id}`
+            ? `${PROCESS_ARROW}_${processId}`
+            : obj.name === `${PROCESS_BOX}_${id}`
+            ? `${PROCESS_BOX}_${processId}`
+            : obj.name === `${PROCESS_TEXT}_${id}`
+            ? `${PROCESS_TEXT}_${processId}`
+            : PROCESS;
         obj.clone(function (cloned: fabric.Object) {
           cloned.top! += elHeight + 10;
-          cloned.name = `${PROCESS}_${processId}`;
+          cloned.name = newElementName;
           canvas?.add(cloned);
         });
       } else if (
@@ -406,16 +426,24 @@ export function useDelAndCopy() {
           obj.name === `${CYCLE_CIRCLE}_${id}` ||
           obj.name === `${CYCLE_TEXT}_${id}`)
       ) {
+        let newElementName =
+          obj.name === `${CYCLE_ARROW}_${id}`
+            ? `${CYCLE_ARROW}_${cycleId}`
+            : obj.name === `${CYCLE_CIRCLE}_${id}`
+            ? `${CYCLE_CIRCLE}_${cycleId}`
+            : obj.name === `${CYCLE_TEXT}_${id}`
+            ? `${CYCLE_TEXT}_${cycleId}`
+            : CYCLE;
         obj.clone(function (cloned: fabric.Object) {
           cloned.left! += elWidth + 10;
-          cloned.name = `${CYCLE}_${cycleId}`;
+          cloned.name = newElementName;
           canvas?.add(cloned);
         });
       }
     });
   }
 
-  function elementGenerate(
+  function elementNameGenerate(
     elName: string,
     clonedObject: fabric.Object
   ): string {
@@ -431,11 +459,16 @@ export function useDelAndCopy() {
         break;
       case FUNNEL:
         newElementName = `${FUNNEL}_${funnelId}`;
+        console.log({ clonedObject });
         (clonedObject as fabric.Group).forEachObject(obj => {
-          const objName = obj.name?.split('_');
-          console.log(objName);
+          const objName =
+            obj.type === 'polygon'
+              ? `${FUNNEL_LEVEL}_${funnelId}`
+              : obj.type === 'rect'
+              ? `${FUNNEL_BASE}_${funnelId}`
+              : FUNNEL;
           obj.set({
-            name: objName && `${objName[0]}_${funnelId}`,
+            name: objName,
           });
         });
 
@@ -443,19 +476,18 @@ export function useDelAndCopy() {
 
         dispatch(updateFunnelId());
         break;
-      case PYRAMID:
-        newElementName = `${PYRAMID}_${pyramidId}`;
+      case TIMELINE:
+        newElementName = `${TIMELINE}_${timelineId}`;
         dispatch(updatePyramidId());
         break;
-      case PYRAMID:
-        newElementName = `${PYRAMID}_${pyramidId}`;
+      case PROCESS:
+        newElementName = `${PROCESS}_${processId}`;
         dispatch(updatePyramidId());
         break;
-      case PYRAMID:
-        newElementName = `${PYRAMID}_${pyramidId}`;
+      case CYCLE:
+        newElementName = `${CYCLE}_${cycleId}`;
         dispatch(updatePyramidId());
         break;
-
       default:
         break;
     }
