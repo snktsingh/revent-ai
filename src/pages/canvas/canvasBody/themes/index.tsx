@@ -58,14 +58,14 @@ export default function Templates() {
   const handleClickOpen = (themeCode: string, themeName: string) => {
     console.log({ themeCode, themeName });
     dispatch(setThemeName(themeName));
+    dispatch(setSelectedTheme(tempCode));
     setOpen(true);
-    setTimeout(() => {
+    
       getElementsData(
         (canvasJS.originalSlideData as any).objects,
         themeCode,
         themeName
-      );
-    }, 1000);
+      )
   };
 
   const handleClose = () => {
@@ -162,7 +162,6 @@ export default function Templates() {
                     autoFocus
                     onClick={() => {
                       changeThemeRequest();
-                      dispatch(setSelectedTheme(tempCode));
                     }}
                   >
                     Yes

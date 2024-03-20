@@ -224,7 +224,7 @@ export function useDelAndCopy() {
     selectedObjects.forEach(target => {
       if (target instanceof fabric.Group) {
         const elName = target.name?.split('_');
-
+        
         // Clone each object in the group
         target.clone(function (cloned: fabric.Object) {
           cloned.left! += cloned.width! + 20;
@@ -263,7 +263,6 @@ export function useDelAndCopy() {
         // Clone a single object
         if (target.name?.startsWith(TIMELINE)) {
           const elName = target.name?.split('_');
-          console.log(elName);
           target.clone(function (cloned: fabric.Object) {
             cloned.top! += cloned.height! + 10;
             cloned.name = elName && elementNameGenerate(elName[0], cloned);
@@ -341,6 +340,7 @@ export function useDelAndCopy() {
             canvas?.renderAll();
           });
         } else {
+          console.log({target})
           target.clone(function (cloned: fabric.Object) {
             cloned.left! += 50;
             cloned.top! += 50;
@@ -459,7 +459,6 @@ export function useDelAndCopy() {
         break;
       case FUNNEL:
         newElementName = `${FUNNEL}_${funnelId}`;
-        console.log({ clonedObject });
         (clonedObject as fabric.Group).forEachObject(obj => {
           const objName =
             obj.type === 'polygon'

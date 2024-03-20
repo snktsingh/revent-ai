@@ -15,6 +15,9 @@ interface ElementEditBarProps {
 
 
 const ElementEditBar: React.FC<ElementEditBarProps> = ({ left, top, canvas }) => {
+
+    const [position, setPosition] = useState({ l: left, t: top });
+
     const { addTableColumn, addTableRow, removeTableColumn, removeTableRow } = useTableElement();
     const {
         adjustControlsVisibility,
@@ -53,11 +56,18 @@ const ElementEditBar: React.FC<ElementEditBarProps> = ({ left, top, canvas }) =>
 
     useEffect(() => {
         adjustControlsVisibility(canvas!);
-    }, [canvas?.getActiveObject()]);
+        if (left < 0 && top < 0) {
+            left = 100;
+            top = -40;
+            setPosition({ l: left, t: top });
+        } else {
+            setPosition({ l: left, t: top });
+        }
+    }, [canvas?.getActiveObject(), left, top]);
 
 
     return (
-        <EditBarContainer left={left} top={top}>
+        <EditBarContainer left={position.l} top={position.t}>
             {!tableIcons && <Tooltip title="Add Level" placement="top">
                 <span>
                     <IconButton onClick={handleAdd} disabled={!plusIcon} style={{ color: plusIcon ? '' : '#e0e0e0' }}>
