@@ -6,7 +6,7 @@ interface IInputProps {
 const TitleInput = (props: IInputProps) => {
   return (
     <CanvasHeaderInput
-      inputProps={{ style: { textAlign: 'center' } }}
+      variant="standard"
       placeholder={props.placeholder}
     />
   );

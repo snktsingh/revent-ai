@@ -26,9 +26,16 @@ import {
   TIMELINE_TEXT,
 } from '@/constants/elementNames';
 import { Copy, DeleteX } from '@/constants/media';
+import {
+  updateFunnelId,
+  updatePyramidId,
+} from '@/redux/reducers/elementsCount';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { fabric } from 'fabric';
 
 export function useDelAndCopy() {
+  const { pyramidId, funnelId, timelineId, processId, cycleId } = useAppSelector(state => state.elementsIds);
+  const dispatch = useAppDispatch();
   const CustomBorderIcons = (canvas: fabric.Canvas | null) => {
     // Load icon images
     const deleteIcon = new Image();
@@ -44,7 +51,7 @@ export function useDelAndCopy() {
         offsetY: -16,
         offsetX: 16,
         cursorStyle: 'pointer',
-        mouseUpHandler: ()=> true,
+        mouseUpHandler: () => true,
         render: renderIcon(deleteIcon),
       });
 
@@ -55,11 +62,9 @@ export function useDelAndCopy() {
         offsetY: -16,
         offsetX: -16,
         cursorStyle: 'pointer',
-        mouseUpHandler: ()=> true,
+        mouseUpHandler: () => true,
         render: renderIcon(cloneIcon),
       });
-
-    
 
     // Function to render custom icons on the canvas
     function renderIcon(icon: HTMLImageElement) {
@@ -84,7 +89,7 @@ export function useDelAndCopy() {
   };
 
   // Function to handle the delete action
-  function deleteObject(canvas : fabric.Canvas | null): boolean {
+  function deleteObject(canvas: fabric.Canvas | null): boolean {
     const activeObject = canvas?.getActiveObject();
     const currentElID = activeObject?.name?.split('_')[1];
     if (activeObject) {
@@ -134,17 +139,17 @@ export function useDelAndCopy() {
           objectsToDelete.push(TABLE);
           break;
         case QUOTE:
-          objectsToDelete.push(QUOTE_IMG,QUOTE_AUTHOR);
+          objectsToDelete.push(QUOTE_IMG, QUOTE_AUTHOR);
           break;
         case QUOTE_AUTHOR:
-          objectsToDelete.push(QUOTE_IMG,QUOTE);
+          objectsToDelete.push(QUOTE_IMG, QUOTE);
           break;
         default:
           break;
       }
 
       // Delete objects by name
-      deleteObjectsByName(objectsToDelete,canvas);
+      deleteObjectsByName(objectsToDelete, canvas);
 
       // Remove the active object from the canvas
       const activeObjects = canvas?.getActiveObjects();
@@ -161,17 +166,20 @@ export function useDelAndCopy() {
   }
 
   // Function to delete objects based on their names
-  const deleteObjectsByName = (names: string[], canvas : fabric.Canvas | null) => {
+  const deleteObjectsByName = (
+    names: string[],
+    canvas: fabric.Canvas | null
+  ) => {
     canvas?.forEachObject(obj => {
       if (names.includes(obj.name || '')) {
         canvas.remove(obj);
       }
-      if(names.includes(TABLE)){
-        if(obj?.name?.startsWith(TABLE_TEXT)){
+      if (names.includes(TABLE)) {
+        if (obj?.name?.startsWith(TABLE_TEXT)) {
           canvas.remove(obj);
         }
       }
-    }); 
+    });
     canvas?.renderAll();
   };
 
@@ -207,29 +215,253 @@ export function useDelAndCopy() {
   //   return true;
   // }
 
- // Function to handle the clone action for multiple selected elements
-function handleCopyClick(selectedObjects: fabric.Object[], canvas: fabric.Canvas | null): void {
-  selectedObjects.forEach(target => {
-    if (target instanceof fabric.Group) {
-      // Clone each object in the group
-      const groupObjects = target.getObjects();
-      groupObjects.forEach(obj => {
+  // Function to handle the clone action for multiple selected elements
+  function handleCopyClick(
+    selectedObjects: fabric.Object[],
+    canvas: fabric.Canvas | null
+  ): void {
+    selectedObjects.forEach(target => {
+      if (target instanceof fabric.Group) {
+        const elName = target.name?.split('_');
+
+        // Clone each object in the group
+        target.clone(function (cloned: fabric.Object) {
+          cloned.left! += cloned.width! + 20;
+          cloned.name = elName && elementGenerate(elName[0], cloned);
+          canvas?.add(cloned);
+          if (
+            canvas &&
+            elName &&
+            cloned.left &&
+            cloned.top &&
+            cloned.width &&
+            cloned.height
+          ) {
+            copyGroupedElements(
+              canvas,
+              elName[0],
+              +elName[1],
+              cloned.left,
+              cloned.top,
+              cloned.width,
+              cloned.height
+            );
+          }
+          canvas?.renderAll();
+        });
+
+        // const groupObjects = target.getObjects();
+        // groupObjects.forEach(obj => {
+        //   obj.clone(function (cloned: fabric.Object) {
+        //     cloned.left! += 200;
+        //     cloned.top! += 200;
+        //     canvas?.add(cloned);
+        //   });
+        // });
+      } else {
+        // Clone a single object
+        if (target.name?.startsWith(TIMELINE)) {
+          const elName = target.name?.split('_');
+          target.clone(function (cloned: fabric.Object) {
+            cloned.top! += cloned.height! + 10;
+            cloned.name = elName && elementGenerate(elName[0], cloned);
+            canvas?.add(cloned);
+            if (
+              canvas &&
+              elName &&
+              cloned.left &&
+              cloned.top &&
+              cloned.width &&
+              cloned.height
+            ) {
+              copyGroupedElements(
+                canvas,
+                elName[0],
+                +elName[1],
+                cloned.left,
+                cloned.top,
+                cloned.width,
+                cloned.height
+              );
+            }
+            canvas?.renderAll();
+          });
+        } else if (target.name?.startsWith(PROCESS)) {
+          const elName = target.name?.split('_');
+          target.clone(function (cloned: fabric.Object) {
+            cloned.top! += cloned.height! + 10;
+            cloned.name = elName && elementGenerate(elName[0], cloned);
+            canvas?.add(cloned);
+            if (
+              canvas &&
+              elName &&
+              cloned.left &&
+              cloned.top &&
+              cloned.width &&
+              cloned.height
+            ) {
+              copyGroupedElements(
+                canvas,
+                elName[0],
+                +elName[1],
+                cloned.left,
+                cloned.top,
+                cloned.width,
+                cloned.height
+              );
+            }
+            canvas?.renderAll();
+          });
+        }else if (target.name?.startsWith(CYCLE)) {
+          const elName = target.name?.split('_');
+          target.clone(function (cloned: fabric.Object) {
+            cloned.left! += cloned.width! + 10;
+            cloned.name = elName && elementGenerate(elName[0], cloned);
+            canvas?.add(cloned);
+            if (
+              canvas &&
+              elName &&
+              cloned.left &&
+              cloned.top &&
+              cloned.width &&
+              cloned.height
+            ) {
+              copyGroupedElements(
+                canvas,
+                elName[0],
+                +elName[1],
+                cloned.left,
+                cloned.top,
+                cloned.width,
+                cloned.height
+              );
+            }
+            canvas?.renderAll();
+          });
+        }else {
+          target.clone(function (cloned: fabric.Object) {
+            cloned.left! += 50;
+            cloned.top! += 50;
+            canvas?.add(cloned);
+          });
+        }
+      }
+    });
+  }
+
+  function copyGroupedElements(
+    canvas: fabric.Canvas,
+    elementName: string,
+    id: number,
+    left: number,
+    top: number,
+    elWidth: number,
+    elHeight: number
+  ) {
+    canvas.getObjects().forEach(obj => {
+      if (
+        elementName.startsWith(PYRAMID) &&
+        obj.name === `${PYRAMID_TEXT}_${id}`
+      ) {
         obj.clone(function (cloned: fabric.Object) {
-          cloned.left! += cloned.width! + 200;
-          cloned.top! += 200;
+          cloned.left! += elWidth + 20;
+          cloned.name = `${PYRAMID_TEXT}_${pyramidId}`;
           canvas?.add(cloned);
         });
-      });
-    } else {
-      // Clone a single object
-      target.clone(function (cloned: fabric.Object) {
-        cloned.left! += 50;
-        cloned.top! += 50;
-        canvas?.add(cloned);
-      });
+      } else if (
+        elementName.startsWith(FUNNEL) &&
+        obj.name === `${FUNNEL_TEXT}_${id}`
+      ) {
+        obj.clone(function (cloned: fabric.Object) {
+          cloned.left! += elWidth + 20;
+          cloned.name = `${FUNNEL_TEXT}_${funnelId}`;
+          canvas?.add(cloned);
+        });
+      } else if (
+        elementName.startsWith(TIMELINE) &&
+        (obj.name === `${TIMELINE_HEADING}_${id}` ||
+          obj.name === `${TIMELINE_CIRCLE}_${id}` ||
+          obj.name === `${TIMELINE_DIRECTION}_${id}` ||
+          obj.name === `${TIMELINE_TEXT}_${id}`)
+      ) {
+        obj.clone(function (cloned: fabric.Object) {
+          cloned.top! += elHeight + 10;
+          cloned.name = `${TIMELINE}_${timelineId}`;
+          canvas?.add(cloned);
+        });
+      } else if (
+        elementName.startsWith(PROCESS) &&
+        (obj.name === `${PROCESS_ARROW}_${id}` ||
+          obj.name === `${PROCESS_BOX}_${id}` ||
+          obj.name === `${PROCESS_TEXT}_${id}`)
+      ) {
+        obj.clone(function (cloned: fabric.Object) {
+          cloned.top! += elHeight + 10;
+          cloned.name = `${PROCESS}_${processId}`;
+          canvas?.add(cloned);
+        });
+      } else if (
+        elementName.startsWith(CYCLE) &&
+        (obj.name === `${CYCLE_ARROW}_${id}` ||
+          obj.name === `${CYCLE_CIRCLE}_${id}` ||
+          obj.name === `${CYCLE_TEXT}_${id}`)
+      ) {
+        obj.clone(function (cloned: fabric.Object) {
+          cloned.left! += elWidth + 10;
+          cloned.name = `${CYCLE}_${cycleId}`;
+          canvas?.add(cloned);
+        });
+      }
+    });
+  }
+
+  function elementGenerate(
+    elName: string,
+    clonedObject: fabric.Object
+  ): string {
+    let newElementName = '';
+    switch (elName) {
+      case PYRAMID:
+        newElementName = `${PYRAMID}_${pyramidId}`;
+        (clonedObject as fabric.Group).forEachObject(obj => {
+          const objName = obj.name?.split('_');
+          obj.name = objName && `${objName[0]}_${pyramidId}`;
+        });
+        dispatch(updatePyramidId());
+        break;
+      case FUNNEL:
+        newElementName = `${FUNNEL}_${funnelId}`;
+        (clonedObject as fabric.Group).forEachObject(obj => {
+          const objName = obj.name?.split('_');
+          console.log(objName);
+          obj.set({
+            name: objName && `${objName[0]}_${funnelId}`,
+          });
+        });
+
+        (clonedObject as fabric.Group).setCoords();
+
+        dispatch(updateFunnelId());
+        break;
+      case PYRAMID:
+        newElementName = `${PYRAMID}_${pyramidId}`;
+        dispatch(updatePyramidId());
+        break;
+      case PYRAMID:
+        newElementName = `${PYRAMID}_${pyramidId}`;
+        dispatch(updatePyramidId());
+        break;
+      case PYRAMID:
+        newElementName = `${PYRAMID}_${pyramidId}`;
+        dispatch(updatePyramidId());
+        break;
+
+      default:
+        break;
     }
-  });
-}
+
+    return newElementName;
+  }
 
   return { CustomBorderIcons, deleteObject, handleCopyClick };
 }
