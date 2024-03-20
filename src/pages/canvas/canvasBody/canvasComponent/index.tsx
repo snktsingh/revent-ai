@@ -2,7 +2,7 @@ import { theme } from '@/constants/theme';
 import { toggleRegenerateButton } from '@/redux/reducers/slide';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { fabric } from 'fabric';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   useBulletOrNumberedText,
   useCustomSelectionIcons,
@@ -21,18 +21,23 @@ import { CanvasContainer } from './style';
 import { IExtendedTextBoxOptions } from '@/interface/fabricTypes';
 import ConversionToJson from '@/components/pptToJson';
 import { setVariantImageAsMain } from '@/redux/reducers/canvas';
+import axios from 'axios';
+import ElementEditBar from '@/components/ElementEditBar';
+import { useObjectScalingEvent } from '../events/objectScalingEvent';
 
 const CanvasComponent: React.FC = () => {
   const canvasRef = useRef<fabric.Canvas | null>(null);
   const FabricRef = useRef<fabric.Canvas | null>(null);
-  const Container = useRef<HTMLDivElement | null>(null);
+  const ContainerRef = useRef<HTMLDivElement | null>(null);
 
+  
   const ElementFunctions = useElementFunctions(canvasRef.current);
 
   const { handleAddCustomIcon } = useCustomSelectionIcons();
   const { CustomBorderIcons } = useDelAndCopy();
   const { renderBulletOrNumTextLine } = useBulletOrNumberedText();
   const { handleObjectMoving } = useObjectMovingEvent();
+  const { handleObjectScaling } = useObjectScalingEvent();
   const { handleSelectionCreated } = useSelectionCreatedEvent();
   const { textExitedEvent, textEnteringEvent } = useTextEvents();
   const { CanvasClick } = useCanvasClickEvent();
@@ -43,6 +48,11 @@ const CanvasComponent: React.FC = () => {
     getElementsData,
     customFabricProperties,
     extractTableData,
+    handleElementBarSelection,
+    showOptions,
+    setShowOptions,
+    selectedElementPosition,
+    setSelectedElementPosition
   } = useCanvasComponent();
 
   const dispatch = useAppDispatch();
@@ -82,6 +92,7 @@ const CanvasComponent: React.FC = () => {
   // }, [jsonData]);
 
   useEffect(() => {
+    setShowOptions(false);
     const newCanvas = new fabric.Canvas('canvas');
     newCanvas.clear();
     fabric.Object.prototype.set({
@@ -97,7 +108,6 @@ const CanvasComponent: React.FC = () => {
       canvasJS.canvas,
       () => {
         updateCanvasDimensions(newCanvas);
-        console.log('main canvas loaded');
         canvasRef.current = newCanvas;
         newCanvas.setBackgroundColor(
           `${theme.colorSchemes.light.palette.common.white}`,
@@ -110,8 +120,8 @@ const CanvasComponent: React.FC = () => {
           theme.colorSchemes.light.palette.common.steelBlue;
         newCanvas.selectionLineWidth = 0.5;
 
-        CustomBorderIcons(newCanvas);
-        
+        // CustomBorderIcons(newCanvas);
+
         newCanvas.forEachObject(obj => {
           if (obj) {
             if ((obj as IExtendedTextBoxOptions)?.listType == 'bullet') {
@@ -120,7 +130,7 @@ const CanvasComponent: React.FC = () => {
             }
           }
         });
-        newCanvas.on('mouse:up', event => {
+        newCanvas.on('mouse:dblclick', event => {
           CanvasClick(newCanvas, event);
         });
         newCanvas.on('text:editing:exited', event => {
@@ -191,8 +201,12 @@ const CanvasComponent: React.FC = () => {
           // console.log(newCanvas.toJSON());
           handleObjectMoving(options, newCanvas);
         });
+        // newCanvas.on('object:scaling', function (options) {
+        //   // console.log(newCanvas.toJSON());
+        //   handleObjectScaling(options, newCanvas);
+        // });
         updateCanvasSlideData(newCanvas, canvasJS.id);
-        handleAddCustomIcon(newCanvas);
+        // handleAddCustomIcon(newCanvas);
         newCanvas.renderAll();
       },
       (error: Error) => {
@@ -201,6 +215,35 @@ const CanvasComponent: React.FC = () => {
     );
 
     const canvas = canvasRef.current!;
+
+    canvas.on('selection:created', handleElementBarSelection);
+    canvas.on('selection:updated', handleElementBarSelection);
+
+    // Event listener for mouse out from Fabric.js canvas objects
+    canvas.on('selection:cleared', () => {
+      setShowOptions(false);
+    });
+
+    window.addEventListener('resize', () => {
+      const container = ContainerRef.current;
+      if (container) {
+        const aspectRatio = 16 / 9;
+        const canvasWidthPercentage = 58;
+        const canvasHeightPercentage = 58 / aspectRatio;
+
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+
+        const canvasWidth = (canvasWidthPercentage / 100) * windowWidth;
+        const canvasHeight = (canvasHeightPercentage / 100) * windowHeight;
+
+        const { top, left } = selectedElementPosition;
+        const rect = container.getBoundingClientRect();
+        const scaleFactorX = rect.width / canvasWidth; // Assuming canvas width is 400
+        const scaleFactorY = rect.height / canvasHeight; // Assuming canvas height is 400
+        setSelectedElementPosition({ top: top * scaleFactorY, left: left * scaleFactorX });
+      }
+    })
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Delete' && canvas.getActiveObject()) {
@@ -246,13 +289,13 @@ const CanvasComponent: React.FC = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
       // window.removeEventListener('click', handleClickOutsideCanvas);
-      window.removeEventListener('resize', () => {});
+      window.removeEventListener('resize', () => { });
       newCanvas.dispose();
     };
   }, [canvasJS.canvas, selectedOriginalCanvas]);
 
   useEffect(() => {
-    console.log('variant image loaded')
+    setShowOptions(false);
     if (variantImage) {
       // Clear the canvas and set its background color to white
       canvasRef.current?.clear();
@@ -260,7 +303,7 @@ const CanvasComponent: React.FC = () => {
         `${theme.colorSchemes.light.palette.common.white}`,
         canvasRef.current.renderAll.bind(canvasRef.current)
       );
-  
+
       // Load the image and adjust its size to fit the canvas
       fabric.Image.fromURL(variantImage, img => {
         const canvasWidth = canvasRef.current?.width || 0;
@@ -268,13 +311,17 @@ const CanvasComponent: React.FC = () => {
         const scaleWidth = canvasWidth / img.width!;
         const scaleHeight = canvasHeight / img.height!;
         const scale = Math.max(scaleWidth, scaleHeight);
-  
+
         // Set image properties and add it to the canvas
         img.set({
           left: 0,
           top: 0,
           scaleX: scale,
           scaleY: scale,
+          selectable: false,
+          lockMovementX: true,
+          lockScalingY: true,
+          moveCursor: 'pointer',
         });
         canvasRef.current?.add(img);
         canvasRef.current?.renderAll();
@@ -282,10 +329,17 @@ const CanvasComponent: React.FC = () => {
     }
   }, [variantImage]);
 
+
+  
+  useEffect(() => {
+  }, [selectedElementPosition,showOptions])
+
   return (
-    <CanvasContainer ref={Container}>
-      {/* <ConversionToJson /> */}
-      <canvas id="canvas"></canvas>
+    <CanvasContainer >
+      <div style={{ position: 'relative' }} ref={ContainerRef}>
+        <canvas id="canvas"></canvas>
+        {showOptions && <ElementEditBar left={selectedElementPosition.left} top={selectedElementPosition.top} canvas={canvasRef.current}/>}
+      </div>
       <div style={{ position: 'absolute', left: -10000 }}>
         <FullscreenCanvas />
       </div>

@@ -1,21 +1,33 @@
-import {
-  GoogleButton,
-  LoginLink,
-  SignUpLeftContainer,
-  SignupRightContainer,
-} from './style';
+import { LoginLink, SignUpLeftContainer, SignupRightContainer } from './style';
 import Logo from '../../assets/logo.svg';
 import SignUpImage from '../../assets/signup.svg';
-import { Box, Button, Divider, Grid } from '@mui/material';
+import { Box, Button, Grid } from '@mui/material';
 import { TextInput } from '../login/style';
-import Google from '../../assets/google.svg';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
+import useSignup from './container';
+import { Slide, ToastContainer } from 'react-toastify';
 
 const SignUp = () => {
+  const {
+    values,
+    handleChange,
+    setConfirmPassword,
+    confirmPassword,
+    handleSubmit,
+    isDisabled,
+    setIsDisabled,
+  } = useSignup();
+
   return (
     <div>
+      <ToastContainer
+        position="top-center"
+        autoClose={1000}
+        hideProgressBar
+        transition={Slide}
+      />
       <Grid container>
         <SignUpLeftContainer xs={6}>
           <img src={Logo} width="25%" />
@@ -24,14 +36,6 @@ const SignUp = () => {
         <SignUpLeftContainer xs={6}>
           <h1>Create Your Account</h1>
           <SignupRightContainer>
-            <br />
-            <br />
-            <GoogleButton variant="outlined">
-              <img src={Google} width="15%" style={{ marginRight: '5%' }} />
-              <>Sign up with Google</>
-            </GoogleButton>
-            <br /> <br />
-            <Divider>About</Divider>
             <Box
               sx={{
                 width: '80%',
@@ -40,29 +44,70 @@ const SignUp = () => {
             >
               <TextInput
                 id="fullWidth"
-                label="Enter your Name"
+                name="login"
+                label="Enter your User Name"
                 variant="outlined"
                 fullWidth
+                value={values.login}
+                onChange={handleChange}
               />
               <TextInput
                 id="fullWidth"
+                name="firstName"
+                label="Enter your First Name"
+                variant="outlined"
+                fullWidth
+                value={values.firstName}
+                onChange={handleChange}
+              />
+              <TextInput
+                id="fullWidth"
+                name="lastName"
+                label="Enter your Last Name"
+                variant="outlined"
+                fullWidth
+                value={values.lastName}
+                onChange={handleChange}
+              />
+              <TextInput
+                id="fullWidth"
+                name="email"
                 label="Enter your Email"
                 variant="outlined"
                 fullWidth
+                value={values.email}
+                onChange={handleChange}
               />
               <TextInput
                 id="fullWidth"
+                name="password"
                 label="Enter your Password"
                 variant="outlined"
                 fullWidth
+                value={values.password}
+                onChange={handleChange}
+              />
+              <TextInput
+                id="fullWidth"
+                label="Confirm your Password"
+                variant="outlined"
+                fullWidth
+                value={confirmPassword}
+                onChange={e => setConfirmPassword(e.target.value)}
               />
             </Box>
             <FormControlLabel
-              control={<Checkbox />}
+              control={<Checkbox onClick={() => setIsDisabled(false)} />}
               label="I have read and accept Terms of use and Privacy Notice"
             />
             <br />
-            <Button variant="contained" size="large" style={{ width: '80%' }}>
+            <Button
+              variant="contained"
+              size="large"
+              style={{ width: '80%' }}
+              onClick={handleSubmit}
+              disabled={isDisabled}
+            >
               Sign up
             </Button>
             <LoginLink>

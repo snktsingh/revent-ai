@@ -59,3 +59,6 @@ export const SignUp = styled.span`
   justify-content: center;
   font-size: 110%;
 `;
+export const PassMessage = styled.span`
+  font-size: 10px;
+`;

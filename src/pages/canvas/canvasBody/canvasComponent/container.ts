@@ -4,15 +4,22 @@ import {
   CONCLUSION_SLIDE_TITLE,
   COVER_SLIDE_SUBTITLE,
   COVER_SLIDE_TITLE,
+  CYCLE_ARROW,
+  CYCLE_CIRCLE,
   CYCLE_TEXT,
   FUNNEL_TEXT,
   PARAGRAPH,
+  PROCESS_ARROW,
+  PROCESS_BOX,
   PROCESS_TEXT,
   PYRAMID_TEXT,
   SECTION_SLIDE_SUBTITLE,
   SECTION_SLIDE_TITLE,
   SUBTITLE,
+  TABLE,
   TABLE_TEXT,
+  TIMELINE_CIRCLE,
+  TIMELINE_DIRECTION,
   TIMELINE_HEADING,
   TIMELINE_TEXT,
   TITLE,
@@ -33,6 +40,9 @@ import { fabric } from 'fabric';
 import { useState } from 'react';
 
 export const useCanvasComponent = () => {
+  const [showOptions, setShowOptions] = useState(false);
+  const [selectedElementPosition, setSelectedElementPosition] = useState({ top: 0, left: 0 });
+
   const customFabricProperties = [
     'listType',
     'listBullet',
@@ -45,7 +55,7 @@ export const useCanvasComponent = () => {
     height: 0,
   });
   const dispatch = useAppDispatch();
-
+  const { canvasJS } = useAppSelector((state) => state.canvas);
   const handleAllElements = (event: fabric.IEvent, canvas: fabric.Canvas) => {
     const { target } = event;
 
@@ -129,6 +139,7 @@ export const useCanvasComponent = () => {
       companyName: themeName,
       themeColor: themeCode,
       imagesCount: '',
+      slideNumber : canvasJS.id,
       elements: [],
     };
     let timelineData: TimelineDataType[] = [];
@@ -377,6 +388,75 @@ export const useCanvasComponent = () => {
     console.log({ tableData });
   };
 
+
+  const handleElementBarSelection = (event: fabric.IEvent) => {
+    if (event.selected && event.selected.length > 0) {
+      const selectedObject = event.selected[0];
+      if (selectedObject && selectedObject.name && checkElementsForEditBar(selectedObject.name)) {
+        setShowOptions(false);
+        return;
+      }
+  
+      const boundingRect = selectedObject.getBoundingRect();
+      const { left, top, width, height } = boundingRect;
+      
+      let positionTop = top - 35;
+      let positionLeft = left + (width - 140) / 2;
+  
+      if (selectedObject && selectedObject.name && selectedObject.name.startsWith(TABLE)) {
+        positionTop = top - 35;
+        positionLeft = left + (width - 275) / 2;
+  
+        const updateTablePosition = () => {
+          const boundingRect = selectedObject.getBoundingRect();
+          const { left, top, width, height } = boundingRect;
+          const newPositionTop = top - 35;
+          const newPositionLeft = left + (width - 275) / 2;
+          setSelectedElementPosition({ top: newPositionTop, left: newPositionLeft });
+        };
+  
+        selectedObject.on('moving', updateTablePosition);
+      } else {
+        const updatePosition = () => {
+          const boundingRect = selectedObject.getBoundingRect();
+          const { left, top, width, height } = boundingRect;
+          const newPositionTop = top - 35;
+          const newPositionLeft = left + (width - 140) / 2;
+          setSelectedElementPosition({ top: newPositionTop, left: newPositionLeft });
+        };
+  
+        selectedObject.on('moving', updatePosition);
+      }
+  
+      setSelectedElementPosition({ top: positionTop, left: positionLeft });
+      setShowOptions(true);
+    }
+  };
+  
+
+  function checkElementsForEditBar(elementName : string) : boolean {
+    if(
+      elementName.startsWith(PYRAMID_TEXT) ||
+      elementName.startsWith(FUNNEL_TEXT) ||
+      elementName.startsWith(PROCESS_TEXT) ||
+      elementName.startsWith(PROCESS_ARROW) ||
+      elementName.startsWith(PROCESS_BOX) ||
+      elementName.startsWith(CYCLE_TEXT) ||
+      elementName.startsWith(CYCLE_ARROW) ||
+      elementName.startsWith(CYCLE_CIRCLE) ||
+      elementName.startsWith(TIMELINE_HEADING) ||
+      elementName.startsWith(TIMELINE_TEXT) ||
+      elementName.startsWith(TIMELINE_CIRCLE) ||
+      elementName.startsWith(TIMELINE_DIRECTION) ||
+      elementName.startsWith(TABLE_TEXT) 
+      ){
+      return true;
+    };
+    return false;
+  };
+  
+
+
   return {
     handleAllElements,
     updateCanvasDimensions,
@@ -384,5 +464,10 @@ export const useCanvasComponent = () => {
     getElementsData,
     customFabricProperties,
     extractTableData,
+    handleElementBarSelection,
+    showOptions,
+    setShowOptions,
+    selectedElementPosition,
+    setSelectedElementPosition
   };
 };

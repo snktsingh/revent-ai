@@ -32,7 +32,7 @@ import {
   TextField,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { ToastContainer } from 'react-toastify';
+import { Slide, ToastContainer } from 'react-toastify';
 import CanvasComponent from './canvasComponent';
 import { CanvasNotes } from './canvasNotes';
 import { ContentElements, elementData } from './elementData';
@@ -81,7 +81,7 @@ const CanvasBody = () => {
   };
 
   const handleRegeneration = (item: any) => {
-    if (variantImage === '' && canvasJS.variants.length === 0) {
+    if (canvasJS.variants.length === 0) {
       handleClose();
       item.onClick();
       dispatch(setMenuItemKey(item.key));
@@ -156,7 +156,7 @@ const CanvasBody = () => {
   };
 
   const handleRedirect = () => {
-    dispatch(setVariantImageAsMain(''));
+    // dispatch(setVariantImageAsMain(''));
     dispatch(toggleSelectedOriginalCanvas(true));
     dispatch(
       updateCanvasInList({
@@ -173,7 +173,6 @@ const CanvasBody = () => {
       const canvasIsEmpty =
         (canvasList[canvasJS.id - 1].canvas as any).objects.length === 0;
       const variantsIsEmpty = canvasJS.variants.length === 0;
-      console.log({ variantsIsEmpty, canvasIsEmpty });
       if (variantsIsEmpty && canvasIsEmpty) {
         dispatch(toggleRegenerateButton(true)); // Disable the button
       } else if (selectedOriginalCanvas) {
@@ -182,12 +181,16 @@ const CanvasBody = () => {
         dispatch(toggleRegenerateButton(true)); // Enable the button
       }
     }
-    console.log({ isRegenerateDisabled });
   }, [canvasJS, dispatch, variantImage, isRegenerateDisabled]);
 
   return (
     <BodyContainer>
-      <ToastContainer autoClose={800} />
+      <ToastContainer
+        position="top-center"
+        autoClose={1000}
+        hideProgressBar
+        transition={Slide}
+      />
       <Grid container>
         <Grid xs={2}>
           <SlideList />
@@ -282,7 +285,7 @@ const CanvasBody = () => {
         </Grid>
       </Grid>
       <Templates />
-      <PopUpModal content={slide.slideKey} />
+      <PopUpModal />
       <Dialog
         open={redirectAlert}
         onClose={closeRedirectAert}

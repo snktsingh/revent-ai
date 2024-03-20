@@ -5,8 +5,8 @@ export const useQuoteElement = () => {
     
   const addQuotes = ( canvas : fabric.Canvas | null) => {
     let text = new fabric.Textbox('❝Click to add a quote❞', {
-      left: 150,
-      top: 200,
+      left: 360,
+      top: 180,
       width: 300,
       height: 40,
       fill: 'black',
@@ -19,8 +19,8 @@ export const useQuoteElement = () => {
     });
 
     let authorText = new fabric.Textbox('- Author Name',{
-      left: 258,
-      top: 250,
+      left: 500,
+      top: 230,
       width: 200,
       height: 20,
       fill: 'black',
@@ -28,14 +28,13 @@ export const useQuoteElement = () => {
       name: QUOTE_AUTHOR,
     })
 
-    const mainListContainer = new fabric.Rect({
-      width: 200,
-      height: 200,
+    const mainListContainer = new fabric.Circle({
+      radius: 100,
       fill: 'transparent',
       strokeWidth: 1,
       stroke: '#cbcbcb',
       name: QUOTE_IMG_CONTAINER,
-      rx:5,
+      // rx:5,
     });
 
     const addImage = new fabric.Text('+ Optional Image', {
@@ -49,7 +48,7 @@ export const useQuoteElement = () => {
       name: QUOTE_ADD_IMG_TEXT,
     });
     let group = new fabric.Group([mainListContainer, addImage], {
-      left:450,
+      left:110,
       top:120,
       name: QUOTE_IMG,
     });

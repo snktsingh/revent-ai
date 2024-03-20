@@ -1,4 +1,10 @@
-import { HeaderContainer, UserAvatar, UserLink } from './style';
+import {
+  HeaderContainer,
+  StyledMenu,
+  StyledMenuItem,
+  UserAvatar,
+  UserLink,
+} from './style';
 import { CanvasBack, PDF, PPT, Present, Share } from '@/constants/media';
 import TitleInput from '@/constants/elements/Input';
 import {
@@ -14,6 +20,7 @@ import {
   DialogContentText,
   DialogActions,
   InputBase,
+  ListItemIcon,
 } from '@mui/material';
 import { ButtonName, MainIconButton } from '@/constants/elements/button/style';
 import VerticalDivider from '@/constants/elements/divider';
@@ -24,10 +31,13 @@ import { CanvasHeaderInput } from '@/constants/elements/Input/style';
 import { ContentElements } from '../canvasBody/elementData';
 import { useAppSelector } from '@/redux/store';
 import { useNavigate } from 'react-router-dom';
+import { replace } from 'lodash';
+import useCanvasHeader from './container';
+import ProfileMenu from '@/common-ui/profileMenu';
 
 const MainCanvasHeader = () => {
   const navigate = useNavigate();
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [openProfileMenu, setOpenProfileMenu] = React.useState<null | HTMLElement>(null);
   const [anchorE2, setAnchorE2] = React.useState<null | HTMLElement>(null);
   const [openWarning, setOpenWarning] = React.useState(false);
   const { pptUrl } = useAppSelector(state => state.thunk);
@@ -39,13 +49,13 @@ const MainCanvasHeader = () => {
   const handleWarningClose = () => {
     setOpenWarning(false);
   };
-  const open = Boolean(anchorEl);
+  
   const openShare = Boolean(anchorE2);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
+    setOpenProfileMenu(event.currentTarget);
   };
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleCloseProfileMenu = () => {
+    setOpenProfileMenu(null);
   };
   const handleShareClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorE2(event.currentTarget);
@@ -53,6 +63,9 @@ const MainCanvasHeader = () => {
   const handleShareClose = () => {
     setAnchorE2(null);
   };
+
+
+
   return (
     <HeaderContainer>
       <MainIconButton onClick={handleWarningOpen}>
@@ -109,17 +122,10 @@ const MainCanvasHeader = () => {
             <UserAvatar>RM</UserAvatar>
           </Stack>
         </MainIconButton>
-        <Menu
-          id="basic-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-        >
-          <MenuItem onClick={handleClose}>
-            <UserLink href="/dashboard">Home</UserLink>
-          </MenuItem>
-          <MenuItem onClick={handleClose}>Logout</MenuItem>
-        </Menu>
+          <ProfileMenu anchorElForProfileMenu={openProfileMenu} 
+          handleCloseProfileMenu={handleCloseProfileMenu} 
+          setAnchorElForProfileMenu={setOpenProfileMenu}
+          />
       </Stack>
       <Dialog
         open={openWarning}
@@ -135,7 +141,9 @@ const MainCanvasHeader = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleWarningClose}>Cancel</Button>
-          <Button onClick={() => navigate('/dashboard')}>Go Back</Button>
+          <Button onClick={() => navigate('/dashboard', { replace: true })}>
+            Go Back
+          </Button>
         </DialogActions>
       </Dialog>
     </HeaderContainer>

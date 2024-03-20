@@ -6,6 +6,7 @@ export interface TestState {
   openVariant: boolean;
   openNotes: boolean;
   itemKey: number;
+  openProfileMenu : boolean,
 }
 
 const initialState: TestState = {
@@ -14,6 +15,7 @@ const initialState: TestState = {
   openVariant: false,
   openNotes: false,
   itemKey: 0,
+  openProfileMenu : false,
 };
 
 export const ElementReducer = createSlice({

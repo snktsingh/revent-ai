@@ -1,7 +1,4 @@
-import { deleteCanvasItem } from '@/redux/reducers/canvas';
-import { closeModal } from '@/redux/reducers/elements';
-import { deleteSlide } from '@/redux/reducers/slide';
-import { useAppDispatch, useAppSelector } from '@/redux/store';
+import React from 'react';
 import {
   Button,
   Dialog,
@@ -10,15 +7,20 @@ import {
   DialogContentText,
   DialogTitle,
 } from '@mui/material';
+import { deleteCanvasItem } from '@/redux/reducers/canvas';
+import { closeModal } from '@/redux/reducers/elements';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
 
-interface IPopUpModal {
-  content: number;
-}
-const PopUpModal = (props: IPopUpModal) => {
+const PopUpModal = () => {
   const isVisible = useAppSelector(state => state.element);
-  const slideKey = useAppSelector(state => state.slide.slideKey);
+  const { canvasJS, canvasList } = useAppSelector(state => state.canvas);
   const dispatch = useAppDispatch();
-  const {canvasJS} = useAppSelector(state=> state.canvas);
+
+  const handleDelete = () => {
+    dispatch(closeModal());
+    dispatch(deleteCanvasItem(canvasJS.id));
+  };
+
   return (
     <Dialog
       open={isVisible.isModalVisible}
@@ -31,21 +33,19 @@ const PopUpModal = (props: IPopUpModal) => {
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-        You want to delete slide {canvasJS.id}
+          {canvasList.length === 1
+            ? 'You cannot delete the only slide.'
+            : `You want to delete slide ${canvasJS.id}`}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={() => dispatch(closeModal())}>Cancel</Button>
-        <Button
-          onClick={() => {
-            dispatch(closeModal());
-            dispatch(deleteCanvasItem(canvasJS.id));
-          }}
-        >
+        <Button onClick={handleDelete} disabled={canvasList.length === 1}>
           Delete
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
+
 export default PopUpModal;
