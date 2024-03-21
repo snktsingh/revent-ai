@@ -46,18 +46,26 @@ export function usePyramidElement() {
           name: `${PYRAMID_LEVEL}_${currentID}`,
         }
       );
-
+        console.log({trapezoid})
       const text = new AutoResizingTextbox('Add Text', {
         fontSize: 18,
-        left: lastText.left,
+        left : lastText.left,
         top: trapezoid.top! + 20,
-        width: 100,
-        fixedWidth: 100,
+        width: 150,
+        fixedWidth: 150,
         fixedHeight: 100,
         name: `${PYRAMID_TEXT}_${currentID}`,
-      });
-
+      });     
       (activeObject as fabric.Group).addWithUpdate(trapezoid);
+
+      canvas.getObjects().forEach((obj) => {
+        if(obj.name === `${PYRAMID_TEXT}_${currentID}` ){
+            obj.set({
+              left : lastText.left
+            })
+        }
+     })
+
       canvas.add(text);
       canvas?.requestRenderAll();
     }
