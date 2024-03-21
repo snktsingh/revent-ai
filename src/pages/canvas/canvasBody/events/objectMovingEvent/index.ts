@@ -279,68 +279,71 @@ export function useObjectMovingEvent() {
         var deltaX = movedObject.left! - lastLeft!;
         var deltaY = movedObject.top! - lastTop!;
 
-        // canvas.forEachObject(function (obj) {
-        //   let left;
-        //   let top;
+        canvas.forEachObject(function (obj) {
+          let left;
+          let top;
 
-        //   if (
-        //     obj.name === `${FUNNEL_TEXT}_${objectID}` &&
-        //     obj.intersectsWithObject(movedObject, true, true)
-        //   ) {
-        //     obj
-        //       .set({
-        //         left: obj.left! + deltaX,
-        //         top: obj.top! + deltaY,
-        //       })
-        //       .setCoords();
-        //     left = obj.left! + deltaX;
-        //     top = obj.top! + deltaY;
-        //   }
+          if (
+            obj.name === `${FUNNEL_TEXT}_${objectID}` &&
+            obj.intersectsWithObject(movedObject, true, true)
+          ) {
+            obj
+              .set({
+                left: obj.left! + deltaX,
+                top: obj.top! + deltaY,
+              })
+              .setCoords();
+            left = obj.left! + deltaX;
+            top = obj.top! + deltaY;
+          }
 
-        //   if (
-        //     obj.name == `${FUNNEL_LEVEL}_${objectID}` &&
-        //     obj.intersectsWithObject(movedObject, true, true)
-        //   ) {
-        //     obj
-        //       .set({
-        //         left: obj.left! + deltaX,
-        //         top: obj.top! + deltaY,
-        //       })
-        //       .setCoords();
-        //     left = obj.left! + deltaX;
-        //     top = obj.top! + deltaY;
-        //   }
+          if (
+            obj.name == `${FUNNEL_LEVEL}_${objectID}` &&
+            obj.intersectsWithObject(movedObject, true, true)
+          ) {
+            obj
+              .set({
+                left: obj.left! + deltaX,
+                top: obj.top! + deltaY,
+              })
+              .setCoords();
+            left = obj.left! + deltaX;
+            top = obj.top! + deltaY;
+          }
 
-        //   if (
-        //     obj.name == `${FUNNEL_BASE}_${objectID}` &&
-        //     obj.intersectsWithObject(movedObject, true, true)
-        //   ) {
-        //     obj
-        //       .set({
-        //         left: obj.left! + deltaX,
-        //         top: obj.top! + deltaY,
-        //       })
-        //       .setCoords();
-        //     left = obj.left! + deltaX;
-        //     top = obj.top! + deltaY;
-        //   }
-        // });
+          // if (
+          //   obj.name == `${FUNNEL_BASE}_${objectID}` &&
+          //   obj.intersectsWithObject(movedObject, true, true)
+          // ) {
+          //   obj
+          //     .set({
+          //       left: obj.left! + deltaX,
+          //       top: obj.top! + deltaY,
+          //     })
+          //     .setCoords();
+          //   left = obj.left! + deltaX;
+          //   top = obj.top! + deltaY;
+          // }
+        });
 
         movedObject.set({
           lastLeft: movedObject.left,
           lastTop: movedObject.top,
         });
-        // canvas.forEachObject(function (obj) {
-        //   if (
-        //     obj.name === `${FUNNEL_TEXT}_${objectID}`
-        //   ) {
-        //     obj
-        //       .set({
-        //         left: movedObject.left!+68,
-        //       })
-        //       .setCoords();
-        //   }
-        // });
+        let top = movedObject.top;
+        canvas.getObjects().reverse().forEach(function (obj) {
+          if (
+            obj.name === `${FUNNEL_TEXT}_${objectID}`
+          ) {
+            obj
+              .set({
+                left: movedObject.left! + movedObject?.width! / 2 - 70,
+                top: top && top+12,
+              })
+              .setCoords();
+          }
+               top= top && top+50;
+        });
       } else if (
         movedObject.name === 'List_Container' ||
         movedObject.name === 'LIST_ELEMENT'

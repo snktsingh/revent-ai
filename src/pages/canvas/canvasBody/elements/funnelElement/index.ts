@@ -47,31 +47,33 @@ export function useFunnelElement() {
 
     (funnelGroup as fabric.Group)?.addWithUpdate(trapezoid);
 
-    let text = new fabric.Textbox('First Text', {
+    let text = new fabric.Textbox('Add Text', {
       fontSize: 18,
-      left: funnelGroup?.left! + funnelGroup?.width!/2,
+      left: funnelGroup?.left! + funnelGroup?.width! / 2 - 70, 
       top: funnelGroup?.top! + 20,
       width: 140,
       editable: true,
       textAlign: 'center',
       name: `${FUNNEL_TEXT}_${currentID}`,
-      hasControls :false,
+      hasControls: false,
       lockMovementX: true,
       lockMovementY: true,
     });
-    let top: number = text.top;
-    canvas.forEachObject((object, i) => {
+
+    let top: number = text.top || 0;
+    canvas.getObjects().reverse().forEach((object, i) => {
       if (object.name == `${FUNNEL_TEXT}_${currentID}`) {
-        object.set({ top: top + 50 });
+        (object as fabric.Textbox).set({ top: top + 50, left: text.left });
         top = top + 50;
-        object.setCoords(); 
+        object.setCoords();
       }
     });
-    console.log(funnelGroup?.top! + 20)
-    
+
     canvas.add(text);
+
     canvas.requestRenderAll();
-  }
+}
+
   //new funnel
   const addFunnel = (canvas: fabric.Canvas | null) => {
     function createLevels(n: number) {
