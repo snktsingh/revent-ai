@@ -1,27 +1,41 @@
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { TextField } from '@mui/material';
 import {
   CardContainer,
   CardLink,
   CardTitle,
+  Loader,
+  LoaderText,
   MainContainer,
   PreviewCard,
-  Subtitle,
   Title,
 } from './style';
 import slideData from './data.json';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { useEffect } from 'react';
+import { getUserDetails } from '@/redux/thunk/user';
+import { MagnifyingGlass } from 'react-loader-spinner';
 
+import '../../../index.css';
+import { theme } from '@/constants/theme';
+import { fetchPPTList } from '@/redux/thunk/dashboard';
+import { Preview } from '@mui/icons-material';
 const Dashboard = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { userDetails } = useAppSelector(state => state.manageUser);
+  const { loadingUserDetails, pptList } = useAppSelector(
+    state => state.manageDashboard
+  );
+
+  useEffect(() => {
+    dispatch(getUserDetails());
+    dispatch(fetchPPTList());
+  }, []);
+
   return (
     <MainContainer>
+      <h3>Hello {userDetails?.firstName} !</h3>
       <span style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Title>Create a Presentation</Title>
         <TextField
@@ -43,39 +57,39 @@ const Dashboard = () => {
           );
         })}
       </CardContainer>
-      {/* <Accordion aria-controls="panel1a-content" id="panel1a-header">
-        <AccordionSummary>
-          <Subtitle>More Templates</Subtitle>
-        </AccordionSummary>
-        <AccordionDetails>
-          <CardContainer>
-            {slideData.templates.map((slide, index) => {
-              return (
-                <CardTitle>
-                  <CardLink href={slide.link}>
-                    <PreviewCard />
-                    {slide.title}
-                  </CardLink>
-                </CardTitle>
-              );
-            })}
-          </CardContainer>
-        </AccordionDetails>
-      </Accordion> */}
-      <Title>Recent Presentation</Title>
-      No Recent Presentations
-      {/* <CardContainer>
-        {slideData.recent.map((slide, index) => {
-          return (
-            <CardTitle>
-              <CardLink href={slide.link}>
-                <PreviewCard />
-                {slide.title}
-              </CardLink>
-            </CardTitle>
-          );
-        })}
-      </CardContainer> */}
+      <Title>Recent Presentations</Title>
+
+      {loadingUserDetails === false ? (
+        <>
+          <CardTitle>
+            <CardLink>
+              <img
+                src="https://revent-ppt-output.s3.amazonaws.com/thumbnails/TRIDENT-3ebe416994459888769625469_.png"
+                width="15%"
+              />
+              <p>untitled-presentation</p>
+            </CardLink>
+          </CardTitle>
+        </>
+      ) : (
+        <Loader>
+          No Recent Presentations
+          <MagnifyingGlass
+            visible={true}
+            height="80"
+            width="80"
+            ariaLabel="magnifying-glass-loading"
+            wrapperStyle={{}}
+            wrapperClass="loader"
+            glassColor="#c0efff"
+            color={`${theme.colorSchemes.light.palette.primary.main}`}
+          />
+          <br />
+          <LoaderText>
+            Gathering your Spectacular Presentations. Please hold tight...
+          </LoaderText>
+        </Loader>
+      )}
     </MainContainer>
   );
 };

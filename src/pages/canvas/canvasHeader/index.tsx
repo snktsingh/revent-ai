@@ -37,10 +37,12 @@ import ProfileMenu from '@/common-ui/profileMenu';
 
 const MainCanvasHeader = () => {
   const navigate = useNavigate();
-  const [openProfileMenu, setOpenProfileMenu] = React.useState<null | HTMLElement>(null);
+  const [openProfileMenu, setOpenProfileMenu] =
+    React.useState<null | HTMLElement>(null);
   const [anchorE2, setAnchorE2] = React.useState<null | HTMLElement>(null);
   const [openWarning, setOpenWarning] = React.useState(false);
-  const { pptUrl } = useAppSelector(state => state.thunk);
+  const { pptUrl, presentationId } = useAppSelector(state => state.thunk);
+  const { userDetails } = useAppSelector(state => state.manageUser);
 
   const handleWarningOpen = () => {
     setOpenWarning(true);
@@ -49,7 +51,7 @@ const MainCanvasHeader = () => {
   const handleWarningClose = () => {
     setOpenWarning(false);
   };
-  
+
   const openShare = Boolean(anchorE2);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setOpenProfileMenu(event.currentTarget);
@@ -64,8 +66,6 @@ const MainCanvasHeader = () => {
     setAnchorE2(null);
   };
 
-
-
   return (
     <HeaderContainer>
       <MainIconButton onClick={handleWarningOpen}>
@@ -75,7 +75,8 @@ const MainCanvasHeader = () => {
         </Stack>
       </MainIconButton>
       <Stack direction="row" spacing={1}></Stack>
-      <CanvasHeaderInput placeholder="Untitled presentation" />
+      <CanvasHeaderInput placeholder="Untitled-presentation" />
+      {presentationId}
       <Stack direction="row" spacing={1}>
         <MainIconButton>
           <Stack direction="row" spacing={1}>
@@ -118,14 +119,20 @@ const MainCanvasHeader = () => {
         </Menu>
         <MainIconButton onClick={handleClick}>
           <Stack direction="row" spacing={1}>
-            <ButtonName>Rashesh Majithia</ButtonName>
-            <UserAvatar>RM</UserAvatar>
+            <ButtonName>
+              {userDetails?.firstName} {userDetails?.lastName}
+            </ButtonName>
+            <UserAvatar>
+              {(userDetails?.firstName || '').slice(0, 1)}
+              {(userDetails?.lastName || '').slice(0, 1)}
+            </UserAvatar>
           </Stack>
         </MainIconButton>
-          <ProfileMenu anchorElForProfileMenu={openProfileMenu} 
-          handleCloseProfileMenu={handleCloseProfileMenu} 
+        <ProfileMenu
+          anchorElForProfileMenu={openProfileMenu}
+          handleCloseProfileMenu={handleCloseProfileMenu}
           setAnchorElForProfileMenu={setOpenProfileMenu}
-          />
+        />
       </Stack>
       <Dialog
         open={openWarning}

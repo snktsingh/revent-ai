@@ -1,15 +1,11 @@
-import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { useAppDispatch } from '@/redux/store';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import UseAuthentication from '../container';
-import { useNavigate } from 'react-router-dom';
 import ENDPOINT, { ROUTES } from '@/constants/endpoint';
 import { setFormDisabled } from '@/redux/reducers/apiData';
 import { setToLS } from '@/utils/localStorage';
 import { IUserLogin } from '@/interfaces/authInterface';
 import { FetchUtils } from '@/utils/fetch-utils';
-import { Token } from '@/utils/localStorage/data';
-import encryptData from '@/components/encryption';
 
 const useLogin = () => {
   const dispatch = useAppDispatch();
@@ -26,6 +22,7 @@ const useLogin = () => {
           data
         );
         if (res.status === 200) {
+          console.log(res.data);
           setToLS('token', res.data.accessToken);
           setToLS('isAuth', true);
           setTimeout(() => {
@@ -34,11 +31,9 @@ const useLogin = () => {
         } else {
           throw new Error('Failed to log in');
         }
-       
       },
       {
         pending: 'Logging in please wait...',
-        success: 'Login Successfully...',
       }
     );
   };

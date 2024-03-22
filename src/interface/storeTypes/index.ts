@@ -35,7 +35,9 @@ export interface ISlideRequests {
   isLoading: boolean;
   isThemeLoading: boolean;
   themesList: any[];
-  xsrfToken: string;
+  presentationId: number | null;
+  presentationName: string;
+  isCreating: boolean;
 }
 
 export interface IShapeRequest {
@@ -66,5 +68,7 @@ export interface APIRequest {
   elements: ReqElementType[];
   title?: string;
   subTitle?: string;
-  slideNumber : number;
+  slideNumber: number;
+  presentationId: number | null;
+  presentationName: string;
 }

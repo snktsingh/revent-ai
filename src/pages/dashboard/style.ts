@@ -17,7 +17,7 @@ export const MainContainer = styled.div`
 `;
 export const Title = styled.p`
   color: ${theme.colorSchemes.light.palette.primary.main};
-  font-size: 25px;
+  font-size: 20px;
 `;
 export const CardContainer = styled.div`
   width: 100%;
@@ -50,4 +50,17 @@ export const CustomAccordion = styled(Accordion)`
   .css-56gxwb-MuiPaper-root-MuiAccordion-root {
     background-color: transparent;
   }
+`;
+export const Loader = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 8%;
+`;
+export const LoaderText = styled.p`
+  font-size: 16px;
+  background: linear-gradient(45deg, blue, red);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 `;

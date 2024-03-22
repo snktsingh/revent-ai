@@ -79,6 +79,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Footer from '@/common-ui/footer';
 import { Token } from '@/utils/localStorage/data';
 import { ROUTES } from '@/constants/endpoint';
+import { useAppSelector } from '@/redux/store';
 
 interface FileUploadProps {
   onFileSelect: (file: File) => void;
@@ -86,7 +87,7 @@ interface FileUploadProps {
 const Home = ({ onFileSelect }: any) => {
   const [data, handleSubmit] = useForm('mbjvbjvd');
   const [data2, handleEmailSubmit] = useForm('xrgwdbzz');
-
+  const { userDetails } = useAppSelector(state => state.manageUser);
   const navigate = useNavigate();
   const {
     aboutRef,
@@ -237,9 +238,10 @@ const Home = ({ onFileSelect }: any) => {
                           bgcolor: `${theme.colorSchemes.light.palette.primary.main}`,
                         }}
                       >
-                        RM
+                        {(userDetails?.firstName || '').slice(0, 1)}
+                        {(userDetails?.lastName || '').slice(0, 1)}
                       </Avatar>
-                      Rashesh Majithia
+                      {userDetails?.firstName} {userDetails?.lastName}
                     </Button>
                   </Link>
                 ) : (
