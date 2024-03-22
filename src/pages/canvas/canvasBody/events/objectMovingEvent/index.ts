@@ -66,22 +66,6 @@ export function useObjectMovingEvent() {
           lastLeft: movedObject.left,
           lastTop: movedObject.top,
         });
-
-        canvas.forEachObject(function (obj) {
-          let left;
-          let top;
-
-          if (
-            obj.name === `${PYRAMID_TEXT}_${objectID}`
-          ) {
-            obj
-              .set({
-                left: movedObject.left!+movedObject.width!/2.6,
-                top: obj.top! ,
-              })
-              .setCoords();
-          }
-        });
         
       } else if (objectName[0] === PROCESS) {
         const lastLeft = movedObject.get('lastLeft') || movedObject.left;

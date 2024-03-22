@@ -2,6 +2,7 @@ import CreateIcon from '@mui/icons-material/Create';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { theme } from '@/constants/theme';
 import {
+  Avatar,
   Button,
   Divider,
   Grid,
@@ -33,10 +34,22 @@ export const ProfileContainer = styled.div`
   align-items: center;
 `;
 
-export const ProfileImage = styled.img`
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
+export const ProfileImage = styled(Avatar)`
+  && {
+    width: 180px;
+    height: 180px;
+  }
+`;
+
+export const ProfileAvatarText = styled(Avatar)`
+  && {
+    width: 120px;
+    height: 120px;
+    background-color: ${theme.colorSchemes.light.palette.primary.main};
+    font-size: 24px;
+    margin: 40px 40px 20px 40px;
+  }
+
 `;
 
 export const ProfileDetails = styled.div`
@@ -220,21 +233,21 @@ export const StyledSelect = styled(Select)`
 `;
 
 export const SectionTitleContainer = styled.div`
-    width: 100%;
-    color: ${theme.colorSchemes.light.palette.primary.main};
+  width: 100%;
+  color: ${theme.colorSchemes.light.palette.primary.main};
 
-    position: relative;
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%; 
-      background-color: #e6edf8; 
-      z-index: -1;
-    }
-`; 
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #e6edf8;
+    z-index: -1;
+  }
+`;
 
 export const SectionTitle = styled(Typography)`
   && {
@@ -244,7 +257,6 @@ export const SectionTitle = styled(Typography)`
     margin: 2% 0 2% 6.5%;
     text-transform: uppercase;
     padding: 2% 0;
-    
   }
 `;
 
@@ -267,9 +279,9 @@ export const BackgroundShapeTop = styled.div`
   top: 0;
   left: 0;
   width: 100%;
-  height: 50px; /* Adjust height as needed */
-  background-color: #e0e0e0; /* Set color of the shape */
-  z-index: -1; /* Ensure the shape is behind the content */
+  height: 50px;
+  background-color: #e0e0e0;
+  z-index: -1;
 `;
 
 export const BackgroundShapeBottom = styled.div`
@@ -277,17 +289,17 @@ export const BackgroundShapeBottom = styled.div`
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 50px; /* Adjust height as needed */
-  background-color: #e0e0e0; /* Set color of the shape */
-  z-index: -1; /* Ensure the shape is behind the content */
+  height: 50px;
+  background-color: #e0e0e0;
+  z-index: -1;
 `;
 
 export const DiagonalShape = styled.div`
   position: absolute;
-  top: 50px; /* Ensure it starts after the top background shape */
+  top: 50px;
   left: 0;
   width: 100%;
-  height: 100px; /* Adjust height as needed */
+  height: 100px;
   background: linear-gradient(to bottom right, transparent 49%, #e0e0e0 50%);
-  z-index: -1; /* Ensure the shape is behind the content */
+  z-index: -1;
 `;

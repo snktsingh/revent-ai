@@ -4,7 +4,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PrivacyTipIcon from '@mui/icons-material/PrivacyTip';
 import { useState } from 'react';
-import { SettingsContainer, GridContainer, InputContainer, MenuButton, NavbarContainer, ProfileContainer, ProfileDetails, ProfileImage, StyledDivider, StyledTab, StyledTabs, UserLink, SideBar, MainSettingsContainer, RightSideContainer, ProfileImgContainer, ProfileTitle, ChevronIcon, StyledInput, Label, StyledSelect, PencilIcon, SectionTitle, ButtonContainer, IconButton, SectionTitleContainer } from './style';
+import { SettingsContainer, GridContainer, InputContainer, MenuButton, NavbarContainer, ProfileContainer, ProfileDetails, ProfileImage, StyledDivider, StyledTab, StyledTabs, UserLink, SideBar, MainSettingsContainer, RightSideContainer, ProfileImgContainer, ProfileTitle, ChevronIcon, StyledInput, Label, StyledSelect, PencilIcon, SectionTitle, ButtonContainer, IconButton, SectionTitleContainer, ProfileAvatarText } from './style';
 import { Link } from 'react-router-dom';
 import { Logo } from '@/constants/media';
 import { GridRowCenter, GridRowEven, StackColCenter } from '@/styles/common-styles/style';
@@ -23,6 +23,12 @@ const UserSettings: React.FC = () => {
   const [tab, setTab] = useState(1);
   const [editMode, setEditMode] = useState(true);
   const [openProfileMenu, setOpenProfileMenu] = useState<null | HTMLElement>(null);
+
+  const [isImageBroken, setIsImageBroken] = useState(false);
+
+  const handleImageError = () => {
+    setIsImageBroken(true);
+  };
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setOpenProfileMenu(event.currentTarget);
@@ -70,6 +76,16 @@ const UserSettings: React.FC = () => {
   }
 
 
+  function getFirstLettersForAvatar(name: string): string {
+    const initials = name
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase())
+      .join('');
+    return initials;
+  }
+
+  console.log({ isImageBroken })
+
   return (
     <>
       <NavbarContainer>
@@ -114,7 +130,13 @@ const UserSettings: React.FC = () => {
         <SettingsContainer>
           <SideBar>
             <ProfileImgContainer>
-              <ProfileImage src="https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg" alt="Profile" />
+              {!isImageBroken ?
+                <ProfileImage src="https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg"
+                  alt="Rashesh Majithia"
+                  onError={handleImageError}
+                /> :
+                <ProfileAvatarText>{getFirstLettersForAvatar('Rashesh Majithia')}</ProfileAvatarText>
+              }
               <ProfileTitle>Rashesh Majithia</ProfileTitle>
             </ProfileImgContainer>
 
@@ -127,11 +149,11 @@ const UserSettings: React.FC = () => {
 
           <RightSideContainer>
             <SectionTitleContainer>
-            <SectionTitle>Personal Details</SectionTitle>
+              <SectionTitle>Personal Details</SectionTitle>
             </SectionTitleContainer>
             <ProfileSettings editMode={editMode} />
             <SectionTitleContainer>
-            <SectionTitle>Company Details</SectionTitle>
+              <SectionTitle>Company Details</SectionTitle>
             </SectionTitleContainer>
             <CompanyDetails editMode={editMode} />
 
@@ -139,8 +161,8 @@ const UserSettings: React.FC = () => {
               <IconButton variant="contained" startIcon={<SaveIcon />} onClick={saveEditedDetails} disabled={editMode}>
                 Save
               </IconButton>
-              <IconButton variant="contained" startIcon={editMode? <EditIcon /> : <CancelIcon/>} onClick={toggleEditMode}>
-               {editMode ?  'Edit' : 'Cancel'}
+              <IconButton variant="contained" startIcon={editMode ? <EditIcon /> : <CancelIcon />} onClick={toggleEditMode}>
+                {editMode ? 'Edit' : 'Cancel'}
               </IconButton>
             </ButtonContainer>
           </RightSideContainer>

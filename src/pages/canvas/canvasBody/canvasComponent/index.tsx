@@ -24,6 +24,7 @@ import { setVariantImageAsMain } from '@/redux/reducers/canvas';
 import axios from 'axios';
 import ElementEditBar from '@/components/ElementEditBar';
 import { useObjectScalingEvent } from '../events/objectScalingEvent';
+import useObjectModified from '../events/objectModifiedEvent';
 
 const CanvasComponent: React.FC = () => {
   const canvasRef = useRef<fabric.Canvas | null>(null);
@@ -40,6 +41,7 @@ const CanvasComponent: React.FC = () => {
   const { handleObjectScaling } = useObjectScalingEvent();
   const { handleSelectionCreated } = useSelectionCreatedEvent();
   const { textExitedEvent, textEnteringEvent } = useTextEvents();
+  const { setElementPositionsAfterMoving } = useObjectModified();
   const { CanvasClick } = useCanvasClickEvent();
   const { jsonData, themeCode, themeName } = useAppSelector(state => state.slideTheme);
   const {
@@ -181,6 +183,9 @@ const CanvasComponent: React.FC = () => {
         });
 
         newCanvas.on('object:modified', e => {
+          if(newCanvas && e.target){
+            setElementPositionsAfterMoving(e.target,newCanvas);
+          }
           updateCanvasSlideData(newCanvas, canvasJS.id);
           getElementsData(
             newCanvas.toObject(customFabricProperties)?.objects,
