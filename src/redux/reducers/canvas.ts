@@ -23,6 +23,7 @@ export interface CanvasSate {
   originalCanvasSlide: any;
   canvasImageURl: string;
   selectedOriginalCanvas: boolean;
+  presentationTitle : string;
 }
 const canvas = new fabric.Canvas(null);
 const canvasJSON = canvas.toObject();
@@ -48,6 +49,7 @@ export const initialState: CanvasSate = {
   originalCanvasSlide: {},
   canvasImageURl: '',
   selectedOriginalCanvas: false,
+  presentationTitle : 'Untitled Presentation',
 };
 
 export const CanvasReducer = createSlice({
@@ -250,6 +252,9 @@ export const CanvasReducer = createSlice({
     toggleSelectedOriginalCanvas(state, action) {
       state.selectedOriginalCanvas = action.payload;
     },
+    setPresentationTitle(state, action) {
+      state.presentationTitle = action.payload;
+    }
   },
 });
 
@@ -277,6 +282,7 @@ export const {
   setCanvasImageUrl,
   setOriginalSlide,
   toggleSelectedOriginalCanvas,
+  setPresentationTitle
 } = CanvasReducer.actions;
 
 export default CanvasReducer.reducer;

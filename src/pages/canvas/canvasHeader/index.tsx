@@ -26,14 +26,15 @@ import { ButtonName, MainIconButton } from '@/constants/elements/button/style';
 import VerticalDivider from '@/constants/elements/divider';
 import useCanvas from '../container';
 import MenuItem from '@mui/material/MenuItem';
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { CanvasHeaderInput } from '@/constants/elements/Input/style';
 import { ContentElements } from '../canvasBody/elementData';
-import { useAppSelector } from '@/redux/store';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { useNavigate } from 'react-router-dom';
 import { replace } from 'lodash';
 import useCanvasHeader from './container';
 import ProfileMenu from '@/common-ui/profileMenu';
+import { setPresentationTitle } from '@/redux/reducers/canvas';
 
 const MainCanvasHeader = () => {
   const navigate = useNavigate();
@@ -41,6 +42,7 @@ const MainCanvasHeader = () => {
   const [anchorE2, setAnchorE2] = React.useState<null | HTMLElement>(null);
   const [openWarning, setOpenWarning] = React.useState(false);
   const { pptUrl } = useAppSelector(state => state.thunk);
+  const { presentationTitle } = useAppSelector( state => state.canvas );
 
   const handleWarningOpen = () => {
     setOpenWarning(true);
@@ -64,7 +66,10 @@ const MainCanvasHeader = () => {
     setAnchorE2(null);
   };
 
-
+  const dispatch = useAppDispatch();
+  const handleInputChange = (e : ChangeEvent<HTMLInputElement>) => {
+    dispatch(setPresentationTitle(e.target.value))
+  }
 
   return (
     <HeaderContainer>
@@ -75,7 +80,7 @@ const MainCanvasHeader = () => {
         </Stack>
       </MainIconButton>
       <Stack direction="row" spacing={1}></Stack>
-      <CanvasHeaderInput placeholder="Untitled presentation" />
+      <CanvasHeaderInput placeholder="Untitled presentation" value={presentationTitle} onChange={handleInputChange} />
       <Stack direction="row" spacing={1}>
         <MainIconButton>
           <Stack direction="row" spacing={1}>
