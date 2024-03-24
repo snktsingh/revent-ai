@@ -1,11 +1,9 @@
-import { Box, Grid, IconButton } from '@mui/material';
+import { Box, Grid, IconButton, InputAdornment } from '@mui/material';
 import {
   ChildContainer,
   Description,
   LeftContainer,
-  PassMessage,
   RightContainer,
-  SignUp,
   SubTitle,
   TextInput,
   Title,
@@ -13,7 +11,6 @@ import {
 import LoginImage from '../../assets/Login.gif';
 import Logo from '../../assets/logo.svg';
 import { CommonLink, CustomButton } from '@/styles/common-styles/style';
-import Link from '@mui/material/Link';
 import { Slide, ToastContainer } from 'react-toastify';
 import useLogin from './container';
 import { useAppSelector } from '@/redux/store';
@@ -23,8 +20,10 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 const Login = () => {
   const { email, setEmail, password, setPassword, handleLogin } = useLogin();
   const [showPassword, setShowPassword] = useState(false);
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClickShowPassword = () => setShowPassword(show => !show);
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
     event.preventDefault();
   };
 
@@ -84,17 +83,17 @@ const Login = () => {
                 fullWidth
                 onChange={e => setPassword(e.target.value)}
                 InputProps={{
-                        endAdornment: (
-                          <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                          edge="end"
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                        )
-                    }}
+                  endAdornment: (
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  ),
+                }}
               />
               <CommonLink>Forgot Password ?</CommonLink>
               <CustomButton
@@ -105,11 +104,9 @@ const Login = () => {
               >
                 Login
               </CustomButton>
-              <SignUp>
-                <Link href="/signup">
-                  Not registered ? Create a new account
-                </Link>
-              </SignUp>
+              {/* <SignUp>
+                <Link to="/signup">Not registered ? Create a new account</Link>
+              </SignUp> */}
             </Box>
             {/* <PassMessage>
               * Password must be minimum of 8 characters and contain at least 1

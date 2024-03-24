@@ -80,7 +80,7 @@ const MainCanvasHeader = () => {
         </Stack>
       </MainIconButton>
       <Stack direction="row" spacing={1}></Stack>
-      <CanvasHeaderInput placeholder="Untitled presentation" value={presentationTitle} onChange={handleInputChange} />
+      <CanvasHeaderInput placeholder="Untitled presentation" value={presentationTitle} onChange={(e : ChangeEvent<HTMLInputElement>) => handleInputChange(e)} />
       <Stack direction="row" spacing={1}>
         <MainIconButton>
           <Stack direction="row" spacing={1}>

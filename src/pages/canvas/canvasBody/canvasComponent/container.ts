@@ -41,7 +41,10 @@ import { useState } from 'react';
 
 export const useCanvasComponent = () => {
   const [showOptions, setShowOptions] = useState(false);
-  const [selectedElementPosition, setSelectedElementPosition] = useState({ top: 0, left: 0 });
+  const [selectedElementPosition, setSelectedElementPosition] = useState({
+    top: 0,
+    left: 0,
+  });
 
   const customFabricProperties = [
     'listType',
@@ -55,7 +58,8 @@ export const useCanvasComponent = () => {
     height: 0,
   });
   const dispatch = useAppDispatch();
-  const { canvasJS } = useAppSelector((state) => state.canvas);
+  const { canvasJS } = useAppSelector(state => state.canvas);
+  const { presentationId } = useAppSelector(state => state.thunk);
   const handleAllElements = (event: fabric.IEvent, canvas: fabric.Canvas) => {
     const { target } = event;
 
@@ -133,14 +137,20 @@ export const useCanvasComponent = () => {
     }
   };
 
-  function getElementsData(canvasData: any[], themeCode: string, themeName : string) {
+  function getElementsData(
+    canvasData: any[],
+    themeCode: string,
+    themeName: string
+  ) {
     console.log({ canvasData });
     const outputFormat: APIRequest = {
       companyName: themeName,
       themeColor: themeCode,
       imagesCount: '',
-      slideNumber : canvasJS.id,
+      slideNumber: canvasJS.id,
       elements: [],
+      presentationId: presentationId,
+      presentationName: 'Presenatation-1',
     };
     let timelineData: TimelineDataType[] = [];
     let titleText: string = '';
@@ -218,36 +228,40 @@ export const useCanvasComponent = () => {
           const { mainBulletPoints, nestedBulletPoints } =
             segregateBulletPoints(canvasObject.text);
           const bulletsData = mainBulletPoints.map((text, index) => {
-             return { heading: text, text };
+            return { heading: text, text };
           });
           const Bullets = getOrCreateElement('BulletPoint', '1', outputFormat);
           Bullets.data = bulletsData;
         } else if (canvasObject.name === TITLE) {
-           titleText = canvasObject.text;
+          titleText = canvasObject.text;
         } else if (canvasObject.name === SUBTITLE) {
           subTitleText = canvasObject.text;
-        }else if(canvasObject.name === COVER_SLIDE_TITLE ){
+        } else if (canvasObject.name === COVER_SLIDE_TITLE) {
           const CoverSlide = getOrCreateElement('Cover', '1', outputFormat);
-          CoverSlide.title = canvasObject.text;  
-        }
-        else if(canvasObject.name === COVER_SLIDE_SUBTITLE ){
+          CoverSlide.title = canvasObject.text;
+        } else if (canvasObject.name === COVER_SLIDE_SUBTITLE) {
           const CoverSlide = getOrCreateElement('Cover', '1', outputFormat);
-          CoverSlide.subTitle = canvasObject.text;  
-        }
-        else if(canvasObject.name === SECTION_SLIDE_TITLE ){
+          CoverSlide.subTitle = canvasObject.text;
+        } else if (canvasObject.name === SECTION_SLIDE_TITLE) {
           const SectionSlide = getOrCreateElement('Section', '1', outputFormat);
-          SectionSlide.title = canvasObject.text;  
-        }
-        else if(canvasObject.name === SECTION_SLIDE_SUBTITLE ){
+          SectionSlide.title = canvasObject.text;
+        } else if (canvasObject.name === SECTION_SLIDE_SUBTITLE) {
           const SectionSlide = getOrCreateElement('Section', '1', outputFormat);
-          SectionSlide.subTitle = canvasObject.text;  
-        }else if(canvasObject.name === CONCLUSION_SLIDE_TITLE ){
-          const ConclusionSlide = getOrCreateElement('Conclusion', '1', outputFormat);
-          ConclusionSlide.title = canvasObject.text;  
-        }
-        else if(canvasObject.name === CONCLUSION_SLIDE_SUBTITLE ){
-          const ConclusionSlide = getOrCreateElement('Conclusion', '1', outputFormat);
-          ConclusionSlide.subTitle = canvasObject.text;  
+          SectionSlide.subTitle = canvasObject.text;
+        } else if (canvasObject.name === CONCLUSION_SLIDE_TITLE) {
+          const ConclusionSlide = getOrCreateElement(
+            'Conclusion',
+            '1',
+            outputFormat
+          );
+          ConclusionSlide.title = canvasObject.text;
+        } else if (canvasObject.name === CONCLUSION_SLIDE_SUBTITLE) {
+          const ConclusionSlide = getOrCreateElement(
+            'Conclusion',
+            '1',
+            outputFormat
+          );
+          ConclusionSlide.subTitle = canvasObject.text;
         }
       }
     });
@@ -294,10 +308,10 @@ export const useCanvasComponent = () => {
 
     const modifiedRequestFormat = outputFormat.elements.map(element => {
       const { elementId, data, title, subTitle, templateName, shape } = element;
-      if(shape === 'Cover' || shape === 'Section' || shape === 'Conclusion'){
-        return {title, subTitle, shape};
+      if (shape === 'Cover' || shape === 'Section' || shape === 'Conclusion') {
+        return { title, subTitle, shape };
       }
-      return {data, title, subTitle, templateName, shape};
+      return { data, title, subTitle, templateName, shape };
     });
     outputFormat.elements = modifiedRequestFormat;
     console.log({ outputFormat });
@@ -319,7 +333,7 @@ export const useCanvasComponent = () => {
           mainBulletPoints.push(currentMainBulletPoint.trim());
         }
         currentMainBulletPoint = trimmedLine;
-      } else if(spacesBeforeText == 4) {
+      } else if (spacesBeforeText == 4) {
         // Nested bullet point
         if (currentMainBulletPoint !== '') {
           if (!nestedBulletPoints[currentMainBulletPoint]) {
@@ -388,33 +402,43 @@ export const useCanvasComponent = () => {
     console.log({ tableData });
   };
 
-
   const handleElementBarSelection = (event: fabric.IEvent) => {
     if (event.selected && event.selected.length > 0) {
       const selectedObject = event.selected[0];
-      if (selectedObject && selectedObject.name && checkElementsForEditBar(selectedObject.name)) {
+      if (
+        selectedObject &&
+        selectedObject.name &&
+        checkElementsForEditBar(selectedObject.name)
+      ) {
         setShowOptions(false);
         return;
       }
-  
+
       const boundingRect = selectedObject.getBoundingRect();
       const { left, top, width, height } = boundingRect;
-      
+
       let positionTop = top - 35;
       let positionLeft = left + (width - 140) / 2;
-  
-      if (selectedObject && selectedObject.name && selectedObject.name.startsWith(TABLE)) {
+
+      if (
+        selectedObject &&
+        selectedObject.name &&
+        selectedObject.name.startsWith(TABLE)
+      ) {
         positionTop = top - 35;
         positionLeft = left + (width - 275) / 2;
-  
+
         const updateTablePosition = () => {
           const boundingRect = selectedObject.getBoundingRect();
           const { left, top, width, height } = boundingRect;
           const newPositionTop = top - 35;
           const newPositionLeft = left + (width - 275) / 2;
-          setSelectedElementPosition({ top: newPositionTop, left: newPositionLeft });
+          setSelectedElementPosition({
+            top: newPositionTop,
+            left: newPositionLeft,
+          });
         };
-  
+
         selectedObject.on('moving', updateTablePosition);
       } else {
         const updatePosition = () => {
@@ -422,20 +446,22 @@ export const useCanvasComponent = () => {
           const { left, top, width, height } = boundingRect;
           const newPositionTop = top - 35;
           const newPositionLeft = left + (width - 140) / 2;
-          setSelectedElementPosition({ top: newPositionTop, left: newPositionLeft });
+          setSelectedElementPosition({
+            top: newPositionTop,
+            left: newPositionLeft,
+          });
         };
-  
+
         selectedObject.on('moving', updatePosition);
       }
-  
+
       setSelectedElementPosition({ top: positionTop, left: positionLeft });
       setShowOptions(true);
     }
   };
-  
 
-  function checkElementsForEditBar(elementName : string) : boolean {
-    if(
+  function checkElementsForEditBar(elementName: string): boolean {
+    if (
       elementName.startsWith(PYRAMID_TEXT) ||
       elementName.startsWith(FUNNEL_TEXT) ||
       elementName.startsWith(PROCESS_TEXT) ||
@@ -448,14 +474,12 @@ export const useCanvasComponent = () => {
       elementName.startsWith(TIMELINE_TEXT) ||
       elementName.startsWith(TIMELINE_CIRCLE) ||
       elementName.startsWith(TIMELINE_DIRECTION) ||
-      elementName.startsWith(TABLE_TEXT) 
-      ){
+      elementName.startsWith(TABLE_TEXT)
+    ) {
       return true;
-    };
+    }
     return false;
-  };
-  
-
+  }
 
   return {
     handleAllElements,
@@ -468,6 +492,6 @@ export const useCanvasComponent = () => {
     showOptions,
     setShowOptions,
     selectedElementPosition,
-    setSelectedElementPosition
+    setSelectedElementPosition,
   };
 };

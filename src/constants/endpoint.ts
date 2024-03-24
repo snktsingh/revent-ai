@@ -10,6 +10,15 @@ export const ENDPOINT = {
     LOGOUT: '/logout',
     SIGNIN: '/register',
   },
+  USER: {
+    GET_DETAILS: '/account',
+  },
+  PPT: {
+    CREATE_PPT: 'ppt/create-presentation',
+  },
+  DASHBOARD: {
+    FETCH_PPT_LIST: 'ppt/get-presentation',
+  },
 } as const;
 
 export const ROUTES = {
@@ -19,7 +28,7 @@ export const ROUTES = {
   DASHBOARD: '/dashboard',
   THEMES: '/themes',
   CANVAS: '/canvas',
-  SETTINGS : '/settings'
+  SETTINGS: '/settings',
 } as const;
 
 export default ENDPOINT;

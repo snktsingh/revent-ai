@@ -5,6 +5,7 @@ import { setVariantImageAsMain, updateCurrentCanvas } from '../reducers/canvas';
 import { APIRequest, ISlideRequests } from '@/interface/storeTypes';
 import { RootState } from '../store';
 import { IUserLogin } from '@/interfaces/authInterface';
+import { create } from 'lodash';
 
 const initialState: ISlideRequests = {
   pptUrl: '',
@@ -13,7 +14,9 @@ const initialState: ISlideRequests = {
   isLoading: false,
   themesList: [],
   isThemeLoading: false,
-  xsrfToken: '',
+  presentationId: null,
+  presentationName: '',
+  isCreating: false,
 };
 
 export const fetchSlideImg = createAsyncThunk(
@@ -37,18 +40,12 @@ export const getAllThemes = createAsyncThunk('theme/getallThemes', async () => {
   return res.data;
 });
 
-// Authenticate user
-export const userAuthenticate = createAsyncThunk(
-  'user/authenticate',
-  async () => {
-    const res = await FetchUtils.getRequest(`${ENDPOINT.AUTH.AUTHENTICATE}`);
-    console.log(res);
-  }
-);
-
-// User Login
-
-// export const userRegister = createAsyncThunk('user/register');
+export const createPresentation = createAsyncThunk('ppt/create', async () => {
+  const res = await FetchUtils.postRequest(`${ENDPOINT.PPT.CREATE_PPT}`, {
+    presentationName: 'untitled-presentation',
+  });
+  return res.data;
+});
 
 const thunkSlice = createSlice({
   name: 'singleSlideData',
@@ -84,6 +81,18 @@ const thunkSlice = createSlice({
       .addCase(getAllThemes.rejected, state => {
         state.themesList = [];
         state.isThemeLoading = false;
+      })
+      .addCase(createPresentation.pending, state => {
+        state.presentationId = null;
+        state.isCreating = true;
+      })
+      .addCase(createPresentation.fulfilled, (state, action) => {
+        state.presentationId = action.payload.presentationId;
+        state.isCreating = false;
+      })
+      .addCase(createPresentation.rejected, state => {
+        state.presentationId = null;
+        state.isCreating = false;
       });
   },
 });
