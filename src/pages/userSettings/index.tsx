@@ -124,7 +124,6 @@ const UserSettings: React.FC = () => {
     return initials;
   }
 
-  console.log({ isImageBroken });
 
   return (
     <>
@@ -153,7 +152,7 @@ const UserSettings: React.FC = () => {
                     bgcolor: `${theme.colorSchemes.light.palette.primary.main}`,
                   }}
                 >
-                  RM
+                  {getFirstLettersForAvatar(`${userDetails?.firstName} ${userDetails?.lastName}`)}
                 </Avatar>
                 {userDetails?.firstName} {userDetails?.lastName}
               </Button>
@@ -173,7 +172,7 @@ const UserSettings: React.FC = () => {
             <ProfileImgContainer>
               {!isImageBroken ? (
                 <ProfileImage
-                  src="https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg"
+                  src="https//img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg"
                   alt="Rashesh Majithia"
                   onError={handleImageError}
                 />

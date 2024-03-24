@@ -35,7 +35,7 @@ export const AccountSection = styled.div`
 `;
 
 export const AccountInfo = styled.div`
-  margin-left: 15px;
+  margin-left: 6px;
 `;
 
 export const AccountIcon = styled(AccountCircleRounded)``;

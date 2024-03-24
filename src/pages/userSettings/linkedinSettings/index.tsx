@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { InputContainer, ProfileContainer, StyledInput, Label, StyledSelect, PencilIcon } from '../style';
 import { InputAdornment, MenuItem } from '@mui/material';
 
@@ -10,23 +10,23 @@ const LinkedinSettings = () => {
     const [company, setCompany] = React.useState('Revent');
     const [role, setRole] = React.useState('Designer');
 
-    const handleAgeChange = (event : any) => {
+    const handleAgeChange = (event : ChangeEvent<HTMLInputElement>) => {
         setAge(event.target.value);
     };
 
-    const handleGenderChange = (event : any) => {
+    const handleGenderChange = (event : ChangeEvent<HTMLInputElement>) => {
         setGender(event.target.value);
     };
 
-    const handleLocationChange = (event : any) => {
+    const handleLocationChange = (event : ChangeEvent<HTMLInputElement>) => {
         setLocation(event.target.value);
     };
 
-    const handleCompanyChange = (event : any) => {
+    const handleCompanyChange = (event : ChangeEvent<HTMLInputElement>) => {
         setCompany(event.target.value);
     };
 
-    const handleRoleChange = (event : any) => {
+    const handleRoleChange = (event : ChangeEvent<HTMLInputElement>) => {
         setRole(event.target.value);
     };
 

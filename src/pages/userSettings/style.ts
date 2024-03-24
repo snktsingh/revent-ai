@@ -16,7 +16,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 export interface StyledTabProps {
-  isActive?: boolean;
+  isActive: boolean;
 }
 
 export const MainSettingsContainer = styled.div`
@@ -46,7 +46,8 @@ export const ProfileAvatarText = styled(Avatar)`
     width: 120px;
     height: 120px;
     background-color: ${theme.colorSchemes.light.palette.primary.main};
-    font-size: 24px;
+    font-size: 4rem;
+    font-family: 'Roboto', sans-serif;
     margin: 40px 40px 20px 40px;
   }
 

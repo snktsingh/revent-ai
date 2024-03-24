@@ -1,20 +1,17 @@
-import React, { useState } from 'react';
-import { InputContainer, ProfileContainer, StyledInput, Label, StyledSelect, PencilIcon, SectionTitle } from '../style';
-import { InputAdornment, MenuItem } from '@mui/material';
+import { MenuItem } from '@mui/material';
+import React, { ChangeEvent, useState } from 'react';
+import useSettings from '../container';
+import { InputContainer, Label, ProfileContainer, StyledInput, StyledSelect } from '../style';
 
 interface ProfileSettingsType {
-    editMode : boolean
+    editMode: boolean
 }
 
-const ProfileSettings : React.FC<ProfileSettingsType> = ({editMode}) => {
+const ProfileSettings: React.FC<ProfileSettingsType> = ({ editMode }) => {
 
-    const [firstName, setFirstName] = useState('Admin');
-    const [lastName, setLastName] = useState('One');
-    const [username, setUsername] = useState('admin123');
-    const [email, setEmail] = useState('admin@localhost.com');
-    const [phone, setPhone] = useState('123-456-7890');
-    const [linkedinUrl, setLinkedinUrl] = useState('https://www.linkedin.com/in/example_username')
-    
+    const { userDetails, userDetailsInputs, handleChange } = useSettings();
+
+    const { firstName, lastName, username, phone, email, linkedinUrl, usePreference } = userDetailsInputs;
 
     return (
         <ProfileContainer>
@@ -22,48 +19,51 @@ const ProfileSettings : React.FC<ProfileSettingsType> = ({editMode}) => {
                 <Label>First Name</Label>
                 <StyledInput
                     // variant="standard"
+                    name='firstName'
                     value={firstName}
                     disabled={editMode}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    // InputProps={{
-                    //     endAdornment: (
-                    //         <InputAdornment position="end">
-                    //             <PencilIcon />
-                    //         </InputAdornment>
-                    //     )
-                    // }}
+                    onChange={handleChange}
+                // InputProps={{
+                //     endAdornment: (
+                //         <InputAdornment position="end">
+                //             <PencilIcon />
+                //         </InputAdornment>
+                //     )
+                // }}
                 />
             </InputContainer>
             <InputContainer>
                 <Label>Last Name</Label>
                 <StyledInput
                     // variant="standard"
+                    name='lastName'
                     value={lastName}
                     disabled={editMode}
-                    onChange={(e) => setLastName(e.target.value)}
-                    // InputProps={{
-                    //     endAdornment: (
-                    //         <InputAdornment position="end">
-                    //             <PencilIcon />
-                    //         </InputAdornment>
-                    //     )
-                    // }}
+                    onChange={handleChange}
+                // InputProps={{
+                //     endAdornment: (
+                //         <InputAdornment position="end">
+                //             <PencilIcon />
+                //         </InputAdornment>
+                //     )
+                // }}
                 />
             </InputContainer>
             <InputContainer>
                 <Label>Mobile Number</Label>
                 <StyledInput
                     // variant="standard"
+                    name='phone'
                     value={phone}
                     disabled={editMode}
-                    onChange={(e) => setPhone(e.target.value)}
-                    // InputProps={{
-                    //     endAdornment: (
-                    //         <InputAdornment position="end">
-                    //             <PencilIcon />
-                    //         </InputAdornment>
-                    //     )
-                    // }}
+                    onChange={handleChange}
+                // InputProps={{
+                //     endAdornment: (
+                //         <InputAdornment position="end">
+                //             <PencilIcon />
+                //         </InputAdornment>
+                //     )
+                // }}
                 />
             </InputContainer>
             <InputContainer>
@@ -71,15 +71,16 @@ const ProfileSettings : React.FC<ProfileSettingsType> = ({editMode}) => {
                 <StyledInput
                     // variant="standard"
                     disabled={editMode}
+                    name='email'
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    // InputProps={{
-                    //     endAdornment: (
-                    //         <InputAdornment position="end">
-                    //             <PencilIcon />
-                    //         </InputAdornment>
-                    //     )
-                    // }}
+                    onChange={handleChange}
+                // InputProps={{
+                //     endAdornment: (
+                //         <InputAdornment position="end">
+                //             <PencilIcon />
+                //         </InputAdornment>
+                //     )
+                // }}
                 />
             </InputContainer>
             <InputContainer>
@@ -87,15 +88,16 @@ const ProfileSettings : React.FC<ProfileSettingsType> = ({editMode}) => {
                 <StyledInput
                     // variant="standard"
                     value={username}
-                    onChange={(e) => setFirstName(e.target.value)}
+                    name='username'
+                    onChange={handleChange}
                     disabled={editMode}
-                    // InputProps={{
-                    //     endAdornment: (
-                    //         <InputAdornment position="end">
-                    //             <PencilIcon />
-                    //         </InputAdornment>
-                    //     )
-                    // }}
+                // InputProps={{
+                //     endAdornment: (
+                //         <InputAdornment position="end">
+                //             <PencilIcon />
+                //         </InputAdornment>
+                //     )
+                // }}
                 />
             </InputContainer>
             <InputContainer>
@@ -103,7 +105,9 @@ const ProfileSettings : React.FC<ProfileSettingsType> = ({editMode}) => {
                 <StyledSelect
                     labelId="dropdown-label"
                     // variant="standard"
-                    value={"Personal"}
+                    value={usePreference}
+                    name='userPreference'
+                    onChange={handleChange}
                     disabled={editMode}
                 >
                     <MenuItem value="Personal">Personal</MenuItem>
@@ -117,15 +121,16 @@ const ProfileSettings : React.FC<ProfileSettingsType> = ({editMode}) => {
                 <StyledInput
                     // variant="standard"
                     value={linkedinUrl}
-                    onChange={(e) => setLinkedinUrl(e.target.value)}
+                    name='linkedinUrl'
+                    onChange={handleChange}
                     disabled={editMode}
-                    // InputProps={{
-                    //     endAdornment: (
-                    //         <InputAdornment position="end">
-                    //             <PencilIcon />
-                    //         </InputAdornment>
-                    //     )
-                    // }}
+                // InputProps={{
+                //     endAdornment: (
+                //         <InputAdornment position="end">
+                //             <PencilIcon />
+                //         </InputAdornment>
+                //     )
+                // }}
                 />
             </InputContainer>
 

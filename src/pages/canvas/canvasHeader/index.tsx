@@ -1,75 +1,52 @@
-import {
-  HeaderContainer,
-  StyledMenu,
-  StyledMenuItem,
-  UserAvatar,
-  UserLink,
-} from './style';
-import { CanvasBack, PDF, PPT, Present, Share } from '@/constants/media';
-import TitleInput from '@/constants/elements/Input';
-import {
-  Stack,
-  Divider,
-  Tooltip,
-  Button,
-  Menu,
-  Link,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  InputBase,
-  ListItemIcon,
-} from '@mui/material';
+import ProfileMenu from '@/common-ui/profileMenu';
+import { CanvasHeaderInput } from '@/constants/elements/Input/style';
 import { ButtonName, MainIconButton } from '@/constants/elements/button/style';
 import VerticalDivider from '@/constants/elements/divider';
-import useCanvas from '../container';
+import { CanvasBack, PDF, PPT, Present, Share } from '@/constants/media';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Menu,
+  Stack
+} from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
-import React, { ChangeEvent } from 'react';
-import { CanvasHeaderInput } from '@/constants/elements/Input/style';
+import { ChangeEvent } from 'react';
 import { ContentElements } from '../canvasBody/elementData';
-import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { useNavigate } from 'react-router-dom';
-import { replace } from 'lodash';
 import useCanvasHeader from './container';
-import ProfileMenu from '@/common-ui/profileMenu';
-import { setPresentationTitle } from '@/redux/reducers/canvas';
+import {
+  HeaderContainer,
+  UserAvatar
+} from './style';
 
 const MainCanvasHeader = () => {
-  const navigate = useNavigate();
-  const [openProfileMenu, setOpenProfileMenu] = React.useState<null | HTMLElement>(null);
-  const [anchorE2, setAnchorE2] = React.useState<null | HTMLElement>(null);
-  const [openWarning, setOpenWarning] = React.useState(false);
-  const { pptUrl } = useAppSelector(state => state.thunk);
-  const { presentationTitle } = useAppSelector( state => state.canvas );
 
-  const handleWarningOpen = () => {
-    setOpenWarning(true);
-  };
-
-  const handleWarningClose = () => {
-    setOpenWarning(false);
-  };
+  const { 
+    userLogout,
+    openShare,
+    getFirstLettersForAvatar,
+    navigate,
+    openProfileMenu,
+    setOpenProfileMenu,
+    anchorE2,
+    setAnchorE2,
+    openWarning,
+    setOpenWarning,
+    pptUrl,
+    presentationTitle,
+    userDetails,
+    handleWarningClose,
+    handleWarningOpen,
+    handleClick,
+    handleCloseProfileMenu,
+    handleShareClick,
+    handleShareClose,
+    handleInputChange
+  } = useCanvasHeader();
   
-  const openShare = Boolean(anchorE2);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setOpenProfileMenu(event.currentTarget);
-  };
-  const handleCloseProfileMenu = () => {
-    setOpenProfileMenu(null);
-  };
-  const handleShareClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorE2(event.currentTarget);
-  };
-  const handleShareClose = () => {
-    setAnchorE2(null);
-  };
-
-  const dispatch = useAppDispatch();
-  const handleInputChange = (e : ChangeEvent<HTMLInputElement>) => {
-    dispatch(setPresentationTitle(e.target.value))
-  }
 
   return (
     <HeaderContainer>
@@ -80,7 +57,7 @@ const MainCanvasHeader = () => {
         </Stack>
       </MainIconButton>
       <Stack direction="row" spacing={1}></Stack>
-      <CanvasHeaderInput placeholder="Untitled presentation" value={presentationTitle} onChange={(e : ChangeEvent<HTMLInputElement>) => handleInputChange(e)} />
+      <CanvasHeaderInput placeholder="Untitled presentation" value={presentationTitle} onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e)} />
       <Stack direction="row" spacing={1}>
         <MainIconButton>
           <Stack direction="row" spacing={1}>
@@ -123,14 +100,14 @@ const MainCanvasHeader = () => {
         </Menu>
         <MainIconButton onClick={handleClick}>
           <Stack direction="row" spacing={1}>
-            <ButtonName>Rashesh Majithia</ButtonName>
-            <UserAvatar>RM</UserAvatar>
+            <ButtonName>{`${userDetails?.firstName} ${userDetails?.lastName}`}</ButtonName>
+            <UserAvatar>{getFirstLettersForAvatar(`${userDetails?.firstName} ${userDetails?.lastName}`)}</UserAvatar>
           </Stack>
         </MainIconButton>
-          <ProfileMenu anchorElForProfileMenu={openProfileMenu} 
-          handleCloseProfileMenu={handleCloseProfileMenu} 
+        <ProfileMenu anchorElForProfileMenu={openProfileMenu}
+          handleCloseProfileMenu={handleCloseProfileMenu}
           setAnchorElForProfileMenu={setOpenProfileMenu}
-          />
+        />
       </Stack>
       <Dialog
         open={openWarning}

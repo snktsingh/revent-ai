@@ -1,80 +1,73 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { InputContainer, ProfileContainer, StyledInput, Label, StyledSelect, PencilIcon } from '../style';
 import { InputAdornment, MenuItem } from '@mui/material';
+import useSettings from '../container';
 
 interface CompanySettingsType {
-  editMode : boolean
+  editMode: boolean
 }
 
-const CompanyDetails : React.FC<CompanySettingsType> = ({editMode}) => {
-    const [companyName, setCompanyName] = useState('Revent');
-    const [companySize, setCompanySize] = useState('10-20');
-    const [roleInCompany, setRoleInCompany] = useState('Developer');
-  
-    const handleCompanyNameChange = (event : any) => {
-      setCompanyName(event.target.value);
-    };
-  
-    const handleCompanySizeChange = (event : any) => {
-      setCompanySize(event.target.value);
-    };
-  
-    const handleRoleInCompanyChange = (event : any) => {
-      setRoleInCompany(event.target.value);
-    };
-  
-    return (
-      <ProfileContainer>
-        <InputContainer>
-          <Label>Company Name</Label>
-          <StyledInput
-            // variant="standard"
-            disabled={editMode}
-            value={companyName}
-            onChange={handleCompanyNameChange}
-            // InputProps={{
-            //   endAdornment: (
-            //     <InputAdornment position="end">
-            //       <PencilIcon />
-            //     </InputAdornment>
-            //   )
-            // }}
-          />
-        </InputContainer>
-        <InputContainer>
-          <Label>Company Size</Label>
-          <StyledInput
-            // variant="standard"
-            disabled={editMode}
-            value={companySize}
-            onChange={handleCompanySizeChange}
-            // InputProps={{
-            //   endAdornment: (
-            //     <InputAdornment position="end">
-            //       <PencilIcon />
-            //     </InputAdornment>
-            //   )
-            // }}
-          />
-        </InputContainer>
-        <InputContainer>
-          <Label>Role in Company</Label>
-          <StyledInput
-            // variant="standard"
-            disabled={editMode}
-            value={roleInCompany}
-            onChange={handleRoleInCompanyChange}
-            // InputProps={{
-            //   endAdornment: (
-            //     <InputAdornment position="end">
-            //       <PencilIcon />
-            //     </InputAdornment>
-            //   )
-            // }}
-          />
-        </InputContainer>
-      </ProfileContainer>
-    );
-  };
-  
-  export default CompanyDetails;
+const CompanyDetails: React.FC<CompanySettingsType> = ({ editMode }) => {
+  const { userDetailsInputs, handleChange } = useSettings();
+
+  const { companyName, companySize, roleInCompany } = userDetailsInputs;
+
+
+  return (
+    <ProfileContainer>
+      <InputContainer>
+        <Label>Company Name</Label>
+        <StyledInput
+          // variant="standard"
+          disabled={editMode}
+          value={companyName}
+          name='companyName'
+          onChange={handleChange}
+        // InputProps={{
+        //   endAdornment: (
+        //     <InputAdornment position="end">
+        //       <PencilIcon />
+        //     </InputAdornment>
+        //   )
+        // }}
+        />
+      </InputContainer>
+      <InputContainer>
+        <Label>Company Size</Label>
+        <StyledInput
+          // variant="standard"
+          disabled={editMode}
+          value={companySize}
+          name='companySize'
+          onChange={handleChange}
+        // InputProps={{
+        //   endAdornment: (
+        //     <InputAdornment position="end">
+        //       <PencilIcon />
+        //     </InputAdornment>
+        //   )
+        // }}
+        />
+      </InputContainer>
+      <InputContainer>
+        <Label>Role in Company</Label>
+        <StyledInput
+          // variant="standard"
+          disabled={editMode}
+          value={roleInCompany}
+          name='roleInCompany'
+          onChange={handleChange}
+        // InputProps={{
+        //   endAdornment: (
+        //     <InputAdornment position="end">
+        //       <PencilIcon />
+        //     </InputAdornment>
+        //   )
+        // }}
+        />
+      </InputContainer>
+    </ProfileContainer>
+  );
+};
+
+export default CompanyDetails;
