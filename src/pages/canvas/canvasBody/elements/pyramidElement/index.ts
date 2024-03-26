@@ -13,9 +13,11 @@ export function usePyramidElement() {
     console.log(activePyramid);
     let lastLevel: any;
     let lastText: any;
+    let levelsCount : number = 0;;
     canvas.forEachObject(obj => {
       if (obj.name == `${PYRAMID_TEXT}_${currentID}`) {
         lastText = obj;
+        levelsCount++;
       }
     });
     let activeObject = canvas.getActiveObject();
@@ -36,7 +38,7 @@ export function usePyramidElement() {
           { x: lastLevel.points[3].x - 40, y: -60 },
         ],
         {
-          fill: 'transparent',
+          fill: (levelsCount % 2 !== 0)? '#406098' : '#B0BCDE',
           stroke: 'black',
           top:
             (activeObject as fabric.Group)?.getScaledHeight() +
@@ -46,7 +48,7 @@ export function usePyramidElement() {
           name: `${PYRAMID_LEVEL}_${currentID}`,
         }
       );
-      console.log({ trapezoid });
+      
       const text = new AutoResizingTextbox('Add Text', {
         fontSize: 18,
         left: lastText.left,
@@ -55,6 +57,7 @@ export function usePyramidElement() {
         fixedWidth: 150,
         fixedHeight: 100,
         name: `${PYRAMID_TEXT}_${currentID}`,
+        fill: 'white'
       });
       (activeObject as fabric.Group).addWithUpdate(trapezoid);
 
@@ -90,8 +93,8 @@ export function usePyramidElement() {
         height: 150,
         left: -101,
         top: -150,
-        fill: 'transparent',
         stroke: 'black',
+        fill: '#B0BCDE',
       });
       const text = new AutoResizingTextbox('Add Text', {
         fontSize: 18,
@@ -104,6 +107,7 @@ export function usePyramidElement() {
         hasControls: false,
         lockMovementX: true,
         lockMovementY: true,
+        fill: 'white'
       });
 
       textsList.push(text);
@@ -118,7 +122,7 @@ export function usePyramidElement() {
           ],
 
           {
-            fill: 'transparent',
+            fill: '#406098',
             stroke: 'black',
             top: trapTop,
             name: `${PYRAMID_LEVEL}_${pyramidId}`,
@@ -136,6 +140,7 @@ export function usePyramidElement() {
           hasControls: false,
           lockMovementX: true,
           lockMovementY: true,
+          fill: 'white'
         });
 
         trapTop = trapTop + 60;
