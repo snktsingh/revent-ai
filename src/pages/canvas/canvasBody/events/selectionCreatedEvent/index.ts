@@ -15,9 +15,10 @@ export function useSelectionCreatedEvent(){
           if (activeObject[0].type == 'text' || activeObject[0].type == 'textbox') {
             dispatch(handleInputSize((activeObject[0] as any)?.fontSize));
           }
+
         }
-    
         
+        canvas?.requestRenderAll();
       };
 
      

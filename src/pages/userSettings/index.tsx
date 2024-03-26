@@ -13,7 +13,7 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PrivacyTipIcon from '@mui/icons-material/PrivacyTip';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   SettingsContainer,
   GridContainer,
@@ -58,16 +58,18 @@ import LinkedinSettings from './linkedinSettings';
 import CompanyDetails from './companySettings';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { useAppSelector } from '@/redux/store';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { getUserDetails } from '@/redux/thunk/user';
 
 const UserSettings: React.FC = () => {
   const [tab, setTab] = useState(1);
   const [editMode, setEditMode] = useState(true);
   const [openProfileMenu, setOpenProfileMenu] = useState<null | HTMLElement>(
     null
-  );
-  const { userDetails } = useAppSelector(state => state.manageUser);
-  const [isImageBroken, setIsImageBroken] = useState(false);
+    );
+    const { userDetails } = useAppSelector(state => state.manageUser);
+    const [isImageBroken, setIsImageBroken] = useState(false);
+    const dispatch = useAppDispatch();
 
   const handleImageError = () => {
     setIsImageBroken(true);
@@ -124,6 +126,9 @@ const UserSettings: React.FC = () => {
     return initials;
   }
 
+  useEffect(()=>{
+    dispatch(getUserDetails());
+  },[])
 
   return (
     <>

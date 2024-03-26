@@ -1,9 +1,14 @@
-import { useAppSelector } from '@/redux/store';
-import React, { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { getUserDetails } from '@/redux/thunk/user';
+import React, { useEffect, useState } from 'react';
 
 const useSettings = () => {
   const { userDetails } = useAppSelector(state => state.manageUser);
-  
+  const dispatch = useAppDispatch();
+  useEffect(()=>{
+    dispatch(getUserDetails());
+  },[])
+
   const [userDetailsInputs, setUserDetailsInputs] = useState({
     firstName: userDetails?.firstName || 'Unknown',
     lastName: userDetails?.lastName || 'User',

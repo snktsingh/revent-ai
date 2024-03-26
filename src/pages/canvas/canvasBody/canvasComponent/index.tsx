@@ -31,7 +31,7 @@ const CanvasComponent: React.FC = () => {
   const FabricRef = useRef<fabric.Canvas | null>(null);
   const ContainerRef = useRef<HTMLDivElement | null>(null);
 
-  
+
   const ElementFunctions = useElementFunctions(canvasRef.current);
 
   const { handleAddCustomIcon } = useCustomSelectionIcons();
@@ -183,8 +183,8 @@ const CanvasComponent: React.FC = () => {
         });
 
         newCanvas.on('object:modified', e => {
-          if(newCanvas && e.target){
-            setElementPositionsAfterMoving(e.target,newCanvas);
+          if (newCanvas && e.target) {
+            setElementPositionsAfterMoving(e.target, newCanvas);
           }
           updateCanvasSlideData(newCanvas, canvasJS.id);
           getElementsData(
@@ -206,10 +206,9 @@ const CanvasComponent: React.FC = () => {
           // console.log(newCanvas.toJSON());
           handleObjectMoving(options, newCanvas);
         });
-        // newCanvas.on('object:scaling', function (options) {
-        //   // console.log(newCanvas.toJSON());
-        //   handleObjectScaling(options, newCanvas);
-        // });
+        newCanvas.on('object:scaling', function (options) {
+          handleObjectScaling(options, newCanvas);
+        });
         updateCanvasSlideData(newCanvas, canvasJS.id);
         // handleAddCustomIcon(newCanvas);
         newCanvas.renderAll();
@@ -220,6 +219,24 @@ const CanvasComponent: React.FC = () => {
     );
 
     const canvas = canvasRef.current!;
+
+    canvas.on('mouse:down', function (options) {
+      const pointer: any = canvas.getPointer(options.e);
+
+      const objectsAtPointer = canvas.getObjects().filter(obj => {
+        return obj.containsPoint(pointer);
+      });
+
+      const textboxFound = objectsAtPointer.some(obj => obj.type === 'textbox');
+
+      if (textboxFound) {
+        const textBox = objectsAtPointer.find(obj => obj.type === 'textbox');
+        if (textBox) {
+          canvas.setActiveObject(textBox);
+        }
+        canvas.requestRenderAll();
+      }
+    });
 
     canvas.on('selection:created', handleElementBarSelection);
     canvas.on('selection:updated', handleElementBarSelection);
@@ -335,15 +352,15 @@ const CanvasComponent: React.FC = () => {
   }, [variantImage]);
 
 
-  
+
   useEffect(() => {
-  }, [selectedElementPosition,showOptions])
+  }, [selectedElementPosition, showOptions])
 
   return (
     <CanvasContainer >
       <div style={{ position: 'relative' }} ref={ContainerRef}>
         <canvas id="canvas"></canvas>
-        {showOptions && <ElementEditBar left={selectedElementPosition.left} top={selectedElementPosition.top} canvas={canvasRef.current}/>}
+        {showOptions && <ElementEditBar left={selectedElementPosition.left} top={selectedElementPosition.top} canvas={canvasRef.current} />}
       </div>
       <div style={{ position: 'absolute', left: -10000 }}>
         <FullscreenCanvas />
