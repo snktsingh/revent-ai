@@ -40,7 +40,7 @@ const CanvasComponent: React.FC = () => {
   const { handleObjectMoving } = useObjectMovingEvent();
   const { handleObjectScaling } = useObjectScalingEvent();
   const { handleSelectionCreated } = useSelectionCreatedEvent();
-  const { textExitedEvent, textEnteringEvent } = useTextEvents();
+  const { textExitedEvent, textEnteringEvent, removePlaceholderText } = useTextEvents();
   const { setElementPositionsAfterMoving } = useObjectModified();
   const { CanvasClick } = useCanvasClickEvent();
   const { jsonData, themeCode, themeName } = useAppSelector(state => state.slideTheme);
@@ -133,6 +133,9 @@ const CanvasComponent: React.FC = () => {
           }
         });
         newCanvas.on('mouse:dblclick', event => {
+          if(event.target){
+            removePlaceholderText(canvas,event.target)
+          }
           CanvasClick(newCanvas, event);
         });
         newCanvas.on('text:editing:exited', event => {
@@ -140,6 +143,9 @@ const CanvasComponent: React.FC = () => {
           updateCanvasSlideData(newCanvas, canvasJS.id);
         });
         newCanvas.on('text:editing:entered', event => {
+          if(event.target){
+            textEnteringEvent(canvas, event.target);
+          }
           updateCanvasSlideData(newCanvas, canvasJS.id);
         });
         newCanvas.on('selection:created', function (event) {
@@ -221,9 +227,6 @@ const CanvasComponent: React.FC = () => {
 
     canvas.on('mouse:down', function (options) {
       const pointer: any = canvas.getPointer(options.e);
-      if(options.target){
-        textEnteringEvent(canvas, options.target);
-      }
 
       const objectsAtPointer = canvas.getObjects().filter(obj => {
         return obj.containsPoint(pointer);

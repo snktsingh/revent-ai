@@ -25,6 +25,8 @@ import {
 } from '@/constants/elementNames';
 
 export function useObjectMovingEvent() {
+
+  
   const handleObjectMoving = (
     options: fabric.IEvent<MouseEvent>,
     canvas: fabric.Canvas
