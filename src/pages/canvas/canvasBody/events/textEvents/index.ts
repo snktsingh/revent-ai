@@ -24,22 +24,29 @@ export function useTextEvents() {
         textBox?.text === 'Click to add a paragraph' ||
         textBox?.text === 'Click to add a bullet point'
       ) {
-        // Clear the placeholder text and make it selectable
-        // textBox.set({ text: '' });
+        textBox.set({ text: '' });
         // textBox.set({textLines : ['']})
         textBox.set({
           fill: theme.colorSchemes.light.palette.common.black,
         });
-        // Set focus on the textbox
         textBox.enterEditing();
-        textBox.selectAll()
-      } else if (textBox.text === 'Add Text' && textBox.name?.startsWith(TIMELINE_TEXT) || textBox.text === 'Add Timeline' && textBox.name?.startsWith(TIMELINE_HEADING)) {
-        // textBox.set({ text: '' });
+        // textBox.selectAll()
+      } else if ((textBox.text === 'Add Text' && textBox.name?.startsWith(TIMELINE_TEXT)) || (textBox.text === 'Add Timeline' && textBox.name?.startsWith(TIMELINE_HEADING))) {
+        textBox.set({ text: '' });
         textBox.set({
           fill: theme.colorSchemes.light.palette.common.black,
         });
         textBox.enterEditing();
-        textBox.selectAll()
+        // textBox.selectAll()
+      } else if (textBox.text === 'Add Text' && textBox.name?.startsWith(PROCESS_TEXT)) {
+        textBox.set({ text: '' });
+        
+        textBox.enterEditing();
+      } else if ((textBox.text === 'Add Text' && textBox.name?.startsWith(PYRAMID_TEXT)) || (textBox.text === 'Add Text' && textBox.name?.startsWith(FUNNEL_TEXT))) {
+        textBox.set({ text: '' });
+        
+        textBox.enterEditing();
+        // textBox.selectAll()
       }
       canvas.renderAll();
     }

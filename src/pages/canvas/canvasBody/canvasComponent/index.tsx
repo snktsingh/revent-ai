@@ -140,7 +140,6 @@ const CanvasComponent: React.FC = () => {
           updateCanvasSlideData(newCanvas, canvasJS.id);
         });
         newCanvas.on('text:editing:entered', event => {
-          textEnteringEvent(newCanvas, event.target as fabric.Text);
           updateCanvasSlideData(newCanvas, canvasJS.id);
         });
         newCanvas.on('selection:created', function (event) {
@@ -222,15 +221,19 @@ const CanvasComponent: React.FC = () => {
 
     canvas.on('mouse:down', function (options) {
       const pointer: any = canvas.getPointer(options.e);
+      if(options.target){
+        textEnteringEvent(canvas, options.target);
+      }
 
       const objectsAtPointer = canvas.getObjects().filter(obj => {
         return obj.containsPoint(pointer);
       });
 
-      const textboxFound = objectsAtPointer.some(obj => obj.type === 'textbox');
-
+      const textboxFound = objectsAtPointer.some(obj => obj.type === 'textbox' || obj.type === 'text');
+      
       if (textboxFound) {
-        const textBox = objectsAtPointer.find(obj => obj.type === 'textbox');
+        const textBox = objectsAtPointer.find(obj => obj.type === 'textbox' || obj.type === 'text');
+        console.log({textBox});
         if (textBox) {
           canvas.setActiveObject(textBox);
         }
