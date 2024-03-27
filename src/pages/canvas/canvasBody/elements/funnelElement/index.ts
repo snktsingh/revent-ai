@@ -37,7 +37,7 @@ export function useFunnelElement() {
         { x: lastLevel.points[3].x - 20, y: -50 },
       ],
       {
-        fill: 'transparent',
+        fill: '#B0BCDE',
         stroke: 'black',
         name: `${FUNNEL_LEVEL}_${currentID}`,
         top: funnelGroup?.top! - 50,
@@ -92,7 +92,7 @@ export function useFunnelElement() {
             { x: x4, y: -50 },
           ],
           {
-            fill: 'transparent',
+            fill: '#B0BCDE',
             stroke: 'black',
             top: trapTop,
             name: `${FUNNEL_LEVEL}_${funnelId}`,
@@ -108,7 +108,7 @@ export function useFunnelElement() {
       }
 
       let rect = new fabric.Rect({
-        fill: 'transparent',
+        fill: '#406098',
         stroke: 'black',
         width: 160,
         height: 100,

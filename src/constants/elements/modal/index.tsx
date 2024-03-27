@@ -20,7 +20,7 @@ const PopUpModal = () => {
     dispatch(closeModal());
     dispatch(deleteCanvasItem(canvasJS.id));
   };
-
+  
   return (
     <Dialog
       open={isVisible.isModalVisible}
