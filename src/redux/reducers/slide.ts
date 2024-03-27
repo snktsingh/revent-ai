@@ -7,7 +7,8 @@ export interface TestState {
   slideKey: number;
   nextKey: number;
   listSearch: string;
-  isRegenerateDisabled : boolean
+  isRegenerateDisabled : boolean;
+  isSlideSelected : boolean;
 }
 
 const initialState: TestState = {
@@ -20,7 +21,8 @@ const initialState: TestState = {
   slideKey: 1,
   nextKey: 2,
   listSearch: '',
-  isRegenerateDisabled: true
+  isRegenerateDisabled: true,
+  isSlideSelected : false
 };
 
 export const slideReducer = createSlice({
@@ -42,12 +44,15 @@ export const slideReducer = createSlice({
     },
     toggleRegenerateButton(state,action : PayloadAction<boolean>){
       state.isRegenerateDisabled = action.payload
+    },
+    toggleSelectingSlide(state,action : PayloadAction<boolean>){
+      state.isSlideSelected = action.payload
     }
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { addSlide, deleteSlide, getSlidekey, searchElement, toggleRegenerateButton } =
+export const { addSlide, deleteSlide, getSlidekey, searchElement, toggleRegenerateButton, toggleSelectingSlide } =
   slideReducer.actions;
 
 export default slideReducer.reducer;

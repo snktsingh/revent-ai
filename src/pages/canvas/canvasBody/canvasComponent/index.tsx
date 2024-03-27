@@ -54,7 +54,8 @@ const CanvasComponent: React.FC = () => {
     showOptions,
     setShowOptions,
     selectedElementPosition,
-    setSelectedElementPosition
+    setSelectedElementPosition,
+    canvasClickEvent
   } = useCanvasComponent();
 
   const dispatch = useAppDispatch();
@@ -364,7 +365,7 @@ const CanvasComponent: React.FC = () => {
 
   return (
     <CanvasContainer >
-      <div style={{ position: 'relative' }} ref={ContainerRef}>
+      <div style={{ position: 'relative' }} ref={ContainerRef} onClick={canvasClickEvent} >
         <canvas id="canvas"></canvas>
         {showOptions && <ElementEditBar left={selectedElementPosition.left} top={selectedElementPosition.top} canvas={canvasRef.current} />}
       </div>

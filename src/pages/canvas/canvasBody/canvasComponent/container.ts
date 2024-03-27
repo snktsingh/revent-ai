@@ -35,6 +35,7 @@ import {
 } from '@/interface/storeTypes';
 import { setRequestData } from '@/redux/reducers/apiData';
 import { setCanvas, updateCanvasInList } from '@/redux/reducers/canvas';
+import { toggleSelectingSlide } from '@/redux/reducers/slide';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { fabric } from 'fabric';
 import { useState } from 'react';
@@ -479,7 +480,12 @@ export const useCanvasComponent = () => {
       return true;
     }
     return false;
-  }
+  };
+
+
+  const canvasClickEvent = () => {
+      dispatch(toggleSelectingSlide(false));     
+  };
 
   return {
     handleAllElements,
@@ -493,5 +499,6 @@ export const useCanvasComponent = () => {
     setShowOptions,
     selectedElementPosition,
     setSelectedElementPosition,
+    canvasClickEvent
   };
 };

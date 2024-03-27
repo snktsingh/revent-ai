@@ -1,4 +1,12 @@
-import React, { useEffect, useRef } from 'react';
+import useCanvasHeader from '@/pages/canvas/canvasHeader/container';
+import { useAppSelector } from '@/redux/store';
+import HomeIcon from '@mui/icons-material/Home';
+import LogoutIcon from '@mui/icons-material/Logout';
+import SettingsIcon from '@mui/icons-material/Settings';
+import { ListItemIcon, Typography } from '@mui/material';
+import Divider from '@mui/material/Divider';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   AccountIcon,
   AccountInfo,
@@ -8,16 +16,8 @@ import {
   StyledMenu,
   StyledMenuItem,
 } from './style';
-import { ListItemIcon, Typography } from '@mui/material';
-import HomeIcon from '@mui/icons-material/Home';
-import SettingsIcon from '@mui/icons-material/Settings';
-import LogoutIcon from '@mui/icons-material/Logout';
-import { useNavigate } from 'react-router-dom';
-import useCanvasHeader from '@/pages/canvas/canvasHeader/container';
-import { AccountCircleRounded } from '@mui/icons-material';
-import Divider from '@mui/material/Divider';
-import { useAppSelector } from '@/redux/store';
-
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import { ROUTES } from '@/constants/endpoint';
 interface ProfileMenuProps {
   anchorElForProfileMenu: null | HTMLElement;
   handleCloseProfileMenu: Function;
@@ -40,11 +40,15 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
   };
   const handleNavigateHome = () => {
     handleClose();
-    navigate('/', { replace: true });
+    navigate(ROUTES.APP_ROOT, { replace: true });
+  };
+  const handleNavigateDashboard = () => {
+    handleClose();
+    navigate(ROUTES.DASHBOARD, { replace: true });
   };
   const handleNavigateSettings = () => {
     handleClose();
-    navigate('/settings', { replace: true });
+    navigate(ROUTES.SETTINGS, { replace: true });
   };
 
   return (
@@ -75,6 +79,12 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
           <HomeIcon />
         </ListItemIcon>
         Home
+      </StyledMenuItem>
+      <StyledMenuItem onClick={handleNavigateDashboard}>
+        <ListItemIcon>
+          <DashboardIcon />
+        </ListItemIcon>
+        Dashboard
       </StyledMenuItem>
       <StyledMenuItem onClick={handleNavigateSettings}>
         <ListItemIcon>
