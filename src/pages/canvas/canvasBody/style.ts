@@ -1,6 +1,6 @@
 import { theme } from '@/constants/theme';
 import { ThumbUpAltRounded } from '@mui/icons-material';
-import { Button, Card } from '@mui/material';
+import { Button, Card, InputBase } from '@mui/material';
 import styled from 'styled-components';
 
 export const BodyContainer = styled.div`
@@ -36,5 +36,10 @@ export const ElementTitle = styled.span`
 export const ElementSubtitle = styled.span`
   font-size: 0.6rem;
   color: ${theme.colorSchemes.light.palette.common.subtext};
+`;
+export const ElementSearchInput = styled(InputBase)`
+  && {
+    padding: 5px 0 5px 20px;
+  }
 `;
 export const LikeButton = styled(ThumbUpAltRounded)``;

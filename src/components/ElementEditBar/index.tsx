@@ -5,6 +5,7 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import styled from 'styled-components';
 import { useEditBar } from './container';
 import { useTableElement } from '@/pages/canvas/canvasBody/elements/tableElement';
+import { TABLE_HEADER } from '@/constants/elementNames';
 
 
 interface ElementEditBarProps {
@@ -18,7 +19,7 @@ const ElementEditBar: React.FC<ElementEditBarProps> = ({ left, top, canvas }) =>
 
     const [position, setPosition] = useState({ l: left, t: top });
 
-    const { addTableColumn, addTableRow, removeTableColumn, removeTableRow } = useTableElement();
+    const { addTableColumn, addTableRow, removeTableColumn, removeTableRow, removeTableHeader, addTableHeader } = useTableElement();
     const {
         adjustControlsVisibility,
         handleCopyClick,
@@ -53,6 +54,22 @@ const ElementEditBar: React.FC<ElementEditBarProps> = ({ left, top, canvas }) =>
     const handleRemoveTableRow = () => {
         removeTableRow(canvas);
     };
+    const handleTableHeader = () => {
+        if (canvas) {
+            let isHeaderAvailable = false;
+            canvas.forEachObject((obj) => {
+                if (obj.name?.startsWith(`${TABLE_HEADER}_`)) {
+                    isHeaderAvailable = true;
+                }
+            });
+
+            if (isHeaderAvailable) {
+                removeTableHeader(canvas);
+            } else {
+                addTableHeader(canvas);
+            }
+        }
+    };
 
     useEffect(() => {
         adjustControlsVisibility(canvas!);
@@ -72,6 +89,15 @@ const ElementEditBar: React.FC<ElementEditBarProps> = ({ left, top, canvas }) =>
                 <span>
                     <IconButton onClick={handleAdd} disabled={!plusIcon} style={{ color: plusIcon ? '' : '#e0e0e0' }}>
                         <AddOutlinedIcon />
+                    </IconButton>
+                </span>
+            </Tooltip>}
+            {tableIcons && <Tooltip title="Add/Remove Header" placement="top">
+                <span>
+                    <IconButton onClick={handleTableHeader} >
+                        <SvgContainer>
+                            <svg fill="#000000" viewBox="-4 -2 14 14" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M2 4h4V1a1 1 0 1 1 2 0v8a1 1 0 1 1-2 0V6H2v3a1 1 0 1 1-2 0V1a1 1 0 1 1 2 0v3z"></path></g></svg>
+                        </SvgContainer>
                     </IconButton>
                 </span>
             </Tooltip>}

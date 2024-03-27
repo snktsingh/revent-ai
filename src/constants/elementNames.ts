@@ -33,6 +33,7 @@ const TIMELINE_DIRECTION = 'TimeLineDirection';
 const TABLE = 'TABLE';
 const TABLE_TEXT = 'TableText';
 const TABLE_CELL = 'TableCell';
+const TABLE_HEADER = 'TableHeader';
 
 
 //Text
@@ -93,5 +94,6 @@ export {
     QUOTE_AUTHOR,
     QUOTE_IMG,
     QUOTE_ADD_IMG_TEXT,
-    QUOTE_IMG_CONTAINER
+    QUOTE_IMG_CONTAINER,
+    TABLE_HEADER
 };

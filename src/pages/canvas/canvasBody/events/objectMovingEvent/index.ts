@@ -16,6 +16,7 @@ import {
   PYRAMID,
   PYRAMID_TEXT,
   TABLE,
+  TABLE_HEADER,
   TABLE_TEXT,
   TIMELINE,
   TIMELINE_CIRCLE,
@@ -403,6 +404,20 @@ export function useObjectMovingEvent() {
 
           if (
             obj.name?.startsWith(`${TABLE_TEXT}_`) &&
+            obj.intersectsWithObject(movedObject, true, true)
+          ) {
+            obj
+              .set({
+                left: obj.left! + deltaX,
+                top: obj.top! + deltaY,
+              })
+              .setCoords();
+            left = obj.left! + deltaX;
+            top = obj.top! + deltaY;
+          }
+
+          if (
+            obj.name?.startsWith(`${TABLE_HEADER}_`) &&
             obj.intersectsWithObject(movedObject, true, true)
           ) {
             obj

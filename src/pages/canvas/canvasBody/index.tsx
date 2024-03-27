@@ -41,6 +41,7 @@ import {
   BodyContainer,
   EditSlideContainer,
   ElementContainer,
+  ElementSearchInput,
   ElementSubtitle,
   ElementTitle,
   LikeButton,
@@ -256,7 +257,7 @@ const CanvasBody = () => {
                 height: '60vh',
               }}
             >
-              <InputBase
+              <ElementSearchInput
                 placeholder="Search...."
                 size="small"
                 value={slide.listSearch}
