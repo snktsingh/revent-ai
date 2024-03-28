@@ -18,6 +18,7 @@ import {
   QUOTE_AUTHOR,
   QUOTE_IMG,
   TABLE,
+  TABLE_HEADER,
   TABLE_TEXT,
   TIMELINE,
   TIMELINE_CIRCLE,
@@ -166,7 +167,6 @@ export function useDelAndCopy() {
     return true;
   }
 
-  // Function to delete objects based on their names
   const deleteObjectsByName = (
     names: string[],
     canvas: fabric.Canvas | null
@@ -176,7 +176,7 @@ export function useDelAndCopy() {
         canvas.remove(obj);
       }
       if (names.includes(TABLE)) {
-        if (obj?.name?.startsWith(TABLE_TEXT)) {
+        if (obj?.name?.startsWith(TABLE_TEXT) || obj?.name?.startsWith(TABLE_HEADER)) {
           canvas.remove(obj);
         }
       }

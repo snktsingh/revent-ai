@@ -25,6 +25,7 @@ import axios from 'axios';
 import ElementEditBar from '@/components/ElementEditBar';
 import { useObjectScalingEvent } from '../events/objectScalingEvent';
 import useObjectModified from '../events/objectModifiedEvent';
+import useCanvasData from './canvasDataExtractor';
 
 const CanvasComponent: React.FC = () => {
   const canvasRef = useRef<fabric.Canvas | null>(null);
@@ -43,13 +44,12 @@ const CanvasComponent: React.FC = () => {
   const { textExitedEvent, textEnteringEvent, removePlaceholderText } = useTextEvents();
   const { setElementPositionsAfterMoving } = useObjectModified();
   const { CanvasClick } = useCanvasClickEvent();
+  const { getElementsData } = useCanvasData();
   const { jsonData, themeCode, themeName } = useAppSelector(state => state.slideTheme);
   const {
     updateCanvasDimensions,
     updateCanvasSlideData,
-    getElementsData,
     customFabricProperties,
-    extractTableData,
     handleElementBarSelection,
     showOptions,
     setShowOptions,
@@ -134,8 +134,8 @@ const CanvasComponent: React.FC = () => {
           }
         });
         newCanvas.on('mouse:dblclick', event => {
-          if(event.target){
-            removePlaceholderText(canvas,event.target)
+          if (event.target) {
+            removePlaceholderText(canvas, event.target)
           }
           CanvasClick(newCanvas, event);
         });
@@ -144,7 +144,7 @@ const CanvasComponent: React.FC = () => {
           updateCanvasSlideData(newCanvas, canvasJS.id);
         });
         newCanvas.on('text:editing:entered', event => {
-          if(event.target){
+          if (event.target) {
             textEnteringEvent(canvas, event.target);
           }
           updateCanvasSlideData(newCanvas, canvasJS.id);
@@ -197,7 +197,6 @@ const CanvasComponent: React.FC = () => {
             newCanvas.toObject(customFabricProperties)?.objects,
             themeCode, themeName
           );
-          extractTableData(newCanvas);
         });
 
         newCanvas.on('selection:cleared', e => {
@@ -234,10 +233,10 @@ const CanvasComponent: React.FC = () => {
       });
 
       const textboxFound = objectsAtPointer.some(obj => obj.type === 'textbox' || obj.type === 'text');
-      
+
       if (textboxFound) {
         const textBox = objectsAtPointer.find(obj => obj.type === 'textbox' || obj.type === 'text');
-        console.log({textBox});
+        console.log({ textBox });
         if (textBox) {
           canvas.setActiveObject(textBox);
         }
