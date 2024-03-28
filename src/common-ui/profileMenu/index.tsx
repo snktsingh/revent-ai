@@ -48,7 +48,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
   };
   const handleNavigateSettings = () => {
     handleClose();
-    navigate(ROUTES.SETTINGS, { replace: true });
+    navigate(ROUTES.SETTINGS, { state:  ROUTES.CANVAS, replace: true });
   };
 
   return (

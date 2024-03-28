@@ -43,7 +43,7 @@ export const theme = extendTheme({
           border: '#D9D9D9',
           subtext: '#A9A9A9',
           steelBlue: '#B0BCDE',
-          gray : '#333333'
+          gray : '#B9BABB'
         },
         primary: {
           main: '#004FBA',

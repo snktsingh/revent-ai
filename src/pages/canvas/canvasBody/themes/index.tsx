@@ -27,9 +27,12 @@ import {
 import { fetchSlideImg, getAllThemes } from '@/redux/thunk/thunk';
 import { useCanvasComponent } from '../canvasComponent/container';
 import { toast } from 'react-toastify';
+import ThumbnailPreview from '@/common-ui/thumbnailPreview';
+import useCanvasData from '../canvasComponent/canvasDataExtractor';
 
 export default function Templates() {
-  const { getElementsData, customFabricProperties } = useCanvasComponent();
+  const {  customFabricProperties } = useCanvasComponent();
+  const { getElementsData } = useCanvasData();
   const [tempCode, setTempCode] = useState('');
   const element = useAppSelector(state => state.element);
   const { selectedThemeId } = useAppSelector(state => state.slideTheme);
@@ -137,7 +140,7 @@ export default function Templates() {
                       : ''
                   }
                 >
-                  <img src={themes.thumbnailUrl} width="100%" height="100%" />
+                  <ThumbnailPreview src={themes.thumbnailUrl} alt={themes.company} style={{width:'14vw',height:'15vh'}} />
                 </ListSlideCard>
               );
             })}

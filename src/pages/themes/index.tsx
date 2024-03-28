@@ -20,6 +20,7 @@ import useStartTheme from './container';
 import { TailSpin } from 'react-loader-spinner';
 import { theme } from '@/constants/theme';
 import ReventingLoader from '@/common-ui/loader';
+import ThumbnailPreview from '@/common-ui/thumbnailPreview';
 
 const AppThemes = () => {
   const { navigate, thunk, dispatch, selectedThemeId, handleGenerate } =
@@ -67,10 +68,7 @@ const AppThemes = () => {
                       }
                     >
                       <ThemeCard>
-                        <ThemeImage
-                          src={theme.thumbnailUrl}
-                          alt={theme.company}
-                        />
+                        <ThumbnailPreview src={theme.thumbnailUrl} alt={theme.company} style={{ width: '246px', height: '140px'}} />
                       </ThemeCard>
                       {theme.title}
                     </ThemeCardTitle>

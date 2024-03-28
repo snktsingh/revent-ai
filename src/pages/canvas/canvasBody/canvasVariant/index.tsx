@@ -19,6 +19,7 @@ import {
   VariantSlideCard,
 } from './style';
 import SvgViewer from '@/components/canvasSvgViewer';
+import ThumbnailPreview from '@/common-ui/thumbnailPreview';
 
 export const CanvasVariant = () => {
   const dispatch = useAppDispatch();
@@ -104,7 +105,7 @@ export const CanvasVariant = () => {
                     >
                       <div>{i + 1}</div>
                       <VariantSlideCard className={el.imagesUrl == variantImage && !selectedOriginalCanvas ? 'clicked-card' : '' }>
-                        <img
+                        <ThumbnailPreview
                           src={el.imagesUrl}
                           alt={`Variant ${i + 1}`}
                           style={{

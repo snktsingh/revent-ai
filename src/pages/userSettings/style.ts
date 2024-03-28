@@ -124,7 +124,7 @@ export const GridContainer = styled(Grid)`
 
 export const SettingsContainer = styled.div`
   height: 80%;
-  margin: 7vh 8vw;
+  margin: 4vh 8vw;
   display: flex;
   justify-content: space-between;
   align-items: start;

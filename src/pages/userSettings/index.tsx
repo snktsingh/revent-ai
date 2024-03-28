@@ -60,6 +60,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { getUserDetails } from '@/redux/thunk/user';
+import BreadCrumb from './navigationBreadcrumb';
 
 const UserSettings: React.FC = () => {
   const [tab, setTab] = useState(1);
@@ -172,6 +173,7 @@ const UserSettings: React.FC = () => {
       </NavbarContainer>
       {/* main settings */}
       <MainSettingsContainer>
+        <BreadCrumb/>
         <SettingsContainer>
           <SideBar>
             <ProfileImgContainer>
