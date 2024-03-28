@@ -19,7 +19,7 @@ export const CanvasHeaderInput = styled.input`
     outline: none;
   }
 
-  ::placeholder {
-    color: white;
+  &::placeholder {
+    color: ${theme.colorSchemes.light.palette.common.white};
   }
 `;

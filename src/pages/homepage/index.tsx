@@ -79,7 +79,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import Footer from '@/common-ui/footer';
 import { Token } from '@/utils/localStorage/data';
 import { ROUTES } from '@/constants/endpoint';
-import { useAppSelector } from '@/redux/store';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { getUserDetails } from '@/redux/thunk/user';
 
 interface FileUploadProps {
   onFileSelect: (file: File) => void;
@@ -89,6 +90,7 @@ const Home = ({ onFileSelect }: any) => {
   const [data2, handleEmailSubmit] = useForm('xrgwdbzz');
   const { userDetails } = useAppSelector(state => state.manageUser);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const {
     aboutRef,
     servicesRef,
@@ -205,6 +207,10 @@ const Home = ({ onFileSelect }: any) => {
       onFileSelect(droppedFile);
     }
   };
+
+  React.useEffect(()=>{
+    dispatch(getUserDetails());
+  },[]);
 
   const inputRef = React.createRef<HTMLInputElement>();
   return (

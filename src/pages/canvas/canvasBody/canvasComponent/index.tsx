@@ -135,7 +135,7 @@ const CanvasComponent: React.FC = () => {
         });
         newCanvas.on('mouse:dblclick', event => {
           if (event.target) {
-            removePlaceholderText(canvas, event.target)
+            // removePlaceholderText(canvas, event.target)
           }
           CanvasClick(newCanvas, event);
         });

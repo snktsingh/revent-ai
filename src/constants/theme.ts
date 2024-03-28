@@ -12,6 +12,7 @@ declare module '@mui/material/styles/createPalette' {
     border: string;
     subtext: string;
     steelBlue: string;
+    gray: string;
   }
 }
 
@@ -42,6 +43,7 @@ export const theme = extendTheme({
           border: '#D9D9D9',
           subtext: '#A9A9A9',
           steelBlue: '#B0BCDE',
+          gray : '#333333'
         },
         primary: {
           main: '#004FBA',

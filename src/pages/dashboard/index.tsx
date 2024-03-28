@@ -20,6 +20,7 @@ import '../../../index.css';
 import { theme } from '@/constants/theme';
 import { fetchPPTList } from '@/redux/thunk/dashboard';
 import { Preview } from '@mui/icons-material';
+import ThumbnailPreview from '@/common-ui/thumbnailPreview';
 const Dashboard = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -63,10 +64,7 @@ const Dashboard = () => {
         <>
           <CardTitle>
             <CardLink>
-              <img
-                src="https://revent-ppt-output.s3.amazonaws.com/thumbnails/TRIDENT-3ebe416994459888769625469_.png"
-                width="15%"
-              />
+              <ThumbnailPreview src="https://revent-ppt-output.s3.amazonaws.com/thumbnails/TRIDENT-3ebe416994459888769625469_.png" alt='thumbnail' style={{width: '14vw',height:'15vh'}}/>
               <p>untitled-presentation</p>
             </CardLink>
           </CardTitle>
