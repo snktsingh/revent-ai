@@ -127,6 +127,7 @@ const Dashboard = () => {
           id="outlined-basic"
           label="Search presentation"
           variant="outlined"
+          size="small"
           onChange={e => {
             filterPresentation(e.target.value);
           }}
