@@ -15,11 +15,11 @@ import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { useEffect } from 'react';
 import { getUserDetails } from '@/redux/thunk/user';
 import { MagnifyingGlass } from 'react-loader-spinner';
-
+import AddToQueueIcon from '@mui/icons-material/AddToQueue';
 import '../../../index.css';
 import { theme } from '@/constants/theme';
 import { fetchPPTList } from '@/redux/thunk/dashboard';
-import { Preview } from '@mui/icons-material';
+import { Add, Preview } from '@mui/icons-material';
 import ThumbnailPreview from '@/common-ui/thumbnailPreview';
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -51,7 +51,9 @@ const Dashboard = () => {
           return (
             <CardTitle onClick={() => navigate('/themes')}>
               <CardLink>
-                <PreviewCard />
+                <PreviewCard >
+                  <AddToQueueIcon sx={{fontSize:'3rem'}}/>                 
+                </PreviewCard>
                 {slide.title}
               </CardLink>
             </CardTitle>
@@ -71,7 +73,7 @@ const Dashboard = () => {
         </>
       ) : (
         <Loader>
-          No Recent Presentations
+          {/* No Recent Presentations */}
           <MagnifyingGlass
             visible={true}
             height="80"

@@ -81,6 +81,7 @@ import { Token } from '@/utils/localStorage/data';
 import { ROUTES } from '@/constants/endpoint';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { getUserDetails } from '@/redux/thunk/user';
+import ProfileMenu from '@/common-ui/profileMenu';
 
 interface FileUploadProps {
   onFileSelect: (file: File) => void;
@@ -122,16 +123,16 @@ const Home = ({ onFileSelect }: any) => {
 
   const toggleDrawer =
     (anchor: Anchor, open: boolean) =>
-    (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event.type === 'keyRight' &&
-        ((event as React.KeyboardEvent).key === '' ||
-          (event as React.KeyboardEvent).key === '')
-      ) {
-        return;
-      }
-      setState({ ...state, [anchor]: open });
-    };
+      (event: React.KeyboardEvent | React.MouseEvent) => {
+        if (
+          event.type === 'keyRight' &&
+          ((event as React.KeyboardEvent).key === '' ||
+            (event as React.KeyboardEvent).key === '')
+        ) {
+          return;
+        }
+        setState({ ...state, [anchor]: open });
+      };
   const workingRef = useRef<HTMLDivElement>(null);
   const handleWorking = () => {
     if (workingRef.current) {
@@ -208,9 +209,20 @@ const Home = ({ onFileSelect }: any) => {
     }
   };
 
-  React.useEffect(()=>{
+  const [openProfileMenu, setOpenProfileMenu] = React.useState<null | HTMLElement>(
+    null
+  );
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setOpenProfileMenu(event.currentTarget);
+  };
+  const handleCloseProfileMenu = () => {
+    setOpenProfileMenu(null);
+  };
+
+  React.useEffect(() => {
     dispatch(getUserDetails());
-  },[]);
+  }, []);
 
   const inputRef = React.createRef<HTMLInputElement>();
   return (
@@ -233,23 +245,21 @@ const Home = ({ onFileSelect }: any) => {
             <GridRowCenter xs={3}>
               <StackColCenter direction="row" spacing={3}>
                 {Token ? (
-                  <Link to={ROUTES.DASHBOARD}>
-                    <Button>
-                      <Avatar
-                        sx={{
-                          fontSize: '12px',
-                          width: 28,
-                          height: 28,
-                          marginRight: '10px',
-                          bgcolor: `${theme.colorSchemes.light.palette.primary.main}`,
-                        }}
-                      >
-                        {(userDetails?.firstName || '').slice(0, 1)}
-                        {(userDetails?.lastName || '').slice(0, 1)}
-                      </Avatar>
-                      {userDetails?.firstName} {userDetails?.lastName}
-                    </Button>
-                  </Link>
+                  <Button onClick={handleClick}>
+                    <Avatar
+                      sx={{
+                        fontSize: '12px',
+                        width: 28,
+                        height: 28,
+                        marginRight: '10px',
+                        bgcolor: `${theme.colorSchemes.light.palette.primary.main}`,
+                      }}
+                    >
+                      {(userDetails?.firstName || '').slice(0, 1)}
+                      {(userDetails?.lastName || '').slice(0, 1)}
+                    </Avatar>
+                    {userDetails?.firstName} {userDetails?.lastName}
+                  </Button>
                 ) : (
                   <>
                     <UserLink to="/login" replace={true}>
@@ -260,6 +270,10 @@ const Home = ({ onFileSelect }: any) => {
                     </Button>
                   </>
                 )}
+                <ProfileMenu anchorElForProfileMenu={openProfileMenu}
+                  handleCloseProfileMenu={handleCloseProfileMenu}
+                  setAnchorElForProfileMenu={setOpenProfileMenu}
+                />
               </StackColCenter>
             </GridRowCenter>
           </GridContainer>

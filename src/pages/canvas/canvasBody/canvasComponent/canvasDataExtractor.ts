@@ -365,7 +365,11 @@ const useCanvasData = () => {
         obj.name.startsWith(TIMELINE) ||
         obj.name.startsWith(PROCESS) ||
         obj.name.startsWith(CYCLE) ||
-        obj.name.startsWith(TABLE)
+        obj.name.startsWith(TABLE) ||
+        obj.name.startsWith('LIST_ELEMENT') ||
+        obj.name.startsWith(QUOTE) ||
+        obj.name.startsWith(BULLET_POINTS) ||
+        obj.name.startsWith(PARAGRAPH)
       ) {
         enabledEl.push('Title', 'Subtitle');
       } else if (obj.name === 'Image' || obj.name === QUOTE) {

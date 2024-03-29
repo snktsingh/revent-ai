@@ -38,6 +38,9 @@ export const PreviewCard = styled(Card)`
   width: 14vw;
   height: 15vh;
   margin-bottom: 5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 export const CardTitle = styled.span`
   margin-bottom: 20px;
