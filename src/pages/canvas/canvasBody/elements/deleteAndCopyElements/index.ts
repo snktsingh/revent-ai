@@ -30,7 +30,7 @@ import { Copy, DeleteX } from '@/constants/media';
 import {
   updateFunnelId,
   updatePyramidId,
-} from '@/redux/reducers/elementsCount';
+} from '@/redux/reducers/fabricElements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { fabric } from 'fabric';
 

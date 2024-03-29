@@ -4,16 +4,23 @@ import {
   CONCLUSION_SLIDE_TITLE,
   COVER_SLIDE_SUBTITLE,
   COVER_SLIDE_TITLE,
+  CYCLE,
   CYCLE_TEXT,
+  FUNNEL,
   FUNNEL_TEXT,
   PARAGRAPH,
+  PROCESS,
   PROCESS_TEXT,
+  PYRAMID,
   PYRAMID_TEXT,
+  QUOTE,
   SECTION_SLIDE_SUBTITLE,
   SECTION_SLIDE_TITLE,
   SUBTITLE,
+  TABLE,
   TABLE_HEADER,
   TABLE_TEXT,
+  TIMELINE,
   TIMELINE_HEADING,
   TIMELINE_TEXT,
   TITLE,
@@ -29,12 +36,14 @@ import {
   TableDataType,
 } from '@/interface/storeTypes';
 import { setRequestData } from '@/redux/reducers/apiData';
+import { setEnabledElements } from '@/redux/reducers/elements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { fabric } from 'fabric';
 
 const useCanvasData = () => {
   const dispatch = useAppDispatch();
   const { canvasJS } = useAppSelector(state => state.canvas);
+  const { enabledElements } = useAppSelector(state => state.element);
   const { presentationId } = useAppSelector(state => state.thunk);
 
   const getOrCreateElement = (
@@ -69,6 +78,7 @@ const useCanvasData = () => {
     themeName: string
   ) {
     console.log({ canvasData });
+    createDisabledElements(canvasData);
     let tableData: TableDataType | undefined;
     if (canvasData) {
       tableData = extractTableData(canvasData);
@@ -244,7 +254,7 @@ const useCanvasData = () => {
       return { data, title, subTitle, templateName, shape };
     });
     outputFormat.elements = modifiedRequestFormat;
-    if (tableData) {
+    if ( tableData?.tableData.length && tableData.tableData.length > 0) {
       outputFormat.elements = [];
       tableData.title = titleText;
       tableData.subTitle = subTitleText;
@@ -339,8 +349,73 @@ const useCanvasData = () => {
     };
   };
 
+  function createDisabledElements(objects: any[]) {
+    let enabledEl: string[] = [];
+
+    objects.forEach(obj => {
+      if (
+        obj.name === 'Cover' ||
+        obj.name === 'Section' ||
+        obj.name === 'Conclusion'
+      ) {
+        enabledEl = [];
+      } else if (
+        obj.name.startsWith(PYRAMID) ||
+        obj.name.startsWith(FUNNEL) ||
+        obj.name.startsWith(TIMELINE) ||
+        obj.name.startsWith(PROCESS) ||
+        obj.name.startsWith(CYCLE) ||
+        obj.name.startsWith(TABLE)
+      ) {
+        enabledEl.push('Title', 'Subtitle');
+      } else if (obj.name === 'Image' || obj.name === QUOTE) {
+        enabledEl.push('Title', 'Subtitle', 'Image', 'Quotes');
+      } else if (obj.name === TITLE || obj.name === SUBTITLE) {
+        enabledEl.push(
+          'Title',
+          'Subtitle',
+          'Image',
+          'Quotes',
+          'List',
+          'Paragraph',
+          'Bullet',
+          'Table',
+          'Cycle',
+          'Process',
+          'Timeline',
+          'Funnel',
+          'Pyramid'
+        );
+      }
+    });
+
+    if(objects.length === 0 ) {
+      enabledEl = [
+        'Title',
+        'Subtitle',
+        'Image',
+        'Quotes',
+        'List',
+        'Paragraph',
+        'Bullet',
+        'Table',
+        'Cycle',
+        'Process',
+        'Timeline',
+        'Funnel',
+        'Pyramid',
+        'Cover Slide',
+        'Section Slide',
+        'Conclusion Slide',
+      ];
+    }
+
+    dispatch(setEnabledElements(enabledEl));
+  }
+
   return {
     getElementsData,
+    createDisabledElements
   };
 };
 

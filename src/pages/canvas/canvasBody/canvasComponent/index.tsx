@@ -122,7 +122,10 @@ const CanvasComponent: React.FC = () => {
         newCanvas.selectionBorderColor =
           theme.colorSchemes.light.palette.common.steelBlue;
         newCanvas.selectionLineWidth = 0.5;
-
+        getElementsData(
+          newCanvas.toObject(customFabricProperties)?.objects,
+          themeCode, themeName
+        );
         // CustomBorderIcons(newCanvas);
 
         newCanvas.forEachObject(obj => {

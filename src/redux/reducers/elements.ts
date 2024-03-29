@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface TestState {
   isModalVisible: boolean;
@@ -6,7 +6,8 @@ export interface TestState {
   openVariant: boolean;
   openNotes: boolean;
   itemKey: number;
-  openProfileMenu : boolean,
+  openProfileMenu: boolean;
+  enabledElements: string[];
 }
 
 const initialState: TestState = {
@@ -15,7 +16,25 @@ const initialState: TestState = {
   openVariant: false,
   openNotes: false,
   itemKey: 0,
-  openProfileMenu : false,
+  openProfileMenu: false,
+  enabledElements: [
+    'Title',
+    'Subtitle',
+    'Image',
+    'Quotes',
+    'List',
+    'Paragraph',
+    'Bullet',
+    'Table',
+    'Cycle',
+    'Process',
+    'Timeline',
+    'Funnel',
+    'Pyramid',
+    'Cover Slide',
+    'Section Slide',
+    'Conclusion Slide',
+  ],
 };
 
 export const ElementReducer = createSlice({
@@ -40,6 +59,9 @@ export const ElementReducer = createSlice({
     toggleNotesSlide: state => {
       state.openNotes = !state.openNotes;
     },
+    setEnabledElements: (state, action) => {
+      state.enabledElements = action.payload;
+    },
   },
 });
 
@@ -51,6 +73,7 @@ export const {
   toggleVariantSlide,
   toggleNotesSlide,
   setMenuItemKey,
+  setEnabledElements,
 } = ElementReducer.actions;
 
 export default ElementReducer.reducer;

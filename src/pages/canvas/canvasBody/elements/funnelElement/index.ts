@@ -4,7 +4,7 @@ import {
   FUNNEL_LEVEL,
   FUNNEL_TEXT,
 } from '@/constants/elementNames';
-import { updateFunnelId } from '@/redux/reducers/elementsCount';
+import { updateFunnelId } from '@/redux/reducers/fabricElements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { fabric } from 'fabric';
 export function useFunnelElement() {

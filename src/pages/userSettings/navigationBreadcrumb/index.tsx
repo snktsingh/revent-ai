@@ -26,7 +26,7 @@ const BreadCrumb = () => {
         navigate(ROUTES.DASHBOARD, { replace: true });
       };
       const handleNavigateCanvas = () => {
-        navigate(ROUTES.CANVAS, { replace: true });
+        navigate(ROUTES.CANVAS);
       };
 
     return (

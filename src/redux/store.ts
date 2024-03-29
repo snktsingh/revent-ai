@@ -5,7 +5,7 @@ import ElementReducer from './reducers/elements';
 import CanvasReducer from './reducers/canvas';
 import ThunkReducer from './thunk/thunk';
 import apiDataReducer from './reducers/apiData';
-import elementsIdsReducer from './reducers/elementsCount';
+import elementsIdsReducer from './reducers/fabricElements';
 import themeReducer from './reducers/theme';
 import userReducer from './thunk/user';
 import dashboardReducer from './thunk/dashboard';

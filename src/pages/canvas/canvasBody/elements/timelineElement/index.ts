@@ -1,6 +1,6 @@
 import { TIMELINE, TIMELINE_CIRCLE, TIMELINE_DIRECTION, TIMELINE_HEADING, TIMELINE_TEXT } from "@/constants/elementNames";
 import { theme } from "@/constants/theme";
-import { updateTimelineId } from "@/redux/reducers/elementsCount";
+import { updateTimelineId } from "@/redux/reducers/fabricElements";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { fabric } from "fabric";
 export function useTimelineElement(){

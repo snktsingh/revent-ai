@@ -5,7 +5,7 @@ import {
   CYCLE_TEXT,
 } from '@/constants/elementNames';
 import { theme } from '@/constants/theme';
-import { updateCycleId } from '@/redux/reducers/elementsCount';
+import { updateCycleId } from '@/redux/reducers/fabricElements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import AutoResizingTextbox from '@/utils/fabric-utils/AutoResizingTextbox';
 import { fabric } from 'fabric';

@@ -5,7 +5,7 @@ import {
   PROCESS_TEXT,
 } from '@/constants/elementNames';
 import { theme } from '@/constants/theme';
-import { updateProcessId } from '@/redux/reducers/elementsCount';
+import { updateProcessId } from '@/redux/reducers/fabricElements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import AutoResizingTextbox from '@/utils/fabric-utils/AutoResizingTextbox';
 import { fabric } from 'fabric';
