@@ -28,10 +28,25 @@ import useObjectModified from '../events/objectModifiedEvent';
 import useCanvasData from './canvasDataExtractor';
 
 const CanvasComponent: React.FC = () => {
-  const canvasRef = useRef<fabric.Canvas | null>(null);
   const FabricRef = useRef<fabric.Canvas | null>(null);
-  const ContainerRef = useRef<HTMLDivElement | null>(null);
 
+  
+  const {
+    updateCanvasDimensions,
+    updateCanvasSlideData,
+    customFabricProperties,
+    handleElementBarSelection,
+    showOptions,
+    setShowOptions,
+    selectedElementPosition,
+    setSelectedElementPosition,
+    canvasClickEvent,
+    loadCanvasFromJSON,
+    windowsRemoveEventListeners,
+    windowsAddEventListeners,
+    canvasRef,
+    ContainerRef
+  } = useCanvasComponent();
 
   const ElementFunctions = useElementFunctions(canvasRef.current);
 
@@ -46,17 +61,6 @@ const CanvasComponent: React.FC = () => {
   const { CanvasClick } = useCanvasClickEvent();
   const { getElementsData } = useCanvasData();
   const { jsonData, themeCode, themeName } = useAppSelector(state => state.slideTheme);
-  const {
-    updateCanvasDimensions,
-    updateCanvasSlideData,
-    customFabricProperties,
-    handleElementBarSelection,
-    showOptions,
-    setShowOptions,
-    selectedElementPosition,
-    setSelectedElementPosition,
-    canvasClickEvent
-  } = useCanvasComponent();
 
   const dispatch = useAppDispatch();
 
@@ -64,35 +68,27 @@ const CanvasComponent: React.FC = () => {
 
   const { pptUrl, imageUrl, variants } = useAppSelector(state => state.thunk);
 
+
   // useEffect(() => {
-  //   if (canvasRef.current) {
-  //     canvasRef.current.clear();
-  //     console.log(jsonData);
-  //     // canvasRef.current.loadFromJSON(
-  //     //   {
-  //     //     left: 34.27,
-  //     //     top: 2.83,
-  //     //     width: 450.15,
-  //     //     height: 63.11,
-  //     //     borderColor: '#000',
-  //     //     borderWidth: 0,
-  //     //     borderType: 'solid',
-  //     //     borderStrokeDasharray: '0',
-  //     //     fillColor: '',
-  //     //     isFlipV: false,
-  //     //     isFlipH: false,
-  //     //     rotate: 0,
-  //     //     vAlign: 'up',
-  //     //     name: 'TextBox 18',
-  //     //     type: 'text',
-  //     //     isVertical: false,
-  //     //   },
-  //     //   () => {
-  //     //     canvasRef.current?.renderAll();
-  //     //   }
-  //     // );
+  //   setShowOptions(false);
+  //   const canvas = new fabric.Canvas('canvas');
+  //   canvas.clear();
+  //   fabric.Object.prototype.set({
+  //     cornerStyle: 'circle',
+  //     transparentCorners: false,
+  //     cornerSize: 8,
+  //     cornerColor: 'white',
+  //     borderColor: 'grey',
+  //     cornerStrokeColor: 'grey',
+  //   });
+  //   fabric.Object.prototype.objectCaching = false;
+  //   loadCanvasFromJSON(canvas);
+  //   windowsAddEventListeners();
+  //   return () => {
+  //     windowsRemoveEventListeners();
+  //     canvas.dispose();
   //   }
-  // }, [jsonData]);
+  // }, [canvasJS.canvas, selectedOriginalCanvas]);
 
   useEffect(() => {
     setShowOptions(false);
@@ -127,6 +123,13 @@ const CanvasComponent: React.FC = () => {
           themeCode, themeName
         );
         // CustomBorderIcons(newCanvas);
+
+        newCanvas.on('text:changed', function (options) {
+          getElementsData(
+            newCanvas.toObject(customFabricProperties)?.objects,
+            themeCode, themeName
+          );
+        });
 
         newCanvas.forEachObject(obj => {
           if (obj) {
@@ -328,14 +331,12 @@ const CanvasComponent: React.FC = () => {
   useEffect(() => {
     setShowOptions(false);
     if (variantImage) {
-      // Clear the canvas and set its background color to white
       canvasRef.current?.clear();
       canvasRef.current?.setBackgroundColor(
         `${theme.colorSchemes.light.palette.common.white}`,
         canvasRef.current.renderAll.bind(canvasRef.current)
       );
 
-      // Load the image and adjust its size to fit the canvas
       fabric.Image.fromURL(variantImage, img => {
         const canvasWidth = canvasRef.current?.width || 0;
         const canvasHeight = canvasRef.current?.height || 0;
@@ -343,7 +344,6 @@ const CanvasComponent: React.FC = () => {
         const scaleHeight = canvasHeight / img.height!;
         const scale = Math.max(scaleWidth, scaleHeight);
 
-        // Set image properties and add it to the canvas
         img.set({
           left: 0,
           top: 0,

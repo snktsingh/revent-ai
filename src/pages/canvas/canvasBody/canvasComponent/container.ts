@@ -1,48 +1,36 @@
-import { Subtitle } from './../../../dashboard/style';
 import {
-  BULLET_POINTS,
-  CONCLUSION_SLIDE_SUBTITLE,
-  CONCLUSION_SLIDE_TITLE,
-  COVER_SLIDE_SUBTITLE,
-  COVER_SLIDE_TITLE,
   CYCLE_ARROW,
   CYCLE_CIRCLE,
   CYCLE_TEXT,
   FUNNEL_TEXT,
-  PARAGRAPH,
   PROCESS_ARROW,
   PROCESS_BOX,
   PROCESS_TEXT,
   PYRAMID_TEXT,
-  SECTION_SLIDE_SUBTITLE,
-  SECTION_SLIDE_TITLE,
-  SUBTITLE,
   TABLE,
-  TABLE_HEADER,
   TABLE_TEXT,
   TIMELINE_CIRCLE,
   TIMELINE_DIRECTION,
   TIMELINE_HEADING,
   TIMELINE_TEXT,
-  TITLE,
 } from '@/constants/elementNames';
-import {
-  BulletPointsFunctionType,
-  TimelineDataType,
-} from '@/interface/elDataTypes';
-import {
-  APIRequest,
-  DataRequestType,
-  ElementBaseType,
-  TableDataType,
-} from '@/interface/storeTypes';
-import { setRequestData } from '@/redux/reducers/apiData';
-import { setCanvas, updateCanvasInList } from '@/redux/reducers/canvas';
-import { toggleSelectingSlide } from '@/redux/reducers/slide';
+import { theme } from '@/constants/theme';
+import { IExtendedTextBoxOptions } from '@/interface/fabricTypes';
+import { updateCanvasInList } from '@/redux/reducers/canvas';
+import { toggleRegenerateButton, toggleSelectingSlide } from '@/redux/reducers/slide';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { fabric } from 'fabric';
-import { head } from 'lodash';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import {
+  useCanvasClickEvent,
+  useObjectMovingEvent,
+  useSelectionCreatedEvent,
+  useTextEvents,
+  useObjectModified,
+  useObjectScalingEvent
+} from '../events/eventExports';
+import { useBulletOrNumberedText } from '../elements/BulletOrNumberElement';
+import useCanvasData from './canvasDataExtractor';
 
 export const useCanvasComponent = () => {
   const [showOptions, setShowOptions] = useState(false);
@@ -50,6 +38,20 @@ export const useCanvasComponent = () => {
     top: 0,
     left: 0,
   });
+  const canvasRef = useRef<fabric.Canvas | null>(null);
+  const ContainerRef = useRef<HTMLDivElement | null>(null);
+
+  // const { handleAddCustomIcon } = useCustomSelectionIcons();
+  // const { CustomBorderIcons } = useDelAndCopy();
+  const { renderBulletOrNumTextLine } = useBulletOrNumberedText();
+  const { handleObjectMoving } = useObjectMovingEvent();
+  const { handleObjectScaling } = useObjectScalingEvent();
+  const { handleSelectionCreated } = useSelectionCreatedEvent();
+  const { textExitedEvent, textEnteringEvent, removePlaceholderText } = useTextEvents();
+  const { setElementPositionsAfterMoving } = useObjectModified();
+  const { CanvasClick } = useCanvasClickEvent();
+  const { getElementsData } = useCanvasData();
+  const { jsonData, themeCode, themeName } = useAppSelector(state => state.slideTheme);
 
   const customFabricProperties = [
     'listType',
@@ -115,8 +117,6 @@ export const useCanvasComponent = () => {
     const updatedCanvas = canvas?.toObject(customFabricProperties);
     dispatch(updateCanvasInList({ id, updatedCanvas }));
   };
-
-  
 
   const handleElementBarSelection = (event: fabric.IEvent) => {
     if (event.selected && event.selected.length > 0) {
@@ -201,6 +201,208 @@ export const useCanvasComponent = () => {
     dispatch(toggleSelectingSlide(false));
   };
 
+  const loadCanvasFromJSON = (canvas: fabric.Canvas) => {
+    canvas.loadFromJSON(
+      canvasJS.canvas,
+      () => {
+        updateCanvasDimensions(canvas);
+        addCanvasEventListeners(canvas);
+        handleCanvasRenders(canvas);
+      },
+      (error: Error) => {
+        console.error('Error loading canvas:', error);
+      }
+    );
+  };
+
+  const handleCanvasRenders = (canvas : fabric.Canvas) => {
+    renderBulletPoints(canvas);
+    canvas.setBackgroundColor(
+      `${theme.colorSchemes.light.palette.common.white}`,
+      canvas.renderAll.bind(canvas)
+    );
+
+    canvas.enableRetinaScaling = true;
+    canvas.selectionColor = 'transparent';
+    canvas.selectionBorderColor =
+      theme.colorSchemes.light.palette.common.steelBlue;
+    canvas.selectionLineWidth = 0.5;
+
+
+  }
+
+  const renderBulletPoints = (canvas : fabric.Canvas) => {
+    canvas.forEachObject(obj => {
+      if (obj) {
+        if ((obj as IExtendedTextBoxOptions)?.listType == 'bullet') {
+          (obj as IExtendedTextBoxOptions)._renderTextLine =
+            renderBulletOrNumTextLine;
+        }
+      }
+    });
+  };
+
+  const addCanvasEventListeners = (canvas: fabric.Canvas) => {
+    canvas.on('text:changed', handleTextChangeEvent);
+    canvas.on('mouse:dblclick', handleMouseDoubleClickEvent);
+    canvas.on('text:editing:exited', handleTextEditingExitedEvent);
+    canvas.on('text:editing:entered', handleTextEditingEnteredEvent);
+    canvas.on('object:added', handleObjectAddedEvent);
+    canvas.on('object:removed', handleObjectRemovedEvent);
+    canvas.on('object:modified', handleObjectModifiedEvent);
+    canvas.on('object:moving', handleObjectMovingEvent);
+    canvas.on('object:scaling', handleObjectScalingEvent);
+    canvas.on('selection:created', handleElementBarSelection);
+    canvas.on('selection:updated', handleElementBarSelection);
+    canvas.on('selection:cleared', () => {
+      setShowOptions(false);
+    });
+    // canvas.on('mouse:down',handleMouseDownEvent);
+  };
+
+  const updateCanvasInStore = (canvas: fabric.Canvas) => {
+    updateCanvasSlideData(canvas, canvasJS.id);
+    getElementsData(
+      canvas.toObject(customFabricProperties)?.objects,
+      themeCode,
+      themeName
+    );
+  };
+
+  const handleTextChangeEvent = (options: fabric.IEvent) => {
+    const canvas = canvasRef.current! as fabric.Canvas;
+    updateCanvasInStore(canvas)
+  };
+
+  const handleMouseDoubleClickEvent = (event: fabric.IEvent<MouseEvent>) => {
+    const canvas = canvasRef.current! as fabric.Canvas;
+    CanvasClick(canvas, event);
+  };
+  
+  const handleTextEditingExitedEvent = (event: fabric.IEvent) => {
+    const canvas = canvasRef.current! as fabric.Canvas;
+    textExitedEvent(canvas, event.target as fabric.Text);
+    updateCanvasInStore(canvas)
+  };
+
+  const handleTextEditingEnteredEvent = (event: fabric.IEvent) => {
+    const canvas = canvasRef.current! as fabric.Canvas;
+    if (event.target) {
+      textEnteringEvent(canvas, event.target as fabric.Text);
+    }
+    updateCanvasInStore(canvas)
+  };
+  
+  const handleObjectAddedEvent = (event: fabric.IEvent) => {
+    const canvas = canvasRef.current! as fabric.Canvas;
+    updateCanvasInStore(canvas);
+    checkRegenerateButtonVisibility(canvas);
+  };
+  
+  const handleObjectRemovedEvent = (event: fabric.IEvent) => {
+    const canvas = canvasRef.current! as fabric.Canvas;
+    updateCanvasInStore(canvas);
+    checkRegenerateButtonVisibility(canvas);
+  };
+  
+  const handleObjectModifiedEvent = (event: fabric.IEvent) => {
+    const canvas = canvasRef.current! as fabric.Canvas;
+    if (canvas && event.target) {
+      setElementPositionsAfterMoving(event.target, canvas);
+    }
+    updateCanvasInStore(canvas);
+  };
+
+  const handleObjectMovingEvent = (options: fabric.IEvent<MouseEvent>) => {
+    const canvas = canvasRef.current! as fabric.Canvas;
+    updateCanvasInStore(canvas)
+    handleObjectMoving(options, canvas);
+  };
+
+  const handleObjectScalingEvent = (options: fabric.IEvent) => {
+    const canvas = canvasRef.current! as fabric.Canvas;
+    // handleObjectScaling(options, canvas);
+  };
+
+  const handleMouseDownEvent = (event: fabric.IEvent) => {
+    const canvas = canvasRef.current! as fabric.Canvas;
+    const pointer: any = canvas.getPointer(event.e);
+
+      const objectsAtPointer = canvas.getObjects().filter(obj => {
+        return obj.containsPoint(pointer);
+      });
+
+      const textboxFound = objectsAtPointer.some(obj => obj.type === 'textbox' || obj.type === 'text');
+
+      if (textboxFound) {
+        const textBox = objectsAtPointer.find(obj => obj.type === 'textbox' || obj.type === 'text');
+        console.log({ textBox });
+        if (textBox) {
+          canvas.setActiveObject(textBox);
+        }
+        canvas.requestRenderAll();
+      }
+  };
+
+
+
+  const checkRegenerateButtonVisibility = (canvas: fabric.Canvas) => {
+    if (canvas.toObject(customFabricProperties)?.objects.length >= 1) {
+      dispatch(toggleRegenerateButton(false));
+    } else {
+      dispatch(toggleRegenerateButton(true));
+    }
+  };
+
+
+  const windowsAddEventListeners = () => {
+    window.addEventListener('resize', handleWindowResize);
+    window.addEventListener('keydown', handleKeyDown);
+  };
+
+  const windowsRemoveEventListeners = () => {
+    window.removeEventListener('resize', handleWindowResize);
+    window.removeEventListener('keydown', handleKeyDown);
+  };
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    const canvas = canvasRef.current! as fabric.Canvas;
+    if (e.key === 'Delete' && canvas.getActiveObject()) {
+      canvas.remove(canvas.getActiveObject()!);
+      const groupObjects = (
+        canvas.getActiveObject() as fabric.Group
+      )?.getObjects();
+
+      groupObjects.forEach((obj: any) => {
+        canvas.remove(obj);
+      });
+
+      canvas.discardActiveObject();
+      canvas.renderAll();
+    }
+  };
+
+  const handleWindowResize = () => {
+    const container = ContainerRef.current;
+    if (container) {
+      const aspectRatio = 16 / 9;
+      const canvasWidthPercentage = 58;
+      const canvasHeightPercentage = 58 / aspectRatio;
+
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+
+      const canvasWidth = (canvasWidthPercentage / 100) * windowWidth;
+      const canvasHeight = (canvasHeightPercentage / 100) * windowHeight;
+
+      const { top, left } = selectedElementPosition;
+      const rect = container.getBoundingClientRect();
+      const scaleFactorX = rect.width / canvasWidth; 
+      const scaleFactorY = rect.height / canvasHeight; 
+      setSelectedElementPosition({ top: top * scaleFactorY, left: left * scaleFactorX });
+    }
+  }
+
   return {
     handleAllElements,
     updateCanvasDimensions,
@@ -212,5 +414,10 @@ export const useCanvasComponent = () => {
     selectedElementPosition,
     setSelectedElementPosition,
     canvasClickEvent,
+    loadCanvasFromJSON,
+    windowsAddEventListeners,
+    windowsRemoveEventListeners,
+    canvasRef,
+    ContainerRef
   };
 };
