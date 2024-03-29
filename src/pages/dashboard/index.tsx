@@ -1,4 +1,17 @@
-import { TextField } from '@mui/material';
+import {
+  Avatar,
+  Button,
+  Card,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Divider,
+  IconButton,
+  Stack,
+  TextField,
+} from '@mui/material';
 import {
   CardContainer,
   CardLink,
@@ -19,11 +32,28 @@ import AddToQueueIcon from '@mui/icons-material/AddToQueue';
 import '../../../index.css';
 import { theme } from '@/constants/theme';
 import { fetchPPTList } from '@/redux/thunk/dashboard';
-import { Add, Preview } from '@mui/icons-material';
-import ThumbnailPreview from '@/common-ui/thumbnailPreview';
+import DeleteIcon from '@mui/icons-material/Delete';
+import useDashboard from './container';
+import ProfileMenu from '@/common-ui/profileMenu';
+
 const Dashboard = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const {
+    open,
+    openProfileMenu,
+    handleCloseProfileMenu,
+    handleOpenProfile,
+    handleClickOpen,
+    handleClose,
+    setPptId,
+    pptId,
+    removePresentation,
+    filterPresentation,
+    setFilteredPpt,
+    getFirstLettersForAvatar,
+    setOpenProfileMenu,
+  } = useDashboard();
   const { userDetails } = useAppSelector(state => state.manageUser);
   const { loadingUserDetails, pptList } = useAppSelector(
     state => state.manageDashboard
@@ -34,16 +64,39 @@ const Dashboard = () => {
     dispatch(fetchPPTList());
   }, []);
 
+  useEffect(() => {
+    setFilteredPpt(pptList);
+  }, []);
+
   return (
     <MainContainer>
-      <h3>Hello {userDetails?.firstName} !</h3>
+      <Stack direction="row" display="flex" justifyContent="space-between">
+        <h3>Hello {userDetails?.firstName} !</h3>
+        <Button onClick={handleOpenProfile}>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Avatar
+              sx={{
+                width: 30,
+                height: 30,
+                fontSize: '12px',
+                bgcolor: `${theme.colorSchemes.light.palette.primary.main}`,
+              }}
+            >
+              {getFirstLettersForAvatar(
+                `${userDetails?.firstName} ${userDetails?.lastName}`
+              )}
+            </Avatar>
+            <span>{`${userDetails?.firstName} ${userDetails?.lastName}`}</span>
+          </Stack>
+        </Button>
+      </Stack>
+      <ProfileMenu
+        anchorElForProfileMenu={openProfileMenu}
+        handleCloseProfileMenu={handleCloseProfileMenu}
+        setAnchorElForProfileMenu={setOpenProfileMenu}
+      />
       <span style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Title>Create a Presentation</Title>
-        <TextField
-          id="outlined-basic"
-          label="Search presentation"
-          variant="outlined"
-        />
       </span>
       <br />
       <CardContainer>
@@ -51,8 +104,13 @@ const Dashboard = () => {
           return (
             <CardTitle onClick={() => navigate('/themes')}>
               <CardLink>
-                <PreviewCard >
-                  <AddToQueueIcon sx={{fontSize:'3rem'}}/>                 
+                <PreviewCard>
+                  <AddToQueueIcon
+                    sx={{
+                      fontSize: '3rem',
+                      color: `${theme.colorSchemes.light.palette.primary.main}`,
+                    }}
+                  />
                 </PreviewCard>
                 {slide.title}
               </CardLink>
@@ -60,17 +118,84 @@ const Dashboard = () => {
           );
         })}
       </CardContainer>
-      <Title>Recent Presentations</Title>
+      <br />
+      <Divider />
+      <br />
+      <Stack direction="row" display="flex" justifyContent="space-between">
+        <Title>Recent Presentations</Title>
+        <TextField
+          id="outlined-basic"
+          label="Search presentation"
+          variant="outlined"
+          onChange={e => {
+            filterPresentation(e.target.value);
+          }}
+        />
+      </Stack>
 
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          <b>Delete Presentation ? </b>
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete the current presentation ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>No</Button>
+          <Button
+            onClick={() => {
+              removePresentation(pptId);
+              handleClose();
+            }}
+            autoFocus
+          >
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
       {loadingUserDetails === false ? (
-        <>
-          <CardTitle>
-            <CardLink>
-              <ThumbnailPreview src="https://revent-ppt-output.s3.amazonaws.com/thumbnails/TRIDENT-3ebe416994459888769625469_.png" alt='thumbnail' style={{width: '14vw',height:'15vh'}}/>
-              <p>untitled-presentation</p>
-            </CardLink>
-          </CardTitle>
-        </>
+        <CardTitle>
+          {pptList.map((ppt: any, index) => {
+            return (
+              <CardLink key={index}>
+                <Card
+                  style={{
+                    width: '180px',
+                    height: '67%',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <img src={ppt.thumbnailUrl} width="180px" />
+                </Card>
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  display="flex"
+                  alignItems="center"
+                >
+                  <p>
+                    {ppt.name == undefined ? 'Untitled-presentation' : ppt.name}
+                  </p>
+                  <IconButton
+                    onClick={() => {
+                      handleClickOpen();
+                      setPptId(ppt.presentationId);
+                    }}
+                  >
+                    <DeleteIcon fontSize="small" />
+                  </IconButton>
+                </Stack>
+              </CardLink>
+            );
+          })}
+        </CardTitle>
       ) : (
         <Loader>
           {/* No Recent Presentations */}

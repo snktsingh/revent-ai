@@ -48,7 +48,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
   };
   const handleNavigateSettings = () => {
     handleClose();
-    navigate(ROUTES.SETTINGS, { state:  ROUTES.CANVAS, replace: true });
+    navigate(ROUTES.SETTINGS, { state: ROUTES.CANVAS, replace: true });
   };
 
   return (
@@ -62,7 +62,6 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
         <SectionTitle variant="h6">Account</SectionTitle>
         <AccountSection>
           <AccountIcon sx={{ fontSize: 42 }} />
-
           <AccountInfo>
             <Typography variant="subtitle1">
               {userDetails?.firstName} {userDetails?.lastName}

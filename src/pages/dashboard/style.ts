@@ -35,16 +35,21 @@ export const TextInput = styled(TextField)`
   background-color: #fff;
 `;
 export const PreviewCard = styled(Card)`
-  width: 14vw;
+  width: 180px;
   height: 15vh;
   margin-bottom: 5%;
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 `;
 export const CardTitle = styled.span`
   margin-bottom: 20px;
-  cursor: pointer;
+
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 3%;
 `;
 export const CardLink = styled(Link)`
   text-decoration: none !important;
