@@ -6,6 +6,7 @@ import { APIRequest, ISlideRequests } from '@/interface/storeTypes';
 import { RootState } from '../store';
 import { IUserLogin } from '@/interfaces/authInterface';
 import { create } from 'lodash';
+import { IUpdatePptName } from '@/interfaces/pptInterfaces';
 
 const initialState: ISlideRequests = {
   pptUrl: '',
@@ -46,6 +47,17 @@ export const createPresentation = createAsyncThunk('ppt/create', async () => {
   });
   return res.data;
 });
+
+export const updatePptName = createAsyncThunk(
+  'ppt/updatePptName',
+  async (body: IUpdatePptName) => {
+    const res = await FetchUtils.putRequest(
+      `${ENDPOINT.PPT.UPDATE_PPT_NAME}`,
+      body
+    );
+    return res.data;
+  }
+);
 
 const thunkSlice = createSlice({
   name: 'singleSlideData',

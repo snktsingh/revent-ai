@@ -47,6 +47,7 @@
     "@vitejs/plugin-react": "^4.0.4",
     "axios": "^1.6.2",
     "crypto-js": "^4.2.0",
+    "moment": "^2.30.1",
     "pptx-compose": "^1.0.0",
     "pptxgenjs": "^3.12.0",
     "pptxtojson": "^0.1.3",

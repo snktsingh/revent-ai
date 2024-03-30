@@ -68,7 +68,11 @@ const AppThemes = () => {
                       }
                     >
                       <ThemeCard>
-                        <ThumbnailPreview src={theme.thumbnailUrl} alt={theme.company} style={{ width: '246px', height: '140px'}} />
+                        <ThumbnailPreview
+                          src={theme.thumbnailUrl}
+                          alt={theme.company}
+                          style={{ width: '246px', height: '140px' }}
+                        />
                       </ThemeCard>
                       {theme.title}
                     </ThemeCardTitle>

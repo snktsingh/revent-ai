@@ -11,20 +11,16 @@ import {
   DialogContentText,
   DialogTitle,
   Menu,
-  Stack
+  Stack,
 } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import { ChangeEvent } from 'react';
 import { ContentElements } from '../canvasBody/elementData';
 import useCanvasHeader from './container';
-import {
-  HeaderContainer,
-  UserAvatar
-} from './style';
+import { HeaderContainer, UserAvatar } from './style';
 
 const MainCanvasHeader = () => {
-
-  const { 
+  const {
     userLogout,
     openShare,
     getFirstLettersForAvatar,
@@ -44,9 +40,10 @@ const MainCanvasHeader = () => {
     handleCloseProfileMenu,
     handleShareClick,
     handleShareClose,
-    handleInputChange
+    handleInputChange,
+    updatePresentationName,
+    presentationId,
   } = useCanvasHeader();
-  
 
   return (
     <HeaderContainer>
@@ -57,7 +54,21 @@ const MainCanvasHeader = () => {
         </Stack>
       </MainIconButton>
       <Stack direction="row" spacing={1}></Stack>
-      <CanvasHeaderInput placeholder="Untitled presentation" value={presentationTitle === 'Untitled Presentation' ? '' : presentationTitle} onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e)} />
+      <CanvasHeaderInput
+        placeholder="Untitled presentation"
+        value={
+          presentationTitle === 'Untitled Presentation' ? '' : presentationTitle
+        }
+        onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e)}
+        onKeyDown={e =>
+          e.key === 'Enter'
+            ? updatePresentationName({
+                presentationId: presentationId,
+                name: presentationTitle,
+              })
+            : ''
+        }
+      />
       <Stack direction="row" spacing={1}>
         <MainIconButton>
           <Stack direction="row" spacing={1}>
@@ -101,10 +112,15 @@ const MainCanvasHeader = () => {
         <MainIconButton onClick={handleClick}>
           <Stack direction="row" spacing={1}>
             <ButtonName>{`${userDetails?.firstName} ${userDetails?.lastName}`}</ButtonName>
-            <UserAvatar>{getFirstLettersForAvatar(`${userDetails?.firstName} ${userDetails?.lastName}`)}</UserAvatar>
+            <UserAvatar>
+              {getFirstLettersForAvatar(
+                `${userDetails?.firstName} ${userDetails?.lastName}`
+              )}
+            </UserAvatar>
           </Stack>
         </MainIconButton>
-        <ProfileMenu anchorElForProfileMenu={openProfileMenu}
+        <ProfileMenu
+          anchorElForProfileMenu={openProfileMenu}
           handleCloseProfileMenu={handleCloseProfileMenu}
           setAnchorElForProfileMenu={setOpenProfileMenu}
         />

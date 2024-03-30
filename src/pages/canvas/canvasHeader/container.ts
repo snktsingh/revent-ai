@@ -1,21 +1,23 @@
 import ENDPOINT, { ROUTES } from '@/constants/endpoint';
+import { IUpdatePptName } from '@/interfaces/pptInterfaces';
 import { setPresentationTitle } from '@/redux/reducers/canvas';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { updatePptName } from '@/redux/thunk/thunk';
 import { FetchUtils } from '@/utils/fetch-utils';
 import React, { ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const useCanvasHeader = () => {
-
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [openProfileMenu, setOpenProfileMenu] = React.useState<null | HTMLElement>(null);
+  const [openProfileMenu, setOpenProfileMenu] =
+    React.useState<null | HTMLElement>(null);
   const [anchorE2, setAnchorE2] = React.useState<null | HTMLElement>(null);
   const [openWarning, setOpenWarning] = React.useState(false);
-  const { pptUrl } = useAppSelector(state => state.thunk);
-  const { presentationTitle } = useAppSelector( state => state.canvas );
-  const { userDetails } = useAppSelector( state => state.manageUser );
+  const { pptUrl, presentationId } = useAppSelector(state => state.thunk);
+  const { presentationTitle } = useAppSelector(state => state.canvas);
+  const { userDetails } = useAppSelector(state => state.manageUser);
 
   const openShare = Boolean(anchorE2);
 
@@ -69,11 +71,15 @@ const useCanvasHeader = () => {
   };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    dispatch(setPresentationTitle(e.target.value))
-  }
+    dispatch(setPresentationTitle(e.target.value));
+  };
 
-  return { 
-    userLogout, 
+  const updatePresentationName = async (data: IUpdatePptName) => {
+    const res = await dispatch(updatePptName(data));
+  };
+
+  return {
+    userLogout,
     getFirstLettersForAvatar,
     navigate,
     openProfileMenu,
@@ -92,7 +98,9 @@ const useCanvasHeader = () => {
     handleShareClick,
     handleShareClose,
     handleInputChange,
-    openShare
+    openShare,
+    updatePresentationName,
+    presentationId,
   };
 };
 export default useCanvasHeader;

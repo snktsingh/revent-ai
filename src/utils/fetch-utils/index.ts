@@ -64,6 +64,12 @@ class FetchUtilClass {
   postRequest = async (url: string, data: any) => {
     return generateInstance.post(url, data);
   };
+  deleteRequest = async (url: string) => {
+    return generateInstance.delete(url);
+  };
+  putRequest = async (url: string, data: any) => {
+    return generateInstance.put(url, data);
+  };
 }
 
 const FetchUtils = new FetchUtilClass();

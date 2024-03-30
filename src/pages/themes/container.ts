@@ -1,5 +1,9 @@
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { createPresentation, getAllThemes } from '@/redux/thunk/thunk';
+import {
+  createPresentation,
+  getAllThemes,
+  updatePptName,
+} from '@/redux/thunk/thunk';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';

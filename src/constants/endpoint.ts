@@ -15,9 +15,11 @@ export const ENDPOINT = {
   },
   PPT: {
     CREATE_PPT: 'ppt/create-presentation',
+    UPDATE_PPT_NAME: 'ppt/update-presentation-name',
+    DELETE_PPT: 'ppt/delete-presentation',
   },
   DASHBOARD: {
-    FETCH_PPT_LIST: 'ppt/get-presentation',
+    FETCH_PPT_LIST: 'ppt/get-all-presentation',
   },
 } as const;
 

@@ -9,10 +9,20 @@ const initialState = {
 
 export const fetchPPTList = createAsyncThunk('dashboard/pptList', async () => {
   const res = await FetchUtils.getRequest(
-    `${ENDPOINT.DASHBOARD.FETCH_PPT_LIST}?presentationId=87`
+    `${ENDPOINT.DASHBOARD.FETCH_PPT_LIST}?size=10&page=0`
   );
   return res.data;
 });
+
+export const deletePresentation = createAsyncThunk(
+  'dashboard/deletePresentation',
+  async (presentationId: number) => {
+    const res = await FetchUtils.deleteRequest(
+      `${ENDPOINT.PPT.DELETE_PPT}?presentationId=${presentationId}`
+    );
+    return res.data;
+  }
+);
 
 const dashboardSlice = createSlice({
   name: 'dashboard-Data',
@@ -25,7 +35,7 @@ const dashboardSlice = createSlice({
         state.loadingUserDetails = true;
       })
       .addCase(fetchPPTList.fulfilled, (state, action) => {
-        state.pptList = action.payload.slides;
+        state.pptList = action.payload;
         state.loadingUserDetails = false;
       })
       .addCase(fetchPPTList.rejected, (state, action) => {
