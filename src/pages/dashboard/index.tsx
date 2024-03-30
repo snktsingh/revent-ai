@@ -35,6 +35,7 @@ import { fetchPPTList } from '@/redux/thunk/dashboard';
 import DeleteIcon from '@mui/icons-material/Delete';
 import useDashboard from './container';
 import ProfileMenu from '@/common-ui/profileMenu';
+import ThumbnailPreview from '@/common-ui/thumbnailPreview';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -174,6 +175,7 @@ const Dashboard = () => {
                   }}
                 >
                   <img src={ppt.thumbnailUrl} width="180px" />
+                  {/* <ThumbnailPreview src={ppt.thumbnailUrl} style={{width:'180px',}} alt={ppt.name == undefined ? 'Untitled-presentation' : ppt.name}/> */}
                 </Card>
                 <Stack
                   direction="row"
