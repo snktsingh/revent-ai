@@ -17,7 +17,10 @@ import {
 import { theme } from '@/constants/theme';
 import { IExtendedTextBoxOptions } from '@/interface/fabricTypes';
 import { updateCanvasInList } from '@/redux/reducers/canvas';
-import { toggleRegenerateButton, toggleSelectingSlide } from '@/redux/reducers/slide';
+import {
+  toggleRegenerateButton,
+  toggleSelectingSlide,
+} from '@/redux/reducers/slide';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { fabric } from 'fabric';
 import { useRef, useState } from 'react';
@@ -27,7 +30,7 @@ import {
   useSelectionCreatedEvent,
   useTextEvents,
   useObjectModified,
-  useObjectScalingEvent
+  useObjectScalingEvent,
 } from '../events/eventExports';
 import { useBulletOrNumberedText } from '../elements/BulletOrNumberElement';
 import useCanvasData from './canvasDataExtractor';
@@ -38,8 +41,6 @@ export const useCanvasComponent = () => {
     top: 0,
     left: 0,
   });
-  const canvasRef = useRef<fabric.Canvas | null>(null);
-  const ContainerRef = useRef<HTMLDivElement | null>(null);
 
   // const { handleAddCustomIcon } = useCustomSelectionIcons();
   // const { CustomBorderIcons } = useDelAndCopy();
@@ -47,11 +48,14 @@ export const useCanvasComponent = () => {
   const { handleObjectMoving } = useObjectMovingEvent();
   const { handleObjectScaling } = useObjectScalingEvent();
   const { handleSelectionCreated } = useSelectionCreatedEvent();
-  const { textExitedEvent, textEnteringEvent, removePlaceholderText } = useTextEvents();
+  const { textExitedEvent, textEnteringEvent, removePlaceholderText } =
+    useTextEvents();
   const { setElementPositionsAfterMoving } = useObjectModified();
   const { CanvasClick } = useCanvasClickEvent();
   const { getElementsData } = useCanvasData();
-  const { jsonData, themeCode, themeName } = useAppSelector(state => state.slideTheme);
+  const { jsonData, themeCode, themeName } = useAppSelector(
+    state => state.slideTheme
+  );
 
   const customFabricProperties = [
     'listType',
@@ -201,37 +205,11 @@ export const useCanvasComponent = () => {
     dispatch(toggleSelectingSlide(false));
   };
 
-  const loadCanvasFromJSON = (canvas: fabric.Canvas) => {
-    canvas.loadFromJSON(
-      canvasJS.canvas,
-      () => {
-        updateCanvasDimensions(canvas);
-        addCanvasEventListeners(canvas);
-        handleCanvasRenders(canvas);
-      },
-      (error: Error) => {
-        console.error('Error loading canvas:', error);
-      }
-    );
+  const handleCanvasRenders = (canvas: fabric.Canvas) => {
+    renderBulletPoints(canvas);
   };
 
-  const handleCanvasRenders = (canvas : fabric.Canvas) => {
-    renderBulletPoints(canvas);
-    canvas.setBackgroundColor(
-      `${theme.colorSchemes.light.palette.common.white}`,
-      canvas.renderAll.bind(canvas)
-    );
-
-    canvas.enableRetinaScaling = true;
-    canvas.selectionColor = 'transparent';
-    canvas.selectionBorderColor =
-      theme.colorSchemes.light.palette.common.steelBlue;
-    canvas.selectionLineWidth = 0.5;
-
-
-  }
-
-  const renderBulletPoints = (canvas : fabric.Canvas) => {
+  const renderBulletPoints = (canvas: fabric.Canvas) => {
     canvas.forEachObject(obj => {
       if (obj) {
         if ((obj as IExtendedTextBoxOptions)?.listType == 'bullet') {
@@ -243,21 +221,25 @@ export const useCanvasComponent = () => {
   };
 
   const addCanvasEventListeners = (canvas: fabric.Canvas) => {
-    canvas.on('text:changed', handleTextChangeEvent);
-    canvas.on('mouse:dblclick', handleMouseDoubleClickEvent);
-    canvas.on('text:editing:exited', handleTextEditingExitedEvent);
-    canvas.on('text:editing:entered', handleTextEditingEnteredEvent);
-    canvas.on('object:added', handleObjectAddedEvent);
-    canvas.on('object:removed', handleObjectRemovedEvent);
-    canvas.on('object:modified', handleObjectModifiedEvent);
-    canvas.on('object:moving', handleObjectMovingEvent);
-    canvas.on('object:scaling', handleObjectScalingEvent);
-    canvas.on('selection:created', handleElementBarSelection);
-    canvas.on('selection:updated', handleElementBarSelection);
+    canvas.on('text:changed', e => handleTextChangeEvent(e, canvas));
+    canvas.on('mouse:dblclick', e => handleMouseDoubleClickEvent(e, canvas));
+    canvas.on('object:added', e => handleObjectAddedEvent(e, canvas));
+    canvas.on('object:removed', e => handleObjectRemovedEvent(e, canvas));
+    canvas.on('object:modified', e => handleObjectModifiedEvent(e, canvas));
+    canvas.on('object:moving', e => handleObjectMovingEvent(e, canvas));
+    canvas.on('object:scaling', e => handleObjectScalingEvent(e, canvas));
+    canvas.on('selection:created', e => handleElementBarSelection(e));
+    canvas.on('selection:updated', e => handleElementBarSelection(e));
+    canvas.on('text:editing:exited', e =>
+      handleTextEditingExitedEvent(e, canvas)
+    );
+    canvas.on('text:editing:entered', e =>
+      handleTextEditingEnteredEvent(e, canvas)
+    );
     canvas.on('selection:cleared', () => {
       setShowOptions(false);
     });
-    // canvas.on('mouse:down',handleMouseDownEvent);
+    canvas.on('mouse:down',(e) => handleMouseDownEvent(e,canvas));
   };
 
   const updateCanvasInStore = (canvas: fabric.Canvas) => {
@@ -269,82 +251,104 @@ export const useCanvasComponent = () => {
     );
   };
 
-  const handleTextChangeEvent = (options: fabric.IEvent) => {
-    const canvas = canvasRef.current! as fabric.Canvas;
-    updateCanvasInStore(canvas)
+  const handleTextChangeEvent = (
+    options: fabric.IEvent,
+    canvas: fabric.Canvas
+  ) => {
+    updateCanvasInStore(canvas);
   };
 
-  const handleMouseDoubleClickEvent = (event: fabric.IEvent<MouseEvent>) => {
-    const canvas = canvasRef.current! as fabric.Canvas;
+  const handleMouseDoubleClickEvent = (
+    event: fabric.IEvent<MouseEvent>,
+    canvas: fabric.Canvas
+  ) => {
     CanvasClick(canvas, event);
   };
-  
-  const handleTextEditingExitedEvent = (event: fabric.IEvent) => {
-    const canvas = canvasRef.current! as fabric.Canvas;
+
+  const handleTextEditingExitedEvent = (
+    event: fabric.IEvent,
+    canvas: fabric.Canvas
+  ) => {
     textExitedEvent(canvas, event.target as fabric.Text);
-    updateCanvasInStore(canvas)
+    updateCanvasInStore(canvas);
   };
 
-  const handleTextEditingEnteredEvent = (event: fabric.IEvent) => {
-    const canvas = canvasRef.current! as fabric.Canvas;
+  const handleTextEditingEnteredEvent = (
+    event: fabric.IEvent,
+    canvas: fabric.Canvas
+  ) => {
     if (event.target) {
       textEnteringEvent(canvas, event.target as fabric.Text);
     }
-    updateCanvasInStore(canvas)
+    updateCanvasInStore(canvas);
   };
-  
-  const handleObjectAddedEvent = (event: fabric.IEvent) => {
-    const canvas = canvasRef.current! as fabric.Canvas;
+
+  const handleObjectAddedEvent = (
+    event: fabric.IEvent,
+    canvas: fabric.Canvas
+  ) => {
     updateCanvasInStore(canvas);
     checkRegenerateButtonVisibility(canvas);
   };
-  
-  const handleObjectRemovedEvent = (event: fabric.IEvent) => {
-    const canvas = canvasRef.current! as fabric.Canvas;
+
+  const handleObjectRemovedEvent = (
+    event: fabric.IEvent,
+    canvas: fabric.Canvas
+  ) => {
     updateCanvasInStore(canvas);
     checkRegenerateButtonVisibility(canvas);
   };
-  
-  const handleObjectModifiedEvent = (event: fabric.IEvent) => {
-    const canvas = canvasRef.current! as fabric.Canvas;
+
+  const handleObjectModifiedEvent = (
+    event: fabric.IEvent,
+    canvas: fabric.Canvas
+  ) => {
     if (canvas && event.target) {
       setElementPositionsAfterMoving(event.target, canvas);
     }
     updateCanvasInStore(canvas);
   };
 
-  const handleObjectMovingEvent = (options: fabric.IEvent<MouseEvent>) => {
-    const canvas = canvasRef.current! as fabric.Canvas;
-    updateCanvasInStore(canvas)
+  const handleObjectMovingEvent = (
+    options: fabric.IEvent<MouseEvent>,
+    canvas: fabric.Canvas
+  ) => {
+    updateCanvasInStore(canvas);
     handleObjectMoving(options, canvas);
   };
 
-  const handleObjectScalingEvent = (options: fabric.IEvent) => {
-    const canvas = canvasRef.current! as fabric.Canvas;
+  const handleObjectScalingEvent = (
+    options: fabric.IEvent,
+    canvas: fabric.Canvas
+  ) => {
     // handleObjectScaling(options, canvas);
   };
 
-  const handleMouseDownEvent = (event: fabric.IEvent) => {
-    const canvas = canvasRef.current! as fabric.Canvas;
+  const handleMouseDownEvent = (
+    event: fabric.IEvent,
+    canvas: fabric.Canvas
+  ) => {
     const pointer: any = canvas.getPointer(event.e);
 
-      const objectsAtPointer = canvas.getObjects().filter(obj => {
-        return obj.containsPoint(pointer);
-      });
+    const objectsAtPointer = canvas.getObjects().filter(obj => {
+      return obj.containsPoint(pointer);
+    });
 
-      const textboxFound = objectsAtPointer.some(obj => obj.type === 'textbox' || obj.type === 'text');
+    const textboxFound = objectsAtPointer.some(
+      obj => obj.type === 'textbox' || obj.type === 'text'
+    );
 
-      if (textboxFound) {
-        const textBox = objectsAtPointer.find(obj => obj.type === 'textbox' || obj.type === 'text');
-        console.log({ textBox });
-        if (textBox) {
-          canvas.setActiveObject(textBox);
-        }
-        canvas.requestRenderAll();
+    if (textboxFound) {
+      const textBox = objectsAtPointer.find(
+        obj => obj.type === 'textbox' || obj.type === 'text'
+      );
+      console.log({ textBox });
+      if (textBox) {
+        canvas.setActiveObject(textBox);
       }
+      canvas.requestRenderAll();
+    }
   };
-
-
 
   const checkRegenerateButtonVisibility = (canvas: fabric.Canvas) => {
     if (canvas.toObject(customFabricProperties)?.objects.length >= 1) {
@@ -354,19 +358,17 @@ export const useCanvasComponent = () => {
     }
   };
 
+  // const windowsAddEventListeners = () => {
+  //   window.addEventListener('resize', handleWindowResize);
+  //   window.addEventListener('keydown', handleKeyDown);
+  // };
 
-  const windowsAddEventListeners = () => {
-    window.addEventListener('resize', handleWindowResize);
-    window.addEventListener('keydown', handleKeyDown);
-  };
+  // const windowsRemoveEventListeners = () => {
+  //   window.removeEventListener('resize', handleWindowResize);
+  //   window.removeEventListener('keydown', handleKeyDown);
+  // };
 
-  const windowsRemoveEventListeners = () => {
-    window.removeEventListener('resize', handleWindowResize);
-    window.removeEventListener('keydown', handleKeyDown);
-  };
-
-  const handleKeyDown = (e: KeyboardEvent) => {
-    const canvas = canvasRef.current! as fabric.Canvas;
+  const handleKeyDown = (e: KeyboardEvent, canvas: fabric.Canvas) => {
     if (e.key === 'Delete' && canvas.getActiveObject()) {
       canvas.remove(canvas.getActiveObject()!);
       const groupObjects = (
@@ -382,8 +384,7 @@ export const useCanvasComponent = () => {
     }
   };
 
-  const handleWindowResize = () => {
-    const container = ContainerRef.current;
+  const handleWindowResize = (container: any) => {
     if (container) {
       const aspectRatio = 16 / 9;
       const canvasWidthPercentage = 58;
@@ -397,11 +398,14 @@ export const useCanvasComponent = () => {
 
       const { top, left } = selectedElementPosition;
       const rect = container.getBoundingClientRect();
-      const scaleFactorX = rect.width / canvasWidth; 
-      const scaleFactorY = rect.height / canvasHeight; 
-      setSelectedElementPosition({ top: top * scaleFactorY, left: left * scaleFactorX });
+      const scaleFactorX = rect.width / canvasWidth;
+      const scaleFactorY = rect.height / canvasHeight;
+      setSelectedElementPosition({
+        top: top * scaleFactorY,
+        left: left * scaleFactorX,
+      });
     }
-  }
+  };
 
   return {
     handleAllElements,
@@ -414,10 +418,9 @@ export const useCanvasComponent = () => {
     selectedElementPosition,
     setSelectedElementPosition,
     canvasClickEvent,
-    loadCanvasFromJSON,
-    windowsAddEventListeners,
-    windowsRemoveEventListeners,
-    canvasRef,
-    ContainerRef
+    addCanvasEventListeners,
+    handleCanvasRenders,
+    handleKeyDown,
+    handleWindowResize,
   };
 };

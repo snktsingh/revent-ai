@@ -1,13 +1,9 @@
-import { setActiveCanvas, setCanvas } from '@/redux/reducers/canvas';
-import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { Stack } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { ListSlideCard, SingleSliderContainer } from '../style';
-import { SlideContainer } from './style';
 import SvgViewer from '@/components/canvasSvgViewer';
-import { useCanvasComponent } from '../canvasComponent/container';
-import { toggleSelectingSlide } from '@/redux/reducers/slide';
+import { Stack } from '@mui/material';
+import { useEffect } from 'react';
+import { ListSlideCard, SingleSliderContainer } from '../style';
 import useSlideList from './container';
+import { SlideContainer } from './style';
 
 export default function SlideList() {
 
@@ -17,9 +13,11 @@ export default function SlideList() {
     canvasList,
     activeCanvasID,
     handleSlideCardClick,
-    loadSvgs
+    loadSvgs,
+    handleDragStart,
+    handleDragOver,
+    handleDrop
   } = useSlideList();
-
 
 
   useEffect(() => {
@@ -37,6 +35,10 @@ export default function SlideList() {
           <div key={canvas.id}>
             <SingleSliderContainer
               onClick={() => handleSlideCardClick(canvas)}
+              draggable
+              onDragStart={e => handleDragStart(e, index)}
+              onDragOver={handleDragOver}
+              onDrop={e => handleDrop(e, index)}
             >
               <Stack direction="row" spacing={1}>
                 <p>{index + 1}</p>

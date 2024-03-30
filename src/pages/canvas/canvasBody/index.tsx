@@ -180,7 +180,6 @@ const CanvasBody = () => {
     return true;
   }
 
-  console.log({enabledElements})
 
   return (
     <BodyContainer>

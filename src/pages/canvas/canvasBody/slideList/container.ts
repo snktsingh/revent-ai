@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/store';
 import React, { useState } from 'react';
 import { useCanvasComponent } from '../canvasComponent/container';
 import { toggleSelectingSlide } from '@/redux/reducers/slide';
-import { setActiveCanvas, setCanvas } from '@/redux/reducers/canvas';
+import { setActiveCanvas, setCanvas, updateCanvasList } from '@/redux/reducers/canvas';
 import { fabric } from 'fabric';
 import { CanvasItem } from '@/interface/storeTypes';
 import { openModal } from '@/redux/reducers/elements';
@@ -66,6 +66,25 @@ const useSlideList = () => {
     dispatch(openModal());
   };
 
+  const handleDragStart = (event : React.DragEvent<HTMLDivElement>, index : number) => {
+    event.dataTransfer.setData('index', index.toString());
+  };
+
+  const handleDragOver = (event : React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  };
+
+  const handleDrop = (event : React.DragEvent<HTMLDivElement>, newIndex : number) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+    const oldIndexStr = event.dataTransfer.getData('index');
+    const oldIndex = parseInt(oldIndexStr, 10); 
+    const updatedCanvasList = [...canvasList];
+    const [removed] = updatedCanvasList.splice(oldIndex, 1);
+    updatedCanvasList.splice(newIndex, 0, removed);
+    dispatch(updateCanvasList(updatedCanvasList));
+  };
+
   return {
     handleKeyDown,
     getImg,
@@ -76,6 +95,9 @@ const useSlideList = () => {
     slide,
     handleSlideCardClick,
     loadSvgs,
+    handleDragOver,
+    handleDragStart,
+    handleDrop
   };
 };
 

@@ -29,8 +29,9 @@ import useCanvasData from './canvasDataExtractor';
 
 const CanvasComponent: React.FC = () => {
   const FabricRef = useRef<fabric.Canvas | null>(null);
+  const canvasRef = useRef<fabric.Canvas | null>(null);
+  const ContainerRef = useRef<HTMLDivElement | null>(null);
 
-  
   const {
     updateCanvasDimensions,
     updateCanvasSlideData,
@@ -41,11 +42,10 @@ const CanvasComponent: React.FC = () => {
     selectedElementPosition,
     setSelectedElementPosition,
     canvasClickEvent,
-    loadCanvasFromJSON,
-    windowsRemoveEventListeners,
-    windowsAddEventListeners,
-    canvasRef,
-    ContainerRef
+    addCanvasEventListeners,
+    handleCanvasRenders,
+    handleKeyDown,
+    handleWindowResize
   } = useCanvasComponent();
 
   const ElementFunctions = useElementFunctions(canvasRef.current);
@@ -71,6 +71,7 @@ const CanvasComponent: React.FC = () => {
 
   // useEffect(() => {
   //   setShowOptions(false);
+
   //   const canvas = new fabric.Canvas('canvas');
   //   canvas.clear();
   //   fabric.Object.prototype.set({
@@ -82,18 +83,47 @@ const CanvasComponent: React.FC = () => {
   //     cornerStrokeColor: 'grey',
   //   });
   //   fabric.Object.prototype.objectCaching = false;
-  //   loadCanvasFromJSON(canvas);
-  //   windowsAddEventListeners();
+
+  //   canvas.loadFromJSON(
+  //     canvasJS.canvas,
+  //     () => {
+  //       canvasRef.current = canvas;
+  //       updateCanvasDimensions(canvas);
+
+  //       canvas.setBackgroundColor(
+  //         `${theme.colorSchemes.light.palette.common.white}`,
+  //         canvas.renderAll.bind(canvas)
+  //       );
+
+  //       canvas.enableRetinaScaling = true;
+  //       canvas.selectionColor = 'transparent';
+  //       canvas.selectionBorderColor =
+  //         theme.colorSchemes.light.palette.common.steelBlue;
+  //       canvas.selectionLineWidth = 0.5;
+  //       handleCanvasRenders(canvas);
+
+  //       addCanvasEventListeners(canvas);
+  //     },
+  //     (error: Error) => {
+  //       console.error('Error loading canvas:', error);
+  //     }
+  //   );
+
+  //   window.addEventListener('keydown', (e) => handleKeyDown(e,canvas));
+  //   window.addEventListener('resize', (e) => handleWindowResize(ContainerRef.current));
   //   return () => {
-  //     windowsRemoveEventListeners();
+  //     window.removeEventListener('keydown',  (e) => handleKeyDown(e,canvas));
+  //     // window.removeEventListener('click', handleClickOutsideCanvas);
+  //     window.removeEventListener('resize', () => { });
   //     canvas.dispose();
-  //   }
-  // }, [canvasJS.canvas, selectedOriginalCanvas]);
+  //   };
+    
+  // }, [canvasJS.canvas, selectedOriginalCanvas])
 
   useEffect(() => {
     setShowOptions(false);
-    const newCanvas = new fabric.Canvas('canvas');
-    newCanvas.clear();
+    const canvas = new fabric.Canvas('canvas');
+    canvas.clear();
     fabric.Object.prototype.set({
       cornerStyle: 'circle',
       transparentCorners: false,
@@ -103,35 +133,36 @@ const CanvasComponent: React.FC = () => {
       cornerStrokeColor: 'grey',
     });
     fabric.Object.prototype.objectCaching = false;
-    newCanvas.loadFromJSON(
+    canvas.loadFromJSON(
       canvasJS.canvas,
       () => {
-        updateCanvasDimensions(newCanvas);
-        canvasRef.current = newCanvas;
-        newCanvas.setBackgroundColor(
+        updateCanvasDimensions(canvas);
+        canvasRef.current = canvas;
+        canvas.setBackgroundColor(
           `${theme.colorSchemes.light.palette.common.white}`,
-          newCanvas.renderAll.bind(newCanvas)
+          canvas.renderAll.bind(canvas)
         );
 
-        newCanvas.enableRetinaScaling = true;
-        newCanvas.selectionColor = 'transparent';
-        newCanvas.selectionBorderColor =
+        canvas.enableRetinaScaling = true;
+        canvas.selectionColor = 'transparent';
+        canvas.selectionBorderColor =
           theme.colorSchemes.light.palette.common.steelBlue;
-        newCanvas.selectionLineWidth = 0.5;
+        canvas.selectionLineWidth = 0.5;
         getElementsData(
-          newCanvas.toObject(customFabricProperties)?.objects,
+          canvas.toObject(customFabricProperties)?.objects,
           themeCode, themeName
         );
-        // CustomBorderIcons(newCanvas);
+        // CustomBorderIcons(canvas);
 
-        newCanvas.on('text:changed', function (options) {
+        canvas.on('text:changed', function (options) {
+          console.log('thinnava')
           getElementsData(
-            newCanvas.toObject(customFabricProperties)?.objects,
+            canvas.toObject(customFabricProperties)?.objects,
             themeCode, themeName
           );
         });
 
-        newCanvas.forEachObject(obj => {
+        canvas.forEachObject(obj => {
           if (obj) {
             if ((obj as IExtendedTextBoxOptions)?.listType == 'bullet') {
               (obj as IExtendedTextBoxOptions)._renderTextLine =
@@ -139,97 +170,97 @@ const CanvasComponent: React.FC = () => {
             }
           }
         });
-        newCanvas.on('mouse:dblclick', event => {
+        canvas.on('mouse:dblclick', event => {
           if (event.target) {
             // removePlaceholderText(canvas, event.target)
           }
-          CanvasClick(newCanvas, event);
+          CanvasClick(canvas, event);
         });
-        newCanvas.on('text:editing:exited', event => {
-          textExitedEvent(newCanvas, event.target as fabric.Text);
-          updateCanvasSlideData(newCanvas, canvasJS.id);
+        canvas.on('text:editing:exited', event => {
+          textExitedEvent(canvas, event.target as fabric.Text);
+          updateCanvasSlideData(canvas, canvasJS.id);
         });
-        newCanvas.on('text:editing:entered', event => {
+        canvas.on('text:editing:entered', event => {
           if (event.target) {
             textEnteringEvent(canvas, event.target);
           }
-          updateCanvasSlideData(newCanvas, canvasJS.id);
+          updateCanvasSlideData(canvas, canvasJS.id);
         });
-        newCanvas.on('selection:created', function (event) {
+        canvas.on('selection:created', function (event) {
           handleSelectionCreated(canvas, event);
         });
         window.addEventListener('resize', () =>
-          updateCanvasDimensions(newCanvas)
+          updateCanvasDimensions(canvas)
         );
-        if (newCanvas.toObject(customFabricProperties)?.objects.length >= 1) {
+        if (canvas.toObject(customFabricProperties)?.objects.length >= 1) {
           dispatch(toggleRegenerateButton(false));
         } else {
           dispatch(toggleRegenerateButton(true));
         }
-        newCanvas.on('object:added', e => {
-          // console.log(newCanvas.toJSON());
-          updateCanvasSlideData(newCanvas, canvasJS.id);
+        canvas.on('object:added', e => {
+          // console.log(canvas.toJSON());
+          updateCanvasSlideData(canvas, canvasJS.id);
           getElementsData(
-            newCanvas.toObject(customFabricProperties)?.objects,
+            canvas.toObject(customFabricProperties)?.objects,
             themeCode, themeName
           );
-          // console.log(newCanvas.toObject(customFabricProperties)?.objects);
+          // console.log(canvas.toObject(customFabricProperties)?.objects);
 
-          if (newCanvas.toObject()?.objects.length >= 1) {
+          if (canvas.toObject()?.objects.length >= 1) {
             dispatch(toggleRegenerateButton(false));
           } else {
             dispatch(toggleRegenerateButton(true));
           }
         });
-        newCanvas.on('object:removed', e => {
-          updateCanvasSlideData(newCanvas, canvasJS.id);
+        canvas.on('object:removed', e => {
+          updateCanvasSlideData(canvas, canvasJS.id);
           getElementsData(
-            newCanvas.toObject(customFabricProperties)?.objects,
+            canvas.toObject(customFabricProperties)?.objects,
             themeCode, themeName
           );
-          if (newCanvas.toObject()?.objects.length >= 1) {
+          if (canvas.toObject()?.objects.length >= 1) {
             dispatch(toggleRegenerateButton(false));
           } else {
             dispatch(toggleRegenerateButton(true));
           }
         });
 
-        newCanvas.on('object:modified', e => {
-          if (newCanvas && e.target) {
-            setElementPositionsAfterMoving(e.target, newCanvas);
+        canvas.on('object:modified', e => {
+          if (canvas && e.target) {
+            setElementPositionsAfterMoving(e.target, canvas);
           }
-          updateCanvasSlideData(newCanvas, canvasJS.id);
+          updateCanvasSlideData(canvas, canvasJS.id);
           getElementsData(
-            newCanvas.toObject(customFabricProperties)?.objects,
+            canvas.toObject(customFabricProperties)?.objects,
             themeCode, themeName
           );
         });
 
-        newCanvas.on('selection:cleared', e => {
-          updateCanvasSlideData(newCanvas, canvasJS.id);
+        canvas.on('selection:cleared', e => {
+          updateCanvasSlideData(canvas, canvasJS.id);
           getElementsData(
-            newCanvas.toObject(customFabricProperties)?.objects,
+            canvas.toObject(customFabricProperties)?.objects,
             themeCode, themeName
           );
         });
-        // newCanvas.on('object:moving', (event: fabric.IEvent) => handleAllElements(event,newCanvas));
-        newCanvas.on('object:moving', function (options) {
-          // console.log(newCanvas.toJSON());
-          handleObjectMoving(options, newCanvas);
+        // canvas.on('object:moving', (event: fabric.IEvent) => handleAllElements(event,canvas));
+        canvas.on('object:moving', function (options) {
+          // console.log(canvas.toJSON());
+          handleObjectMoving(options, canvas);
         });
-        newCanvas.on('object:scaling', function (options) {
-          handleObjectScaling(options, newCanvas);
+        canvas.on('object:scaling', function (options) {
+          handleObjectScaling(options, canvas);
         });
-        updateCanvasSlideData(newCanvas, canvasJS.id);
-        // handleAddCustomIcon(newCanvas);
-        newCanvas.renderAll();
+        updateCanvasSlideData(canvas, canvasJS.id);
+        // handleAddCustomIcon(canvas);
+        canvas.renderAll();
       },
       (error: Error) => {
         console.error('Error loading canvas:', error);
       }
     );
 
-    const canvas = canvasRef.current!;
+    // const canvas = canvasRef.current!;
 
     canvas.on('mouse:down', function (options) {
       const pointer: any = canvas.getPointer(options.e);
@@ -324,7 +355,7 @@ const CanvasComponent: React.FC = () => {
       window.removeEventListener('keydown', handleKeyDown);
       // window.removeEventListener('click', handleClickOutsideCanvas);
       window.removeEventListener('resize', () => { });
-      newCanvas.dispose();
+      canvas.dispose();
     };
   }, [canvasJS.canvas, selectedOriginalCanvas]);
 

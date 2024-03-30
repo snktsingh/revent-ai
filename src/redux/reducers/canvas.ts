@@ -263,6 +263,9 @@ export const CanvasReducer = createSlice({
     setPresentationTitle(state, action) {
       state.presentationTitle = action.payload;
     },
+    updateCanvasList(state, action : PayloadAction<CanvasItem[]>) {
+      state.canvasList = action.payload;
+    }
   },
 });
 
@@ -291,6 +294,7 @@ export const {
   setOriginalSlide,
   toggleSelectedOriginalCanvas,
   setPresentationTitle,
+  updateCanvasList
 } = CanvasReducer.actions;
 
 export default CanvasReducer.reducer;
