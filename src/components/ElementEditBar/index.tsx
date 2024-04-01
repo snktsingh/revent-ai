@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { useEditBar } from './container';
 import { useTableElement } from '@/pages/canvas/canvasBody/elements/tableElement';
 import { TABLE_HEADER } from '@/constants/elementNames';
+import { useAppSelector } from '@/redux/store';
 
 
 interface ElementEditBarProps {
@@ -18,7 +19,7 @@ interface ElementEditBarProps {
 const ElementEditBar: React.FC<ElementEditBarProps> = ({ left, top, canvas }) => {
 
     const [position, setPosition] = useState({ l: left, t: top });
-
+    const { enhancementWithAI } = useAppSelector(state => state.apiData);
     const { addTableColumn, addTableRow, removeTableColumn, removeTableRow, removeTableHeader, addTableHeader } = useTableElement();
     const {
         adjustControlsVisibility,
@@ -26,7 +27,9 @@ const ElementEditBar: React.FC<ElementEditBarProps> = ({ left, top, canvas }) =>
         deleteObject,
         plusIcon,
         checkElementForAddLevel,
-        tableIcons
+        tableIcons,
+        handleAICheckbox,
+        aiCheckbox
     } = useEditBar();
 
     const handleDelete = () => {
@@ -147,13 +150,12 @@ const ElementEditBar: React.FC<ElementEditBarProps> = ({ left, top, canvas }) =>
                     </IconButton>
                 </span>
             </Tooltip>}
-            <Tooltip title="Enhancement with AI" placement="top">
-
+            { aiCheckbox && <Tooltip title="Enhancement with AI" placement="top">
             <CheckboxContainer>
-                <input type="checkbox"  />
+                <input type="checkbox"  checked={enhancementWithAI} onChange={handleAICheckbox} />
                 <div className="checkmark"></div>
             </CheckboxContainer>
-            </Tooltip>
+            </Tooltip>}
         </EditBarContainer>
     );
 };

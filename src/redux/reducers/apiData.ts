@@ -6,12 +6,14 @@ export interface apiDataInitialState {
   requestData: APIRequest | null;
   isAuth: any;
   isDisabled: boolean;
+  enhancementWithAI: boolean;
 }
 
 const initialState: apiDataInitialState = {
   requestData: null,
   isAuth: getFromLS('isAuth'),
   isDisabled: false,
+  enhancementWithAI : true,
 };
 
 export const apiDataReducer = createSlice({
@@ -27,9 +29,12 @@ export const apiDataReducer = createSlice({
     setFormDisabled: state => {
       state.isDisabled = !state.isDisabled;
     },
+    updateCheckboxForAI(state,action : PayloadAction<boolean>) {
+      state.enhancementWithAI = action.payload;
+    }
   },
 });
 
-export const { setRequestData, setAuth, setFormDisabled } =
+export const { setRequestData, setAuth, setFormDisabled, updateCheckboxForAI } =
   apiDataReducer.actions;
 export default apiDataReducer.reducer;

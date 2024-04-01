@@ -74,9 +74,9 @@ const CanvasComponent: React.FC = () => {
     canvas.loadFromJSON(
       canvasJS.canvas,
       () => {
+        updateCanvasStyle(canvas);
         updateCanvasDimensions(canvas);
         canvasRef.current = canvas;
-        updateCanvasStyle(canvas);
         getElementsData(
           canvas.toObject(customFabricProperties)?.objects,
           themeCode, themeName

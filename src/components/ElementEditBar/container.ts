@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useDelAndCopy } from '@/pages/canvas/canvasBody/elements/deleteAndCopyElements';
 import {
+  BULLET_POINTS,
   CYCLE,
   CYCLE_TEXT,
   FUNNEL,
   FUNNEL_TEXT,
+  PARAGRAPH,
   PROCESS,
   PROCESS_TEXT,
   PYRAMID,
@@ -22,11 +24,14 @@ import {
   useTableElement,
   useTimelineElement,
 } from '@/pages/canvas/canvasBody/elements/elementExports';
+import { updateCheckboxForAI } from '@/redux/reducers/apiData';
+import { useAppDispatch } from '@/redux/store';
 
 export const useEditBar = () => {
   const [plusIcon, setPlusIcon] = useState<boolean>(false);
   const [tableIcons, setTableIcon] = useState<boolean>(false);
-
+  const [aiCheckbox, setAICheckbox] = useState<boolean>(false);
+const dispatch = useAppDispatch();
   const { addProcessSteps } = useProcessElement();
   const { addPyramidLevel } = usePyramidElement();
   const { addFunnelLevels } = useFunnelElement();
@@ -39,10 +44,8 @@ export const useEditBar = () => {
   const { deleteObject, handleCopyClick } = useDelAndCopy();
 
   const adjustControlsVisibility = (canvas: fabric.Canvas): void => {
-    // Get the selected object, if any
     const selectedObject = canvas.getActiveObject();
 
-    // Custom controls setup for different elements
     const objectName = selectedObject?.name?.split('_');
     const currentElementId = objectName && objectName[1];
 
@@ -60,6 +63,7 @@ export const useEditBar = () => {
 
     let showPlusIcon = false;
     let showTableIcons = false;
+    let showAICheckbox = false;
 
     if (objectName && selectedObject) {
       if (
@@ -70,11 +74,10 @@ export const useEditBar = () => {
         (objectName[0] === CYCLE && cycleSteps < 6) ||
         selectedObject.name === 'LIST_ELEMENT'
       ) {
-        showPlusIcon = true; // Set the visibility state to true if any condition is met
+        showPlusIcon = true; 
       }
     }
 
-    // Check if the number of levels exceeds a certain limit to hide the plus icon
     if (
       (objectName && objectName[0] === PYRAMID && pLevels >= 6) ||
       (objectName && objectName[0] === PROCESS && processStepsTotal >= 6) ||
@@ -82,7 +85,7 @@ export const useEditBar = () => {
       (objectName && objectName[0] === FUNNEL && fLevels >= 6) ||
       (objectName && objectName[0] === CYCLE && cycleSteps >= 6)
     ) {
-      showPlusIcon = false; // Hide the plus icon if the limit is reached
+      showPlusIcon = false; 
     }
 
     if (objectName && objectName[0] === TABLE) {
@@ -90,8 +93,13 @@ export const useEditBar = () => {
       showTableIcons = true;
     }
 
-    setPlusIcon(showPlusIcon); // Update the plusIcon state based on the visibility state
-    setTableIcon(showTableIcons); // Update the tableIcons state based on the visibility state
+    if(objectName && (objectName[0] === BULLET_POINTS || objectName[0] === PARAGRAPH)){
+      showAICheckbox = true;
+    }
+
+    setPlusIcon(showPlusIcon); 
+    setTableIcon(showTableIcons); 
+    setAICheckbox(showAICheckbox);
   };
 
   const countObjects = (canvas: fabric.Canvas, objectType: string): number => {
@@ -179,7 +187,11 @@ export const useEditBar = () => {
     (selectedElement as fabric.Group).setCoords();
     canvas.renderAll();
     return true;
-  }
+  };
+
+  const handleAICheckbox = (e : React.ChangeEvent<HTMLInputElement>) => {
+      dispatch(updateCheckboxForAI(e.target.checked))
+  };
 
   return {
     adjustControlsVisibility,
@@ -188,5 +200,7 @@ export const useEditBar = () => {
     plusIcon,
     checkElementForAddLevel,
     tableIcons,
+    handleAICheckbox,
+    aiCheckbox
   };
 };

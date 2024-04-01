@@ -45,7 +45,7 @@ export const CheckboxContainer = styled.label`
   font-size: 12px;
   user-select: none;
   padding: 2px 5px;
-
+  
   input {
     position: absolute;
     opacity: 0;
@@ -53,8 +53,9 @@ export const CheckboxContainer = styled.label`
     height: 0;
     width: 0;
   }
-
+  
   .checkmark {
+    border: 1px solid #000;
     position: relative;
     top: 0;
     left: 0;
@@ -65,10 +66,11 @@ export const CheckboxContainer = styled.label`
     transition: all 0.2s ease;
     opacity: 0.4;
   }
-
+  
   input:checked ~ .checkmark {
     background: ${theme.colorSchemes.light.palette.primary.main};
     opacity: 0.9;
+    border: none;
     transition: all 0.2s ease;
   }
 

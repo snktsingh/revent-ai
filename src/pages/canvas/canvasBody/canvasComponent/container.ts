@@ -7,7 +7,11 @@ import {
   PROCESS_BOX,
   PROCESS_TEXT,
   PYRAMID_TEXT,
+  QUOTE,
+  QUOTE_AUTHOR,
+  QUOTE_IMG,
   TABLE,
+  TABLE_HEADER,
   TABLE_TEXT,
   TIMELINE_CIRCLE,
   TIMELINE_DIRECTION,
@@ -134,7 +138,8 @@ export const useCanvasComponent = () => {
         setShowOptions(false);
         return;
       }
-
+      
+      setShowOptions(true);
       const boundingRect = selectedObject.getBoundingRect();
       const { left, top, width, height } = boundingRect;
 
@@ -177,7 +182,6 @@ export const useCanvasComponent = () => {
       }
 
       setSelectedElementPosition({ top: positionTop, left: positionLeft });
-      setShowOptions(true);
     }
   };
 
@@ -195,7 +199,11 @@ export const useCanvasComponent = () => {
       elementName.startsWith(TIMELINE_TEXT) ||
       elementName.startsWith(TIMELINE_CIRCLE) ||
       elementName.startsWith(TIMELINE_DIRECTION) ||
-      elementName.startsWith(TABLE_TEXT)
+      elementName.startsWith(TABLE_TEXT) ||
+      elementName.startsWith(TABLE_HEADER) || 
+      elementName.startsWith(QUOTE) || 
+      elementName.startsWith(QUOTE_IMG) || 
+      elementName.startsWith(QUOTE_AUTHOR) 
     ) {
       return true;
     }
