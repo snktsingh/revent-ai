@@ -39,6 +39,7 @@ export default function SlideList() {
               onDragStart={e => handleDragStart(e, index)}
               onDragOver={handleDragOver}
               onDrop={e => handleDrop(e, index)}
+              isDragging={canvas.id === activeCanvasID}
             >
               <Stack direction="row" spacing={1}>
                 <p>{index + 1}</p>

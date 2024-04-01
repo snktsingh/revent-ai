@@ -113,6 +113,7 @@ export const useCanvasComponent = () => {
         width: canvasWidth,
         height: canvasHeight,
       });
+      
       canvas.renderAll();
     }
   };

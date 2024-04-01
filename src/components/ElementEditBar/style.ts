@@ -1,3 +1,4 @@
+import { theme } from '@/constants/theme';
 import styled from 'styled-components';
 
 export const EditBarContainer = styled.div<{ left: number; top: number }>`
@@ -27,12 +28,67 @@ export const IconButton = styled.button`
   cursor: pointer;
   display: flex;
   align-items: center;
-  color: #333; /* Customize icon color */
-  font-size: 24px; /* Set a consistent font size for all icons */
+  color: #333;
+  font-size: 24px;
 `;
 
 export const SvgContainer = styled.span`
-display: inline-block;
-width: 22px; /* Adjust width and height as needed */
-height: 22px;
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+`;
+
+export const CheckboxContainer = styled.label`
+  display: block;
+  position: relative;
+  cursor: pointer;
+  font-size: 12px;
+  user-select: none;
+  padding: 2px 5px;
+
+  input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+
+  .checkmark {
+    position: relative;
+    top: 0;
+    left: 0;
+    height: 1.6em;
+    width: 1.6em;
+    border-radius: 50%;
+    background: #ffeded38;
+    transition: all 0.2s ease;
+    opacity: 0.4;
+  }
+
+  input:checked ~ .checkmark {
+    background: ${theme.colorSchemes.light.palett};
+    opacity: 0.9;
+    transition: all 0.2s ease;
+  }
+
+  .checkmark:after {
+    content: '';
+    position: absolute;
+    display: none;
+  }
+
+  input:checked ~ .checkmark:after {
+    display: block;
+  }
+
+  .checkmark:after {
+    left: 0.61em;
+    top: 0.43em;
+    width: 0.25em;
+    height: 0.5em;
+    border: solid rgb(255, 255, 255);
+    border-width: 0 0.15em 0.15em 0;
+    transform: rotate(45deg);
+  }
 `;

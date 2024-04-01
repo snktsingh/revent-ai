@@ -12,7 +12,7 @@ export const SlideCountContainer = styled.div`
   display: flex;
   justify-content: space-between;
 `;
-export const SingleSliderContainer = styled.div`
+export const SingleSliderContainer = styled.div<{ isDragging: boolean }>`
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -23,7 +23,7 @@ export const EditSlideContainer = styled.div`
 export const ListSlideCard = styled(Card)`
   && {
     width: fit-content;
-    height: 15vh;
+    height: 14vh;
     margin-bottom: 2vh;
   }
 `;

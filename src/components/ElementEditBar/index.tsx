@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { EditBarContainer, IconButton, SvgContainer } from './style';
+import { CheckboxContainer, EditBarContainer, IconButton, SvgContainer } from './style';
 import Tooltip from '@mui/material/Tooltip';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import styled from 'styled-components';
@@ -147,6 +147,13 @@ const ElementEditBar: React.FC<ElementEditBarProps> = ({ left, top, canvas }) =>
                     </IconButton>
                 </span>
             </Tooltip>}
+            <Tooltip title="Enhancement with AI" placement="top">
+
+            <CheckboxContainer>
+                <input type="checkbox"  />
+                <div className="checkmark"></div>
+            </CheckboxContainer>
+            </Tooltip>
         </EditBarContainer>
     );
 };

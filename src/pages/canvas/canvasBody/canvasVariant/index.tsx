@@ -110,7 +110,7 @@ export const CanvasVariant = () => {
                           alt={`Variant ${i + 1}`}
                           style={{
                             width: '100%',
-                            height: '100%',
+                            height: '12vh',
                             borderRadius:'3%'
                           }}
                         />

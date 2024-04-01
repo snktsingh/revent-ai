@@ -49,15 +49,14 @@ const CanvasComponent: React.FC = () => {
     onTextEditingEnteredEvent,
     onTextEditingExitedEvent
   } = useCanvasEvents();
-  const { jsonData, themeCode, themeName } = useAppSelector(state => state.slideTheme);
+  const { themeCode, themeName } = useAppSelector(state => state.slideTheme);
 
   const dispatch = useAppDispatch();
 
   const { canvasJS, variantImage, selectedOriginalCanvas } = useAppSelector(state => state.canvas);
 
-  const { pptUrl, imageUrl, variants } = useAppSelector(state => state.thunk);
 
- 
+
 
   useEffect(() => {
     setShowOptions(false);
@@ -83,9 +82,7 @@ const CanvasComponent: React.FC = () => {
           themeCode, themeName
         );
 
-        window.addEventListener('resize', () =>
-          updateCanvasDimensions(canvas)
-        );
+
         if (canvas.toObject(customFabricProperties)?.objects.length >= 1) {
           dispatch(toggleRegenerateButton(false));
         } else {
@@ -129,7 +126,9 @@ const CanvasComponent: React.FC = () => {
         console.error('Error loading canvas:', error);
       }
     );
-
+    window.addEventListener('resize', () =>
+      updateCanvasDimensions(canvas)
+    );
     window.addEventListener('keydown', (e) => handleKeyDown(e, canvas));
     return () => {
       window.removeEventListener('keydown', (e) => handleKeyDown(e, canvas));
@@ -141,6 +140,8 @@ const CanvasComponent: React.FC = () => {
   useEffect(() => {
     setShowOptions(false);
     if (variantImage) {
+      console.log('variantImage loaded');
+      console.log({variantImage});
       canvasRef.current?.clear();
       canvasRef.current?.setBackgroundColor(
         `${theme.colorSchemes.light.palette.common.white}`,
