@@ -67,7 +67,7 @@ export const CheckboxContainer = styled.label`
   }
 
   input:checked ~ .checkmark {
-    background: ${theme.colorSchemes.light.palett};
+    background: ${theme.colorSchemes.light.palette.primary.main};
     opacity: 0.9;
     transition: all 0.2s ease;
   }
