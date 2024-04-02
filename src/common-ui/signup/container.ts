@@ -1,5 +1,5 @@
 import ENDPOINT, { ROUTES } from '@/constants/endpoint';
-import { FetchUtils } from '@/utils/fetch-utils';
+import { FetchNonHeaderUtils, FetchUtils } from '@/utils/fetch-utils';
 import { Password } from '@mui/icons-material';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
@@ -15,9 +15,12 @@ const useSignup = () => {
     lastName: '',
     email: '',
     password: '',
+    imageUrl: 'http://placehold.it/50x50',
+    langKey: 'en',
   });
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
+  const [isPreview, setIsPreview] = useState<boolean>(false);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setValues({ ...values, [name]: value });
@@ -26,14 +29,14 @@ const useSignup = () => {
   const handleRegister = async () => {
     toast.promise(
       async () => {
-        const res = await FetchUtils.postRequest(
+        const res = await FetchNonHeaderUtils.postRequest(
           `${ENDPOINT.AUTH.SIGNIN}`,
           values
         );
-        if (res.status === 200) {
+        if (res.status === 201) {
           setTimeout(() => {
-            window.location.replace(`${ROUTES.LOGIN}`);
-          }, 1500);
+            setIsPreview(true);
+          }, 1000);
         } else {
           throw new Error('Failed to log in');
         }
@@ -71,6 +74,8 @@ const useSignup = () => {
     setIsDisabled,
     handleSubmit,
     setConfirmPassword,
+    setIsPreview,
+    isPreview,
   };
 };
 export default useSignup;

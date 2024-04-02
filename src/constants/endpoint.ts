@@ -12,6 +12,7 @@ export const ENDPOINT = {
   },
   USER: {
     GET_DETAILS: '/account',
+    VERIFY_ACCOUNT: '/activate',
   },
   PPT: {
     CREATE_PPT: 'ppt/create-presentation',
@@ -31,6 +32,7 @@ export const ROUTES = {
   THEMES: '/themes',
   CANVAS: '/canvas',
   SETTINGS: '/settings',
+  ACTIVATION: '/activation',
 } as const;
 
 export default ENDPOINT;

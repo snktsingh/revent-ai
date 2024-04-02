@@ -5,6 +5,7 @@
     { "source": "/dashboard", "destination": "/" },
     { "source": "/themes", "destination": "/" },
     { "source": "/canvas", "destination": "/" },
-    { "source": "/settings", "destination": "/" }
+    { "source": "/settings", "destination": "/" },
+    { "source": "/activation", "destination": "/" }
   ]
 }

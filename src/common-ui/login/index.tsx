@@ -3,7 +3,9 @@ import {
   ChildContainer,
   Description,
   LeftContainer,
+  RedirectLink,
   RightContainer,
+  SignUp,
   SubTitle,
   TextInput,
   Title,
@@ -16,6 +18,7 @@ import useLogin from './container';
 import { useAppSelector } from '@/redux/store';
 import { useState } from 'react';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
   const { email, setEmail, password, setPassword, handleLogin } = useLogin();
@@ -104,9 +107,11 @@ const Login = () => {
               >
                 Login
               </CustomButton>
-              {/* <SignUp>
-                <Link to="/signup">Not registered ? Create a new account</Link>
-              </SignUp> */}
+              <SignUp>
+                <RedirectLink to="/signup">
+                  Not registered ? Create a new account
+                </RedirectLink>
+              </SignUp>
             </Box>
             {/* <PassMessage>
               * Password must be minimum of 8 characters and contain at least 1
