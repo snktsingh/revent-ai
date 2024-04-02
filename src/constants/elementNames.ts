@@ -57,6 +57,12 @@ const QUOTE_AUTHOR = 'QuoteAuthor';
 const QUOTE_IMG = 'QuoteImg';
 const QUOTE_IMG_CONTAINER = 'QuoteImgContainer';
 
+//List
+const LIST_MAIN = 'ListMain';
+const LIST_CONTAINER = 'ListContainer';
+const LIST_TEXT = 'ListText';
+const LIST_IMG = 'ListImg';
+
 export {
     FUNNEL,
     FUNNEL_TEXT,
@@ -97,5 +103,9 @@ export {
     QUOTE_IMG,
     QUOTE_ADD_IMG_TEXT,
     QUOTE_IMG_CONTAINER,
-    TABLE_HEADER
+    TABLE_HEADER,
+    LIST_MAIN,
+    LIST_TEXT,
+    LIST_CONTAINER,
+    LIST_IMG
 };

@@ -7,6 +7,9 @@ import {
   FUNNEL_BASE,
   FUNNEL_LEVEL,
   FUNNEL_TEXT,
+  LIST_IMG,
+  LIST_MAIN,
+  LIST_TEXT,
   PROCESS,
   PROCESS_ARROW,
   PROCESS_BOX,
@@ -135,8 +138,8 @@ export function useDelAndCopy() {
             `${CYCLE_TEXT}_${currentElID}`
           );
           break;
-        case 'LIST_ELEMENT':
-          objectsToDelete.push('listText', 'listImage', 'ListAddImageText');
+        case `${LIST_MAIN}_${currentElID}`:
+          objectsToDelete.push(`${LIST_TEXT}_${currentElID}`, `${LIST_IMG}_${currentElID}`);
           break;
         case `${TABLE}_`:
           objectsToDelete.push(TABLE);

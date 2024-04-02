@@ -153,12 +153,26 @@ const useCanvasEvents = () => {
       obj => obj.type === 'textbox' || obj.type === 'text'
     );
 
+    const quoteImgQnt = objectsAtPointer.some(
+      obj => obj.name?.startsWith(QUOTE_IMG)
+    );
+
     if (textboxFound) {
       const textBox = objectsAtPointer.find(
         obj => obj.type === 'textbox' || obj.type === 'text'
       );
       if (textBox) {
         canvas.setActiveObject(textBox);
+      }
+      canvas.requestRenderAll();
+    }
+
+    if(quoteImgQnt) {
+      const imgContainer = objectsAtPointer.find(
+        obj => obj.name?.startsWith(QUOTE_IMG)
+      );
+      if(imgContainer) {
+        canvas.setActiveObject(imgContainer)
       }
       canvas.requestRenderAll();
     }

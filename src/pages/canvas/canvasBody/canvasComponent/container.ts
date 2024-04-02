@@ -3,6 +3,7 @@ import {
   CYCLE_CIRCLE,
   CYCLE_TEXT,
   FUNNEL_TEXT,
+  LIST_TEXT,
   PROCESS_ARROW,
   PROCESS_BOX,
   PROCESS_TEXT,
@@ -202,9 +203,9 @@ export const useCanvasComponent = () => {
       elementName.startsWith(TIMELINE_DIRECTION) ||
       elementName.startsWith(TABLE_TEXT) ||
       elementName.startsWith(TABLE_HEADER) || 
-      elementName.startsWith(QUOTE_IMG) || 
       elementName.startsWith(QUOTE_AUTHOR) ||
-      elementName.startsWith(QUOTE_TEXT)
+      elementName.startsWith(QUOTE_TEXT) ||
+      elementName.startsWith(LIST_TEXT) 
     ) {
       return true;
     }

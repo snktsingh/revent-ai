@@ -75,7 +75,7 @@ export const useQuoteElement = () => {
     //   top: 120,
     // })
 
-    canvas?.add(text, group, authorText, QuoteContainer);
+    canvas?.add(text, authorText, QuoteContainer, group);
   };
 
 
@@ -103,7 +103,7 @@ export const useQuoteElement = () => {
               let TextElement = (object as fabric.Group)._objects[1];
               (object as fabric.Group).removeWithUpdate(TextElement);
               (object as fabric.Group).set({
-                name: 'Quote_Container',
+                name: `${QUOTE_IMG}_`,
               });
               img.set({
                 left: object && object.left !== undefined ? object.left + 2 : 0,

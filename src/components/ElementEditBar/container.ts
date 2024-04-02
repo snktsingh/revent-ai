@@ -6,11 +6,15 @@ import {
   CYCLE_TEXT,
   FUNNEL,
   FUNNEL_TEXT,
+  LIST_IMG,
+  LIST_MAIN,
   PARAGRAPH,
   PROCESS,
   PROCESS_TEXT,
   PYRAMID,
   PYRAMID_TEXT,
+  QUOTE,
+  QUOTE_IMG,
   TABLE,
   TIMELINE,
   TIMELINE_TEXT,
@@ -21,16 +25,19 @@ import {
   useListElement,
   useProcessElement,
   usePyramidElement,
+  useQuoteElement,
   useTableElement,
   useTimelineElement,
 } from '@/pages/canvas/canvasBody/elements/elementExports';
 import { updateCheckboxForAI } from '@/redux/reducers/apiData';
-import { useAppDispatch } from '@/redux/store';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { updateListId } from '@/redux/reducers/fabricElements';
 
 export const useEditBar = () => {
   const [plusIcon, setPlusIcon] = useState<boolean>(false);
   const [tableIcons, setTableIcon] = useState<boolean>(false);
   const [aiCheckbox, setAICheckbox] = useState<boolean>(false);
+  const [imgChangeICon, setImgChangeICon] = useState<boolean>(false);
 const dispatch = useAppDispatch();
   const { addProcessSteps } = useProcessElement();
   const { addPyramidLevel } = usePyramidElement();
@@ -38,9 +45,10 @@ const dispatch = useAppDispatch();
   const { addCycleSteps } = useCycleElement();
   const { addTimelineSteps } = useTimelineElement();
   const { addListElement, addImage } = useListElement();
+  const { addQuoteImage } = useQuoteElement();
   const { addTableRow, addTableColumn, removeTableColumn, removeTableRow } =
     useTableElement();
-
+  const { listID } = useAppSelector( state => state.elementsIds )
   const { deleteObject, handleCopyClick } = useDelAndCopy();
 
   const adjustControlsVisibility = (canvas: fabric.Canvas): void => {
@@ -64,6 +72,7 @@ const dispatch = useAppDispatch();
     let showPlusIcon = false;
     let showTableIcons = false;
     let showAICheckbox = false;
+    let showChangeImgIcon = false;
 
     if (objectName && selectedObject) {
       if (
@@ -72,7 +81,7 @@ const dispatch = useAppDispatch();
         (objectName[0] === TIMELINE && timelineLevels < 6) ||
         (objectName[0] === FUNNEL && fLevels < 6) ||
         (objectName[0] === CYCLE && cycleSteps < 6) ||
-        selectedObject.name === 'LIST_ELEMENT'
+        objectName[0] === LIST_MAIN
       ) {
         showPlusIcon = true; 
       }
@@ -97,9 +106,14 @@ const dispatch = useAppDispatch();
       showAICheckbox = true;
     }
 
+    if(objectName && (selectedObject?.name?.startsWith(QUOTE_IMG) || objectName[0] === LIST_IMG)){
+      showChangeImgIcon = true;
+    }
+
     setPlusIcon(showPlusIcon); 
     setTableIcon(showTableIcons); 
     setAICheckbox(showAICheckbox);
+    setImgChangeICon(showChangeImgIcon);
   };
 
   const countObjects = (canvas: fabric.Canvas, objectType: string): number => {
@@ -122,10 +136,8 @@ const dispatch = useAppDispatch();
   const addElement = (canvas: fabric.Canvas | null, type: string) => {
     const activeElement = canvas?.getActiveObject();
     if (!activeElement) return false;
-    const lastListElement = canvas?.getObjects().reverse().find(obj => obj.name === 'LIST_ELEMENT');
-    // Check the type of the active element
+    const lastListElement = canvas?.getObjects().reverse().find(obj => obj.name?.startsWith(LIST_MAIN));
     if (activeElement.name?.startsWith(type) && canvas) {
-      // Call the corresponding function based on the element type
       switch (type) {
         case 'PYRAMID':
           addPyramidLevel(canvas);
@@ -148,8 +160,9 @@ const dispatch = useAppDispatch();
         case 'TABLE_COLUMN':
           addTableColumn(canvas);
           break;
-        case 'LIST':
+        case LIST_MAIN:
           addList(canvas,lastListElement);
+          dispatch(updateListId());
           break;
         default:
           break;
@@ -186,7 +199,17 @@ const dispatch = useAppDispatch();
       );
     (selectedElement as fabric.Group).setCoords();
     canvas.renderAll();
-    return true;
+  };
+
+  function handleQuoteImage(canvas: fabric.Canvas) {
+    let selectedElement = canvas.getActiveObject();
+    addQuoteImage(canvas, selectedElement!);
+    selectedElement &&
+      (selectedElement as fabric.Group).remove(
+        (selectedElement as fabric.Group)._objects[1]
+      );
+    (selectedElement as fabric.Group).setCoords();
+    canvas.renderAll();
   };
 
   const handleAICheckbox = (e : React.ChangeEvent<HTMLInputElement>) => {
@@ -201,6 +224,9 @@ const dispatch = useAppDispatch();
     checkElementForAddLevel,
     tableIcons,
     handleAICheckbox,
-    aiCheckbox
+    aiCheckbox,
+    imgChangeICon,
+    addListImage,
+    handleQuoteImage
   };
 };
