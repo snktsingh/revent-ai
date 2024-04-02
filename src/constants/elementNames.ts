@@ -51,6 +51,7 @@ const CONCLUSION_SLIDE_SUBTITLE = 'ConclusionSlideSubtitle';
 
 //Quote 
 const QUOTE = 'QUOTE';
+const QUOTE_TEXT = 'QuoteText';
 const QUOTE_ADD_IMG_TEXT = 'QuoteAddImgText';
 const QUOTE_AUTHOR = 'QuoteAuthor';
 const QUOTE_IMG = 'QuoteImg';
@@ -91,6 +92,7 @@ export {
     CONCLUSION_SLIDE_TITLE,
     CONCLUSION_SLIDE_SUBTITLE,
     QUOTE,
+    QUOTE_TEXT,
     QUOTE_AUTHOR,
     QUOTE_IMG,
     QUOTE_ADD_IMG_TEXT,

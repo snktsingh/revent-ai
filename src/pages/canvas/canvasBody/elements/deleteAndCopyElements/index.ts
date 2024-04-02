@@ -17,6 +17,7 @@ import {
   QUOTE,
   QUOTE_AUTHOR,
   QUOTE_IMG,
+  QUOTE_TEXT,
   TABLE,
   TABLE_HEADER,
   TABLE_TEXT,
@@ -140,8 +141,8 @@ export function useDelAndCopy() {
         case `${TABLE}_`:
           objectsToDelete.push(TABLE);
           break;
-        case QUOTE:
-          objectsToDelete.push(QUOTE_IMG, QUOTE_AUTHOR);
+        case `${QUOTE}_`:
+          objectsToDelete.push(QUOTE_IMG, QUOTE_AUTHOR, QUOTE_TEXT);
           break;
         case QUOTE_AUTHOR:
           objectsToDelete.push(QUOTE_IMG, QUOTE);
@@ -176,7 +177,10 @@ export function useDelAndCopy() {
         canvas.remove(obj);
       }
       if (names.includes(TABLE)) {
-        if (obj?.name?.startsWith(TABLE_TEXT) || obj?.name?.startsWith(TABLE_HEADER)) {
+        if (
+          obj?.name?.startsWith(TABLE_TEXT) ||
+          obj?.name?.startsWith(TABLE_HEADER)
+        ) {
           canvas.remove(obj);
         }
       }
@@ -224,7 +228,7 @@ export function useDelAndCopy() {
     selectedObjects.forEach(target => {
       if (target instanceof fabric.Group) {
         const elName = target.name?.split('_');
-        
+
         // Clone each object in the group
         target.clone(function (cloned: fabric.Object) {
           cloned.left! += cloned.width! + 20;
@@ -339,8 +343,34 @@ export function useDelAndCopy() {
             }
             canvas?.renderAll();
           });
+        } else if (target.name?.startsWith(QUOTE)) {
+          const elName = target.name?.split('_');
+          target.clone(function (cloned: fabric.Object) {
+            cloned.top! += cloned.height! + 10;
+            cloned.name = elName && elementNameGenerate(elName[0], cloned);
+            canvas?.add(cloned);
+            if (
+              canvas &&
+              elName &&
+              cloned.left &&
+              cloned.top &&
+              cloned.width &&
+              cloned.height
+            ) {
+              copyGroupedElements(
+                canvas,
+                elName[0],
+                +elName[1],
+                cloned.left,
+                cloned.top,
+                cloned.width,
+                cloned.height
+              );
+            }
+            canvas?.renderAll();
+          });
         } else {
-          console.log({target})
+          console.log({ target });
           target.clone(function (cloned: fabric.Object) {
             cloned.left! += 50;
             cloned.top! += 50;
@@ -436,6 +466,25 @@ export function useDelAndCopy() {
             : CYCLE;
         obj.clone(function (cloned: fabric.Object) {
           cloned.left! += elWidth + 10;
+          cloned.name = newElementName;
+          canvas?.add(cloned);
+        });
+      }else if (
+        elementName.startsWith(QUOTE) &&
+        (obj.name === QUOTE_TEXT ||
+          obj.name === QUOTE_AUTHOR ||
+          obj.name === QUOTE_IMG)
+      ) {
+        let newElementName =
+          obj.name === QUOTE_TEXT
+            ? QUOTE_TEXT
+            : obj.name === QUOTE_AUTHOR
+            ? QUOTE_AUTHOR
+            : obj.name === QUOTE_IMG
+            ? QUOTE_IMG
+            : QUOTE;
+        obj.clone(function (cloned: fabric.Object) {
+          cloned.top! += elHeight + 10;
           cloned.name = newElementName;
           canvas?.add(cloned);
         });

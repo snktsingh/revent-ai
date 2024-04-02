@@ -10,6 +10,7 @@ import {
   QUOTE,
   QUOTE_AUTHOR,
   QUOTE_IMG,
+  QUOTE_TEXT,
   TABLE,
   TABLE_HEADER,
   TABLE_TEXT,
@@ -201,9 +202,9 @@ export const useCanvasComponent = () => {
       elementName.startsWith(TIMELINE_DIRECTION) ||
       elementName.startsWith(TABLE_TEXT) ||
       elementName.startsWith(TABLE_HEADER) || 
-      elementName.startsWith(QUOTE) || 
       elementName.startsWith(QUOTE_IMG) || 
-      elementName.startsWith(QUOTE_AUTHOR) 
+      elementName.startsWith(QUOTE_AUTHOR) ||
+      elementName.startsWith(QUOTE_TEXT)
     ) {
       return true;
     }

@@ -15,6 +15,10 @@ import {
   PROCESS_TEXT,
   PYRAMID,
   PYRAMID_TEXT,
+  QUOTE,
+  QUOTE_AUTHOR,
+  QUOTE_IMG,
+  QUOTE_TEXT,
   TABLE,
   TABLE_HEADER,
   TABLE_TEXT,
@@ -418,6 +422,64 @@ export function useObjectMovingEvent() {
 
           if (
             obj.name?.startsWith(`${TABLE_HEADER}_`) &&
+            obj.intersectsWithObject(movedObject, true, true)
+          ) {
+            obj
+              .set({
+                left: obj.left! + deltaX,
+                top: obj.top! + deltaY,
+              })
+              .setCoords();
+            left = obj.left! + deltaX;
+            top = obj.top! + deltaY;
+          }
+        });
+
+        movedObject.set({
+          lastLeft: movedObject.left,
+          lastTop: movedObject.top,
+        });
+      }else if (objectName[0] === QUOTE ) {
+        const lastLeft = movedObject.get('lastLeft') || movedObject.left;
+        const lastTop = movedObject.get('lastTop') || movedObject.top;
+
+        var deltaX = movedObject.left! - lastLeft!;
+        var deltaY = movedObject.top! - lastTop!;
+
+        canvas.forEachObject(function (obj) {
+          let left;
+          let top;
+
+          if (
+            obj.name?.startsWith(QUOTE_AUTHOR) &&
+            obj.intersectsWithObject(movedObject, true, true)
+          ) {
+            obj
+              .set({
+                left: obj.left! + deltaX,
+                top: obj.top! + deltaY,
+              })
+              .setCoords();
+            left = obj.left! + deltaX;
+            top = obj.top! + deltaY;
+          }
+
+          if (
+            obj.name?.startsWith(QUOTE_TEXT) &&
+            obj.intersectsWithObject(movedObject, true, true)
+          ) {
+            obj
+              .set({
+                left: obj.left! + deltaX,
+                top: obj.top! + deltaY,
+              })
+              .setCoords();
+            left = obj.left! + deltaX;
+            top = obj.top! + deltaY;
+          }
+
+          if (
+            obj.name?.startsWith(QUOTE_IMG) &&
             obj.intersectsWithObject(movedObject, true, true)
           ) {
             obj
