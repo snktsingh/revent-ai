@@ -189,7 +189,8 @@ export const useTableElement = () => {
           top: activeObject?.top! + i * 50 - 50,
           selectable: false,
           hasBorders: false,
-          name: `${TABLE_CELL}_${i}_${Number(row) + 1}`,
+          name: `${TABLE_CELL}_${i}_${Number(col) + 1}`,
+          backgroundColor: i === 1 ? '#7fa7dc' : 'transparent',
         });
 
         const text = new AutoResizingTextbox(``, {
@@ -200,8 +201,11 @@ export const useTableElement = () => {
           left: cell.left! + 2,
           top: cell.top! + 6,
           selectable: true,
-          backgroundColor: theme.colorSchemes.light.palette.common.white,
-          name: `${TABLE_TEXT}_${i}_${Number(col) + 1}`,
+          backgroundColor: i === 1 ? '#7fa7dc' : 'transparent',
+            name:
+              i === 1
+                ? `${TABLE_HEADER}_${i}_${Number(col) + 1}`
+                : `${TABLE_TEXT}_${i}_${Number(col) + 1}`,
           fixedWidth: 150 - 6,
           fixedHeight: 50 - 6,
           lockMovementX: true,
@@ -209,6 +213,8 @@ export const useTableElement = () => {
           hasControls: false,
           borderColor: 'transparent',
           transparentCorners: true,
+          fill:
+              i === 1 ? theme.colorSchemes.light.palette.common.white : 'black',
         });
 
         activeObject.addWithUpdate(cell);
@@ -266,13 +272,15 @@ export const useTableElement = () => {
       console.error('Last text box not found');
       return;
     }
-
     canvas.getObjects().forEach(obj => {
       if (obj.name && obj.name.startsWith(`${TABLE_TEXT}_`)) {
         const [_, i, j] = (obj?.name || '').split('_');
         if (j == col) {
           canvas.remove(obj);
         }
+      }
+      if(obj.name && obj.name.startsWith(`${TABLE_HEADER}_1_${col}`)){
+        canvas.remove(obj);
       }
     });
 

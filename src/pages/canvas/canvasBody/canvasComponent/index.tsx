@@ -61,6 +61,7 @@ const CanvasComponent: React.FC = () => {
   useEffect(() => {
     setShowOptions(false);
     const canvas = new fabric.Canvas('canvas');
+    updateCanvasStyle(canvas);
     canvas.clear();
     fabric.Object.prototype.set({
       cornerStyle: 'circle',
