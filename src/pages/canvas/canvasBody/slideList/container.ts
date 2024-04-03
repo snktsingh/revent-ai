@@ -8,6 +8,7 @@ import { CanvasItem } from '@/interface/storeTypes';
 import { openModal } from '@/redux/reducers/elements';
 
 const useSlideList = () => {
+  const [draggedItemId, setDraggedItemId] = useState(null);
   const dispatch = useAppDispatch();
   const slide = useAppSelector(state => state.slide);
   const { canvasList, canvasJS, activeCanvasID } = useAppSelector(
@@ -66,15 +67,16 @@ const useSlideList = () => {
     dispatch(openModal());
   };
 
-  const handleDragStart = (event : React.DragEvent<HTMLDivElement>, index : number) => {
+  const handleDragStart = (event : React.DragEvent<HTMLDivElement>, index : number, canvas : CanvasItem) => {
     event.dataTransfer.setData('index', index.toString());
+    handleSlideCardClick(canvas);
   };
 
   const handleDragOver = (event : React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
   };
 
-  const handleDrop = (event : React.DragEvent<HTMLDivElement>, newIndex : number) => {
+  const handleDrop = (event : React.DragEvent<HTMLDivElement>, newIndex : number, canvas : CanvasItem) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
     const oldIndexStr = event.dataTransfer.getData('index');
@@ -83,6 +85,7 @@ const useSlideList = () => {
     const [removed] = updatedCanvasList.splice(oldIndex, 1);
     updatedCanvasList.splice(newIndex, 0, removed);
     dispatch(updateCanvasList(updatedCanvasList));
+    // handleSlideCardClick(canvas);
   };
 
   return {
@@ -97,7 +100,7 @@ const useSlideList = () => {
     loadSvgs,
     handleDragOver,
     handleDragStart,
-    handleDrop
+    handleDrop,
   };
 };
 

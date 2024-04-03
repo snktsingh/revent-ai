@@ -49,6 +49,7 @@ import {
 import Templates from './themes';
 import { useCanvasComponent } from './canvasComponent/container';
 import useCanvasData from './canvasComponent/canvasDataExtractor';
+import useVariants from './canvasVariant/container';
 
 const CanvasBody = () => {
   const slide = useAppSelector(state => state.slide);
@@ -73,7 +74,8 @@ const CanvasBody = () => {
   const [activeDislike, setActiveDislike] = useState(false);
   const [elementName, setElementName] = useState<string>('');
   const [elementsDisable, setElementsDisable] = useState<boolean>(false);
-
+  const [variantsIsEmpty, setVariantsIsEmpty] = useState<boolean>(false);
+  const { handleApplyOriginalAsMain } = useVariants();
   const handleLike = () => {
     setActiveLike(!activeLike);
     setActiveDislike(false);
@@ -161,13 +163,13 @@ const CanvasBody = () => {
     if (canvasJS) {
       const canvasIsEmpty =
         (canvasList[canvasJS.id - 1].canvas as any).objects.length === 0;
-      const variantsIsEmpty = canvasJS.variants.length === 0;
+      setVariantsIsEmpty(canvasJS.variants.length === 0);
       if (variantsIsEmpty && canvasIsEmpty) {
-        dispatch(toggleRegenerateButton(true)); // Disable the button
+        dispatch(toggleRegenerateButton(true)); 
       } else if (selectedOriginalCanvas) {
-        dispatch(toggleRegenerateButton(false)); // Enable the button
+        dispatch(toggleRegenerateButton(false)); 
       } else if (!variantsIsEmpty && !selectedOriginalCanvas) {
-        dispatch(toggleRegenerateButton(true)); // Enable the button
+        dispatch(toggleRegenerateButton(true)); 
       }
     }
   }, [canvasJS, dispatch, variantImage, isRegenerateDisabled,enabledElements]);
@@ -234,6 +236,14 @@ const CanvasBody = () => {
                     }
                   />
                 </IconButton>{' '} */}
+                &nbsp;
+                {(!variantsIsEmpty && !selectedOriginalCanvas) && <Button
+                  variant="contained"
+                  size="small"
+                  onClick={() => handleApplyOriginalAsMain()}
+                >
+                  Edit
+                </Button>}
                 &nbsp;
                 <Button
                   variant="contained"
