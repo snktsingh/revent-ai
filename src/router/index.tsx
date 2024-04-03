@@ -10,6 +10,7 @@ import AppThemes from '@/pages/themes';
 import Home from '@/pages/homepage';
 import Protected from '@/protected';
 import UserSettings from '@/pages/userSettings';
+import ActivateAccount from '@/common-ui/activateAccount';
 
 export const authRoutes: RouteObject[] = [
   { path: ROUTES.APP_ROOT, element: <Home /> },
@@ -33,6 +34,7 @@ export const defaultRoutes: RouteObject[] = [
   { path: ROUTES.THEMES, element: <Protected /> },
   { path: ROUTES.CANVAS, element: <Protected /> },
   { path: ROUTES.SETTINGS, element: <UserSettings /> },
+  { path: ROUTES.ACTIVATION, element: <ActivateAccount /> },
   {
     path: '/*',
     element: <NotFound />,

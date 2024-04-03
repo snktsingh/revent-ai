@@ -57,7 +57,7 @@ generateInstance.interceptors.response.use(
   }
 );
 
-class FetchUtilClass {
+class FetchUtilHeaderClass {
   getRequest = async (url: string) => {
     return generateInstance.get(url);
   };
@@ -72,5 +72,75 @@ class FetchUtilClass {
   };
 }
 
-const FetchUtils = new FetchUtilClass();
+const FetchUtils = new FetchUtilHeaderClass();
 export { FetchUtils };
+
+// Instance without headers and Authorization.
+
+export const nonHeaderInstance: AxiosInstance = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  timeout: 30000,
+});
+
+nonHeaderInstance.interceptors.request.use(config => {
+  return config;
+});
+
+nonHeaderInstance.interceptors.response.use(
+  (response: AxiosResponse<any, any>) => {
+    const responsestatusCode = response.status;
+    switch (
+      responsestatusCode
+      // case 200: {
+      //   toast.success(response.data.message);
+      //   break;
+      // }
+    ) {
+    }
+    return response;
+  },
+  (error: AxiosError<any, any>) => {
+    const responseStatusCode = error.response;
+    toast.error(error.response?.data.message);
+    switch (responseStatusCode?.status) {
+      case 404: {
+        toast.error('URL does not exist on specified resource');
+        break;
+      }
+      case 401: {
+        toast.error('User Unauthorized');
+        break;
+      }
+      case 500: {
+        toast.error('Technical Server Error');
+        break;
+      }
+      // default: {
+      //   toast.error('Something went wrong !');
+      // }
+    }
+    if (error.response && error.response.data) {
+      console.log(error);
+      return Promise.reject(error.response.data);
+    }
+    return Promise.reject(error.message);
+  }
+);
+
+class FetchUtilClass {
+  getRequest = async (url: string) => {
+    return nonHeaderInstance.get(url);
+  };
+  postRequest = async (url: string, data: any) => {
+    return nonHeaderInstance.post(url, data);
+  };
+  deleteRequest = async (url: string) => {
+    return nonHeaderInstance.delete(url);
+  };
+  putRequest = async (url: string, data: any) => {
+    return nonHeaderInstance.put(url, data);
+  };
+}
+
+const FetchNonHeaderUtils = new FetchUtilClass();
+export { FetchNonHeaderUtils };
