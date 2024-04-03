@@ -1,5 +1,5 @@
 import { TIMELINE, TIMELINE_CIRCLE, TIMELINE_DIRECTION, TIMELINE_HEADING, TIMELINE_TEXT } from "@/constants/elementNames";
-import { theme } from "@/constants/theme";
+import { customStyles, theme } from "@/constants/theme";
 import { updateTimelineId } from "@/redux/reducers/fabricElements";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { fabric } from "fabric";
@@ -25,7 +25,7 @@ export function useTimelineElement(){
           left: lastCircle.left + 40,
           top: mainContainer.top + 20 + 45,
           strokeWidth: 3,
-          stroke: theme.colorSchemes.light.palette.common.steelBlue,
+          stroke: customStyles.elementColors.cloudyBlue,
           name: `${TIMELINE_DIRECTION}_${currentID}`,
         });
     
@@ -33,7 +33,7 @@ export function useTimelineElement(){
     
         let circle = new fabric.Circle({
           radius: 20,
-          fill: theme.colorSchemes.light.palette.primary.main,
+          fill: customStyles.elementColors.duskyBlue,
           top: mainContainer.top + 20 + 26,
           left: lastCircle.left + 180,
           stroke: theme.colorSchemes.light.palette.common.black,
@@ -57,7 +57,7 @@ export function useTimelineElement(){
             top,
             left,
             width,
-            fill: 'black',
+            fill: theme.colorSchemes.light.palette.common.black,
             name: timelineName,
             hasControls :false
           });
@@ -108,7 +108,7 @@ export function useTimelineElement(){
             top,
             left,
             width,
-            fill: 'black',
+            fill: theme.colorSchemes.light.palette.common.black,
             name: timelineName,
             hasControls :false,
           });
@@ -120,7 +120,7 @@ export function useTimelineElement(){
             left,
             top,
             strokeWidth: 3,
-            stroke: theme.colorSchemes.light.palette.common.steelBlue,
+            stroke: customStyles.elementColors.cloudyBlue,
             name:`${TIMELINE_DIRECTION}_${timelineId}`,
           });
           return canvas?.add(line);
@@ -129,7 +129,7 @@ export function useTimelineElement(){
         function addCircle(left: number, top: number) {
           let circle = new fabric.Circle({
             radius: 20,
-            fill: theme.colorSchemes.light.palette.primary.main,
+            fill: customStyles.elementColors.duskyBlue,
             top,
             left,
             stroke: theme.colorSchemes.light.palette.common.black,

@@ -4,7 +4,7 @@ import {
   PROCESS_BOX,
   PROCESS_TEXT,
 } from '@/constants/elementNames';
-import { theme } from '@/constants/theme';
+import { customStyles, theme } from '@/constants/theme';
 import { updateProcessId } from '@/redux/reducers/fabricElements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import AutoResizingTextbox from '@/utils/fabric-utils/AutoResizingTextbox';
@@ -38,7 +38,7 @@ export const useProcessElement = () => {
     ];
 
     const Arrow = new fabric.Polygon(ArrowPoints, {
-      fill: theme.colorSchemes.light.palette.common.steelBlue,
+      fill: customStyles.elementColors.cloudyBlue,
       left: lastRect.left + 130,
       top: mainContainer.top + 40,
       angle: 0,
@@ -51,7 +51,7 @@ export const useProcessElement = () => {
       top: mainContainer.top + 20,
       width: 110,
       height: 100,
-      fill: theme.colorSchemes.light.palette.primary.main,
+      fill: customStyles.elementColors.duskyBlue,
       rx: 10,
       ry: 10,
       name: `${PROCESS_BOX}_${currentID}`,
@@ -103,7 +103,7 @@ export const useProcessElement = () => {
         top: top,
         width,
         height,
-        fill: theme.colorSchemes.light.palette.primary.main,
+        fill: customStyles.elementColors.duskyBlue,
         rx: 10,
         ry: 10,
         name: `${PROCESS_BOX}_${processId}`,
@@ -139,7 +139,7 @@ export const useProcessElement = () => {
       ];
 
       const Arrow = new fabric.Polygon(ArrowPoints, {
-        fill: theme.colorSchemes.light.palette.common.steelBlue,
+        fill: customStyles.elementColors.cloudyBlue,
         left,
         top,
         angle,

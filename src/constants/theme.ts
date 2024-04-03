@@ -57,3 +57,10 @@ export const theme = extendTheme({
 });
 
 export type Theme = typeof theme;
+
+export const customStyles = {
+  elementColors: {
+    duskyBlue: '#406098',
+    cloudyBlue: '#B0BCDE',
+  },
+};

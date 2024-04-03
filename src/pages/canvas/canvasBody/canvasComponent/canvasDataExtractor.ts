@@ -374,10 +374,24 @@ const useCanvasData = () => {
         enabledEl.push('Title', 'Subtitle');
       } else if (obj.name === 'Image' || obj.name === QUOTE) {
         enabledEl.push('Title', 'Subtitle', 'Image', 'Quotes');
-      } else if (obj.name === TITLE || obj.name === SUBTITLE) {
+      } else if (obj.name === TITLE ) {
+        enabledEl.push(
+          'Subtitle',
+          'Image',
+          'Quotes',
+          'List',
+          'Paragraph',
+          'Bullet',
+          'Table',
+          'Cycle',
+          'Process',
+          'Timeline',
+          'Funnel',
+          'Pyramid'
+        );
+      }else if (obj.name === SUBTITLE ) {
         enabledEl.push(
           'Title',
-          'Subtitle',
           'Image',
           'Quotes',
           'List',
