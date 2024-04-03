@@ -4,11 +4,16 @@ import { useEffect, useState } from 'react';
 import { ListSlideCard, SingleSliderContainer } from '../style';
 import useSlideList from './container';
 import { SlideContainer } from './style';
-import Draggable from 'react-draggable';
+import { DndContext, closestCorners } from '@dnd-kit/core';
+import { SortableContext, arrayMove, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CanvasItem } from '@/interface/storeTypes';
+import { CSS } from '@dnd-kit/utilities';
+import { updateCanvasList } from '@/redux/reducers/canvas';
+interface SingleSlideComponentProps extends CanvasItem {
+  index: number;
+}
+
 export default function SlideList() {
-
-
 
   const {
     handleKeyDown,
@@ -19,7 +24,8 @@ export default function SlideList() {
     loadSvgs,
     handleDragStart,
     handleDragOver,
-    handleDrop
+    handleDrop,
+    dispatch
   } = useSlideList();
 
 
@@ -31,47 +37,83 @@ export default function SlideList() {
     }
   }, [canvasList]);
 
-  const handleDragStop = (e, data, index, canvas) => {
-    const newIndex = Math.round(data.y / data.node.clientHeight);
-    if (newIndex >= 0 && newIndex < canvasList.length && newIndex !== index) {
-      handleDrop(null, newIndex, canvas);
+  const getSlideId = (id: number) => canvasList.findIndex((slide) => slide.id === id);
+
+  const handleDragEnd = (event: any) => {
+    const { active, over } = event;
+    if (active.id === over.id) return;
+
+    const updateCanvasListArray = () => {
+      const originalPos = getSlideId(active.id);
+      const newPos = getSlideId(over.id);
+      return arrayMove(canvasList, originalPos, newPos)
     }
+
+    dispatch(updateCanvasList(updateCanvasListArray()));
+  }
+
+
+  const SingleSlideComponent: React.FC<SingleSlideComponentProps> = ({ index, ...props }) => {
+    const canvas = props;
+
+    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: canvas.id });
+
+    const styles = {
+      transition,
+      transform: CSS.Transform.toString(transform),
+    }
+
+    const allListeners = { ...listeners, onClick: () => handleSlideCardClick(canvas) };
+
+    console.log({ allListeners })
+
+    return (
+      <div
+        ref={setNodeRef}
+        {...attributes}
+        onPointerDown={(event) => {
+
+          handleSlideCardClick(canvas)
+          if (listeners?.onPointerDown) {
+            listeners.onPointerDown(event);
+          }
+        }}
+        onKeyDown={(event) => {
+          if (listeners?.onKeyDown) {
+            listeners.onKeyDown(event);
+          }
+        }}
+        style={styles}
+      >
+        <SingleSliderContainer
+        >
+          <Stack direction="row" spacing={1}>
+            <p>{index + 1}</p>
+            <ListSlideCard
+              className={activeCanvasID == canvas.id ? 'clicked-card' : ''}
+            >
+
+              <SvgViewer svgContent={svgURLs[index]} />
+            </ListSlideCard>
+          </Stack>
+        </SingleSliderContainer>
+        <br />
+      </div>
+    );
   };
 
   return (
-    <SlideContainer>
-      {canvasList.map((canvas, index) => {
-        return (
-          <Draggable
-          axis="y"
-          bounds="parent"
-          onStop={(e, data) => handleDragStop(e, data, index, canvas)}
-          key={canvas.id}
-          >
-            <div key={canvas.id}>
-              <SingleSliderContainer
-                onClick={() => handleSlideCardClick(canvas)}
-                // draggable
-                // onDragStart={e => handleDragStart(e, index, canvas)}
-                // onDragOver={handleDragOver}
-                // onDrop={e => handleDrop(e, index, canvas)}
-                isDragging={canvas.id === activeCanvasID}
-              >
-                <Stack direction="row" spacing={1}>
-                  <p>{index + 1}</p>
-                  <ListSlideCard
-                    className={activeCanvasID == canvas.id ? 'clicked-card' : ''}
-                  >
-                    <SvgViewer svgContent={svgURLs[index]} />
-                  </ListSlideCard>
-                </Stack>
-              </SingleSliderContainer>
-              <br />
-            </div>
-          </Draggable>
-        );
-      })}
-      <br />
-    </SlideContainer>
+    <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
+      <SlideContainer>
+        <SortableContext items={canvasList} strategy={verticalListSortingStrategy}>
+          {canvasList.map((canvas, index) => {
+            return (
+              <SingleSlideComponent key={canvas.id} {...canvas} index={index} />
+            );
+          })}
+        </SortableContext>
+        <br />
+      </SlideContainer>
+    </DndContext>
   );
 }

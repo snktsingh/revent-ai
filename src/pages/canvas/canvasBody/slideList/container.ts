@@ -101,6 +101,7 @@ const useSlideList = () => {
     handleDragOver,
     handleDragStart,
     handleDrop,
+    dispatch
   };
 };
 
