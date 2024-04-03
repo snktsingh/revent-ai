@@ -8,6 +8,7 @@ import {
   CYCLE_TEXT,
   FUNNEL,
   FUNNEL_TEXT,
+  LIST_MAIN,
   PARAGRAPH,
   PROCESS,
   PROCESS_TEXT,
@@ -254,7 +255,7 @@ const useCanvasData = () => {
       return { data, title, subTitle, templateName, shape };
     });
     outputFormat.elements = modifiedRequestFormat;
-    if ( tableData?.tableData.length && tableData.tableData.length > 0) {
+    if (tableData?.tableData.length && tableData.tableData.length > 0) {
       outputFormat.elements = [];
       tableData.title = titleText;
       tableData.subTitle = subTitleText;
@@ -352,65 +353,90 @@ const useCanvasData = () => {
   function createDisabledElements(objects: any[]) {
     let enabledEl: string[] = [];
 
-    objects.forEach(obj => {
-      if (
-        obj.name === 'Cover' ||
-        obj.name === 'Section' ||
-        obj.name === 'Conclusion'
-      ) {
-        enabledEl = [];
-      } else if (
-        obj.name.startsWith(PYRAMID) ||
-        obj.name.startsWith(FUNNEL) ||
-        obj.name.startsWith(TIMELINE) ||
-        obj.name.startsWith(PROCESS) ||
-        obj.name.startsWith(CYCLE) ||
-        obj.name.startsWith(TABLE) ||
-        obj.name.startsWith('LIST_ELEMENT') ||
-        obj.name.startsWith(QUOTE) ||
-        obj.name.startsWith(BULLET_POINTS) ||
-        obj.name.startsWith(PARAGRAPH)
-      ) {
-        enabledEl.push('Title', 'Subtitle');
-      } else if (obj.name === 'Image' || obj.name === QUOTE) {
-        enabledEl.push('Title', 'Subtitle', 'Image', 'Quotes');
-      } else if (obj.name === TITLE ) {
-        enabledEl.push(
-          'Subtitle',
-          'Image',
-          'Quotes',
-          'List',
-          'Paragraph',
-          'Bullet',
-          'Table',
-          'Cycle',
-          'Process',
-          'Timeline',
-          'Funnel',
-          'Pyramid'
-        );
-      }else if (obj.name === SUBTITLE ) {
-        enabledEl.push(
-          'Title',
-          'Image',
-          'Quotes',
-          'List',
-          'Paragraph',
-          'Bullet',
-          'Table',
-          'Cycle',
-          'Process',
-          'Timeline',
-          'Funnel',
-          'Pyramid'
-        );
-      }
-    });
+    const isTitleAdded = objects.some(obj => obj.name === TITLE);
+    const isSubtitleAdded = objects.some(obj => obj.name === SUBTITLE);
+    const isCoverSectionOrConclusionAdded = objects.some(obj =>
+      ['Cover', 'Section', 'Conclusion'].some(elName =>
+        obj.name.startsWith(elName)
+      )
+    );
+    const isShapeAdded = objects.some(obj =>
+      [
+        PYRAMID,
+        FUNNEL,
+        TIMELINE,
+        PROCESS,
+        CYCLE,
+        TABLE,
+        LIST_MAIN,
+        QUOTE,
+        BULLET_POINTS,
+        PARAGRAPH,
+      ].some(elName => obj.name.startsWith(elName))
+    );
 
-    if(objects.length === 0 ) {
-      enabledEl = [
-        'Title',
-        'Subtitle',
+    if (isCoverSectionOrConclusionAdded) {
+      enabledEl = [];
+    } else if (isShapeAdded && isTitleAdded && isSubtitleAdded) {
+      enabledEl = [];
+    } else if (isShapeAdded && isTitleAdded) {
+      enabledEl.push('Subtitle');
+    } else if (isShapeAdded && isSubtitleAdded) {
+      enabledEl.push('Title');
+    } else if (isShapeAdded) {
+      enabledEl.push('Title', 'Subtitle');
+    } else if (isTitleAdded && isSubtitleAdded) {
+      enabledEl.push(
+        'Image',
+        'Quotes',
+        'List',
+        'Paragraph',
+        'Bullet',
+        'Table',
+        'Cycle',
+        'Process',
+        'Timeline',
+        'Funnel',
+        'Pyramid'
+      );
+    } else if (isTitleAdded) {
+      enabledEl.push(
+        'Image',
+        'Quotes',
+        'List',
+        'Paragraph',
+        'Bullet',
+        'Table',
+        'Cycle',
+        'Process',
+        'Timeline',
+        'Funnel',
+        'Pyramid',
+        'Subtitle'
+      );
+    } else if (isSubtitleAdded) {
+      enabledEl.push(
+        'Image',
+        'Quotes',
+        'List',
+        'Paragraph',
+        'Bullet',
+        'Table',
+        'Cycle',
+        'Process',
+        'Timeline',
+        'Funnel',
+        'Pyramid',
+        'Title'
+      );
+    } else {
+      if (!isTitleAdded) {
+        enabledEl.push('Title');
+      }
+      if (!isSubtitleAdded) {
+        enabledEl.push('Subtitle');
+      }
+      enabledEl.push(
         'Image',
         'Quotes',
         'List',
@@ -424,8 +450,8 @@ const useCanvasData = () => {
         'Pyramid',
         'Cover Slide',
         'Section Slide',
-        'Conclusion Slide',
-      ];
+        'Conclusion Slide'
+      );
     }
 
     dispatch(setEnabledElements(enabledEl));
@@ -433,7 +459,7 @@ const useCanvasData = () => {
 
   return {
     getElementsData,
-    createDisabledElements
+    createDisabledElements,
   };
 };
 
