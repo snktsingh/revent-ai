@@ -68,6 +68,7 @@ const dispatch = useAppDispatch();
     let cycleSteps = countObjects(canvas, `${CYCLE_TEXT}_${currentElementId}`);
     let pLevels = countObjects(canvas, `${PYRAMID_TEXT}_${currentElementId}`);
     let fLevels = countObjects(canvas, `${FUNNEL_TEXT}_${currentElementId}`);
+    let listCount = countObjects(canvas, LIST_MAIN);
 
     let showPlusIcon = false;
     let showTableIcons = false;
@@ -81,7 +82,7 @@ const dispatch = useAppDispatch();
         (objectName[0] === TIMELINE && timelineLevels < 6) ||
         (objectName[0] === FUNNEL && fLevels < 6) ||
         (objectName[0] === CYCLE && cycleSteps < 6) ||
-        objectName[0] === LIST_MAIN
+        objectName[0] === LIST_MAIN && listCount < 8
       ) {
         showPlusIcon = true; 
       }

@@ -88,7 +88,7 @@ export function useTimelineElement(){
             });
           }
         });
-    
+        canvas.discardActiveObject();
         canvas?.renderAll();
       };
     // new timeline

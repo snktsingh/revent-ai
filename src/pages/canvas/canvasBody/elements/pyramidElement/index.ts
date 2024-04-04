@@ -70,6 +70,7 @@ export function usePyramidElement() {
       });
 
       canvas.add(text);
+      canvas.discardActiveObject()
       canvas?.requestRenderAll();
     }
   };

@@ -63,10 +63,6 @@ export default function SlideList() {
       transform: CSS.Transform.toString(transform),
     }
 
-    const allListeners = { ...listeners, onClick: () => handleSlideCardClick(canvas) };
-
-    console.log({ allListeners })
-
     return (
       <div
         ref={setNodeRef}
@@ -105,7 +101,7 @@ export default function SlideList() {
   return (
     <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
       <SlideContainer>
-        <SortableContext items={canvasList} strategy={verticalListSortingStrategy}>
+        <SortableContext items={canvasList} strategy={verticalListSortingStrategy} >
           {canvasList.map((canvas, index) => {
             return (
               <SingleSlideComponent key={canvas.id} {...canvas} index={index} />

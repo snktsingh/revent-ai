@@ -86,7 +86,7 @@ export const useProcessElement = () => {
     canvas.add(rect);
     canvas.add(Arrow);
     canvas.add(text);
-
+    canvas.discardActiveObject()
     canvas.renderAll();
   };
   // new process

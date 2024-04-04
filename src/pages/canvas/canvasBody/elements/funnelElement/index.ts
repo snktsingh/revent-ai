@@ -70,7 +70,7 @@ export function useFunnelElement() {
     });
 
     canvas.add(text);
-
+    canvas.discardActiveObject()
     canvas.requestRenderAll();
 }
 

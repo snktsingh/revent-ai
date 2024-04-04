@@ -97,6 +97,8 @@ const ElementEditBar: React.FC<ElementEditBarProps> = ({ left, top, canvas }) =>
         }
     }, [canvas?.getActiveObject(), left, top]);
 
+    useEffect(() => { console.log({plusIcon})}, [plusIcon]);
+
 
     return (
         <EditBarContainer left={position.l} top={position.t}>

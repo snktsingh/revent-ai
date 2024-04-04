@@ -56,6 +56,7 @@ export function useListElement(){
         // canvas?.add(addImage);
         canvas?.add(group);
         canvas?.add(text);
+        canvas?.discardActiveObject()
         canvas?.renderAll();
       };
 
