@@ -30,7 +30,7 @@ const BreadCrumb = () => {
       };
 
     return (
-        <Box sx={{ m: '2% 0 0 8%' }}>
+        <Box sx={{ m: '1% 0 0 8%' }}>
             <Breadcrumbs>
                 <Chip label="Home" icon={<Home sx={{ fontSize: '1.2rem' }} />} sx={ChipStyle} onClick={handleNavigateHome}/>
                 {previousEndpoint === ROUTES.CANVAS && <Breadcrumbs>
