@@ -120,7 +120,6 @@ const CanvasComponent: React.FC = () => {
         canvas.on('object:scaling', options => onObjectScalingEvent(options, canvas));
         canvas.on('mouse:down', options => onMouseDownEvent(options, canvas));
 
-
         canvas.renderAll();
       },
       (error: Error) => {

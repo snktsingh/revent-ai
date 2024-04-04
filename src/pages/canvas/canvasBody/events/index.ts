@@ -67,7 +67,7 @@ const useCanvasEvents = () => {
 
   const onTextEditingEnteredEvent = (event: IEvent, canvas: fabric.Canvas) => {
     if (event.target) {
-      textEnteringEvent(canvas, event.target);
+      // textEnteringEvent(canvas, event.target);
     }
     updateCanvasSlideData(canvas, canvasJS.id);
   };
@@ -120,6 +120,9 @@ const useCanvasEvents = () => {
   };
 
   const onSelectionClearedEvent = (event: IEvent, canvas: fabric.Canvas) => {
+    if(event.deselected){
+      textExitedEvent(canvas, event.deselected[0]);
+    }
     updateCanvasSlideData(canvas, canvasJS.id);
     getElementsData(
       canvas.toObject(customFabricProperties)?.objects,
@@ -143,6 +146,10 @@ const useCanvasEvents = () => {
   };
 
   const onMouseDownEvent = (options: IEvent, canvas: fabric.Canvas) => {
+    if(options.target) {
+      removePlaceholderText(canvas,options.target);
+    }
+
     const pointer: any = canvas.getPointer(options.e);
 
     const objectsAtPointer = canvas.getObjects().filter(obj => {
