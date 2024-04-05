@@ -97,7 +97,7 @@ const ElementEditBar: React.FC<ElementEditBarProps> = ({ left, top, canvas }) =>
         }
     }, [canvas?.getActiveObject(), left, top]);
 
-    useEffect(() => { console.log({plusIcon})}, [plusIcon]);
+    useEffect(() => { }, [plusIcon]);
 
 
     return (

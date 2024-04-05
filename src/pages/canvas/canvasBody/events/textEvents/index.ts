@@ -104,9 +104,6 @@ export function useTextEvents() {
         textBox.text === 'Click to add a bullet point'
       ) {
         textBox.set({ text: '' });
-        textBox.set({
-          fill: theme.colorSchemes.light.palette.common.black,
-        });
         textBox.enterEditing();
         // textBox.selectAll();
       } else if (
@@ -116,9 +113,9 @@ export function useTextEvents() {
           textBox.name?.startsWith(TIMELINE_HEADING))
       ) {
         // textBox.set({ text: '' });
-        textBox.set({
-          fill: theme.colorSchemes.light.palette.common.black,
-        });
+        // textBox.set({
+        //   fill: theme.colorSchemes.light.palette.common.black,
+        // });
         textBox.enterEditing();
         textBox.selectAll();
       } else if (
@@ -228,9 +225,9 @@ export function useTextEvents() {
     ) {
       if (textBox.text == '') {
         textBox.text = 'Add Text';
-        textBox.set({
-          fill: '#404040',
-        });
+        // textBox.set({
+        //   fill: '#404040',
+        // });
       }
       canvas.renderAll();
     } else if (textBox.name?.startsWith(TIMELINE_HEADING)) {
@@ -247,9 +244,9 @@ export function useTextEvents() {
     ) {
       if (textBox.text == '') {
         textBox.text = 'Add Text';
-        textBox.set({
-          fill: theme.colorSchemes.light.palette.common.white,
-        });
+        // textBox.set({
+        //   fill: theme.colorSchemes.light.palette.common.white,
+        // });
       }
       canvas.renderAll();
     }
