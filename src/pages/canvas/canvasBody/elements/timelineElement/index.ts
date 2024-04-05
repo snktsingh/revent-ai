@@ -11,37 +11,39 @@ export function useTimelineElement(){
         const currentID = activeTimeline?.name?.split("_")[1];
         let lastCircle: any;
         let mainContainer: any;
+        let circleCount = 0;
     
         canvas.forEachObject(obj => {
           if (obj.name == `${TIMELINE_CIRCLE}_${currentID}`) {
             lastCircle = obj;
+            circleCount++;
           }
           if (obj.name == `${TIMELINE}_${currentID}`) {
             mainContainer = obj;
           }
         });
-    
-        let line = new fabric.Line([50, 100, 200, 100], {
+
+        
+        let lineWidth = circleCount === 4? 150 : 200;
+        let line = new fabric.Line([50, 100, lineWidth, 100], {
           left: lastCircle.left + 40,
-          top: mainContainer.top + 20 + 45,
+          top: lastCircle.top + 18,
           strokeWidth: 3,
           stroke: customStyles.elementColors.cloudyBlue,
           name: `${TIMELINE_DIRECTION}_${currentID}`,
         });
     
-        canvas?.add(line);
-    
+        
         let circle = new fabric.Circle({
           radius: 20,
           fill: customStyles.elementColors.duskyBlue,
-          top: mainContainer.top + 20 + 26,
+          top: lastCircle.top,
           left: lastCircle.left + 180,
           stroke: theme.colorSchemes.light.palette.common.black,
           name: `${TIMELINE_CIRCLE}_${currentID}`,
         });
     
-        canvas?.add(circle);
-    
+        
         function addText(
           left: number,
           top: number,
@@ -49,7 +51,7 @@ export function useTimelineElement(){
           fontSize: number,
           textContent: string,
           timelineName: string
-        ) {
+          ) {
           let text = new fabric.Textbox(textContent, {
             fontSize,
             originX: 'left',
@@ -63,18 +65,46 @@ export function useTimelineElement(){
           });
           return canvas?.add(text);
         }
-    
-        addText(
+
+        if(circleCount === 4) {
+          line.left = mainContainer.left! + 8;
+          line.top = mainContainer.top! + 220;
+
+          circle.left = mainContainer.left! + 108;
+          circle.top = mainContainer.top! + 201;
+
+          addText(
+            circle.left! - 20,
+            circle.top! - 25,
+            100,
+            14,
+            'Add Timeline',
+            `${TIMELINE_HEADING}_${currentID}`
+          );
+
+          addText(
+            circle.left! - 20,
+            circle.top! + 53,
+            150,
+            16,
+            'Add Text',
+            `${TIMELINE_TEXT}_${currentID}`
+          );
+        }
+        
+        canvas?.add(line);
+        canvas?.add(circle);
+        circleCount !== 4 && addText(
           lastCircle.left + 170,
-          mainContainer.top + 20,
+          lastCircle.top - 25,
           100,
           14,
           'Add Timeline',
           `${TIMELINE_HEADING}_${currentID}`
         );
-        addText(
+        circleCount !== 4 && addText(
           lastCircle.left + 170,
-          mainContainer.top + 20 + 79,
+          lastCircle.top + 53,
           150,
           16,
           'Add Text',
@@ -84,7 +114,8 @@ export function useTimelineElement(){
         canvas.forEachObject(obj => {
           if (obj.name == `${TIMELINE}_${currentID}`) {
             obj.set({
-              width: obj.width! + 180,
+              width: circleCount < 4? obj.width! + 170 : obj.width,
+              height : circleCount === 4? obj.height! + 160 : obj.height!
             });
           }
         });

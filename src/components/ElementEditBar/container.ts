@@ -79,7 +79,7 @@ const dispatch = useAppDispatch();
       if (
         (objectName[0] === PYRAMID && pLevels < 6) ||
         (objectName[0] === PROCESS && processStepsTotal < 6) ||
-        (objectName[0] === TIMELINE && timelineLevels < 6) ||
+        (objectName[0] === TIMELINE && timelineLevels < 8) ||
         (objectName[0] === FUNNEL && fLevels < 6) ||
         (objectName[0] === CYCLE && cycleSteps < 6) ||
         objectName[0] === LIST_MAIN && listCount < 8
@@ -91,7 +91,7 @@ const dispatch = useAppDispatch();
     if (
       (objectName && objectName[0] === PYRAMID && pLevels >= 6) ||
       (objectName && objectName[0] === PROCESS && processStepsTotal >= 6) ||
-      (objectName && objectName[0] === TIMELINE && timelineLevels >= 6) ||
+      (objectName && objectName[0] === TIMELINE && timelineLevels >= 8) ||
       (objectName && objectName[0] === FUNNEL && fLevels >= 6) ||
       (objectName && objectName[0] === CYCLE && cycleSteps >= 6)
     ) {
