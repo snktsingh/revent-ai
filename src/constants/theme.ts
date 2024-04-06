@@ -43,7 +43,7 @@ export const theme = extendTheme({
           border: '#D9D9D9',
           subtext: '#A9A9A9',
           steelBlue: '#B0BCDE',
-          gray : '#B9BABB'
+          gray: '#B9BABB',
         },
         primary: {
           main: '#004FBA',
@@ -57,3 +57,17 @@ export const theme = extendTheme({
 });
 
 export type Theme = typeof theme;
+
+interface customStylesType {
+  elementColors: {
+    duskyBlue: string;
+    cloudyBlue: string;
+  };
+}
+
+export const customStyles: customStylesType = {
+  elementColors: {
+    duskyBlue: '#406098',
+    cloudyBlue: '#B0BCDE',
+  },
+};

@@ -11,6 +11,7 @@ import {
   PYRAMID,
   PYRAMID_TEXT,
   QUOTE,
+  QUOTE_TEXT,
   SECTION_SLIDE_SUBTITLE,
   SECTION_SLIDE_TITLE,
   SUBTITLE,
@@ -21,8 +22,10 @@ import {
 import { theme } from '@/constants/theme';
 import { fabric } from 'fabric';
 export function useTextEvents() {
-
-  const removePlaceholderText = (canvas: fabric.Canvas, object: fabric.Object) => {
+  const removePlaceholderText = (
+    canvas: fabric.Canvas,
+    object: fabric.Object
+  ) => {
     if (object instanceof fabric.Textbox) {
       let textBox = object as fabric.Textbox;
       if (
@@ -36,8 +39,9 @@ export function useTextEvents() {
         textBox.set({
           fill: theme.colorSchemes.light.palette.common.black,
         });
-        textBox.enterEditing();
-        textBox.selectAll();
+        if (textBox.isEditing) {
+          textBox.exitEditing();
+        }
       } else if (
         (textBox.text === 'Add Text' &&
           textBox.name?.startsWith(TIMELINE_TEXT)) ||
@@ -48,30 +52,45 @@ export function useTextEvents() {
         textBox.set({
           fill: theme.colorSchemes.light.palette.common.black,
         });
-        textBox.enterEditing();
+        if (!textBox.isEditing) {
+          textBox.enterEditing();
+        }
       } else if (
         textBox.text === 'Add Text' &&
         textBox.name?.startsWith(PROCESS_TEXT)
       ) {
         textBox.set({ text: '' });
-        textBox.enterEditing();
+        if (!textBox.isEditing) {
+          textBox.enterEditing();
+        }
       } else if (
         (textBox.text === 'Add Text' &&
           textBox.name?.startsWith(PYRAMID_TEXT)) ||
         (textBox.text === 'Add Text' && textBox.name?.startsWith(FUNNEL_TEXT))
       ) {
         textBox.set({ text: '' });
-        textBox.enterEditing();
+        if (!textBox.isEditing) {
+          textBox.enterEditing();
+        }
       } else if (
-        textBox.name === QUOTE &&
+        textBox.name === QUOTE_TEXT &&
         textBox.text === '❝Click to add a quote❞'
-        ) {
+      ) {
         textBox.set({ text: '❝❞' });
-        textBox.enterEditing();
-        
+        if (!textBox.isEditing) {
+          textBox.enterEditing();
+        }
+      } else if (
+        textBox.text === 'Add Text' &&
+        textBox.name?.startsWith(CYCLE_TEXT)
+      ) {
+        textBox.set({ text: '' });
+        if (!textBox.isEditing) {
+          textBox.enterEditing();
+        }
       }
-      canvas.requestRenderAll();
     }
+    canvas.renderAll();
   };
 
   const textEnteringEvent = (canvas: fabric.Canvas, object: fabric.Object) => {
@@ -84,12 +103,9 @@ export function useTextEvents() {
         textBox.text === 'Click to add a paragraph' ||
         textBox.text === 'Click to add a bullet point'
       ) {
-        // textBox.set({ text: '' });
-        textBox.set({
-          fill: theme.colorSchemes.light.palette.common.black,
-        });
+        textBox.set({ text: '' });
         textBox.enterEditing();
-        textBox.selectAll();
+        // textBox.selectAll();
       } else if (
         (textBox.text === 'Add Text' &&
           textBox.name?.startsWith(TIMELINE_TEXT)) ||
@@ -97,9 +113,9 @@ export function useTextEvents() {
           textBox.name?.startsWith(TIMELINE_HEADING))
       ) {
         // textBox.set({ text: '' });
-        textBox.set({
-          fill: theme.colorSchemes.light.palette.common.black,
-        });
+        // textBox.set({
+        //   fill: theme.colorSchemes.light.palette.common.black,
+        // });
         textBox.enterEditing();
         textBox.selectAll();
       } else if (
@@ -120,7 +136,7 @@ export function useTextEvents() {
       } else if (
         textBox.name === QUOTE &&
         textBox.text === '❝Click to add a quote❞'
-        ) {
+      ) {
         textBox.enterEditing();
         textBox.selectionStart = 1;
         textBox.selectionEnd = 21;
@@ -129,11 +145,8 @@ export function useTextEvents() {
     }
   };
 
-  const textExitedEvent = (
-    canvas: fabric.Canvas,
-    object: fabric.Textbox | fabric.Text | fabric.IText
-  ) => {
-    let textBox = object;
+  const textExitedEvent = (canvas: fabric.Canvas, object: fabric.Object) => {
+    let textBox = object as fabric.Textbox | fabric.Text | fabric.IText;
     switch (textBox.name) {
       case TITLE:
         if (textBox.text == '') {
@@ -212,9 +225,9 @@ export function useTextEvents() {
     ) {
       if (textBox.text == '') {
         textBox.text = 'Add Text';
-        textBox.set({
-          fill: '#404040',
-        });
+        // textBox.set({
+        //   fill: '#404040',
+        // });
       }
       canvas.renderAll();
     } else if (textBox.name?.startsWith(TIMELINE_HEADING)) {
@@ -231,9 +244,9 @@ export function useTextEvents() {
     ) {
       if (textBox.text == '') {
         textBox.text = 'Add Text';
-        textBox.set({
-          fill: theme.colorSchemes.light.palette.common.white,
-        });
+        // textBox.set({
+        //   fill: theme.colorSchemes.light.palette.common.white,
+        // });
       }
       canvas.renderAll();
     }

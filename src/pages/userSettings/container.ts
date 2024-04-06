@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 const useSettings = () => {
   const { userDetails } = useAppSelector(state => state.manageUser);
   const dispatch = useAppDispatch();
+  
   useEffect(()=>{
     dispatch(getUserDetails());
   },[])
@@ -12,14 +13,14 @@ const useSettings = () => {
   const [userDetailsInputs, setUserDetailsInputs] = useState({
     firstName: userDetails?.firstName || 'Unknown',
     lastName: userDetails?.lastName || 'User',
-    username: 'admin123',
+    username: '',
     email: userDetails?.email || 'example@examplemail.com',
-    phone: '123-456-7890',
-    linkedinUrl: 'https://www.linkedin.com/in/example_username',
+    phone: '',
+    linkedinUrl: '',
     usePreference : 'Personal',
-    companyName : "Revent",
-    roleInCompany : 'Developer',
-    companySize: '10-20'
+    companyName : "",
+    roleInCompany : '',
+    companySize: ''
   });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

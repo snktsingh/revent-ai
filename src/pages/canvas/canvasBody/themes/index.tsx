@@ -29,6 +29,7 @@ import { useCanvasComponent } from '../canvasComponent/container';
 import { toast } from 'react-toastify';
 import ThumbnailPreview from '@/common-ui/thumbnailPreview';
 import useCanvasData from '../canvasComponent/canvasDataExtractor';
+import { ThemesSliderContainer } from './style';
 
 export default function Templates() {
   const {  customFabricProperties } = useCanvasComponent();
@@ -49,11 +50,14 @@ export default function Templates() {
   };
 
   const DrawerHeader = styled('div')(({ theme }) => ({
+    position: 'fixed',
     display: 'flex',
     alignItems: 'center',
     padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
     justifyContent: 'space-between',
+    width: '14vw',
+    background: 'white',
   }));
 
   const [open, setOpen] = useState<boolean>(false);
@@ -105,7 +109,7 @@ export default function Templates() {
       anchor="left"
       open={element.openTemplates}
     >
-      <DrawerHeader>
+      <DrawerHeader >
         <h4>Themes</h4>
         <IconButton onClick={handleDrawerClose}>
           {theme.direction === 'ltr' ? (
@@ -115,7 +119,7 @@ export default function Templates() {
           )}
         </IconButton>
       </DrawerHeader>
-      <SingleSliderContainer>
+      <ThemesSliderContainer>
         <Button onClick={() => dispatch(setNewTheme(true))}>
           <Stack direction="row" spacing={1}>
             <img src={Add} />
@@ -176,7 +180,7 @@ export default function Templates() {
             </Dialog>
           </>
         )}
-      </SingleSliderContainer>
+      </ThemesSliderContainer>
     </Drawer>
   );
 }

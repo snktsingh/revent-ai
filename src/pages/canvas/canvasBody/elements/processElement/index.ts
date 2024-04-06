@@ -4,7 +4,7 @@ import {
   PROCESS_BOX,
   PROCESS_TEXT,
 } from '@/constants/elementNames';
-import { theme } from '@/constants/theme';
+import { customStyles, theme } from '@/constants/theme';
 import { updateProcessId } from '@/redux/reducers/fabricElements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import AutoResizingTextbox from '@/utils/fabric-utils/AutoResizingTextbox';
@@ -17,15 +17,19 @@ export const useProcessElement = () => {
     const currentID = activeProcess?.name?.split('_')[1];
     let lastRect: any;
     let mainContainer: any;
+    let rectCount = 0;
 
     canvas.forEachObject(obj => {
       if (obj.name === `${PROCESS_BOX}_${currentID}`) {
         lastRect = obj;
+        rectCount++;
       }
       if (obj.name == `${PROCESS}_${currentID}`) {
         mainContainer = obj;
       }
     });
+
+    
 
     const ArrowPoints = [
       { x: 100, y: 100 },
@@ -38,9 +42,9 @@ export const useProcessElement = () => {
     ];
 
     const Arrow = new fabric.Polygon(ArrowPoints, {
-      fill: theme.colorSchemes.light.palette.common.steelBlue,
+      fill: customStyles.elementColors.cloudyBlue,
       left: lastRect.left + 130,
-      top: mainContainer.top + 40,
+      top: lastRect.top + 20,
       angle: 0,
       name: `${PROCESS_ARROW}_${currentID}`,
       width: 20,
@@ -48,10 +52,10 @@ export const useProcessElement = () => {
 
     let rect = new fabric.Rect({
       left: Arrow.left! + 60,
-      top: mainContainer.top + 20,
+      top: lastRect.top,
       width: 110,
       height: 100,
-      fill: theme.colorSchemes.light.palette.primary.main,
+      fill: customStyles.elementColors.duskyBlue,
       rx: 10,
       ry: 10,
       name: `${PROCESS_BOX}_${currentID}`,
@@ -75,18 +79,26 @@ export const useProcessElement = () => {
       lockMovementY: true,
     });
 
+    if(rectCount === 3) {
+       rect.left = mainContainer.left!;
+       rect.top = mainContainer.top! + 180;
+       text.left = rect.left! + 5;
+       text.top = rect.top! + 5
+    }
+
     canvas.forEachObject(obj => {
       if (obj.name == `${PROCESS}_${currentID}`) {
         obj.set({
-          width: obj.width! + 200,
+          width: rectCount < 3 ? obj.width! + 200 : obj.width,
+          height: rectCount === 3 ? 300 : obj.height
         });
       }
-    });
+    }); 
 
     canvas.add(rect);
-    canvas.add(Arrow);
+    rectCount !== 3 && canvas.add(Arrow);
     canvas.add(text);
-
+    canvas.discardActiveObject()
     canvas.renderAll();
   };
   // new process
@@ -103,7 +115,7 @@ export const useProcessElement = () => {
         top: top,
         width,
         height,
-        fill: theme.colorSchemes.light.palette.primary.main,
+        fill: customStyles.elementColors.duskyBlue,
         rx: 10,
         ry: 10,
         name: `${PROCESS_BOX}_${processId}`,
@@ -139,7 +151,7 @@ export const useProcessElement = () => {
       ];
 
       const Arrow = new fabric.Polygon(ArrowPoints, {
-        fill: theme.colorSchemes.light.palette.common.steelBlue,
+        fill: customStyles.elementColors.cloudyBlue,
         left,
         top,
         angle,

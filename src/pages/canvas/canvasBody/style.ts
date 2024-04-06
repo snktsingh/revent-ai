@@ -12,7 +12,7 @@ export const SlideCountContainer = styled.div`
   display: flex;
   justify-content: space-between;
 `;
-export const SingleSliderContainer = styled.div<{ isDragging: boolean }>`
+export const SingleSliderContainer = styled.div`
   cursor: pointer;
   display: flex;
   flex-direction: column;

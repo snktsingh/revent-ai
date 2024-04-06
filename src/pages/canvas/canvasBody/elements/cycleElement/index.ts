@@ -4,7 +4,7 @@ import {
   CYCLE_CIRCLE,
   CYCLE_TEXT,
 } from '@/constants/elementNames';
-import { theme } from '@/constants/theme';
+import { customStyles, theme } from '@/constants/theme';
 import { updateCycleId } from '@/redux/reducers/fabricElements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import AutoResizingTextbox from '@/utils/fabric-utils/AutoResizingTextbox';
@@ -24,7 +24,7 @@ export function useCycleElement() {
     ];
 
     const Arrow = new fabric.Polygon(ArrowPoints, {
-      fill: theme.colorSchemes.light.palette.common.steelBlue,
+      fill: customStyles.elementColors.cloudyBlue,
       left,
       top,
       angle,
@@ -62,7 +62,7 @@ export function useCycleElement() {
     const addCircle = (left: number, top: number) => {
       const circle = new fabric.Circle({
         radius: 50,
-        fill: theme.colorSchemes.light.palette.primary.main,
+        fill: customStyles.elementColors.duskyBlue,
         stroke: theme.colorSchemes.light.palette.primary.main,
         top,
         left,
@@ -274,7 +274,7 @@ export function useCycleElement() {
 
       const circle = new fabric.Circle({
         radius: 50,
-        fill: theme.colorSchemes.light.palette.primary.main,
+        fill: customStyles.elementColors.duskyBlue,
         stroke: theme.colorSchemes.light.palette.primary.main,
         top,
         left,

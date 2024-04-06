@@ -124,14 +124,14 @@ export const GridContainer = styled(Grid)`
 
 export const SettingsContainer = styled.div`
   height: 80%;
-  margin: 4vh 8vw;
+  margin: 2.2vh 8vw;
   display: flex;
   justify-content: space-between;
   align-items: start;
 `;
 
 export const SideBar = styled.div`
-  width: 25%;
+  width: 23%;
   height: 100%;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
     rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
@@ -139,11 +139,11 @@ export const SideBar = styled.div`
 `;
 
 export const RightSideContainer = styled.div`
-  width: 70%;
+  width: 75%;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
     rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
   border-radius: 4px;
-  padding-bottom: 3%;
+  padding-bottom: 0.5%;
   position: relative; /* Needed for absolute positioning of background shapes */
 
   /* &::before {
@@ -209,34 +209,40 @@ export const InputContainer = styled.div`
 `;
 
 export const Label = styled.div`
-  font-size: 12px;
+  font-size: 10px;
   color: #666;
   text-transform: uppercase;
 `;
 
 export const StyledInput = styled(TextField)`
   & .MuiInputBase-input {
-    padding-top: 12px;
+    /* padding-top: 12px; */
     width: 250px;
-    font-size: 16px;
+    font-size: 12px;
+    height: 10px;
   }
   && {
-    margin-top: 5px;
+    /* margin-top: 5px; */
   }
 `;
 
 export const StyledSelect = styled(Select)`
   & .MuiSelect-select.MuiSelect-select {
-    padding-top: 12px;
+    /* padding-top: 12px; */
     width: 230px;
-    font-size: 16px;
+    font-size: 12px;
+  }
+  &&{
+    
+
   }
 `;
 
 export const SectionTitleContainer = styled.div`
   width: 100%;
   color: ${theme.colorSchemes.light.palette.primary.main};
-
+  height: 30px;
+  margin : 1.5% 0;
   position: relative;
   &::before {
     content: '';
@@ -252,12 +258,12 @@ export const SectionTitleContainer = styled.div`
 
 export const SectionTitle = styled(Typography)`
   && {
-    font-size: 1.1rem;
+    font-size: 0.8rem;
     font-weight: 550;
     font-family: 'Roboto', sans-serif;
-    margin: 2% 0 2% 6.5%;
+    margin: 0 0 0 2.5%;
     text-transform: uppercase;
-    padding: 2% 0;
+    padding: 0.6% 0;
   }
 `;
 
