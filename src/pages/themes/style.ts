@@ -20,11 +20,10 @@ export const ButtonContainer = styled.span`
   justify-content: flex-end;
 `;
 export const ThemeCard = styled(Card)`
-  width: 246px;
-  height: 140px;
+  width: 14vw;
+  height: 15vh;
+
   cursor: pointer;
-  overflow: hidden;
-  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
 `;
 export const ThemeCardTitle = styled.span`
   margin-bottom: 40px;
@@ -32,13 +31,7 @@ export const ThemeCardTitle = styled.span`
   margin-right: 20px;
 `;
 export const ThemeCardContainer = styled.div`
-  width: fit-content;
-  height: fit-content;
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
-`;
-export const ThemeImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 `;

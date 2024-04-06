@@ -1,115 +1,97 @@
-import SvgViewer from '@/components/canvasSvgViewer';
+import { setActiveCanvas, setCanvas } from '@/redux/reducers/canvas';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { Stack } from '@mui/material';
+import { fabric } from 'fabric';
 import { useEffect, useState } from 'react';
 import { ListSlideCard, SingleSliderContainer } from '../style';
-import useSlideList from './container';
 import { SlideContainer } from './style';
-import { DndContext, closestCorners } from '@dnd-kit/core';
-import { SortableContext, arrayMove, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
-import { CanvasItem } from '@/interface/storeTypes';
-import { CSS } from '@dnd-kit/utilities';
-import { updateCanvasList } from '@/redux/reducers/canvas';
-interface SingleSlideComponentProps extends CanvasItem {
-  index: number;
-}
+import SvgViewer from '@/components/canvasSvgViewer';
+import { useCanvasComponent } from '../canvasComponent/container';
 
 export default function SlideList() {
-
-  const {
-    handleKeyDown,
-    svgURLs,
-    canvasList,
-    activeCanvasID,
-    handleSlideCardClick,
-    loadSvgs,
-    handleDragStart,
-    handleDragOver,
-    handleDrop,
-    dispatch
-  } = useSlideList();
-
-
-  useEffect(() => {
-    loadSvgs();
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    }
-  }, [canvasList]);
-
-  const getSlideId = (id: number) => canvasList.findIndex((slide) => slide.id === id);
-
-  const handleDragEnd = (event: any) => {
-    const { active, over } = event;
-    if (active.id === over.id) return;
-
-    const updateCanvasListArray = () => {
-      const originalPos = getSlideId(active.id);
-      const newPos = getSlideId(over.id);
-      return arrayMove(canvasList, originalPos, newPos)
-    }
-
-    dispatch(updateCanvasList(updateCanvasListArray()));
-  }
-
-
-  const SingleSlideComponent: React.FC<SingleSlideComponentProps> = ({ index, ...props }) => {
-    const canvas = props;
-
-    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: canvas.id });
-
-    const styles = {
-      transition,
-      transform: CSS.Transform.toString(transform),
-    }
-
-    return (
-      <div
-        ref={setNodeRef}
-        {...attributes}
-        onPointerDown={(event) => {
-
-          handleSlideCardClick(canvas)
-          if (listeners?.onPointerDown) {
-            listeners.onPointerDown(event);
-          }
-        }}
-        onKeyDown={(event) => {
-          if (listeners?.onKeyDown) {
-            listeners.onKeyDown(event);
-          }
-        }}
-        style={styles}
-      >
-        <SingleSliderContainer
-        >
-          <Stack direction="row" spacing={1}>
-            <p>{index + 1}</p>
-            <ListSlideCard
-              className={activeCanvasID == canvas.id ? 'clicked-card' : ''}
-            >
-
-              <SvgViewer svgContent={svgURLs[index]} />
-            </ListSlideCard>
-          </Stack>
-        </SingleSliderContainer>
-        <br />
-      </div>
-    );
+  const dispatch = useAppDispatch();
+  const slide = useAppSelector(state => state.slide);
+  const { canvasList, canvasJS, activeCanvasID } = useAppSelector(
+    state => state.canvas
+  );
+  const { updateCanvasDimensions } = useCanvasComponent()
+  const handleCardClick = (id: number) => {
+    dispatch(setActiveCanvas(id));
   };
 
+  const [svgURLs, setsvgURLs] = useState<string[]>([]); // State to hold svg URLs
+
+  const getImg = async (canvasJson: Object) => {
+    const canvas = new fabric.Canvas(null);
+
+    return new Promise<string>((resolve, reject) => {
+      try {
+        canvas.loadFromJSON(canvasJson, () => {
+          // canvas.width = 970;
+          // canvas.height = 500;
+          updateCanvasDimensions(canvas);
+          const svgURL = canvas.toSVG();
+          resolve(svgURL);
+        });
+      } catch (error) {
+        console.log(error);
+        reject('Error occurred while loading canvas');
+      }
+    });
+  };
+
+  useEffect(() => {
+    const loadSvgs = async () => {
+      const urls: string[] = [];
+      for (const canvas of canvasList) {
+        try {
+          const svgURL = await getImg(canvas.canvas);
+          urls.push(svgURL);
+        } catch (error) {
+          console.error(error);
+          urls.push('error'); // Push placeholder for error cases
+        }
+      }
+      setsvgURLs(urls);
+    };
+
+    loadSvgs();
+  }, [canvasList]);
+
   return (
-    <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
-      <SlideContainer>
-        <SortableContext items={canvasList} strategy={verticalListSortingStrategy} >
-          {canvasList.map((canvas, index) => {
-            return (
-              <SingleSlideComponent key={canvas.id} {...canvas} index={index} />
-            );
-          })}
-        </SortableContext>
-        <br />
-      </SlideContainer>
-    </DndContext>
+    <SlideContainer>
+      {canvasList.map((canvas, index) => {
+        return (
+          <div key={canvas.id}>
+            <SingleSliderContainer
+              onClick={() => {
+                dispatch(setCanvas(canvas));
+                handleCardClick(canvas.id);
+              }}
+            >
+              <Stack direction="row" spacing={1}>
+                <p>{index + 1}</p>
+                <ListSlideCard
+                  className={activeCanvasID == canvas.id ? 'clicked-card' : ''}
+                >
+                  {/* <img
+                    src={svgURLs[index] || 'placeholder-for-error'}
+                    alt={`canvas-${index}`}
+                    style={{
+                      width: '100%',
+                      objectFit: 'contain',
+                      height: '100%',
+                    }}
+                  /> */}
+              <SvgViewer svgContent={svgURLs[index]}/>
+                </ListSlideCard>
+              </Stack>
+            </SingleSliderContainer>
+            <br />
+          </div>
+        );
+      })}
+      <br />
+    </SlideContainer>
   );
 }

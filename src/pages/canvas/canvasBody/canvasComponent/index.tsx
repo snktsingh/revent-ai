@@ -1,68 +1,89 @@
-import ElementEditBar from '@/components/ElementEditBar';
 import { theme } from '@/constants/theme';
 import { toggleRegenerateButton } from '@/redux/reducers/slide';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { fabric } from 'fabric';
 import React, { useEffect, useRef } from 'react';
-import useCanvasEvents from '../events';
-import useCanvasData from './canvasDataExtractor';
+import {
+  useBulletOrNumberedText,
+  useCustomSelectionIcons,
+  useDelAndCopy,
+} from '../elements/elementExports';
+import {
+  useCanvasClickEvent,
+  useObjectMovingEvent,
+  useSelectionCreatedEvent,
+  useTextEvents,
+} from '../events/eventExports';
 import { useCanvasComponent } from './container';
 import { useElementFunctions } from './elementFunctions';
 import FullscreenCanvas from './fullscreenCanvas';
 import { CanvasContainer } from './style';
+import { IExtendedTextBoxOptions } from '@/interface/fabricTypes';
+import ConversionToJson from '@/components/pptToJson';
+import { setVariantImageAsMain } from '@/redux/reducers/canvas';
 
 const CanvasComponent: React.FC = () => {
-  const FabricRef = useRef<fabric.Canvas | null>(null);
   const canvasRef = useRef<fabric.Canvas | null>(null);
-  const ContainerRef = useRef<HTMLDivElement | null>(null);
-
-  const {
-    updateCanvasDimensions,
-    updateCanvasSlideData,
-    customFabricProperties,
-    handleElementBarSelection,
-    showOptions,
-    setShowOptions,
-    selectedElementPosition,
-    canvasClickEvent,
-    handleKeyDown,
-    handleWindowResize,
-    forEachCanvasObject,
-    updateCanvasStyle
-  } = useCanvasComponent();
+  const FabricRef = useRef<fabric.Canvas | null>(null);
+  const Container = useRef<HTMLDivElement | null>(null);
 
   const ElementFunctions = useElementFunctions(canvasRef.current);
 
-
-  const { getElementsData } = useCanvasData();
+  const { handleAddCustomIcon } = useCustomSelectionIcons();
+  const { CustomBorderIcons } = useDelAndCopy();
+  const { renderBulletOrNumTextLine } = useBulletOrNumberedText();
+  const { handleObjectMoving } = useObjectMovingEvent();
+  const { handleSelectionCreated } = useSelectionCreatedEvent();
+  const { textExitedEvent, textEnteringEvent } = useTextEvents();
+  const { CanvasClick } = useCanvasClickEvent();
+  const { jsonData, themeCode, themeName } = useAppSelector(state => state.slideTheme);
   const {
-    onDoubleClickEvent,
-    onMouseDownEvent,
-    onObjectAddedEvent,
-    onObjectModifiedEvent,
-    onObjectMovingEvent,
-    onObjectRemovedEvent,
-    onObjectScalingEvent,
-    onSelectionClearedEvent,
-    onSelectionCreatedEvent,
-    onTextChangedEvent,
-    onTextEditingEnteredEvent,
-    onTextEditingExitedEvent
-  } = useCanvasEvents();
-  const { themeCode, themeName } = useAppSelector(state => state.slideTheme);
+    updateCanvasDimensions,
+    updateCanvasSlideData,
+    getElementsData,
+    customFabricProperties,
+    extractTableData,
+  } = useCanvasComponent();
 
   const dispatch = useAppDispatch();
 
   const { canvasJS, variantImage, selectedOriginalCanvas } = useAppSelector(state => state.canvas);
 
+  const { pptUrl, imageUrl, variants } = useAppSelector(state => state.thunk);
 
-
+  // useEffect(() => {
+  //   if (canvasRef.current) {
+  //     canvasRef.current.clear();
+  //     console.log(jsonData);
+  //     // canvasRef.current.loadFromJSON(
+  //     //   {
+  //     //     left: 34.27,
+  //     //     top: 2.83,
+  //     //     width: 450.15,
+  //     //     height: 63.11,
+  //     //     borderColor: '#000',
+  //     //     borderWidth: 0,
+  //     //     borderType: 'solid',
+  //     //     borderStrokeDasharray: '0',
+  //     //     fillColor: '',
+  //     //     isFlipV: false,
+  //     //     isFlipH: false,
+  //     //     rotate: 0,
+  //     //     vAlign: 'up',
+  //     //     name: 'TextBox 18',
+  //     //     type: 'text',
+  //     //     isVertical: false,
+  //     //   },
+  //     //   () => {
+  //     //     canvasRef.current?.renderAll();
+  //     //   }
+  //     // );
+  //   }
+  // }, [jsonData]);
 
   useEffect(() => {
-    setShowOptions(false);
-    const canvas = new fabric.Canvas('canvas');
-    updateCanvasStyle(canvas);
-    canvas.clear();
+    const newCanvas = new fabric.Canvas('canvas');
+    newCanvas.clear();
     fabric.Object.prototype.set({
       cornerStyle: 'circle',
       transparentCorners: false,
@@ -72,98 +93,188 @@ const CanvasComponent: React.FC = () => {
       cornerStrokeColor: 'grey',
     });
     fabric.Object.prototype.objectCaching = false;
-    canvas.loadFromJSON(
+    newCanvas.loadFromJSON(
       canvasJS.canvas,
       () => {
-        updateCanvasStyle(canvas);
-        updateCanvasDimensions(canvas);
-        canvasRef.current = canvas;
-        getElementsData(
-          canvas.toObject(customFabricProperties)?.objects,
-          themeCode, themeName
+        updateCanvasDimensions(newCanvas);
+        console.log('main canvas loaded');
+        canvasRef.current = newCanvas;
+        newCanvas.setBackgroundColor(
+          `${theme.colorSchemes.light.palette.common.white}`,
+          newCanvas.renderAll.bind(newCanvas)
         );
 
+        newCanvas.enableRetinaScaling = true;
+        newCanvas.selectionColor = 'transparent';
+        newCanvas.selectionBorderColor =
+          theme.colorSchemes.light.palette.common.steelBlue;
+        newCanvas.selectionLineWidth = 0.5;
 
-        if (canvas.toObject(customFabricProperties)?.objects.length >= 1) {
+        CustomBorderIcons(newCanvas);
+        
+        newCanvas.forEachObject(obj => {
+          if (obj) {
+            if ((obj as IExtendedTextBoxOptions)?.listType == 'bullet') {
+              (obj as IExtendedTextBoxOptions)._renderTextLine =
+                renderBulletOrNumTextLine;
+            }
+          }
+        });
+        newCanvas.on('mouse:up', event => {
+          CanvasClick(newCanvas, event);
+        });
+        newCanvas.on('text:editing:exited', event => {
+          textExitedEvent(newCanvas, event.target as fabric.Text);
+          updateCanvasSlideData(newCanvas, canvasJS.id);
+        });
+        newCanvas.on('text:editing:entered', event => {
+          textEnteringEvent(newCanvas, event.target as fabric.Text);
+          updateCanvasSlideData(newCanvas, canvasJS.id);
+        });
+        newCanvas.on('selection:created', function (event) {
+          handleSelectionCreated(canvas, event);
+        });
+        window.addEventListener('resize', () =>
+          updateCanvasDimensions(newCanvas)
+        );
+        if (newCanvas.toObject(customFabricProperties)?.objects.length >= 1) {
           dispatch(toggleRegenerateButton(false));
         } else {
           dispatch(toggleRegenerateButton(true));
         }
+        newCanvas.on('object:added', e => {
+          // console.log(newCanvas.toJSON());
+          updateCanvasSlideData(newCanvas, canvasJS.id);
+          getElementsData(
+            newCanvas.toObject(customFabricProperties)?.objects,
+            themeCode, themeName
+          );
+          // console.log(newCanvas.toObject(customFabricProperties)?.objects);
 
-        updateCanvasSlideData(canvas, canvasJS.id);
-
-        forEachCanvasObject(canvas);
-        // canvas Events
-        canvas.on('selection:created', handleElementBarSelection);
-        canvas.on('selection:updated', handleElementBarSelection);
-
-        canvas.on('selection:cleared', () => {
-          setShowOptions(false);
+          if (newCanvas.toObject()?.objects.length >= 1) {
+            dispatch(toggleRegenerateButton(false));
+          } else {
+            dispatch(toggleRegenerateButton(true));
+          }
         });
-        canvas.on('text:changed', options => onTextChangedEvent(options, canvas));
-        canvas.on('mouse:dblclick', event => onDoubleClickEvent(event, canvas));
-        canvas.on('text:editing:exited', event =>
-          onTextEditingExitedEvent(event, canvas)
-        );
-        canvas.on('text:editing:entered', event =>
-          onTextEditingEnteredEvent(event, canvas)
-        );
-        canvas.on('selection:created', (event) =>
-          onSelectionCreatedEvent(event, canvas)
-        );
+        newCanvas.on('object:removed', e => {
+          updateCanvasSlideData(newCanvas, canvasJS.id);
+          getElementsData(
+            newCanvas.toObject(customFabricProperties)?.objects,
+            themeCode, themeName
+          );
+          if (newCanvas.toObject()?.objects.length >= 1) {
+            dispatch(toggleRegenerateButton(false));
+          } else {
+            dispatch(toggleRegenerateButton(true));
+          }
+        });
 
-        canvas.on('object:added', e => onObjectAddedEvent(e, canvas));
-        canvas.on('object:removed', e => onObjectRemovedEvent(e, canvas));
-        canvas.on('object:modified', e => onObjectModifiedEvent(e, canvas));
-        canvas.on('selection:cleared', e => onSelectionClearedEvent(e, canvas));
-        canvas.on('object:moving', options => onObjectMovingEvent(options, canvas));
-        canvas.on('object:scaling', options => onObjectScalingEvent(options, canvas));
-        canvas.on('mouse:down', options => onMouseDownEvent(options, canvas));
+        newCanvas.on('object:modified', e => {
+          updateCanvasSlideData(newCanvas, canvasJS.id);
+          getElementsData(
+            newCanvas.toObject(customFabricProperties)?.objects,
+            themeCode, themeName
+          );
+          extractTableData(newCanvas);
+        });
 
-        canvas.renderAll();
+        newCanvas.on('selection:cleared', e => {
+          updateCanvasSlideData(newCanvas, canvasJS.id);
+          getElementsData(
+            newCanvas.toObject(customFabricProperties)?.objects,
+            themeCode, themeName
+          );
+        });
+        // newCanvas.on('object:moving', (event: fabric.IEvent) => handleAllElements(event,newCanvas));
+        newCanvas.on('object:moving', function (options) {
+          // console.log(newCanvas.toJSON());
+          handleObjectMoving(options, newCanvas);
+        });
+        updateCanvasSlideData(newCanvas, canvasJS.id);
+        handleAddCustomIcon(newCanvas);
+        newCanvas.renderAll();
       },
       (error: Error) => {
         console.error('Error loading canvas:', error);
       }
     );
-    window.addEventListener('resize', () =>
-      updateCanvasDimensions(canvas)
-    );
-    window.addEventListener('keydown', (e) => handleKeyDown(e, canvas));
+
+    const canvas = canvasRef.current!;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Delete' && canvas.getActiveObject()) {
+        canvas.remove(canvas.getActiveObject()!);
+        const groupObjects = (
+          canvas.getActiveObject() as fabric.Group
+        )?.getObjects();
+
+        groupObjects.forEach((obj: any) => {
+          canvas.remove(obj);
+        });
+
+        canvas.discardActiveObject();
+        canvas.renderAll();
+      }
+    };
+
+    const handleClickOutsideCanvas = (event: MouseEvent) => {
+      if (
+        canvas &&
+        canvas.getActiveObject() &&
+        !isClickWithinCanvas(event, canvas)
+      ) {
+        canvas.discardActiveObject().renderAll();
+      }
+    };
+
+    const isClickWithinCanvas = (event: MouseEvent, canvas: fabric.Canvas) => {
+      const canvasBoundary = canvas.getElement().getBoundingClientRect();
+      const clickX = event.clientX;
+      const clickY = event.clientY;
+      return (
+        clickX >= canvasBoundary.left &&
+        clickX <= canvasBoundary.right &&
+        clickY >= canvasBoundary.top &&
+        clickY <= canvasBoundary.bottom
+      );
+    };
+
+    // window.addEventListener('click', handleClickOutsideCanvas);
+
+    window.addEventListener('keydown', handleKeyDown);
     return () => {
-      window.removeEventListener('keydown', (e) => handleKeyDown(e, canvas));
-      window.removeEventListener('resize', () => { });
-      canvas.dispose();
+      window.removeEventListener('keydown', handleKeyDown);
+      // window.removeEventListener('click', handleClickOutsideCanvas);
+      window.removeEventListener('resize', () => {});
+      newCanvas.dispose();
     };
   }, [canvasJS.canvas, selectedOriginalCanvas]);
 
   useEffect(() => {
-    setShowOptions(false);
+    console.log('variant image loaded')
     if (variantImage) {
-      console.log('variantImage loaded');
-      console.log({variantImage});
+      // Clear the canvas and set its background color to white
       canvasRef.current?.clear();
       canvasRef.current?.setBackgroundColor(
         `${theme.colorSchemes.light.palette.common.white}`,
         canvasRef.current.renderAll.bind(canvasRef.current)
       );
-
+  
+      // Load the image and adjust its size to fit the canvas
       fabric.Image.fromURL(variantImage, img => {
         const canvasWidth = canvasRef.current?.width || 0;
         const canvasHeight = canvasRef.current?.height || 0;
         const scaleWidth = canvasWidth / img.width!;
         const scaleHeight = canvasHeight / img.height!;
         const scale = Math.max(scaleWidth, scaleHeight);
-
+  
+        // Set image properties and add it to the canvas
         img.set({
           left: 0,
           top: 0,
           scaleX: scale,
           scaleY: scale,
-          selectable: false,
-          lockMovementX: true,
-          lockScalingY: true,
-          moveCursor: 'pointer',
         });
         canvasRef.current?.add(img);
         canvasRef.current?.renderAll();
@@ -171,17 +282,10 @@ const CanvasComponent: React.FC = () => {
     }
   }, [variantImage]);
 
-
-
-  useEffect(() => {
-  }, [selectedElementPosition, showOptions])
-
   return (
-    <CanvasContainer onContextMenu={(e) => e.preventDefault()} >
-      <div style={{ position: 'relative' }} ref={ContainerRef} onClick={canvasClickEvent} >
-        <canvas id="canvas"></canvas>
-        {showOptions && <ElementEditBar left={selectedElementPosition.left} top={selectedElementPosition.top} canvas={canvasRef.current} />}
-      </div>
+    <CanvasContainer ref={Container}>
+      {/* <ConversionToJson /> */}
+      <canvas id="canvas"></canvas>
       <div style={{ position: 'absolute', left: -10000 }}>
         <FullscreenCanvas />
       </div>

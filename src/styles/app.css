@@ -4,16 +4,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
 canvas {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-.Toastify__close-button--light {
-  display: none;
-}
-.Toastify__toast-container {
-  width: 18%;
-  border-radius: 20px;
-}
-.Toastify__toast-theme--light {
-  border-radius: 10px;
-}
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
