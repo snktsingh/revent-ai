@@ -5,11 +5,8 @@ import ElementReducer from './reducers/elements';
 import CanvasReducer from './reducers/canvas';
 import ThunkReducer from './thunk/thunk';
 import apiDataReducer from './reducers/apiData';
-import elementsIdsReducer from './reducers/fabricElements';
+import elementsIdsReducer from './reducers/elementsCount';
 import themeReducer from './reducers/theme';
-import userReducer from './thunk/user';
-import dashboardReducer from './thunk/dashboard';
-
 export const store = configureStore({
   reducer: {
     slide: slideReducer,
@@ -19,8 +16,6 @@ export const store = configureStore({
     apiData: apiDataReducer,
     elementsIds: elementsIdsReducer,
     slideTheme: themeReducer,
-    manageUser: userReducer,
-    manageDashboard: dashboardReducer,
   },
 });
 

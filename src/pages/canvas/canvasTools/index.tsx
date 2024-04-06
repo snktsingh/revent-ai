@@ -259,7 +259,7 @@ const CanvasTools = () => {
         </ToolOutlinedButton>
 
 
-        {/* <Autocomplete
+        <Autocomplete
           sx={{ width: 200 }}
           size="small"
           value={searchFont}
@@ -288,10 +288,10 @@ const CanvasTools = () => {
             );
           }}
           ListboxProps={{ onScroll: handleScroll, ref: listRef }}
-        /> */}
+        />
 
 
-        {/* <IconButton
+        <IconButton
           size="small"
           onClick={() => {
             dispatch(handleSize(-1));
@@ -317,11 +317,11 @@ const CanvasTools = () => {
           }}
         >
           <AddOutlined />
-        </IconButton> */}
-        {/* <ColorDiv onClick={handleTextColorClick}>
+        </IconButton>
+        <ColorDiv onClick={handleTextColorClick}>
           <FontDownloadOutlinedIcon />
           <div style={{ background: textColor }}></div>
-        </ColorDiv> */}
+        </ColorDiv>
 
         <Menu
           open={openTextColor}
@@ -413,7 +413,7 @@ const CanvasTools = () => {
 
         <FontTool>
           <Stack direction="row" spacing={0}>
-            {/* <IconButton
+            <IconButton
               size="small"
               onClick={() => ContentElements.handleBold()}
             >
@@ -438,7 +438,7 @@ const CanvasTools = () => {
             <BorderColorDiv onClick={handleBorderColorClick}>
               <ColorizeOutlinedIcon />
               <div style={{ background: borderColor }}></div>
-            </BorderColorDiv> */}
+            </BorderColorDiv>
 
             <Menu
               open={openBorderColor}
@@ -626,7 +626,7 @@ const CanvasTools = () => {
       </Menu>
 
       <Stack direction="row" spacing={1}>
-        {/* <ToolOutlinedSelect defaultValue={1}>
+        <ToolOutlinedSelect defaultValue={1}>
           <MenuItem value={1}>
             <FormatAlignLeftIcon style={{ display: 'flex' }} />
           </MenuItem>
@@ -639,8 +639,8 @@ const CanvasTools = () => {
           <MenuItem value={4}>
             <FormatAlignJustifyIcon style={{ display: 'flex' }} />
           </MenuItem>
-        </ToolOutlinedSelect> */}
-        {/* <ToolOutlinedSelect
+        </ToolOutlinedSelect>
+        <ToolOutlinedSelect
           inputProps={{ 'aria-label': 'Without label' }}
           defaultValue={1}
         >
@@ -650,16 +650,16 @@ const CanvasTools = () => {
           <MenuItem value={2}>
             <FormatListNumberedIcon style={{ display: 'flex' }} />
           </MenuItem>
-        </ToolOutlinedSelect> */}
+        </ToolOutlinedSelect>
       </Stack>
-      {/* <ShapesCard
+      <ShapesCard
         onClick={handleClick}
         aria-controls={open ? 'basic-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
       >
         <img src={ShapesIcon} alt="shapes_icon" />
-      </ShapesCard> */}
+      </ShapesCard>
       <Menu
         id="basic-menu"
         anchorEl={anchorShapesEl}

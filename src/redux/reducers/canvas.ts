@@ -23,7 +23,6 @@ export interface CanvasSate {
   originalCanvasSlide: any;
   canvasImageURl: string;
   selectedOriginalCanvas: boolean;
-  presentationTitle: string;
 }
 const canvas = new fabric.Canvas(null);
 const canvasJSON = canvas.toObject();
@@ -33,22 +32,8 @@ export const initialState: CanvasSate = {
   textColor: '',
   borderColor: '',
   tableDetails: null,
-  canvasList: [
-    {
-      id: 1,
-      canvas: canvasJSON,
-      notes: '',
-      variants: [],
-      originalSlideData: {},
-    },
-  ],
-  canvasJS: {
-    id: 1,
-    canvas: canvasJSON,
-    notes: '',
-    variants: [],
-    originalSlideData: {},
-  },
+  canvasList: [{ id: 1, canvas: canvasJSON, notes :'', variants : [], originalSlideData : {} }],
+  canvasJS: { id: 1, canvas: canvasJSON, notes :'', variants : [], originalSlideData : {} },
   activeCanvasID: 1,
   size: 1,
   canvasData: [],
@@ -63,7 +48,6 @@ export const initialState: CanvasSate = {
   originalCanvasSlide: {},
   canvasImageURl: '',
   selectedOriginalCanvas: false,
-  presentationTitle: 'Untitled Presentation',
 };
 
 export const CanvasReducer = createSlice({
@@ -88,7 +72,7 @@ export const CanvasReducer = createSlice({
     setTempData: (state, action) => {
       state.tempData = action.payload;
     },
-    setCanvas: (state, action: PayloadAction<CanvasItem>) => {
+    setCanvas: (state, action : PayloadAction<CanvasItem>) => {
       return {
         ...state,
         canvasJS: action.payload,
@@ -107,9 +91,9 @@ export const CanvasReducer = createSlice({
         {
           id: canvasID,
           canvas: canvasJSON,
-          notes: '',
-          variants: [],
-          originalSlideData: {},
+          notes :'', 
+          variants : [], 
+          originalSlideData : {}
         },
       ];
 
@@ -120,9 +104,9 @@ export const CanvasReducer = createSlice({
         canvasJS: {
           id: canvasID,
           canvas: canvasJSON,
-          notes: '',
-          variants: [],
-          originalSlideData: {},
+          notes :'', 
+          variants : [], 
+          originalSlideData : {}
         },
       };
     },
@@ -196,28 +180,34 @@ export const CanvasReducer = createSlice({
     deleteCanvasItem(state, action) {
       const idToDelete = action.payload;
 
-      if (idToDelete >= 1 && idToDelete <= state.canvasList.length) {
+      const indexOfItemToDelete = idToDelete - 1;
+      if (
+        indexOfItemToDelete > 0 &&
+        indexOfItemToDelete >= 0 &&
+        indexOfItemToDelete < state.canvasList.length
+      ) {
         const updatedCanvasList = state.canvasList.filter(
-          canvas => canvas.id !== idToDelete
+          (canvas, index) => index !== indexOfItemToDelete
         );
+
         const renumberedCanvasList = updatedCanvasList.map((canvas, index) => ({
           ...canvas,
           id: index + 1,
         }));
-
-        const newActiveCanvasId = idToDelete === 1 ? 1 : idToDelete - 1;
-
-        const newActiveCanvasJS = renumberedCanvasList[newActiveCanvasId-1]
+        let newActiveCanvasId = state.canvasList.filter(
+          canvas => canvas.id == idToDelete - 1
+        );
         return {
           ...state,
           canvasList: renumberedCanvasList,
-          activeCanvasID: newActiveCanvasId,
-          canvasJS: newActiveCanvasJS || null, 
+          activeCanvasID: idToDelete - 1 || 1,
+          canvasJS: newActiveCanvasId[0],
         };
       }
+
       return state;
     },
-    updateCurrentCanvas(state, action: PayloadAction<CanvasItem>) {
+    updateCurrentCanvas(state, action : PayloadAction<CanvasItem>) {
       const updatedList = state.canvasList.map(canvasItem => {
         if (canvasItem.id === action.payload.id) {
           return {
@@ -260,12 +250,6 @@ export const CanvasReducer = createSlice({
     toggleSelectedOriginalCanvas(state, action) {
       state.selectedOriginalCanvas = action.payload;
     },
-    setPresentationTitle(state, action) {
-      state.presentationTitle = action.payload;
-    },
-    updateCanvasList(state, action : PayloadAction<CanvasItem[]>) {
-      state.canvasList = action.payload;
-    }
   },
 });
 
@@ -293,8 +277,6 @@ export const {
   setCanvasImageUrl,
   setOriginalSlide,
   toggleSelectedOriginalCanvas,
-  setPresentationTitle,
-  updateCanvasList
 } = CanvasReducer.actions;
 
 export default CanvasReducer.reducer;

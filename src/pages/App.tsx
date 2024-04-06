@@ -5,7 +5,9 @@ import Footer from '@/common-ui/footer';
 function App() {
   return (
     <AppLayout>
-      <Home />
+      <>
+        <Home />
+      </>
     </AppLayout>
   );
 }

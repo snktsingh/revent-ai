@@ -1,4 +1,5 @@
 import { Back, Wand } from '@/constants/media';
+import { useEffect, useState } from 'react';
 import {
   ButtonContainer,
   TemplateContainer,
@@ -6,27 +7,33 @@ import {
   ThemeCard,
   ThemeCardContainer,
   ThemeCardTitle,
-  ThemeImage,
   Title,
 } from './style';
+import Link from '@mui/material/Link';
 import { Stack } from '@mui/material';
 import { CustomButton } from '@/styles/common-styles/style';
+import ReventingLoader from '@/common-ui/loader';
+import { themeData } from './data';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { getAllThemes } from '@/redux/thunk/thunk';
 import {
   setSelectedTheme,
   setThemeCode,
   setThemeName,
 } from '@/redux/reducers/theme';
-import useStartTheme from './container';
-import { TailSpin } from 'react-loader-spinner';
-import { theme } from '@/constants/theme';
-import ReventingLoader from '@/common-ui/loader';
-import ThumbnailPreview from '@/common-ui/thumbnailPreview';
+import { useNavigate } from 'react-router-dom';
 
 const AppThemes = () => {
-  const { navigate, thunk, dispatch, selectedThemeId, handleGenerate } =
-    useStartTheme();
+  const [loading, setLoading] = useState(false);
+  const thunk = useAppSelector(state => state.thunk);
+  const { selectedThemeId } = useAppSelector(state => state.slideTheme);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-  if (thunk.isCreating) {
+  useEffect(() => {
+    dispatch(getAllThemes());
+  }, []);
+  if (loading == true) {
     return <ReventingLoader />;
   } else {
     return (
@@ -41,16 +48,7 @@ const AppThemes = () => {
           <h2>Themes</h2>
           <ThemeCardContainer>
             {thunk.isThemeLoading ? (
-              <TailSpin
-                visible={true}
-                height="40"
-                width="40"
-                color={`${theme.colorSchemes.light.palette.primary.main}`}
-                ariaLabel="tail-spin-loading"
-                radius="1"
-                wrapperStyle={{}}
-                wrapperClass=""
-              />
+              <h4>Loading...</h4>
             ) : (
               <>
                 {thunk.themesList.map(theme => {
@@ -68,11 +66,7 @@ const AppThemes = () => {
                       }
                     >
                       <ThemeCard>
-                        <ThumbnailPreview
-                          src={theme.thumbnailUrl}
-                          alt={theme.company}
-                          style={{ width: '246px', height: '140px' }}
-                        />
+                        <img src={theme.thumbnailUrl} width="100%" height={'100%'} />
                       </ThemeCard>
                       {theme.title}
                     </ThemeCardTitle>
@@ -84,7 +78,11 @@ const AppThemes = () => {
         </span>
         <ButtonContainer>
           <Stack direction="row" spacing={3}>
-            <CustomButton variant="contained" onClick={handleGenerate}>
+            {/* <CustomButton variant="outlined">Generate Random</CustomButton> */}
+            <CustomButton
+              variant="contained"
+              onClick={() => navigate('/canvas')}
+            >
               <Stack direction="row" spacing={2}>
                 <img src={Wand} />
                 <p>Generate</p>
