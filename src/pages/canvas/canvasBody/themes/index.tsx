@@ -27,9 +27,13 @@ import {
 import { fetchSlideImg, getAllThemes } from '@/redux/thunk/thunk';
 import { useCanvasComponent } from '../canvasComponent/container';
 import { toast } from 'react-toastify';
+import ThumbnailPreview from '@/common-ui/thumbnailPreview';
+import useCanvasData from '../canvasComponent/canvasDataExtractor';
+import { ThemesSliderContainer } from './style';
 
 export default function Templates() {
-  const { getElementsData, customFabricProperties } = useCanvasComponent();
+  const {  customFabricProperties } = useCanvasComponent();
+  const { getElementsData } = useCanvasData();
   const [tempCode, setTempCode] = useState('');
   const element = useAppSelector(state => state.element);
   const { selectedThemeId } = useAppSelector(state => state.slideTheme);
@@ -46,11 +50,14 @@ export default function Templates() {
   };
 
   const DrawerHeader = styled('div')(({ theme }) => ({
+    position: 'fixed',
     display: 'flex',
     alignItems: 'center',
     padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
     justifyContent: 'space-between',
+    width: '14vw',
+    background: 'white',
   }));
 
   const [open, setOpen] = useState<boolean>(false);
@@ -58,14 +65,14 @@ export default function Templates() {
   const handleClickOpen = (themeCode: string, themeName: string) => {
     console.log({ themeCode, themeName });
     dispatch(setThemeName(themeName));
+    dispatch(setSelectedTheme(tempCode));
     setOpen(true);
-    setTimeout(() => {
+    
       getElementsData(
         (canvasJS.originalSlideData as any).objects,
         themeCode,
         themeName
-      );
-    }, 1000);
+      )
   };
 
   const handleClose = () => {
@@ -101,7 +108,7 @@ export default function Templates() {
       anchor="left"
       open={element.openTemplates}
     >
-      <DrawerHeader>
+      <DrawerHeader >
         <h4>Themes</h4>
         <IconButton onClick={handleDrawerClose}>
           {theme.direction === 'ltr' ? (
@@ -111,7 +118,7 @@ export default function Templates() {
           )}
         </IconButton>
       </DrawerHeader>
-      <SingleSliderContainer>
+      <ThemesSliderContainer>
         <Button onClick={() => dispatch(setNewTheme(true))}>
           <Stack direction="row" spacing={1}>
             <img src={Add} />
@@ -137,7 +144,7 @@ export default function Templates() {
                       : ''
                   }
                 >
-                  <img src={themes.thumbnailUrl} width="100%" height="100%" />
+                  <ThumbnailPreview src={themes.thumbnailUrl} alt={themes.company} style={{width:'14vw',height:'15vh'}} />
                 </ListSlideCard>
               );
             })}
@@ -162,7 +169,6 @@ export default function Templates() {
                     autoFocus
                     onClick={() => {
                       changeThemeRequest();
-                      dispatch(setSelectedTheme(tempCode));
                     }}
                   >
                     Yes
@@ -172,7 +178,7 @@ export default function Templates() {
             </Dialog>
           </>
         )}
-      </SingleSliderContainer>
+      </ThemesSliderContainer>
     </Drawer>
   );
 }

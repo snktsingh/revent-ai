@@ -27,11 +27,20 @@ import {
   UploadContainer,
   UploadSubtitle,
   UploadTitle,
+  UserLink,
   VideoTitle,
 } from './style';
 import { useForm, ValidationError } from '@formspree/react';
 import Menu from '../../assets/menu.svg';
-import { Box, Button, CardMedia, Grid, Stack, TextField } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  Button,
+  CardMedia,
+  Grid,
+  Stack,
+  TextField,
+} from '@mui/material';
 import {
   CustomButton,
   CustomDivider,
@@ -58,8 +67,6 @@ import useRedirect from '../container';
 import Logo from '../../assets/logo.svg';
 import '../../styles/base/base.css';
 import HeroText from '../../assets/heroText.gif';
-import Link from '@mui/material/Link';
-import { UserLink } from '../canvas/canvasHeader/style';
 import { ToastContainer, toast } from 'react-toastify';
 import {
   CancelUpload,
@@ -68,8 +75,13 @@ import {
   UploadTick,
   Wand,
 } from '@/constants/media';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Footer from '@/common-ui/footer';
+import { Token } from '@/utils/localStorage/data';
+import { ROUTES } from '@/constants/endpoint';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { getUserDetails } from '@/redux/thunk/user';
+import ProfileMenu from '@/common-ui/profileMenu';
 
 interface FileUploadProps {
   onFileSelect: (file: File) => void;
@@ -77,8 +89,9 @@ interface FileUploadProps {
 const Home = ({ onFileSelect }: any) => {
   const [data, handleSubmit] = useForm('mbjvbjvd');
   const [data2, handleEmailSubmit] = useForm('xrgwdbzz');
-  
+  const { userDetails } = useAppSelector(state => state.manageUser);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const {
     aboutRef,
     servicesRef,
@@ -97,7 +110,7 @@ const Home = ({ onFileSelect }: any) => {
     handleContact,
     handleOurMission,
     handleGetStarted,
-    handleHowItWorks
+    handleHowItWorks,
   } = useRedirect();
 
   const [state, setState] = React.useState({
@@ -196,6 +209,21 @@ const Home = ({ onFileSelect }: any) => {
     }
   };
 
+  const [openProfileMenu, setOpenProfileMenu] = React.useState<null | HTMLElement>(
+    null
+  );
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setOpenProfileMenu(event.currentTarget);
+  };
+  const handleCloseProfileMenu = () => {
+    setOpenProfileMenu(null);
+  };
+
+  React.useEffect(() => {
+    dispatch(getUserDetails());
+  }, []);
+
   const inputRef = React.createRef<HTMLInputElement>();
   return (
     <>
@@ -203,11 +231,11 @@ const Home = ({ onFileSelect }: any) => {
       <DesktopContainer>
         <HeaderContainer>
           <GridContainer container spacing={2}>
-            <Grid item xs={3}>
-              <Link href="/">
+            <GridRowCenter item xs={3}>
+              <Link to="/">
                 <img src={Logo} height="70%" />
               </Link>
-            </Grid>
+            </GridRowCenter>
             <GridRowEven item xs={6}>
               <MenuButton onClick={handleAbout}>About Us</MenuButton>
               <MenuButton onClick={handleServices}>Services</MenuButton>
@@ -216,12 +244,36 @@ const Home = ({ onFileSelect }: any) => {
             </GridRowEven>
             <GridRowCenter xs={3}>
               <StackColCenter direction="row" spacing={3}>
-                <UserLink>
-                  <UserLink >Sign In</UserLink>
-                </UserLink>
-                <Button variant="outlined" onClick={handleTry}>
-                  Create Now
-                </Button>
+                {Token ? (
+                  <Button onClick={handleClick}>
+                    <Avatar
+                      sx={{
+                        fontSize: '12px',
+                        width: 28,
+                        height: 28,
+                        marginRight: '10px',
+                        bgcolor: `${theme.colorSchemes.light.palette.primary.main}`,
+                      }}
+                    >
+                      {(userDetails?.firstName || '').slice(0, 1)}
+                      {(userDetails?.lastName || '').slice(0, 1)}
+                    </Avatar>
+                    {userDetails?.firstName} {userDetails?.lastName}
+                  </Button>
+                ) : (
+                  <>
+                    <UserLink to="/login" replace={true}>
+                      Sign In
+                    </UserLink>
+                    <Button variant="outlined" onClick={handleTry}>
+                      Create Now
+                    </Button>
+                  </>
+                )}
+                <ProfileMenu anchorElForProfileMenu={openProfileMenu}
+                  handleCloseProfileMenu={handleCloseProfileMenu}
+                  setAnchorElForProfileMenu={setOpenProfileMenu}
+                />
               </StackColCenter>
             </GridRowCenter>
           </GridContainer>
@@ -254,7 +306,7 @@ const Home = ({ onFileSelect }: any) => {
                   </Stack>
                 </GridRowCenter>
               </MainContainer>
-              {/* <ChildContainer>
+              <ChildContainer>
                 <UploadTitle ref={getStartedRef}>Get Started</UploadTitle>
                 <Stack direction="row" width="80vw" spacing={13}>
                   <UploadContainer>
@@ -367,7 +419,7 @@ const Home = ({ onFileSelect }: any) => {
                     See How it works ?
                   </ContainerDescription>
                 </span>
-              </ChildContainer> */}
+              </ChildContainer>
               <ChildContainer ref={workingRef}>
                 <ContactGrid container spacing={4} ref={howItWorksRef}>
                   <StackColCenter direction="row" spacing={3}>
@@ -395,7 +447,7 @@ const Home = ({ onFileSelect }: any) => {
                   </StackColCenter>
                 </ContactGrid>
               </ChildContainer>
-              <div ref={aboutRef} >
+              <div ref={aboutRef}>
                 <AboutContainer>
                   <CustomDivider>
                     <DividerText>About Us</DividerText>
@@ -597,7 +649,7 @@ const Home = ({ onFileSelect }: any) => {
       </DesktopContainer>
       <MobileContainer>
         <GridJustify container style={{ margin: '0% 0% 4% 0%' }}>
-          <Link href="/">
+          <Link to="/">
             <img src={Logo} width="80%" />
           </Link>
           {(['top'] as const).map(anchor => (
@@ -799,7 +851,7 @@ const Home = ({ onFileSelect }: any) => {
           handleTry,
           handleOurMission,
           handleGetStarted,
-          handleHowItWorks
+          handleHowItWorks,
         }}
       />
     </>

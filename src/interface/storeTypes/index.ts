@@ -7,11 +7,10 @@ export interface TableDetails {
 export interface CanvasItem {
   id: number; // Use number as ID type
   canvas: object;
-  notes? : string;
-  variants : VariantsType[];
-  originalSlideData : object;
+  notes?: string;
+  variants: VariantsType[];
+  originalSlideData: object;
 }
-
 
 export interface IShapeRequest {
   companyName: string;
@@ -36,6 +35,9 @@ export interface ISlideRequests {
   isLoading: boolean;
   isThemeLoading: boolean;
   themesList: any[];
+  presentationId: number | null;
+  presentationName: string;
+  isCreating: boolean;
 }
 
 export interface IShapeRequest {
@@ -44,14 +46,15 @@ export interface IShapeRequest {
   data: string[];
 }
 
+
 export interface DataRequestType {
   name?: string;
   heading?: string;
   subHeading?: string;
-  text: string;
+  text?: string;
 }
 
-export interface ReqElementType {
+export interface ElementBaseType {
   shape: string;
   data?: DataRequestType[];
   title: string;
@@ -59,11 +62,20 @@ export interface ReqElementType {
   templateName?: string;
   elementId?: string;
 }
+
+export interface TableDataType extends ElementBaseType {
+  headers: string[];
+  tableData: string[][];
+}
+
 export interface APIRequest {
   companyName: string;
   themeColor: string;
   imagesCount: string;
-  elements: ReqElementType[];
-  title? : string,
-  subTitle? : string
+  elements: (ElementBaseType | TableDataType)[];
+  title?: string;
+  subTitle?: string;
+  slideNumber: number;
+  presentationId: number | null;
+  presentationName: string;
 }

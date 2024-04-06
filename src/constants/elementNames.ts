@@ -33,6 +33,7 @@ const TIMELINE_DIRECTION = 'TimeLineDirection';
 const TABLE = 'TABLE';
 const TABLE_TEXT = 'TableText';
 const TABLE_CELL = 'TableCell';
+const TABLE_HEADER = 'TableHeader';
 
 
 //Text
@@ -50,10 +51,17 @@ const CONCLUSION_SLIDE_SUBTITLE = 'ConclusionSlideSubtitle';
 
 //Quote 
 const QUOTE = 'QUOTE';
+const QUOTE_TEXT = 'QuoteText';
 const QUOTE_ADD_IMG_TEXT = 'QuoteAddImgText';
 const QUOTE_AUTHOR = 'QuoteAuthor';
 const QUOTE_IMG = 'QuoteImg';
 const QUOTE_IMG_CONTAINER = 'QuoteImgContainer';
+
+//List
+const LIST_MAIN = 'ListMain';
+const LIST_CONTAINER = 'ListContainer';
+const LIST_TEXT = 'ListText';
+const LIST_IMG = 'ListImg';
 
 export {
     FUNNEL,
@@ -90,8 +98,14 @@ export {
     CONCLUSION_SLIDE_TITLE,
     CONCLUSION_SLIDE_SUBTITLE,
     QUOTE,
+    QUOTE_TEXT,
     QUOTE_AUTHOR,
     QUOTE_IMG,
     QUOTE_ADD_IMG_TEXT,
-    QUOTE_IMG_CONTAINER
+    QUOTE_IMG_CONTAINER,
+    TABLE_HEADER,
+    LIST_MAIN,
+    LIST_TEXT,
+    LIST_CONTAINER,
+    LIST_IMG
 };

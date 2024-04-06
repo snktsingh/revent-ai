@@ -32,7 +32,7 @@ import {
   TextField,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { ToastContainer } from 'react-toastify';
+import { Slide, ToastContainer } from 'react-toastify';
 import CanvasComponent from './canvasComponent';
 import { CanvasNotes } from './canvasNotes';
 import { ContentElements, elementData } from './elementData';
@@ -41,12 +41,15 @@ import {
   BodyContainer,
   EditSlideContainer,
   ElementContainer,
+  ElementSearchInput,
   ElementSubtitle,
   ElementTitle,
   LikeButton,
 } from './style';
 import Templates from './themes';
 import { useCanvasComponent } from './canvasComponent/container';
+import useCanvasData from './canvasComponent/canvasDataExtractor';
+import useVariants from './canvasVariant/container';
 
 const CanvasBody = () => {
   const slide = useAppSelector(state => state.slide);
@@ -59,17 +62,20 @@ const CanvasBody = () => {
   const closeRedirectAert = () => {
     setRedirectAlert(false);
   };
-  const { getElementsData } = useCanvasComponent();
+  const { getElementsData } = useCanvasData();
   const dispatch = useAppDispatch();
   const { canvasJS, canvasList, selectedOriginalCanvas, variantImage } =
     useAppSelector(state => state.canvas);
   const { isRegenerateDisabled } = useAppSelector(state => state.slide);
   const { isLoading } = useAppSelector(state => state.thunk);
   const { requestData } = useAppSelector(state => state.apiData);
+  const { enabledElements } = useAppSelector(state => state.element);
   const [activeLike, setActiveLike] = useState(false);
   const [activeDislike, setActiveDislike] = useState(false);
   const [elementName, setElementName] = useState<string>('');
-
+  const [elementsDisable, setElementsDisable] = useState<boolean>(false);
+  const [variantsIsEmpty, setVariantsIsEmpty] = useState<boolean>(false);
+  const { handleApplyOriginalAsMain } = useVariants();
   const handleLike = () => {
     setActiveLike(!activeLike);
     setActiveDislike(false);
@@ -81,7 +87,7 @@ const CanvasBody = () => {
   };
 
   const handleRegeneration = (item: any) => {
-    if (variantImage === '' && canvasJS.variants.length === 0) {
+    if (canvasJS.variants.length === 0) {
       handleClose();
       item.onClick();
       dispatch(setMenuItemKey(item.key));
@@ -126,24 +132,7 @@ const CanvasBody = () => {
     setOpenDialog(true);
   };
 
-  // elementData[6].onClick = () => {
-  //   ContentElements.handleOpenTable();
-  // };
-  // elementData[8].onClick = () => {
-  //   ContentElements.handleCycle();
-  // };
-  // elementData[9].onClick = () => {
-  //   ContentElements.handleProcess();
-  // };
-  // elementData[10].onClick = () => {
-  //   ContentElements.handleTimeline();
-  // };
-  // elementData[11].onClick = () => {
-  //   ContentElements.handleFunnel();
-  // };
-  // elementData[12].onClick = () => {
-  //   ContentElements.handlePyramid();
-  // };
+
 
   const handleRequest = () => {
     const currentCanvas = {
@@ -156,7 +145,7 @@ const CanvasBody = () => {
   };
 
   const handleRedirect = () => {
-    dispatch(setVariantImageAsMain(''));
+    // dispatch(setVariantImageAsMain(''));
     dispatch(toggleSelectedOriginalCanvas(true));
     dispatch(
       updateCanvasInList({
@@ -168,26 +157,40 @@ const CanvasBody = () => {
     dispatch(setCanvas(canvas));
     setRedirectAlert(false);
   };
+
+
   useEffect(() => {
     if (canvasJS) {
       const canvasIsEmpty =
         (canvasList[canvasJS.id - 1].canvas as any).objects.length === 0;
-      const variantsIsEmpty = canvasJS.variants.length === 0;
-      console.log({ variantsIsEmpty, canvasIsEmpty });
+      setVariantsIsEmpty(canvasJS.variants.length === 0);
       if (variantsIsEmpty && canvasIsEmpty) {
-        dispatch(toggleRegenerateButton(true)); // Disable the button
+        dispatch(toggleRegenerateButton(true)); 
       } else if (selectedOriginalCanvas) {
-        dispatch(toggleRegenerateButton(false)); // Enable the button
+        dispatch(toggleRegenerateButton(false)); 
       } else if (!variantsIsEmpty && !selectedOriginalCanvas) {
-        dispatch(toggleRegenerateButton(true)); // Enable the button
+        dispatch(toggleRegenerateButton(true)); 
       }
     }
-    console.log({ isRegenerateDisabled });
-  }, [canvasJS, dispatch, variantImage, isRegenerateDisabled]);
+  }, [canvasJS, dispatch, variantImage, isRegenerateDisabled,enabledElements]);
+
+  function isDisabled(name: string): boolean {
+    if (enabledElements.includes(name)) {
+      return false;
+    }
+
+    return true;
+  }
+
 
   return (
     <BodyContainer>
-      <ToastContainer autoClose={800} />
+      <ToastContainer
+        position="top-center"
+        autoClose={1000}
+        hideProgressBar
+        transition={Slide}
+      />
       <Grid container>
         <Grid xs={2}>
           <SlideList />
@@ -234,6 +237,14 @@ const CanvasBody = () => {
                   />
                 </IconButton>{' '} */}
                 &nbsp;
+                {(!variantsIsEmpty && !selectedOriginalCanvas) && <Button
+                  variant="contained"
+                  size="small"
+                  onClick={() => handleApplyOriginalAsMain()}
+                >
+                  Edit
+                </Button>}
+                &nbsp;
                 <Button
                   variant="contained"
                   size="small"
@@ -253,7 +264,7 @@ const CanvasBody = () => {
                 height: '60vh',
               }}
             >
-              <InputBase
+              <ElementSearchInput
                 placeholder="Search...."
                 size="small"
                 value={slide.listSearch}
@@ -265,8 +276,9 @@ const CanvasBody = () => {
                     onClick={() => handleRegeneration(item)}
                     style={{ display: 'flex', flexDirection: 'column' }}
                     key={index}
+                    disabled={isDisabled(item.title)}
                   >
-                    <Stack direction="row" width={'100%'} spacing={2}>
+                    <Stack direction="row" width={'100%'} spacing={2} >
                       <img src={item.icon} width="30vh" />
                       <ElementContainer>
                         <ElementTitle>{item.title}</ElementTitle>
@@ -282,7 +294,7 @@ const CanvasBody = () => {
         </Grid>
       </Grid>
       <Templates />
-      <PopUpModal content={slide.slideKey} />
+      <PopUpModal />
       <Dialog
         open={redirectAlert}
         onClose={closeRedirectAert}

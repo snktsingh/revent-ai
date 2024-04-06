@@ -1,17 +1,18 @@
 import { theme } from '@/constants/theme';
-import { Input, InputBase } from '@mui/material';
+import { TextField } from '@mui/material';
 import styled from 'styled-components';
 
-export const CanvasHeaderInput = styled(InputBase)`
-  color: ${theme.colorSchemes.light.palette.common.white} !important;
-  border: 0px;
-  font-size: 2vh !important;
-  transition: border 0.5s !important;
-  padding-left: 0.5%;
-
-  &:hover {
-    border: 1px solid ${theme.colorSchemes.light.palette.common.white} !important;
-    border-radius: 10px;
+export const CanvasHeaderInput = styled.input`
+  border: none;
+  font-family: 'Roboto', sans-serif;
+  color: ${theme.colorSchemes.light.palette.common.white};
+  font-size: 16px;
+  padding: 8px 12px;
+  background: none;
+  &:focus {
+    background: none;
+    border: 1px solid white;
+    outline: none;
+    border-radius: 5px;
   }
-  
 `;
