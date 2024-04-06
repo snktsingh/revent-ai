@@ -1,58 +1,50 @@
-import { HeaderContainer, UserAvatar, UserLink } from './style';
-import { CanvasBack, PDF, PPT, Present, Share } from '@/constants/media';
-import TitleInput from '@/constants/elements/Input';
-import {
-  Stack,
-  Divider,
-  Tooltip,
-  Button,
-  Menu,
-  Link,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  InputBase,
-} from '@mui/material';
+import ProfileMenu from '@/common-ui/profileMenu';
+import { CanvasHeaderInput } from '@/constants/elements/Input/style';
 import { ButtonName, MainIconButton } from '@/constants/elements/button/style';
 import VerticalDivider from '@/constants/elements/divider';
-import useCanvas from '../container';
+import { CanvasBack, PDF, PPT, Present, Share } from '@/constants/media';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Menu,
+  Stack,
+} from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
-import React from 'react';
-import { CanvasHeaderInput } from '@/constants/elements/Input/style';
+import { ChangeEvent } from 'react';
 import { ContentElements } from '../canvasBody/elementData';
-import { useAppSelector } from '@/redux/store';
-import { useNavigate } from 'react-router-dom';
+import useCanvasHeader from './container';
+import { HeaderContainer, UserAvatar } from './style';
 
 const MainCanvasHeader = () => {
-  const navigate = useNavigate();
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [anchorE2, setAnchorE2] = React.useState<null | HTMLElement>(null);
-  const [openWarning, setOpenWarning] = React.useState(false);
-  const { pptUrl } = useAppSelector(state => state.thunk);
+  const {
+    userLogout,
+    openShare,
+    getFirstLettersForAvatar,
+    navigate,
+    openProfileMenu,
+    setOpenProfileMenu,
+    anchorE2,
+    setAnchorE2,
+    openWarning,
+    setOpenWarning,
+    pptUrl,
+    presentationTitle,
+    userDetails,
+    handleWarningClose,
+    handleWarningOpen,
+    handleClick,
+    handleCloseProfileMenu,
+    handleShareClick,
+    handleShareClose,
+    handleInputChange,
+    updatePresentationName,
+    presentationId,
+  } = useCanvasHeader();
 
-  const handleWarningOpen = () => {
-    setOpenWarning(true);
-  };
-
-  const handleWarningClose = () => {
-    setOpenWarning(false);
-  };
-  const open = Boolean(anchorEl);
-  const openShare = Boolean(anchorE2);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  const handleShareClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorE2(event.currentTarget);
-  };
-  const handleShareClose = () => {
-    setAnchorE2(null);
-  };
   return (
     <HeaderContainer>
       <MainIconButton onClick={handleWarningOpen}>
@@ -62,7 +54,21 @@ const MainCanvasHeader = () => {
         </Stack>
       </MainIconButton>
       <Stack direction="row" spacing={1}></Stack>
-      <CanvasHeaderInput placeholder="Untitled presentation" />
+      <CanvasHeaderInput
+        placeholder="Untitled presentation"
+        value={
+          presentationTitle === 'Untitled Presentation' ? '' : presentationTitle
+        }
+        onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e)}
+        onKeyDown={e =>
+          e.key === 'Enter'
+            ? updatePresentationName({
+                presentationId: presentationId,
+                name: presentationTitle,
+              })
+            : ''
+        }
+      />
       <Stack direction="row" spacing={1}>
         <MainIconButton>
           <Stack direction="row" spacing={1}>
@@ -105,21 +111,19 @@ const MainCanvasHeader = () => {
         </Menu>
         <MainIconButton onClick={handleClick}>
           <Stack direction="row" spacing={1}>
-            <ButtonName>Rashesh Majithia</ButtonName>
-            <UserAvatar>RM</UserAvatar>
+            <ButtonName>{`${userDetails?.firstName} ${userDetails?.lastName}`}</ButtonName>
+            <UserAvatar>
+              {getFirstLettersForAvatar(
+                `${userDetails?.firstName} ${userDetails?.lastName}`
+              )}
+            </UserAvatar>
           </Stack>
         </MainIconButton>
-        <Menu
-          id="basic-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-        >
-          <MenuItem onClick={handleClose}>
-            <UserLink href="/dashboard">Home</UserLink>
-          </MenuItem>
-          <MenuItem onClick={handleClose}>Logout</MenuItem>
-        </Menu>
+        <ProfileMenu
+          anchorElForProfileMenu={openProfileMenu}
+          handleCloseProfileMenu={handleCloseProfileMenu}
+          setAnchorElForProfileMenu={setOpenProfileMenu}
+        />
       </Stack>
       <Dialog
         open={openWarning}
@@ -135,7 +139,9 @@ const MainCanvasHeader = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleWarningClose}>Cancel</Button>
-          <Button onClick={() => navigate('/dashboard')}>Go Back</Button>
+          <Button onClick={() => navigate('/dashboard', { replace: true })}>
+            Go Back
+          </Button>
         </DialogActions>
       </Dialog>
     </HeaderContainer>

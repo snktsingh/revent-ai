@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Grid, TextField } from '@mui/material';
 import { theme } from '@/constants/theme';
+import { Link } from 'react-router-dom';
 export const LeftContainer = styled(Grid)`
   background-color: #f3f8ff;
   padding: 10%;
@@ -58,4 +59,8 @@ export const SignUp = styled.span`
   display: flex;
   justify-content: center;
   font-size: 110%;
+`;
+export const RedirectLink = styled(Link)`
+  text-decoration: none;
+  color: #004fba;
 `;

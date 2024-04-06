@@ -1,36 +1,41 @@
-import { QUOTE, QUOTE_ADD_IMG_TEXT, QUOTE_AUTHOR, QUOTE_IMG, QUOTE_IMG_CONTAINER } from "@/constants/elementNames";
-import { theme } from "@/constants/theme";
-import { fabric } from "fabric";
+import {
+  QUOTE,
+  QUOTE_ADD_IMG_TEXT,
+  QUOTE_AUTHOR,
+  QUOTE_IMG,
+  QUOTE_IMG_CONTAINER,
+  QUOTE_TEXT,
+} from '@/constants/elementNames';
+import { theme } from '@/constants/theme';
+import { fabric } from 'fabric';
 export const useQuoteElement = () => {
-    
-  const addQuotes = ( canvas : fabric.Canvas | null) => {
+  const addQuotes = (canvas: fabric.Canvas | null) => {
     let text = new fabric.Textbox('❝Click to add a quote❞', {
-      left: 150,
-      top: 200,
+      left: 360,
+      top: 180,
       width: 300,
       height: 40,
       fill: 'black',
       fontSize: 28,
       hasRotatingPoint: false,
       selectable: true,
-      name: QUOTE,
+      name: QUOTE_TEXT,
       cursorColor: theme.colorSchemes.light.palette.primary.main,
-      type: 'textbox',
     });
 
-    let authorText = new fabric.Textbox('- Author Name',{
-      left: 258,
-      top: 250,
+    let authorText = new fabric.Textbox('- Author Name', {
+      left: 500,
+      top: 230,
       width: 200,
       height: 20,
       fill: 'black',
       fontSize: 18,
       name: QUOTE_AUTHOR,
-    })
+    });
 
     const mainListContainer = new fabric.Rect({
-      width: 200,
-      height: 200,
+      width: 150,
+      height: 190,
       fill: 'transparent',
       strokeWidth: 1,
       stroke: '#cbcbcb',
@@ -38,23 +43,84 @@ export const useQuoteElement = () => {
       rx:5,
     });
 
-    const addImage = new fabric.Text('+ Optional Image', {
+    const addImage = new fabric.Text('+ Add Image (Optional)', {
       top: mainListContainer.top! + 80,
       left: mainListContainer.left! + 30,
       fill: 'black',
-      fontSize: 20,
+      fontSize: 12,
       hasControls: false,
       selectable: false,
       hoverCursor: 'pointer',
       name: QUOTE_ADD_IMG_TEXT,
     });
     let group = new fabric.Group([mainListContainer, addImage], {
-      left:450,
-      top:120,
+      left: 110,
+      top: 120,
       name: QUOTE_IMG,
     });
 
-    canvas?.add(text,group,authorText)
-  };  
-  return { addQuotes };
-}
+    let QuoteContainer = new fabric.Rect({
+      fill: 'transparent',
+      strokeWidth: 1,
+      name: `${QUOTE}_`,
+      rx: 5,
+      left: 110,
+      top: 120,
+      width: 600,
+      height : 200,
+    });
+
+    // let QuoteEntireGroup = new fabric.Group([QuoteContainer,group],{
+    //   left: 110,
+    //   top: 120,
+    // })
+
+    canvas?.add(text, authorText, QuoteContainer, group);
+  };
+
+
+
+  const addQuoteImage = (canvas: fabric.Canvas, object: fabric.Object) => {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/**';
+    fileInput.click();
+    let file;
+    let reader = new FileReader();
+    fileInput.addEventListener('change', e => {
+      file = (e.target as HTMLInputElement)?.files?.[0];
+      if (file) {
+        reader.onload = () => {
+          if (canvas) {
+            fabric.Image.fromURL(reader.result as string, img => {
+              const fixedWidth = 147; 
+              const fixedHeight = 170; 
+              // img.scaleToWidth(fixedWidth);
+              // img.scaleToHeight(fixedHeight);
+              const scaleX = fixedWidth / img.width!;
+              const scaleY = fixedHeight / img.height!;
+              let container = (object as fabric.Group)._objects[1];
+              let TextElement = (object as fabric.Group)._objects[1];
+              (object as fabric.Group).removeWithUpdate(TextElement);
+              (object as fabric.Group).set({
+                name: `${QUOTE_IMG}_`,
+              });
+              img.set({
+                left: object && object.left !== undefined ? object.left + 2 : 0,
+                top: object && object.top !== undefined ? object.top + 2 : 0,
+                name: 'QuoteImage',
+                scaleX,
+                scaleY,
+              });
+              object && (object as fabric.Group).addWithUpdate(img);
+              object && canvas.sendBackwards(object);
+              object?.setCoords();
+            });
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  };
+  return { addQuotes, addQuoteImage };
+};
