@@ -2,9 +2,9 @@ import ENDPOINT, { ROUTES } from '@/constants/endpoint';
 import { IUpdatePptName } from '@/interfaces/pptInterfaces';
 import { setPresentationTitle } from '@/redux/reducers/canvas';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { updatePptName } from '@/redux/thunk/thunk';
+import { setPresentationName, updatePptName } from '@/redux/thunk/thunk';
 import { FetchUtils } from '@/utils/fetch-utils';
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
@@ -18,7 +18,7 @@ const useCanvasHeader = () => {
   const { pptUrl, presentationId } = useAppSelector(state => state.thunk);
   const { presentationTitle } = useAppSelector(state => state.canvas);
   const { userDetails } = useAppSelector(state => state.manageUser);
-
+  const [updateResponse, setUpdateResponse] = useState(null);
   const openShare = Boolean(anchorE2);
 
   const userLogout = async () => {
@@ -71,11 +71,12 @@ const useCanvasHeader = () => {
   };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    dispatch(setPresentationTitle(e.target.value));
+    dispatch(setPresentationName(e.target.value));
   };
 
   const updatePresentationName = async (data: IUpdatePptName) => {
     const res = await dispatch(updatePptName(data));
+    setUpdateResponse(res.payload);
   };
 
   return {
@@ -101,6 +102,7 @@ const useCanvasHeader = () => {
     openShare,
     updatePresentationName,
     presentationId,
+    updateResponse
   };
 };
 export default useCanvasHeader;

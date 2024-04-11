@@ -63,7 +63,7 @@ export const initialState: CanvasSate = {
   originalCanvasSlide: {},
   canvasImageURl: '',
   selectedOriginalCanvas: false,
-  presentationTitle: 'Untitled Presentation',
+  presentationTitle: '',
 };
 
 export const CanvasReducer = createSlice({

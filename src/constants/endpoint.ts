@@ -18,6 +18,7 @@ export const ENDPOINT = {
     CREATE_PPT: 'ppt/create-presentation',
     UPDATE_PPT_NAME: 'ppt/update-presentation-name',
     DELETE_PPT: 'ppt/delete-presentation',
+    GET_PPT_DETAILS: 'ppt/get-presentation',
   },
   DASHBOARD: {
     FETCH_PPT_LIST: 'ppt/get-all-presentation',
@@ -30,7 +31,7 @@ export const ROUTES = {
   LOGIN: '/login',
   DASHBOARD: '/dashboard',
   THEMES: '/themes',
-  CANVAS: '/canvas',
+  CANVAS: '/canvas/:id',
   SETTINGS: '/settings',
   ACTIVATION: '/activation',
 } as const;

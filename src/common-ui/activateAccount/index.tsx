@@ -10,20 +10,16 @@ const ActivateAccount = () => {
   const { isActivated } = useActivate();
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      // Set your custom message here
       const confirmationMessage =
         'Are you sure you want to leave? Your changes may not be saved.';
 
-      // Display a confirmation dialog
       event.preventDefault();
       event.returnValue = confirmationMessage;
       return confirmationMessage;
     };
 
     const handlePopState = () => {
-      // Display an alert when the back button is pressed
       window.alert('Back button pressed!');
-      // You can add more custom actions here if needed
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);

@@ -18,8 +18,10 @@ import { ChangeEvent } from 'react';
 import { ContentElements } from '../canvasBody/elementData';
 import useCanvasHeader from './container';
 import { HeaderContainer, UserAvatar } from './style';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
 
-const MainCanvasHeader = () => {
+const MainCanvasHeader = ({ pId }: any) => {
+  const dispatch = useAppDispatch();
   const {
     userLogout,
     openShare,
@@ -42,8 +44,12 @@ const MainCanvasHeader = () => {
     handleShareClose,
     handleInputChange,
     updatePresentationName,
-    presentationId,
+    updateResponse,
   } = useCanvasHeader();
+
+  const { presentationId, presentationName, pptDetails } = useAppSelector(
+    state => state.thunk
+  );
 
   return (
     <HeaderContainer>
@@ -56,18 +62,17 @@ const MainCanvasHeader = () => {
       <Stack direction="row" spacing={1}></Stack>
       <CanvasHeaderInput
         placeholder="Untitled presentation"
-        value={
-          presentationTitle === 'Untitled Presentation' ? '' : presentationTitle
-        }
-        onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(e)}
-        onKeyDown={e =>
-          e.key === 'Enter'
-            ? updatePresentationName({
-                presentationId: presentationId,
-                name: presentationTitle,
-              })
-            : ''
-        }
+        value={presentationName}
+        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+          handleInputChange(e);
+          setTimeout(() => {
+            updatePresentationName({
+              presentationId: presentationId,
+              name: presentationName,
+            });
+            navigate(`/canvas/${presentationId}-${presentationName}`);
+          }, 2000);
+        }}
       />
       <Stack direction="row" spacing={1}>
         <MainIconButton>
