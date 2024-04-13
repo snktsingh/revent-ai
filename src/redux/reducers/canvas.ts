@@ -24,6 +24,7 @@ export interface CanvasSate {
   canvasImageURl: string;
   selectedOriginalCanvas: boolean;
   presentationTitle: string;
+  isVariantSelected : boolean;
 }
 const canvas = new fabric.Canvas(null);
 const canvasJSON = canvas.toObject();
@@ -64,6 +65,7 @@ export const initialState: CanvasSate = {
   canvasImageURl: '',
   selectedOriginalCanvas: false,
   presentationTitle: 'Untitled Presentation',
+  isVariantSelected :  false,
 };
 
 export const CanvasReducer = createSlice({
@@ -265,6 +267,9 @@ export const CanvasReducer = createSlice({
     },
     updateCanvasList(state, action : PayloadAction<CanvasItem[]>) {
       state.canvasList = action.payload;
+    },
+    toggleIsVariantSelected(state, action : PayloadAction<boolean>) {
+      state.isVariantSelected = true;
     }
   },
 });
@@ -294,7 +299,8 @@ export const {
   setOriginalSlide,
   toggleSelectedOriginalCanvas,
   setPresentationTitle,
-  updateCanvasList
+  updateCanvasList,
+  toggleIsVariantSelected
 } = CanvasReducer.actions;
 
 export default CanvasReducer.reducer;

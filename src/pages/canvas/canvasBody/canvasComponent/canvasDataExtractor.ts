@@ -76,7 +76,7 @@ const useCanvasData = () => {
   function getElementsData(
     canvasData: any[],
     themeCode: string,
-    themeName: string
+    themeId: number
   ) {
     console.log({ canvasData });
     createDisabledElements(canvasData);
@@ -85,7 +85,7 @@ const useCanvasData = () => {
       tableData = extractTableData(canvasData);
     }
     const outputFormat: APIRequest = {
-      companyName: themeName,
+      themeId: themeId,
       themeColor: themeCode,
       imagesCount: '',
       slideNumber: canvasJS.id,
@@ -171,7 +171,7 @@ const useCanvasData = () => {
           const bulletsData = mainBulletPoints.map((text, index) => {
             return { heading: text, text };
           });
-          const Bullets = getOrCreateElement('BulletPoint', '1', outputFormat);
+          const Bullets = getOrCreateElement('BulletTitle', '1', outputFormat);
           Bullets.data = bulletsData;
         } else if (canvasObject.name === TITLE) {
           titleText = canvasObject.text;

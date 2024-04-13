@@ -14,7 +14,7 @@ import { CustomButton } from '@/styles/common-styles/style';
 import {
   setSelectedTheme,
   setThemeCode,
-  setThemeName,
+  setThemeId,
 } from '@/redux/reducers/theme';
 import useStartTheme from './container';
 import { TailSpin } from 'react-loader-spinner';
@@ -56,14 +56,15 @@ const AppThemes = () => {
                 {thunk.themesList.map((theme,i) => {
                   return (
                     <ThemeCardTitle
-                      key={theme.company + i}
+                      key={theme.themeId}
                       onClick={() => {
-                        dispatch(setSelectedTheme(theme.templateName));
+                        dispatch(setSelectedTheme(theme.themeId));
                         dispatch(setThemeCode(theme.themeColor));
-                        dispatch(setThemeName(theme.company));
+                        dispatch(setThemeId(theme.themeId));
+                        console.log({theme})
                       }}
                       className={
-                        selectedThemeId === theme.templateName
+                        selectedThemeId === theme.themeId
                           ? 'clicked-card'
                           : ''
                       }
@@ -71,7 +72,7 @@ const AppThemes = () => {
                       <ThemeCard>
                         <ThumbnailPreview
                           src={theme.thumbnailUrl}
-                          alt={theme.company}
+                          alt={theme.themeId}
                           style={{ width: '246px', height: '140px' }}
                         />
                       </ThemeCard>

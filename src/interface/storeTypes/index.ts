@@ -69,7 +69,7 @@ export interface TableDataType extends ElementBaseType {
 }
 
 export interface APIRequest {
-  companyName: string;
+  themeId: string | number;
   themeColor: string;
   imagesCount: string;
   elements: (ElementBaseType | TableDataType)[];

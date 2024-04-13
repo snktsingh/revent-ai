@@ -25,8 +25,9 @@ import { QUOTE_IMG } from '@/constants/elementNames';
 
 const useCanvasEvents = () => {
   const dispatch = useAppDispatch();
-  const { themeCode, themeName } = useAppSelector(state => state.slideTheme);
-  const { canvasJS } = useAppSelector(state => state.canvas);
+  const { themeCode, themeId } = useAppSelector(state => state.slideTheme);
+  const { canvasJS, isVariantSelected } = useAppSelector(state => state.canvas);
+  
   const { renderBulletOrNumTextLine } = useBulletOrNumberedText();
   const { handleObjectMoving } = useObjectMovingEvent();
   const { handleObjectScaling } = useObjectScalingEvent();
@@ -46,7 +47,7 @@ const useCanvasEvents = () => {
     getElementsData(
       canvas.toObject(customFabricProperties)?.objects,
       themeCode,
-      themeName
+      themeId
     );
   };
 
@@ -81,16 +82,24 @@ const useCanvasEvents = () => {
 
   const onObjectAddedEvent = (event: IEvent, canvas: fabric.Canvas) => {
     updateCanvasSlideData(canvas, canvasJS.id);
-    getElementsData(
-      canvas.toObject(customFabricProperties)?.objects,
-      themeCode,
-      themeName
-    );
+    const elementsDataPromise = new Promise((resolve, reject) => {
+      const elementsData = getElementsData(
+        canvas.toObject(customFabricProperties)?.objects,
+        themeCode,
+        themeId
+      );
+      resolve(elementsData); 
+    });
+  
+    const elementsData = elementsDataPromise;
+
+
     if (canvas.toObject()?.objects.length >= 1) {
       dispatch(toggleRegenerateButton(false));
     } else {
       dispatch(toggleRegenerateButton(true));
     }
+    canvas.renderAll()
   };
 
   const onObjectRemovedEvent = (event: IEvent, canvas: fabric.Canvas) => {
@@ -98,7 +107,7 @@ const useCanvasEvents = () => {
     getElementsData(
       canvas.toObject(customFabricProperties)?.objects,
       themeCode,
-      themeName
+      themeId
     );
     if (canvas.toObject()?.objects.length >= 1) {
       dispatch(toggleRegenerateButton(false));
@@ -115,7 +124,7 @@ const useCanvasEvents = () => {
     getElementsData(
       canvas.toObject(customFabricProperties)?.objects,
       themeCode,
-      themeName
+      themeId
     );
   };
 
@@ -127,7 +136,7 @@ const useCanvasEvents = () => {
     getElementsData(
       canvas.toObject(customFabricProperties)?.objects,
       themeCode,
-      themeName
+      themeId
     );
   };
 
