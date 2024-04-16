@@ -21,9 +21,9 @@ const useVariants = () => {
 
   const handleVariants = (CanvasURL: string, pptURL: string, index: number) => {
     dispatch(toggleIsVariantSelected(true));
+    dispatch(toggleSelectedOriginalCanvas(false));
     dispatch(setVariantImageAsMain(CanvasURL));
     console.log(index)
-    dispatch(toggleSelectedOriginalCanvas(false));
   };
 
   const handleApplyOriginalAsMain = () => {

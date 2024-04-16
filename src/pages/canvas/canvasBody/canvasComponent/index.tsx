@@ -181,7 +181,8 @@ const CanvasComponent: React.FC = () => {
       canvasRef.current?.renderAll();
     }
 
-  }, [variantImage]);
+  }, [variantImage, isVariantSelected]);
+
 
 
 
