@@ -63,6 +63,8 @@ const LIST_CONTAINER = 'ListContainer';
 const LIST_TEXT = 'ListText';
 const LIST_IMG = 'ListImg';
 
+const IMAGE = 'IMAGE';
+
 export {
     FUNNEL,
     FUNNEL_TEXT,
@@ -107,5 +109,6 @@ export {
     LIST_MAIN,
     LIST_TEXT,
     LIST_CONTAINER,
-    LIST_IMG
+    LIST_IMG,
+    IMAGE
 };

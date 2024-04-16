@@ -87,7 +87,6 @@ export function useListElement() {
       
       if (file) {
         addListImages({ canvasId : canvasJS.id, file, path : '' });
-        console.log({listImages})
         reader.onload = () => {
           if (canvas) {
             fabric.Image.fromURL(reader.result as string, img => {

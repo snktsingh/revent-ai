@@ -50,7 +50,7 @@ import Templates from './themes';
 import { useCanvasComponent } from './canvasComponent/container';
 import useCanvasData from './canvasComponent/canvasDataExtractor';
 import useVariants from './canvasVariant/container';
-import { listImages } from '@/data/data';
+import { Images, listImages } from '@/data/data';
 
 const CanvasBody = () => {
   const slide = useAppSelector(state => state.slide);
@@ -141,8 +141,9 @@ const CanvasBody = () => {
       originalSlideData: canvasList[canvasJS.id - 1].canvas,
     };
     dispatch(updateCurrentCanvas(currentCanvas));
-    const isImagesPresent = requestData?.elements.some((canvas => canvas.shape === 'List'));
-    if(isImagesPresent){
+    const isListImagesPresent = requestData?.elements.some((canvas => canvas.shape === 'List'));
+    const isImagesPresent = requestData?.elements.some((canvas => canvas.shape === 'Images'));
+    if(isListImagesPresent){
       let blob = new Blob([JSON.stringify(requestData)], {type : 'application/json'});
       let formData = new FormData();
       formData.append('data', blob);
@@ -150,6 +151,20 @@ const CanvasBody = () => {
       if(listImagesArray){
         for(let i=0;i<listImagesArray.images.length;i++){
           formData.append("images", listImagesArray.images[i].file);
+        }
+        dispatch(fetchSlideImg(formData));
+        dispatch(toggleSelectedOriginalCanvas(false));
+      }
+      return;
+    }
+    if(isImagesPresent){
+      let blob = new Blob([JSON.stringify(requestData)], {type : 'application/json'});
+      let formData = new FormData();
+      formData.append('data', blob);
+      const ImagesArray = Images.find((el) => el.canvasId == canvasJS.id);
+      if(ImagesArray){
+        for(let i=0;i<ImagesArray.images.length;i++){
+          formData.append("images", ImagesArray.images[i].file);
         }
         dispatch(fetchSlideImg(formData));
         dispatch(toggleSelectedOriginalCanvas(false));
