@@ -73,6 +73,7 @@ const CanvasComponent: React.FC = () => {
       cornerStrokeColor: 'grey',
     });
     fabric.Object.prototype.objectCaching = false;
+    console.log(canvasJS.canvas)
     canvas.loadFromJSON(
       canvasJS.canvas,
       () => {

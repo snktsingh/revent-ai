@@ -417,4 +417,3 @@ interface variantsType {
   addVariantsCanvas: Function;
 }
 
-export const listImages : listObjType[] = []

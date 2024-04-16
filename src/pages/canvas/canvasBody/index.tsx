@@ -35,7 +35,7 @@ import React, { useEffect, useState } from 'react';
 import { Slide, ToastContainer } from 'react-toastify';
 import CanvasComponent from './canvasComponent';
 import { CanvasNotes } from './canvasNotes';
-import { ContentElements, elementData, listImages } from './elementData';
+import { ContentElements, elementData } from './elementData';
 import SlideList from './slideList';
 import {
   BodyContainer,
@@ -50,6 +50,7 @@ import Templates from './themes';
 import { useCanvasComponent } from './canvasComponent/container';
 import useCanvasData from './canvasComponent/canvasDataExtractor';
 import useVariants from './canvasVariant/container';
+import { listImages } from '@/data/data';
 
 const CanvasBody = () => {
   const slide = useAppSelector(state => state.slide);
@@ -145,11 +146,14 @@ const CanvasBody = () => {
       let blob = new Blob([JSON.stringify(requestData)], {type : 'application/json'});
       let formData = new FormData();
       formData.append('data', blob);
-      for(let i=0;i<listImages.length;i++){
-        formData.append("images", listImages[i].file);
+      const listImagesArray = listImages.find((el) => el.canvasId == canvasJS.id);
+      if(listImagesArray){
+        for(let i=0;i<listImagesArray.images.length;i++){
+          formData.append("images", listImagesArray.images[i].file);
+        }
+        dispatch(fetchSlideImg(formData));
+        dispatch(toggleSelectedOriginalCanvas(false));
       }
-      dispatch(fetchSlideImg(formData));
-      dispatch(toggleSelectedOriginalCanvas(false));
       return;
     }
     dispatch(fetchSlideImg(requestData));

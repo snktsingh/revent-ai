@@ -282,6 +282,7 @@ export const CanvasReducer = createSlice({
       if (canvasIndex !== -1) {
         state.canvasList[canvasIndex].listImages = images;
       }
+      state.canvasJS = state.canvasList[canvasIndex];
     },
   },
 });

@@ -8,8 +8,9 @@ export interface TableDetails {
 }
 
 export interface listObjType {
+  canvasId : number,
   path : string,
-  file : object
+  file : any
 }
 export interface CanvasItem {
   id: number; 
