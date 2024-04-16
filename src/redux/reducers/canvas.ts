@@ -41,6 +41,7 @@ export const initialState: CanvasSate = {
       notes: '',
       variants: [],
       originalSlideData: {},
+      listImages : [],
     },
   ],
   canvasJS: {
@@ -49,6 +50,7 @@ export const initialState: CanvasSate = {
     notes: '',
     variants: [],
     originalSlideData: {},
+    listImages : [],
   },
   activeCanvasID: 1,
   size: 1,
@@ -112,6 +114,7 @@ export const CanvasReducer = createSlice({
           notes: '',
           variants: [],
           originalSlideData: {},
+          listImages : [],
         },
       ];
 
@@ -125,6 +128,7 @@ export const CanvasReducer = createSlice({
           notes: '',
           variants: [],
           originalSlideData: {},
+          listImages : [],
         },
       };
     },
@@ -227,6 +231,7 @@ export const CanvasReducer = createSlice({
             notes: action.payload.notes,
             variants: action.payload.variants,
             originalSlideData: action.payload.originalSlideData,
+            listImages : action.payload.listImages
           };
         }
         return canvasItem;
@@ -270,7 +275,14 @@ export const CanvasReducer = createSlice({
     },
     toggleIsVariantSelected(state, action : PayloadAction<boolean>) {
       state.isVariantSelected = true;
-    }
+    },
+    updateListImagesWithCanvasId: (state, action) => {
+      const { canvasId, images } = action.payload;
+      const canvasIndex = state.canvasList.findIndex(canvas => canvas.id === canvasId);
+      if (canvasIndex !== -1) {
+        state.canvasList[canvasIndex].listImages = images;
+      }
+    },
   },
 });
 
@@ -300,7 +312,8 @@ export const {
   toggleSelectedOriginalCanvas,
   setPresentationTitle,
   updateCanvasList,
-  toggleIsVariantSelected
+  toggleIsVariantSelected,
+  updateListImagesWithCanvasId
 } = CanvasReducer.actions;
 
 export default CanvasReducer.reducer;

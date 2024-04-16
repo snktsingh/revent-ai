@@ -1,0 +1,30 @@
+{
+    "themeId": 1,
+    "imagesCount": "",
+    "slideNumber": 1,
+    "elements": [
+        {
+            "data": [
+                {
+                    "name": "Text",
+                    "heading": "",
+                    "subHeading": "",
+                    "text": "Text"
+                },
+                {
+                    "name": "Text",
+                    "heading": "",
+                    "subHeading": "",
+                    "text": "Text"
+                }
+            ],
+            "title": "",
+            "subTitle": "",
+            "templateName": "",
+            "shape": "List"
+        }
+    ],
+    "presentationId": null,
+    "title": "",
+    "subTitle": ""
+}

@@ -35,7 +35,7 @@ import React, { useEffect, useState } from 'react';
 import { Slide, ToastContainer } from 'react-toastify';
 import CanvasComponent from './canvasComponent';
 import { CanvasNotes } from './canvasNotes';
-import { ContentElements, elementData } from './elementData';
+import { ContentElements, elementData, listImages } from './elementData';
 import SlideList from './slideList';
 import {
   BodyContainer,
@@ -140,6 +140,18 @@ const CanvasBody = () => {
       originalSlideData: canvasList[canvasJS.id - 1].canvas,
     };
     dispatch(updateCurrentCanvas(currentCanvas));
+    const isImagesPresent = requestData?.elements.some((canvas => canvas.shape === 'List'));
+    if(isImagesPresent){
+      let blob = new Blob([JSON.stringify(requestData)], {type : 'application/json'});
+      let formData = new FormData();
+      formData.append('data', blob);
+      for(let i=0;i<listImages.length;i++){
+        formData.append("images", listImages[i].file);
+      }
+      dispatch(fetchSlideImg(formData));
+      dispatch(toggleSelectedOriginalCanvas(false));
+      return;
+    }
     dispatch(fetchSlideImg(requestData));
     dispatch(toggleSelectedOriginalCanvas(false));
   };

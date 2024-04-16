@@ -25,6 +25,7 @@ import {
   TitleSubIcon,
   TriangleIcon,
 } from '@/constants/media';
+import { listObjType } from '@/interface/storeTypes';
 
 interface IElementData {
   key: number;
@@ -415,3 +416,5 @@ export const ContentElements: ContentEle = {
 interface variantsType {
   addVariantsCanvas: Function;
 }
+
+export const listImages : listObjType[] = []
