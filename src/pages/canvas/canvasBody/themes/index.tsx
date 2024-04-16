@@ -22,7 +22,7 @@ import {
   setNewTheme,
   setSelectedTheme,
   setThemeCode,
-  setThemeName,
+  setThemeId,
 } from '@/redux/reducers/theme';
 import { fetchSlideImg, getAllThemes } from '@/redux/thunk/thunk';
 import { useCanvasComponent } from '../canvasComponent/container';
@@ -62,16 +62,15 @@ export default function Templates() {
 
   const [open, setOpen] = useState<boolean>(false);
 
-  const handleClickOpen = (themeCode: string, themeName: string) => {
-    console.log({ themeCode, themeName });
-    dispatch(setThemeName(themeName));
+  const handleClickOpen = (themeCode: string, themeId: number) => {
+    dispatch(setThemeId(themeId));
     dispatch(setSelectedTheme(tempCode));
     setOpen(true);
 
     getElementsData(
       (canvasJS.originalSlideData as any).objects,
       themeCode,
-      themeName
+      themeId
     )
   };
 
@@ -135,17 +134,17 @@ export default function Templates() {
               return (
                 <ListSlideCard
                   onClick={() => {
-                    handleClickOpen(themes.themeColor, themes.company);
-                    setTempCode(themes.templateName);
+                    handleClickOpen(themes.themeColor, themes.themeId);
+                    setTempCode(themes.themeId);
                   }}
-                  key={themes.company + i}
+                  key={themes.themeId}
                   className={
-                    selectedThemeId === themes.templateName
+                    selectedThemeId === themes.themeId
                       ? 'clicked-card'
                       : ''
                   }
                 >
-                  <ThumbnailPreview src={themes.thumbnailUrl} alt={themes.company} style={{width:'14vw',height:'15vh'}} />
+                  <ThumbnailPreview src={themes.thumbnailUrl} alt={themes.themeId} style={{width:'14vw',height:'15vh'}} />
                 </ListSlideCard>
               );
             })}

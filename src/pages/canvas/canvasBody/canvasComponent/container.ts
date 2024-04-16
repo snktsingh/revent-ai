@@ -59,7 +59,7 @@ export const useCanvasComponent = () => {
   const { setElementPositionsAfterMoving } = useObjectModified();
   const { CanvasClick } = useCanvasClickEvent();
   const { getElementsData } = useCanvasData();
-  const { jsonData, themeCode, themeName } = useAppSelector(
+  const { jsonData, themeCode, themeId } = useAppSelector(
     state => state.slideTheme
   );
 

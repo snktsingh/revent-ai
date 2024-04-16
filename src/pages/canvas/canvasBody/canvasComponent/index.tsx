@@ -49,11 +49,11 @@ const CanvasComponent: React.FC = () => {
     onTextEditingEnteredEvent,
     onTextEditingExitedEvent
   } = useCanvasEvents();
-  const { themeCode, themeName } = useAppSelector(state => state.slideTheme);
+  const { themeCode, themeId } = useAppSelector(state => state.slideTheme);
 
   const dispatch = useAppDispatch();
 
-  const { canvasJS, variantImage, selectedOriginalCanvas } = useAppSelector(state => state.canvas);
+  const { canvasJS, variantImage, selectedOriginalCanvas,isVariantSelected } = useAppSelector(state => state.canvas);
 
 
 
@@ -63,6 +63,7 @@ const CanvasComponent: React.FC = () => {
     const canvas = new fabric.Canvas('canvas');
     updateCanvasStyle(canvas);
     canvas.clear();
+    console.log('canvas loaded');
     fabric.Object.prototype.set({
       cornerStyle: 'circle',
       transparentCorners: false,
@@ -75,13 +76,18 @@ const CanvasComponent: React.FC = () => {
     canvas.loadFromJSON(
       canvasJS.canvas,
       () => {
-        updateCanvasStyle(canvas);
-        updateCanvasDimensions(canvas);
         canvasRef.current = canvas;
-        getElementsData(
-          canvas.toObject(customFabricProperties)?.objects,
-          themeCode, themeName
-        );
+        if(canvas){
+          updateCanvasStyle(canvas);
+          updateCanvasDimensions(canvas);
+        }
+        
+        if(canvas.toObject(customFabricProperties)?.objects){
+          getElementsData(
+            canvas.toObject(customFabricProperties)?.objects,
+            themeCode, themeId
+          );
+        }
 
 
         if (canvas.toObject(customFabricProperties)?.objects.length >= 1) {
@@ -139,15 +145,16 @@ const CanvasComponent: React.FC = () => {
 
   useEffect(() => {
     setShowOptions(false);
-    if (variantImage) {
-      console.log('variantImage loaded');
-      console.log({variantImage});
+    if (variantImage && canvasRef.current) {
+      console.log('1 started')
       canvasRef.current?.clear();
+      console.log('1 ended')
+      console.log({variantImage});
       canvasRef.current?.setBackgroundColor(
         `${theme.colorSchemes.light.palette.common.white}`,
         canvasRef.current.renderAll.bind(canvasRef.current)
       );
-
+      
       fabric.Image.fromURL(variantImage, img => {
         const canvasWidth = canvasRef.current?.width || 0;
         const canvasHeight = canvasRef.current?.height || 0;
@@ -155,7 +162,8 @@ const CanvasComponent: React.FC = () => {
         const scaleHeight = canvasHeight / img.height!;
         const scale = Math.max(scaleWidth, scaleHeight);
 
-        img.set({
+        
+       const variant = img.set({
           left: 0,
           top: 0,
           scaleX: scale,
@@ -165,11 +173,16 @@ const CanvasComponent: React.FC = () => {
           lockScalingY: true,
           moveCursor: 'pointer',
         });
-        canvasRef.current?.add(img);
-        canvasRef.current?.renderAll();
+        console.log('2 started')
+        canvasRef.current?.add(variant);
+        console.log({variant})
+        console.log('2 ended')
       });
+      canvasRef.current?.renderAll();
     }
-  }, [variantImage]);
+
+  }, [variantImage, isVariantSelected]);
+
 
 
 

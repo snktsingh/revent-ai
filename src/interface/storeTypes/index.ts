@@ -6,12 +6,18 @@ export interface TableDetails {
   width: number;
   height: number;
 }
+
+export interface listObjType {
+  path : string,
+  file : object
+}
 export interface CanvasItem {
-  id: number; // Use number as ID type
+  id: number; 
   canvas: object;
   notes?: string;
   variants: VariantsType[];
   originalSlideData: object;
+  listImages : listObjType[]
 }
 
 export interface IShapeRequest {
@@ -72,13 +78,12 @@ export interface TableDataType extends ElementBaseType {
 }
 
 export interface APIRequest {
-  companyName: string;
-  themeColor: string;
+  themeId: string | number;
   imagesCount: string;
   elements: (ElementBaseType | TableDataType)[];
   title?: string;
   subTitle?: string;
   slideNumber: number;
   presentationId: number | null;
-  presentationName: string;
+  presentationName?: string;
 }

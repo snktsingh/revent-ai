@@ -1,7 +1,11 @@
 import ENDPOINT from '@/constants/endpoint';
 import { FetchUtils } from '@/utils/fetch-utils';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { setVariantImageAsMain, updateCurrentCanvas } from '../reducers/canvas';
+import {
+  setVariantImageAsMain,
+  toggleIsVariantSelected,
+  updateCurrentCanvas,
+} from '../reducers/canvas';
 import { APIRequest, ISlideRequests } from '@/interface/storeTypes';
 import { RootState } from '../store';
 import { IUserLogin } from '@/interfaces/authInterface';
@@ -24,9 +28,14 @@ const initialState: ISlideRequests = {
 
 export const fetchSlideImg = createAsyncThunk(
   'slide/fetchimage-ppt',
-  async (req: APIRequest | null, { dispatch, getState }) => {
-    const res = await FetchUtils.postRequest(`${ENDPOINT.GEN_PPT_MULTI}`, req);
+  async (req: any, { dispatch, getState }) => {
+    let isFormData = false;
+    if (req instanceof FormData) {
+      isFormData = true;
+    }
+    const res = await FetchUtils.postRequest(`${isFormData ? ENDPOINT.GEN_PPT_IMAGES : ENDPOINT.GEN_PPT_MULTI}`, req);
     dispatch(setVariantImageAsMain(res.data.variants[0].imagesUrl));
+    dispatch(toggleIsVariantSelected(true));
     const currentCanvas = (getState() as RootState).canvas.canvasJS;
     const updatedCanvasVariants = {
       ...currentCanvas,

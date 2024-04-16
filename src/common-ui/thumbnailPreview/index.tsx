@@ -20,6 +20,7 @@ const ThumbnailPreview: React.FC<ThumbnailPreviewProps> = ({
     setImageErrorOccur(true);
   }
 
+
   return (
     <div>
       {errorOccur ? (
@@ -33,7 +34,7 @@ const ThumbnailPreview: React.FC<ThumbnailPreviewProps> = ({
           </ErrorText>
         </ErrorPreviewCard>
       ) : (
-        <img src={src} alt={alt} style={style} onError={handleError} />
+        <img src={src} alt={alt} width="100%" height="100%" onError={handleError} />
       )}
     </div>
   );

@@ -1,6 +1,7 @@
 import {
   setCanvas,
   setVariantImageAsMain,
+  toggleIsVariantSelected,
   toggleSelectedOriginalCanvas,
   updateCanvasInList,
 } from '@/redux/reducers/canvas';
@@ -19,12 +20,15 @@ const useVariants = () => {
   const array: number[] = [1, 2, 3];
 
   const handleVariants = (CanvasURL: string, pptURL: string, index: number) => {
+    dispatch(toggleIsVariantSelected(true));
     dispatch(toggleSelectedOriginalCanvas(false));
     dispatch(setVariantImageAsMain(CanvasURL));
+    console.log(index)
   };
 
   const handleApplyOriginalAsMain = () => {
     dispatch(setVariantImageAsMain(''));
+    dispatch(toggleIsVariantSelected(false));
     dispatch(toggleSelectedOriginalCanvas(true));
     dispatch(updateCanvasInList({id : canvasJS.id, updatedCanvas : canvasJS.originalSlideData}));
     let canvas = { ...canvasJS, canvas : canvasJS.originalSlideData };

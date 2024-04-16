@@ -9,6 +9,7 @@ import {
   FUNNEL,
   FUNNEL_TEXT,
   LIST_MAIN,
+  LIST_TEXT,
   PARAGRAPH,
   PROCESS,
   PROCESS_TEXT,
@@ -76,7 +77,7 @@ const useCanvasData = () => {
   function getElementsData(
     canvasData: any[],
     themeCode: string,
-    themeName: string
+    themeId: number
   ) {
     console.log({ canvasData });
     createDisabledElements(canvasData);
@@ -85,13 +86,12 @@ const useCanvasData = () => {
       tableData = extractTableData(canvasData);
     }
     const outputFormat: APIRequest = {
-      companyName: themeName,
-      themeColor: themeCode,
+      themeId: themeId,
       imagesCount: '',
       slideNumber: canvasJS.id,
       elements: [],
       presentationId: presentationId,
-      presentationName: 'Presentation-1',
+      // presentationName: 'Presentation-1',
     };
     let timelineData: TimelineDataType[] = [];
     let titleText: string = '';
@@ -117,6 +117,8 @@ const useCanvasData = () => {
           case canvasObject.name.startsWith(PROCESS_TEXT):
             elementType = 'Process';
             break;
+
+         
         }
 
         if (elementType) {
@@ -171,7 +173,7 @@ const useCanvasData = () => {
           const bulletsData = mainBulletPoints.map((text, index) => {
             return { heading: text, text };
           });
-          const Bullets = getOrCreateElement('BulletPoint', '1', outputFormat);
+          const Bullets = getOrCreateElement('BulletTitle', '1', outputFormat);
           Bullets.data = bulletsData;
         } else if (canvasObject.name === TITLE) {
           titleText = canvasObject.text;
@@ -204,7 +206,20 @@ const useCanvasData = () => {
           );
           ConclusionSlide.subTitle = canvasObject.text;
         }
-      }
+        else if (canvasObject.name.startsWith(LIST_TEXT)) {
+           const ListImage = getOrCreateElement(
+             'List',
+             '1',
+             outputFormat
+           )
+           ListImage.data?.push({
+            name: canvasObject.text,
+            heading: '',
+            subHeading: '',
+            text: canvasObject.text,
+          });
+        }
+      } 
     });
 
     if (outputFormat.elements.length > 0 && titleText && subTitleText) {
@@ -250,7 +265,7 @@ const useCanvasData = () => {
     const modifiedRequestFormat = outputFormat.elements.map(element => {
       const { elementId, data, title, subTitle, templateName, shape } = element;
       if (shape === 'Cover' || shape === 'Section' || shape === 'Conclusion') {
-        return { title, subTitle, shape };
+        return { title, subTitle, shape, data };
       }
       return { data, title, subTitle, templateName, shape };
     });
@@ -262,6 +277,10 @@ const useCanvasData = () => {
       tableData.data = [];
       outputFormat.elements.push(tableData);
     }
+
+
+
+
     console.log({ outputFormat });
     dispatch(setRequestData(outputFormat));
   }
