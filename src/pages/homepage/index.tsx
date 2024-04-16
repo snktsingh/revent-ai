@@ -1,6 +1,6 @@
 import { Wrapper } from '@/layout/AppLayout/style';
 import Banner from '../../assets/bannerSub.svg';
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import {
   AboutContainer,
   CardContainer,
@@ -123,16 +123,16 @@ const Home = ({ onFileSelect }: any) => {
 
   const toggleDrawer =
     (anchor: Anchor, open: boolean) =>
-      (event: React.KeyboardEvent | React.MouseEvent) => {
-        if (
-          event.type === 'keyRight' &&
-          ((event as React.KeyboardEvent).key === '' ||
-            (event as React.KeyboardEvent).key === '')
-        ) {
-          return;
-        }
-        setState({ ...state, [anchor]: open });
-      };
+    (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (
+        event.type === 'keyRight' &&
+        ((event as React.KeyboardEvent).key === '' ||
+          (event as React.KeyboardEvent).key === '')
+      ) {
+        return;
+      }
+      setState({ ...state, [anchor]: open });
+    };
   const workingRef = useRef<HTMLDivElement>(null);
   const handleWorking = () => {
     if (workingRef.current) {
@@ -187,7 +187,6 @@ const Home = ({ onFileSelect }: any) => {
   };
 
   const handleContainerClick = () => {
-    // Trigger the input click when the container is clicked
     if (inputRef.current) {
       inputRef.current.click();
     }
@@ -209,9 +208,8 @@ const Home = ({ onFileSelect }: any) => {
     }
   };
 
-  const [openProfileMenu, setOpenProfileMenu] = React.useState<null | HTMLElement>(
-    null
-  );
+  const [openProfileMenu, setOpenProfileMenu] =
+    React.useState<null | HTMLElement>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setOpenProfileMenu(event.currentTarget);
@@ -220,8 +218,10 @@ const Home = ({ onFileSelect }: any) => {
     setOpenProfileMenu(null);
   };
 
-  React.useEffect(() => {
-    dispatch(getUserDetails());
+  useEffect(() => {
+    if (Token !== '' && Token !== null) {
+      dispatch(getUserDetails());
+    }
   }, []);
 
   const inputRef = React.createRef<HTMLInputElement>();
@@ -270,7 +270,8 @@ const Home = ({ onFileSelect }: any) => {
                     </Button>
                   </>
                 )}
-                <ProfileMenu anchorElForProfileMenu={openProfileMenu}
+                <ProfileMenu
+                  anchorElForProfileMenu={openProfileMenu}
                   handleCloseProfileMenu={handleCloseProfileMenu}
                   setAnchorElForProfileMenu={setOpenProfileMenu}
                 />

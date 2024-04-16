@@ -173,9 +173,11 @@ const Dashboard = () => {
                     height: '67%',
                     cursor: 'pointer',
                   }}
+                  onClick={() => {
+                    navigate(`/canvas/${ppt.presentationId}-${ppt.name}`);
+                  }}
                 >
                   <img src={ppt.thumbnailUrl} width="180px" />
-                  {/* <ThumbnailPreview src={ppt.thumbnailUrl} style={{width:'180px',}} alt={ppt.name == undefined ? 'Untitled-presentation' : ppt.name}/> */}
                 </Card>
                 <Stack
                   direction="row"

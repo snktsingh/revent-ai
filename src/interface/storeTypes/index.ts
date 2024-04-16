@@ -1,3 +1,5 @@
+import { IFetchPptDetails } from '@/interfaces/pptInterfaces';
+
 export interface TableDetails {
   row: number;
   col: number;
@@ -43,7 +45,9 @@ export interface ISlideRequests {
   themesList: any[];
   presentationId: number | null;
   presentationName: string;
-  isCreating: boolean;
+  isAuthenticating: boolean;
+  pptDetails: IFetchPptDetails | null;
+  unAuthMessage: boolean;
 }
 
 export interface IShapeRequest {
@@ -51,7 +55,6 @@ export interface IShapeRequest {
   shape: string;
   data: string[];
 }
-
 
 export interface DataRequestType {
   name?: string;

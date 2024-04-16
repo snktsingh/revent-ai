@@ -4,7 +4,7 @@ import { Token } from '../localStorage/data';
 
 export const generateInstance: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
-  timeout: 30000,
+  timeout: 60000,
   headers: {
     Authorization: 'Bearer ' + Token,
   },
@@ -19,7 +19,7 @@ generateInstance.interceptors.response.use(
     const responsestatusCode = response.status;
     switch (responsestatusCode) {
       case 200: {
-        toast.success(response.data.message);
+        // toast.success(response.data.message);
         break;
       }
       default: {
@@ -38,7 +38,8 @@ generateInstance.interceptors.response.use(
         break;
       }
       case 401: {
-        toast.error('User Unauthorized');
+        localStorage.clear();
+        window.location.replace('/login');
         break;
       }
       case 500: {

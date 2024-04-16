@@ -66,7 +66,7 @@ export const initialState: CanvasSate = {
   originalCanvasSlide: {},
   canvasImageURl: '',
   selectedOriginalCanvas: false,
-  presentationTitle: 'Untitled Presentation',
+  presentationTitle: '',
   isVariantSelected :  false,
 };
 

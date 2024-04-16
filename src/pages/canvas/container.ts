@@ -6,7 +6,7 @@ import { useFullScreenHandle } from 'react-full-screen';
 
 const useCanvas = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const { isCreating, presentationId } = useAppSelector(state => state.thunk);
+  const { isAuthenticating, presentationId } = useAppSelector(state => state.thunk);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -22,7 +22,7 @@ const useCanvas = () => {
     open,
     handleClick,
     handleClose,
-    isCreating,
+    isAuthenticating,
   };
 };
 export default useCanvas;

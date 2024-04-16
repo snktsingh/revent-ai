@@ -18,8 +18,7 @@ const useStartTheme = () => {
     const res = await dispatch(createPresentation());
     const data = res.payload;
     if (data.message === 'SUCCESS') {
-      navigate('/canvas');
-      toast.success('Presentation Initialized !');
+      navigate(`/canvas/${data.presentationId}-Untitled-Presentation`);
     } else {
       toast.error('Failed to create presentation !');
     }

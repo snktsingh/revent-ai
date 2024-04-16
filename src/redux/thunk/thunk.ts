@@ -20,8 +20,10 @@ const initialState: ISlideRequests = {
   themesList: [],
   isThemeLoading: false,
   presentationId: null,
-  presentationName: '',
-  isCreating: false,
+  presentationName: 'Untitled-Presentation',
+  isAuthenticating: true,
+  pptDetails: null,
+  unAuthMessage: false,
 };
 
 export const fetchSlideImg = createAsyncThunk(
@@ -50,6 +52,7 @@ export const getAllThemes = createAsyncThunk('theme/getallThemes', async () => {
   return res.data;
 });
 
+// Create a new presentation
 export const createPresentation = createAsyncThunk('ppt/create', async () => {
   const res = await FetchUtils.postRequest(`${ENDPOINT.PPT.CREATE_PPT}`, {
     presentationName: 'untitled-presentation',
@@ -57,6 +60,7 @@ export const createPresentation = createAsyncThunk('ppt/create', async () => {
   return res.data;
 });
 
+// Update Presentation Name
 export const updatePptName = createAsyncThunk(
   'ppt/updatePptName',
   async (body: IUpdatePptName) => {
@@ -68,10 +72,31 @@ export const updatePptName = createAsyncThunk(
   }
 );
 
+// Fetch Presentation Details By ID
+export const fetchPptDetails = createAsyncThunk(
+  'ppt/fetchDetailsByID',
+  async (pId: string) => {
+    const res = await FetchUtils.getRequest(
+      `${ENDPOINT.PPT.GET_PPT_DETAILS}?presentationId=${pId}`
+    );
+    return res.data;
+  }
+);
+
 const thunkSlice = createSlice({
   name: 'singleSlideData',
   initialState,
-  reducers: {},
+  reducers: {
+    setPresentationName: (state, action) => {
+      state.presentationName = action.payload;
+    },
+    setAuthenticateLoader: state => {
+      state.isAuthenticating = false;
+    },
+    setUnauthMessage: (state, action) => {
+      state.unAuthMessage = action.payload;
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(fetchSlideImg.pending, (state, action) => {
@@ -105,17 +130,29 @@ const thunkSlice = createSlice({
       })
       .addCase(createPresentation.pending, state => {
         state.presentationId = null;
-        state.isCreating = true;
+        state.isAuthenticating = true;
       })
       .addCase(createPresentation.fulfilled, (state, action) => {
         state.presentationId = action.payload.presentationId;
-        state.isCreating = false;
       })
       .addCase(createPresentation.rejected, state => {
         state.presentationId = null;
-        state.isCreating = false;
+      })
+      .addCase(fetchPptDetails.pending, (state, action) => {
+        state.pptDetails = null;
+      })
+      .addCase(fetchPptDetails.fulfilled, (state, action) => {
+        state.pptDetails = action.payload;
+        state.presentationName = action.payload.name;
+        state.presentationId = action.payload.presentationId;
+      })
+      .addCase(fetchPptDetails.rejected, (state, action) => {
+        state.pptDetails = null;
       });
   },
 });
+
+export const { setPresentationName, setAuthenticateLoader, setUnauthMessage } =
+  thunkSlice.actions;
 
 export default thunkSlice.reducer;
