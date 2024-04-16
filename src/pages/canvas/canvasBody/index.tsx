@@ -50,7 +50,7 @@ import Templates from './themes';
 import { useCanvasComponent } from './canvasComponent/container';
 import useCanvasData from './canvasComponent/canvasDataExtractor';
 import useVariants from './canvasVariant/container';
-import { Images, listImages } from '@/data/data';
+import { Images, QuoteImages, listImages } from '@/data/data';
 
 const CanvasBody = () => {
   const slide = useAppSelector(state => state.slide);
@@ -143,6 +143,7 @@ const CanvasBody = () => {
     dispatch(updateCurrentCanvas(currentCanvas));
     const isListImagesPresent = requestData?.elements.some((canvas => canvas.shape === 'List'));
     const isImagesPresent = requestData?.elements.some((canvas => canvas.shape === 'Images'));
+    const isQuoteImagesPresent = requestData?.elements.some((canvas => canvas.shape === 'Quote'));
     if(isListImagesPresent){
       let blob = new Blob([JSON.stringify(requestData)], {type : 'application/json'});
       let formData = new FormData();
@@ -168,6 +169,24 @@ const CanvasBody = () => {
         }
         dispatch(fetchSlideImg(formData));
         dispatch(toggleSelectedOriginalCanvas(false));
+      }
+      return;
+    }
+    if(isQuoteImagesPresent){
+      console.log({requestData})
+      let blob = new Blob([JSON.stringify(requestData)], {type : 'application/json'});
+      let formData = new FormData();
+      formData.append('data', blob);
+      const QuoteImagesArray = QuoteImages.find((el) => el.canvasId == canvasJS.id);
+      if(QuoteImagesArray){
+        if(QuoteImagesArray.images.length !== 0){
+          for(let i=0;i<QuoteImagesArray.images.length;i++){
+            formData.append("images", QuoteImagesArray.images[i].file);
+          }
+          dispatch(fetchSlideImg(formData));
+          dispatch(toggleSelectedOriginalCanvas(false));
+          return;
+        }
       }
       return;
     }

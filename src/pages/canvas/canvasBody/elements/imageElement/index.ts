@@ -15,7 +15,6 @@ export function useImageElement() {
       const file = (e.target as HTMLInputElement)?.files?.[0];
       if (file) {
         addImages({ canvasId: canvasJS.id, file, path: '' });
-        console.log({ Images });
 
         reader.onload = () => {
           if (canvas) {

@@ -73,7 +73,6 @@ const CanvasComponent: React.FC = () => {
       cornerStrokeColor: 'grey',
     });
     fabric.Object.prototype.objectCaching = false;
-    console.log(canvasJS.canvas)
     canvas.loadFromJSON(
       canvasJS.canvas,
       () => {
@@ -148,7 +147,7 @@ const CanvasComponent: React.FC = () => {
     setShowOptions(false);
     if (variantImage && canvasRef.current) {
       console.log('1 started')
-      canvasRef.current?.clear();
+      // canvasRef.current?.clear();
       console.log('1 ended')
       console.log({variantImage});
       canvasRef.current?.setBackgroundColor(
@@ -182,7 +181,7 @@ const CanvasComponent: React.FC = () => {
       canvasRef.current?.renderAll();
     }
 
-  }, [variantImage, isVariantSelected]);
+  }, [variantImage]);
 
 
 

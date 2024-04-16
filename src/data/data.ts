@@ -47,3 +47,23 @@ export function addImages(newImage: listObjType): void {
 }
 
 
+export const QuoteImages: {
+    canvasId: number;
+    images: ImageData[];
+  }[] = [];
+
+export function addQuoteImageForStore(newImage: listObjType): void {
+  const { canvasId, path, file } = newImage;
+
+  const existingEntryIndex = QuoteImages.findIndex(
+    entry => entry.canvasId === canvasId
+  );
+
+  if (existingEntryIndex !== -1) {
+    QuoteImages[existingEntryIndex].images.push({ path, file });
+  } else {
+    QuoteImages.push({ canvasId, images: [{ path, file }] });
+  }
+}
+
+

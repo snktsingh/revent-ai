@@ -7,8 +7,11 @@ import {
   QUOTE_TEXT,
 } from '@/constants/elementNames';
 import { theme } from '@/constants/theme';
+import { QuoteImages, addQuoteImageForStore } from '@/data/data';
+import { useAppSelector } from '@/redux/store';
 import { fabric } from 'fabric';
 export const useQuoteElement = () => {
+  const { canvasJS } = useAppSelector(state => state.canvas);
   const addQuotes = (canvas: fabric.Canvas | null) => {
     let text = new fabric.Textbox('❝Click to add a quote❞', {
       left: 360,
@@ -90,6 +93,8 @@ export const useQuoteElement = () => {
     fileInput.addEventListener('change', e => {
       file = (e.target as HTMLInputElement)?.files?.[0];
       if (file) {
+        addQuoteImageForStore({canvasId : canvasJS.id, file, path : ''});
+
         reader.onload = () => {
           if (canvas) {
             fabric.Image.fromURL(reader.result as string, img => {

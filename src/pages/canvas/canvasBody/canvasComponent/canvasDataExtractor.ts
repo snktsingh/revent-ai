@@ -245,8 +245,9 @@ const useCanvasData = () => {
             '1',
             outputFormat
           )
-          Quote.data[0]['text'] = canvasObject.text
-          
+          if(Quote.data){
+            Quote.data[0]['text'] = canvasObject.text
+          }
        }
       } 
     });
