@@ -20,6 +20,7 @@ import {
 } from './style';
 import SvgViewer from '@/components/canvasSvgViewer';
 import ThumbnailPreview from '@/common-ui/thumbnailPreview';
+import { useEffect } from 'react';
 
 export const CanvasVariant = () => {
   const dispatch = useAppDispatch();
@@ -34,17 +35,21 @@ export const CanvasVariant = () => {
     canvasJS
   } = useVariants();
 
+  useEffect(()=>{
+    dispatch(toggleVariantSlide(false))
+  },[canvasJS.canvas])
+
   return (
     <div>
       {canvasJS.variants.length > 0 && (
-        <VariantButton onClick={() => dispatch(toggleVariantSlide())}>
+        <VariantButton onClick={() => dispatch(toggleVariantSlide(true))}>
           <img src={varianButtonSvg} alt="variantButton" />
         </VariantButton>
       )}
       <Drawer
         anchor="right"
         open={openVariant}
-        onClose={() => dispatch(toggleVariantSlide())}
+        onClose={() => dispatch(toggleVariantSlide(false))}
         sx={{
           width: '14vw',
           flexShrink: 3,
@@ -59,7 +64,7 @@ export const CanvasVariant = () => {
         variant="persistent"
       >
         <DrawerMainContainer>
-          <DrawerBtnContainer onClick={() => dispatch(toggleVariantSlide())}>
+          <DrawerBtnContainer onClick={() => dispatch(toggleVariantSlide(true))}>
             <DrawerVariantButton>Variants</DrawerVariantButton>
           </DrawerBtnContainer>
           <DrawerVariant>

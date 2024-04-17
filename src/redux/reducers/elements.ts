@@ -53,8 +53,8 @@ export const ElementReducer = createSlice({
     toggleTemplateVisibility: state => {
       state.openTemplates = !state.openTemplates;
     },
-    toggleVariantSlide: state => {
-      state.openVariant = !state.openVariant;
+    toggleVariantSlide: (state, action: PayloadAction<boolean>) => {
+      state.openVariant = action.payload;
     },
     toggleNotesSlide: state => {
       state.openNotes = !state.openNotes;

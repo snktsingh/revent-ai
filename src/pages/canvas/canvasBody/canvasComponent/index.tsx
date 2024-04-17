@@ -148,6 +148,7 @@ const CanvasComponent: React.FC = () => {
     if (variantImage && canvasRef.current) {
       console.log('1 started')
       // canvasRef.current?.clear();
+      
       console.log('1 ended')
       console.log({variantImage});
       canvasRef.current?.setBackgroundColor(
@@ -181,7 +182,7 @@ const CanvasComponent: React.FC = () => {
       canvasRef.current?.renderAll();
     }
 
-  }, [variantImage]);
+  }, [variantImage, isVariantSelected]);
 
 
 
