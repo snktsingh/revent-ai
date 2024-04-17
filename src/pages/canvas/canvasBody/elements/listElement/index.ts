@@ -14,6 +14,7 @@ import { updateListId } from '@/redux/reducers/fabricElements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import AutoResizingTextbox from '@/utils/fabric-utils/AutoResizingTextbox';
 import { fabric } from 'fabric';
+
 export function useListElement() {
   const dispatch = useAppDispatch();
   const { canvasList, canvasJS } = useAppSelector(state => state.canvas);
@@ -81,12 +82,12 @@ export function useListElement() {
     let file: any;
     let reader = new FileReader();
 
-
     fileInput.addEventListener('change', e => {
       file = (e.target as HTMLInputElement)?.files?.[0];
       
       if (file) {
         addListImages({ canvasId : canvasJS.id, file, path : '' });
+
         reader.onload = () => {
           if (canvas) {
             fabric.Image.fromURL(reader.result as string, img => {

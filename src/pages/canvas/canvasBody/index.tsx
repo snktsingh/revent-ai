@@ -141,9 +141,11 @@ const CanvasBody = () => {
       originalSlideData: canvasList[canvasJS.id - 1].canvas,
     };
     dispatch(updateCurrentCanvas(currentCanvas));
+
     const isListImagesPresent = requestData?.elements.some((canvas => canvas.shape === 'List'));
     const isImagesPresent = requestData?.elements.some((canvas => canvas.shape === 'Images'));
     const isQuoteImagesPresent = requestData?.elements.some((canvas => canvas.shape === 'Quote'));
+    
     if(isListImagesPresent){
       let blob = new Blob([JSON.stringify(requestData)], {type : 'application/json'});
       let formData = new FormData();
@@ -158,10 +160,12 @@ const CanvasBody = () => {
       }
       return;
     }
+
     if(isImagesPresent){
       let blob = new Blob([JSON.stringify(requestData)], {type : 'application/json'});
       let formData = new FormData();
       formData.append('data', blob);
+
       const ImagesArray = Images.find((el) => el.canvasId == canvasJS.id);
       if(ImagesArray){
         for(let i=0;i<ImagesArray.images.length;i++){

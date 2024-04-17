@@ -222,6 +222,7 @@ const useCanvasData = () => {
             text: canvasObject.text,
           });
         }
+
         else if (canvasObject.name.startsWith(IMAGE)) {
           const Image = getOrCreateElement(
             'Images',
