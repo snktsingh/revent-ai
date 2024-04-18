@@ -150,10 +150,12 @@ const CanvasComponent: React.FC = () => {
   useEffect(() => {
     setShowOptions(false);
     if (variantImage && canvasRef.current) {
+
       console.log('variant 1')
       canvasRef.current?.clear();
       
       console.log('variant 2')
+
       canvasRef.current?.setBackgroundColor(
         `${theme.colorSchemes.light.palette.common.white}`,
         canvasRef.current.renderAll.bind(canvasRef.current)
