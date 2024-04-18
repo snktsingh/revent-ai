@@ -21,6 +21,8 @@ const useSignup = () => {
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const [isPreview, setIsPreview] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setValues({ ...values, [name]: value });
@@ -65,6 +67,14 @@ const useSignup = () => {
     console.log(values);
   };
 
+  const handleClickShowPassword = () => setShowPassword(show => !show);
+  const handleClickShowConfirmPassword = () => setShowConfirmPassword(show => !show);
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+  };
+
   return {
     values,
     setValues,
@@ -76,6 +86,11 @@ const useSignup = () => {
     setConfirmPassword,
     setIsPreview,
     isPreview,
+    handleClickShowPassword,
+    handleMouseDownPassword,
+    showPassword,
+    showConfirmPassword,
+    handleClickShowConfirmPassword
   };
 };
 export default useSignup;

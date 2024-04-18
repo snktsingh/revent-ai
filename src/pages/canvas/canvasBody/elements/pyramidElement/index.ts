@@ -57,7 +57,8 @@ export function usePyramidElement() {
         fixedWidth: 150,
         fixedHeight: 100,
         name: `${PYRAMID_TEXT}_${currentID}`,
-        fill: 'white'
+        fill: 'white',
+        hasBorders: false
       });
       (activeObject as fabric.Group).addWithUpdate(trapezoid);
 
@@ -103,12 +104,13 @@ export function usePyramidElement() {
         top: 138,
         width: 100,
         name: `${PYRAMID_TEXT}_${pyramidId}`,
-        fixedWidth: 100,
-        fixedHeight: 200,
+        fixedWidth: 120,
+        fixedHeight: 60,
         hasControls: false,
         lockMovementX: true,
         lockMovementY: true,
-        fill: 'white'
+        fill: 'white',
+        hasBorders: false
       });
 
       textsList.push(text);
@@ -136,12 +138,13 @@ export function usePyramidElement() {
           top: 213,
           width: 140,
           name: `${PYRAMID_TEXT}_${pyramidId}`,
-          fixedWidth: 130,
+          fixedWidth: 150,
           fixedHeight: 50,
           hasControls: false,
           lockMovementX: true,
           lockMovementY: true,
-          fill: 'white'
+          fill: 'white',
+          hasBorders: false
         });
 
         trapTop = trapTop + 60;

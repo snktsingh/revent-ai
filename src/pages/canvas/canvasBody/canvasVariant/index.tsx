@@ -42,7 +42,7 @@ export const CanvasVariant = () => {
   return (
     <div>
       {canvasJS.variants.length > 0 && (
-        <VariantButton onClick={() => dispatch(toggleVariantSlide(true))}>
+        <VariantButton onClick={() => dispatch(toggleVariantSlide(!openVariant))}>
           <img src={varianButtonSvg} alt="variantButton" />
         </VariantButton>
       )}

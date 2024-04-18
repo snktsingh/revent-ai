@@ -76,12 +76,15 @@ const CanvasComponent: React.FC = () => {
     canvas.loadFromJSON(
       canvasJS.canvas,
       () => {
+        console.log('canvas 1')
         canvasRef.current = canvas;
         if(canvas){
+          console.log('canvas 2')
           updateCanvasStyle(canvas);
+          console.log('canvas 3')
           updateCanvasDimensions(canvas);
         }
-        
+        console.log('canvas 4')
         if(canvas.toObject(customFabricProperties)?.objects){
           getElementsData(
             canvas.toObject(customFabricProperties)?.objects,
@@ -95,10 +98,11 @@ const CanvasComponent: React.FC = () => {
         } else {
           dispatch(toggleRegenerateButton(true));
         }
-
+        console.log('canvas 5')
         updateCanvasSlideData(canvas, canvasJS.id);
-
+        console.log('canvas 6')
         forEachCanvasObject(canvas);
+        console.log('canvas 7')
         // canvas Events
         canvas.on('selection:created', handleElementBarSelection);
         canvas.on('selection:updated', handleElementBarSelection);
@@ -125,7 +129,7 @@ const CanvasComponent: React.FC = () => {
         canvas.on('object:moving', options => onObjectMovingEvent(options, canvas));
         canvas.on('object:scaling', options => onObjectScalingEvent(options, canvas));
         canvas.on('mouse:down', options => onMouseDownEvent(options, canvas));
-
+        console.log('canvas 8')
         canvas.renderAll();
       },
       (error: Error) => {
@@ -146,16 +150,15 @@ const CanvasComponent: React.FC = () => {
   useEffect(() => {
     setShowOptions(false);
     if (variantImage && canvasRef.current) {
-      console.log('1 started')
-      // canvasRef.current?.clear();
+      console.log('variant 1')
+      canvasRef.current?.clear();
       
-      console.log('1 ended')
-      console.log({variantImage});
+      console.log('variant 2')
       canvasRef.current?.setBackgroundColor(
         `${theme.colorSchemes.light.palette.common.white}`,
         canvasRef.current.renderAll.bind(canvasRef.current)
       );
-      
+      console.log('variant 3')
       fabric.Image.fromURL(variantImage, img => {
         const canvasWidth = canvasRef.current?.width || 0;
         const canvasHeight = canvasRef.current?.height || 0;
@@ -163,8 +166,8 @@ const CanvasComponent: React.FC = () => {
         const scaleHeight = canvasHeight / img.height!;
         const scale = Math.max(scaleWidth, scaleHeight);
 
-        
-       const variant = img.set({
+        console.log('variant 4')
+       img.set({
           left: 0,
           top: 0,
           scaleX: scale,
@@ -174,12 +177,12 @@ const CanvasComponent: React.FC = () => {
           lockScalingY: true,
           moveCursor: 'pointer',
         });
-        console.log('2 started')
-        canvasRef.current?.add(variant);
-        console.log({variant})
-        console.log('2 ended')
+        console.log('variant 5')
+        canvasRef.current?.add(img);
+        console.log('variant 6')
       });
       canvasRef.current?.renderAll();
+      console.log('variant 7')
     }
 
   }, [variantImage, isVariantSelected]);
