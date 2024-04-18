@@ -8,6 +8,7 @@ import {
   CYCLE_TEXT,
   FUNNEL,
   FUNNEL_TEXT,
+  IMAGE,
   LIST_MAIN,
   LIST_TEXT,
   PARAGRAPH,
@@ -16,6 +17,8 @@ import {
   PYRAMID,
   PYRAMID_TEXT,
   QUOTE,
+  QUOTE_AUTHOR,
+  QUOTE_TEXT,
   SECTION_SLIDE_SUBTITLE,
   SECTION_SLIDE_TITLE,
   SUBTITLE,
@@ -97,7 +100,7 @@ const useCanvasData = () => {
     let titleText: string = '';
     let subTitleText: string = '';
     canvasData.forEach(canvasObject => {
-      if (canvasObject.type === 'textbox' && canvasObject.name) {
+      if ((canvasObject.type === 'textbox' || canvasObject.type === 'image') && canvasObject.name) {
         const elementID = canvasObject.name.split('_')[1];
         let elementType: string | null = null;
 
@@ -219,6 +222,34 @@ const useCanvasData = () => {
             text: canvasObject.text,
           });
         }
+
+        else if (canvasObject.name.startsWith(IMAGE)) {
+          const Image = getOrCreateElement(
+            'Images',
+            '1',
+            outputFormat
+          )
+       }
+        else if (canvasObject.name.startsWith(QUOTE_TEXT)) {
+          const Quote = getOrCreateElement(
+            'Quote',
+            '1',
+            outputFormat
+          )
+          Quote.data?.push({
+            heading: canvasObject.text,
+          })
+       }
+        else if (canvasObject.name.startsWith(QUOTE_AUTHOR)) {
+          const Quote = getOrCreateElement(
+            'Quote',
+            '1',
+            outputFormat
+          )
+          if(Quote.data){
+            Quote.data[0]['text'] = canvasObject.text
+          }
+       }
       } 
     });
 

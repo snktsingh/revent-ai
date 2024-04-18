@@ -147,7 +147,8 @@ const CanvasComponent: React.FC = () => {
     setShowOptions(false);
     if (variantImage && canvasRef.current) {
       console.log('1 started')
-      canvasRef.current?.clear();
+      // canvasRef.current?.clear();
+      
       console.log('1 ended')
       console.log({variantImage});
       canvasRef.current?.setBackgroundColor(
