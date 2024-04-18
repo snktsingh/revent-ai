@@ -293,7 +293,7 @@ const CanvasBody = () => {
                 &nbsp;
                 {(!variantsIsEmpty && !selectedOriginalCanvas) && <Button
                   variant="contained"
-                  size="small"
+                  size="medium"
                   onClick={() => handleApplyOriginalAsMain()}
                 >
                   Edit
@@ -301,7 +301,7 @@ const CanvasBody = () => {
                 &nbsp;
                 <Button
                   variant="contained"
-                  size="small"
+                  size="medium"
                   onClick={() => handleRequest()}
                   disabled={isRegenerateDisabled}
                 >

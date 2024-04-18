@@ -58,6 +58,7 @@ export function useFunnelElement() {
       hasControls: false,
       lockMovementX: true,
       lockMovementY: true,
+      hasBorders: false
     });
 
     let top: number = text.top || 0;
@@ -140,7 +141,8 @@ export function useFunnelElement() {
         name: `${FUNNEL_TEXT}_${funnelId}`,
         hasControls :false,
         lockMovementX : true,
-        lockMovementY:true
+        lockMovementY:true,
+        hasBorders: false
       });
       return canvas?.add(text);
     }

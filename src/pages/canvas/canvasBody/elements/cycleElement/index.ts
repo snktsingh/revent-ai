@@ -84,6 +84,7 @@ export function useCycleElement() {
         hasControls: false,
         lockMovementX: true,
         lockMovementY: true,
+        hasBorders: false
       });
       return canvas.add(text);
     };
@@ -270,6 +271,7 @@ export function useCycleElement() {
         hasControls: false,
         lockMovementX: true,
         lockMovementY: true,
+        hasBorders: false
       });
 
       const circle = new fabric.Circle({

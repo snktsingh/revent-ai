@@ -77,6 +77,7 @@ export const useProcessElement = () => {
       hasControls: false,
       lockMovementX: true,
       lockMovementY: true,
+      hasBorders: false
     });
 
     if(rectCount === 3) {
@@ -136,6 +137,7 @@ export const useProcessElement = () => {
         hasControls: false,
         lockMovementX: true,
         lockMovementY: true,
+        hasBorders: false,
       });
       return canvas?.add(text);
     }

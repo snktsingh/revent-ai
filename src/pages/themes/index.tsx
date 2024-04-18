@@ -35,7 +35,7 @@ const AppThemes = () => {
         </TemplateTitle>
         <br />
         <br />
-        <h2>Themes</h2>
+        <h2>Select a Base Theme</h2>
         <ThemeCardContainer>
           {thunk.isThemeLoading ? (
             <TailSpin
@@ -55,9 +55,11 @@ const AppThemes = () => {
                   <ThemeCardTitle
                     key={theme.themeId}
                     onClick={() => {
-                      dispatch(setSelectedTheme(theme.themeId));
-                      dispatch(setThemeCode(theme.themeColor));
-                      dispatch(setThemeId(theme.themeId));
+                      // dispatch(setSelectedTheme(theme.themeId));
+                      // dispatch(setThemeId(theme.themeId));
+                      handleGenerate(theme.themeId);
+                      setTimeout(() => {
+                      }, 2500);
                       console.log({ theme })
                     }}
                     className={
@@ -81,7 +83,7 @@ const AppThemes = () => {
           )}
         </ThemeCardContainer>
       </span>
-      <ButtonContainer>
+      {/* <ButtonContainer>
         <Stack direction="row" spacing={3}>
           <CustomButton variant="contained" onClick={handleGenerate}>
             <Stack direction="row" spacing={2}>
@@ -90,7 +92,7 @@ const AppThemes = () => {
             </Stack>
           </CustomButton>
         </Stack>
-      </ButtonContainer>
+      </ButtonContainer> */}
     </TemplateContainer>
   );
 };

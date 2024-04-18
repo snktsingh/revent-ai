@@ -7,7 +7,7 @@ import {
 } from './style';
 import Logo from '../../assets/logo.svg';
 import SignUpImage from '../../assets/signup.svg';
-import { Box, Button, Grid } from '@mui/material';
+import { Box, Button, Grid, IconButton } from '@mui/material';
 import { TextInput } from '../login/style';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
@@ -15,6 +15,7 @@ import useSignup from './container';
 import { Slide, ToastContainer } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import EmailPreview from '../emailPreview';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const SignUp = () => {
   const {
@@ -27,6 +28,11 @@ const SignUp = () => {
     isPreview,
     setIsPreview,
     setIsDisabled,
+    handleClickShowPassword,
+    handleMouseDownPassword,
+    showConfirmPassword,
+    showPassword,
+    handleClickShowConfirmPassword
   } = useSignup();
 
   if (isPreview) {
@@ -102,6 +108,19 @@ const SignUp = () => {
                   fullWidth
                   value={values.password}
                   onChange={handleChange}
+                  type={showPassword ? 'text' : 'password'}
+                  InputProps={{
+                    endAdornment: (
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    ),
+                  }}
                 />
                 <TextInput
                   id="fullWidth"
@@ -110,6 +129,19 @@ const SignUp = () => {
                   fullWidth
                   value={confirmPassword}
                   onChange={e => setConfirmPassword(e.target.value)}
+                  type={showPassword ? 'text' : 'password'}
+                  InputProps={{
+                    endAdornment: (
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowConfirmPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    ),
+                  }}
                 />
                 <PassMessage>
                   *Passwords must be minimum 8 characters and contain 1 letter,

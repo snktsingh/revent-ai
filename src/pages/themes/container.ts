@@ -1,3 +1,4 @@
+import { setSelectedTheme, setThemeId } from '@/redux/reducers/theme';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import {
   createPresentation,
@@ -24,10 +25,12 @@ const useStartTheme = () => {
     }
   };
 
-  const handleGenerate = () => {
-    if (selectedThemeId === '' || selectedThemeId === null) {
+  const handleGenerate = (themeId : number) => {
+    if (themeId === null) {
       toast.warning('Please select at least one theme !');
     } else {
+      dispatch(setSelectedTheme(themeId));
+      dispatch(setThemeId(themeId));
       handleCreatePPT();
     }
   };
