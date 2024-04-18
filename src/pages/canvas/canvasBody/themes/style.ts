@@ -5,4 +5,5 @@ export const ThemesSliderContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 7vh;
+  align-items: center;
 `;

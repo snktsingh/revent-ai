@@ -22,7 +22,7 @@ const ThumbnailPreview: React.FC<ThumbnailPreviewProps> = ({
 
 
   return (
-    <div>
+    <>
       {errorOccur ? (
         <ErrorPreviewCard style={style}>
           <ReportGmailerrorredIcon sx={{ fontSize: '3rem', color:'white' }} />
@@ -34,9 +34,9 @@ const ThumbnailPreview: React.FC<ThumbnailPreviewProps> = ({
           </ErrorText>
         </ErrorPreviewCard>
       ) : (
-        <img src={src} alt={alt} width="100%" height="100%" onError={handleError} />
+        <img src={src} alt={alt} style={style} onError={handleError} />
       )}
-    </div>
+    </>
   );
 }
 
