@@ -2,6 +2,7 @@ import PopUpModal from '@/constants/elements/modal';
 import { AddElement, Copy, Delete } from '@/constants/media';
 import canvas, {
   copyCanvasCopy,
+  deleteCanvasItem,
   setCanvas,
   setVariantImageAsMain,
   toggleSelectedOriginalCanvas,
@@ -70,7 +71,7 @@ const CanvasBody = () => {
   const { isRegenerateDisabled } = useAppSelector(state => state.slide);
   const { isLoading } = useAppSelector(state => state.thunk);
   const { requestData } = useAppSelector(state => state.apiData);
-  const { enabledElements } = useAppSelector(state => state.element);
+  const { enabledElements, isDeleteAlertShow } = useAppSelector(state => state.element);
   const [activeLike, setActiveLike] = useState(false);
   const [activeDislike, setActiveDislike] = useState(false);
   const [elementName, setElementName] = useState<string>('');
@@ -94,6 +95,10 @@ const CanvasBody = () => {
       dispatch(setMenuItemKey(item.key));
     } else {
       handleClose();
+      if(selectedOriginalCanvas){
+        item.onClick();
+        return;
+      }
       openRedirectAlert();
     }
   };
@@ -212,6 +217,17 @@ const CanvasBody = () => {
     setRedirectAlert(false);
   };
 
+  const handleDeleteSlide = () => {
+     if(isDeleteAlertShow){
+      dispatch(openModal())
+    }else{
+      if(canvasList.length === 1){
+        dispatch(openModal());
+        return;
+      }
+      dispatch(deleteCanvasItem(canvasJS.id));
+     }
+  };
 
   useEffect(() => {
     if (canvasJS) {
@@ -257,7 +273,7 @@ const CanvasBody = () => {
               width={'91.51%'}
             >
               <span>
-                <IconButton onClick={() => dispatch(openModal())}>
+                <IconButton onClick={handleDeleteSlide}>
                   <img src={Delete} />
                 </IconButton>
                 <IconButton

@@ -40,11 +40,12 @@ export default function Templates() {
   const dispatch = useAppDispatch();
   const thunk = useAppSelector(state => state.thunk);
   const { requestData } = useAppSelector(state => state.apiData);
-  const { canvasJS, originalCanvasSlide } = useAppSelector(
+  const { canvasJS, originalCanvasSlide, canvasList } = useAppSelector(
     state => state.canvas
   );
+  const [canvasIndex, setCanvasIndex] = useState<number>(0);
   const theme = useTheme();
-
+  
   const handleDrawerClose = () => {
     dispatch(toggleTemplateVisibility());
   };
@@ -74,13 +75,17 @@ export default function Templates() {
       themeId
     )
   };
-
+  
   const handleClose = () => {
     setOpen(false);
     dispatch(setThemeCode(''));
   };
-
+  
   useEffect(() => {
+    const index = canvasList.findIndex((canvas) => canvas.id === canvasJS.id);
+    if(index){
+      setCanvasIndex(index);
+    }
     dispatch(getAllThemes());
   }, []);
 
@@ -156,15 +161,20 @@ export default function Templates() {
               aria-describedby="alert-dialog-description"
             >
               <>
+                {(canvasList[canvasIndex].canvas as any).objects.length > 0 && 
                 <DialogTitle id="alert-dialog-title">
                   {'Are you sure ?'}
-                </DialogTitle>
+                </DialogTitle>}
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">
-                    Selecting this theme will change the current slide contents
+                    { (canvasList[canvasIndex].canvas as any).objects.length > 0 ? "Selecting this theme will change the current slide contents" : "Please add something to the canvas to change the theme"}
+                    
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
+                  {
+                    (canvasList[canvasIndex].canvas as any).objects.length > 0 ?
+                  <>
                   <Button onClick={handleClose}>No</Button>
                   <Button
                     autoFocus
@@ -175,6 +185,10 @@ export default function Templates() {
                   >
                     Yes
                   </Button>
+                  </>
+                  :
+                  <Button onClick={handleClose}>Okay</Button>
+                  }
                 </DialogActions>
               </>
             </Dialog>
