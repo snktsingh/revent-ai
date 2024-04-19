@@ -61,7 +61,7 @@ export const Text = styled.p`
   line-height: 0.8rem;
 `;
 export const VariantSlide = styled.div`
-  margin: 10px 0px 0px 0px;
+  margin: 10px 0px 15px 0px;
   display: flex;
   width: 100%;
   justify-content: space-around;
@@ -87,11 +87,13 @@ export const OriginalSlideCard = styled.div`
 `;
 export const VariantSlideCard = styled.div`
   width: 90%;
-  height: 12vh;
+  height: auto;
   flex-shrink: 0;
   border-radius: 5px;
   background: ${theme.colorSchemes.light.palette.common.border};
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  display: flex;
+  align-items: center;
 `;
 export const ButtonContainer = styled.div`
   width: 90%;

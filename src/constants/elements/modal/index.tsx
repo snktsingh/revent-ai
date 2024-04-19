@@ -1,15 +1,19 @@
 import React from 'react';
 import {
   Button,
+  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  FormControlLabel,
+  Stack,
 } from '@mui/material';
 import { deleteCanvasItem } from '@/redux/reducers/canvas';
 import { closeModal } from '@/redux/reducers/elements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { CheckBox } from '@mui/icons-material';
 
 const PopUpModal = () => {
   const isVisible = useAppSelector(state => state.element);
@@ -20,7 +24,7 @@ const PopUpModal = () => {
     dispatch(closeModal());
     dispatch(deleteCanvasItem(canvasJS.id));
   };
-  
+
   return (
     <Dialog
       open={isVisible.isModalVisible}
@@ -29,7 +33,7 @@ const PopUpModal = () => {
       aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title">
-        <h3>Are you sure?</h3>
+        {"Are you sure?"}
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
@@ -39,10 +43,22 @@ const PopUpModal = () => {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => dispatch(closeModal())}>Cancel</Button>
-        <Button onClick={handleDelete} disabled={canvasList.length === 1}>
-          Delete
-        </Button>
+        <Stack
+          direction='row'
+          spacing={5}
+          mt={-1}
+          ml={1}
+        >
+          <Stack>
+            <FormControlLabel control={<Checkbox size="small" />} label="Don't show me again"/>
+          </Stack>
+          <Stack direction='row'>
+            <Button color="primary" onClick={() => dispatch(closeModal())}>Cancel</Button>
+            <Button color="secondary" onClick={handleDelete} disabled={canvasList.length === 1}>
+              Delete
+            </Button>
+          </Stack>
+        </Stack>
       </DialogActions>
     </Dialog>
   );

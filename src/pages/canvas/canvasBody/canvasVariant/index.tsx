@@ -49,22 +49,24 @@ export const CanvasVariant = () => {
       <Drawer
         anchor="right"
         open={openVariant}
+        variant="persistent"
         onClose={() => dispatch(toggleVariantSlide(false))}
         sx={{
-          width: '14vw',
+          // width: '15vw',
+          height: '100%',
           flexShrink: 3,
           '& .MuiDrawer-paper': {
-            width: '19vw',
-            padding: '0vh 2vh',
-            marginTop: '14.3vh',
+            width: '20%',
+            padding: '0vh 1vw 0vh 2vw',
+            marginTop: '13.4vh',
             background: 'none',
             border: 'none',
           },
+         
         }}
-        variant="persistent"
       >
         <DrawerMainContainer>
-          <DrawerBtnContainer onClick={() => dispatch(toggleVariantSlide(true))}>
+          <DrawerBtnContainer onClick={() => dispatch(toggleVariantSlide(false))}>
             <DrawerVariantButton>Variants</DrawerVariantButton>
           </DrawerBtnContainer>
           <DrawerVariant>
@@ -115,7 +117,7 @@ export const CanvasVariant = () => {
                           alt={`Variant ${i + 1}`}
                           style={{
                             width: '100%',
-                            height: '12vh',
+                            height: 'auto',
                             borderRadius:'3%'
                           }}
                         />

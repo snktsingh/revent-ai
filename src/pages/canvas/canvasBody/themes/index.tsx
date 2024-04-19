@@ -50,13 +50,14 @@ export default function Templates() {
   };
 
   const DrawerHeader = styled('div')(({ theme }) => ({
+    margin: 'auto',
     position: 'fixed',
     display: 'flex',
     alignItems: 'center',
     padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
     justifyContent: 'space-between',
-    width: '14vw',
+    width: '15vw',
     background: 'white',
   }));
 
@@ -144,7 +145,7 @@ export default function Templates() {
                       : ''
                   }
                 >
-                  <ThumbnailPreview src={themes.thumbnailUrl} alt={themes.themeId} style={{width:'14vw',height:'15vh'}} />
+                  <ThumbnailPreview src={themes.thumbnailUrl} alt={themes.themeId} style={{width: '100%',height:'auto'}} />
                 </ListSlideCard>
               );
             })}
