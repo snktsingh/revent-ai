@@ -1,6 +1,6 @@
 import CreateIcon from '@mui/icons-material/Create';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { theme } from '@/constants/theme';
+import { customStyles, theme } from '@/constants/theme';
 import {
   Avatar,
   Button,
@@ -47,7 +47,7 @@ export const ProfileAvatarText = styled(Avatar)`
     height: 120px;
     background-color: ${theme.colorSchemes.light.palette.primary.main};
     font-size: 4rem;
-    font-family: 'Roboto', sans-serif;
+    font-family: ${customStyles.fonts.robotoSansSerif};
     margin: 40px 40px 20px 40px;
   }
 
@@ -178,7 +178,7 @@ export const ProfileImgContainer = styled.div`
 export const ProfileTitle = styled.div`
   font-size: 18px;
   font-weight: 500;
-  font-family: 'Roboto', sans-serif;
+  font-family: ${customStyles.fonts.robotoSansSerif};
   color: rgb(68, 71, 91);
   background: none;
 `;
@@ -260,7 +260,7 @@ export const SectionTitle = styled(Typography)`
   && {
     font-size: 0.8rem;
     font-weight: 550;
-    font-family: 'Roboto', sans-serif;
+    font-family: ${customStyles.fonts.robotoSansSerif};
     margin: 0 0 0 2.5%;
     text-transform: uppercase;
     padding: 0.6% 0;

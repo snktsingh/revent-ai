@@ -1,3 +1,4 @@
+import { customStyles } from '@/constants/theme';
 import { Card } from '@mui/material';
 import styled from 'styled-components';
 
@@ -49,4 +50,9 @@ export const AddThemeCard = styled.div`
    flex-direction: column;
    align-items: center;
    justify-content: center;
+`;
+
+export const AddThemeText = styled.h3`
+  color: #1C274C;
+  font-family: ${customStyles.fonts.robotoSansSerif};
 `;
