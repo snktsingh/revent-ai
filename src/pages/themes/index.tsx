@@ -23,6 +23,7 @@ import { TailSpin } from 'react-loader-spinner';
 import { theme } from '@/constants/theme';
 import ReventingLoader from '@/common-ui/loader';
 import ThumbnailPreview from '@/common-ui/thumbnailPreview';
+import CanvasThemes from '@/common-ui/addTheme';
 
 const AppThemes = () => {
   const { navigate, thunk, dispatch, selectedThemeId, handleGenerate } =
@@ -107,6 +108,7 @@ const AppThemes = () => {
           </CustomButton>
         </Stack>
       </ButtonContainer> */}
+      <CanvasThemes/>
     </TemplateContainer>
   );
 };
