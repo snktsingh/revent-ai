@@ -12,6 +12,11 @@ export interface IUserResponse {
   lastModifiedBy: string;
   lastModifiedDate: Date | null;
   authorities: string[];
+  phone : string;
+  linkedIn : string;
+  companyRole : string;
+  companyName : string;
+  companySize : number;
 }
 
 export interface IUserDetails {

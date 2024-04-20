@@ -61,7 +61,7 @@ const SignUp = () => {
                 }}
               >
                 <FormContainer>
-                  <TextInput
+                  {/* <TextInput
                     id="fullWidth"
                     name="login"
                     label="Enter your User Name"
@@ -69,10 +69,11 @@ const SignUp = () => {
                     fullWidth
                     value={values.login}
                     onChange={handleChange}
-                  />
+                  /> */}
                   <TextInput
                     id="fullWidth"
                     name="email"
+                    type='email'
                     label="Enter your Email"
                     variant="outlined"
                     fullWidth
@@ -84,6 +85,7 @@ const SignUp = () => {
                   <TextInput
                     id="fullWidth"
                     name="firstName"
+                    type='text'
                     label="Enter your First Name"
                     variant="outlined"
                     fullWidth
@@ -93,6 +95,7 @@ const SignUp = () => {
                   <TextInput
                     id="fullWidth"
                     name="lastName"
+                    type='text'
                     label="Enter your Last Name"
                     variant="outlined"
                     fullWidth

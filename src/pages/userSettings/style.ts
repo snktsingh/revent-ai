@@ -50,7 +50,6 @@ export const ProfileAvatarText = styled(Avatar)`
     font-family: ${customStyles.fonts.robotoSansSerif};
     margin: 40px 40px 20px 40px;
   }
-
 `;
 
 export const ProfileDetails = styled.div`
@@ -232,9 +231,8 @@ export const StyledSelect = styled(Select)`
     width: 230px;
     font-size: 12px;
   }
-  &&{
-    
-
+  && {
+    height: 45px;
   }
 `;
 
@@ -242,7 +240,7 @@ export const SectionTitleContainer = styled.div`
   width: 100%;
   color: ${theme.colorSchemes.light.palette.primary.main};
   height: 30px;
-  margin : 1.5% 0;
+  margin: 1.5% 0;
   position: relative;
   &::before {
     content: '';
