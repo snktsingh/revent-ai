@@ -1,4 +1,4 @@
-import { theme } from '@/constants/theme';
+import { customStyles, theme } from '@/constants/theme';
 import { Button, styled as Mstyled } from '@mui/material';
 import styled from 'styled-components';
 
@@ -40,7 +40,7 @@ export const DrawerVariantButton = styled.button`
   padding: 6px 20px;
   border: none;
   cursor: pointer;
-  font-family: 'Roboto';
+  font-family: ${customStyles.fonts.robotoSansSerif};
 `;
 export const DrawerVariant = styled.div`
   width: 80%;
@@ -54,7 +54,7 @@ export const Text = styled.p`
   opacity: 50%;
   margin: 1rem 0px 0px 1rem;
   color: #222222;
-  font-family: 'Roboto';
+  font-family: ${customStyles.fonts.robotoSansSerif};
   font-size: 0.7rem;
   font-style: normal;
   font-weight: 700;
@@ -68,7 +68,7 @@ export const VariantSlide = styled.div`
   cursor: pointer;
   div {
     color: ${theme.colorSchemes.light.palette.common.darkGrey};
-    font-family: 'Roboto';
+    font-family: ${customStyles.fonts.robotoSansSerif};
     font-size: 0.6rem;
     font-style: normal;
     font-weight: 500;
@@ -131,6 +131,6 @@ export const LogoContainer = styled.div`
     color: #a8a8a8;
     font-size: 0.6rem;
     font-weight: 500;
-    font-family: sans-serif;
+    font-family: ${customStyles.fonts.robotoSansSerif};
   }
 `;

@@ -1,5 +1,5 @@
 import { theme } from '@/constants/theme';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 export const EditBarContainer = styled.div<{ left: number; top: number }>`
   position: absolute;
@@ -38,59 +38,114 @@ export const SvgContainer = styled.span`
   height: 22px;
 `;
 
+// export const CheckboxContainer = styled.label`
+//   display: block;
+//   position: relative;
+//   cursor: pointer;
+//   font-size: 12px;
+//   user-select: none;
+//   padding: 2px 5px;
+  
+//   input {
+//     position: absolute;
+//     opacity: 0;
+//     cursor: pointer;
+//     height: 0;
+//     width: 0;
+//   }
+  
+//   .checkmark {
+//     border: 1px solid #000;
+//     position: relative;
+//     top: 0;
+//     left: 0;
+//     height: 1.6em;
+//     width: 1.6em;
+//     border-radius: 50%;
+//     background: #ffeded38;
+//     transition: all 0.2s ease;
+//     opacity: 0.4;
+//   }
+  
+//   input:checked ~ .checkmark {
+//     background: ${theme.colorSchemes.light.palette.primary.main};
+//     opacity: 0.9;
+//     border: none;
+//     transition: all 0.2s ease;
+//   }
+
+//   .checkmark:after {
+//     content: '';
+//     position: absolute;
+//     display: none;
+//   }
+
+//   input:checked ~ .checkmark:after {
+//     display: block;
+//   }
+
+//   .checkmark:after {
+//     left: 0.61em;
+//     top: 0.43em;
+//     width: 0.25em;
+//     height: 0.5em;
+//     border: solid rgb(255, 255, 255);
+//     border-width: 0 0.15em 0.15em 0;
+//     transform: rotate(45deg);
+//   }
+// `;
+
+const keyframesFill = keyframes`
+  0% {
+    transform: rotate(0deg) scale(0);
+    opacity: 0;
+  }
+
+  30% {
+    transform: rotate(-2deg) scale(0.5);
+  }
+`;
+
 export const CheckboxContainer = styled.label`
-  display: block;
+  --color: #a5a5b0;
+  --size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
   cursor: pointer;
-  font-size: 12px;
+  font-size: var(--size);
   user-select: none;
-  padding: 2px 5px;
-  
-  input {
+  fill: var(--color);
+  padding: 2px 20px 2px 10px;
+
+  & .microphone-slash {
+    position: absolute;
+    animation: ${keyframesFill} 0.5s;
+  }
+
+  & .microphone {
+    position: absolute;
+    display: none;
+    animation: ${keyframesFill} 0.5s;
+  }
+
+  & input:checked ~ .microphone-slash {
+    display: none;
+  }
+
+  & input:checked ~ .microphone {
+    display: block;
+  }
+
+  & input {
     position: absolute;
     opacity: 0;
     cursor: pointer;
     height: 0;
     width: 0;
   }
-  
-  .checkmark {
-    border: 1px solid #000;
-    position: relative;
-    top: 0;
-    left: 0;
-    height: 1.6em;
-    width: 1.6em;
-    border-radius: 50%;
-    background: #ffeded38;
-    transition: all 0.2s ease;
-    opacity: 0.4;
-  }
-  
-  input:checked ~ .checkmark {
-    background: ${theme.colorSchemes.light.palette.primary.main};
-    opacity: 0.9;
-    border: none;
-    transition: all 0.2s ease;
-  }
-
-  .checkmark:after {
-    content: '';
-    position: absolute;
-    display: none;
-  }
-
-  input:checked ~ .checkmark:after {
-    display: block;
-  }
-
-  .checkmark:after {
-    left: 0.61em;
-    top: 0.43em;
-    width: 0.25em;
-    height: 0.5em;
-    border: solid rgb(255, 255, 255);
-    border-width: 0 0.15em 0.15em 0;
-    transform: rotate(45deg);
-  }
 `;
+
+
+

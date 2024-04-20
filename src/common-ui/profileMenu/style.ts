@@ -1,3 +1,4 @@
+import { customStyles } from '@/constants/theme';
 import { AccountCircleRounded } from '@mui/icons-material';
 import { Menu, MenuItem, Typography } from '@mui/material';
 import styled from 'styled-components';
@@ -17,7 +18,7 @@ export const StyledMenu = styled(Menu)`
 
 export const StyledMenuItem = styled(MenuItem)`
   && {
-    font-family: 'Roboto', sans-serif;
+    font-family: ${customStyles.fonts.robotoSansSerif};
     font-size: 14px;
     padding: 8px 20px;
     color: #333333;

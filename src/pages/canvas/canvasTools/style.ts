@@ -1,4 +1,4 @@
-import { theme } from '@/constants/theme';
+import { customStyles, theme } from '@/constants/theme';
 import { Box } from '@mui/material';
 import styled from 'styled-components';
 
@@ -68,7 +68,7 @@ export const SectionTitle = styled.h2`
   font-size: 0.7rem;
   color: ${theme.colorSchemes.light.palette.common.darkGrey};
 
-  font-family: 'Roboto';
+  font-family: ${customStyles.fonts.robotoSansSerif};
   margin: 0.1rem 0.1rem;
   margin-bottom: 5px;
 `;
