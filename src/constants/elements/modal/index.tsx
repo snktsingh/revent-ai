@@ -51,6 +51,7 @@ const PopUpModal = () => {
         >
           <Stack>
             <FormControlLabel control={<Checkbox size="small" onChange={(e) => dispatch(updateDeleteAlertShow(!e.target.checked))} />} label="Don't show me again"/>
+
           </Stack>
           <Stack direction='row'>
             <Button color="primary" onClick={() => dispatch(closeModal())}>Cancel</Button>

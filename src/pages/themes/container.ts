@@ -27,7 +27,8 @@ const useStartTheme = () => {
     }
   };
 
-  const handleGenerate = (themeId: number) => {
+  const handleGenerate = (themeId : number) => {
+
     if (themeId === null) {
       toast.warning('Please select at least one theme !');
     } else {
