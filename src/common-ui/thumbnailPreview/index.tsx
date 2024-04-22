@@ -6,12 +6,14 @@ interface ThumbnailPreviewProps {
   src: string;
   alt: string;
   style?: React.CSSProperties;
+  componentTitle : string;
 }
 
 const ThumbnailPreview: React.FC<ThumbnailPreviewProps> = ({
   src,
   alt,
   style,
+  componentTitle
 }) => {
 
   const [errorOccur, setImageErrorOccur] = useState<boolean>(false);
@@ -24,7 +26,7 @@ const ThumbnailPreview: React.FC<ThumbnailPreviewProps> = ({
   return (
     <>
       {errorOccur ? (
-        <ErrorPreviewCard style={style}>
+        <ErrorPreviewCard style={componentTitle === 'slideThemes'? {...style} : style}>
           <ReportGmailerrorredIcon sx={{ fontSize: '3rem', color:'white' }} />
           <ErrorText sx={{mt:'2%'}}>
             Sorry :(

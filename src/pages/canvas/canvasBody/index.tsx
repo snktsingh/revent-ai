@@ -77,6 +77,9 @@ const CanvasBody = () => {
   const [elementName, setElementName] = useState<string>('');
   const [elementsDisable, setElementsDisable] = useState<boolean>(false);
   const [variantsIsEmpty, setVariantsIsEmpty] = useState<boolean>(false);
+  const [isCanvasEmpty, setIsCanvasEmpty] = useState<boolean>(false);
+  const [isEditDisabled, setIsEditDisabled] = useState<boolean>(false);
+  const [ canvasIndex, setCanvasIndex] = useState<number>(0);
   const { handleApplyOriginalAsMain } = useVariants();
   const handleLike = () => {
     setActiveLike(!activeLike);
@@ -230,19 +233,32 @@ const CanvasBody = () => {
   };
 
   useEffect(() => {
-    if (canvasJS) {
+    const index = canvasList.findIndex((canvas) => canvas.id === canvasJS.id);
+    setCanvasIndex(index);
+    if (canvasJS && index) {
       const canvasIsEmpty =
-        (canvasList[canvasJS.id - 1].canvas as any).objects.length === 0;
-      setVariantsIsEmpty(canvasJS.variants.length === 0);
-      if (variantsIsEmpty && canvasIsEmpty) {
-        dispatch(toggleRegenerateButton(true)); 
-      } else if (selectedOriginalCanvas) {
-        dispatch(toggleRegenerateButton(false)); 
-      } else if (!variantsIsEmpty && !selectedOriginalCanvas) {
-        dispatch(toggleRegenerateButton(true)); 
-      }
+        (canvasList[index].canvas as any).objects.length === 0;
+        setIsCanvasEmpty(canvasIsEmpty);
+        
+        setVariantsIsEmpty(canvasList[index].variants.length === 0);
+        if (canvasList[index].variants.length === 0 && canvasIsEmpty) {
+          dispatch(toggleRegenerateButton(true)); 
+        } else if (selectedOriginalCanvas) {
+          dispatch(toggleRegenerateButton(false)); 
+        } else if (!variantsIsEmpty && !selectedOriginalCanvas) {
+          dispatch(toggleRegenerateButton(true)); 
+        }
+
+
+        if(!variantsIsEmpty && !selectedOriginalCanvas && canvasIsEmpty){
+          setIsEditDisabled(true);
+        }else if(!selectedOriginalCanvas) {
+          setIsEditDisabled(true);
+        }else if(!variantsIsEmpty){
+           setIsEditDisabled(true)
+        }
     }
-  }, [canvasJS, dispatch, variantImage, isRegenerateDisabled,enabledElements]);
+  }, [canvasList[canvasIndex].canvas, dispatch, variantImage,enabledElements]);
 
   function isDisabled(name: string): boolean {
     if (enabledElements.includes(name)) {
@@ -307,7 +323,7 @@ const CanvasBody = () => {
                   />
                 </IconButton>{' '} */}
                 &nbsp;
-                {(!variantsIsEmpty && !selectedOriginalCanvas) && <Button
+                {!isEditDisabled && <Button
                   variant="contained"
                   size="medium"
                   onClick={() => handleApplyOriginalAsMain()}

@@ -150,7 +150,7 @@ export default function Templates() {
                       : ''
                   }
                 >
-                  <ThumbnailPreview src={themes.thumbnailUrl} alt={themes.themeId} style={{width: '100%',height:'auto'}} />
+                  <ThumbnailPreview src={themes.thumbnailUrl} alt={themes.themeId} style={{width: '100%',height:'auto'}} componentTitle='slideThemes' />
                 </ListSlideCard>
               );
             })}

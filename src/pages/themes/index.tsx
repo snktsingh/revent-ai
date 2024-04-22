@@ -89,6 +89,7 @@ const AppThemes = () => {
                         src={theme.thumbnailUrl}
                         alt={theme.themeId}
                         style={{ width: '246px', height: '140px' }}
+                        componentTitle='mainThemes'
                       />
                     </ThemeCard>
                     {theme.title}
