@@ -7,6 +7,6 @@
     { "source": "/canvas", "destination": "/" },
     { "source": "/settings", "destination": "/" },
     { "source": "/activation", "destination": "/" },
-    { "source": "/canvas/*", "destination": "/" }
+    { "source": "/canvas/:id", "destination": "/" }
   ]
 }
