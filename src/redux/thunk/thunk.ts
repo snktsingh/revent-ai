@@ -2,6 +2,7 @@ import ENDPOINT from '@/constants/endpoint';
 import { FetchUtils } from '@/utils/fetch-utils';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
+  setActiveCanvas,
   setVariantImageAsMain,
   toggleIsVariantSelected,
   updateCurrentCanvas,
@@ -24,6 +25,7 @@ const initialState: ISlideRequests = {
   isAuthenticating: true,
   pptDetails: null,
   unAuthMessage: false,
+  selectedSlideIndex: 0,
 };
 
 export const fetchSlideImg = createAsyncThunk(
@@ -33,7 +35,10 @@ export const fetchSlideImg = createAsyncThunk(
     if (req instanceof FormData) {
       isFormData = true;
     }
-    const res = await FetchUtils.postRequest(`${isFormData ? ENDPOINT.GEN_PPT_IMAGES : ENDPOINT.GEN_PPT_MULTI}`, req);
+    const res = await FetchUtils.postRequest(
+      `${isFormData ? ENDPOINT.GEN_PPT_IMAGES : ENDPOINT.GEN_PPT_MULTI}`,
+      req
+    );
     dispatch(setVariantImageAsMain(res.data.variants[0].imagesUrl));
     dispatch(toggleIsVariantSelected(true));
     const currentCanvas = (getState() as RootState).canvas.canvasJS;
@@ -75,10 +80,12 @@ export const updatePptName = createAsyncThunk(
 // Fetch Presentation Details By ID
 export const fetchPptDetails = createAsyncThunk(
   'ppt/fetchDetailsByID',
-  async (pId: string) => {
+  async (pId: string, { dispatch }) => {
     const res = await FetchUtils.getRequest(
       `${ENDPOINT.PPT.GET_PPT_DETAILS}?presentationId=${pId}`
     );
+    dispatch(setVariantImageAsMain(res.data.slides[0][0].thumbnailUrl));
+    dispatch(setActiveCanvas(res.data.slides[0][0].slideId));
     return res.data;
   }
 );
@@ -95,6 +102,9 @@ const thunkSlice = createSlice({
     },
     setUnauthMessage: (state, action) => {
       state.unAuthMessage = action.payload;
+    },
+    setEditPptIndex: (state, action) => {
+      state.selectedSlideIndex = action.payload;
     },
   },
   extraReducers(builder) {
@@ -152,7 +162,11 @@ const thunkSlice = createSlice({
   },
 });
 
-export const { setPresentationName, setAuthenticateLoader, setUnauthMessage } =
-  thunkSlice.actions;
+export const {
+  setPresentationName,
+  setAuthenticateLoader,
+  setUnauthMessage,
+  setEditPptIndex,
+} = thunkSlice.actions;
 
 export default thunkSlice.reducer;
