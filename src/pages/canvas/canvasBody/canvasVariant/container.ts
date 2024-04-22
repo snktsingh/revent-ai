@@ -15,8 +15,14 @@ const useVariants = () => {
   const dispatch = useAppDispatch();
   const [originalImageUrl, setOriginalImageUrl] = useState<string>('');
   const { openVariant } = useAppSelector(state => state.element);
-  const { originalCanvasSlide, variantImage, selectedOriginalCanvas, canvasJS, canvasList } =
-    useAppSelector(state => state.canvas);
+  const {
+    originalCanvasSlide,
+    variantImage,
+    selectedOriginalCanvas,
+    canvasJS,
+    canvasList,
+  } = useAppSelector(state => state.canvas);
+  const { pptDetails } = useAppSelector(state => state.thunk);
   const array: number[] = [1, 2, 3];
 
   const handleVariants = (CanvasURL: string, pptURL: string, index: number) => {
@@ -30,12 +36,17 @@ const useVariants = () => {
     dispatch(setVariantImageAsMain(''));
     dispatch(toggleIsVariantSelected(false));
     dispatch(toggleSelectedOriginalCanvas(true));
-    dispatch(updateCanvasInList({id : canvasJS.id, updatedCanvas : canvasJS.originalSlideData}));
-    let canvas = { ...canvasJS, canvas : canvasJS.originalSlideData };
-    dispatch(setCanvas(canvas))
-    console.log({variantImage})
+    dispatch(
+      updateCanvasInList({
+        id: canvasJS.id,
+        updatedCanvas: canvasJS.originalSlideData,
+      })
+    );
+    let canvas = { ...canvasJS, canvas: canvasJS.originalSlideData };
+    dispatch(setCanvas(canvas));
+    console.log({ variantImage });
   };
-  
+
   const getImg = async (canvasJson: Object) => {
     const canvas = new fabric.Canvas(null);
 
@@ -78,7 +89,8 @@ const useVariants = () => {
     originalImageUrl,
     variantImage,
     selectedOriginalCanvas,
-    canvasJS
+    canvasJS,
+    pptDetails,
   };
 };
 export default useVariants;

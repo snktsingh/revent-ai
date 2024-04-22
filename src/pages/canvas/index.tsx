@@ -3,20 +3,16 @@ import CanvasBody from './canvasBody';
 import { CanvasVariant } from './canvasBody/canvasVariant';
 import MainCanvasHeader from './canvasHeader';
 import CanvasTools from './canvasTools';
-import useCanvas from './container';
 import ReventingLoader from '@/common-ui/loader';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { getUserDetails } from '@/redux/thunk/user';
-import { useEffect, useState } from 'react';
-import { FetchUtils } from '@/utils/fetch-utils';
+import { useEffect } from 'react';
 import {
   fetchPptDetails,
   setAuthenticateLoader,
   setUnauthMessage,
-  updatePptName,
 } from '@/redux/thunk/thunk';
 import { toast } from 'react-toastify';
-import { setPresentationTitle } from '@/redux/reducers/canvas';
 
 const MainCanvas = () => {
   const dispatch = useAppDispatch();
@@ -27,16 +23,18 @@ const MainCanvas = () => {
   const pId = relUrl.substring(0, temp);
 
   useEffect(() => {
+    console.log(relUrl.search('-'));
+    console.log(relUrl.slice(0, temp));
     dispatch(getUserDetails());
     getPresentationData(pId);
   }, []);
 
   const getPresentationData = async (pptId: string) => {
     const res = await dispatch(fetchPptDetails(pptId));
-    if (pName === 'Untitled-Presentation') {
+    console.log(res.meta.requestStatus === 'fulfilled');
+    if (res.meta.requestStatus === 'fulfilled') {
+      toast.success("Presentation added to canvas")
       dispatch(setAuthenticateLoader());
-    } else if (decodeURIComponent(pName) !== res.payload.name) {
-      dispatch(setUnauthMessage(true));
     } else {
       dispatch(setAuthenticateLoader());
     }
