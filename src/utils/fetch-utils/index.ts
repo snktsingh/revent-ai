@@ -46,6 +46,12 @@ generateInstance.interceptors.response.use(
         toast.error('Technical Server Error');
         break;
       }
+      case 502: {
+        toast.error('Technical Error');
+        localStorage.clear();
+        window.location.replace('/login');
+        break;
+      }
       default: {
         toast.error('Something went wrong !');
       }

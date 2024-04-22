@@ -21,6 +21,23 @@ export interface CanvasItem {
   listImages : listObjType[]
 }
 
+export interface IPresentationDetails {
+  code: number;
+  message: string;
+  presentationId: number;
+  name: string;
+  slides: ISlideDetails[];
+  lastModifiedBy: string;
+  lastModifiedDate: string;
+}
+
+export interface ISlideDetails {
+  slideId: number;
+  slideNumber: number;
+  thumbnilUrl: string;
+  active: boolean;
+}
+
 export interface IShapeRequest {
   companyName: string;
   shape: string;
@@ -49,6 +66,7 @@ export interface ISlideRequests {
   isAuthenticating: boolean;
   pptDetails: IFetchPptDetails | null;
   unAuthMessage: boolean;
+  selectedSlideIndex: number;
 }
 
 export interface IShapeRequest {

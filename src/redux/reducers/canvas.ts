@@ -213,12 +213,12 @@ export const CanvasReducer = createSlice({
 
         const newActiveCanvasId = idToDelete === 1 ? 1 : idToDelete - 1;
 
-        const newActiveCanvasJS = renumberedCanvasList[newActiveCanvasId-1]
+        const newActiveCanvasJS = renumberedCanvasList[newActiveCanvasId - 1];
         return {
           ...state,
           canvasList: renumberedCanvasList,
           activeCanvasID: newActiveCanvasId,
-          canvasJS: newActiveCanvasJS || null, 
+          canvasJS: newActiveCanvasJS || null,
         };
       }
       return state;
@@ -270,7 +270,7 @@ export const CanvasReducer = createSlice({
     setPresentationTitle(state, action) {
       state.presentationTitle = action.payload;
     },
-    updateCanvasList(state, action : PayloadAction<CanvasItem[]>) {
+    updateCanvasList(state, action: PayloadAction<CanvasItem[]>) {
       state.canvasList = action.payload;
     },
     toggleIsVariantSelected(state, action : PayloadAction<boolean>) {
