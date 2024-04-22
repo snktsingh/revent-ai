@@ -36,6 +36,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import useDashboard from './container';
 import ProfileMenu from '@/common-ui/profileMenu';
 import ThumbnailPreview from '@/common-ui/thumbnailPreview';
+import { faker } from '@faker-js/faker';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -174,7 +175,9 @@ const Dashboard = () => {
                     cursor: 'pointer',
                   }}
                   onClick={() => {
-                    navigate(`/canvas/${ppt.presentationId}-${ppt.name}`);
+                    navigate(
+                      `/canvas/${ppt.presentationId}-${faker.string.uuid()}`
+                    );
                   }}
                 >
                   <img src={ppt.thumbnailUrl} width="180px" />

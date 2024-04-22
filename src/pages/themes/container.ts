@@ -5,9 +5,10 @@ import {
   getAllThemes,
   updatePptName,
 } from '@/redux/thunk/thunk';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { faker } from '@faker-js/faker';
 
 const useStartTheme = () => {
   const thunk = useAppSelector(state => state.thunk);
@@ -19,13 +20,14 @@ const useStartTheme = () => {
     const res = await dispatch(createPresentation());
     const data = res.payload;
     if (data.message === 'SUCCESS') {
-      navigate(`/canvas/${data.presentationId}-Untitled-Presentation`);
+      navigate(`/canvas/${data.presentationId}-${faker.string.uuid()}`);
+      toast.success('Presentantoin Initialized !');
     } else {
       toast.error('Failed to create presentation !');
     }
   };
 
-  const handleGenerate = (themeId : number) => {
+  const handleGenerate = (themeId: number) => {
     if (themeId === null) {
       toast.warning('Please select at least one theme !');
     } else {

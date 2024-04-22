@@ -28,11 +28,10 @@ const CanvasComponent: React.FC = () => {
     handleKeyDown,
     handleWindowResize,
     forEachCanvasObject,
-    updateCanvasStyle
+    updateCanvasStyle,
   } = useCanvasComponent();
 
   const ElementFunctions = useElementFunctions(canvasRef.current);
-
 
   const { getElementsData } = useCanvasData();
   const {
@@ -47,16 +46,14 @@ const CanvasComponent: React.FC = () => {
     onSelectionCreatedEvent,
     onTextChangedEvent,
     onTextEditingEnteredEvent,
-    onTextEditingExitedEvent
+    onTextEditingExitedEvent,
   } = useCanvasEvents();
   const { themeCode, themeId } = useAppSelector(state => state.slideTheme);
 
   const dispatch = useAppDispatch();
 
-  const { canvasJS, variantImage, selectedOriginalCanvas,isVariantSelected } = useAppSelector(state => state.canvas);
-
-
-
+  const { canvasJS, variantImage, selectedOriginalCanvas, isVariantSelected } =
+    useAppSelector(state => state.canvas);
 
   useEffect(() => {
     setShowOptions(false);
@@ -84,25 +81,25 @@ const CanvasComponent: React.FC = () => {
           console.log('canvas 3')
           updateCanvasDimensions(canvas);
         }
-        console.log('canvas 4')
-        if(canvas.toObject(customFabricProperties)?.objects){
+        console.log('canvas 4');
+        if (canvas.toObject(customFabricProperties)?.objects) {
           getElementsData(
             canvas.toObject(customFabricProperties)?.objects,
-            themeCode, themeId
+            themeCode,
+            themeId
           );
         }
-
 
         if (canvas.toObject(customFabricProperties)?.objects.length >= 1) {
           dispatch(toggleRegenerateButton(false));
         } else {
           dispatch(toggleRegenerateButton(true));
         }
-        console.log('canvas 5')
+        console.log('canvas 5');
         updateCanvasSlideData(canvas, canvasJS.id);
-        console.log('canvas 6')
+        console.log('canvas 6');
         forEachCanvasObject(canvas);
-        console.log('canvas 7')
+        console.log('canvas 7');
         // canvas Events
         canvas.on('selection:created', handleElementBarSelection);
         canvas.on('selection:updated', handleElementBarSelection);
@@ -110,7 +107,9 @@ const CanvasComponent: React.FC = () => {
         canvas.on('selection:cleared', () => {
           setShowOptions(false);
         });
-        canvas.on('text:changed', options => onTextChangedEvent(options, canvas));
+        canvas.on('text:changed', options =>
+          onTextChangedEvent(options, canvas)
+        );
         canvas.on('mouse:dblclick', event => onDoubleClickEvent(event, canvas));
         canvas.on('text:editing:exited', event =>
           onTextEditingExitedEvent(event, canvas)
@@ -118,7 +117,7 @@ const CanvasComponent: React.FC = () => {
         canvas.on('text:editing:entered', event =>
           onTextEditingEnteredEvent(event, canvas)
         );
-        canvas.on('selection:created', (event) =>
+        canvas.on('selection:created', event =>
           onSelectionCreatedEvent(event, canvas)
         );
 
@@ -126,23 +125,25 @@ const CanvasComponent: React.FC = () => {
         canvas.on('object:removed', e => onObjectRemovedEvent(e, canvas));
         canvas.on('object:modified', e => onObjectModifiedEvent(e, canvas));
         canvas.on('selection:cleared', e => onSelectionClearedEvent(e, canvas));
-        canvas.on('object:moving', options => onObjectMovingEvent(options, canvas));
-        canvas.on('object:scaling', options => onObjectScalingEvent(options, canvas));
+        canvas.on('object:moving', options =>
+          onObjectMovingEvent(options, canvas)
+        );
+        canvas.on('object:scaling', options =>
+          onObjectScalingEvent(options, canvas)
+        );
         canvas.on('mouse:down', options => onMouseDownEvent(options, canvas));
-        console.log('canvas 8')
+        console.log('canvas 8');
         canvas.renderAll();
       },
       (error: Error) => {
         console.error('Error loading canvas:', error);
       }
     );
-    window.addEventListener('resize', () =>
-      updateCanvasDimensions(canvas)
-    );
-    window.addEventListener('keydown', (e) => handleKeyDown(e, canvas));
+    window.addEventListener('resize', () => updateCanvasDimensions(canvas));
+    window.addEventListener('keydown', e => handleKeyDown(e, canvas));
     return () => {
-      window.removeEventListener('keydown', (e) => handleKeyDown(e, canvas));
-      window.removeEventListener('resize', () => { });
+      window.removeEventListener('keydown', e => handleKeyDown(e, canvas));
+      window.removeEventListener('resize', () => {});
       canvas.dispose();
     };
   }, [canvasJS.canvas, selectedOriginalCanvas]);
@@ -150,17 +151,14 @@ const CanvasComponent: React.FC = () => {
   useEffect(() => {
     setShowOptions(false);
     if (variantImage && canvasRef.current) {
-
-      console.log('variant 1')
-      canvasRef.current?.clear();
+      // canvasRef.current?.clear();
       
-      console.log('variant 2')
-
+      console.log({variantImage});
       canvasRef.current?.setBackgroundColor(
         `${theme.colorSchemes.light.palette.common.white}`,
         canvasRef.current.renderAll.bind(canvasRef.current)
       );
-      console.log('variant 3')
+      console.log('variant 3');
       fabric.Image.fromURL(variantImage, img => {
         const canvasWidth = canvasRef.current?.width || 0;
         const canvasHeight = canvasRef.current?.height || 0;
@@ -168,8 +166,8 @@ const CanvasComponent: React.FC = () => {
         const scaleHeight = canvasHeight / img.height!;
         const scale = Math.max(scaleWidth, scaleHeight);
 
-        console.log('variant 4')
-       img.set({
+        console.log('variant 4');
+        img.set({
           left: 0,
           top: 0,
           scaleX: scale,
@@ -178,28 +176,32 @@ const CanvasComponent: React.FC = () => {
           lockMovementX: true,
           lockScalingY: true,
           moveCursor: 'pointer',
+          name: 'image',
         });
-        console.log('variant 5')
         canvasRef.current?.add(img);
-        console.log('variant 6')
       });
       canvasRef.current?.renderAll();
-      console.log('variant 7')
+      console.log('variant 7');
     }
-
   }, [variantImage, isVariantSelected]);
 
-
-
-
-  useEffect(() => {
-  }, [selectedElementPosition, showOptions])
+  useEffect(() => {}, [selectedElementPosition, showOptions]);
 
   return (
-    <CanvasContainer onContextMenu={(e) => e.preventDefault()} >
-      <div style={{ position: 'relative' }} ref={ContainerRef} onClick={canvasClickEvent} >
+    <CanvasContainer onContextMenu={e => e.preventDefault()}>
+      <div
+        style={{ position: 'relative' }}
+        ref={ContainerRef}
+        onClick={canvasClickEvent}
+      >
         <canvas id="canvas"></canvas>
-        {showOptions && <ElementEditBar left={selectedElementPosition.left} top={selectedElementPosition.top} canvas={canvasRef.current} />}
+        {showOptions && (
+          <ElementEditBar
+            left={selectedElementPosition.left}
+            top={selectedElementPosition.top}
+            canvas={canvasRef.current}
+          />
+        )}
       </div>
       <div style={{ position: 'absolute', left: -10000 }}>
         <FullscreenCanvas />
