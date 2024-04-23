@@ -46,7 +46,6 @@ const useCanvasEvents = () => {
   const onTextChangedEvent = (event: IEvent, canvas: fabric.Canvas) => {
     getElementsData(
       canvas.toObject(customFabricProperties)?.objects,
-      themeCode,
       themeId
     );
   };
@@ -85,7 +84,6 @@ const useCanvasEvents = () => {
     const elementsDataPromise = new Promise((resolve, reject) => {
       const elementsData = getElementsData(
         canvas.toObject(customFabricProperties)?.objects,
-        themeCode,
         themeId
       );
       resolve(elementsData); 
@@ -106,7 +104,6 @@ const useCanvasEvents = () => {
     updateCanvasSlideData(canvas, canvasJS.id);
     getElementsData(
       canvas.toObject(customFabricProperties)?.objects,
-      themeCode,
       themeId
     );
     if (canvas.toObject()?.objects.length >= 1) {
@@ -123,7 +120,6 @@ const useCanvasEvents = () => {
     updateCanvasSlideData(canvas, canvasJS.id);
     getElementsData(
       canvas.toObject(customFabricProperties)?.objects,
-      themeCode,
       themeId
     );
   };
@@ -135,7 +131,6 @@ const useCanvasEvents = () => {
     updateCanvasSlideData(canvas, canvasJS.id);
     getElementsData(
       canvas.toObject(customFabricProperties)?.objects,
-      themeCode,
       themeId
     );
   };

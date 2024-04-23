@@ -66,7 +66,7 @@ const CanvasBody = () => {
   };
   const { getElementsData } = useCanvasData();
   const dispatch = useAppDispatch();
-  const { canvasJS, canvasList, selectedOriginalCanvas, variantImage } =
+  const { canvasJS, canvasList, selectedOriginalCanvas, variantImage, isVariantSelected } =
     useAppSelector(state => state.canvas);
   const { isRegenerateDisabled } = useAppSelector(state => state.slide);
   const { isLoading } = useAppSelector(state => state.thunk);
@@ -76,10 +76,10 @@ const CanvasBody = () => {
   const [activeDislike, setActiveDislike] = useState(false);
   const [elementName, setElementName] = useState<string>('');
   const [elementsDisable, setElementsDisable] = useState<boolean>(false);
-  const [variantsIsEmpty, setVariantsIsEmpty] = useState<boolean>(false);
-  const [isCanvasEmpty, setIsCanvasEmpty] = useState<boolean>(false);
-  const [isEditDisabled, setIsEditDisabled] = useState<boolean>(false);
-  const [ canvasIndex, setCanvasIndex] = useState<number>(0);
+  const [isVariantsEmpty, setIsVariantsEmpty] = useState<boolean>(true);
+  const [isCanvasEmpty, setIsCanvasEmpty] = useState<boolean>(true);
+  const [isEditBtnShow, setIsEditBtnShow] = useState<boolean>(false);
+  const [canvasIndex, setCanvasIndex] = useState<number>(0);
   const { handleApplyOriginalAsMain } = useVariants();
   const handleLike = () => {
     setActiveLike(!activeLike);
@@ -98,7 +98,7 @@ const CanvasBody = () => {
       dispatch(setMenuItemKey(item.key));
     } else {
       handleClose();
-      if(selectedOriginalCanvas){
+      if (selectedOriginalCanvas) {
         item.onClick();
         return;
       }
@@ -153,14 +153,14 @@ const CanvasBody = () => {
     const isListImagesPresent = requestData?.elements.some((canvas => canvas.shape === 'List'));
     const isImagesPresent = requestData?.elements.some((canvas => canvas.shape === 'Images'));
     const isQuoteImagesPresent = requestData?.elements.some((canvas => canvas.shape === 'Quote'));
-    
-    if(isListImagesPresent){
-      let blob = new Blob([JSON.stringify(requestData)], {type : 'application/json'});
+
+    if (isListImagesPresent) {
+      let blob = new Blob([JSON.stringify(requestData)], { type: 'application/json' });
       let formData = new FormData();
       formData.append('data', blob);
       const listImagesArray = listImages.find((el) => el.canvasId == canvasJS.id);
-      if(listImagesArray){
-        for(let i=0;i<listImagesArray.images.length;i++){
+      if (listImagesArray) {
+        for (let i = 0; i < listImagesArray.images.length; i++) {
           formData.append("images", listImagesArray.images[i].file);
         }
         dispatch(fetchSlideImg(formData));
@@ -169,14 +169,14 @@ const CanvasBody = () => {
       return;
     }
 
-    if(isImagesPresent){
-      let blob = new Blob([JSON.stringify(requestData)], {type : 'application/json'});
+    if (isImagesPresent) {
+      let blob = new Blob([JSON.stringify(requestData)], { type: 'application/json' });
       let formData = new FormData();
       formData.append('data', blob);
 
       const ImagesArray = Images.find((el) => el.canvasId == canvasJS.id);
-      if(ImagesArray){
-        for(let i=0;i<ImagesArray.images.length;i++){
+      if (ImagesArray) {
+        for (let i = 0; i < ImagesArray.images.length; i++) {
           formData.append("images", ImagesArray.images[i].file);
         }
         dispatch(fetchSlideImg(formData));
@@ -184,15 +184,15 @@ const CanvasBody = () => {
       }
       return;
     }
-    if(isQuoteImagesPresent){
-      console.log({requestData})
-      let blob = new Blob([JSON.stringify(requestData)], {type : 'application/json'});
+    if (isQuoteImagesPresent) {
+      console.log({ requestData })
+      let blob = new Blob([JSON.stringify(requestData)], { type: 'application/json' });
       let formData = new FormData();
       formData.append('data', blob);
       const QuoteImagesArray = QuoteImages.find((el) => el.canvasId == canvasJS.id);
-      if(QuoteImagesArray){
-        if(QuoteImagesArray.images.length !== 0){
-          for(let i=0;i<QuoteImagesArray.images.length;i++){
+      if (QuoteImagesArray) {
+        if (QuoteImagesArray.images.length !== 0) {
+          for (let i = 0; i < QuoteImagesArray.images.length; i++) {
             formData.append("images", QuoteImagesArray.images[i].file);
           }
           dispatch(fetchSlideImg(formData));
@@ -221,44 +221,52 @@ const CanvasBody = () => {
   };
 
   const handleDeleteSlide = () => {
-     if(isDeleteAlertShow){
+    if (isDeleteAlertShow) {
       dispatch(openModal())
-    }else{
-      if(canvasList.length === 1){
+    } else {
+      if (canvasList.length === 1) {
         dispatch(openModal());
         return;
       }
       dispatch(deleteCanvasItem(canvasJS.id));
-     }
+    }
   };
 
   useEffect(() => {
     const index = canvasList.findIndex((canvas) => canvas.id === canvasJS.id);
     setCanvasIndex(index);
-    if (canvasJS && index) {
+    if (canvasJS && (index || index === 0)) {
       const canvasIsEmpty =
         (canvasList[index].canvas as any).objects.length === 0;
-        setIsCanvasEmpty(canvasIsEmpty);
-        
-        setVariantsIsEmpty(canvasList[index].variants.length === 0);
-        if (canvasList[index].variants.length === 0 && canvasIsEmpty) {
-          dispatch(toggleRegenerateButton(true)); 
-        } else if (selectedOriginalCanvas) {
-          dispatch(toggleRegenerateButton(false)); 
-        } else if (!variantsIsEmpty && !selectedOriginalCanvas) {
-          dispatch(toggleRegenerateButton(true)); 
-        }
+      const variantsIsEmpty = canvasList[index].variants.length === 0;
+      setIsCanvasEmpty(canvasIsEmpty);
+      setIsVariantsEmpty(variantsIsEmpty);
+      if (variantsIsEmpty && canvasIsEmpty) {
+        dispatch(toggleRegenerateButton(true));
+      } else if (selectedOriginalCanvas) {
+        dispatch(toggleRegenerateButton(false));
+      } else if (!isVariantsEmpty && !selectedOriginalCanvas) {
+        dispatch(toggleRegenerateButton(true));
+      } else if (!canvasIsEmpty) {
+        dispatch(toggleRegenerateButton(false));
+      }
 
 
-        if(!variantsIsEmpty && !selectedOriginalCanvas && canvasIsEmpty){
-          setIsEditDisabled(true);
-        }else if(!selectedOriginalCanvas) {
-          setIsEditDisabled(true);
-        }else if(!variantsIsEmpty){
-           setIsEditDisabled(true)
-        }
+      if (!isVariantsEmpty && !selectedOriginalCanvas ) {
+        setIsEditBtnShow(false);
+      } else if (!isVariantsEmpty && !selectedOriginalCanvas) {
+        setIsEditBtnShow(true);
+      } else if (selectedOriginalCanvas) {
+        setIsEditBtnShow(false);
+      } else if (isVariantSelected) {
+        setIsEditBtnShow(true);
+      } else if(!canvasIsEmpty && selectedOriginalCanvas) {
+        setIsEditBtnShow(false)
+      } else if(canvasIsEmpty){
+        setIsEditBtnShow(false)
+      }
     }
-  }, [canvasList[canvasIndex].canvas, dispatch, variantImage,enabledElements]);
+  }, [canvasList[canvasIndex].canvas, dispatch, variantImage, enabledElements, isVariantSelected]);
 
   function isDisabled(name: string): boolean {
     if (enabledElements.includes(name)) {
@@ -323,7 +331,7 @@ const CanvasBody = () => {
                   />
                 </IconButton>{' '} */}
                 &nbsp;
-                {!isEditDisabled && <Button
+                {isEditBtnShow && <Button
                   variant="contained"
                   size="medium"
                   onClick={() => handleApplyOriginalAsMain()}

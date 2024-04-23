@@ -60,7 +60,6 @@ const CanvasComponent: React.FC = () => {
     const canvas = new fabric.Canvas('canvas');
     updateCanvasStyle(canvas);
     canvas.clear();
-    console.log('canvas loaded');
     fabric.Object.prototype.set({
       cornerStyle: 'circle',
       transparentCorners: false,
@@ -74,20 +73,15 @@ const CanvasComponent: React.FC = () => {
       canvasJS.canvas,
       () => {
 
-        console.log('canvas 1')
         canvasRef.current = canvas;
-        if(canvas){
-          console.log('canvas 2')
+        if (canvas) {
           updateCanvasStyle(canvas);
-          console.log('canvas 3')
           updateCanvasDimensions(canvas);
         }
-        console.log('canvas 4')
-        if(canvas.toObject(customFabricProperties)?.objects){
 
+        if (canvas.toObject(customFabricProperties)?.objects) {
           getElementsData(
             canvas.toObject(customFabricProperties)?.objects,
-            themeCode,
             themeId
           );
         }
@@ -98,11 +92,11 @@ const CanvasComponent: React.FC = () => {
           dispatch(toggleRegenerateButton(true));
         }
 
-        console.log('canvas 5')
+
         updateCanvasSlideData(canvas, canvasJS.id);
-        console.log('canvas 6');
+        ;
         forEachCanvasObject(canvas);
-        console.log('canvas 7');
+        ;
         // canvas Events
         canvas.on('selection:created', handleElementBarSelection);
         canvas.on('selection:updated', handleElementBarSelection);
@@ -136,7 +130,6 @@ const CanvasComponent: React.FC = () => {
         );
         canvas.on('mouse:down', options => onMouseDownEvent(options, canvas));
 
-        console.log('canvas 8')
 
         canvas.renderAll();
       },
@@ -148,7 +141,7 @@ const CanvasComponent: React.FC = () => {
     window.addEventListener('keydown', e => handleKeyDown(e, canvas));
     return () => {
       window.removeEventListener('keydown', e => handleKeyDown(e, canvas));
-      window.removeEventListener('resize', () => {});
+      window.removeEventListener('resize', () => { });
       canvas.dispose();
     };
   }, [canvasJS.canvas, selectedOriginalCanvas]);
@@ -157,17 +150,12 @@ const CanvasComponent: React.FC = () => {
     setShowOptions(false);
     if (variantImage && canvasRef.current) {
 
-
-      console.log('variant 1')
       canvasRef.current?.clear();
-      
-      console.log({variantImage});
+
       canvasRef.current?.setBackgroundColor(
         `${theme.colorSchemes.light.palette.common.white}`,
         canvasRef.current.renderAll.bind(canvasRef.current)
       );
-
-      console.log('variant 3')
 
       fabric.Image.fromURL(variantImage, img => {
         const canvasWidth = canvasRef.current?.width || 0;
@@ -176,10 +164,7 @@ const CanvasComponent: React.FC = () => {
         const scaleHeight = canvasHeight / img.height!;
         const scale = Math.max(scaleWidth, scaleHeight);
 
-
-        console.log('variant 4')
-       img.set({
-
+        img.set({
           left: 0,
           top: 0,
           scaleX: scale,
@@ -191,16 +176,14 @@ const CanvasComponent: React.FC = () => {
           name: 'image',
         });
 
-        console.log('variant 5')
         canvasRef.current?.add(img);
       });
       canvasRef.current?.renderAll();
-      console.log('variant 7')
 
     }
   }, [variantImage, isVariantSelected]);
 
-  useEffect(() => {}, [selectedElementPosition, showOptions]);
+  useEffect(() => { }, [selectedElementPosition, showOptions]);
 
   return (
     <CanvasContainer onContextMenu={e => e.preventDefault()}>

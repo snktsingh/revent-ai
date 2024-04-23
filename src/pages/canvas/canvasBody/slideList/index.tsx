@@ -69,7 +69,7 @@ export default function SlideList() {
     ...props
   }) => {
     const canvas = props;
-    console.log(svgURLs);
+    // console.log(svgURLs);
 
     const { attributes, listeners, setNodeRef, transform, transition } =
       useSortable({ id: canvas.id });
@@ -111,7 +111,7 @@ export default function SlideList() {
     );
   };
 
-  if (pptDetails?.slides.length > 0) {
+  if (pptDetails?.slides?.length > 0) {
     return (
       <SlideContainer>
         {pptDetails?.slides.map((slide: any, index) => {
@@ -127,7 +127,7 @@ export default function SlideList() {
                     dispatch(setActiveCanvas(slide[0].slideId));
                     dispatch(setEditPptIndex(index));
                     dispatch(setVariantImageAsMain(slide[0].thumbnailUrl));
-                    console.log(slide[0].thumbnailUrl);
+                    // console.log(slide[0].thumbnailUrl);
                   }}
                 >
                   <img src={slide[0].thumbnailUrl} width="100%" />
