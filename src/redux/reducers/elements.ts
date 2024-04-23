@@ -8,6 +8,7 @@ export interface TestState {
   itemKey: number;
   openProfileMenu: boolean;
   enabledElements: string[];
+  isDeleteAlertShow : boolean
 }
 
 const initialState: TestState = {
@@ -17,6 +18,7 @@ const initialState: TestState = {
   openNotes: false,
   itemKey: 0,
   openProfileMenu: false,
+  isDeleteAlertShow: true,
   enabledElements: [
     'Title',
     'Subtitle',
@@ -62,6 +64,9 @@ export const ElementReducer = createSlice({
     setEnabledElements: (state, action) => {
       state.enabledElements = action.payload;
     },
+    updateDeleteAlertShow(state,action : PayloadAction<boolean>) {
+      state.isDeleteAlertShow = action.payload;
+    }
   },
 });
 
@@ -74,6 +79,7 @@ export const {
   toggleNotesSlide,
   setMenuItemKey,
   setEnabledElements,
+  updateDeleteAlertShow
 } = ElementReducer.actions;
 
 export default ElementReducer.reducer;

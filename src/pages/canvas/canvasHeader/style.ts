@@ -1,4 +1,4 @@
-import { theme } from '@/constants/theme';
+import { customStyles, theme } from '@/constants/theme';
 import { Avatar, Menu, MenuItem } from '@mui/material';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -41,7 +41,7 @@ export const StyledMenu = styled(Menu)`
 
 export const StyledMenuItem = styled(MenuItem)`
   && {
-    font-family: 'Roboto', sans-serif;
+    font-family: ${customStyles.fonts.robotoSansSerif};
     font-size: 14px;
     padding: 10px 20px;
     color: #333333;

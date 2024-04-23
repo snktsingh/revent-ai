@@ -152,6 +152,7 @@ export const CanvasReducer = createSlice({
     },
     updateCanvasInList(state, action) {
       const { id, updatedCanvas } = action.payload;
+      console.log({updatedCanvas})
 
       const updatedList = state.canvasList.map(canvasItem => {
         if (canvasItem.id === id) {

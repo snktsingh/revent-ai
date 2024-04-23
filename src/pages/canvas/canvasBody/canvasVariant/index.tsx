@@ -68,12 +68,12 @@ export const CanvasVariant = () => {
             background: 'none',
             border: 'none',
           },
+         
         }}
       >
         <DrawerMainContainer>
-          <DrawerBtnContainer
-            onClick={() => dispatch(toggleVariantSlide(false))}
-          >
+
+          <DrawerBtnContainer onClick={() => dispatch(toggleVariantSlide(false))}>
             <DrawerVariantButton>Variants</DrawerVariantButton>
           </DrawerBtnContainer>
           <DrawerVariant>
@@ -91,6 +91,11 @@ export const CanvasVariant = () => {
 
             <ButtonContainer>
               <p>Variants</p>
+
+              <RefreshBtn variant="contained" size="small">
+                Refresh
+              </RefreshBtn>
+
             </ButtonContainer>
             {canvasJS.variants.length > 0 && pptDetails?.slides.length === 0 ? (
               canvasJS.variants.map((el: VariantsType, i: number) => {
@@ -112,7 +117,7 @@ export const CanvasVariant = () => {
                         alt={`Variant ${i + 1}`}
                         style={{
                           width: '100%',
-                          height: '12vh',
+                          height: 'auto',
                           borderRadius: '3%',
                         }}
                       />
@@ -147,7 +152,7 @@ export const CanvasVariant = () => {
                                 alt={`Variant ${index + 1}`}
                                 style={{
                                   width: '100%',
-                                  height: '12vh',
+                                  height: 'auto',
                                   borderRadius: '3%',
                                 }}
                               />

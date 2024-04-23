@@ -63,6 +63,9 @@ interface customStylesType {
     duskyBlue: string;
     cloudyBlue: string;
   };
+  fonts : {
+    robotoSansSerif : string;
+  }
 }
 
 export const customStyles: customStylesType = {
@@ -70,4 +73,7 @@ export const customStyles: customStylesType = {
     duskyBlue: '#406098',
     cloudyBlue: '#B0BCDE',
   },
+  fonts : {
+    robotoSansSerif : "'Roboto', sans-serif",
+  }
 };

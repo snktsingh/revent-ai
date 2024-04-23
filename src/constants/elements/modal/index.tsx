@@ -11,7 +11,7 @@ import {
   Stack,
 } from '@mui/material';
 import { deleteCanvasItem } from '@/redux/reducers/canvas';
-import { closeModal } from '@/redux/reducers/elements';
+import { closeModal, updateDeleteAlertShow } from '@/redux/reducers/elements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { CheckBox } from '@mui/icons-material';
 
@@ -50,7 +50,8 @@ const PopUpModal = () => {
           ml={1}
         >
           <Stack>
-            <FormControlLabel control={<Checkbox size="small" />} label="Don't show me again"/>
+            <FormControlLabel control={<Checkbox size="small" onChange={(e) => dispatch(updateDeleteAlertShow(!e.target.checked))} />} label="Don't show me again"/>
+
           </Stack>
           <Stack direction='row'>
             <Button color="primary" onClick={() => dispatch(closeModal())}>Cancel</Button>

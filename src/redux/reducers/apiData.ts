@@ -13,7 +13,7 @@ const initialState: apiDataInitialState = {
   requestData: null,
   isAuth: getFromLS('isAuth'),
   isDisabled: false,
-  enhancementWithAI : true,
+  enhancementWithAI : false,
 };
 
 export const apiDataReducer = createSlice({

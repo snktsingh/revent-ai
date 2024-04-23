@@ -79,7 +79,6 @@ const useCanvasData = () => {
 
   function getElementsData(
     canvasData: any[],
-    themeCode: string,
     themeId: number
   ) {
     console.log({ canvasData });

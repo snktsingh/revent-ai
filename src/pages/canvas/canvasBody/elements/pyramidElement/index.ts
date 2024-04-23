@@ -103,6 +103,7 @@ export function usePyramidElement() {
         left: 365,
         top: 138,
         width: 100,
+        height: 60,
         name: `${PYRAMID_TEXT}_${pyramidId}`,
         fixedWidth: 120,
         fixedHeight: 60,

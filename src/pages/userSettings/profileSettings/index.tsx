@@ -1,4 +1,4 @@
-import { MenuItem } from '@mui/material';
+import { MenuItem, Tooltip } from '@mui/material';
 import React, { ChangeEvent, useState } from 'react';
 import useSettings from '../container';
 import { InputContainer, Label, ProfileContainer, StyledInput, StyledSelect } from '../style';
@@ -51,54 +51,51 @@ const ProfileSettings: React.FC<ProfileSettingsType> = ({ editMode }) => {
             </InputContainer>
             <InputContainer>
                 <Label>Mobile Number</Label>
-                <StyledInput
-                    // variant="standard"
-                    name='phone'
-                    value={phone}
-                    disabled={editMode}
-                    onChange={handleChange}
-                // InputProps={{
-                //     endAdornment: (
-                //         <InputAdornment position="end">
-                //             <PencilIcon />
-                //         </InputAdornment>
-                //     )
-                // }}
-                />
+                {!editMode ? (
+                    <Tooltip title="Phone number is not editable" arrow>
+                        <span>
+                            <StyledInput
+                                // variant="standard"
+                                name='phone'
+                                value={phone}
+                                disabled={true}
+                                onChange={handleChange}
+                            />
+                        </span>
+                    </Tooltip>
+                ) : (
+                    <StyledInput
+                        // variant="standard"
+                        name='phone'
+                        value={phone}
+                        onChange={handleChange}
+                        disabled={true}
+                    />
+                )}
             </InputContainer>
             <InputContainer>
                 <Label>Email</Label>
-                <StyledInput
-                    // variant="standard"
-                    disabled={editMode}
-                    name='email'
-                    value={email}
-                    onChange={handleChange}
-                // InputProps={{
-                //     endAdornment: (
-                //         <InputAdornment position="end">
-                //             <PencilIcon />
-                //         </InputAdornment>
-                //     )
-                // }}
-                />
-            </InputContainer>
-            <InputContainer>
-                <Label>Username</Label>
-                <StyledInput
-                    // variant="standard"
-                    value={username}
-                    name='username'
-                    onChange={handleChange}
-                    disabled={editMode}
-                // InputProps={{
-                //     endAdornment: (
-                //         <InputAdornment position="end">
-                //             <PencilIcon />
-                //         </InputAdornment>
-                //     )
-                // }}
-                />
+                {!editMode ? (
+                    <Tooltip title="Email is not editable" arrow>
+                        <span>
+                            <StyledInput
+                                // variant="standard"
+                                disabled={true}
+                                name='email'
+                                value={email}
+                                onChange={handleChange}
+                            />
+                        </span>
+                    </Tooltip>
+                ) : (
+                    <StyledInput
+                        // variant="standard"
+                        disabled={true}
+                        name='email'
+                        value={email}
+                        onChange={handleChange}
+                    />
+                )}
             </InputContainer>
             <InputContainer>
                 <Label>Select Preference</Label>
@@ -107,7 +104,7 @@ const ProfileSettings: React.FC<ProfileSettingsType> = ({ editMode }) => {
                     // variant="standard"
                     value={usePreference}
                     name='userPreference'
-                    onChange={handleChange}
+                    onChange={(e) => handleChange(e as React.ChangeEvent<HTMLInputElement>)}
                     disabled={editMode}
                 >
                     <MenuItem value="Personal">Personal</MenuItem>

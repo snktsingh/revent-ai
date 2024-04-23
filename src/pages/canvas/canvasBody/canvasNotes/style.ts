@@ -1,4 +1,4 @@
-import { theme } from '@/constants/theme';
+import { customStyles, theme } from '@/constants/theme';
 import styled, { css } from 'styled-components';
 
 interface ContainerProps {
@@ -56,7 +56,7 @@ export const NotesHeading = styled.div`
   cursor: pointer;
 
   p {
-    font-family: 'Roboto';
+    font-family: ${customStyles.fonts.robotoSansSerif};
     font-weight: 600;
     font-size: 1vw;
   }
@@ -72,7 +72,7 @@ export const NotesInput = styled.input`
   outline: none;
   background: none;
   color: ${theme.colorSchemes.light.palette.common.darkGrey};
-  font-family: 'Roboto';
+  font-family: ${customStyles.fonts.robotoSansSerif};
   font-size: 0.8vw;
   height: 100%;
 `;

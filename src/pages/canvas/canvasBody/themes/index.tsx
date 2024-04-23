@@ -36,15 +36,18 @@ export default function Templates() {
   const { getElementsData } = useCanvasData();
   const [tempCode, setTempCode] = useState('');
   const element = useAppSelector(state => state.element);
-  const { selectedThemeId } = useAppSelector(state => state.slideTheme);
+  const { selectedThemeId, themeId } = useAppSelector(state => state.slideTheme);
   const dispatch = useAppDispatch();
   const thunk = useAppSelector(state => state.thunk);
   const { requestData } = useAppSelector(state => state.apiData);
-  const { canvasJS, originalCanvasSlide } = useAppSelector(
+  const { canvasJS, originalCanvasSlide, canvasList } = useAppSelector(
     state => state.canvas
   );
+  const [currentTheme, setCurrentTheme] = useState<any>({});
+  const [canvasIndex, setCanvasIndex] = useState<number>(0);
+  const [hasVariantsInCanvasList, setIsVariantsAvailable] = useState<boolean>(false);
   const theme = useTheme();
-
+  
   const handleDrawerClose = () => {
     dispatch(toggleTemplateVisibility());
   };
@@ -63,28 +66,40 @@ export default function Templates() {
 
   const [open, setOpen] = useState<boolean>(false);
 
-  const handleClickOpen = (themeCode: string, themeId: number) => {
-    dispatch(setThemeId(themeId));
-    dispatch(setSelectedTheme(tempCode));
-    setOpen(true);
-
+  const handleClickOpen = (theme : any) => {
+    setCurrentTheme(theme);
+    
+    if(hasVariantsInCanvasList){
+      setOpen(true);
+    }else {
+      console.log(theme.themeId)
+      dispatch(setThemeId(theme.themeId));
+    }
+    console.log({selectedThemeId})
     getElementsData(
       (canvasJS.originalSlideData as any).objects,
-      themeCode,
-      themeId
+      theme.themeId
     )
   };
-
+  
   const handleClose = () => {
     setOpen(false);
     dispatch(setThemeCode(''));
   };
-
+  
   useEffect(() => {
+    const hasVariants = canvasList.some(item => item.variants.length > 0);
+    setIsVariantsAvailable(hasVariants);
+    const index = canvasList.findIndex((canvas) => canvas.id === canvasJS.id);
+    if(index){
+      setCanvasIndex(index);
+    }
     dispatch(getAllThemes());
-  }, []);
+  }, [canvasJS.canvas]);
 
+  // useEffect(()=>{},[selectedThemeId]);
   const changeThemeRequest = () => {
+    dispatch(setThemeId(currentTheme.themeId));
     if (requestData?.elements.length == 0) {
       toast.warning('Canvas is empty');
     } else {
@@ -135,17 +150,16 @@ export default function Templates() {
               return (
                 <ListSlideCard
                   onClick={() => {
-                    handleClickOpen(themes.themeColor, themes.themeId);
-                    setTempCode(themes.themeId);
+                    handleClickOpen(themes);
                   }}
                   key={themes.themeId}
                   className={
-                    selectedThemeId === themes.themeId
+                    themeId === themes.themeId
                       ? 'clicked-card'
                       : ''
                   }
                 >
-                  <ThumbnailPreview src={themes.thumbnailUrl} alt={themes.themeId} style={{width: '100%',height:'auto'}} />
+                  <ThumbnailPreview src={themes.thumbnailUrl} alt={themes.themeId} style={{width: '100%',height:'auto'}} componentTitle='slideThemes' />
                 </ListSlideCard>
               );
             })}
@@ -165,6 +179,7 @@ export default function Templates() {
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
+                  <>
                   <Button onClick={handleClose}>No</Button>
                   <Button
                     autoFocus
@@ -175,6 +190,7 @@ export default function Templates() {
                   >
                     Yes
                   </Button>
+                  </>
                 </DialogActions>
               </>
             </Dialog>
