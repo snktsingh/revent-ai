@@ -120,6 +120,7 @@ export const CanvasVariant = () => {
                           height: 'auto',
                           borderRadius: '3%',
                         }}
+                        componentTitle='Variants'
                       />
                     </VariantSlideCard>
                   </VariantSlide>
@@ -148,6 +149,7 @@ export const CanvasVariant = () => {
                               }
                             >
                               <ThumbnailPreview
+                                componentTitle='variants'
                                 src={el.thumbnailUrl}
                                 alt={`Variant ${index + 1}`}
                                 style={{
