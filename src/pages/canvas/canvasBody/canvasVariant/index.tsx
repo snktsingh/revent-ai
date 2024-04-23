@@ -44,14 +44,13 @@ export const CanvasVariant = () => {
 
   return (
     <div>
-      {canvasJS.variants.length > 0 ||
-        (pptDetails?.slides.length > 0 && (
-          <VariantButton
-            onClick={() => dispatch(toggleVariantSlide(!openVariant))}
-          >
-            <img src={varianButtonSvg} alt="variantButton" />
-          </VariantButton>
-        ))}
+      {canvasJS.variants.length > 0 && (
+        <VariantButton
+          onClick={() => dispatch(toggleVariantSlide(!openVariant))}
+        >
+          <img src={varianButtonSvg} alt="variantButton" />
+        </VariantButton>
+      )}
       <Drawer
         anchor="right"
         open={openVariant}
@@ -92,7 +91,7 @@ export const CanvasVariant = () => {
             <ButtonContainer>
               <p>Variants</p>
             </ButtonContainer>
-            {canvasJS.variants.length > 0 && pptDetails?.slides.length === 0 ? (
+            {canvasJS.variants.length > 0 ? (
               canvasJS.variants.map((el: VariantsType, i: number) => {
                 return (
                   <VariantSlide
@@ -108,6 +107,7 @@ export const CanvasVariant = () => {
                       }
                     >
                       <ThumbnailPreview
+                        componentTitle=""
                         src={el.imagesUrl}
                         alt={`Variant ${i + 1}`}
                         style={{
@@ -121,6 +121,7 @@ export const CanvasVariant = () => {
                 );
               })
             ) : (
+<<<<<<< Updated upstream
               <>
                 {pptDetails?.slides.length !== 0 ? (
                   <>
@@ -161,8 +162,10 @@ export const CanvasVariant = () => {
                   <></>
                 )}
               </>
+=======
+              <></>
+>>>>>>> Stashed changes
             )}
-
             <LogoContainer>
               <div>
                 <span>Powered by</span>

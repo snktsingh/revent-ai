@@ -69,7 +69,10 @@ export default function SlideList() {
     ...props
   }) => {
     const canvas = props;
+<<<<<<< Updated upstream
     console.log(svgURLs);
+=======
+>>>>>>> Stashed changes
 
     const { attributes, listeners, setNodeRef, transform, transition } =
       useSortable({ id: canvas.id });
@@ -111,6 +114,7 @@ export default function SlideList() {
     );
   };
 
+<<<<<<< Updated upstream
   if (pptDetails?.slides.length > 0) {
     return (
       <SlideContainer>
@@ -136,25 +140,23 @@ export default function SlideList() {
             </SingleSliderContainer>
           );
         })}
+=======
+  return (
+    <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
+      <SlideContainer>
+        <SortableContext
+          items={canvasList}
+          strategy={verticalListSortingStrategy}
+        >
+          {canvasList.map((canvas, index) => {
+            return (
+              <SingleSlideComponent key={index} {...canvas} index={index} />
+            );
+          })}
+        </SortableContext>
+        <br />
+>>>>>>> Stashed changes
       </SlideContainer>
-    );
-  } else {
-    return (
-      <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
-        <SlideContainer>
-          <SortableContext
-            items={canvasList}
-            strategy={verticalListSortingStrategy}
-          >
-            {canvasList.map((canvas, index) => {
-              return (
-                <SingleSlideComponent key={index} {...canvas} index={index} />
-              );
-            })}
-          </SortableContext>
-          <br />
-        </SlideContainer>
-      </DndContext>
-    );
-  }
+    </DndContext>
+  );
 }
