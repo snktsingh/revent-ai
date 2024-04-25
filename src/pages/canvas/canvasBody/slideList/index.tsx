@@ -14,7 +14,7 @@ import {
 import { CanvasItem } from '@/interface/storeTypes';
 import { CSS } from '@dnd-kit/utilities';
 import {
-  setActiveCanvas,
+  setActiveSlideId,
   setVariantImageAsMain,
   updateCanvasList,
 } from '@/redux/reducers/canvas';
@@ -29,7 +29,7 @@ export default function SlideList() {
     handleKeyDown,
     svgURLs,
     canvasList,
-    activeCanvasID,
+    activeSlideID,
     handleSlideCardClick,
     loadSvgs,
     handleDragStart,
@@ -99,7 +99,7 @@ export default function SlideList() {
           <Stack direction="row" spacing={1}>
             <p>{index + 1}</p>
             <ListSlideCard
-              className={activeCanvasID == canvas.id ? 'clicked-card' : ''}
+              className={activeSlideID == canvas.id ? 'clicked-card' : ''}
             >
               <SvgViewer svgContent={svgURLs[index]} />
             </ListSlideCard>

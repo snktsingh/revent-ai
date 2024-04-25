@@ -252,11 +252,11 @@ const CanvasBody = () => {
         hideProgressBar
         transition={Slide}
       />
-      <Grid container>
-        <Grid xs={2}>
+      <Grid  container>
+        <Grid item xs={2}>
           <SlideList />
         </Grid>
-        <Grid xs={8}>
+        <Grid item xs={8}>
           <EditSlideContainer>
             <Stack
               direction="row"

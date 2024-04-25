@@ -70,7 +70,6 @@ export default function Templates() {
 
     getElementsData(
       (canvasJS.originalSlideData as any).objects,
-      themeCode,
       themeId
     )
   };

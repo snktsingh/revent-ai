@@ -2,7 +2,8 @@ import ENDPOINT from '@/constants/endpoint';
 import { FetchUtils } from '@/utils/fetch-utils';
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
-  setActiveCanvas,
+  setActiveSlideId,
+  setCanvas,
   setVariantImageAsMain,
   toggleIsVariantSelected,
   updateCanvasList,
@@ -13,6 +14,8 @@ import { RootState } from '../store';
 import { IUserLogin } from '@/interfaces/authInterface';
 import { create, forEach } from 'lodash';
 import { IUpdatePptName } from '@/interfaces/pptInterfaces';
+import { canvasData, customizeData } from '@/utils/transformResData';
+import { toggleSelectingSlide } from '../reducers/slide';
 
 const initialState: ISlideRequests = {
   pptUrl: '',
@@ -86,58 +89,16 @@ export const fetchPptDetails = createAsyncThunk(
     const res = await FetchUtils.getRequest(
       `${ENDPOINT.PPT.GET_PPT_DETAILS}?presentationId=${pId}`
     );
-    dispatch(setVariantImageAsMain(res.data.slides[0][0].thumbnailUrl));
-    dispatch(setActiveCanvas(1));
     const currentCanvas = (getState() as RootState).canvas.canvasJS;
+    dispatch(setActiveSlideId(1));
+
     const data = [];
     const promises = [];
     for (let i = 0; i < res.data.slides.length; i++) {
+      canvasData.objects[0].src = `${res.data.slides[i][0].thumbnailUrl}`;
       const slide : any = {
         id: i + 1,
-        canvas: {
-          version: '5.3.0',
-          objects: [
-            {
-              type: 'image',
-              version: '5.3.0',
-              originX: 'left',
-              originY: 'top',
-              left: 0,
-              top: 0,
-              width: 960,
-              height: 540,
-              fill: 'rgb(0,0,0)',
-              stroke: null,
-              strokeWidth: 0,
-              strokeDashArray: null,
-              strokeLineCap: 'butt',
-              strokeDashOffset: 0,
-              strokeLineJoin: 'miter',
-              strokeUniform: false,
-              strokeMiterLimit: 4,
-              scaleX: 0.5,
-              scaleY: 0.5,
-              angle: 0,
-              flipX: false,
-              flipY: false,
-              opacity: 1,
-              shadow: null,
-              visible: true,
-              backgroundColor: '',
-              fillRule: 'nonzero',
-              paintFirst: 'fill',
-              globalCompositeOperation: 'source-over',
-              skewX: 0,
-              skewY: 0,
-              cropX: 0,
-              cropY: 0,
-              name: 'image',
-              src: `${res.data.slides[i][0].thumbnailUrl}`,
-              crossOrigin: null,
-              filters: [],
-            },
-          ],
-        },
+        canvas: canvasData,
         notes: '',
         variants: [],
         originalSlideData: {},
@@ -150,17 +111,17 @@ export const fetchPptDetails = createAsyncThunk(
         });
       });
       data.push(slide);
-      // Pushing the promise into an array
       promises.push(new Promise<void>(resolve => resolve()));
     }
 
-    // Wait for all promises to resolve before dispatching updateCanvasList
     await Promise.all(promises);
-
-    // After loop completes, dispatch updateCanvasList
-    dispatch(updateCanvasList(data));
-
-    // Return data
+    console.log({data})
+    if(data.length > 0 && data[0].canvas !== ""){
+      dispatch(updateCanvasList(data));
+      dispatch(setVariantImageAsMain(res.data.slides[0][0].thumbnailUrl));
+      dispatch(toggleSelectingSlide(true));
+      dispatch(setCanvas({...currentCanvas, variants : data[0].variants}));
+    }
     return data;
   }
 );

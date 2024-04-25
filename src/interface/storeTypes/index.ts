@@ -64,7 +64,7 @@ export interface ISlideRequests {
   presentationId: number | null;
   presentationName: string;
   isAuthenticating: boolean;
-  pptDetails: IFetchPptDetails | null;
+  pptDetails: any;
   unAuthMessage: boolean;
   selectedSlideIndex: number;
 }

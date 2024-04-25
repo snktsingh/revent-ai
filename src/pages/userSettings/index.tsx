@@ -196,14 +196,12 @@ const UserSettings: React.FC = () => {
 
             <StyledTabs>
               <StyledTab
-                isActive={tab === 1}
+                isactive={tab === 1}
                 onClick={() => setTab(1)}
                 endIcon={<ChevronIcon />}
               >
                 General Settings
               </StyledTab>
-              {/* <StyledTab isActive={tab === 2} endIcon={<ChevronIcon />} onClick={() => setTab(2)} >Linkedin Profile</StyledTab>
-              <StyledTab isActive={tab === 3} endIcon={<ChevronIcon />} onClick={() => setTab(3)} >Company Details</StyledTab> */}
             </StyledTabs>
           </SideBar>
 

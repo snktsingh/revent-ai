@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/store';
 import React, { useState } from 'react';
 import { useCanvasComponent } from '../canvasComponent/container';
 import { toggleSelectingSlide } from '@/redux/reducers/slide';
-import { setActiveCanvas, setCanvas, updateCanvasList } from '@/redux/reducers/canvas';
+import { setActiveSlideId, setCanvas, updateCanvasList } from '@/redux/reducers/canvas';
 import { fabric } from 'fabric';
 import { CanvasItem } from '@/interface/storeTypes';
 import { openModal } from '@/redux/reducers/elements';
@@ -11,15 +11,16 @@ const useSlideList = () => {
   const [draggedItemId, setDraggedItemId] = useState(null);
   const dispatch = useAppDispatch();
   const slide = useAppSelector(state => state.slide);
-  const { canvasList, canvasJS, activeCanvasID } = useAppSelector(
+  const { canvasList, canvasJS, activeSlideID } = useAppSelector(
     state => state.canvas
   );
   const { updateCanvasDimensions } = useCanvasComponent();
 
   const handleSlideCardClick = (canvas: CanvasItem) => {
+    console.log({canvas})
     dispatch(toggleSelectingSlide(true));
     dispatch(setCanvas(canvas));
-    dispatch(setActiveCanvas(canvas.id));
+    dispatch(setActiveSlideId(canvas.id));
   };
 
   const [svgURLs, setsvgURLs] = useState<string[]>([]);
@@ -94,7 +95,7 @@ const useSlideList = () => {
     svgURLs,
     canvasJS,
     canvasList,
-    activeCanvasID,
+    activeSlideID,
     slide,
     handleSlideCardClick,
     loadSvgs,

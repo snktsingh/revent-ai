@@ -13,7 +13,7 @@ export interface CanvasSate {
   tableDetails: TableDetails | null;
   canvasList: CanvasItem[];
   canvasJS: CanvasItem;
-  activeCanvasID: number;
+  activeSlideID: number;
   size: number;
   canvasData: string[];
   tempData: any[];
@@ -52,7 +52,7 @@ export const initialState: CanvasSate = {
     originalSlideData: {},
     listImages : [],
   },
-  activeCanvasID: 1,
+  activeSlideID: 1,
   size: 1,
   canvasData: [],
   tempData: [],
@@ -121,7 +121,7 @@ export const CanvasReducer = createSlice({
       return {
         ...state,
         canvasList: updatedCanvasList,
-        activeCanvasID: canvasID,
+        activeSlideID: canvasID,
         canvasJS: {
           id: canvasID,
           canvas: canvasJSON,
@@ -132,10 +132,10 @@ export const CanvasReducer = createSlice({
         },
       };
     },
-    setActiveCanvas(state, action) {
+    setActiveSlideId(state, action) {
       return {
         ...state,
-        activeCanvasID: action.payload,
+        activeSlideID: action.payload,
       };
     },
     setColor(state, action) {
@@ -195,7 +195,7 @@ export const CanvasReducer = createSlice({
       return {
         ...state,
         canvasList: updatedCanvasList,
-        activeCanvasID: id + 1,
+        activeSlideID: id + 1,
         canvasJS: copiedCanvas,
       };
     },
@@ -211,13 +211,13 @@ export const CanvasReducer = createSlice({
           id: index + 1,
         }));
 
-        const newActiveCanvasId = idToDelete === 1 ? 1 : idToDelete - 1;
+        const newActiveSlideId = idToDelete === 1 ? 1 : idToDelete - 1;
 
-        const newActiveCanvasJS = renumberedCanvasList[newActiveCanvasId - 1];
+        const newActiveCanvasJS = renumberedCanvasList[newActiveSlideId - 1];
         return {
           ...state,
           canvasList: renumberedCanvasList,
-          activeCanvasID: newActiveCanvasId,
+          activeSlideID: newActiveSlideId,
           canvasJS: newActiveCanvasJS || null,
         };
       }
@@ -299,7 +299,7 @@ export const {
   updateCurrentCanvas,
   copyCanvasCopy,
   deleteCanvasItem,
-  setActiveCanvas,
+  setActiveSlideId,
   handleSize,
   handleInputSize,
   setCanvasData,

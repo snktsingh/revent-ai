@@ -20,10 +20,11 @@ import {
 } from './style';
 import SvgViewer from '@/components/canvasSvgViewer';
 import ThumbnailPreview from '@/common-ui/thumbnailPreview';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ISlideList } from '@/interfaces/pptInterfaces';
 
 export const CanvasVariant = () => {
+  const [canvasIndex, setCanvasIndex] = useState<number>(0)
   const dispatch = useAppDispatch();
   const { selectedSlideIndex } = useAppSelector(state => state.thunk);
   const {
@@ -36,15 +37,18 @@ export const CanvasVariant = () => {
     selectedOriginalCanvas,
     canvasJS,
     pptDetails,
+    canvasList
   } = useVariants();
 
   useEffect(() => {
+    const index = canvasList.findIndex((el) => el.id === canvasJS.id);
+    setCanvasIndex(index);
     dispatch(toggleVariantSlide(false));
   }, [canvasJS.canvas]);
 
   return (
     <div>
-      {canvasJS.variants.length > 0 && (
+      {(canvasJS.variants.length > 0) && (
         <VariantButton
           onClick={() => dispatch(toggleVariantSlide(!openVariant))}
         >
@@ -119,9 +123,9 @@ export const CanvasVariant = () => {
                   </VariantSlide>
                 );
               })
-            ) : (
+            ) : 
               <></>
-            )}
+          }
             <LogoContainer>
               <div>
                 <span>Powered by</span>
