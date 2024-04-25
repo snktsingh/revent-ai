@@ -1,6 +1,8 @@
+import { CanvasItem } from '@/interface/storeTypes';
+import { setCanvas, setVariantImageAsMain, updateCanvasList } from '@/redux/reducers/canvas';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { deletePresentation, fetchPPTList } from '@/redux/thunk/dashboard';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const useDashboard = () => {
   const dispatch = useAppDispatch();
@@ -44,6 +46,27 @@ const useDashboard = () => {
       .join('');
     return initials;
   }
+
+  useEffect(()=> {
+    let canvas : CanvasItem[] = [
+      {
+        id: 1,
+        canvas: {
+          version: '5.3.0',
+          objects: [],
+          background: '#fff',
+        },
+        notes: '',
+        variants: [],
+        originalSlideData: {},
+        listImages: [],
+      }
+    ];
+    dispatch(setCanvas(canvas[0]));
+    dispatch(setVariantImageAsMain(''))
+    dispatch(updateCanvasList(canvas));
+  },[]);
+
   return {
     open,
     handleClickOpen,

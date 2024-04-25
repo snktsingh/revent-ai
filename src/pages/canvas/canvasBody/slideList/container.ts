@@ -2,7 +2,11 @@ import { useAppDispatch, useAppSelector } from '@/redux/store';
 import React, { useState } from 'react';
 import { useCanvasComponent } from '../canvasComponent/container';
 import { toggleSelectingSlide } from '@/redux/reducers/slide';
-import { setActiveSlideId, setCanvas, updateCanvasList } from '@/redux/reducers/canvas';
+import {
+  setActiveSlideId,
+  setCanvas,
+  updateCanvasList,
+} from '@/redux/reducers/canvas';
 import { fabric } from 'fabric';
 import { CanvasItem } from '@/interface/storeTypes';
 import { openModal } from '@/redux/reducers/elements';
@@ -17,7 +21,7 @@ const useSlideList = () => {
   const { updateCanvasDimensions } = useCanvasComponent();
 
   const handleSlideCardClick = (canvas: CanvasItem) => {
-    console.log({canvas})
+    console.log({ canvas });
     dispatch(toggleSelectingSlide(true));
     dispatch(setCanvas(canvas));
     dispatch(setActiveSlideId(canvas.id));
@@ -68,20 +72,28 @@ const useSlideList = () => {
     dispatch(openModal());
   };
 
-  const handleDragStart = (event : React.DragEvent<HTMLDivElement>, index : number, canvas : CanvasItem) => {
+  const handleDragStart = (
+    event: React.DragEvent<HTMLDivElement>,
+    index: number,
+    canvas: CanvasItem
+  ) => {
     event.dataTransfer.setData('index', index.toString());
     handleSlideCardClick(canvas);
   };
 
-  const handleDragOver = (event : React.DragEvent<HTMLDivElement>) => {
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
   };
 
-  const handleDrop = (event : React.DragEvent<HTMLDivElement>, newIndex : number, canvas : CanvasItem) => {
+  const handleDrop = (
+    event: React.DragEvent<HTMLDivElement>,
+    newIndex: number,
+    canvas: CanvasItem
+  ) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
     const oldIndexStr = event.dataTransfer.getData('index');
-    const oldIndex = parseInt(oldIndexStr, 10); 
+    const oldIndex = parseInt(oldIndexStr, 10);
     const updatedCanvasList = [...canvasList];
     const [removed] = updatedCanvasList.splice(oldIndex, 1);
     updatedCanvasList.splice(newIndex, 0, removed);
@@ -102,7 +114,7 @@ const useSlideList = () => {
     handleDragOver,
     handleDragStart,
     handleDrop,
-    dispatch
+    dispatch,
   };
 };
 

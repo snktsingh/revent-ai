@@ -8,6 +8,7 @@ export interface TestState {
   itemKey: number;
   openProfileMenu: boolean;
   enabledElements: string[];
+  isPresentationLoading : boolean
 }
 
 const initialState: TestState = {
@@ -17,6 +18,7 @@ const initialState: TestState = {
   openNotes: false,
   itemKey: 0,
   openProfileMenu: false,
+  isPresentationLoading : true,
   enabledElements: [
     'Title',
     'Subtitle',
@@ -62,6 +64,9 @@ export const ElementReducer = createSlice({
     setEnabledElements: (state, action) => {
       state.enabledElements = action.payload;
     },
+    updatePresentationLoading : (state, action : PayloadAction<boolean>) => {
+      state.isPresentationLoading = action.payload;
+    }
   },
 });
 
@@ -74,6 +79,7 @@ export const {
   toggleNotesSlide,
   setMenuItemKey,
   setEnabledElements,
+  updatePresentationLoading
 } = ElementReducer.actions;
 
 export default ElementReducer.reducer;

@@ -45,11 +45,14 @@ const MainCanvasHeader = ({ pId }: any) => {
     handleInputChange,
     updatePresentationName,
     updateResponse,
+    handleGoBack
   } = useCanvasHeader();
 
   const { presentationId, presentationName, pptDetails } = useAppSelector(
     state => state.thunk
   );
+
+
 
   return (
     <HeaderContainer>
@@ -144,7 +147,7 @@ const MainCanvasHeader = ({ pId }: any) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleWarningClose}>Cancel</Button>
-          <Button onClick={() => navigate('/dashboard', { replace: true })}>
+          <Button onClick={handleGoBack}>
             Go Back
           </Button>
         </DialogActions>

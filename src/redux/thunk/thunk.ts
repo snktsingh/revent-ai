@@ -9,12 +9,12 @@ import {
   updateCanvasList,
   updateCurrentCanvas,
 } from '../reducers/canvas';
-import { APIRequest, ISlideRequests } from '@/interface/storeTypes';
+import { APIRequest, CanvasItem, ISlideRequests } from '@/interface/storeTypes';
 import { RootState } from '../store';
 import { IUserLogin } from '@/interfaces/authInterface';
 import { create, forEach } from 'lodash';
 import { IUpdatePptName } from '@/interfaces/pptInterfaces';
-import { canvasData, customizeData } from '@/utils/transformResData';
+import { canvasData } from '@/utils/transformResData';
 import { toggleSelectingSlide } from '../reducers/slide';
 
 const initialState: ISlideRequests = {
@@ -89,40 +89,7 @@ export const fetchPptDetails = createAsyncThunk(
     const res = await FetchUtils.getRequest(
       `${ENDPOINT.PPT.GET_PPT_DETAILS}?presentationId=${pId}`
     );
-    const currentCanvas = (getState() as RootState).canvas.canvasJS;
-    dispatch(setActiveSlideId(1));
-
-    const data = [];
-    const promises = [];
-    for (let i = 0; i < res.data.slides.length; i++) {
-      canvasData.objects[0].src = `${res.data.slides[i][0].thumbnailUrl}`;
-      const slide : any = {
-        id: i + 1,
-        canvas: canvasData,
-        notes: '',
-        variants: [],
-        originalSlideData: {},
-        listImages: [],
-      };
-      res.data.slides[i].forEach((element: any) => {
-        slide.variants.push({
-          pptUrl: '',
-          imagesUrl: element.thumbnailUrl,
-        });
-      });
-      data.push(slide);
-      promises.push(new Promise<void>(resolve => resolve()));
-    }
-
-    await Promise.all(promises);
-    console.log({data})
-    if(data.length > 0 && data[0].canvas !== ""){
-      dispatch(updateCanvasList(data));
-      dispatch(setVariantImageAsMain(res.data.slides[0][0].thumbnailUrl));
-      dispatch(toggleSelectingSlide(true));
-      dispatch(setCanvas({...currentCanvas, variants : data[0].variants}));
-    }
-    return data;
+    return res.data;
   }
 );
 

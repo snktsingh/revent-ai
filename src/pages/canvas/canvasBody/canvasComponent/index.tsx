@@ -54,9 +54,9 @@ const CanvasComponent: React.FC = () => {
 
   const { canvasJS, variantImage, selectedOriginalCanvas, isVariantSelected, canvasList } =
     useAppSelector(state => state.canvas);
-    console.log({canvasList})
 
   useEffect(() => {
+    console.log({canvasJS})
     setShowOptions(false);
     const canvas = new fabric.Canvas('canvas');
     updateCanvasStyle(canvas);
@@ -174,7 +174,7 @@ const CanvasComponent: React.FC = () => {
           lockMovementX: true,
           lockScalingY: true,
           moveCursor: 'pointer',
-          name: 'image',
+          name: 'VariantImage',
         });
 
         canvasRef.current?.add(img);
