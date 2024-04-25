@@ -10,11 +10,14 @@ import { useCanvasComponent } from './container';
 import { useElementFunctions } from './elementFunctions';
 import FullscreenCanvas from './fullscreenCanvas';
 import { CanvasContainer } from './style';
+import { useParams } from 'react-router-dom';
+import { setPresentationID } from '@/redux/thunk/thunk';
 
 const CanvasComponent: React.FC = () => {
   const FabricRef = useRef<fabric.Canvas | null>(null);
   const canvasRef = useRef<fabric.Canvas | null>(null);
   const ContainerRef = useRef<HTMLDivElement | null>(null);
+
 
   const {
     updateCanvasDimensions,

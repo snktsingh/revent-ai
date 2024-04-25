@@ -1,6 +1,6 @@
 import ENDPOINT from '@/constants/endpoint';
 import { FetchUtils } from '@/utils/fetch-utils';
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
   setActiveCanvas,
   setVariantImageAsMain,
@@ -92,7 +92,7 @@ export const fetchPptDetails = createAsyncThunk(
     const data = [];
     const promises = [];
     for (let i = 0; i < res.data.slides.length; i++) {
-      const slide = {
+      const slide : any = {
         id: i + 1,
         canvas: {
           version: '5.3.0',
@@ -151,7 +151,7 @@ export const fetchPptDetails = createAsyncThunk(
       });
       data.push(slide);
       // Pushing the promise into an array
-      promises.push(new Promise(resolve => resolve()));
+      promises.push(new Promise<void>(resolve => resolve()));
     }
 
     // Wait for all promises to resolve before dispatching updateCanvasList
@@ -181,6 +181,9 @@ const thunkSlice = createSlice({
     setEditPptIndex: (state, action) => {
       state.selectedSlideIndex = action.payload;
     },
+    setPresentationID : (state, action : PayloadAction<number>) => {
+      state.presentationId = action.payload;
+    }
   },
   extraReducers(builder) {
     builder
@@ -226,7 +229,7 @@ const thunkSlice = createSlice({
       .addCase(fetchPptDetails.pending, (state, action) => {
         state.pptDetails = null;
       })
-      .addCase(fetchPptDetails.fulfilled, (state, action) => {
+      .addCase(fetchPptDetails.fulfilled, (state, action : PayloadAction<any>) => {
         state.pptDetails = action.payload;
         state.presentationName = action.payload.name;
         state.presentationId = action.payload.presentationId;
@@ -242,6 +245,7 @@ export const {
   setAuthenticateLoader,
   setUnauthMessage,
   setEditPptIndex,
+  setPresentationID
 } = thunkSlice.actions;
 
 export default thunkSlice.reducer;

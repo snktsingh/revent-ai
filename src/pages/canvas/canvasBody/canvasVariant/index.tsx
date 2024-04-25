@@ -107,7 +107,6 @@ export const CanvasVariant = () => {
                       }
                     >
                       <ThumbnailPreview
-                        componentTitle=""
                         src={el.imagesUrl}
                         alt={`Variant ${i + 1}`}
                         style={{
@@ -121,50 +120,7 @@ export const CanvasVariant = () => {
                 );
               })
             ) : (
-<<<<<<< Updated upstream
-              <>
-                {pptDetails?.slides.length !== 0 ? (
-                  <>
-                    {pptDetails?.slides[selectedSlideIndex].map(
-                      (el: ISlideList, index: number) => {
-                        return (
-                          <VariantSlide
-                            key={el.thumbnailUrl}
-                            onClick={() =>
-                              handleVariants(el.thumbnailUrl, '', index)
-                            }
-                          >
-                            <div>{index + 1}</div>
-                            <VariantSlideCard
-                              className={
-                                el.thumbnailUrl == variantImage &&
-                                !selectedOriginalCanvas
-                                  ? 'clicked-card'
-                                  : ''
-                              }
-                            >
-                              <ThumbnailPreview
-                                src={el.thumbnailUrl}
-                                alt={`Variant ${index + 1}`}
-                                style={{
-                                  width: '100%',
-                                  height: '12vh',
-                                  borderRadius: '3%',
-                                }}
-                              />
-                            </VariantSlideCard>
-                          </VariantSlide>
-                        );
-                      }
-                    )}
-                  </>
-                ) : (
-                  <></>
-                )}
-              </>
-=======
               <></>
->>>>>>> Stashed changes
             )}
             <LogoContainer>
               <div>

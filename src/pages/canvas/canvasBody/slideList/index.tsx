@@ -69,10 +69,6 @@ export default function SlideList() {
     ...props
   }) => {
     const canvas = props;
-<<<<<<< Updated upstream
-    console.log(svgURLs);
-=======
->>>>>>> Stashed changes
 
     const { attributes, listeners, setNodeRef, transform, transition } =
       useSortable({ id: canvas.id });
@@ -114,33 +110,7 @@ export default function SlideList() {
     );
   };
 
-<<<<<<< Updated upstream
-  if (pptDetails?.slides.length > 0) {
-    return (
-      <SlideContainer>
-        {pptDetails?.slides.map((slide: any, index) => {
-          return (
-            <SingleSliderContainer style={{ marginBottom: '1.8vh' }}>
-              <Stack direction="row" spacing={1}>
-                <p>{index + 1}</p>
-                <ListSlideCard
-                  className={
-                    activeCanvasID == slide[0].slideId ? 'clicked-card' : ''
-                  }
-                  onClick={() => {
-                    dispatch(setActiveCanvas(slide[0].slideId));
-                    dispatch(setEditPptIndex(index));
-                    dispatch(setVariantImageAsMain(slide[0].thumbnailUrl));
-                    console.log(slide[0].thumbnailUrl);
-                  }}
-                >
-                  <img src={slide[0].thumbnailUrl} width="100%" />
-                </ListSlideCard>
-              </Stack>
-            </SingleSliderContainer>
-          );
-        })}
-=======
+
   return (
     <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
       <SlideContainer>
@@ -155,7 +125,6 @@ export default function SlideList() {
           })}
         </SortableContext>
         <br />
->>>>>>> Stashed changes
       </SlideContainer>
     </DndContext>
   );
