@@ -52,6 +52,7 @@ import { useCanvasComponent } from './canvasComponent/container';
 import useCanvasData from './canvasComponent/canvasDataExtractor';
 import useVariants from './canvasVariant/container';
 import { Images, QuoteImages, listImages } from '@/data/data';
+import { useParams } from 'react-router-dom';
 
 const CanvasBody = () => {
   const slide = useAppSelector(state => state.slide);
@@ -90,7 +91,7 @@ const CanvasBody = () => {
     setActiveDislike(!activeDislike);
     setActiveLike(false);
   };
-
+  const params = useParams<{ id: string }>(); 
   const handleRegeneration = (item: any) => {
     if (canvasJS.variants.length === 0) {
       handleClose();
@@ -202,7 +203,13 @@ const CanvasBody = () => {
       }
       return;
     }
-    dispatch(fetchSlideImg(requestData));
+    let reqData = {...requestData};
+    if(params.id?.split('-')[0] && reqData){
+      const ptId = Number(params.id?.split('-')[0]);
+      reqData.presentationId = ptId;
+      console.log({ptId})
+    }
+    dispatch(fetchSlideImg(reqData));
     dispatch(toggleSelectedOriginalCanvas(false));
   };
 
@@ -285,11 +292,11 @@ const CanvasBody = () => {
         hideProgressBar
         transition={Slide}
       />
-      <Grid container>
-        <Grid xs={2}>
+      <Grid  container>
+        <Grid item xs={2}>
           <SlideList />
         </Grid>
-        <Grid xs={8}>
+        <Grid item xs={8}>
           <EditSlideContainer>
             <Stack
               direction="row"

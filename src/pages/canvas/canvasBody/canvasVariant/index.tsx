@@ -20,10 +20,11 @@ import {
 } from './style';
 import SvgViewer from '@/components/canvasSvgViewer';
 import ThumbnailPreview from '@/common-ui/thumbnailPreview';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ISlideList } from '@/interfaces/pptInterfaces';
 
 export const CanvasVariant = () => {
+  const [canvasIndex, setCanvasIndex] = useState<number>(0)
   const dispatch = useAppDispatch();
   const { selectedSlideIndex } = useAppSelector(state => state.thunk);
   const {
@@ -36,15 +37,18 @@ export const CanvasVariant = () => {
     selectedOriginalCanvas,
     canvasJS,
     pptDetails,
+    canvasList
   } = useVariants();
 
   useEffect(() => {
+    const index = canvasList.findIndex((el) => el.id === canvasJS.id);
+    setCanvasIndex(index);
     dispatch(toggleVariantSlide(false));
   }, [canvasJS.canvas]);
 
   return (
     <div>
-      {canvasJS.variants.length > 0 && (
+      {(canvasJS.variants.length > 0) && (
         <VariantButton
           onClick={() => dispatch(toggleVariantSlide(!openVariant))}
         >
@@ -112,7 +116,6 @@ export const CanvasVariant = () => {
                       }
                     >
                       <ThumbnailPreview
-                        componentTitle=""
                         src={el.imagesUrl}
                         alt={`Variant ${i + 1}`}
                         style={{
@@ -126,53 +129,10 @@ export const CanvasVariant = () => {
                   </VariantSlide>
                 );
               })
-            ) : (
-<<<<<<< Updated upstream
-              <>
-                {pptDetails?.slides.length !== 0 ? (
-                  <>
-                    {pptDetails?.slides[selectedSlideIndex].map(
-                      (el: ISlideList, index: number) => {
-                        return (
-                          <VariantSlide
-                            key={el.thumbnailUrl}
-                            onClick={() =>
-                              handleVariants(el.thumbnailUrl, '', index)
-                            }
-                          >
-                            <div>{index + 1}</div>
-                            <VariantSlideCard
-                              className={
-                                el.thumbnailUrl == variantImage &&
-                                !selectedOriginalCanvas
-                                  ? 'clicked-card'
-                                  : ''
-                              }
-                            >
-                              <ThumbnailPreview
-                                componentTitle='variants'
-                                src={el.thumbnailUrl}
-                                alt={`Variant ${index + 1}`}
-                                style={{
-                                  width: '100%',
-                                  height: 'auto',
-                                  borderRadius: '3%',
-                                }}
-                              />
-                            </VariantSlideCard>
-                          </VariantSlide>
-                        );
-                      }
-                    )}
-                  </>
-                ) : (
-                  <></>
-                )}
-              </>
-=======
+            ) : 
               <></>
->>>>>>> Stashed changes
-            )}
+          }
+
             <LogoContainer>
               <div>
                 <span>Powered by</span>

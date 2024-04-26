@@ -69,6 +69,7 @@ const Dashboard = () => {
   useEffect(() => {
     setFilteredPpt(pptList);
   }, []);
+  
 
   return (
     <MainContainer>
@@ -104,7 +105,7 @@ const Dashboard = () => {
       <CardContainer>
         {slideData.templates.map((slide, index) => {
           return (
-            <CardTitle onClick={() => navigate('/themes')}>
+            <CardTitle key={slide.title+index} onClick={() => navigate('/themes')}>
               <CardLink>
                 <PreviewCard>
                   <AddToQueueIcon

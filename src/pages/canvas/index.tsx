@@ -13,10 +13,17 @@ import {
   setUnauthMessage,
 } from '@/redux/thunk/thunk';
 import { toast } from 'react-toastify';
+import { processSlides } from '@/utils/transformResData';
+import { setActiveSlideId, setCanvas, setVariantImageAsMain, updateCanvasList } from '@/redux/reducers/canvas';
+import { toggleSelectingSlide } from '@/redux/reducers/slide';
+import { updatePresentationLoading } from '@/redux/reducers/elements';
 
 const MainCanvas = () => {
   const dispatch = useAppDispatch();
   const { isAuthenticating } = useAppSelector(state => state.thunk);
+  const { canvasJS } = useAppSelector(state => state.canvas);
+  const { isPresentationLoading } = useAppSelector(state => state.element);
+
   const relUrl = window.location.pathname.slice(8);
   const temp = relUrl.search('-');
   const pName = relUrl.slice(temp + 1);
@@ -30,9 +37,20 @@ const MainCanvas = () => {
   }, []);
 
   const getPresentationData = async (pptId: string) => {
-    const res = await dispatch(fetchPptDetails(pptId));
-    console.log(res.meta.requestStatus === 'fulfilled');
+    dispatch(updatePresentationLoading(true));
+    const res: any = await dispatch(fetchPptDetails(pptId));
     if (res.meta.requestStatus === 'fulfilled') {
+
+      const slidesData = processSlides(res.payload.slides);
+
+      if (slidesData.length > 0 && slidesData[0].canvas) {
+        dispatch(setActiveSlideId(1));
+        dispatch(updateCanvasList(slidesData));
+        dispatch(setVariantImageAsMain(res.payload.slides[0][0].thumbnailUrl));
+        dispatch(toggleSelectingSlide(true));
+        dispatch(setCanvas({ ...canvasJS, variants: slidesData[0].variants }));
+      }
+      dispatch(updatePresentationLoading(false));
       toast.success("Presentation added to canvas")
       dispatch(setAuthenticateLoader());
     } else {
@@ -44,13 +62,20 @@ const MainCanvas = () => {
     return <ReventingLoader />;
   } else {
     return (
-      <div>
-        <MainCanvasHeader pId={pId} />
-        <CanvasTools />
-        <CanvasBody />
-        <CanvasVariant />
-        <CanvasThemes />
-      </div>
+      <>
+        {
+          isPresentationLoading ?
+            <ReventingLoader />
+            :
+            <div>
+              <MainCanvasHeader pId={pId} />
+              <CanvasTools />
+              <CanvasBody />
+              <CanvasVariant />
+              <CanvasThemes />
+            </div>
+        }
+      </>
     );
   }
 };
