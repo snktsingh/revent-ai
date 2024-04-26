@@ -182,7 +182,7 @@ const CanvasComponent: React.FC = () => {
       canvasRef.current?.renderAll();
 
     }
-  }, [variantImage, isVariantSelected]);
+  }, [variantImage, isVariantSelected, window.innerWidth]);
 
   useEffect(() => { }, [selectedElementPosition, showOptions]);
 

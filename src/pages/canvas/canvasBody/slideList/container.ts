@@ -38,6 +38,28 @@ const useSlideList = () => {
           // canvas.width = 970;
           // canvas.height = 500;
           updateCanvasDimensions(canvas);
+          canvas.forEachObject(obj => {
+            if (obj.name && obj.name == 'VariantImage') {
+              const canvasWidth = canvas?.width || 0;
+              const canvasHeight = canvas?.height || 0;
+              const scaleWidth = canvasWidth / obj.width!;
+              const scaleHeight = canvasHeight / obj.height!;
+              const scale = Math.max(scaleWidth, scaleHeight);
+
+              obj.set({
+                left: 0,
+                top: 0,
+                scaleX: scale,
+                scaleY: scale,
+                selectable: false,
+                lockMovementX: true,
+                lockScalingY: true,
+                moveCursor: 'pointer',
+                name: 'VariantImage',
+              });
+            }
+          });
+          canvas.renderAll();
           const svgURL = canvas.toSVG();
           resolve(svgURL);
         });
@@ -53,6 +75,7 @@ const useSlideList = () => {
     for (const canvas of canvasList) {
       try {
         const svgURL = await getImg(canvas.canvas);
+        console.log({ svgURL });
         urls.push(svgURL);
       } catch (error) {
         console.error(error);
