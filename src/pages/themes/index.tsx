@@ -74,9 +74,6 @@ const AppThemes = () => {
                       // dispatch(setSelectedTheme(theme.themeId));
                       // dispatch(setThemeId(theme.themeId));
                       handleGenerate(theme.themeId);
-                      setTimeout(() => {
-                      }, 2500);
-                      console.log({ theme })
                     }}
                     className={
                       selectedThemeId === theme.themeId

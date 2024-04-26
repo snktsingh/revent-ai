@@ -50,7 +50,6 @@ export const fetchSlideImg = createAsyncThunk(
       ...currentCanvas,
       variants: res.data.variants,
     };
-    console.log(updatedCanvasVariants);
     dispatch(updateCurrentCanvas(updatedCanvasVariants));
     return res.data;
   }

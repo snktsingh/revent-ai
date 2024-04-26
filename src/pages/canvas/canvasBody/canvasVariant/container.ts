@@ -29,7 +29,6 @@ const useVariants = () => {
     dispatch(toggleIsVariantSelected(true));
     dispatch(toggleSelectedOriginalCanvas(false));
     dispatch(setVariantImageAsMain(CanvasURL));
-    console.log(index)
   };
 
   const handleApplyOriginalAsMain = () => {

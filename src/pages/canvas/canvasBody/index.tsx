@@ -207,7 +207,6 @@ const CanvasBody = () => {
     if(params.id?.split('-')[0] && reqData){
       const ptId = Number(params.id?.split('-')[0]);
       reqData.presentationId = ptId;
-      console.log({ptId})
     }
     dispatch(fetchSlideImg(reqData));
     dispatch(toggleSelectedOriginalCanvas(false));

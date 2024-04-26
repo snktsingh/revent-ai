@@ -21,7 +21,6 @@ const useSlideList = () => {
   const { updateCanvasDimensions } = useCanvasComponent();
 
   const handleSlideCardClick = (canvas: CanvasItem) => {
-    console.log({ canvas });
     dispatch(toggleSelectingSlide(true));
     dispatch(setCanvas(canvas));
     dispatch(setActiveSlideId(canvas.id));
@@ -75,7 +74,6 @@ const useSlideList = () => {
     for (const canvas of canvasList) {
       try {
         const svgURL = await getImg(canvas.canvas);
-        console.log({ svgURL });
         urls.push(svgURL);
       } catch (error) {
         console.error(error);

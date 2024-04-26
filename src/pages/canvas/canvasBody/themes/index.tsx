@@ -72,10 +72,8 @@ export default function Templates() {
     if(hasVariantsInCanvasList){
       setOpen(true);
     }else {
-      console.log(theme.themeId)
       dispatch(setThemeId(theme.themeId));
     }
-    console.log({selectedThemeId})
     getElementsData(
       (canvasJS.originalSlideData as any).objects,
       theme.themeId

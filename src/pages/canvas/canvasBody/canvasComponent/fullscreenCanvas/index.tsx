@@ -73,7 +73,6 @@ const FullscreenCanvas = () => {
     ContentElements.openFullScreen = () => {
         console.log('full screen')
         setCurrentCanvasIndex(0);
-        console.log({ currentCanvasIndex })
 
         const canvasElement = document.getElementById('fullscreen-canvas');
         if (canvasElement) {

@@ -10,7 +10,6 @@ export function usePyramidElement() {
   const addPyramidLevel = (canvas: fabric.Canvas) => {
     const activePyramid = canvas.getActiveObject();
     const currentID = activePyramid?.name?.split('_')[1];
-    console.log(activePyramid);
     let lastLevel: any;
     let lastText: any;
     let levelsCount : number = 0;;

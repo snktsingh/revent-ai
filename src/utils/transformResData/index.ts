@@ -47,7 +47,6 @@ export const canvasData = {
 };
 
 export const processSlides = (slides: any[]): CanvasItem[] => {
-  console.log({ slides });
   return slides.map((slideData, index) => {
     let canvas = JSON.parse(JSON.stringify(canvasData));
     canvas.objects[0].src = `${slideData[0].thumbnailUrl}`;
