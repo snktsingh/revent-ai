@@ -16,7 +16,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 export interface StyledTabProps {
-  isActive: boolean;
+  isactive: boolean;
 }
 
 export const MainSettingsContainer = styled.div`
@@ -78,8 +78,8 @@ export const StyledTab = styled(Button)<StyledTabProps>`
   height: 52px;
   color: #44475b !important;
 
-  ${({ isActive }) =>
-    isActive &&
+  ${({ isactive }) =>
+    isactive &&
     `
       background-color: #e6edf8 !important;
       color: #004FBA !important;

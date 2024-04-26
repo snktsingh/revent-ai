@@ -91,6 +91,7 @@ const useVariants = () => {
     selectedOriginalCanvas,
     canvasJS,
     pptDetails,
+    canvasList
   };
 };
 export default useVariants;

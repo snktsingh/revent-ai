@@ -2,7 +2,7 @@ import { customStyles, theme } from '@/constants/theme';
 import styled, { css } from 'styled-components';
 
 interface ContainerProps {
-  isActive: boolean;
+  isactive: string;
 }
 
 export const NotesBodyContainer = styled.div`
@@ -25,7 +25,7 @@ export const AddNotesContainer = styled.div<ContainerProps>`
   display: flex;
   align-items: center;
   ${props =>
-    props.isActive &&
+    props.isactive === 'true' &&
     css`
       transform: translateY(0);
       transition: opacity 0.5s ease-in, transform 0.5s ease-in;

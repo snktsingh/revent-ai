@@ -1,17 +1,21 @@
 import ENDPOINT from '@/constants/endpoint';
 import { FetchUtils } from '@/utils/fetch-utils';
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
-  setActiveCanvas,
+  setActiveSlideId,
+  setCanvas,
   setVariantImageAsMain,
   toggleIsVariantSelected,
+  updateCanvasList,
   updateCurrentCanvas,
 } from '../reducers/canvas';
-import { APIRequest, ISlideRequests } from '@/interface/storeTypes';
+import { APIRequest, CanvasItem, ISlideRequests } from '@/interface/storeTypes';
 import { RootState } from '../store';
 import { IUserLogin } from '@/interfaces/authInterface';
-import { create } from 'lodash';
+import { create, forEach } from 'lodash';
 import { IUpdatePptName } from '@/interfaces/pptInterfaces';
+import { canvasData } from '@/utils/transformResData';
+import { toggleSelectingSlide } from '../reducers/slide';
 
 const initialState: ISlideRequests = {
   pptUrl: '',
@@ -46,6 +50,7 @@ export const fetchSlideImg = createAsyncThunk(
       ...currentCanvas,
       variants: res.data.variants,
     };
+    console.log(updatedCanvasVariants);
     dispatch(updateCurrentCanvas(updatedCanvasVariants));
     return res.data;
   }
@@ -80,12 +85,10 @@ export const updatePptName = createAsyncThunk(
 // Fetch Presentation Details By ID
 export const fetchPptDetails = createAsyncThunk(
   'ppt/fetchDetailsByID',
-  async (pId: string, { dispatch }) => {
+  async (pId: string, { dispatch, getState }) => {
     const res = await FetchUtils.getRequest(
       `${ENDPOINT.PPT.GET_PPT_DETAILS}?presentationId=${pId}`
     );
-    dispatch(setVariantImageAsMain(res.data.slides[0][0].thumbnailUrl));
-    dispatch(setActiveCanvas(res.data.slides[0][0].slideId));
     return res.data;
   }
 );
@@ -106,6 +109,9 @@ const thunkSlice = createSlice({
     setEditPptIndex: (state, action) => {
       state.selectedSlideIndex = action.payload;
     },
+    setPresentationID : (state, action : PayloadAction<number>) => {
+      state.presentationId = action.payload;
+    }
   },
   extraReducers(builder) {
     builder
@@ -151,7 +157,7 @@ const thunkSlice = createSlice({
       .addCase(fetchPptDetails.pending, (state, action) => {
         state.pptDetails = null;
       })
-      .addCase(fetchPptDetails.fulfilled, (state, action) => {
+      .addCase(fetchPptDetails.fulfilled, (state, action : PayloadAction<any>) => {
         state.pptDetails = action.payload;
         state.presentationName = action.payload.name;
         state.presentationId = action.payload.presentationId;
@@ -167,6 +173,7 @@ export const {
   setAuthenticateLoader,
   setUnauthMessage,
   setEditPptIndex,
+  setPresentationID
 } = thunkSlice.actions;
 
 export default thunkSlice.reducer;

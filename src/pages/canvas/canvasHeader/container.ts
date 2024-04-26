@@ -1,6 +1,7 @@
 import ENDPOINT, { ROUTES } from '@/constants/endpoint';
+import { CanvasItem } from '@/interface/storeTypes';
 import { IUpdatePptName } from '@/interfaces/pptInterfaces';
-import { setPresentationTitle } from '@/redux/reducers/canvas';
+import { setPresentationTitle, updateCanvasList } from '@/redux/reducers/canvas';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { setPresentationName, updatePptName } from '@/redux/thunk/thunk';
 import { FetchUtils } from '@/utils/fetch-utils';
@@ -79,6 +80,25 @@ const useCanvasHeader = () => {
     setUpdateResponse(res.payload);
   };
 
+  const handleGoBack = () => {
+    navigate('/dashboard', { replace: true });
+    let canvas : CanvasItem[] = [
+      {
+        id: 1,
+        canvas: {
+          version: '5.3.0',
+          objects: [],
+          background: '#fff',
+        },
+        notes: '',
+        variants: [],
+        originalSlideData: {},
+        listImages: [],
+      }
+    ];
+    dispatch(updateCanvasList(canvas));
+  };
+
   return {
     userLogout,
     getFirstLettersForAvatar,
@@ -102,7 +122,8 @@ const useCanvasHeader = () => {
     openShare,
     updatePresentationName,
     presentationId,
-    updateResponse
+    updateResponse,
+    handleGoBack,
   };
 };
 export default useCanvasHeader;

@@ -1,5 +1,5 @@
 import { theme } from '@/constants/theme';
-import { setActiveCanvas, setCanvas } from '@/redux/reducers/canvas';
+import { setActiveSlideId, setCanvas } from '@/redux/reducers/canvas';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { fabric } from 'fabric';
 import { useEffect, useState } from 'react';
@@ -18,11 +18,11 @@ const FullscreenCanvas = () => {
         console.log({ currentCanvasIndex, length: canvasList })
         if ((event.keyCode === 37 || event.keyCode === 38) && currentCanvasIndex > 0) {
             dispatch(setCanvas(canvasList[currentCanvasIndex]));
-            dispatch(setActiveCanvas(canvasList[currentCanvasIndex].id));
+            dispatch(setActiveSlideId(canvasList[currentCanvasIndex].id));
             setCurrentCanvasIndex(currentCanvasIndex - 1);
         } else if ((event.keyCode === 39 || event.keyCode === 40) && currentCanvasIndex < canvasList.length - 1) {
             dispatch(setCanvas(canvasList[currentCanvasIndex]));
-            dispatch(setActiveCanvas(canvasList[currentCanvasIndex].id));
+            dispatch(setActiveSlideId(canvasList[currentCanvasIndex].id));
             setCurrentCanvasIndex(currentCanvasIndex + 1);
         }
     };
