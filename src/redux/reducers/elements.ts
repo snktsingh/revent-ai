@@ -9,6 +9,7 @@ export interface TestState {
   openProfileMenu: boolean;
   enabledElements: string[];
   isPresentationLoading : boolean;
+  isDeleteAlertShow : boolean;
 }
 
 const initialState: TestState = {
@@ -19,6 +20,7 @@ const initialState: TestState = {
   itemKey: 0,
   openProfileMenu: false,
   isPresentationLoading : true,
+  isDeleteAlertShow: true,
   enabledElements: [
     'Title',
     'Subtitle',
@@ -67,6 +69,9 @@ export const ElementReducer = createSlice({
     updatePresentationLoading : (state, action : PayloadAction<boolean>) => {
       state.isPresentationLoading = action.payload;
     },
+    updateDeleteAlertShow(state,action : PayloadAction<boolean>) {
+      state.isDeleteAlertShow = action.payload;
+    },
   },
 });
 
@@ -79,7 +84,8 @@ export const {
   toggleNotesSlide,
   setMenuItemKey,
   setEnabledElements,
-  updatePresentationLoading
+  updatePresentationLoading,
+  updateDeleteAlertShow
 } = ElementReducer.actions;
 
 export default ElementReducer.reducer;
