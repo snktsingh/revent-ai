@@ -19,7 +19,7 @@ export const CanvasNotes = () => {
 
   return (
     <NotesBodyContainer>
-      <AddNotesContainer isActive={true}>
+      <AddNotesContainer isactive="true">
         <span>
           <InputBase placeholder="Click here to add notes..." value={canvasJS.notes} onChange={handleNotesChange} />
         </span>

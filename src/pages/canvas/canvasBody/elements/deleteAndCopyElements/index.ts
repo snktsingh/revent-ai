@@ -373,7 +373,6 @@ export function useDelAndCopy() {
             canvas?.renderAll();
           });
         } else {
-          console.log({ target });
           target.clone(function (cloned: fabric.Object) {
             cloned.left! += 50;
             cloned.top! += 50;

@@ -77,10 +77,7 @@ const useCanvasData = () => {
     }
   };
 
-  function getElementsData(
-    canvasData: any[],
-    themeId: number
-  ) {
+  function getElementsData(canvasData: any[], themeId: number) {
     console.log({ canvasData });
     createDisabledElements(canvasData);
     let tableData: TableDataType | undefined;
@@ -99,7 +96,10 @@ const useCanvasData = () => {
     let titleText: string = '';
     let subTitleText: string = '';
     canvasData.forEach(canvasObject => {
-      if ((canvasObject.type === 'textbox' || canvasObject.type === 'image') && canvasObject.name) {
+      if (
+        (canvasObject.type === 'textbox' || canvasObject.type === 'image') &&
+        canvasObject.name
+      ) {
         const elementID = canvasObject.name.split('_')[1];
         let elementType: string | null = null;
 
@@ -119,8 +119,6 @@ const useCanvasData = () => {
           case canvasObject.name.startsWith(PROCESS_TEXT):
             elementType = 'Process';
             break;
-
-         
         }
 
         if (elementType) {
@@ -207,52 +205,31 @@ const useCanvasData = () => {
             outputFormat
           );
           ConclusionSlide.subTitle = canvasObject.text;
-        }
-        else if (canvasObject.name.startsWith(LIST_TEXT)) {
-           const ListImage = getOrCreateElement(
-             'List',
-             '1',
-             outputFormat
-           )
-           ListImage.data?.push({
+        } else if (canvasObject.name.startsWith(LIST_TEXT)) {
+          const ListImage = getOrCreateElement('List', '1', outputFormat);
+          ListImage.data?.push({
             name: canvasObject.text,
             heading: '',
             subHeading: '',
             text: canvasObject.text,
           });
-        }
-
-        else if (canvasObject.name.startsWith(IMAGE)) {
-          const Image = getOrCreateElement(
-            'Images',
-            '1',
-            outputFormat
-          )
-       }
-        else if (canvasObject.name.startsWith(QUOTE_TEXT)) {
-          const Quote = getOrCreateElement(
-            'Quote',
-            '1',
-            outputFormat
-          )
+        } else if (canvasObject.name.startsWith(IMAGE)) {
+          const Image = getOrCreateElement('Images', '1', outputFormat);
+        } else if (canvasObject.name.startsWith(QUOTE_TEXT)) {
+          const Quote = getOrCreateElement('Quote', '1', outputFormat);
           Quote.data?.push({
-            heading: canvasObject.text,
-          })
-       }
-        else if (canvasObject.name.startsWith(QUOTE_AUTHOR)) {
-          const Quote = getOrCreateElement(
-            'Quote',
-            '1',
-            outputFormat
-          )
-          if(Quote.data){
-            Quote.data[0]['text'] = canvasObject.text
+            text: canvasObject.text,
+          });
+        } else if (canvasObject.name.startsWith(QUOTE_AUTHOR)) {
+          const Quote = getOrCreateElement('Quote', '1', outputFormat);
+          if (Quote.data) {
+            Quote.data[0]['heading'] = canvasObject.text;
           }
-       }
-      } 
+        }
+      }
     });
 
-    if (outputFormat.elements.length > 0 && titleText && subTitleText) {
+    if (outputFormat && outputFormat.elements.length > 0 && titleText && subTitleText) {
       outputFormat.elements[0].title = titleText;
       outputFormat.elements[0].subTitle = subTitleText;
     }
@@ -274,8 +251,10 @@ const useCanvasData = () => {
           subHeading: '',
         });
       } else {
-        const lastTimeline = timelineArray[timelineArray.length - 1];
-        lastTimeline && (lastTimeline.text = item.content);
+        if(timelineArray && timelineArray.length){
+          const lastTimeline = timelineArray[timelineArray.length - 1];
+          lastTimeline && (lastTimeline.text = item.content);
+        }
       }
     });
 
@@ -283,7 +262,7 @@ const useCanvasData = () => {
       getOrCreateElement('Timeline', id, outputFormat).data = content;
     });
 
-    if (outputFormat.elements.length > 0) {
+    if (outputFormat && outputFormat.elements.length > 0) {
       outputFormat['title'] = titleText;
       outputFormat['subTitle'] = subTitleText;
     } else {
@@ -300,16 +279,13 @@ const useCanvasData = () => {
       return { data, title, subTitle, templateName, shape };
     });
     outputFormat.elements = modifiedRequestFormat;
-    if (tableData?.tableData.length && tableData.tableData.length > 0) {
+    if (tableData?.tableData && tableData?.tableData.length && tableData.tableData.length > 0) {
       outputFormat.elements = [];
       tableData.title = titleText;
       tableData.subTitle = subTitleText;
       tableData.data = [];
       outputFormat.elements.push(tableData);
     }
-
-
-
 
     console.log({ outputFormat });
     dispatch(setRequestData(outputFormat));
@@ -404,25 +380,29 @@ const useCanvasData = () => {
 
     const isTitleAdded = objects.some(obj => obj.name === TITLE);
     const isSubtitleAdded = objects.some(obj => obj.name === SUBTITLE);
-    const isCoverSectionOrConclusionAdded = objects.some(obj =>
-      ['Cover', 'Section', 'Conclusion'].some(elName =>
-        obj.name.startsWith(elName)
-      )
-    );
-    const isShapeAdded = objects.some(obj =>
-      [
-        PYRAMID,
-        FUNNEL,
-        TIMELINE,
-        PROCESS,
-        CYCLE,
-        TABLE,
-        LIST_MAIN,
-        QUOTE,
-        BULLET_POINTS,
-        PARAGRAPH,
-      ].some(elName => obj.name.startsWith(elName))
-    );
+    const isCoverSectionOrConclusionAdded = objects.some(obj => {
+      if (obj.name) {
+        return ['Cover', 'Section', 'Conclusion'].some(elName =>
+          obj.name.startsWith(elName)
+        );
+      }
+    });
+    const isShapeAdded = objects.some(obj => {
+      if (obj.name) {
+        return [
+          PYRAMID,
+          FUNNEL,
+          TIMELINE,
+          PROCESS,
+          CYCLE,
+          TABLE,
+          LIST_MAIN,
+          QUOTE,
+          BULLET_POINTS,
+          PARAGRAPH,
+        ].some(elName => obj.name.startsWith(elName));
+      }
+    });
 
     if (isCoverSectionOrConclusionAdded) {
       enabledEl = [];

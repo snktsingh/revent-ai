@@ -72,10 +72,8 @@ export default function Templates() {
     if(hasVariantsInCanvasList){
       setOpen(true);
     }else {
-      console.log(theme.themeId)
       dispatch(setThemeId(theme.themeId));
     }
-    console.log({selectedThemeId})
     getElementsData(
       (canvasJS.originalSlideData as any).objects,
       theme.themeId
@@ -100,7 +98,7 @@ export default function Templates() {
   // useEffect(()=>{},[selectedThemeId]);
   const changeThemeRequest = () => {
     dispatch(setThemeId(currentTheme.themeId));
-    if (requestData?.elements.length == 0) {
+    if (requestData?.elements && requestData?.elements.length == 0) {
       toast.warning('Canvas is empty');
     } else {
       console.log({ changeTheme: canvasJS.originalSlideData })

@@ -92,7 +92,7 @@ const useCanvasEvents = () => {
     const elementsData = elementsDataPromise;
 
 
-    if (canvas.toObject()?.objects.length >= 1) {
+    if (canvas.toObject()?.objects && canvas.toObject()?.objects.length >= 1) {
       dispatch(toggleRegenerateButton(false));
     } else {
       dispatch(toggleRegenerateButton(true));
@@ -106,7 +106,7 @@ const useCanvasEvents = () => {
       canvas.toObject(customFabricProperties)?.objects,
       themeId
     );
-    if (canvas.toObject()?.objects.length >= 1) {
+    if (canvas.toObject()?.objects && canvas.toObject()?.objects.length >= 1) {
       dispatch(toggleRegenerateButton(false));
     } else {
       dispatch(toggleRegenerateButton(true));
