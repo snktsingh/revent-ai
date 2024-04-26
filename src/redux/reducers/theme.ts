@@ -1,11 +1,11 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 interface slideThemes {
   openAddTheme: boolean;
   themeCode: string;
   jsonData: any;
   themeId: number;
-  selectedThemeId: string;
+  selectedThemeId: number;
 }
 
 const initialState: slideThemes = {
@@ -13,7 +13,7 @@ const initialState: slideThemes = {
   themeCode: '#004FBA',
   themeId: 1,
   jsonData: null,
-  selectedThemeId: '',
+  selectedThemeId: 0,
 };
 
 export const themeReducer = createSlice({
@@ -26,7 +26,7 @@ export const themeReducer = createSlice({
     setThemeCode: (state, action) => {
       state.themeCode = action.payload;
     },
-    setThemeId: (state, action) => {
+    setThemeId: (state, action : PayloadAction<number>) => {
       state.themeId = action.payload;
     },
     setPptData: (state, action) => {

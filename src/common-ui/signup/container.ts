@@ -26,6 +26,9 @@ const useSignup = () => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setValues({ ...values, [name]: value });
+    if(name === 'email'){
+      setValues({ ...values, login: value });
+    };
   };
 
   const handleRegister = async () => {

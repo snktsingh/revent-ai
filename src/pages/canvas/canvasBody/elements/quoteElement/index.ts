@@ -10,6 +10,7 @@ import { theme } from '@/constants/theme';
 import { QuoteImages, addQuoteImageForStore } from '@/data/data';
 import { useAppSelector } from '@/redux/store';
 import { fabric } from 'fabric';
+import { toast } from 'react-toastify';
 export const useQuoteElement = () => {
   const { canvasJS } = useAppSelector(state => state.canvas);
   const addQuotes = (canvas: fabric.Canvas | null) => {
@@ -86,13 +87,28 @@ export const useQuoteElement = () => {
   const addQuoteImage = (canvas: fabric.Canvas, object: fabric.Object) => {
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
-    fileInput.accept = 'image/**';
+    fileInput.accept = 'image/*';
     fileInput.click();
     let file;
     let reader = new FileReader();
     fileInput.addEventListener('change', e => {
       file = (e.target as HTMLInputElement)?.files?.[0];
       if (file) {
+        const fileSizeInMB = file.size / (1024 * 1024); 
+        if (fileSizeInMB > 25) {
+          toast.warn('The image size exceeds 25 MB. Please choose a smaller image.', {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            });
+          fileInput.value = ''; 
+          return;
+        }
         addQuoteImageForStore({canvasId : canvasJS.id, file, path : ''});
 
         reader.onload = () => {

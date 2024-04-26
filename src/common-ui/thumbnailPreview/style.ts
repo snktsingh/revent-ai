@@ -9,6 +9,7 @@ export const ErrorPreviewCard = styled(Card)`
     align-items: center;
     justify-content: center;
     background-color: ${theme.colorSchemes.light.palette.common.gray};
+    padding: 9% 0;
   }
 `;
 
