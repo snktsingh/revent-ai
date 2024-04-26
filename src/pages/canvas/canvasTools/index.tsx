@@ -413,7 +413,7 @@ const CanvasTools = () => {
 
         <FontTool>
           <Stack direction="row" spacing={0}>
-            {/* <IconButton
+            <IconButton
               size="small"
               onClick={() => ContentElements.handleBold()}
             >
@@ -431,7 +431,7 @@ const CanvasTools = () => {
             >
               <FormatUnderlinedRounded />
             </IconButton>
-            <IconButton onClick={handleColorClick}>
+            {/* <IconButton onClick={handleColorClick}>
               <ColorLensOutlinedIcon />
             </IconButton>
 

@@ -15,12 +15,12 @@ const useSettings = () => {
     lastName: userDetails?.lastName || 'User',
     username: '',
     email: userDetails?.email || 'example@examplemail.com',
-    phone: '',
-    linkedinUrl: '',
+    phone: userDetails?.phone || '123-4567-8901',
+    linkedinUrl: userDetails?.linkedIn || '',
     usePreference : 'Personal',
-    companyName : "",
-    roleInCompany : '',
-    companySize: ''
+    companyName : userDetails?.companyName || "",
+    roleInCompany : userDetails?.companyRole || '',
+    companySize: userDetails?.companySize ||  ''
   });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

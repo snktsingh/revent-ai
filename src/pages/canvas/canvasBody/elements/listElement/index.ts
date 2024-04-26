@@ -14,6 +14,7 @@ import { updateListId } from '@/redux/reducers/fabricElements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import AutoResizingTextbox from '@/utils/fabric-utils/AutoResizingTextbox';
 import { fabric } from 'fabric';
+import { toast } from 'react-toastify';
 
 export function useListElement() {
   const dispatch = useAppDispatch();
@@ -77,7 +78,7 @@ export function useListElement() {
     const objectName = object.name?.split('_');
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
-    fileInput.accept = 'image/**';
+    fileInput.accept = 'image/*';
     fileInput.click();
     let file: any;
     let reader = new FileReader();
@@ -86,6 +87,21 @@ export function useListElement() {
       file = (e.target as HTMLInputElement)?.files?.[0];
       
       if (file) {
+        const fileSizeInMB = file.size / (1024 * 1024); 
+        if (fileSizeInMB > 25) {
+          toast.warn('The image size exceeds 25 MB. Please choose a smaller image.', {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            });
+          fileInput.value = ''; 
+          return;
+        }
         addListImages({ canvasId : canvasJS.id, file, path : '' });
 
         reader.onload = () => {
