@@ -21,7 +21,7 @@ const useStartTheme = () => {
     const data = res.payload;
     if (data.message === 'SUCCESS') {
       navigate(`/canvas/${data.presentationId}-${faker.string.uuid()}`);
-      toast.success('Presentantoin Initialized !');
+      toast.success('Presentantion Initialized !');
     } else {
       toast.error('Failed to create presentation !');
     }

@@ -1,5 +1,9 @@
 import { CanvasItem } from '@/interface/storeTypes';
-import { setCanvas, setVariantImageAsMain, updateCanvasList } from '@/redux/reducers/canvas';
+import {
+  setCanvas,
+  setVariantImageAsMain,
+  updateCanvasList,
+} from '@/redux/reducers/canvas';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { deletePresentation, fetchPPTList } from '@/redux/thunk/dashboard';
 import { useEffect, useState } from 'react';
@@ -27,16 +31,7 @@ const useDashboard = () => {
 
   const removePresentation = async (presentationId: number) => {
     const res = await dispatch(deletePresentation(presentationId));
-    dispatch(fetchPPTList());
-  };
-
-  const [filteredPpt, setFilteredPpt] = useState([pptList]);
-
-  const filterPresentation = (search: string) => {
-    const res = pptList.filter((item: any) =>
-      item.name.toLowerCase().includes(search.toLowerCase())
-    );
-    setFilteredPpt(res);
+    dispatch(fetchPPTList(0));
   };
 
   function getFirstLettersForAvatar(name: string): string {
@@ -47,8 +42,8 @@ const useDashboard = () => {
     return initials;
   }
 
-  useEffect(()=> {
-    let canvas : CanvasItem[] = [
+  useEffect(() => {
+    let canvas: CanvasItem[] = [
       {
         id: 1,
         canvas: {
@@ -60,12 +55,12 @@ const useDashboard = () => {
         variants: [],
         originalSlideData: {},
         listImages: [],
-      }
+      },
     ];
     dispatch(setCanvas(canvas[0]));
-    dispatch(setVariantImageAsMain(''))
+    dispatch(setVariantImageAsMain(''));
     dispatch(updateCanvasList(canvas));
-  },[]);
+  }, []);
 
   return {
     open,
@@ -74,14 +69,11 @@ const useDashboard = () => {
     removePresentation,
     setPptId,
     pptId,
-    filteredPpt,
-    filterPresentation,
-    setFilteredPpt,
     getFirstLettersForAvatar,
     handleOpenProfile,
     handleCloseProfileMenu,
     openProfileMenu,
-    setOpenProfileMenu
+    setOpenProfileMenu,
   };
 };
 export default useDashboard;

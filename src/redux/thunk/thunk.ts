@@ -25,7 +25,7 @@ const initialState: ISlideRequests = {
   themesList: [],
   isThemeLoading: false,
   presentationId: null,
-  presentationName: 'Untitled-Presentation',
+  presentationName: '',
   isAuthenticating: true,
   pptDetails: null,
   unAuthMessage: false,
@@ -109,9 +109,9 @@ const thunkSlice = createSlice({
     setEditPptIndex: (state, action) => {
       state.selectedSlideIndex = action.payload;
     },
-    setPresentationID : (state, action : PayloadAction<number>) => {
+    setPresentationID: (state, action: PayloadAction<number>) => {
       state.presentationId = action.payload;
-    }
+    },
   },
   extraReducers(builder) {
     builder
@@ -157,11 +157,14 @@ const thunkSlice = createSlice({
       .addCase(fetchPptDetails.pending, (state, action) => {
         state.pptDetails = null;
       })
-      .addCase(fetchPptDetails.fulfilled, (state, action : PayloadAction<any>) => {
-        state.pptDetails = action.payload;
-        state.presentationName = action.payload.name;
-        state.presentationId = action.payload.presentationId;
-      })
+      .addCase(
+        fetchPptDetails.fulfilled,
+        (state, action: PayloadAction<any>) => {
+          state.pptDetails = action.payload;
+          state.presentationName = action.payload.name;
+          state.presentationId = action.payload.presentationId;
+        }
+      )
       .addCase(fetchPptDetails.rejected, (state, action) => {
         state.pptDetails = null;
       });
@@ -173,7 +176,7 @@ export const {
   setAuthenticateLoader,
   setUnauthMessage,
   setEditPptIndex,
-  setPresentationID
+  setPresentationID,
 } = thunkSlice.actions;
 
 export default thunkSlice.reducer;

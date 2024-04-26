@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Box,
   Button,
   Card,
   Dialog,
@@ -25,18 +26,19 @@ import {
 import slideData from './data.json';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getUserDetails } from '@/redux/thunk/user';
 import { MagnifyingGlass } from 'react-loader-spinner';
 import AddToQueueIcon from '@mui/icons-material/AddToQueue';
 import '../../../index.css';
 import { theme } from '@/constants/theme';
-import { fetchPPTList } from '@/redux/thunk/dashboard';
+import { IPresentation, fetchPPTList } from '@/redux/thunk/dashboard';
 import DeleteIcon from '@mui/icons-material/Delete';
 import useDashboard from './container';
 import ProfileMenu from '@/common-ui/profileMenu';
 import ThumbnailPreview from '@/common-ui/thumbnailPreview';
 import { faker } from '@faker-js/faker';
+import { Blank } from '@/constants/media';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -51,11 +53,10 @@ const Dashboard = () => {
     setPptId,
     pptId,
     removePresentation,
-    filterPresentation,
-    setFilteredPpt,
     getFirstLettersForAvatar,
     setOpenProfileMenu,
   } = useDashboard();
+
   const { userDetails } = useAppSelector(state => state.manageUser);
   const { loadingUserDetails, pptList } = useAppSelector(
     state => state.manageDashboard
@@ -63,13 +64,22 @@ const Dashboard = () => {
 
   useEffect(() => {
     dispatch(getUserDetails());
-    dispatch(fetchPPTList());
+    dispatch(fetchPPTList(0));
   }, []);
 
-  useEffect(() => {
-    setFilteredPpt(pptList);
-  }, []);
-  
+  const handleMore = async () => {
+    const res = await dispatch(fetchPPTList(1));
+    console.log(res.payload);
+    console.log(pptList)
+  };
+
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const filteredPptList =
+    searchTerm.length > 0
+      ? pptList.filter((ppt: IPresentation) =>
+          ppt.name.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      : pptList;
 
   return (
     <MainContainer>
@@ -105,7 +115,10 @@ const Dashboard = () => {
       <CardContainer>
         {slideData.templates.map((slide, index) => {
           return (
-            <CardTitle key={slide.title+index} onClick={() => navigate('/themes')}>
+            <CardTitle
+              key={slide.title + index}
+              onClick={() => navigate('/themes')}
+            >
               <CardLink>
                 <PreviewCard>
                   <AddToQueueIcon
@@ -131,12 +144,9 @@ const Dashboard = () => {
           label="Search presentation"
           variant="outlined"
           size="small"
-          onChange={e => {
-            filterPresentation(e.target.value);
-          }}
+          onChange={e => setSearchTerm(e.target.value)}
         />
       </Stack>
-
       <Dialog
         open={open}
         onClose={handleClose}
@@ -165,46 +175,65 @@ const Dashboard = () => {
         </DialogActions>
       </Dialog>
       {loadingUserDetails === false ? (
-        <CardTitle>
-          {pptList.map((ppt: any, index) => {
-            return (
-              <CardLink key={index}>
-                <Card
-                  style={{
-                    width: '180px',
-                    height: '67%',
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => {
-                    navigate(
-                      `/canvas/${ppt.presentationId}-${faker.string.uuid()}`
-                    );
-                  }}
-                >
-                  <img src={ppt.thumbnailUrl} width="180px" />
-                </Card>
-                <Stack
-                  direction="row"
-                  justifyContent="space-between"
-                  display="flex"
-                  alignItems="center"
-                >
-                  <p>
-                    {ppt.name == undefined ? 'Untitled-presentation' : ppt.name}
-                  </p>
-                  <IconButton
-                    onClick={() => {
-                      handleClickOpen();
-                      setPptId(ppt.presentationId);
-                    }}
-                  >
-                    <DeleteIcon fontSize="small" />
-                  </IconButton>
-                </Stack>
-              </CardLink>
-            );
-          })}
-        </CardTitle>
+        <Box>
+          <Box height="40vh" overflow="auto">
+            <CardTitle>
+              {filteredPptList.map((ppt: any, index) => {
+                return (
+                  <CardLink key={index}>
+                    <Card
+                      style={{
+                        width: '180px',
+                        height: '13vh',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                      }}
+                      onClick={() => {
+                        navigate(
+                          `/canvas/${ppt.presentationId}-${faker.string.uuid()}`
+                        );
+                      }}
+                    >
+                      {ppt.thumbnailUrl !== '' ? (
+                        <img src={ppt.thumbnailUrl} width="100%" />
+                      ) : (
+                        <img src={Blank} width="100%" height="30%" />
+                      )}
+                    </Card>
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      display="flex"
+                      alignItems="center"
+                    >
+                      <p>
+                        {ppt.name == undefined
+                          ? 'Untitled-presentation'
+                          : ppt.name}
+                      </p>
+                      <IconButton
+                        onClick={() => {
+                          handleClickOpen();
+                          setPptId(ppt.presentationId);
+                        }}
+                      >
+                        <DeleteIcon fontSize="small" />
+                      </IconButton>
+                    </Stack>
+                  </CardLink>
+                );
+              })}
+            </CardTitle>{' '}
+          </Box>
+          <Button
+            variant="outlined"
+            sx={{ marginTop: '10px' }}
+            onClick={handleMore}
+          >
+            Load more
+          </Button>
+        </Box>
       ) : (
         <Loader>
           {/* No Recent Presentations */}
