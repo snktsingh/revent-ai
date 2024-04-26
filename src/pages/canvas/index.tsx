@@ -43,7 +43,7 @@ const MainCanvas = () => {
 
       const slidesData = processSlides(res.payload.slides);
 
-      if (slidesData.length > 0 && slidesData[0].canvas) {
+      if (slidesData && slidesData.length > 0 && slidesData[0].canvas) {
         dispatch(setActiveSlideId(1));
         dispatch(updateCanvasList(slidesData));
         dispatch(setVariantImageAsMain(res.payload.slides[0][0].thumbnailUrl));

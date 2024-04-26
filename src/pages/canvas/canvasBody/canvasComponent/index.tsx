@@ -87,7 +87,7 @@ const CanvasComponent: React.FC = () => {
           );
         }
 
-        if (canvas.toObject(customFabricProperties)?.objects.length >= 1) {
+        if (canvas.toObject(customFabricProperties)?.objects && canvas.toObject(customFabricProperties)?.objects.length >= 1) {
           dispatch(toggleRegenerateButton(false));
         } else {
           dispatch(toggleRegenerateButton(true));
@@ -95,9 +95,7 @@ const CanvasComponent: React.FC = () => {
 
 
         updateCanvasSlideData(canvas, canvasJS.id);
-        ;
         forEachCanvasObject(canvas);
-        ;
         // canvas Events
         canvas.on('selection:created', handleElementBarSelection);
         canvas.on('selection:updated', handleElementBarSelection);
@@ -182,9 +180,9 @@ const CanvasComponent: React.FC = () => {
       canvasRef.current?.renderAll();
 
     }
-  }, [variantImage, isVariantSelected, window.innerWidth]);
+  }, [variantImage, isVariantSelected]);
 
-  useEffect(() => { }, [selectedElementPosition, showOptions]);
+  useEffect(() => { }, [selectedElementPosition, showOptions, window.innerWidth]);
 
   return (
     <CanvasContainer onContextMenu={e => e.preventDefault()}>

@@ -48,7 +48,7 @@ export const CanvasVariant = () => {
 
   return (
     <div>
-      {(canvasJS.variants.length > 0) && (
+      {( canvasJS.variants && canvasJS.variants.length > 0) && (
         <VariantButton
           onClick={() => dispatch(toggleVariantSlide(!openVariant))}
         >
@@ -100,7 +100,7 @@ export const CanvasVariant = () => {
               </RefreshBtn>
 
             </ButtonContainer>
-            {canvasJS.variants.length > 0 ? (
+            {(canvasJS.variants && canvasJS.variants.length) > 0 ? (
               canvasJS.variants.map((el: VariantsType, i: number) => {
                 return (
                   <VariantSlide

@@ -98,7 +98,7 @@ export default function Templates() {
   // useEffect(()=>{},[selectedThemeId]);
   const changeThemeRequest = () => {
     dispatch(setThemeId(currentTheme.themeId));
-    if (requestData?.elements.length == 0) {
+    if (requestData?.elements && requestData?.elements.length == 0) {
       toast.warning('Canvas is empty');
     } else {
       console.log({ changeTheme: canvasJS.originalSlideData })

@@ -218,18 +218,18 @@ const useCanvasData = () => {
         } else if (canvasObject.name.startsWith(QUOTE_TEXT)) {
           const Quote = getOrCreateElement('Quote', '1', outputFormat);
           Quote.data?.push({
-            heading: canvasObject.text,
+            text: canvasObject.text,
           });
         } else if (canvasObject.name.startsWith(QUOTE_AUTHOR)) {
           const Quote = getOrCreateElement('Quote', '1', outputFormat);
           if (Quote.data) {
-            Quote.data[0]['text'] = canvasObject.text;
+            Quote.data[0]['heading'] = canvasObject.text;
           }
         }
       }
     });
 
-    if (outputFormat.elements.length > 0 && titleText && subTitleText) {
+    if (outputFormat && outputFormat.elements.length > 0 && titleText && subTitleText) {
       outputFormat.elements[0].title = titleText;
       outputFormat.elements[0].subTitle = subTitleText;
     }
@@ -251,8 +251,10 @@ const useCanvasData = () => {
           subHeading: '',
         });
       } else {
-        const lastTimeline = timelineArray[timelineArray.length - 1];
-        lastTimeline && (lastTimeline.text = item.content);
+        if(timelineArray && timelineArray.length){
+          const lastTimeline = timelineArray[timelineArray.length - 1];
+          lastTimeline && (lastTimeline.text = item.content);
+        }
       }
     });
 
@@ -260,7 +262,7 @@ const useCanvasData = () => {
       getOrCreateElement('Timeline', id, outputFormat).data = content;
     });
 
-    if (outputFormat.elements.length > 0) {
+    if (outputFormat && outputFormat.elements.length > 0) {
       outputFormat['title'] = titleText;
       outputFormat['subTitle'] = subTitleText;
     } else {
@@ -277,7 +279,7 @@ const useCanvasData = () => {
       return { data, title, subTitle, templateName, shape };
     });
     outputFormat.elements = modifiedRequestFormat;
-    if (tableData?.tableData.length && tableData.tableData.length > 0) {
+    if (tableData?.tableData && tableData?.tableData.length && tableData.tableData.length > 0) {
       outputFormat.elements = [];
       tableData.title = titleText;
       tableData.subTitle = subTitleText;

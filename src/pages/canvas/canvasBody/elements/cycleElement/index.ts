@@ -88,7 +88,7 @@ export function useCycleElement() {
       });
       return canvas.add(text);
     };
-    switch (Circles.length + 1) {
+    switch (Circles && Circles.length + 1) {
       // case 3:
       //   createCircleWithText(100, 100);
       //   canvas?.add(addArrow(220, 124, 0));
