@@ -2,17 +2,35 @@ import ENDPOINT from '@/constants/endpoint';
 import { FetchUtils } from '@/utils/fetch-utils';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
+export interface IPresentation {
+  code: number;
+  message: string;
+  presentationId: number;
+  name: string;
+  thumbnailUrl: string;
+  lastModifiedBy: string;
+  lastModifiedDate: string;
+}
+
+interface IDashboard {
+  pptList: IPresentation[];
+  loadingUserDetails: boolean;
+}
+
+const initialState: IDashboard = {
   pptList: [],
   loadingUserDetails: true,
 };
 
-export const fetchPPTList = createAsyncThunk('dashboard/pptList', async () => {
-  const res = await FetchUtils.getRequest(
-    `${ENDPOINT.DASHBOARD.FETCH_PPT_LIST}?size=10&page=0`
-  );
-  return res.data;
-});
+export const fetchPPTList = createAsyncThunk(
+  'dashboard/pptList',
+  async (pageNo: number) => {
+    const res = await FetchUtils.getRequest(
+      `${ENDPOINT.DASHBOARD.FETCH_PPT_LIST}?size=14&page=${pageNo}`
+    );
+    return res.data;
+  }
+);
 
 export const deletePresentation = createAsyncThunk(
   'dashboard/deletePresentation',

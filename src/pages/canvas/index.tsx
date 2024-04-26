@@ -14,7 +14,12 @@ import {
 } from '@/redux/thunk/thunk';
 import { toast } from 'react-toastify';
 import { processSlides } from '@/utils/transformResData';
-import { setActiveSlideId, setCanvas, setVariantImageAsMain, updateCanvasList } from '@/redux/reducers/canvas';
+import {
+  setActiveSlideId,
+  setCanvas,
+  setVariantImageAsMain,
+  updateCanvasList,
+} from '@/redux/reducers/canvas';
 import { toggleSelectingSlide } from '@/redux/reducers/slide';
 import { updatePresentationLoading } from '@/redux/reducers/elements';
 
@@ -40,7 +45,6 @@ const MainCanvas = () => {
     dispatch(updatePresentationLoading(true));
     const res: any = await dispatch(fetchPptDetails(pptId));
     if (res.meta.requestStatus === 'fulfilled') {
-
       const slidesData = processSlides(res.payload.slides);
 
       if (slidesData && slidesData.length > 0 && slidesData[0].canvas) {
@@ -51,7 +55,6 @@ const MainCanvas = () => {
         dispatch(setCanvas({ ...canvasJS, variants: slidesData[0].variants }));
       }
       dispatch(updatePresentationLoading(false));
-      toast.success("Presentation added to canvas")
       dispatch(setAuthenticateLoader());
     } else {
       dispatch(setAuthenticateLoader());
@@ -63,18 +66,17 @@ const MainCanvas = () => {
   } else {
     return (
       <>
-        {
-          isPresentationLoading ?
-            <ReventingLoader />
-            :
-            <div>
-              <MainCanvasHeader pId={pId} />
-              <CanvasTools />
-              <CanvasBody />
-              <CanvasVariant />
-              <CanvasThemes />
-            </div>
-        }
+        {isPresentationLoading ? (
+          <ReventingLoader />
+        ) : (
+          <div>
+            <MainCanvasHeader pId={pId} />
+            <CanvasTools />
+            <CanvasBody />
+            <CanvasVariant />
+            <CanvasThemes />
+          </div>
+        )}
       </>
     );
   }

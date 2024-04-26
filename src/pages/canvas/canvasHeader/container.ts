@@ -1,7 +1,10 @@
 import ENDPOINT, { ROUTES } from '@/constants/endpoint';
 import { CanvasItem } from '@/interface/storeTypes';
 import { IUpdatePptName } from '@/interfaces/pptInterfaces';
-import { setPresentationTitle, updateCanvasList } from '@/redux/reducers/canvas';
+import {
+  setPresentationTitle,
+  updateCanvasList,
+} from '@/redux/reducers/canvas';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { setPresentationName, updatePptName } from '@/redux/thunk/thunk';
 import { FetchUtils } from '@/utils/fetch-utils';
@@ -20,6 +23,7 @@ const useCanvasHeader = () => {
   const { presentationTitle } = useAppSelector(state => state.canvas);
   const { userDetails } = useAppSelector(state => state.manageUser);
   const [updateResponse, setUpdateResponse] = useState(null);
+  const [isUpdating, setIsUpdating] = useState<boolean>(false);
   const openShare = Boolean(anchorE2);
 
   const userLogout = async () => {
@@ -76,13 +80,15 @@ const useCanvasHeader = () => {
   };
 
   const updatePresentationName = async (data: IUpdatePptName) => {
+    setIsUpdating(true);
     const res = await dispatch(updatePptName(data));
     setUpdateResponse(res.payload);
+    setIsUpdating(false);
   };
 
   const handleGoBack = () => {
     navigate('/dashboard', { replace: true });
-    let canvas : CanvasItem[] = [
+    let canvas: CanvasItem[] = [
       {
         id: 1,
         canvas: {
@@ -94,7 +100,7 @@ const useCanvasHeader = () => {
         variants: [],
         originalSlideData: {},
         listImages: [],
-      }
+      },
     ];
     dispatch(updateCanvasList(canvas));
   };
@@ -124,6 +130,8 @@ const useCanvasHeader = () => {
     presentationId,
     updateResponse,
     handleGoBack,
+    isUpdating,
+    setIsUpdating,
   };
 };
 export default useCanvasHeader;
