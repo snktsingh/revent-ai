@@ -66,7 +66,7 @@ export const ElementReducer = createSlice({
     },
     updatePresentationLoading : (state, action : PayloadAction<boolean>) => {
       state.isPresentationLoading = action.payload;
-
+    },
   },
 });
 
