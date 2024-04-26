@@ -8,7 +8,7 @@ export interface TestState {
   itemKey: number;
   openProfileMenu: boolean;
   enabledElements: string[];
-  isPresentationLoading : boolean
+  isPresentationLoading : boolean;
 }
 
 const initialState: TestState = {
