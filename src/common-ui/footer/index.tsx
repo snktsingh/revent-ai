@@ -50,7 +50,6 @@ const Footer : React.FC<FooterProps> = ({ handlers }) => {
   } = handlers;
 
   const handleSocialLinks = (appName: string) => {
-    console.log("clicked")
     switch (appName) {
       case 'Instagram':
         window.open('https://www.instagram.com/revent.ai?igsh=cmVjaGt6bG0xMzRz', '_blank');

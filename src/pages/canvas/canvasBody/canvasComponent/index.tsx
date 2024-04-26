@@ -52,10 +52,11 @@ const CanvasComponent: React.FC = () => {
 
   const dispatch = useAppDispatch();
 
-  const { canvasJS, variantImage, selectedOriginalCanvas, isVariantSelected } =
+  const { canvasJS, variantImage, selectedOriginalCanvas, isVariantSelected, canvasList } =
     useAppSelector(state => state.canvas);
 
   useEffect(() => {
+    console.log({canvasJS})
     setShowOptions(false);
     const canvas = new fabric.Canvas('canvas');
     updateCanvasStyle(canvas);
@@ -86,17 +87,19 @@ const CanvasComponent: React.FC = () => {
           );
         }
 
-        if (canvas.toObject(customFabricProperties)?.objects.length >= 1) {
+        if (canvas.toObject(customFabricProperties)?.objects && canvas.toObject(customFabricProperties)?.objects.length >= 1) {
           dispatch(toggleRegenerateButton(false));
         } else {
           dispatch(toggleRegenerateButton(true));
         }
 
 
+
+
         updateCanvasSlideData(canvas, canvasJS.id);
-        ;
+        console.log('canvas 6');
         forEachCanvasObject(canvas);
-        ;
+        console.log('canvas 7');
         // canvas Events
         canvas.on('selection:created', handleElementBarSelection);
         canvas.on('selection:updated', handleElementBarSelection);
@@ -173,7 +176,7 @@ const CanvasComponent: React.FC = () => {
           lockMovementX: true,
           lockScalingY: true,
           moveCursor: 'pointer',
-          name: 'image',
+          name: 'VariantImage',
         });
 
         canvasRef.current?.add(img);
@@ -183,7 +186,7 @@ const CanvasComponent: React.FC = () => {
     }
   }, [variantImage, isVariantSelected]);
 
-  useEffect(() => { }, [selectedElementPosition, showOptions]);
+  useEffect(() => {}, [selectedElementPosition, showOptions]);
 
   return (
     <CanvasContainer onContextMenu={e => e.preventDefault()}>

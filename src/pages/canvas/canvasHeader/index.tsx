@@ -4,7 +4,9 @@ import { ButtonName, MainIconButton } from '@/constants/elements/button/style';
 import VerticalDivider from '@/constants/elements/divider';
 import { CanvasBack, PDF, PPT, Present, Share } from '@/constants/media';
 import {
+  Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -14,27 +16,23 @@ import {
   Stack,
 } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
 import { ContentElements } from '../canvasBody/elementData';
 import useCanvasHeader from './container';
 import { HeaderContainer, UserAvatar } from './style';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { setPresentationName } from '@/redux/thunk/thunk';
 
 const MainCanvasHeader = ({ pId }: any) => {
   const dispatch = useAppDispatch();
   const {
-    userLogout,
     openShare,
     getFirstLettersForAvatar,
-    navigate,
     openProfileMenu,
     setOpenProfileMenu,
     anchorE2,
-    setAnchorE2,
     openWarning,
-    setOpenWarning,
     pptUrl,
-    presentationTitle,
     userDetails,
     handleWarningClose,
     handleWarningOpen,
@@ -44,12 +42,33 @@ const MainCanvasHeader = ({ pId }: any) => {
     handleShareClose,
     handleInputChange,
     updatePresentationName,
-    updateResponse,
+    isUpdating,
+    handleGoBack,
   } = useCanvasHeader();
 
   const { presentationId, presentationName, pptDetails } = useAppSelector(
     state => state.thunk
   );
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      updatePresentationName({
+        presentationId: presentationId,
+        name: presentationName,
+      });
+      event.currentTarget.blur();
+    }
+  };
+
+  useEffect(() => {
+    if (presentationName === '' || presentationName === undefined) {
+      dispatch(setPresentationName('Untitled-presentation'));
+      updatePresentationName({
+        presentationId: presentationId,
+        name: 'Untitled-presentation',
+      });
+    }
+  }, [presentationName]);
 
   return (
     <HeaderContainer>
@@ -60,20 +79,23 @@ const MainCanvasHeader = ({ pId }: any) => {
         </Stack>
       </MainIconButton>
       <Stack direction="row" spacing={1}></Stack>
-      <CanvasHeaderInput
-        placeholder="Untitled presentation"
-        value={presentationName}
-        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-          handleInputChange(e);
-          setTimeout(() => {
-            updatePresentationName({
-              presentationId: presentationId,
-              name: presentationName,
-            });
-            navigate(`/canvas/${presentationId}-${presentationName}`);
-          }, 2000);
-        }}
-      />
+      <Box display="flex" gap={2}>
+        <CanvasHeaderInput
+          placeholder="Untitled presentation"
+          value={presentationName}
+          onKeyDown={handleKeyDown}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            handleInputChange(e);
+          }}
+        />
+        {isUpdating && (
+          <CircularProgress
+            size={20}
+            disableShrink
+            style={{ color: 'white', alignSelf: 'center' }}
+          />
+        )}
+      </Box>
       <Stack direction="row" spacing={1}>
         <MainIconButton>
           <Stack direction="row" spacing={1}>
@@ -144,9 +166,7 @@ const MainCanvasHeader = ({ pId }: any) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleWarningClose}>Cancel</Button>
-          <Button onClick={() => navigate('/dashboard', { replace: true })}>
-            Go Back
-          </Button>
+          <Button onClick={handleGoBack}>Go Back</Button>
         </DialogActions>
       </Dialog>
     </HeaderContainer>

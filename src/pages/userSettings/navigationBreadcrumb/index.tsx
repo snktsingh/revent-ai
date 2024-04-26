@@ -16,9 +16,7 @@ const ChipStyle = {
 const BreadCrumb = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    console.log(location)
     const previousEndpoint = location.state || '/';
-    console.log({previousEndpoint})
     const handleNavigateHome = () => {
         navigate(ROUTES.APP_ROOT, { replace: true });
       };

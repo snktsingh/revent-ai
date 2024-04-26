@@ -52,6 +52,7 @@ import { useCanvasComponent } from './canvasComponent/container';
 import useCanvasData from './canvasComponent/canvasDataExtractor';
 import useVariants from './canvasVariant/container';
 import { Images, QuoteImages, listImages } from '@/data/data';
+import { useParams } from 'react-router-dom';
 
 const CanvasBody = () => {
   const slide = useAppSelector(state => state.slide);
@@ -90,9 +91,9 @@ const CanvasBody = () => {
     setActiveDislike(!activeDislike);
     setActiveLike(false);
   };
-
+  const params = useParams<{ id: string }>(); 
   const handleRegeneration = (item: any) => {
-    if (canvasJS.variants.length === 0) {
+    if (Array.isArray(canvasJS.variants) && canvasJS.variants.length === 0) {
       handleClose();
       item.onClick();
       dispatch(setMenuItemKey(item.key));
@@ -159,7 +160,7 @@ const CanvasBody = () => {
       let formData = new FormData();
       formData.append('data', blob);
       const listImagesArray = listImages.find((el) => el.canvasId == canvasJS.id);
-      if (listImagesArray) {
+      if (listImagesArray && listImagesArray.images) {
         for (let i = 0; i < listImagesArray.images.length; i++) {
           formData.append("images", listImagesArray.images[i].file);
         }
@@ -175,7 +176,7 @@ const CanvasBody = () => {
       formData.append('data', blob);
 
       const ImagesArray = Images.find((el) => el.canvasId == canvasJS.id);
-      if (ImagesArray) {
+      if (ImagesArray && ImagesArray.images) {
         for (let i = 0; i < ImagesArray.images.length; i++) {
           formData.append("images", ImagesArray.images[i].file);
         }
@@ -190,7 +191,7 @@ const CanvasBody = () => {
       let formData = new FormData();
       formData.append('data', blob);
       const QuoteImagesArray = QuoteImages.find((el) => el.canvasId == canvasJS.id);
-      if (QuoteImagesArray) {
+      if (QuoteImagesArray && QuoteImagesArray.images) {
         if (QuoteImagesArray.images.length !== 0) {
           for (let i = 0; i < QuoteImagesArray.images.length; i++) {
             formData.append("images", QuoteImagesArray.images[i].file);
@@ -202,7 +203,12 @@ const CanvasBody = () => {
       }
       return;
     }
-    dispatch(fetchSlideImg(requestData));
+    let reqData = {...requestData};
+    if(params.id?.split('-')[0] && reqData){
+      const ptId = Number(params.id?.split('-')[0]);
+      reqData.presentationId = ptId;
+    }
+    dispatch(fetchSlideImg(reqData));
     dispatch(toggleSelectedOriginalCanvas(false));
   };
 
@@ -224,7 +230,7 @@ const CanvasBody = () => {
     if (isDeleteAlertShow) {
       dispatch(openModal())
     } else {
-      if (canvasList.length === 1) {
+      if (canvasList && canvasList.length === 1) {
         dispatch(openModal());
         return;
       }
@@ -235,7 +241,7 @@ const CanvasBody = () => {
   useEffect(() => {
     const index = canvasList.findIndex((canvas) => canvas.id === canvasJS.id);
     setCanvasIndex(index);
-    if (canvasJS && (index || index === 0)) {
+    if (canvasList && (index || index === 0)) {
       const canvasIsEmpty =
         (canvasList[index].canvas as any).objects.length === 0;
       const variantsIsEmpty = canvasList[index].variants.length === 0;
@@ -285,11 +291,11 @@ const CanvasBody = () => {
         hideProgressBar
         transition={Slide}
       />
-      <Grid container>
-        <Grid xs={2}>
+      <Grid  container>
+        <Grid item xs={2}>
           <SlideList />
         </Grid>
-        <Grid xs={8}>
+        <Grid item xs={8}>
           <EditSlideContainer>
             <Stack
               direction="row"

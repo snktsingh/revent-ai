@@ -22,7 +22,6 @@ const useLogin = () => {
           data
         );
         if (res.status === 200) {
-          console.log(res.data);
           setToLS('token', res.data.accessToken);
           setToLS('isAuth', true);
           setTimeout(() => {

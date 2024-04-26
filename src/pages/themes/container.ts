@@ -21,14 +21,12 @@ const useStartTheme = () => {
     const data = res.payload;
     if (data.message === 'SUCCESS') {
       navigate(`/canvas/${data.presentationId}-${faker.string.uuid()}`);
-      toast.success('Presentantoin Initialized !');
     } else {
       toast.error('Failed to create presentation !');
     }
   };
 
-  const handleGenerate = (themeId : number) => {
-
+  const handleGenerate = (themeId: number) => {
     if (themeId === null) {
       toast.warning('Please select at least one theme !');
     } else {

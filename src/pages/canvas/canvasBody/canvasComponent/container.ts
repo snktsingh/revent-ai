@@ -275,6 +275,24 @@ export const useCanvasComponent = () => {
       if (obj && (obj as IExtendedTextBoxOptions)?.listType === 'bullet') {
         (obj as IExtendedTextBoxOptions)._renderTextLine =
           renderBulletOrNumTextLine;
+      }else if(obj.name && obj.name == "VariantImage"){
+        const canvasWidth = canvas?.width || 0;
+        const canvasHeight = canvas?.height || 0;
+        const scaleWidth = canvasWidth / obj.width!;
+        const scaleHeight = canvasHeight / obj.height!;
+        const scale = Math.max(scaleWidth, scaleHeight);
+
+        obj.set({
+          left: 0,
+          top: 0,
+          scaleX: scale,
+          scaleY: scale,
+          selectable: false,
+          lockMovementX: true,
+          lockScalingY: true,
+          moveCursor: 'pointer',
+          name: 'VariantImage',
+        });
       }
     });
   };
