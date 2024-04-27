@@ -1,17 +1,20 @@
 import { MenuItem, Tooltip } from '@mui/material';
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import useSettings from '../container';
 import { InputContainer, Label, ProfileContainer, StyledInput, StyledSelect } from '../style';
+import { IUserAccountDetails } from '@/interfaces/authInterface';
 
-interface ProfileSettingsType {
-    editMode: boolean
+interface ProfileFormProps {
+    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    userDetails: IUserAccountDetails;
+    editMode : boolean;
 }
 
-const ProfileSettings: React.FC<ProfileSettingsType> = ({ editMode }) => {
+const ProfileSettings: React.FC<ProfileFormProps> = ({ handleChange, userDetails, editMode }) => {
 
-    const { userDetails, userDetailsInputs, handleChange } = useSettings();
+    const { userDetailsInputs } = useSettings();
 
-    const { firstName, lastName, username, phone, email, linkedinUrl, usePreference } = userDetailsInputs;
+    const { firstName, lastName, phone, email, linkedIn } = userDetails;
 
     return (
         <ProfileContainer>
@@ -23,13 +26,6 @@ const ProfileSettings: React.FC<ProfileSettingsType> = ({ editMode }) => {
                     value={firstName}
                     disabled={editMode}
                     onChange={handleChange}
-                // InputProps={{
-                //     endAdornment: (
-                //         <InputAdornment position="end">
-                //             <PencilIcon />
-                //         </InputAdornment>
-                //     )
-                // }}
                 />
             </InputContainer>
             <InputContainer>
@@ -40,13 +36,6 @@ const ProfileSettings: React.FC<ProfileSettingsType> = ({ editMode }) => {
                     value={lastName}
                     disabled={editMode}
                     onChange={handleChange}
-                // InputProps={{
-                //     endAdornment: (
-                //         <InputAdornment position="end">
-                //             <PencilIcon />
-                //         </InputAdornment>
-                //     )
-                // }}
                 />
             </InputContainer>
             <InputContainer>
@@ -102,7 +91,7 @@ const ProfileSettings: React.FC<ProfileSettingsType> = ({ editMode }) => {
                 <StyledSelect
                     labelId="dropdown-label"
                     // variant="standard"
-                    value={usePreference}
+                    value={"Personal"}
                     name='userPreference'
                     onChange={(e) => handleChange(e as React.ChangeEvent<HTMLInputElement>)}
                     disabled={editMode}
@@ -117,17 +106,10 @@ const ProfileSettings: React.FC<ProfileSettingsType> = ({ editMode }) => {
                 <Label>Linkedin Url</Label>
                 <StyledInput
                     // variant="standard"
-                    value={linkedinUrl}
-                    name='linkedinUrl'
+                    value={linkedIn}
+                    name='linkedIn'
                     onChange={handleChange}
                     disabled={editMode}
-                // InputProps={{
-                //     endAdornment: (
-                //         <InputAdornment position="end">
-                //             <PencilIcon />
-                //         </InputAdornment>
-                //     )
-                // }}
                 />
             </InputContainer>
 

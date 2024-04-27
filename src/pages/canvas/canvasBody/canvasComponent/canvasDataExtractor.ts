@@ -222,8 +222,8 @@ const useCanvasData = () => {
           });
         } else if (canvasObject.name.startsWith(QUOTE_AUTHOR)) {
           const Quote = getOrCreateElement('Quote', '1', outputFormat);
-          if (Quote.data) {
-            Quote.data[0]['heading'] = canvasObject.text;
+          if (Quote.data && Quote.data[0] && Quote.data[0].heading) {
+            Quote.data[0].heading = canvasObject.text;
           }
         }
       }

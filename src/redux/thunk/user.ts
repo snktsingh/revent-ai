@@ -1,4 +1,5 @@
 import ENDPOINT from '@/constants/endpoint';
+import { IUserAccountDetails } from '@/interfaces/authInterface';
 import { IUserDetails } from '@/interfaces/userInterface';
 import { FetchUtils } from '@/utils/fetch-utils';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
@@ -14,6 +15,15 @@ export const getUserDetails = createAsyncThunk(
     return res.data;
   }
 );
+
+export const updateUserDetails = createAsyncThunk(
+  'user/update_details',
+  async (updatedUserDetails : IUserAccountDetails) => {
+    const res = await FetchUtils.postRequest(`${ENDPOINT.USER.GET_DETAILS}`,updatedUserDetails);
+    console.log(res);
+    return res.data;
+  }
+)
 
 const userSlice = createSlice({
   name: 'user-management',

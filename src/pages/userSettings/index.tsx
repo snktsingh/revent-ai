@@ -59,18 +59,48 @@ import CompanyDetails from './companySettings';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { getUserDetails } from '@/redux/thunk/user';
+import { getUserDetails, updateUserDetails } from '@/redux/thunk/user';
 import BreadCrumb from './navigationBreadcrumb';
+import useSettings from './container';
+import { IUserAccountDetails } from '@/interfaces/authInterface';
+import { toast } from 'react-toastify';
+import { error } from 'console';
+
+const initialUserDetails = {
+  id: null,
+  login: '',
+  firstName: '',
+  lastName: '',
+  email: '',
+  imageUrl: 'http://placehold.it/50x50',
+  activated: true,
+  langKey: 'en',
+  createdBy: '',
+  createdDate: '',
+  lastModifiedBy: '',
+  lastModifiedDate: '',
+  authorities: [''],
+  linkedIn: '',
+  phone: '',
+  companyName: '',
+  companySize: '',
+  companyRole: '',
+  termsConditionId: null,
+  userCredit: null,
+}
 
 const UserSettings: React.FC = () => {
   const [tab, setTab] = useState(1);
-  const [editMode, setEditMode] = useState(true);
+  const [userAccountOrg, setUserAccount] = useState<IUserAccountDetails>(initialUserDetails);
+  const [userDetails, setUserDetails] = useState<IUserAccountDetails>(initialUserDetails);
+
+  const { editMode, setEditMode } = useSettings();
   const [openProfileMenu, setOpenProfileMenu] = useState<null | HTMLElement>(
     null
-    );
-    const { userDetails } = useAppSelector(state => state.manageUser);
-    const [isImageBroken, setIsImageBroken] = useState(false);
-    const dispatch = useAppDispatch();
+  );
+  // const { userDetails } = useAppSelector(state => state.manageUser);
+  const [isImageBroken, setIsImageBroken] = useState(false);
+  const dispatch = useAppDispatch();
 
   const handleImageError = () => {
     setIsImageBroken(true);
@@ -115,9 +145,6 @@ const UserSettings: React.FC = () => {
     setEditMode(!editMode);
   };
 
-  const saveEditedDetails = () => {
-    setEditMode(true);
-  };
 
   function getFirstLettersForAvatar(name: string): string {
     const initials = name
@@ -125,11 +152,64 @@ const UserSettings: React.FC = () => {
       .map(word => word.charAt(0).toUpperCase())
       .join('');
     return initials;
-  }
+  };
 
-  useEffect(()=>{
-    dispatch(getUserDetails());
-  },[])
+
+  useEffect(() => {
+    dispatch(getUserDetails()).then(res => {
+      setUserDetails(res.payload);
+      setUserAccount(res.payload);
+    });
+  }, []);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setUserDetails({ ...userDetails, [name]: value });
+  };
+
+  const handleUpdateUserDetails = () => {
+    const propertiesToCheck: (keyof IUserAccountDetails)[] = [
+      "firstName",
+      "lastName",
+      "email",
+      "linkedIn",
+      "phone",
+      "companyName",
+      "companySize",
+      "companyRole",
+    ];
+    let edited = false;
+
+    if (userDetails.linkedIn && !isValidLinkedInUrl(userDetails.linkedIn)) {
+      toast.warning("Please add a valid LinkedIn URL.");
+      return; 
+    }
+    
+    for (const property of propertiesToCheck) {
+      if (userAccountOrg[property] !== userDetails[property]) {
+        edited = true;
+        break;
+      }
+    }
+
+    if (edited) {
+      dispatch(updateUserDetails(userDetails)).then((res) => {
+        toast.success("User details have been updated!");
+        setEditMode(true);
+      }).catch((error)=>{
+        toast.info("Something Went Wrong!");
+        setEditMode(true);
+      })
+    } else {
+      setEditMode(true);
+      toast.info("No changes were made to user details.");
+    }
+  };
+
+  const isValidLinkedInUrl = (url: string): boolean => {
+    const linkedInRegex = /^(https?:\/\/)?(www\.)?linkedin\.com\/in\/[a-zA-Z0-9_-]+\/?$/;
+    return linkedInRegex.test(url);
+  };
 
   return (
     <>
@@ -173,7 +253,7 @@ const UserSettings: React.FC = () => {
       </NavbarContainer>
       {/* main settings */}
       <MainSettingsContainer>
-        <BreadCrumb/>
+        <BreadCrumb />
         <SettingsContainer>
           <SideBar>
             <ProfileImgContainer>
@@ -209,17 +289,17 @@ const UserSettings: React.FC = () => {
             <SectionTitleContainer>
               <SectionTitle>Personal Details</SectionTitle>
             </SectionTitleContainer>
-            <ProfileSettings editMode={editMode} />
+            <ProfileSettings handleChange={handleChange} userDetails={userDetails} editMode={editMode} />
             <SectionTitleContainer>
               <SectionTitle>Company Details</SectionTitle>
             </SectionTitleContainer>
-            <CompanyDetails editMode={editMode} />
+            <CompanyDetails handleChange={handleChange} userDetails={userDetails} editMode={editMode} />
 
             <ButtonContainer>
               <IconButton
                 variant="contained"
                 startIcon={<SaveIcon />}
-                onClick={saveEditedDetails}
+                onClick={handleUpdateUserDetails}
                 disabled={editMode}
               >
                 Save
