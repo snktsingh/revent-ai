@@ -241,7 +241,7 @@ const CanvasBody = () => {
   useEffect(() => {
     const index = canvasList.findIndex((canvas) => canvas.id === canvasJS.id);
     setCanvasIndex(index);
-    if (canvasList && (index || index === 0)) {
+    if (canvasList && (index || index === 0) && canvasList[index].canvas) {
       const canvasIsEmpty =
         (canvasList[index].canvas as any).objects.length === 0;
       const variantsIsEmpty = canvasList[index].variants.length === 0;
@@ -257,20 +257,8 @@ const CanvasBody = () => {
         dispatch(toggleRegenerateButton(false));
       }
 
-
-      if (!isVariantsEmpty && !selectedOriginalCanvas ) {
-        setIsEditBtnShow(false);
-      } else if (!isVariantsEmpty && !selectedOriginalCanvas) {
-        setIsEditBtnShow(true);
-      } else if (selectedOriginalCanvas) {
-        setIsEditBtnShow(false);
-      } else if (isVariantSelected) {
-        setIsEditBtnShow(true);
-      } else if(!canvasIsEmpty && selectedOriginalCanvas) {
-        setIsEditBtnShow(false)
-      } else if(canvasIsEmpty){
-        setIsEditBtnShow(false)
-      }
+      const hasVariants = (canvasList[index].canvas as any).objects.some((obj: any) => obj.name === 'VariantImage');
+      setIsEditBtnShow(hasVariants);
     }
   }, [canvasList[canvasIndex].canvas, dispatch, variantImage, enabledElements, isVariantSelected]);
 
