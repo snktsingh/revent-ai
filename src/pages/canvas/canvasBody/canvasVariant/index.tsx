@@ -44,7 +44,7 @@ export const CanvasVariant = () => {
     const index = canvasList.findIndex((el) => el.id === canvasJS.id);
     setCanvasIndex(index);
     dispatch(toggleVariantSlide(false));
-  }, [canvasJS.canvas]);
+  }, [canvasJS.variants.length>0]);
 
   return (
     <div>
