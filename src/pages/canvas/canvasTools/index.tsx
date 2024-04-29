@@ -62,6 +62,7 @@ import FontDownloadOutlinedIcon from '@mui/icons-material/FontDownloadOutlined';
 import ColorizeOutlinedIcon from '@mui/icons-material/ColorizeOutlined';
 import WebFont from 'webfontloader';
 import FontsData from '../../../data/fontsData.json';
+import CreditsComponent from '@/components/CreditsComponent';
 
 interface FontItem {
   family: string;
@@ -222,7 +223,7 @@ const CanvasTools = () => {
     if (
       listRef.current &&
       ((listRef.current as HTMLUListElement).scrollHeight) - (listRef.current as HTMLUListElement).scrollTop <=
-      (listRef.current as HTMLUListElement).clientHeight+1000
+      (listRef.current as HTMLUListElement).clientHeight + 1000
     ) {
       // Load more fonts when user reaches the end of the list
       const start = filteredFonts.length;
@@ -660,6 +661,9 @@ const CanvasTools = () => {
       >
         <img src={ShapesIcon} alt="shapes_icon" />
       </ShapesCard> */}
+
+      <CreditsComponent />
+
       <Menu
         id="basic-menu"
         anchorEl={anchorShapesEl}

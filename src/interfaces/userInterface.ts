@@ -21,4 +21,5 @@ export interface IUserResponse {
 
 export interface IUserDetails {
   userDetails: IUserResponse | null;
+  creditAmount : number;
 }

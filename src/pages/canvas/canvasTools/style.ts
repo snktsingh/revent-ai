@@ -7,6 +7,8 @@ export const MainToolContainer = styled.div`
   padding: 1.7% 0.4%;
   border-bottom: 1px solid ${theme.colorSchemes.light.palette.common.border};
   display: flex;
+  justify-content: space-between;
+  margin: 0 0.5%;
   align-items: center;
 `;
 export const FontTool = styled.span`

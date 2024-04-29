@@ -14,6 +14,7 @@ export const ENDPOINT = {
   USER: {
     GET_DETAILS: '/account',
     VERIFY_ACCOUNT: '/activate',
+    CREDIT_AMOUNT : '/user-credit'
   },
   PPT: {
     CREATE_PPT: 'ppt/create-presentation',

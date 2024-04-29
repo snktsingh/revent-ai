@@ -6,6 +6,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 const initialState: IUserDetails = {
   userDetails: null,
+  creditAmount : 0,
 };
 
 export const getUserDetails = createAsyncThunk(
@@ -20,10 +21,17 @@ export const updateUserDetails = createAsyncThunk(
   'user/update_details',
   async (updatedUserDetails : IUserAccountDetails) => {
     const res = await FetchUtils.postRequest(`${ENDPOINT.USER.GET_DETAILS}`,updatedUserDetails);
-    console.log(res);
     return res.data;
   }
-)
+);
+
+export const getUserCredit = createAsyncThunk(
+  'user/get_credits',
+  async () => {
+    const res = await FetchUtils.getRequest(`${ENDPOINT.USER.CREDIT_AMOUNT}`);
+    return res.data;
+  }
+);
 
 const userSlice = createSlice({
   name: 'user-management',
@@ -39,7 +47,17 @@ const userSlice = createSlice({
       })
       .addCase(getUserDetails.rejected, (state, action) => {
         state.userDetails = null;
+      })
+      .addCase(getUserCredit.pending, (state, action) => {
+        state.creditAmount = 0;
+      })
+      .addCase(getUserCredit.fulfilled, (state, action) => {
+        state.creditAmount = action.payload.credit;
+      })
+      .addCase(getUserCredit.rejected, (state, action) => {
+        state.creditAmount = 0;
       });
+
   },
 });
 export const {} = userSlice.actions;
