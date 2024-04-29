@@ -52,7 +52,7 @@ export function useListElement() {
       moveCursor: 'pointer',
     });
 
-    const text = new AutoResizingTextbox('Text', {
+    const text = new AutoResizingTextbox('Add Text', {
       fontSize: 18,
       width: 145,
       height: 100,

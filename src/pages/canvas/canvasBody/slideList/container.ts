@@ -59,7 +59,6 @@ const useSlideList = () => {
           });
           canvas.renderAll();
           const svgURL = canvas.toSVG();
-          console.log(svgURL)
           resolve(svgURL);
         });
       } catch (error) {

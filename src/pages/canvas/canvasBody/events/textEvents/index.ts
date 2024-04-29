@@ -6,11 +6,13 @@ import {
   COVER_SLIDE_TITLE,
   CYCLE_TEXT,
   FUNNEL_TEXT,
+  LIST_TEXT,
   PARAGRAPH,
   PROCESS_TEXT,
   PYRAMID,
   PYRAMID_TEXT,
   QUOTE,
+  QUOTE_AUTHOR,
   QUOTE_TEXT,
   SECTION_SLIDE_SUBTITLE,
   SECTION_SLIDE_TITLE,
@@ -83,6 +85,22 @@ export function useTextEvents() {
       } else if (
         textBox.text === 'Add Text' &&
         textBox.name?.startsWith(CYCLE_TEXT)
+      ) {
+        textBox.set({ text: '' });
+        if (!textBox.isEditing) {
+          textBox.enterEditing();
+        }
+      }else if (
+        textBox.text === '- Author Name' &&
+        textBox.name?.startsWith(QUOTE_AUTHOR)
+      ) {
+        textBox.set({ text: '' });
+        if (!textBox.isEditing) {
+          textBox.enterEditing();
+        }
+      }else if (
+        textBox.text === 'Add Text' &&
+        textBox.name?.startsWith(LIST_TEXT)
       ) {
         textBox.set({ text: '' });
         if (!textBox.isEditing) {
@@ -247,6 +265,27 @@ export function useTextEvents() {
         // textBox.set({
         //   fill: theme.colorSchemes.light.palette.common.white,
         // });
+      }
+      canvas.renderAll();
+    }else if (
+      textBox.name?.startsWith(QUOTE_TEXT)
+    ) {
+      if (textBox.text == '' || textBox.text == '❝❞') {
+        textBox.text = '❝Click to add a quote❞';
+      }
+      canvas.renderAll();
+    }else if (
+      textBox.name?.startsWith(QUOTE_AUTHOR)
+    ) {
+      if (textBox.text == '') {
+        textBox.text = '- Author Name';
+      }
+      canvas.renderAll();
+    }else if (
+      textBox.name?.startsWith(LIST_TEXT)
+    ) {
+      if (textBox.text == '') {
+        textBox.text = 'Add Text';
       }
       canvas.renderAll();
     }
