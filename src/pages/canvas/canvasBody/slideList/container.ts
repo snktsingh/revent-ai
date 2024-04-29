@@ -33,9 +33,8 @@ const useSlideList = () => {
 
     return new Promise<string>((resolve, reject) => {
       try {
+        console.log('loading slide image')
         canvas.loadFromJSON(canvasJson, () => {
-          // canvas.width = 970;
-          // canvas.height = 500;
           updateCanvasDimensions(canvas);
           canvas.forEachObject(obj => {
             if (obj.name && obj.name == 'VariantImage') {
@@ -60,6 +59,7 @@ const useSlideList = () => {
           });
           canvas.renderAll();
           const svgURL = canvas.toSVG();
+          console.log(svgURL)
           resolve(svgURL);
         });
       } catch (error) {

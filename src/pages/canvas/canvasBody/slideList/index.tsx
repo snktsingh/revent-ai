@@ -1,5 +1,5 @@
 import SvgViewer from '@/components/canvasSvgViewer';
-import { Stack } from '@mui/material';
+import { Skeleton, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { ListSlideCard, SingleSliderContainer } from '../style';
 import useSlideList from './container';
@@ -79,38 +79,49 @@ export default function SlideList() {
     };
 
     return (
-      <div
-        ref={setNodeRef}
-        {...attributes}
-        onPointerDown={event => {
-          handleSlideCardClick(canvas);
-          if (listeners?.onPointerDown) {
-            listeners.onPointerDown(event);
-          }
-        }}
-        onKeyDown={event => {
-          if (listeners?.onKeyDown) {
-            listeners.onKeyDown(event);
-          }
-        }}
-        style={styles}
-      >
-        <SingleSliderContainer>
-          <Stack direction="row" spacing={1}>
-            <p>{index + 1}</p>
-            <ListSlideCard
-              className={activeSlideID == canvas.id ? 'clicked-card' : ''}
+      <>
+        {
+          !svgURLs[index] ?
+            <SingleSliderContainer> 
+                <ListSlideCard>
+                <Skeleton variant="rounded" width={'100%'} height={120} />
+                </ListSlideCard>
+            </SingleSliderContainer>
+            :
+            <div
+              ref={setNodeRef}
+              {...attributes}
+              onPointerDown={event => {
+                handleSlideCardClick(canvas);
+                if (listeners?.onPointerDown) {
+                  listeners.onPointerDown(event);
+                }
+              }}
+              onKeyDown={event => {
+                if (listeners?.onKeyDown) {
+                  listeners.onKeyDown(event);
+                }
+              }}
+              style={styles}
             >
-              <SvgViewer svgContent={svgURLs[index]} />
-            </ListSlideCard>
-          </Stack>
-        </SingleSliderContainer>
-        <br />
-      </div>
+              <SingleSliderContainer>
+                <Stack direction="row" spacing={1}>
+                  <p>{index + 1}</p>
+                  <ListSlideCard
+                    className={activeSlideID == canvas.id ? 'clicked-card' : ''}
+                  >
+                    <SvgViewer svgContent={svgURLs[index]} />
+                  </ListSlideCard>
+                </Stack>
+              </SingleSliderContainer>
+              <br />
+            </div>
+        }
+      </>
     );
   };
 
-        
+
   return (
     <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
       <SlideContainer>
