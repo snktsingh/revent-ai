@@ -21,6 +21,7 @@ export const ENDPOINT = {
     UPDATE_PPT_NAME: 'ppt/update-presentation-name',
     DELETE_PPT: 'ppt/delete-presentation',
     GET_PPT_DETAILS: 'ppt/get-presentation',
+    CANVAS_JSON : '/canvas-data'
   },
   DASHBOARD: {
     FETCH_PPT_LIST: 'ppt/get-all-presentation',
@@ -36,6 +37,7 @@ export const ROUTES = {
   CANVAS: '/canvas/:id',
   SETTINGS: '/settings',
   ACTIVATION: '/activation',
+  RESET_PASSWORD : '/forgot-password'
 } as const;
 
 export default ENDPOINT;

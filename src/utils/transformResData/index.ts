@@ -46,7 +46,8 @@ export const canvasData = {
   ],
 };
 
-export const processSlides = (slides: any[]): CanvasItem[] => {
+export const processSlides = (slides: any[], presentationId : number): CanvasItem[] => {
+  
   return slides.map((slideData, index) => {
     let canvas = JSON.parse(JSON.stringify(canvasData));
     canvas.objects[0].src = `${slideData[0].thumbnailUrl}`;
@@ -57,6 +58,8 @@ export const processSlides = (slides: any[]): CanvasItem[] => {
       variants: [],
       originalSlideData: {},
       listImages: [],
+      slideId: slideData[0].slideId,
+      presentationId,
     };
 
     slideData.forEach((element: any) => {

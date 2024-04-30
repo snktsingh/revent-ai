@@ -10,6 +10,7 @@ import {
 import { fabric } from 'fabric';
 import { CanvasItem } from '@/interface/storeTypes';
 import { openModal } from '@/redux/reducers/elements';
+import { useSearchParams } from 'react-router-dom';
 
 const useSlideList = () => {
   const [draggedItemId, setDraggedItemId] = useState(null);
@@ -19,12 +20,22 @@ const useSlideList = () => {
     state => state.canvas
   );
   const { updateCanvasDimensions } = useCanvasComponent();
+  const [searchParams,setSearchParams] = useSearchParams();
 
   const handleSlideCardClick = (canvas: CanvasItem) => {
     dispatch(toggleSelectingSlide(true));
     dispatch(setCanvas(canvas));
     dispatch(setActiveSlideId(canvas.id));
+    handleURl((canvas.slideId).toString());
   };
+
+
+  const handleURl = (slideId : string) => {
+    let params = {
+      slide: slideId,
+    };
+    setSearchParams(params);
+  }
 
   const [svgURLs, setsvgURLs] = useState<string[]>([]);
 
@@ -33,7 +44,6 @@ const useSlideList = () => {
 
     return new Promise<string>((resolve, reject) => {
       try {
-        console.log('loading slide image')
         canvas.loadFromJSON(canvasJson, () => {
           updateCanvasDimensions(canvas);
           canvas.forEachObject(obj => {

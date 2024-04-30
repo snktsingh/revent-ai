@@ -55,6 +55,8 @@ const useDashboard = () => {
         variants: [],
         originalSlideData: {},
         listImages: [],
+        slideId: 1,
+        presentationId: 1,
       },
     ];
     dispatch(setCanvas(canvas[0]));

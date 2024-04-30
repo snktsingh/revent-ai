@@ -11,6 +11,7 @@ import Home from '@/pages/homepage';
 import Protected from '@/protected';
 import UserSettings from '@/pages/userSettings';
 import ActivateAccount from '@/common-ui/activateAccount';
+import ResetPasswordPage from '@/common-ui/resetPassword';
 
 export const authRoutes: RouteObject[] = [
   { path: ROUTES.APP_ROOT, element: <Home /> },
@@ -35,6 +36,7 @@ export const defaultRoutes: RouteObject[] = [
   { path: ROUTES.CANVAS, element: <Protected /> },
   { path: ROUTES.SETTINGS, element: <UserSettings /> },
   { path: ROUTES.ACTIVATION, element: <ActivateAccount /> },
+  { path: ROUTES.RESET_PASSWORD, element: <ResetPasswordPage /> },
   {
     path: '/*',
     element: <NotFound />,

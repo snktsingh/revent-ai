@@ -1,9 +1,9 @@
 import SvgViewer from '@/components/canvasSvgViewer';
-import { Skeleton, Stack } from '@mui/material';
+import { Paper, Skeleton, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { ListSlideCard, SingleSliderContainer } from '../style';
 import useSlideList from './container';
-import { SlideContainer } from './style';
+import { Dot, LoaderContainer, SlideContainer } from './style';
 import { DndContext, closestCorners } from '@dnd-kit/core';
 import {
   SortableContext,
@@ -20,6 +20,7 @@ import {
 } from '@/redux/reducers/canvas';
 import { useAppSelector } from '@/redux/store';
 import { setEditPptIndex } from '@/redux/thunk/thunk';
+import { useSearchParams } from 'react-router-dom';
 interface SingleSlideComponentProps extends CanvasItem {
   index: number;
 }
@@ -36,9 +37,11 @@ export default function SlideList() {
     handleDragOver,
     handleDrop,
     dispatch,
+    canvasJS
   } = useSlideList();
 
   const { pptDetails } = useAppSelector(state => state.thunk);
+  
 
   useEffect(() => {
     loadSvgs();
@@ -78,14 +81,22 @@ export default function SlideList() {
       transform: CSS.Transform.toString(transform),
     };
 
+    
+
     return (
       <>
         {
           !svgURLs[index] ?
-            <SingleSliderContainer> 
-                <ListSlideCard>
-                <Skeleton variant="rounded" width={'100%'} height={120} />
-                </ListSlideCard>
+            <SingleSliderContainer>
+              <ListSlideCard>
+                  <LoaderContainer>
+                    <Dot />
+                    <Dot />
+                    <Dot />
+                    <Dot />
+                    <Dot />
+                  </LoaderContainer>
+              </ListSlideCard>
             </SingleSliderContainer>
             :
             <div

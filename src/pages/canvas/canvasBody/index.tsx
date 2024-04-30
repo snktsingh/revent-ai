@@ -150,6 +150,8 @@ const CanvasBody = () => {
       originalSlideData: canvasList[canvasJS.id - 1].canvas,
     };
     dispatch(updateCurrentCanvas(currentCanvas));
+    const canvasJSON = canvasList[canvasJS.id - 1].canvas;
+    const pptId = params.id?.split('-')[0];
 
     const isListImagesPresent = requestData?.elements.some((canvas => canvas.shape === 'List'));
     const isImagesPresent = requestData?.elements.some((canvas => canvas.shape === 'Images'));
@@ -164,7 +166,7 @@ const CanvasBody = () => {
         for (let i = 0; i < listImagesArray.images.length; i++) {
           formData.append("images", listImagesArray.images[i].file);
         }
-        dispatch(fetchSlideImg(formData));
+        dispatch(fetchSlideImg({req :formData, canvasJSON, pptId}));
         dispatch(toggleSelectedOriginalCanvas(false));
       }
       return;
@@ -180,7 +182,7 @@ const CanvasBody = () => {
         for (let i = 0; i < ImagesArray.images.length; i++) {
           formData.append("images", ImagesArray.images[i].file);
         }
-        dispatch(fetchSlideImg(formData));
+        dispatch(fetchSlideImg({req :formData, canvasJSON, pptId}));
         dispatch(toggleSelectedOriginalCanvas(false));
       }
       return;
@@ -196,7 +198,7 @@ const CanvasBody = () => {
           for (let i = 0; i < QuoteImagesArray.images.length; i++) {
             formData.append("images", QuoteImagesArray.images[i].file);
           }
-          dispatch(fetchSlideImg(formData));
+          dispatch(fetchSlideImg({req :formData, canvasJSON, pptId}));
           dispatch(toggleSelectedOriginalCanvas(false));
           return;
         }
@@ -208,7 +210,7 @@ const CanvasBody = () => {
       const ptId = Number(params.id?.split('-')[0]);
       reqData.presentationId = ptId;
     }
-    dispatch(fetchSlideImg(reqData));
+    dispatch(fetchSlideImg({req :reqData, canvasJSON, pptId}));
     dispatch(toggleSelectedOriginalCanvas(false));
   };
 

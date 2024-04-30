@@ -21,6 +21,7 @@ const useVariants = () => {
     selectedOriginalCanvas,
     canvasJS,
     canvasList,
+    activeSlideID
   } = useAppSelector(state => state.canvas);
   const { pptDetails } = useAppSelector(state => state.thunk);
   const array: number[] = [1, 2, 3];
@@ -90,7 +91,9 @@ const useVariants = () => {
     selectedOriginalCanvas,
     canvasJS,
     pptDetails,
-    canvasList
+    canvasList,
+    getCanvasImageFromJSON,
+    activeSlideID
   };
 };
 export default useVariants;

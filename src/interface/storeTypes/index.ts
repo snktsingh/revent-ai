@@ -18,7 +18,9 @@ export interface CanvasItem {
   notes?: string;
   variants: VariantsType[];
   originalSlideData: object;
-  listImages : listObjType[]
+  listImages : listObjType[];
+  slideId : number;
+  presentationId : number;
 }
 
 export interface IPresentationDetails {
