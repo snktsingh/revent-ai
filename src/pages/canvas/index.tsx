@@ -26,10 +26,10 @@ import { useSearchParams } from 'react-router-dom';
 
 const MainCanvas = () => {
   const dispatch = useAppDispatch();
-  const { isAuthenticating, pptDetails } = useAppSelector(state => state.thunk);
+  const { isAuthenticating } = useAppSelector(state => state.thunk);
   const { canvasJS } = useAppSelector(state => state.canvas);
   const { isPresentationLoading } = useAppSelector(state => state.element);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams , setSearchParams] = useSearchParams();
 
   const relUrl = window.location.pathname.slice(8);
   const temp = relUrl.search('-');
@@ -37,6 +37,8 @@ const MainCanvas = () => {
   const pId = relUrl.substring(0, temp);
 
   useEffect(() => {
+    console.log(relUrl.search('-'));
+    console.log(relUrl.slice(0, temp));
     dispatch(getUserDetails());
     getPresentationData(pId);
   }, []);
@@ -45,13 +47,10 @@ const MainCanvas = () => {
     dispatch(updatePresentationLoading(true));
     const res: any = await dispatch(fetchPptDetails(pptId));
     if (res.meta.requestStatus === 'fulfilled') {
-      if (res.payload.slides[0]) {
-        setSearchParams({ slide: res.payload.slides[0][0].slideId });
+      if(res.payload.slides[0]){
+        setSearchParams({slide: res.payload.slides[0][0].slideId});
       }
-      const slidesData = processSlides(
-        res.payload.slides,
-        res.payload.presentationId
-      );
+      const slidesData = processSlides(res.payload.slides, res.payload.presentationId);
       if (slidesData && slidesData.length > 0 && slidesData[0].canvas) {
         dispatch(setActiveSlideId(1));
         dispatch(updateCanvasList(slidesData));

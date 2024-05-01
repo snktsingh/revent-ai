@@ -62,6 +62,7 @@ const CanvasComponent: React.FC = () => {
 
   useEffect(() => {
     console.log({ canvasJS });
+    console.log("canvas loading");
     setShowOptions(false);
     const canvas = new fabric.Canvas('canvas');
     updateCanvasStyle(canvas);
@@ -126,9 +127,9 @@ const CanvasComponent: React.FC = () => {
         );
 
         canvas.on('object:added', e => onObjectAddedEvent(e, canvas));
-        console.log(
-          canvas.on('object:added', e => onObjectAddedEvent(e, canvas))
-        );
+        // console.log(
+        //   canvas.on('object:added', e => onObjectAddedEvent(e, canvas))
+        // );
         canvas.on('object:removed', e => onObjectRemovedEvent(e, canvas));
         canvas.on('object:modified', e => onObjectModifiedEvent(e, canvas));
         canvas.on('selection:cleared', e => onSelectionClearedEvent(e, canvas));

@@ -14,7 +14,9 @@ export const ENDPOINT = {
   USER: {
     GET_DETAILS: '/account',
     VERIFY_ACCOUNT: '/activate',
-    CREDIT_AMOUNT : '/user-credit'
+    CREDIT_AMOUNT : '/user-credit',
+    RESET_PASS_INIT : '/account/reset-password/init',
+    RESET_PASS_FINISH : '/account/reset-password/finish'
   },
   PPT: {
     CREATE_PPT: 'ppt/create-presentation',
@@ -38,7 +40,8 @@ export const ROUTES = {
   CANVAS: '/canvas/:id',
   SETTINGS: '/settings',
   ACTIVATION: '/activation',
-  RESET_PASSWORD : '/forgot-password'
+  FORGOT_PASSWORD : '/forgot-password',
+  RESET_PASSWORD : '/reset-password',
 } as const;
 
 export default ENDPOINT;
