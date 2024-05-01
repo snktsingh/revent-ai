@@ -30,7 +30,7 @@ export const useBulletOrNumberedText = () => {
               method,
               ctx,
               bullet,
-              bulletLeft + 30,
+               30,
               top,
               lineIndex
             );

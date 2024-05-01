@@ -16,6 +16,7 @@ import { create, forEach } from 'lodash';
 import { IUpdatePptName } from '@/interfaces/pptInterfaces';
 import { canvasData } from '@/utils/transformResData';
 import { toggleSelectingSlide } from '../reducers/slide';
+import { IUpdateTheme } from '@/interfaces/themeInterface';
 
 const initialState: ISlideRequests = {
   pptUrl: '',
@@ -34,7 +35,7 @@ const initialState: ISlideRequests = {
 
 export const fetchSlideImg = createAsyncThunk(
   'slide/fetchimage-ppt',
-  async ({req, canvasJSON, pptId}: any, { dispatch, getState }) => {
+  async ({ req, canvasJSON, pptId }: any, { dispatch, getState }) => {
     let isFormData = false;
     if (req instanceof FormData) {
       isFormData = true;
@@ -43,8 +44,10 @@ export const fetchSlideImg = createAsyncThunk(
       `${isFormData ? ENDPOINT.GEN_PPT_IMAGES : ENDPOINT.GEN_PPT_MULTI}`,
       req
     );
-    dispatch(updateSlideJSONData({pptId,canvasJSON,slideId : res.data.slideId}));
-    console.log(res.data)
+    dispatch(
+      updateSlideJSONData({ pptId, canvasJSON, slideId: res.data.slideId })
+    );
+    console.log(res.data);
     dispatch(setVariantImageAsMain(res.data.variants[0].imagesUrl));
     dispatch(toggleIsVariantSelected(true));
     const currentCanvas = (getState() as RootState).canvas.canvasJS;
@@ -102,7 +105,7 @@ export const updateSlideJSONData = createAsyncThunk(
       `${ENDPOINT.PPT.CANVAS_JSON}/${pptId}/${slideId}`,
       canvasJSON
     );
-    console.log({json: res.data})
+    console.log({ json: res.data });
     return res.data;
   }
 );
@@ -111,11 +114,30 @@ export const updateSlideJSONData = createAsyncThunk(
 
 export const getSlideJSONData = createAsyncThunk(
   'slide/get-json',
-  async ({ pptId, slideId}:{ pptId : string, slideId : string}) : Promise<any> => {
-    const res = await FetchUtils.getRequest(`${ENDPOINT.PPT.CANVAS_JSON}/${pptId}/${slideId}`);
+  async ({
+    pptId,
+    slideId,
+  }: {
+    pptId: string;
+    slideId: string;
+  }): Promise<any> => {
+    const res = await FetchUtils.getRequest(
+      `${ENDPOINT.PPT.CANVAS_JSON}/${pptId}/${slideId}`
+    );
     return res.data;
   }
-)
+);
+
+//Update Theme for Presentation
+export const updatePresentationTheme = createAsyncThunk(
+  'ppt/updatePptTheme',
+  async ({ pptId, themeId }: IUpdateTheme) => {
+    const res = await FetchUtils.getRequest(
+      `${ENDPOINT.PPT.UPDATE_THEME}?presentationId=${pptId}&themeId=${themeId}`
+    );
+    console.log(res);
+  }
+);
 
 const thunkSlice = createSlice({
   name: 'singleSlideData',
@@ -190,6 +212,20 @@ const thunkSlice = createSlice({
         }
       )
       .addCase(fetchPptDetails.rejected, (state, action) => {
+        state.pptDetails = null;
+      })
+      .addCase(updatePresentationTheme.pending, (state, action) => {
+        state.pptDetails = null;
+      })
+      .addCase(
+        updatePresentationTheme.fulfilled,
+        (state, action: PayloadAction<any>) => {
+          state.pptDetails = action.payload;
+          state.presentationName = action.payload.name;
+          state.presentationId = action.payload.presentationId;
+        }
+      )
+      .addCase(updatePresentationTheme.rejected, (state, action) => {
         state.pptDetails = null;
       });
   },

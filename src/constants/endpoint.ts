@@ -21,7 +21,8 @@ export const ENDPOINT = {
     UPDATE_PPT_NAME: 'ppt/update-presentation-name',
     DELETE_PPT: 'ppt/delete-presentation',
     GET_PPT_DETAILS: 'ppt/get-presentation',
-    CANVAS_JSON : '/canvas-data'
+    CANVAS_JSON : '/canvas-data',
+    UPDATE_THEME: 'ppt/change-theme',
   },
   DASHBOARD: {
     FETCH_PPT_LIST: 'ppt/get-all-presentation',

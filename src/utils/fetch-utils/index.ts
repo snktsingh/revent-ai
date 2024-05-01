@@ -65,8 +65,8 @@ generateInstance.interceptors.response.use(
 );
 
 class FetchUtilHeaderClass {
-  getRequest = async (url: string) => {
-    return generateInstance.get(url);
+  getRequest = async (url: string, data?: any) => {
+    return generateInstance.get(url, data);
   };
   postRequest = async (url: string, data: any) => {
     return generateInstance.post(url, data);
