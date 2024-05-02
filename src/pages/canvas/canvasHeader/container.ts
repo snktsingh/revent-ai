@@ -100,6 +100,8 @@ const useCanvasHeader = () => {
         variants: [],
         originalSlideData: {},
         listImages: [],
+        slideId:1,
+        presentationId:1,
       },
     ];
     dispatch(updateCanvasList(canvas));

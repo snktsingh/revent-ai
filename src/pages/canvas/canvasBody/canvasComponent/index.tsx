@@ -49,6 +49,7 @@ const CanvasComponent: React.FC = () => {
     onTextEditingExitedEvent,
   } = useCanvasEvents();
   const { themeCode, themeId } = useAppSelector(state => state.slideTheme);
+  const { isPresentationLoading } = useAppSelector(state => state.element);
 
   const dispatch = useAppDispatch();
 
@@ -204,7 +205,14 @@ const CanvasComponent: React.FC = () => {
         ref={ContainerRef}
         onClick={canvasClickEvent}
       >
-        <canvas id="canvas"></canvas>
+        {
+          isPresentationLoading?
+          <>
+          thinnava
+          </>
+          :
+          <canvas id="canvas"></canvas>
+        }
         {showOptions && (
           <ElementEditBar
             left={selectedElementPosition.left}

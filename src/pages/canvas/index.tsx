@@ -9,6 +9,7 @@ import { getUserDetails } from '@/redux/thunk/user';
 import { useEffect } from 'react';
 import {
   fetchPptDetails,
+  getSlideJSONData,
   setAuthenticateLoader,
   setUnauthMessage,
 } from '@/redux/thunk/thunk';
@@ -19,6 +20,7 @@ import {
   setCanvas,
   setVariantImageAsMain,
   updateCanvasList,
+  updateCurrentCanvas,
 } from '@/redux/reducers/canvas';
 import { toggleSelectingSlide } from '@/redux/reducers/slide';
 import { updatePresentationLoading } from '@/redux/reducers/elements';
@@ -46,13 +48,17 @@ const MainCanvas = () => {
   const getPresentationData = async (pptId: string) => {
     dispatch(updatePresentationLoading(true));
     const res: any = await dispatch(fetchPptDetails(pptId));
-    dispatch(updatePresentationLoading(true));
     if (res.meta.requestStatus === 'fulfilled') {
       if(res.payload.slides[0]){
         setSearchParams({slide: res.payload.slides[0][0].slideId});
       }
       const slidesData = processSlides(res.payload.slides, res.payload.presentationId);
       if (slidesData && slidesData.length > 0 && slidesData[0].canvas) {
+        dispatch(getSlideJSONData({pptId, slideId : res.payload.slides[0][0].slideId})).then((response)=>{
+          if(response.payload){
+            dispatch(updateCurrentCanvas({...slidesData[0],originalSlideData : response.payload}));
+          }
+        })
         dispatch(setActiveSlideId(1));
         dispatch(updateCanvasList(slidesData));
         dispatch(setVariantImageAsMain(res.payload.slides[0][0].thumbnailUrl));

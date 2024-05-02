@@ -61,7 +61,7 @@ export const CanvasVariant = () => {
 
   useEffect(() => {
     const canvasIndex = canvasList.findIndex((slide) => slide.id === activeSlideID);
-    if(pptId && slideId && Number(slideId)>100 && canvasList[canvasIndex].originalSlideData){
+    if(pptId && slideId && Number(slideId)>100 && canvasList[canvasIndex].originalSlideData  && canvasIndex !== 0){
       dispatch(getSlideJSONData({pptId, slideId})).then((res)=>{
         if(res.payload){
           getCanvasImageFromJSON(res.payload);
