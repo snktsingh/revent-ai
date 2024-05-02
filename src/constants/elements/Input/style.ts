@@ -15,4 +15,14 @@ export const CanvasHeaderInput = styled.input`
     outline: none;
     border-radius: 5px;
   }
+  &:hover {
+    background: none;
+    border: 1px solid white;
+    outline: none;
+    border-radius: 5px;
+  }
+  &::selection {
+    background-color: white; 
+    color:  ${theme.colorSchemes.light.palette.primary.main}; 
+  }
 `;
