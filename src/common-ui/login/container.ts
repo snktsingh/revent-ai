@@ -40,15 +40,22 @@ const useLogin = () => {
   const handleLogin = () => {
     dispatch(setFormDisabled());
     if (email === '' || email === null) {
-      toast.warning('Email is empty');
+      toast.warning('Email field is empty. Please provide your email address.');
     } else if (password === '' || password === null) {
-      toast.warning('Password is empty');
+      toast.warning('Password field is empty. Please enter your password.');
+    } else if (!validateEmail(email)) {
+      toast.warning('Please enter a valid email address.');
     } else {
       userLogin({
         username: email,
         password: password,
       });
     }
+  };
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   };
 
   return {

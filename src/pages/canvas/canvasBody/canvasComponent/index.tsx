@@ -205,14 +205,7 @@ const CanvasComponent: React.FC = () => {
         ref={ContainerRef}
         onClick={canvasClickEvent}
       >
-        {
-          isPresentationLoading?
-          <>
-          thinnava
-          </>
-          :
-          <canvas id="canvas"></canvas>
-        }
+        <canvas id="canvas"></canvas>
         {showOptions && (
           <ElementEditBar
             left={selectedElementPosition.left}

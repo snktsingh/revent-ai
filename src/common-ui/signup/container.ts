@@ -1,6 +1,7 @@
 import ENDPOINT, { ROUTES } from '@/constants/endpoint';
 import { FetchNonHeaderUtils, FetchUtils } from '@/utils/fetch-utils';
 import { Password } from '@mui/icons-material';
+import { error } from 'console';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -10,13 +11,13 @@ interface SignUpState {
 
 const useSignup = () => {
   const [values, setValues] = useState<SignUpState>({
-    login: '',
+    email: '',
     firstName: '',
     lastName: '',
-    email: '',
     password: '',
     imageUrl: 'http://placehold.it/50x50',
     langKey: 'en',
+    login: '',
   });
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
@@ -26,48 +27,70 @@ const useSignup = () => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setValues({ ...values, [name]: value });
-    if(name === 'email'){
-      setValues({ ...values, login: value });
-    };
   };
 
   const handleRegister = async () => {
+    values.login = values.email;
     toast.promise(
       async () => {
-        const res = await FetchNonHeaderUtils.postRequest(
-          `${ENDPOINT.AUTH.SIGNIN}`,
-          values
-        );
-        if (res.status === 201) {
-          setTimeout(() => {
-            setIsPreview(true);
-          }, 1000);
-        } else {
-          throw new Error('Failed to log in');
+        try {
+          const res = await FetchNonHeaderUtils.postRequest(
+            `${ENDPOINT.AUTH.SIGNIN}`,
+            values
+          );
+          if (res.status === 201) {
+            setTimeout(() => {
+              setIsPreview(true);
+            }, 1000);
+            toast.success('Registered Successfully...');
+          } else {
+            throw new Error('Failed to log in');
+          }
+        } catch (error : any) {
+          if (error.message === "emailexists") {
+            toast.info('This account already exists. Please log in instead.');
+          } else {
+            console.error(error);
+            toast.error('An unexpected error occurred. Please try again later.');
+          }
         }
       },
       {
         pending: 'Registering please wait...',
-        success: 'Registered Successfully...',
       }
     );
   };
 
   const handleSubmit = () => {
+    values.login = values.email;
     for (const key in values) {
       if (values[key] === '') {
         toast.warning(`Please fill in ${key}`);
         return;
       }
     }
-    if (confirmPassword === '') {
+    if(!validateEmail(values.email)){
+      toast.warning('Please enter a valid email address');
+    }else if (confirmPassword === '') {
       toast.warning('Please confirm your password');
     } else if (values.password !== confirmPassword) {
       toast.warning('Please match the passwords');
-    } else {
+    } else if(!validatePassword(values.password)){
+      toast.warning('Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, and one number.');
+    }
+     else {
       handleRegister();
     }
-    console.log(values);
+  };
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email)
+  };
+
+  const validatePassword = (password: string) => {
+    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/;
+    return passwordRegex.test(password)
   };
 
   const handleClickShowPassword = () => setShowPassword(show => !show);
