@@ -16,6 +16,7 @@ import { create, forEach } from 'lodash';
 import { IUpdatePptName } from '@/interfaces/pptInterfaces';
 import { canvasData } from '@/utils/transformResData';
 import { toggleSelectingSlide } from '../reducers/slide';
+import { IUpdateTheme } from '@/interfaces/themeInterface';
 
 const initialState: ISlideRequests = {
   pptUrl: '',
@@ -134,7 +135,7 @@ export const updatePresentationTheme = createAsyncThunk(
     const res = await FetchUtils.getRequest(
       `${ENDPOINT.PPT.UPDATE_THEME}?presentationId=${pptId}&themeId=${themeId}`
     );
-    console.log(res);
+    return res;
   }
 );
 
@@ -202,14 +203,6 @@ const thunkSlice = createSlice({
       .addCase(fetchPptDetails.pending, (state, action) => {
         state.pptDetails = null;
       })
-      .addCase(
-        fetchPptDetails.fulfilled,
-        (state, action: PayloadAction<any>) => {
-          state.pptDetails = action.payload;
-          state.presentationName = action.payload.name;
-          state.presentationId = action.payload.presentationId;
-        }
-      )
       .addCase(
         fetchPptDetails.fulfilled,
         (state, action: PayloadAction<any>) => {

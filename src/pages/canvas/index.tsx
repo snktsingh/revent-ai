@@ -47,7 +47,6 @@ const MainCanvas = () => {
     dispatch(updatePresentationLoading(true));
     const res: any = await dispatch(fetchPptDetails(pptId));
     dispatch(updatePresentationLoading(true));
-    const res: any = await dispatch(fetchPptDetails(pptId));
     if (res.meta.requestStatus === 'fulfilled') {
       if(res.payload.slides[0]){
         setSearchParams({slide: res.payload.slides[0][0].slideId});
