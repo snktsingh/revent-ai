@@ -48,5 +48,13 @@ export const SubTitle = styled.span`
   font-size: 14px;
   text-align: center;
   width: 25vw;
-  color: #696969;
+  color: #656a72;
+`;
+export const EmailSentContainer = styled.div`
+
+`;
+
+export const ResendText = styled.p`
+ color: #444953;
+ font-size: 12px;
 `;

@@ -24,7 +24,7 @@ import { useEffect, useState } from 'react';
 import { ISlideList } from '@/interfaces/pptInterfaces';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { getSlideJSONData } from '@/redux/thunk/thunk';
-import { updateCurrentCanvas } from '@/redux/reducers/canvas';
+import { setVariantImageAsMain, toggleIsVariantSelected, updateCurrentCanvas } from '@/redux/reducers/canvas';
 
 export const CanvasVariant = () => {
   const [canvasIndex, setCanvasIndex] = useState<number>(0)
@@ -61,7 +61,7 @@ export const CanvasVariant = () => {
 
   useEffect(() => {
     const canvasIndex = canvasList.findIndex((slide) => slide.id === activeSlideID);
-    if(pptId && slideId && Number(slideId)>100){
+    if(pptId && slideId && Number(slideId)>100 && canvasList[canvasIndex].originalSlideData){
       dispatch(getSlideJSONData({pptId, slideId})).then((res)=>{
         if(res.payload){
           getCanvasImageFromJSON(res.payload);

@@ -100,7 +100,7 @@ const Login = () => {
                   ),
                 }}
               />
-              <CommonLink onClick={()=> navigate(ROUTES.RESET_PASSWORD)}>Forgot Password ?</CommonLink>
+              <CommonLink onClick={()=> navigate(ROUTES.FORGOT_PASSWORD)}>Forgot Password ?</CommonLink>
               <CustomButton
                 variant="contained"
                 size="large"
