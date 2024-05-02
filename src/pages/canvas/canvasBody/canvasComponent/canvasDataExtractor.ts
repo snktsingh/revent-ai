@@ -229,7 +229,12 @@ const useCanvasData = () => {
       }
     });
 
-    if (outputFormat && outputFormat.elements.length > 0 && titleText && subTitleText) {
+    if (
+      outputFormat &&
+      outputFormat.elements.length > 0 &&
+      titleText &&
+      subTitleText
+    ) {
       outputFormat.elements[0].title = titleText;
       outputFormat.elements[0].subTitle = subTitleText;
     }
@@ -251,7 +256,7 @@ const useCanvasData = () => {
           subHeading: '',
         });
       } else {
-        if(timelineArray && timelineArray.length){
+        if (timelineArray && timelineArray.length) {
           const lastTimeline = timelineArray[timelineArray.length - 1];
           lastTimeline && (lastTimeline.text = item.content);
         }
@@ -279,7 +284,11 @@ const useCanvasData = () => {
       return { data, title, subTitle, templateName, shape };
     });
     outputFormat.elements = modifiedRequestFormat;
-    if (tableData?.tableData && tableData?.tableData.length && tableData.tableData.length > 0) {
+    if (
+      tableData?.tableData &&
+      tableData?.tableData.length &&
+      tableData.tableData.length > 0
+    ) {
       outputFormat.elements = [];
       tableData.title = titleText;
       tableData.subTitle = subTitleText;

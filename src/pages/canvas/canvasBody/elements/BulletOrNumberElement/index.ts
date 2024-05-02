@@ -1,102 +1,100 @@
 import { BULLET_POINTS } from '@/constants/elementNames';
 import { IExtendedTextBoxOptions } from '@/interface/fabricTypes';
 import { fabric } from 'fabric';
-import {groupBy, pick, uniqueId} from "lodash"
+import { groupBy, pick, uniqueId } from 'lodash';
 
 export const useBulletOrNumberedText = () => {
-    const text = `Click to add a bullet point`;
-  
-    const renderBulletOrNumTextLine = function (
-      this: any,
-      method: any,
-      ctx: any,
-      line: any,
-      left: any,
-      top: any,
-      lineIndex: any
-    ) {
-      const style0 = this.getCompleteStyleDeclaration(lineIndex, 0);
-      // Determine the list type
-      const bullet =
-        this.listType === 'numbered'
-          ? [this.listCounter + '.']
-          : [this.listBullet];
-      const bulletLeft = left - style0.fontSize - 2;
-  
-      if (line.length) {
-        if (!this.isWrapping) {
-          if (this.tabPressed ) {
-            this._renderChars(
-              method,
-              ctx,
-              bullet,
-               30,
-              top,
-              lineIndex
-            );
-            this.isWrapping = !this.isEndOfWrapping(lineIndex);
-          } else {
-            this._renderChars(method, ctx, bullet, bulletLeft, top, lineIndex);
-            this.isWrapping = !this.isEndOfWrapping(lineIndex);
-            if (!this.isWrapping) {
-              if (this.listType === 'numbered') {
-                this.listCounter++;
-              }
+  const text = `Click to add a bullet point`;
+
+  const renderBulletOrNumTextLine = function (
+    this: any,
+    method: any,
+    ctx: any,
+    line: any,
+    left: any,
+    top: any,
+    lineIndex: any
+  ) {
+    const style0 = this.getCompleteStyleDeclaration(lineIndex, 0);
+    // Determine the list type
+    const bullet =
+      this.listType === 'numbered'
+        ? [this.listCounter + '.']
+        : [this.listBullet];
+    const bulletLeft = left - style0.fontSize - 2;
+
+    if (line.length) {
+      if (!this.isWrapping) {
+        if (this.tabPressed) {
+          this._renderChars(
+            method,
+            ctx,
+            bullet,
+            bulletLeft + 30,
+            top,
+            lineIndex
+          );
+          this.isWrapping = !this.isEndOfWrapping(lineIndex);
+        } else {
+          this._renderChars(method, ctx, bullet, bulletLeft, top, lineIndex);
+          this.isWrapping = !this.isEndOfWrapping(lineIndex);
+          if (!this.isWrapping) {
+            if (this.listType === 'numbered') {
+              this.listCounter++;
             }
           }
-        } else if (this.isEndOfWrapping(lineIndex)) {
-          this.isWrapping = false;
-          if (this.listType === 'numbered') {
-            this.listCounter++;
-          }
+        }
+      } else if (this.isEndOfWrapping(lineIndex)) {
+        this.isWrapping = false;
+        if (this.listType === 'numbered') {
+          this.listCounter++;
         }
       }
-  
-      if (lineIndex === this.textLines.length - 1) {
-        this.isWrapping = false;
-        this.listCounter = 1;
-      }
-  
-      this._renderChars(method, ctx, line, left, top, lineIndex);
-    };
-  
-    class CustomTextbox
-      extends fabric.Textbox
-      implements IExtendedTextBoxOptions
-    {
-      tabPressed: boolean = false;
-  
-      // onKeyDown(e: any): void {
-      //   if (e.keyCode === 9) {
-      //     console.log('Tab pressed');
-      //     this.tabPressed = true;
-      //     e.preventDefault();
-      //     this.canvas?.requestRenderAll();
-      //   }
-      // }
     }
-  
-    const BulletText = new CustomTextbox(text, {
-      fontFamily: 'sans-serif',
-      lineHeight: 1.4,
-      left: 100,
-      top: 150,
-      width: 450,
-      fontSize: 20,
-      objectCaching: false,
-      isWrapping: false,
-      listType: 'bullet',
-      listBullet: '\u2022',
-      listCounter: 0,
-      name: BULLET_POINTS,
-      fill: '#404040',
-    } as IExtendedTextBoxOptions);
-    BulletText._renderTextLine = renderBulletOrNumTextLine;
-  
-    return { BulletText, renderBulletOrNumTextLine };
+
+    if (lineIndex === this.textLines.length - 1) {
+      this.isWrapping = false;
+      this.listCounter = 1;
+    }
+
+    this._renderChars(method, ctx, line, left, top, lineIndex);
   };
 
+  class CustomTextbox
+    extends fabric.Textbox
+    implements IExtendedTextBoxOptions
+  {
+    tabPressed: boolean = false;
 
+    // onKeyDown(e: any): void {
+    //   if (e.keyCode === 9) {
+    //     console.log('Tab pressed');
+    //     this.tabPressed = true;
+    //     e.preventDefault();
+    //     this.canvas?.requestRenderAll();
+    //   }
+    // }
+  }
+
+  const BulletText = new CustomTextbox(text, {
+    fontFamily: 'sans-serif',
+    lineHeight: 1.4,
+    left: 100,
+    top: 150,
+    width: 450,
+    fontSize: 20,
+    objectCaching: false,
+    isWrapping: false,
+    listType: 'bullet',
+    listBullet: '\u2022',
+    listCounter: 0,
+    name: BULLET_POINTS,
+    fill: '#404040',
+  } as IExtendedTextBoxOptions);
+  BulletText._renderTextLine = renderBulletOrNumTextLine;
+
+  return { BulletText, renderBulletOrNumTextLine };
+};
 
 // const REGEX_VAR = new RegExp(/\`[\s*a-zA-Z0-9-_.@$!%,();:\/"|&']+?\`/g)
 
@@ -120,7 +118,6 @@ export const useBulletOrNumberedText = () => {
 // fabric.Textbox.prototype.lineStyles = {};
 // //@ts-ignore
 // fabric.Textbox.prototype.bulletStyleMap = ["", "●", "■", "○", "◦", "•"];
-
 
 // fabric.Text.prototype.initDimensions = function() {
 //     if (this.__skipDimension) {
@@ -312,7 +309,7 @@ export const useBulletOrNumberedText = () => {
 //         // Perform actions when a key is released
 //         if (e.keyCode === 9) {
 //             // Tab key pressed
-           
+
 //             var start = this.selectionStart;
 //             var end = this.selectionEnd;
 //             var text = this.text;
@@ -375,7 +372,6 @@ export const useBulletOrNumberedText = () => {
 //             }
 //         }
 //         if (this.isEditing && (e.keyCode === 13 && e.code === "Enter")){
-
 
 //             // Get the current line index and the line's indent level
 //             const cursorLineIndexSkip = this.get2DCursorLocation(this.selectionStart)?.lineIndex;
@@ -519,7 +515,6 @@ export const useBulletOrNumberedText = () => {
 //         return graphemeLines;
 
 //     };
-
 
 //     isLineIndent (line) {
 //         var lineIndex = this._styleMap && this._styleMap[line] ? this._styleMap[line].line : line;
@@ -672,17 +667,13 @@ export const useBulletOrNumberedText = () => {
 //         }
 //     };
 
-
-
 //     _getLineLeftOffset (lineIndex) {
 //         var indentSpace = this.getIndentSpace(lineIndex), lineWidth = this.getLineWidth(lineIndex) + indentSpace;
 //         return "center" === this.textAlign ? (this.width - lineWidth) / 2 + indentSpace : "right" === this.textAlign ? this.width - lineWidth + indentSpace : indentSpace
 //     };
 
-
 //     _renderTextLine (method, ctx, line, left, top, lineIndex) {
 //         //@ts-ignore
-
 
 //         this.callSuper("_renderTextLine", method, ctx, line, left, top, lineIndex);
 //         const { text } = this.getLineBulletText(lineIndex);
@@ -692,7 +683,6 @@ export const useBulletOrNumberedText = () => {
 //             this._renderChar(method, ctx, lineIndex, 0, this.isNumberBullet ? text + "." : text, left, top);
 //         }
 //     };
-
 
 //     handleMouseUp(e: fabric.IEvent<Event>) {
 //         if (!this.isEditing && this.canvas) {

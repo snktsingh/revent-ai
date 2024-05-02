@@ -100,9 +100,13 @@ const CanvasComponent: React.FC = () => {
           dispatch(toggleRegenerateButton(true));
         }
 
+
+
+
         updateCanvasSlideData(canvas, canvasJS.id);
         console.log('canvas 6');
         forEachCanvasObject(canvas);
+        console.log('canvas 7');
         console.log('canvas 7');
         // canvas Events
         canvas.on('selection:created', handleElementBarSelection);

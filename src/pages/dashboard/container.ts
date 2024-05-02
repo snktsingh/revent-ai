@@ -4,8 +4,15 @@ import {
   setVariantImageAsMain,
   updateCanvasList,
 } from '@/redux/reducers/canvas';
+import { CanvasItem } from '@/interface/storeTypes';
+import {
+  setCanvas,
+  setVariantImageAsMain,
+  updateCanvasList,
+} from '@/redux/reducers/canvas';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { deletePresentation, fetchPPTList } from '@/redux/thunk/dashboard';
+import { useEffect, useState } from 'react';
 import { useEffect, useState } from 'react';
 
 const useDashboard = () => {

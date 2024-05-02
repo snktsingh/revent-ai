@@ -81,10 +81,13 @@ export default function Templates() {
 
     if (hasVariantsInCanvasList) {
       setOpen(true);
-    } else {
+    }else {
       dispatch(setThemeId(theme.themeId));
     }
-    getElementsData((canvasJS.originalSlideData as any).objects, theme.themeId);
+    getElementsData(
+      (canvasJS.originalSlideData as any).objects,
+      theme.themeId
+    )
   };
 
   const handleClose = () => {
