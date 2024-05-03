@@ -143,6 +143,24 @@ export const updatePresentationTheme = createAsyncThunk(
   }
 );
 
+//upload Custom Theme
+export const uploadCustomTheme = createAsyncThunk(
+  'ppt/uploadCustomTheme',
+  async (file: File) => {
+    const formData = new FormData();
+    formData.append('files', file);
+    try {
+      const response = await FetchUtils.postRequest(
+        `${ENDPOINT.PPT.UPLOAD_THEME}`,
+        formData
+      );
+      return response.data;
+    } catch (error) {
+      return error;
+    }
+  }
+);
+
 const thunkSlice = createSlice({
   name: 'singleSlideData',
   initialState,

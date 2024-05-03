@@ -25,6 +25,7 @@ export const ENDPOINT = {
     GET_PPT_DETAILS: 'ppt/get-presentation',
     CANVAS_JSON : '/canvas-data',
     UPDATE_THEME: 'ppt/change-theme',
+    UPLOAD_THEME : '/template/upload-custom',
   },
   DASHBOARD: {
     FETCH_PPT_LIST: 'ppt/get-all-presentation',

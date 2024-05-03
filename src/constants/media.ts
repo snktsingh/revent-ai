@@ -66,6 +66,8 @@ const Canvas_Arrow = `<svg fill="#000000" height="256px" width="256px" version="
 import ForgotSvgIcon from "../assets/forgotPng.svg";
 import LockSvgIcon from "../assets/passwordLock.svg";
 import ResetSuccessIcon from "../assets/succesfullResetPass.jpg";
+import FileUploadIcon from "../assets/fileUploadIcons.svg";
+import DoneGif from "../assets/Done.gif";
 
 export {
   Back,
@@ -135,5 +137,7 @@ export {
   Blank,
   ForgotSvgIcon,
   LockSvgIcon,
-  ResetSuccessIcon
+  ResetSuccessIcon,
+  FileUploadIcon,
+  DoneGif
 };
