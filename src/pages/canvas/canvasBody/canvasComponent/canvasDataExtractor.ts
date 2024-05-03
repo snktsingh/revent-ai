@@ -427,7 +427,7 @@ const useCanvasData = () => {
       enabledEl.push(
         'Image',
         'Quotes',
-        'List',
+        'Team List',
         'Paragraph',
         'Bullet',
         'Table',
@@ -441,7 +441,7 @@ const useCanvasData = () => {
       enabledEl.push(
         'Image',
         'Quotes',
-        'List',
+        'Team List',
         'Paragraph',
         'Bullet',
         'Table',
@@ -456,7 +456,7 @@ const useCanvasData = () => {
       enabledEl.push(
         'Image',
         'Quotes',
-        'List',
+        'Team List',
         'Paragraph',
         'Bullet',
         'Table',
@@ -477,7 +477,7 @@ const useCanvasData = () => {
       enabledEl.push(
         'Image',
         'Quotes',
-        'List',
+        'Team List',
         'Paragraph',
         'Bullet',
         'Table',

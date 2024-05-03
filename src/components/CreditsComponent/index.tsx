@@ -6,6 +6,8 @@ import { getUserCredit } from '@/redux/thunk/user';
 const CreditsComponent = () => {
     const dispatch = useAppDispatch();
     const { creditAmount } = useAppSelector(state => state.manageUser)
+    const { activeSlideID, canvasList } = useAppSelector(state => state.canvas);
+    const index = canvasList.findIndex((slide) => slide.id === activeSlideID);
 
     useEffect(()=> {
         dispatch(getUserCredit())

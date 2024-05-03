@@ -17,6 +17,8 @@ import { IUpdatePptName } from '@/interfaces/pptInterfaces';
 import { canvasData } from '@/utils/transformResData';
 import { toggleSelectingSlide } from '../reducers/slide';
 import { IUpdateTheme } from '@/interfaces/themeInterface';
+import { Action } from '@dnd-kit/core/dist/store';
+import { getUserCredit } from './user';
 
 const initialState: ISlideRequests = {
   pptUrl: '',
@@ -56,6 +58,7 @@ export const fetchSlideImg = createAsyncThunk(
       variants: res.data.variants,
     };
     dispatch(updateCurrentCanvas(updatedCanvasVariants));
+    dispatch(getUserCredit());
     return res.data;
   }
 );
@@ -131,10 +134,11 @@ export const getSlideJSONData = createAsyncThunk(
 //Update Theme for Presentation
 export const updatePresentationTheme = createAsyncThunk(
   'ppt/updatePptTheme',
-  async ({ pptId, themeId }: IUpdateTheme) => {
+  async ({ pptId, themeId }: IUpdateTheme, { dispatch }) => {
     const res = await FetchUtils.getRequest(
       `${ENDPOINT.PPT.UPDATE_THEME}?presentationId=${pptId}&themeId=${themeId}`
     );
+    dispatch(getUserCredit());
     return res;
   }
 );
@@ -157,6 +161,9 @@ const thunkSlice = createSlice({
     },
     setPresentationID: (state, action: PayloadAction<number>) => {
       state.presentationId = action.payload;
+    },
+    updateStateLoading: (state, action: PayloadAction<boolean>) => {
+      state.isLoading = action.payload;
     },
   },
   extraReducers(builder) {
@@ -237,6 +244,7 @@ export const {
   setUnauthMessage,
   setEditPptIndex,
   setPresentationID,
+  updateStateLoading,
 } = thunkSlice.actions;
 
 export default thunkSlice.reducer;

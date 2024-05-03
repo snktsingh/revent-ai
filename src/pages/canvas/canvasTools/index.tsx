@@ -96,7 +96,7 @@ const CanvasTools = () => {
   const [searchFont, setSearchFont] = useState<string>();
   const selectRef = useRef<HTMLDivElement>(null);
   const listRef = useRef(null);
-
+  const { isLoading } = useAppSelector(state => state.thunk);
   const [anchorShapesEl, setAnchorShapesEl] = useState<null | HTMLElement>(
     null
   );
@@ -244,6 +244,7 @@ const CanvasTools = () => {
           onClick={() => {
             dispatch(toggleTemplateVisibility());
           }}
+          disabled={isLoading}
         >
           <Stack direction="row" spacing={1}>
             <img src={Template} />
@@ -252,6 +253,7 @@ const CanvasTools = () => {
         </ToolOutlinedButton>
         <ToolOutlinedButton
           onClick={handleAddNewSlide}
+          disabled={isLoading}
         >
           <Stack direction="row" spacing={1}>
             <img src={Add} />

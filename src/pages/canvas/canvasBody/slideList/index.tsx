@@ -40,7 +40,7 @@ export default function SlideList() {
     canvasJS
   } = useSlideList();
 
-  const { pptDetails } = useAppSelector(state => state.thunk);
+  const { pptDetails, isLoading } = useAppSelector(state => state.thunk);
   
 
   useEffect(() => {
@@ -103,7 +103,7 @@ export default function SlideList() {
               ref={setNodeRef}
               {...attributes}
               onPointerDown={event => {
-                handleSlideCardClick(canvas);
+                {!isLoading && handleSlideCardClick(canvas)};
                 if (listeners?.onPointerDown) {
                   listeners.onPointerDown(event);
                 }

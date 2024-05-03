@@ -6,7 +6,7 @@ import {
   updateCanvasList,
 } from '@/redux/reducers/canvas';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { setPresentationName, updatePptName } from '@/redux/thunk/thunk';
+import { setPresentationName, updatePptName, updateStateLoading } from '@/redux/thunk/thunk';
 import { FetchUtils } from '@/utils/fetch-utils';
 import React, { ChangeEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -87,6 +87,7 @@ const useCanvasHeader = () => {
   };
 
   const handleGoBack = () => {
+    dispatch(updateStateLoading(false));
     navigate('/dashboard', { replace: true });
     let canvas: CanvasItem[] = [
       {

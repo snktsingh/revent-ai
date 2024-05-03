@@ -96,13 +96,16 @@ export default function Templates() {
   };
 
   useEffect(() => {
+     dispatch(getAllThemes());
+  },[])
+
+  useEffect(() => {
     const hasVariants = canvasList.some(item => item.variants.length > 0);
     setIsVariantsAvailable(hasVariants);
     const index = canvasList.findIndex(canvas => canvas.id === canvasJS.id);
     if (index) {
       setCanvasIndex(index);
     }
-    dispatch(getAllThemes());
   }, [canvasJS.canvas]);
 
   // useEffect(()=>{},[selectedThemeId]);

@@ -46,7 +46,7 @@ const MainCanvasHeader = ({ pId }: any) => {
     handleGoBack,
   } = useCanvasHeader();
 
-  const { presentationId, presentationName, pptDetails } = useAppSelector(
+  const { presentationId, presentationName, pptDetails, isLoading } = useAppSelector(
     state => state.thunk
   );
 
