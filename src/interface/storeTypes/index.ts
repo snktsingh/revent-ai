@@ -54,6 +54,8 @@ export interface IListofSlides {
 export interface VariantsType {
   pptUrl: string;
   imagesUrl: string;
+  active : boolean;
+  slideVariantId : number
 }
 
 export interface ISlideRequests {

@@ -32,8 +32,9 @@ export const PreviewContainer = styled.span`
 `;
 
 export const FileUploadDiv = styled.div`
-  width: fit-content;
-  height: fit-content;
+  width: 100%;
+  height: 100%;
+  padding: 5px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -41,11 +42,12 @@ export const FileUploadDiv = styled.div`
 `;
 
 export const FileUploadLabel = styled.label`
-  cursor: pointer;
-  padding: 1rem 8rem;
+  width: 100%;
+  height: 100%;
   border: 2px dashed #ccc;
   border-radius: 5px;
-
+  cursor: pointer;
+  padding: 1.5rem;
   &.dragover {
     border-color: #004fba;
   }
@@ -138,7 +140,7 @@ export const LoadingBar = styled.div`
   position: relative;
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
@@ -194,7 +196,7 @@ export const Img = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  
+
   ${Card}:hover & {
     transition: 0.5s ease-in-out;
   }
@@ -218,3 +220,38 @@ export const TextContent = styled.div`
   justify-content: space-between;
 `;
 
+export const SubText = styled.div`
+  margin-top: 8px;
+  opacity: 0.7;
+`;
+
+export const HeadText = styled.div`
+  font-weight: bold;
+  font-size: large;
+`;
+
+export const UploadedFileContainer = styled.span`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 2px dashed #ccc;
+  padding: 1.5rem;
+`;
+
+export const UploadedFileImage = styled.img`
+  width: 40px;
+`;
+
+export const UploadedFileText = styled.b`
+  margin-top: 10px;
+`;
+
+export const UploadedFileName = styled.p`
+  margin-top: 5px;
+`;
+
+export const CancelUploadImage = styled.img`
+  width: 40px;
+  cursor: pointer;
+`;

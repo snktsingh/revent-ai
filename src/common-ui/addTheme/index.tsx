@@ -15,12 +15,14 @@ import {
 import { ChangeEvent, DragEvent, useEffect, useRef, useState } from 'react';
 import {
   BrowseButton,
+  CancelUploadImage,
   Card,
   ColorContainer,
   FileUploadDesign,
   FileUploadDiv,
   FileUploadLabel,
   H1,
+  HeadText,
   Img,
   Label,
   LoaderContainer,
@@ -30,15 +32,20 @@ import {
   StyledCloudUploadIcon,
   StyledFileInput,
   StyledText,
+  SubText,
   SuccessContainer,
   TextBox,
   TextContent,
   ThemeContainer,
+  UploadedFileContainer,
+  UploadedFileImage,
+  UploadedFileName,
+  UploadedFileText,
 } from './style';
 
 import { setTextColor } from '@/redux/reducers/canvas';
 import ImageIcon from '@mui/icons-material/Image';
-import { CancelUpload, DoneGif, FileUploadIcon } from '@/constants/media';
+import { CancelUpload, DoneGif, FileUploadIcon, UploadTick } from '@/constants/media';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { toast } from 'react-toastify';
 import { uploadCustomTheme } from '@/redux/thunk/thunk';
@@ -64,10 +71,10 @@ const CanvasThemes = () => {
   const [isFileUploaded, setIsFileUploaded] = useState<boolean>(false);
   const [isUploading, setIsUploading] = useState<boolean>(false);
 
-  useEffect(()=> {
-     setIsFileUploaded(false);
-     setIsUploading(false);
-     setSelectedFiles(null);
+  useEffect(() => {
+    setIsFileUploaded(false);
+    setIsUploading(false);
+    setSelectedFiles(null);
   }, [toggleTheme.openAddTheme === false])
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -147,7 +154,14 @@ const CanvasThemes = () => {
       open={toggleTheme.openAddTheme}
       onClose={() => dispatch(setNewTheme(false))}
     >
-      {isUploading ? <></> : <DialogTitle>Add New Theme</DialogTitle> }
+      {isUploading ? <></> : <DialogTitle>
+        <HeadText>
+        Create new theme
+        </HeadText>
+        <SubText>
+          Add any existing pptx brand file to use as a theme on Revent Press
+        </SubText>
+      </DialogTitle>}
       <DialogContent>
         {/* <DialogContentText>
           Please select a logo and a color code to create a new theme.
@@ -229,52 +243,63 @@ const CanvasThemes = () => {
             isFileUploaded ?
               <SuccessContainer>
                 <img src={DoneGif} width={200} alt="uploadDone" />
-                <StyledText>Your submission has been received successfully. We'll process it and notify you via email once it's available. Thank you for your patience!</StyledText>
+                <StyledText>Thank you for adding a theme on Revent Press! You will be notified via email once the theme is ready to use.</StyledText>
                 <Button type="submit" variant="contained" onClick={() => dispatch(setNewTheme(false))} style={{ backgroundColor: '#004FBA', color: 'white' }}>
                   Close
                 </Button>
               </SuccessContainer>
               :
-              <FileUploadDiv >
-                <FileUploadLabel
-                  ref={fileUploadLabelRef}
-                  onDragEnter={handleDragEnter}
-                  onDragOver={handleDragOver}
-                  onDragLeave={handleDragLeave}
-                  onDrop={handleDrop}
-                >
-                  <FileUploadDesign>
-                    <img src={FileUploadIcon} width={200} alt="fileUpload" />
-                    <Typography>Drag and Drop</Typography>
-                    <Typography>or</Typography>
-                    <BrowseButton>
-                      Browse file
-                    </BrowseButton>
-                  </FileUploadDesign>
-                  <StyledFileInput id="file" type="file" accept=".ppt, .pptx" onChange={handleFileChange} ref={inputRef} />
-                </FileUploadLabel>
-                {selectedFiles && 
-                 <Card>
-                 <Img >.PPTX</Img>
-                 <TextBox>
-                   <TextContent>
-                     <H1>{selectedFiles!.name}</H1>
-                   </TextContent>
-                 </TextBox>
-               </Card>
-               }
-              </FileUploadDiv>
+              <>
+                {
+                  selectedFiles ?
+
+                    <UploadedFileContainer>
+                      <br />
+                      <UploadedFileImage src={UploadTick} />
+                      <br />
+                      <UploadedFileText>File Uploaded</UploadedFileText>
+                      <UploadedFileName>{selectedFiles.name}</UploadedFileName>
+                      <br />
+                      <CancelUploadImage
+                        src={CancelUpload}
+                        onClick={() => setSelectedFiles(null)}
+                      />
+                    </UploadedFileContainer>
+
+                    :
+                    <FileUploadDiv >
+                      <FileUploadLabel
+                        ref={fileUploadLabelRef}
+                        onDragEnter={handleDragEnter}
+                        onDragOver={handleDragOver}
+                        onDragLeave={handleDragLeave}
+                        onDrop={handleDrop}
+                      >
+                        <FileUploadDesign>
+                          <img src={FileUploadIcon} width={200} alt="fileUpload" />
+                          <Typography>Drag and Drop</Typography>
+                          <Typography>or</Typography>
+                          <BrowseButton>
+                            Browse file
+                          </BrowseButton>
+                          <StyledFileInput id="file" type="file" accept=".ppt, .pptx" onChange={handleFileChange} ref={inputRef} />
+                        </FileUploadDesign>
+                      </FileUploadLabel>
+                    </FileUploadDiv>
+                }
+              </>
+
         }
       </DialogContent>
       <DialogActions>
         {
-          isUploading ?  <></> : isFileUploaded ? <></> :
+          isUploading ? <></> : isFileUploaded ? <></> :
             <Button type="submit" variant="contained" onClick={handleAddTheme} style={{ backgroundColor: '#004FBA', color: 'white', marginRight: 11 }}>
               Add Theme
             </Button>
         }
       </DialogActions>
-    </Dialog>
+    </Dialog >
   );
 };
 export default CanvasThemes;

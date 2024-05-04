@@ -36,6 +36,8 @@ import useCanvasData from '../canvasComponent/canvasDataExtractor';
 import { ThemesSliderContainer } from './style';
 import { FetchUtils } from '@/utils/fetch-utils';
 import ENDPOINT from '@/constants/endpoint';
+import { processSlides } from '@/utils/transformResData';
+import { updateCanvasList } from '@/redux/reducers/canvas';
 
 export default function Templates() {
   const { customFabricProperties } = useCanvasComponent();
@@ -121,7 +123,12 @@ export default function Templates() {
           pptId: thunk.presentationId,
           themeId: themeId,
         })
-      );
+      ).then((res : any) => {
+        // if(res.payload.data.slides){
+        //   const slidesData = processSlides(res.payload.data.slides, res.payload.data.presentationId);
+        //   dispatch(updateCanvasList(slidesData));
+        // }
+      });
     }
     setOpen(false);
   };
@@ -155,7 +162,7 @@ export default function Templates() {
         <Button onClick={() => dispatch(setNewTheme(true))}>
           <Stack direction="row" spacing={1}>
             <img src={Add} />
-            <span>Add New Theme</span>
+            <span>Create new theme</span>
           </Stack>
         </Button>
         <br />
