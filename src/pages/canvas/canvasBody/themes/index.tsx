@@ -27,6 +27,7 @@ import {
 import {
   fetchSlideImg,
   getAllThemes,
+  toggleThemeChange,
   updatePresentationTheme,
 } from '@/redux/thunk/thunk';
 import { useCanvasComponent } from '../canvasComponent/container';
@@ -83,13 +84,10 @@ export default function Templates() {
 
     if (hasVariantsInCanvasList) {
       setOpen(true);
-    }else {
+    } else {
       dispatch(setThemeId(theme.themeId));
     }
-    getElementsData(
-      (canvasJS.originalSlideData as any).objects,
-      theme.themeId
-    )
+    getElementsData((canvasJS.originalSlideData as any).objects, theme.themeId);
   };
 
   const handleClose = () => {
@@ -98,8 +96,8 @@ export default function Templates() {
   };
 
   useEffect(() => {
-     dispatch(getAllThemes());
-  },[])
+    dispatch(getAllThemes());
+  }, []);
 
   useEffect(() => {
     const hasVariants = canvasList.some(item => item.variants.length > 0);
@@ -112,6 +110,7 @@ export default function Templates() {
 
   // useEffect(()=>{},[selectedThemeId]);
   const changeThemeRequest = () => {
+    dispatch(toggleThemeChange());
     dispatch(setThemeId(currentTheme.themeId));
     if (requestData?.elements && requestData?.elements.length == 0) {
       toast.warning('Canvas is empty');
@@ -123,11 +122,15 @@ export default function Templates() {
           pptId: thunk.presentationId,
           themeId: themeId,
         })
-      ).then((res : any) => {
-        // if(res.payload.data.slides){
-        //   const slidesData = processSlides(res.payload.data.slides, res.payload.data.presentationId);
-        //   dispatch(updateCanvasList(slidesData));
-        // }
+      ).then((res: any) => {
+        console.log(res);
+        if (res.payload.status == 200) {
+          window.location.reload();
+          toast.success('Theme Updated ');
+        } else {
+          dispatch(toggleThemeChange());
+          toast.error('Theme updating failed');
+        }
       });
     }
     setOpen(false);

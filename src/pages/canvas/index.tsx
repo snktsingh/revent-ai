@@ -12,6 +12,7 @@ import {
   getSlideJSONData,
   setAuthenticateLoader,
   setUnauthMessage,
+  toggleThemeChange,
 } from '@/redux/thunk/thunk';
 import { toast } from 'react-toastify';
 import { processSlides } from '@/utils/transformResData';
@@ -26,10 +27,13 @@ import { toggleSelectingSlide } from '@/redux/reducers/slide';
 import { updatePresentationLoading } from '@/redux/reducers/elements';
 import { useSearchParams } from 'react-router-dom';
 import { setThemeId } from '@/redux/reducers/theme';
+import { Backdrop, CircularProgress, Stack } from '@mui/material';
 
 const MainCanvas = () => {
   const dispatch = useAppDispatch();
-  const { isAuthenticating } = useAppSelector(state => state.thunk);
+  const { isAuthenticating, themePreviewLoader } = useAppSelector(
+    state => state.thunk
+  );
   const { canvasJS } = useAppSelector(state => state.canvas);
   const { isPresentationLoading } = useAppSelector(state => state.element);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -54,18 +58,28 @@ const MainCanvas = () => {
         setSearchParams({ slide: res.payload.slides[0][0].slideId });
       }
 
-      const slidesData = processSlides(res.payload.slides, res.payload.presentationId);
+      const slidesData = processSlides(
+        res.payload.slides,
+        res.payload.presentationId
+      );
       if (slidesData && slidesData.length > 0 && slidesData[0].canvas) {
-        dispatch(getSlideJSONData({ pptId, slideId: res.payload.slides[0][0].slideId })).then((response) => {
+        dispatch(
+          getSlideJSONData({ pptId, slideId: res.payload.slides[0][0].slideId })
+        ).then(response => {
           if (response.payload) {
-            dispatch(updateCurrentCanvas({ ...slidesData[0], originalSlideData: response.payload }));
+            dispatch(
+              updateCurrentCanvas({
+                ...slidesData[0],
+                originalSlideData: response.payload,
+              })
+            );
           }
         });
         dispatch(setThemeId(res.payload.themeId));
         dispatch(setActiveSlideId(1));
         dispatch(updateCanvasList(slidesData));
-        res.payload.slides[0].forEach((variant : any) => {
-          if (variant.active){
+        res.payload.slides[0].forEach((variant: any) => {
+          if (variant.active) {
             dispatch(setVariantImageAsMain(variant.thumbnailUrl));
           }
         });
@@ -88,6 +102,18 @@ const MainCanvas = () => {
           <ReventingLoader />
         ) : (
           <div>
+            <Backdrop
+              sx={{
+                color: '#fff',
+                zIndex: theme => theme.zIndex.drawer + 1,
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+              open={themePreviewLoader}
+            >
+              <CircularProgress color="inherit" />
+              <p>Changing Presentation theme please wait...</p>
+            </Backdrop>
             <MainCanvasHeader pId={pId} />
             <CanvasTools />
             <CanvasBody />

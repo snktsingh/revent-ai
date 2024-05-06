@@ -8,19 +8,19 @@ export interface TableDetails {
 }
 
 export interface listObjType {
-  canvasId : number,
-  path : string,
-  file : any
+  canvasId: number;
+  path: string;
+  file: any;
 }
 export interface CanvasItem {
-  id: number; 
+  id: number;
   canvas: object;
   notes?: string;
   variants: VariantsType[];
   originalSlideData: object;
-  listImages : listObjType[];
-  slideId : number;
-  presentationId : number;
+  listImages: listObjType[];
+  slideId: number;
+  presentationId: number;
 }
 
 export interface IPresentationDetails {
@@ -54,8 +54,8 @@ export interface IListofSlides {
 export interface VariantsType {
   pptUrl: string;
   imagesUrl: string;
-  active : boolean;
-  slideVariantId : number
+  active: boolean;
+  slideVariantId: number;
 }
 
 export interface ISlideRequests {
@@ -71,6 +71,7 @@ export interface ISlideRequests {
   pptDetails: any;
   unAuthMessage: boolean;
   selectedSlideIndex: number;
+  themePreviewLoader: boolean;
 }
 
 export interface IShapeRequest {

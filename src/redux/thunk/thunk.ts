@@ -33,6 +33,7 @@ const initialState: ISlideRequests = {
   pptDetails: null,
   unAuthMessage: false,
   selectedSlideIndex: 0,
+  themePreviewLoader: false,
 };
 
 export const fetchSlideImg = createAsyncThunk(
@@ -46,9 +47,17 @@ export const fetchSlideImg = createAsyncThunk(
       `${isFormData ? ENDPOINT.GEN_PPT_IMAGES : ENDPOINT.GEN_PPT_MULTI}`,
       req
     );
-    dispatch(
-      updateSlideJSONData({ pptId, canvasJSON, slideId: res.data.slideId })
-    );
+    const currentSlideId = (getState() as RootState).canvas.canvasJS.slideId;
+    if (currentSlideId == 1) {
+      dispatch(
+        createSlideJSONData({ pptId, canvasJSON, slideId: res.data.slideId })
+      );
+    } else {
+      dispatch(
+        updateSlideJSONData({ pptId, canvasJSON, slideId: res.data.slideId })
+      );
+    }
+
     console.log(res.data);
     dispatch(setVariantImageAsMain(res.data.variants[0].imagesUrl));
     dispatch(toggleIsVariantSelected(true));
@@ -101,10 +110,22 @@ export const fetchPptDetails = createAsyncThunk(
 );
 
 // Update Slide JSON Data
-export const updateSlideJSONData = createAsyncThunk(
+export const createSlideJSONData = createAsyncThunk(
   'slide/update-json',
   async ({ pptId, slideId, canvasJSON }: any) => {
     const res = await FetchUtils.postRequest(
+      `${ENDPOINT.PPT.CANVAS_JSON}/${pptId}/${slideId}`,
+      canvasJSON
+    );
+    console.log({ json: res.data });
+    return res.data;
+  }
+);
+
+export const updateSlideJSONData = createAsyncThunk(
+  'slide/update-json',
+  async ({ pptId, slideId, canvasJSON }: any) => {
+    const res = await FetchUtils.putRequest(
       `${ENDPOINT.PPT.CANVAS_JSON}/${pptId}/${slideId}`,
       canvasJSON
     );
@@ -182,6 +203,9 @@ const thunkSlice = createSlice({
     },
     updateStateLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
+    },
+    toggleThemeChange: state => {
+      state.themePreviewLoader = !state.themePreviewLoader;
     },
   },
   extraReducers(builder) {
@@ -263,6 +287,7 @@ export const {
   setEditPptIndex,
   setPresentationID,
   updateStateLoading,
+  toggleThemeChange,
 } = thunkSlice.actions;
 
 export default thunkSlice.reducer;
