@@ -13,6 +13,7 @@ import {
   ThemeCardContainer,
   ThemeCardTitle,
   ThemeImage,
+  ThemeTitle,
   Title,
 } from './style';
 import { Stack, Typography } from '@mui/material';
@@ -29,10 +30,21 @@ import { theme } from '@/constants/theme';
 import ReventingLoader from '@/common-ui/loader';
 import ThumbnailPreview from '@/common-ui/thumbnailPreview';
 import CanvasThemes from '@/common-ui/addTheme';
+import { useState } from 'react';
 
 const AppThemes = () => {
   const { navigate, thunk, dispatch, selectedThemeId, handleGenerate } =
     useStartTheme();
+
+  const [searchTerm, setSearchTerm] = useState<string>('');
+
+  const filteredThemeList =
+    searchTerm.length > 0
+      ? thunk.themesList.filter((theme) =>
+        theme.themeName.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+      : thunk.themesList;
+
 
   return (
     <TemplateContainer>
@@ -47,7 +59,7 @@ const AppThemes = () => {
           <h2>Select a Base Theme</h2>
           <SearchBarGroup>
             <Icon />
-            <StyledInput type="search" placeholder="Search" />
+            <StyledInput type="search" placeholder="Search" onChange={(e) => setSearchTerm(e.target.value)} />
           </SearchBarGroup>
         </HeadingContainer>
         <ThemeCardContainer>
@@ -76,7 +88,7 @@ const AppThemes = () => {
             />
           ) : (
             <>
-              {thunk.themesList.map((theme, i) => {
+              {filteredThemeList.map((theme, i) => {
                 return (
                   <ThemeCardTitle
                     key={theme.themeId}
@@ -99,7 +111,7 @@ const AppThemes = () => {
                         componentTitle='mainThemes'
                       />
                     </ThemeCard>
-                    {theme.title}
+                    <ThemeTitle>{theme.themeName}</ThemeTitle>
                   </ThemeCardTitle>
                 );
               })}

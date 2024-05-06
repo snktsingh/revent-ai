@@ -107,3 +107,8 @@ export const Icon = styled(SearchIcon)`
   width: 1rem;
   height: 1rem;
 `;
+
+export const ThemeTitle = styled.div`
+ opacity: 0.8;
+ margin: .5rem 0 0 .2rem;
+`;
