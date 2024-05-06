@@ -40,10 +40,10 @@ const MainCanvasHeader = ({ pId }: any) => {
     handleCloseProfileMenu,
     handleShareClick,
     handleShareClose,
-    handleInputChange,
     updatePresentationName,
     isUpdating,
     handleGoBack,
+    handleInputChange
   } = useCanvasHeader();
 
   const { presentationId, presentationName, pptDetails, isLoading } = useAppSelector(
@@ -60,16 +60,6 @@ const MainCanvasHeader = ({ pId }: any) => {
     }
   };
 
-  useEffect(() => {
-    if (presentationName === '' || presentationName === undefined) {
-      dispatch(setPresentationName('Untitled-presentation'));
-      updatePresentationName({
-        presentationId: presentationId,
-        name: 'Untitled-presentation',
-      });
-    }
-  }, [presentationName]);
-
   return (
     <HeaderContainer>
       <MainIconButton onClick={handleWarningOpen}>
@@ -85,6 +75,7 @@ const MainCanvasHeader = ({ pId }: any) => {
           value={presentationName}
           onKeyDown={handleKeyDown}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            dispatch(setPresentationName(e.target.value));
             handleInputChange(e);
           }}
         />
