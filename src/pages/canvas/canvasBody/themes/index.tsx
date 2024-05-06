@@ -24,19 +24,30 @@ import {
   setThemeCode,
   setThemeId,
 } from '@/redux/reducers/theme';
-import { fetchSlideImg, getAllThemes } from '@/redux/thunk/thunk';
+import {
+  fetchSlideImg,
+  getAllThemes,
+  toggleThemeChange,
+  updatePresentationTheme,
+} from '@/redux/thunk/thunk';
 import { useCanvasComponent } from '../canvasComponent/container';
 import { toast } from 'react-toastify';
 import ThumbnailPreview from '@/common-ui/thumbnailPreview';
 import useCanvasData from '../canvasComponent/canvasDataExtractor';
 import { ThemesSliderContainer } from './style';
+import { FetchUtils } from '@/utils/fetch-utils';
+import ENDPOINT from '@/constants/endpoint';
+import { processSlides } from '@/utils/transformResData';
+import { updateCanvasList } from '@/redux/reducers/canvas';
 
 export default function Templates() {
-  const {  customFabricProperties } = useCanvasComponent();
+  const { customFabricProperties } = useCanvasComponent();
   const { getElementsData } = useCanvasData();
   const [tempCode, setTempCode] = useState('');
   const element = useAppSelector(state => state.element);
-  const { selectedThemeId, themeId } = useAppSelector(state => state.slideTheme);
+  const { selectedThemeId, themeId } = useAppSelector(
+    state => state.slideTheme
+  );
   const dispatch = useAppDispatch();
   const thunk = useAppSelector(state => state.thunk);
   const { requestData } = useAppSelector(state => state.apiData);
@@ -45,9 +56,10 @@ export default function Templates() {
   );
   const [currentTheme, setCurrentTheme] = useState<any>({});
   const [canvasIndex, setCanvasIndex] = useState<number>(0);
-  const [hasVariantsInCanvasList, setIsVariantsAvailable] = useState<boolean>(false);
+  const [hasVariantsInCanvasList, setIsVariantsAvailable] =
+    useState<boolean>(false);
   const theme = useTheme();
-  
+
   const handleDrawerClose = () => {
     dispatch(toggleTemplateVisibility());
   };
@@ -66,43 +78,60 @@ export default function Templates() {
 
   const [open, setOpen] = useState<boolean>(false);
 
-  const handleClickOpen = (theme : any) => {
+  const handleClickOpen = (theme: any) => {
     setCurrentTheme(theme);
-    
-    if(hasVariantsInCanvasList){
+    dispatch(setThemeId(theme.themeId));
+
+    if (hasVariantsInCanvasList) {
       setOpen(true);
-    }else {
+    } else {
       dispatch(setThemeId(theme.themeId));
     }
-    getElementsData(
-      (canvasJS.originalSlideData as any).objects,
-      theme.themeId
-    )
+    getElementsData((canvasJS.originalSlideData as any).objects, theme.themeId);
   };
-  
+
   const handleClose = () => {
     setOpen(false);
     dispatch(setThemeCode(''));
   };
-  
+
+  useEffect(() => {
+    dispatch(getAllThemes());
+  }, []);
+
   useEffect(() => {
     const hasVariants = canvasList.some(item => item.variants.length > 0);
     setIsVariantsAvailable(hasVariants);
-    const index = canvasList.findIndex((canvas) => canvas.id === canvasJS.id);
-    if(index){
+    const index = canvasList.findIndex(canvas => canvas.id === canvasJS.id);
+    if (index) {
       setCanvasIndex(index);
     }
-    dispatch(getAllThemes());
   }, [canvasJS.canvas]);
 
   // useEffect(()=>{},[selectedThemeId]);
   const changeThemeRequest = () => {
+    dispatch(toggleThemeChange());
     dispatch(setThemeId(currentTheme.themeId));
     if (requestData?.elements && requestData?.elements.length == 0) {
       toast.warning('Canvas is empty');
     } else {
-      console.log({ changeTheme: canvasJS.originalSlideData })
-      dispatch(fetchSlideImg(requestData));
+      console.log({ changeTheme: canvasJS.originalSlideData });
+      console.log(themeId);
+      dispatch(
+        updatePresentationTheme({
+          pptId: thunk.presentationId,
+          themeId: themeId,
+        })
+      ).then((res: any) => {
+        console.log(res);
+        if (res.payload.status == 200) {
+          window.location.reload();
+          toast.success('Theme Updated ');
+        } else {
+          dispatch(toggleThemeChange());
+          toast.error('Theme updating failed');
+        }
+      });
     }
     setOpen(false);
   };
@@ -122,7 +151,7 @@ export default function Templates() {
       anchor="left"
       open={element.openTemplates}
     >
-      <DrawerHeader >
+      <DrawerHeader>
         <h4>Themes</h4>
         <IconButton onClick={handleDrawerClose}>
           {theme.direction === 'ltr' ? (
@@ -136,7 +165,7 @@ export default function Templates() {
         <Button onClick={() => dispatch(setNewTheme(true))}>
           <Stack direction="row" spacing={1}>
             <img src={Add} />
-            <span>Add New Theme</span>
+            <span>Create new theme</span>
           </Stack>
         </Button>
         <br />
@@ -151,13 +180,14 @@ export default function Templates() {
                     handleClickOpen(themes);
                   }}
                   key={themes.themeId}
-                  className={
-                    themeId === themes.themeId
-                      ? 'clicked-card'
-                      : ''
-                  }
+                  className={themeId === themes.themeId ? 'clicked-card' : ''}
                 >
-                  <ThumbnailPreview src={themes.thumbnailUrl} alt={themes.themeId} style={{width: '100%',height:'auto'}} componentTitle='slideThemes' />
+                  <ThumbnailPreview
+                    src={themes.thumbnailUrl}
+                    alt={themes.themeId}
+                    style={{ width: '100%', height: 'auto' }}
+                    componentTitle="slideThemes"
+                  />
                 </ListSlideCard>
               );
             })}
@@ -173,21 +203,22 @@ export default function Templates() {
                 </DialogTitle>
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">
-                    Selecting this theme will change the current slide contents
+                    Selecting this theme will change theme for whole
+                    presentation
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                   <>
-                  <Button onClick={handleClose}>No</Button>
-                  <Button
-                    autoFocus
-                    onClick={() => {
-                      changeThemeRequest();
-                      // dispatch(setSelectedTheme(tempCode));
-                    }}
-                  >
-                    Yes
-                  </Button>
+                    <Button onClick={handleClose}>No</Button>
+                    <Button
+                      autoFocus
+                      onClick={() => {
+                        changeThemeRequest();
+                        // dispatch(setSelectedTheme(tempCode));
+                      }}
+                    >
+                      Yes
+                    </Button>
                   </>
                 </DialogActions>
               </>

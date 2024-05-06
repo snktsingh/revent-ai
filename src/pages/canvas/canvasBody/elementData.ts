@@ -109,8 +109,8 @@ export const elementData: IElementData[] = [
   {
     key: 9,
     icon: AddList,
-    title: 'List',
-    subtitle: 'Suitable for Client Lists, Team Lists',
+    title: 'Team List',
+    subtitle: 'Suitable for Team Member Lists',
     onClick: () => {},
   },
   {

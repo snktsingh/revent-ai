@@ -62,6 +62,7 @@ import FontDownloadOutlinedIcon from '@mui/icons-material/FontDownloadOutlined';
 import ColorizeOutlinedIcon from '@mui/icons-material/ColorizeOutlined';
 import WebFont from 'webfontloader';
 import FontsData from '../../../data/fontsData.json';
+import CreditsComponent from '@/components/CreditsComponent';
 
 interface FontItem {
   family: string;
@@ -95,7 +96,7 @@ const CanvasTools = () => {
   const [searchFont, setSearchFont] = useState<string>();
   const selectRef = useRef<HTMLDivElement>(null);
   const listRef = useRef(null);
-
+  const { isLoading } = useAppSelector(state => state.thunk);
   const [anchorShapesEl, setAnchorShapesEl] = useState<null | HTMLElement>(
     null
   );
@@ -222,7 +223,7 @@ const CanvasTools = () => {
     if (
       listRef.current &&
       ((listRef.current as HTMLUListElement).scrollHeight) - (listRef.current as HTMLUListElement).scrollTop <=
-      (listRef.current as HTMLUListElement).clientHeight+1000
+      (listRef.current as HTMLUListElement).clientHeight + 1000
     ) {
       // Load more fonts when user reaches the end of the list
       const start = filteredFonts.length;
@@ -243,6 +244,7 @@ const CanvasTools = () => {
           onClick={() => {
             dispatch(toggleTemplateVisibility());
           }}
+          disabled={isLoading}
         >
           <Stack direction="row" spacing={1}>
             <img src={Template} />
@@ -251,6 +253,7 @@ const CanvasTools = () => {
         </ToolOutlinedButton>
         <ToolOutlinedButton
           onClick={handleAddNewSlide}
+          disabled={isLoading}
         >
           <Stack direction="row" spacing={1}>
             <img src={Add} />
@@ -660,6 +663,9 @@ const CanvasTools = () => {
       >
         <img src={ShapesIcon} alt="shapes_icon" />
       </ShapesCard> */}
+
+      <CreditsComponent />
+
       <Menu
         id="basic-menu"
         anchorEl={anchorShapesEl}

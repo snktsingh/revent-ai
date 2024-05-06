@@ -24,7 +24,7 @@ export interface CanvasSate {
   canvasImageURl: string;
   selectedOriginalCanvas: boolean;
   presentationTitle: string;
-  isVariantSelected : boolean;
+  isVariantSelected: boolean;
 }
 const canvas = new fabric.Canvas(null);
 const canvasJSON = canvas.toObject();
@@ -41,7 +41,9 @@ export const initialState: CanvasSate = {
       notes: '',
       variants: [],
       originalSlideData: {},
-      listImages : [],
+      listImages: [],
+      slideId: 1,
+      presentationId: 1,
     },
   ],
   canvasJS: {
@@ -50,7 +52,9 @@ export const initialState: CanvasSate = {
     notes: '',
     variants: [],
     originalSlideData: {},
-    listImages : [],
+    listImages: [],
+    slideId: 1,
+    presentationId: 1,
   },
   activeSlideID: 1,
   size: 1,
@@ -67,7 +71,7 @@ export const initialState: CanvasSate = {
   canvasImageURl: '',
   selectedOriginalCanvas: false,
   presentationTitle: '',
-  isVariantSelected :  false,
+  isVariantSelected: false,
 };
 
 export const CanvasReducer = createSlice({
@@ -105,7 +109,7 @@ export const CanvasReducer = createSlice({
       const canvas = new fabric.Canvas(null);
       const canvasID =
         state.canvasList[state.canvasList.length - 1].id + 1 || 2;
-      const canvasJSON = canvas.toObject(); // Use toObject() instead of toJSON() for Fabric.js
+      const canvasJSON = canvas.toObject(); 
       const updatedCanvasList = [
         ...state.canvasList,
         {
@@ -114,7 +118,9 @@ export const CanvasReducer = createSlice({
           notes: '',
           variants: [],
           originalSlideData: {},
-          listImages : [],
+          listImages: [],
+          slideId: canvasID,
+          presentationId: 1,
         },
       ];
 
@@ -128,7 +134,9 @@ export const CanvasReducer = createSlice({
           notes: '',
           variants: [],
           originalSlideData: {},
-          listImages : [],
+          listImages: [],
+          slideId: canvasID,
+          presentationId: 1,
         },
       };
     },
@@ -152,7 +160,7 @@ export const CanvasReducer = createSlice({
     },
     updateCanvasInList(state, action) {
       const { id, updatedCanvas } = action.payload;
-      console.log({updatedCanvas})
+      console.log({ updatedCanvas });
 
       const updatedList = state.canvasList.map(canvasItem => {
         if (canvasItem.id === id) {
@@ -232,7 +240,7 @@ export const CanvasReducer = createSlice({
             notes: action.payload.notes,
             variants: action.payload.variants,
             originalSlideData: action.payload.originalSlideData,
-            listImages : action.payload.listImages
+            listImages: action.payload.listImages,
           };
         }
         return canvasItem;
@@ -274,12 +282,14 @@ export const CanvasReducer = createSlice({
     updateCanvasList(state, action: PayloadAction<CanvasItem[]>) {
       state.canvasList = action.payload;
     },
-    toggleIsVariantSelected(state, action : PayloadAction<boolean>) {
+    toggleIsVariantSelected(state, action: PayloadAction<boolean>) {
       state.isVariantSelected = true;
     },
     updateListImagesWithCanvasId: (state, action) => {
       const { canvasId, images } = action.payload;
-      const canvasIndex = state.canvasList.findIndex(canvas => canvas.id === canvasId);
+      const canvasIndex = state.canvasList.findIndex(
+        canvas => canvas.id === canvasId
+      );
       if (canvasIndex !== -1) {
         state.canvasList[canvasIndex].listImages = images;
       }
@@ -315,7 +325,7 @@ export const {
   setPresentationTitle,
   updateCanvasList,
   toggleIsVariantSelected,
-  updateListImagesWithCanvasId
+  updateListImagesWithCanvasId,
 } = CanvasReducer.actions;
 
 export default CanvasReducer.reducer;

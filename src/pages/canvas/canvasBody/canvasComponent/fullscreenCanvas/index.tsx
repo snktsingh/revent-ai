@@ -46,6 +46,27 @@ const FullscreenCanvas = () => {
         if (fullscreenCanvas && canvasList && canvasList.length > 0) {
             fullscreenCanvas.clear();
             fullscreenCanvas.loadFromJSON(canvasList[currentCanvasIndex].canvas, () => {
+                fullscreenCanvas.forEachObject(obj => {
+                     if(obj.name && obj.name == "VariantImage"){
+                      const canvasWidth = fullscreenCanvas?.width || 0;
+                      const canvasHeight = fullscreenCanvas?.height || 0;
+                      const scaleWidth = canvasWidth / obj.width!;
+                      const scaleHeight = canvasHeight / obj.height!;
+                      const scale = Math.max(scaleWidth, scaleHeight);
+              
+                      obj.set({
+                        left: 0,
+                        top: 0,
+                        scaleX: scale,
+                        scaleY: scale,
+                        selectable: false,
+                        lockMovementX: true,
+                        lockScalingY: true,
+                        moveCursor: 'pointer',
+                        name: 'VariantImage',
+                      });
+                    }
+                  });
                 fullscreenCanvas.enableRetinaScaling = true;
                 fullscreenCanvas.setBackgroundColor(
                     `${theme.colorSchemes.light.palette.common.white}`,

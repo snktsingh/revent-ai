@@ -1,15 +1,35 @@
+import { IUserAccountDetails } from '@/interfaces/authInterface';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { getUserDetails } from '@/redux/thunk/user';
+import { getUserDetails, updateUserDetails } from '@/redux/thunk/user';
 import React, { useEffect, useState } from 'react';
 
 const useSettings = () => {
-  const { userDetails } = useAppSelector(state => state.manageUser);
+  // const { userDetails } = useAppSelector(state => state.manageUser);
+  const [editMode, setEditMode] = useState(true);
+  const [userAccount, setUserAccount] = useState({});
+  const [userDetails, setUserDetails] = useState<IUserAccountDetails>({
+    id: null,
+    login: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    imageUrl: 'http://placehold.it/50x50',
+    activated: true,
+    langKey: 'en',
+    createdBy: '',
+    createdDate: '',
+    lastModifiedBy: '',
+    lastModifiedDate: '',
+    authorities: [''],
+    linkedIn: '',
+    phone: '',
+    companyName: '',
+    companySize: '',
+    companyRole: '',
+    termsConditionId: null,
+    userCredit: null,
+  });
   const dispatch = useAppDispatch();
-  
-  useEffect(()=>{
-    dispatch(getUserDetails());
-  },[])
-
   const [userDetailsInputs, setUserDetailsInputs] = useState({
     firstName: userDetails?.firstName || 'Unknown',
     lastName: userDetails?.lastName || 'User',
@@ -17,18 +37,32 @@ const useSettings = () => {
     email: userDetails?.email || 'example@examplemail.com',
     phone: userDetails?.phone || '123-4567-8901',
     linkedinUrl: userDetails?.linkedIn || '',
-    usePreference : 'Personal',
-    companyName : userDetails?.companyName || "",
-    roleInCompany : userDetails?.companyRole || '',
-    companySize: userDetails?.companySize ||  ''
+    usePreference: 'Personal',
+    companyName: userDetails?.companyName || '',
+    roleInCompany: userDetails?.companyRole || '',
+    companySize: userDetails?.companySize || '',
   });
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setUserDetailsInputs({ ...userDetailsInputs, [name]: value });
+  // useEffect(() => {
+  //   dispatch(getUserDetails()).then(res => {
+  //     setUserDetails(res.payload);
+  //     // setUserAccount(res.payload);
+  //   });
+  // }, []);
+
+  
+
+  const handleUpdateUserDetails = () => {
+    //  dispatch(updateUserDetails(userDetails))
+    console.log({userAccount})
   };
 
-  return { userDetails, userDetailsInputs, handleChange };
+  return {
+    userDetailsInputs,
+    editMode,
+    setEditMode,
+    handleUpdateUserDetails,
+  };
 };
 
 export default useSettings;

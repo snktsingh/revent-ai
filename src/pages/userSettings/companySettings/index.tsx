@@ -2,15 +2,17 @@ import React, { ChangeEvent, useState } from 'react';
 import { InputContainer, ProfileContainer, StyledInput, Label, StyledSelect, PencilIcon } from '../style';
 import { InputAdornment, MenuItem } from '@mui/material';
 import useSettings from '../container';
+import { IUserAccountDetails } from '@/interfaces/authInterface';
 
-interface CompanySettingsType {
-  editMode: boolean
+interface ProfileFormProps {
+  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  userDetails: IUserAccountDetails;
+  editMode : boolean;
 }
 
-const CompanyDetails: React.FC<CompanySettingsType> = ({ editMode }) => {
-  const { userDetailsInputs, handleChange } = useSettings();
+const CompanyDetails: React.FC<ProfileFormProps> = ({ handleChange, userDetails, editMode }) => {
 
-  const { companyName, companySize, roleInCompany } = userDetailsInputs;
+  const { companyName, companySize, companyRole } = userDetails;
 
 
   return (
@@ -18,52 +20,28 @@ const CompanyDetails: React.FC<CompanySettingsType> = ({ editMode }) => {
       <InputContainer>
         <Label>Company Name</Label>
         <StyledInput
-          // variant="standard"
           disabled={editMode}
           value={companyName}
           name='companyName'
           onChange={handleChange}
-        // InputProps={{
-        //   endAdornment: (
-        //     <InputAdornment position="end">
-        //       <PencilIcon />
-        //     </InputAdornment>
-        //   )
-        // }}
         />
       </InputContainer>
       <InputContainer>
         <Label>Company Size</Label>
         <StyledInput
-          // variant="standard"
           disabled={editMode}
           value={companySize}
           name='companySize'
           onChange={handleChange}
-        // InputProps={{
-        //   endAdornment: (
-        //     <InputAdornment position="end">
-        //       <PencilIcon />
-        //     </InputAdornment>
-        //   )
-        // }}
         />
       </InputContainer>
       <InputContainer>
         <Label>Role in Company</Label>
         <StyledInput
-          // variant="standard"
           disabled={editMode}
-          value={roleInCompany}
-          name='roleInCompany'
+          value={companyRole}
+          name='companyRole'
           onChange={handleChange}
-        // InputProps={{
-        //   endAdornment: (
-        //     <InputAdornment position="end">
-        //       <PencilIcon />
-        //     </InputAdornment>
-        //   )
-        // }}
         />
       </InputContainer>
     </ProfileContainer>

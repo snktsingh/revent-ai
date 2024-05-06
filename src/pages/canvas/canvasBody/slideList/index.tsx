@@ -1,9 +1,9 @@
 import SvgViewer from '@/components/canvasSvgViewer';
-import { Stack } from '@mui/material';
+import { Paper, Skeleton, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { ListSlideCard, SingleSliderContainer } from '../style';
 import useSlideList from './container';
-import { SlideContainer } from './style';
+import { Dot, LoaderContainer, SlideContainer } from './style';
 import { DndContext, closestCorners } from '@dnd-kit/core';
 import {
   SortableContext,
@@ -20,6 +20,7 @@ import {
 } from '@/redux/reducers/canvas';
 import { useAppSelector } from '@/redux/store';
 import { setEditPptIndex } from '@/redux/thunk/thunk';
+import { useSearchParams } from 'react-router-dom';
 interface SingleSlideComponentProps extends CanvasItem {
   index: number;
 }
@@ -36,9 +37,11 @@ export default function SlideList() {
     handleDragOver,
     handleDrop,
     dispatch,
+    canvasJS
   } = useSlideList();
 
-  const { pptDetails } = useAppSelector(state => state.thunk);
+  const { pptDetails, isLoading } = useAppSelector(state => state.thunk);
+  
 
   useEffect(() => {
     loadSvgs();
@@ -78,39 +81,58 @@ export default function SlideList() {
       transform: CSS.Transform.toString(transform),
     };
 
+    
+
     return (
-      <div
-        ref={setNodeRef}
-        {...attributes}
-        onPointerDown={event => {
-          handleSlideCardClick(canvas);
-          if (listeners?.onPointerDown) {
-            listeners.onPointerDown(event);
-          }
-        }}
-        onKeyDown={event => {
-          if (listeners?.onKeyDown) {
-            listeners.onKeyDown(event);
-          }
-        }}
-        style={styles}
-      >
-        <SingleSliderContainer>
-          <Stack direction="row" spacing={1}>
-            <p>{index + 1}</p>
-            <ListSlideCard
-              className={activeSlideID == canvas.id ? 'clicked-card' : ''}
+      <>
+        {
+          !svgURLs[index] ?
+            <SingleSliderContainer>
+              <ListSlideCard>
+                  <LoaderContainer>
+                    <Dot />
+                    <Dot />
+                    <Dot />
+                    <Dot />
+                    <Dot />
+                  </LoaderContainer>
+              </ListSlideCard>
+            </SingleSliderContainer>
+            :
+            <div
+              ref={setNodeRef}
+              {...attributes}
+              onPointerDown={event => {
+                {!isLoading && handleSlideCardClick(canvas)};
+                if (listeners?.onPointerDown) {
+                  listeners.onPointerDown(event);
+                }
+              }}
+              onKeyDown={event => {
+                if (listeners?.onKeyDown) {
+                  listeners.onKeyDown(event);
+                }
+              }}
+              style={styles}
             >
-              <SvgViewer svgContent={svgURLs[index]} />
-            </ListSlideCard>
-          </Stack>
-        </SingleSliderContainer>
-        <br />
-      </div>
+              <SingleSliderContainer>
+                <Stack direction="row" spacing={1}>
+                  <p>{index + 1}</p>
+                  <ListSlideCard
+                    className={activeSlideID == canvas.id ? 'clicked-card' : ''}
+                  >
+                    <SvgViewer svgContent={svgURLs[index]} />
+                  </ListSlideCard>
+                </Stack>
+              </SingleSliderContainer>
+              <br />
+            </div>
+        }
+      </>
     );
   };
 
-        
+
   return (
     <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
       <SlideContainer>

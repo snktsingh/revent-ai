@@ -9,9 +9,13 @@ import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { fabric } from 'fabric';
 import { useEffect, useState } from 'react';
 import { useCanvasComponent } from '../canvasComponent/container';
+import useCanvasData from '../canvasComponent/canvasDataExtractor';
+import { toggleVariantSlide } from '@/redux/reducers/elements';
+import { refreshVariants } from '@/redux/thunk/thunk';
 
 const useVariants = () => {
   const { updateCanvasDimensions } = useCanvasComponent();
+  const { getElementsData } = useCanvasData();
   const dispatch = useAppDispatch();
   const [originalImageUrl, setOriginalImageUrl] = useState<string>('');
   const { openVariant } = useAppSelector(state => state.element);
@@ -21,8 +25,11 @@ const useVariants = () => {
     selectedOriginalCanvas,
     canvasJS,
     canvasList,
+    activeSlideID,
   } = useAppSelector(state => state.canvas);
   const { pptDetails } = useAppSelector(state => state.thunk);
+  const { themeId } = useAppSelector(state => state.slideTheme);
+  const { requestData } = useAppSelector(state => state.apiData);
   const array: number[] = [1, 2, 3];
 
   const handleVariants = (CanvasURL: string, pptURL: string, index: number) => {
@@ -76,6 +83,22 @@ const useVariants = () => {
     setOriginalImageUrl(url);
   };
 
+  const handleRefreshVariants = () => {
+    dispatch(refreshVariants(requestData))
+  };
+
+  const handleOpenVariantsSlide = () => {
+    dispatch(toggleVariantSlide(!openVariant));
+
+    const currentSlideIndex = canvasList.findIndex(
+      slide => slide.id === activeSlideID
+    );
+    getElementsData(
+      (canvasList[currentSlideIndex].originalSlideData as any)?.objects,
+      themeId
+    );
+  };
+
   useEffect(() => {
     getCanvasImageFromJSON(canvasJS.originalSlideData);
   }, [canvasJS.originalSlideData]);
@@ -90,7 +113,11 @@ const useVariants = () => {
     selectedOriginalCanvas,
     canvasJS,
     pptDetails,
-    canvasList
+    canvasList,
+    getCanvasImageFromJSON,
+    activeSlideID,
+    handleRefreshVariants,
+    handleOpenVariantsSlide,
   };
 };
 export default useVariants;

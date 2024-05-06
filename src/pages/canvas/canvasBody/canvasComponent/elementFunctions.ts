@@ -151,7 +151,7 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
           addQuotes(canvas);
         };
         break;
-      case 'List':
+      case 'Team List':
         element.onClick = () => {
           addListElement(canvas, 33, 23);
         };

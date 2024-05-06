@@ -16,6 +16,9 @@ const CanvasComponent: React.FC = () => {
   const canvasRef = useRef<fabric.Canvas | null>(null);
   const ContainerRef = useRef<HTMLDivElement | null>(null);
 
+  var multiply = fabric.util.multiplyTransformMatrices;
+  var invert = fabric.util.invertTransform;
+
   const {
     updateCanvasDimensions,
     updateCanvasSlideData,
@@ -49,16 +52,23 @@ const CanvasComponent: React.FC = () => {
     onTextEditingExitedEvent,
   } = useCanvasEvents();
   const { themeCode, themeId } = useAppSelector(state => state.slideTheme);
+  const { isPresentationLoading } = useAppSelector(state => state.element);
 
   const dispatch = useAppDispatch();
 
-  const { canvasJS, variantImage, selectedOriginalCanvas, isVariantSelected, canvasList } =
-    useAppSelector(state => state.canvas);
+  const {
+    canvasJS,
+    variantImage,
+    selectedOriginalCanvas,
+    isVariantSelected,
+    canvasList,
+  } = useAppSelector(state => state.canvas);
 
   useEffect(() => {
-    console.log({canvasJS})
+    console.log({ canvasJS });
+    console.log("canvas loading");
     setShowOptions(false);
-    const canvas = new fabric.Canvas('canvas');
+    const canvas = new fabric.Canvas('canvas', {preserveObjectStacking:true});
     updateCanvasStyle(canvas);
     canvas.clear();
     fabric.Object.prototype.set({
@@ -73,7 +83,6 @@ const CanvasComponent: React.FC = () => {
     canvas.loadFromJSON(
       canvasJS.canvas,
       () => {
-
         canvasRef.current = canvas;
         if (canvas) {
           updateCanvasStyle(canvas);
@@ -87,7 +96,10 @@ const CanvasComponent: React.FC = () => {
           );
         }
 
-        if (canvas.toObject(customFabricProperties)?.objects && canvas.toObject(customFabricProperties)?.objects.length >= 1) {
+        if (
+          canvas.toObject(customFabricProperties)?.objects &&
+          canvas.toObject(customFabricProperties)?.objects.length >= 1
+        ) {
           dispatch(toggleRegenerateButton(false));
         } else {
           dispatch(toggleRegenerateButton(true));
@@ -99,6 +111,7 @@ const CanvasComponent: React.FC = () => {
         updateCanvasSlideData(canvas, canvasJS.id);
         console.log('canvas 6');
         forEachCanvasObject(canvas);
+        console.log('canvas 7');
         console.log('canvas 7');
         // canvas Events
         canvas.on('selection:created', handleElementBarSelection);
@@ -122,6 +135,9 @@ const CanvasComponent: React.FC = () => {
         );
 
         canvas.on('object:added', e => onObjectAddedEvent(e, canvas));
+        // console.log(
+        //   canvas.on('object:added', e => onObjectAddedEvent(e, canvas))
+        // );
         canvas.on('object:removed', e => onObjectRemovedEvent(e, canvas));
         canvas.on('object:modified', e => onObjectModifiedEvent(e, canvas));
         canvas.on('selection:cleared', e => onSelectionClearedEvent(e, canvas));
@@ -133,7 +149,6 @@ const CanvasComponent: React.FC = () => {
         );
         canvas.on('mouse:down', options => onMouseDownEvent(options, canvas));
 
-
         canvas.renderAll();
       },
       (error: Error) => {
@@ -144,7 +159,7 @@ const CanvasComponent: React.FC = () => {
     window.addEventListener('keydown', e => handleKeyDown(e, canvas));
     return () => {
       window.removeEventListener('keydown', e => handleKeyDown(e, canvas));
-      window.removeEventListener('resize', () => { });
+      window.removeEventListener('resize', () => {});
       canvas.dispose();
     };
   }, [canvasJS.canvas, selectedOriginalCanvas]);
@@ -152,7 +167,6 @@ const CanvasComponent: React.FC = () => {
   useEffect(() => {
     setShowOptions(false);
     if (variantImage && canvasRef.current) {
-
       canvasRef.current?.clear();
 
       canvasRef.current?.setBackgroundColor(
@@ -182,7 +196,6 @@ const CanvasComponent: React.FC = () => {
         canvasRef.current?.add(img);
       });
       canvasRef.current?.renderAll();
-
     }
   }, [variantImage, isVariantSelected]);
 

@@ -22,10 +22,15 @@ import SvgViewer from '@/components/canvasSvgViewer';
 import ThumbnailPreview from '@/common-ui/thumbnailPreview';
 import { useEffect, useState } from 'react';
 import { ISlideList } from '@/interfaces/pptInterfaces';
+import { useParams, useSearchParams } from 'react-router-dom';
+import { getSlideJSONData } from '@/redux/thunk/thunk';
+import { setVariantImageAsMain, toggleIsVariantSelected, updateCurrentCanvas } from '@/redux/reducers/canvas';
 
 export const CanvasVariant = () => {
   const [canvasIndex, setCanvasIndex] = useState<number>(0)
   const dispatch = useAppDispatch();
+  const [searchParams , setSearchParams] = useSearchParams();
+  const params = useParams<{ id: string }>();
   const { selectedSlideIndex } = useAppSelector(state => state.thunk);
   const {
     openVariant,
@@ -37,20 +42,42 @@ export const CanvasVariant = () => {
     selectedOriginalCanvas,
     canvasJS,
     pptDetails,
-    canvasList
+    canvasList,
+    getCanvasImageFromJSON,
+    activeSlideID,
+    handleRefreshVariants,
+    handleOpenVariantsSlide
   } = useVariants();
+
+  const [canvasJSONdata, setCanvasJson] = useState<string>(''); 
 
   useEffect(() => {
     const index = canvasList.findIndex((el) => el.id === canvasJS.id);
     setCanvasIndex(index);
     dispatch(toggleVariantSlide(false));
-  }, [canvasJS.canvas]);
+  }, [canvasJS.variants.length>0]);
+
+
+  const slideId = searchParams.get('slide');
+  const pptId = params.id?.split('-')[0];
+
+  useEffect(() => {
+    const canvasIndex = canvasList.findIndex((slide) => slide.id === activeSlideID);
+    if(pptId && slideId && Number(slideId)>100 && canvasList[canvasIndex].originalSlideData  && canvasIndex !== 0){
+      dispatch(getSlideJSONData({pptId, slideId})).then((res)=>{
+        if(res.payload){
+          getCanvasImageFromJSON(res.payload);
+          dispatch(updateCurrentCanvas({...canvasList[canvasIndex],originalSlideData : res.payload}));
+        }
+      })
+    }
+  }, [slideId]);
 
   return (
     <div>
       {( canvasJS.variants && canvasJS.variants.length > 0) && (
         <VariantButton
-          onClick={() => dispatch(toggleVariantSlide(!openVariant))}
+          onClick={handleOpenVariantsSlide}
         >
           <img src={varianButtonSvg} alt="variantButton" />
         </VariantButton>
@@ -95,7 +122,7 @@ export const CanvasVariant = () => {
             <ButtonContainer>
               <p>Variants</p>
 
-              <RefreshBtn variant="contained" size="small">
+              <RefreshBtn variant="contained" size="small" onClick={handleRefreshVariants}>
                 Refresh
               </RefreshBtn>
 

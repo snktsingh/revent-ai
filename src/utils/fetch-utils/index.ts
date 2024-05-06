@@ -65,8 +65,8 @@ generateInstance.interceptors.response.use(
 );
 
 class FetchUtilHeaderClass {
-  getRequest = async (url: string) => {
-    return generateInstance.get(url);
+  getRequest = async (url: string, data?: any) => {
+    return generateInstance.get(url, data);
   };
   postRequest = async (url: string, data: any) => {
     return generateInstance.post(url, data);
@@ -108,7 +108,7 @@ nonHeaderInstance.interceptors.response.use(
   },
   (error: AxiosError<any, any>) => {
     const responseStatusCode = error.response;
-    toast.error(error.response?.data.message);
+    // toast.error(error.response?.data.message);
     switch (responseStatusCode?.status) {
       case 404: {
         toast.error('URL does not exist on specified resource');
@@ -119,7 +119,7 @@ nonHeaderInstance.interceptors.response.use(
         break;
       }
       case 500: {
-        toast.error('Technical Server Error');
+        // toast.error('Technical Server Error');
         break;
       }
       // default: {
@@ -151,3 +151,72 @@ class FetchUtilClass {
 
 const FetchNonHeaderUtils = new FetchUtilClass();
 export { FetchNonHeaderUtils };
+
+// Instance without headers and content-type : Text/plain
+export const nonHeaderJSONInstance: AxiosInstance = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  timeout: 30000,
+  headers : {
+    "Content-Type" : 'text/plain'
+  }
+});
+
+nonHeaderJSONInstance.interceptors.request.use(config => {
+  return config;
+});
+
+nonHeaderJSONInstance.interceptors.response.use(
+  (response: AxiosResponse<any, any>) => {
+    const responsestatusCode = response.status;
+    switch (
+      responsestatusCode
+      // case 200: {
+      //   toast.success(response.data.message);
+      //   break;
+      // }
+    ) {
+    }
+    return response;
+  },
+  (error: AxiosError<any, any>) => {
+    const responseStatusCode = error.response;
+    // toast.error(error.response?.data.message);
+    switch (responseStatusCode?.status) {
+      case 404: {
+        toast.error('URL does not exist on specified resource');
+        break;
+      }
+      case 401: {
+        toast.error('User Unauthorized');
+        break;
+      }
+      case 500: {
+        toast.error('Technical Server Error');
+        break;
+      }
+    }
+    if (error.response && error.response.data) {
+      console.log(error);
+      return Promise.reject(error.response.data);
+    }
+    return Promise.reject(error.message);
+  }
+);
+
+class FetchPlainUtilClass {
+  getRequest = async (url: string) => {
+    return nonHeaderJSONInstance.get(url);
+  };
+  postRequest = async (url: string, data: any) => {
+    return nonHeaderJSONInstance.post(url, data);
+  };
+  deleteRequest = async (url: string) => {
+    return nonHeaderJSONInstance.delete(url);
+  };
+  putRequest = async (url: string, data: any) => {
+    return nonHeaderJSONInstance.put(url, data);
+  };
+}
+
+const FetchNonHeaderNonJSONUtils = new FetchPlainUtilClass();
+export { FetchNonHeaderNonJSONUtils };

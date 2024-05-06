@@ -18,9 +18,11 @@ import useLogin from './container';
 import { useAppSelector } from '@/redux/store';
 import { useState } from 'react';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { ROUTES } from '@/constants/endpoint';
 
 const Login = () => {
+  const navigate = useNavigate();
   const { email, setEmail, password, setPassword, handleLogin } = useLogin();
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(show => !show);
@@ -98,7 +100,7 @@ const Login = () => {
                   ),
                 }}
               />
-              <CommonLink>Forgot Password ?</CommonLink>
+              <CommonLink onClick={()=> navigate(ROUTES.FORGOT_PASSWORD)}>Forgot Password ?</CommonLink>
               <CustomButton
                 variant="contained"
                 size="large"
@@ -113,10 +115,6 @@ const Login = () => {
                 </RedirectLink>
               </SignUp>
             </Box>
-            {/* <PassMessage>
-              * Password must be minimum of 8 characters and contain at least 1
-              letter and 1 number.
-            </PassMessage> */}
           </RightContainer>
         </Grid>
       </Grid>

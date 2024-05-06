@@ -1,4 +1,5 @@
 import ENDPOINT, { ROUTES } from '@/constants/endpoint';
+import { useDebounce } from '@/hooks/useDebounce';
 import { CanvasItem } from '@/interface/storeTypes';
 import { IUpdatePptName } from '@/interfaces/pptInterfaces';
 import {
@@ -6,8 +7,13 @@ import {
   updateCanvasList,
 } from '@/redux/reducers/canvas';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { setPresentationName, updatePptName } from '@/redux/thunk/thunk';
+import {
+  setPresentationName,
+  updatePptName,
+  updateStateLoading,
+} from '@/redux/thunk/thunk';
 import { FetchUtils } from '@/utils/fetch-utils';
+import { debounce } from 'lodash';
 import React, { ChangeEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -19,12 +25,13 @@ const useCanvasHeader = () => {
     React.useState<null | HTMLElement>(null);
   const [anchorE2, setAnchorE2] = React.useState<null | HTMLElement>(null);
   const [openWarning, setOpenWarning] = React.useState(false);
-  const { pptUrl, presentationId } = useAppSelector(state => state.thunk);
+  const { pptUrl, presentationId, presentationName } = useAppSelector(state => state.thunk);
   const { presentationTitle } = useAppSelector(state => state.canvas);
   const { userDetails } = useAppSelector(state => state.manageUser);
   const [updateResponse, setUpdateResponse] = useState(null);
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
   const openShare = Boolean(anchorE2);
+
 
   const userLogout = async () => {
     toast.promise(
@@ -75,9 +82,20 @@ const useCanvasHeader = () => {
     setAnchorE2(null);
   };
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    dispatch(setPresentationName(e.target.value));
-  };
+  const handleInputChange = useDebounce((e: ChangeEvent<HTMLInputElement>) => {
+    if (presentationName === '' || presentationName === undefined) {
+      dispatch(setPresentationName('Untitled-presentation'));
+      updatePresentationName({
+        presentationId: presentationId,
+        name: 'Untitled-presentation',
+      });
+    } else {
+      updatePresentationName({
+        presentationId: presentationId,
+        name: presentationName,
+      });
+    }
+  }, 500);
 
   const updatePresentationName = async (data: IUpdatePptName) => {
     setIsUpdating(true);
@@ -87,6 +105,7 @@ const useCanvasHeader = () => {
   };
 
   const handleGoBack = () => {
+    dispatch(updateStateLoading(false));
     navigate('/dashboard', { replace: true });
     let canvas: CanvasItem[] = [
       {
@@ -100,6 +119,8 @@ const useCanvasHeader = () => {
         variants: [],
         originalSlideData: {},
         listImages: [],
+        slideId: 1,
+        presentationId: 1,
       },
     ];
     dispatch(updateCanvasList(canvas));

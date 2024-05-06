@@ -14,12 +14,18 @@ export const ENDPOINT = {
   USER: {
     GET_DETAILS: '/account',
     VERIFY_ACCOUNT: '/activate',
+    CREDIT_AMOUNT : '/user-credit',
+    RESET_PASS_INIT : '/account/reset-password/init',
+    RESET_PASS_FINISH : '/account/reset-password/finish'
   },
   PPT: {
     CREATE_PPT: 'ppt/create-presentation',
     UPDATE_PPT_NAME: 'ppt/update-presentation-name',
     DELETE_PPT: 'ppt/delete-presentation',
     GET_PPT_DETAILS: 'ppt/get-presentation',
+    CANVAS_JSON : '/canvas-data',
+    UPDATE_THEME: 'ppt/change-theme',
+    UPLOAD_THEME : '/template/upload-custom',
   },
   DASHBOARD: {
     FETCH_PPT_LIST: 'ppt/get-all-presentation',
@@ -35,6 +41,8 @@ export const ROUTES = {
   CANVAS: '/canvas/:id',
   SETTINGS: '/settings',
   ACTIVATION: '/activation',
+  FORGOT_PASSWORD : '/forgot-password',
+  RESET_PASSWORD : '/reset-password',
 } as const;
 
 export default ENDPOINT;
