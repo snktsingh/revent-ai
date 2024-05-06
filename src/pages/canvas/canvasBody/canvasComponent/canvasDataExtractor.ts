@@ -66,8 +66,6 @@ const useCanvasData = () => {
     } else {
       const newElement: ElementBaseType = {
         shape,
-        title: '',
-        subTitle: '',
         templateName: '',
         elementId,
         data: [],
@@ -181,15 +179,19 @@ const useCanvasData = () => {
           subTitleText = canvasObject.text;
         } else if (canvasObject.name === COVER_SLIDE_TITLE) {
           const CoverSlide = getOrCreateElement('Cover', '1', outputFormat);
+          titleText = canvasObject.text;
           CoverSlide.title = canvasObject.text;
         } else if (canvasObject.name === COVER_SLIDE_SUBTITLE) {
           const CoverSlide = getOrCreateElement('Cover', '1', outputFormat);
+          subTitleText = canvasObject.text;
           CoverSlide.subTitle = canvasObject.text;
         } else if (canvasObject.name === SECTION_SLIDE_TITLE) {
           const SectionSlide = getOrCreateElement('Section', '1', outputFormat);
+          titleText = canvasObject.text;
           SectionSlide.title = canvasObject.text;
         } else if (canvasObject.name === SECTION_SLIDE_SUBTITLE) {
           const SectionSlide = getOrCreateElement('Section', '1', outputFormat);
+          subTitleText = canvasObject.text;
           SectionSlide.subTitle = canvasObject.text;
         } else if (canvasObject.name === CONCLUSION_SLIDE_TITLE) {
           const ConclusionSlide = getOrCreateElement(
@@ -197,6 +199,7 @@ const useCanvasData = () => {
             '1',
             outputFormat
           );
+          titleText = canvasObject.text;
           ConclusionSlide.title = canvasObject.text;
         } else if (canvasObject.name === CONCLUSION_SLIDE_SUBTITLE) {
           const ConclusionSlide = getOrCreateElement(
@@ -204,6 +207,7 @@ const useCanvasData = () => {
             '1',
             outputFormat
           );
+          subTitleText = canvasObject.text;
           ConclusionSlide.subTitle = canvasObject.text;
         } else if (canvasObject.name.startsWith(LIST_TEXT)) {
           const ListImage = getOrCreateElement('List', '1', outputFormat);
@@ -232,9 +236,11 @@ const useCanvasData = () => {
     if (
       outputFormat &&
       outputFormat.elements.length > 0 &&
-      titleText &&
-      subTitleText
+      titleText !== "" &&
+      subTitleText !== ""
     ) {
+      outputFormat.title = titleText;
+      outputFormat.subTitle = subTitleText;
       outputFormat.elements[0].title = titleText;
       outputFormat.elements[0].subTitle = subTitleText;
     }
@@ -268,8 +274,8 @@ const useCanvasData = () => {
     });
 
     if (outputFormat && outputFormat.elements.length > 0) {
-      outputFormat['title'] = titleText;
-      outputFormat['subTitle'] = subTitleText;
+      // outputFormat['title'] = titleText;
+      // outputFormat['subTitle'] = subTitleText;
     } else {
       const titleData = getOrCreateElement('cover', '1', outputFormat);
       titleData['title'] = titleText;
@@ -290,12 +296,13 @@ const useCanvasData = () => {
       tableData.tableData.length > 0
     ) {
       outputFormat.elements = [];
-      tableData.title = titleText;
-      tableData.subTitle = subTitleText;
+      if(titleText && subTitleText){
+        tableData.title = titleText;
+        tableData.subTitle = subTitleText;
+      }
       tableData.data = [];
       outputFormat.elements.push(tableData);
     }
-
     console.log({ outputFormat });
     dispatch(setRequestData(outputFormat));
   }

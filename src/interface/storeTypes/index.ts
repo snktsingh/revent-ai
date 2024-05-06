@@ -90,8 +90,8 @@ export interface DataRequestType {
 export interface ElementBaseType {
   shape: string;
   data?: DataRequestType[];
-  title: string;
-  subTitle: string;
+  title?: string;
+  subTitle?: string;
   templateName?: string;
   elementId?: string;
 }

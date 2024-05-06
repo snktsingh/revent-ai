@@ -16,6 +16,9 @@ const CanvasComponent: React.FC = () => {
   const canvasRef = useRef<fabric.Canvas | null>(null);
   const ContainerRef = useRef<HTMLDivElement | null>(null);
 
+  var multiply = fabric.util.multiplyTransformMatrices;
+  var invert = fabric.util.invertTransform;
+
   const {
     updateCanvasDimensions,
     updateCanvasSlideData,
@@ -65,7 +68,7 @@ const CanvasComponent: React.FC = () => {
     console.log({ canvasJS });
     console.log("canvas loading");
     setShowOptions(false);
-    const canvas = new fabric.Canvas('canvas');
+    const canvas = new fabric.Canvas('canvas', {preserveObjectStacking:true});
     updateCanvasStyle(canvas);
     canvas.clear();
     fabric.Object.prototype.set({

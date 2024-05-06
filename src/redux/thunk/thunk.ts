@@ -109,7 +109,7 @@ export const fetchPptDetails = createAsyncThunk(
   }
 );
 
-// Update Slide JSON Data
+// Create Slide JSON Data
 export const createSlideJSONData = createAsyncThunk(
   'slide/update-json',
   async ({ pptId, slideId, canvasJSON }: any) => {
@@ -121,7 +121,7 @@ export const createSlideJSONData = createAsyncThunk(
     return res.data;
   }
 );
-
+// update Slide JSON Data
 export const updateSlideJSONData = createAsyncThunk(
   'slide/update-json',
   async ({ pptId, slideId, canvasJSON }: any) => {
@@ -176,6 +176,31 @@ export const uploadCustomTheme = createAsyncThunk(
         formData
       );
       return response.data;
+    } catch (error) {
+      return error;
+    }
+  }
+);
+
+// Refresh button
+export const refreshVariants = createAsyncThunk(
+  'ppt/refreshVariants',
+  async (req: any,{dispatch, getState}) => {
+    try {
+      const res = await FetchUtils.postRequest(
+        `${ENDPOINT.GEN_PPT_MULTI}`,
+        req
+      );
+      dispatch(setVariantImageAsMain(res.data.variants[0].imagesUrl));
+      dispatch(toggleIsVariantSelected(true));
+      const currentCanvas = (getState() as RootState).canvas.canvasJS;
+      const updatedCanvasVariants = {
+        ...currentCanvas,
+        variants: res.data.variants,
+      };
+      dispatch(updateCurrentCanvas(updatedCanvasVariants));
+      dispatch(getUserCredit());
+      return res;
     } catch (error) {
       return error;
     }

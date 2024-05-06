@@ -44,7 +44,9 @@ export const CanvasVariant = () => {
     pptDetails,
     canvasList,
     getCanvasImageFromJSON,
-    activeSlideID
+    activeSlideID,
+    handleRefreshVariants,
+    handleOpenVariantsSlide
   } = useVariants();
 
   const [canvasJSONdata, setCanvasJson] = useState<string>(''); 
@@ -75,7 +77,7 @@ export const CanvasVariant = () => {
     <div>
       {( canvasJS.variants && canvasJS.variants.length > 0) && (
         <VariantButton
-          onClick={() => dispatch(toggleVariantSlide(!openVariant))}
+          onClick={handleOpenVariantsSlide}
         >
           <img src={varianButtonSvg} alt="variantButton" />
         </VariantButton>
@@ -120,7 +122,7 @@ export const CanvasVariant = () => {
             <ButtonContainer>
               <p>Variants</p>
 
-              <RefreshBtn variant="contained" size="small">
+              <RefreshBtn variant="contained" size="small" onClick={handleRefreshVariants}>
                 Refresh
               </RefreshBtn>
 
