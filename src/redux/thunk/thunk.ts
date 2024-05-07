@@ -43,12 +43,16 @@ export const fetchSlideImg = createAsyncThunk(
     if (req instanceof FormData) {
       isFormData = true;
     }
+    const currentSlideId = (getState() as RootState).canvas.canvasJS.id;
+    const { canvasList } = (getState() as RootState).canvas;
+    const currentSlide = canvasList.findIndex((slide) => slide.id == currentSlideId);
+
     const res = await FetchUtils.postRequest(
       `${isFormData ? ENDPOINT.GEN_PPT_IMAGES : ENDPOINT.GEN_PPT_MULTI}`,
       req
     );
-    const currentSlideId = (getState() as RootState).canvas.canvasJS.slideId;
-    if (currentSlideId == 1) {
+    console.log({currentSlideId : canvasList[currentSlide].slideId})
+    if (canvasList[currentSlide].slideId < 999) {
       dispatch(
         createSlideJSONData({ pptId, canvasJSON, slideId: res.data.slideId })
       );
