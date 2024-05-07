@@ -22,9 +22,9 @@ generateInstance.interceptors.response.use(
         // toast.success(response.data.message);
         break;
       }
-      default: {
-        toast.error(response.data.message);
-      }
+      // default: {
+      //   toast.error(response.data.message);
+      // }
     }
     return response;
   },

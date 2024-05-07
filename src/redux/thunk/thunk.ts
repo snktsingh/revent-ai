@@ -51,16 +51,20 @@ export const fetchSlideImg = createAsyncThunk(
       `${isFormData ? ENDPOINT.GEN_PPT_IMAGES : ENDPOINT.GEN_PPT_MULTI}`,
       req
     );
-    console.log({currentSlideId : canvasList[currentSlide].slideId})
-    if (canvasList[currentSlide].slideId < 999) {
-      dispatch(
-        createSlideJSONData({ pptId, canvasJSON, slideId: res.data.slideId })
-      );
-    } else {
-      dispatch(
-        updateSlideJSONData({ pptId, canvasJSON, slideId: res.data.slideId })
-      );
-    }
+
+    dispatch(
+      createSlideJSONData({ pptId, canvasJSON, slideId: res.data.slideId })
+    );
+
+    // if (canvasList[currentSlide].slideId < 999) {
+    //   dispatch(
+    //     createSlideJSONData({ pptId, canvasJSON, slideId: res.data.slideId })
+    //   );
+    // } else {
+    //   dispatch(
+    //     updateSlideJSONData({ pptId, canvasJSON, slideId: res.data.slideId })
+    //   );
+    // }
 
     console.log(res.data);
     dispatch(setVariantImageAsMain(res.data.variants[0].imagesUrl));

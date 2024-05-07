@@ -22,6 +22,8 @@ export const authRoutes: RouteObject[] = [
   { path: ROUTES.THEMES, element: <AppThemes /> },
   { path: ROUTES.CANVAS, element: <MainCanvas /> },
   { path: ROUTES.SETTINGS, element: <UserSettings /> },
+  // { path: ROUTES.FORGOT_PASSWORD, element: <ForgotPasswordPage /> },
+  // { path: ROUTES.RESET_PASSWORD, element: <ResetPasswordPage /> },
   {
     path: '/*',
     element: <NotFound />,
