@@ -32,6 +32,7 @@ import ThumbnailPreview from '@/common-ui/thumbnailPreview';
 import CanvasThemes from '@/common-ui/addTheme';
 import { useState } from 'react';
 import NavBar from '@/common-ui/NavBar';
+import { ROUTES } from '@/constants/endpoint';
 
 const AppThemes = () => {
   const { navigate, thunk, dispatch, selectedThemeId, handleGenerate } =
@@ -53,7 +54,7 @@ const AppThemes = () => {
      <TemplateContainer>
       <span>
         <TemplateTitle>
-          <img src={Back} onClick={() => navigate('/dashboard')} />
+          <img src={Back} onClick={() => navigate(ROUTES.DASHBOARD)} />
           <Title>Create your Presentations</Title>
         </TemplateTitle>
         <br />

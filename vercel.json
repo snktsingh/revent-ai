@@ -2,12 +2,12 @@
   "rewrites": [
     { "source": "/login", "destination": "/" },
     { "source": "/signup", "destination": "/" },
-    { "source": "/dashboard", "destination": "/" },
+    { "source": "/my-presentations", "destination": "/" },
     { "source": "/themes", "destination": "/" },
-    { "source": "/canvas", "destination": "/" },
+    { "source": "/presentation", "destination": "/" },
     { "source": "/settings", "destination": "/" },
     { "source": "/activation", "destination": "/" },
-    { "source": "/canvas/:id", "destination": "/" },
+    { "source": "/presentation/:id", "destination": "/" },
     { "source": "/forgot-password", "destination": "/" },
     { "source": "/reset-password", "destination": "/" }
   ]

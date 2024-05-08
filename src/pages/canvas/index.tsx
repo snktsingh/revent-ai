@@ -25,7 +25,7 @@ import {
 } from '@/redux/reducers/canvas';
 import { toggleSelectingSlide } from '@/redux/reducers/slide';
 import { updatePresentationLoading } from '@/redux/reducers/elements';
-import { useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { setThemeId } from '@/redux/reducers/theme';
 import { Backdrop, CircularProgress, Stack } from '@mui/material';
 
@@ -37,17 +37,15 @@ const MainCanvas = () => {
   const { canvasJS } = useAppSelector(state => state.canvas);
   const { isPresentationLoading } = useAppSelector(state => state.element);
   const [searchParams, setSearchParams] = useSearchParams();
+  const params = useParams<{ id: string }>(); 
 
-  const relUrl = window.location.pathname.slice(8);
-  const temp = relUrl.search('-');
-  const pName = relUrl.slice(temp + 1);
-  const pId = relUrl.substring(0, temp);
+  const pptId = Number(params.id?.split('-')[0]);
 
   useEffect(() => {
-    console.log(relUrl.search('-'));
-    console.log(relUrl.slice(0, temp));
+    // console.log(relUrl.search('-'));
+    // console.log(relUrl.slice(0, temp));
     dispatch(getUserDetails());
-    getPresentationData(pId);
+    getPresentationData(pptId.toString());
   }, []);
 
   const getPresentationData = async (pptId: string) => {
@@ -114,7 +112,7 @@ const MainCanvas = () => {
               <CircularProgress color="inherit" />
               <p>Changing Presentation theme please wait...</p>
             </Backdrop>
-            <MainCanvasHeader pId={pId} />
+            <MainCanvasHeader pId={pptId} />
             <CanvasTools />
             <CanvasBody />
             <CanvasVariant />

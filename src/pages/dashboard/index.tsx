@@ -194,7 +194,7 @@ const Dashboard = () => {
                       }}
                       onClick={() => {
                         navigate(
-                          `/canvas/${ppt.presentationId}-${faker.string.uuid()}`
+                          `/presentation/${ppt.presentationId}-${faker.string.uuid()}`
                         );
                       }}
                     >
