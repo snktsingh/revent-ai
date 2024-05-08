@@ -152,7 +152,7 @@ export const CanvasVariant = () => {
                       return (
                         <VariantSlide
                           key={el.imagesUrl}
-                          onClick={() => handleVariants(el.imagesUrl, el.slideVariantId, canvasJS.id)}
+                          onClick={() => handleVariants(el.imagesUrl, el.slideVariantId, canvasJS.slideId)}
                         >
                           <div>{i + 1}</div>
                           <VariantSlideCard

@@ -235,7 +235,7 @@ export const updateActiveVariantApi = createAsyncThunk(
   "variant/active",
   async ({pptId, slideId, variantId} : {pptId : number, slideId : number, variantId :number}) => {
     try {
-      const res = await FetchUtils.putRequest(`${ENDPOINT.PPT.UPDATE_ACTIVE_VARIANT}?presentationId=${pptId}&slideNumber=${slideId}&slideVarientId=${variantId}`, null);
+      const res = await FetchUtils.putRequest(`${ENDPOINT.PPT.UPDATE_ACTIVE_VARIANT}?presentationId=${pptId}&slideId=${slideId}&slideVarientId=${variantId}`, null);
 
       return res;
     } catch (error) {
