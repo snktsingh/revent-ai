@@ -51,3 +51,11 @@ export const StyledMenuItem = styled(MenuItem)`
     }
   }
 `;
+
+export const ShareMenu = styled(Menu)`
+ && {
+    .MuiPaper-root {
+       width: 15%;
+    }
+  }
+`;

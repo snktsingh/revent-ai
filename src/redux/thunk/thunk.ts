@@ -45,7 +45,9 @@ export const fetchSlideImg = createAsyncThunk(
     }
     const currentSlideId = (getState() as RootState).canvas.canvasJS.id;
     const { canvasList } = (getState() as RootState).canvas;
-    const currentSlide = canvasList.findIndex((slide) => slide.id == currentSlideId);
+    const currentSlide = canvasList.findIndex(
+      slide => slide.id == currentSlideId
+    );
 
     const res = await FetchUtils.postRequest(
       `${isFormData ? ENDPOINT.GEN_PPT_IMAGES : ENDPOINT.GEN_PPT_MULTI}`,
@@ -193,7 +195,7 @@ export const uploadCustomTheme = createAsyncThunk(
 // Refresh button
 export const refreshVariants = createAsyncThunk(
   'ppt/refreshVariants',
-  async (req: any,{dispatch, getState}) => {
+  async (req: any, { dispatch, getState }) => {
     try {
       const res = await FetchUtils.postRequest(
         `${ENDPOINT.GEN_PPT_MULTI}`,
@@ -208,6 +210,33 @@ export const refreshVariants = createAsyncThunk(
       };
       dispatch(updateCurrentCanvas(updatedCanvasVariants));
       dispatch(getUserCredit());
+      return res;
+    } catch (error) {
+      return error;
+    }
+  }
+);
+
+// Download Presentation
+export const downloadPresentation = createAsyncThunk(
+  `ppt/downloadPresentation`,
+  async (pptId : number) => {
+    try {
+      const res = await FetchUtils.getRequest(`${ENDPOINT.PPT.DOWNLOAD_PRESENTATION}?presentationId=${pptId}`);
+      return res.data;
+    } catch (error) {
+      return error;
+    }
+  }
+);
+
+// update active variant 
+export const updateActiveVariantApi = createAsyncThunk(
+  "variant/active",
+  async ({pptId, slideId, variantId} : {pptId : number, slideId : number, variantId :number}) => {
+    try {
+      const res = await FetchUtils.putRequest(`${ENDPOINT.PPT.UPDATE_ACTIVE_VARIANT}?presentationId=${pptId}&slideNumber=${slideId}&slideVarientId=${variantId}`, null);
+
       return res;
     } catch (error) {
       return error;

@@ -50,7 +50,6 @@ export const processSlides = (slides: any[], presentationId : number): CanvasIte
   
   return slides.map((slideData, index) => {
     let canvas = JSON.parse(JSON.stringify(canvasData));
-    canvas.objects[0].src = `${slideData[0].thumbnailUrl}`;
     const slide: CanvasItem = {
       id: index + 1,
       canvas,
@@ -69,6 +68,10 @@ export const processSlides = (slides: any[], presentationId : number): CanvasIte
         active : element.active,
         slideVariantId : Number(element.slideVariantId)
       });
+
+      if (element.active) {
+        (slide.canvas as any).objects[0].src = element.thumbnailUrl;
+      }
     });
 
     return slide;

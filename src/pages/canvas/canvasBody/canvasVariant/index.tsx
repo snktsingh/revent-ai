@@ -6,13 +6,17 @@ import { Drawer } from '@mui/material';
 import useVariants from './container';
 import {
   ButtonContainer,
+  CenteredSpinner,
   DrawerBtnContainer,
   DrawerMainContainer,
   DrawerVariant,
   DrawerVariantButton,
+  LoaderCard,
+  LoaderContainer,
   LogoContainer,
   OriginalSlideCard,
   RefreshBtn,
+  SpinnerBlade,
   Text,
   VariantButton,
   VariantSlide,
@@ -29,7 +33,7 @@ import { setVariantImageAsMain, toggleIsVariantSelected, updateCurrentCanvas } f
 export const CanvasVariant = () => {
   const [canvasIndex, setCanvasIndex] = useState<number>(0)
   const dispatch = useAppDispatch();
-  const [searchParams , setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const params = useParams<{ id: string }>();
   const { selectedSlideIndex } = useAppSelector(state => state.thunk);
   const {
@@ -46,16 +50,17 @@ export const CanvasVariant = () => {
     getCanvasImageFromJSON,
     activeSlideID,
     handleRefreshVariants,
-    handleOpenVariantsSlide
+    handleOpenVariantsSlide,
+    isLoading
   } = useVariants();
 
-  const [canvasJSONdata, setCanvasJson] = useState<string>(''); 
+  const [canvasJSONdata, setCanvasJson] = useState<string>('');
 
   useEffect(() => {
     const index = canvasList.findIndex((el) => el.id === canvasJS.id);
     setCanvasIndex(index);
     dispatch(toggleVariantSlide(false));
-  }, [canvasJS.variants.length>0]);
+  }, [canvasJS.variants.length > 0]);
 
 
   const slideId = searchParams.get('slide');
@@ -63,11 +68,11 @@ export const CanvasVariant = () => {
 
   useEffect(() => {
     const canvasIndex = canvasList.findIndex((slide) => slide.id === activeSlideID);
-    if(pptId && slideId && Number(slideId)>100 && canvasList[canvasIndex].originalSlideData  && canvasIndex !== 0){
-      dispatch(getSlideJSONData({pptId, slideId})).then((res)=>{
-        if(res.payload){
+    if (pptId && slideId && Number(slideId) > 100 && canvasList[canvasIndex].originalSlideData && canvasIndex !== 0) {
+      dispatch(getSlideJSONData({ pptId, slideId })).then((res) => {
+        if (res.payload) {
           getCanvasImageFromJSON(res.payload);
-          dispatch(updateCurrentCanvas({...canvasList[canvasIndex],originalSlideData : res.payload}));
+          dispatch(updateCurrentCanvas({ ...canvasList[canvasIndex], originalSlideData: res.payload }));
         }
       })
     }
@@ -75,7 +80,7 @@ export const CanvasVariant = () => {
 
   return (
     <div>
-      {( canvasJS.variants && canvasJS.variants.length > 0) && (
+      {(canvasJS.variants && canvasJS.variants.length > 0) && (
         <VariantButton
           onClick={handleOpenVariantsSlide}
         >
@@ -98,7 +103,7 @@ export const CanvasVariant = () => {
             background: 'none',
             border: 'none',
           },
-         
+
         }}
       >
         <DrawerMainContainer>
@@ -127,39 +132,56 @@ export const CanvasVariant = () => {
               </RefreshBtn>
 
             </ButtonContainer>
-            {(canvasJS.variants && canvasJS.variants.length) > 0 ? (
-              canvasJS.variants.map((el: VariantsType, i: number) => {
-                return (
-                  <VariantSlide
-                    key={el.imagesUrl}
-                    onClick={() => handleVariants(el.imagesUrl, el.pptUrl, i)}
-                  >
-                    <div>{i + 1}</div>
-                    <VariantSlideCard
-                      className={
-                        el.imagesUrl == variantImage && !selectedOriginalCanvas
-                          ? 'clicked-card'
-                          : ''
-                      }
-                    >
-                      <ThumbnailPreview
-                        src={el.imagesUrl}
-                        alt={`Variant ${i + 1}`}
-                        style={{
-                          width: '100%',
-                          height: 'auto',
-                          borderRadius: '3%',
-                        }}
-                        componentTitle='Variants'
-                      />
-                    </VariantSlideCard>
-                  </VariantSlide>
-                );
-              })
-            ) : 
-              <></>
-          }
+            {
+              isLoading ?
+                <LoaderContainer>
+                  {[1, 2, 3, 4].map((el) => {
+                    return <LoaderCard>
+                      <CenteredSpinner>
+                        {[...Array(12)].map((_, index) => (
+                          <SpinnerBlade key={index} />
+                        ))}
+                      </CenteredSpinner>
+                    </LoaderCard>
+                  })}
+                </LoaderContainer>
+                :
+                <>
+                  {(canvasJS.variants && canvasJS.variants.length) > 0 ? (
+                    canvasJS.variants.map((el: VariantsType, i: number) => {
+                      return (
+                        <VariantSlide
+                          key={el.imagesUrl}
+                          onClick={() => handleVariants(el.imagesUrl, el.slideVariantId, canvasJS.id)}
+                        >
+                          <div>{i + 1}</div>
+                          <VariantSlideCard
+                            className={
+                              el.imagesUrl == variantImage && !selectedOriginalCanvas ? 'clicked-card' : el.active && !variantImage
+                                ? 'clicked-card'
+                                : ''
+                            }
+                          >
+                            <ThumbnailPreview
+                              src={el.imagesUrl}
+                              alt={`Variant ${i + 1}`}
+                              style={{
+                                width: '100%',
+                                height: 'auto',
+                                borderRadius: '3%',
+                              }}
+                              componentTitle='Variants'
+                            />
+                          </VariantSlideCard>
+                        </VariantSlide>
+                      );
+                    })
+                  ) :
+                    <></>
+                  }
+                </>
 
+            }
             <LogoContainer>
               <div>
                 <span>Powered by</span>

@@ -2,7 +2,7 @@ import ProfileMenu from '@/common-ui/profileMenu';
 import { CanvasHeaderInput } from '@/constants/elements/Input/style';
 import { ButtonName, MainIconButton } from '@/constants/elements/button/style';
 import VerticalDivider from '@/constants/elements/divider';
-import { CanvasBack, PDF, PPT, Present, Share } from '@/constants/media';
+import { Blank, CanvasBack, PDF, PPT, Present, Share } from '@/constants/media';
 import {
   Box,
   Button,
@@ -19,9 +19,9 @@ import MenuItem from '@mui/material/MenuItem';
 import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
 import { ContentElements } from '../canvasBody/elementData';
 import useCanvasHeader from './container';
-import { HeaderContainer, UserAvatar } from './style';
+import { HeaderContainer, ShareMenu, UserAvatar } from './style';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { setPresentationName } from '@/redux/thunk/thunk';
+import { downloadPresentation, setPresentationName } from '@/redux/thunk/thunk';
 
 const MainCanvasHeader = ({ pId }: any) => {
   const dispatch = useAppDispatch();
@@ -59,6 +59,12 @@ const MainCanvasHeader = ({ pId }: any) => {
       event.currentTarget.blur();
     }
   };
+
+  const handleDownloadPresentation = () => {
+     dispatch(downloadPresentation(pId)).then(res => {
+        console.log(res.payload)
+     })
+  }
 
   return (
     <HeaderContainer>
@@ -104,7 +110,9 @@ const MainCanvasHeader = ({ pId }: any) => {
             <ButtonName>Share</ButtonName>
           </Stack>
         </MainIconButton>
-        <Menu
+
+        {/* Share menu */}
+        <ShareMenu
           id="Share-menu"
           anchorEl={anchorE2}
           open={openShare}
@@ -116,17 +124,13 @@ const MainCanvasHeader = ({ pId }: any) => {
               <h4>Download PDF</h4>
             </Stack>
           </MenuItem>
-          <MenuItem onClick={handleShareClose}>
+          <MenuItem onClick={handleDownloadPresentation}>
             <Stack direction="row" spacing={2}>
               <img src={PPT} width="10%" />
-              <h4>
-                <a href={pptUrl} target="_blank">
-                  Download PPT
-                </a>
-              </h4>
+              <h4>Download PPT</h4>
             </Stack>
           </MenuItem>
-        </Menu>
+        </ShareMenu>
         <MainIconButton onClick={handleClick}>
           <Stack direction="row" spacing={1}>
             <ButtonName>{`${userDetails?.firstName} ${userDetails?.lastName}`}</ButtonName>
