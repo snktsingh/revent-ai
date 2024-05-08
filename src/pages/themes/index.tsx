@@ -31,6 +31,7 @@ import ReventingLoader from '@/common-ui/loader';
 import ThumbnailPreview from '@/common-ui/thumbnailPreview';
 import CanvasThemes from '@/common-ui/addTheme';
 import { useState } from 'react';
+import NavBar from '@/common-ui/NavBar';
 
 const AppThemes = () => {
   const { navigate, thunk, dispatch, selectedThemeId, handleGenerate } =
@@ -47,7 +48,9 @@ const AppThemes = () => {
 
 
   return (
-    <TemplateContainer>
+     <>
+     <NavBar/>
+     <TemplateContainer>
       <span>
         <TemplateTitle>
           <img src={Back} onClick={() => navigate('/dashboard')} />
@@ -131,6 +134,7 @@ const AppThemes = () => {
       </ButtonContainer> */}
       <CanvasThemes />
     </TemplateContainer>
+     </>
   );
 };
 export default AppThemes;

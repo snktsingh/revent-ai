@@ -68,7 +68,7 @@ const MainCanvasHeader = ({ pId }: any) => {
 
   return (
     <HeaderContainer>
-      <MainIconButton onClick={handleWarningOpen}>
+      <MainIconButton onClick={handleGoBack}>
         <Stack direction="row" spacing={2}>
           <img src={CanvasBack} />
           <ButtonName>Back</ButtonName>
