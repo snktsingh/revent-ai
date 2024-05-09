@@ -34,6 +34,7 @@ const useVariants = () => {
   const { pptDetails } = useAppSelector(state => state.thunk);
   const { themeId } = useAppSelector(state => state.slideTheme);
   const { requestData } = useAppSelector(state => state.apiData);
+  const [prevVariant, setPrevVariant] = useState<string>('');
   const array: number[] = [1, 2, 3];
 
   const handleVariants = (CanvasURL: string,variantId : number, slideId : number) => {
@@ -52,6 +53,7 @@ const useVariants = () => {
   }, 1000);
 
   const handleApplyOriginalAsMain = () => {
+    setPrevVariant(variantImage);
     dispatch(setVariantImageAsMain(''));
     dispatch(toggleIsVariantSelected(false));
     dispatch(toggleSelectedOriginalCanvas(true));
@@ -134,7 +136,8 @@ const useVariants = () => {
     activeSlideID,
     handleRefreshVariants,
     handleOpenVariantsSlide,
-    isLoading
+    isLoading,
+    prevVariant
   };
 };
 export default useVariants;

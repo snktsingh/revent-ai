@@ -5,6 +5,7 @@ import canvas, {
   deleteCanvasItem,
   setCanvas,
   setVariantImageAsMain,
+  toggleIsVariantSelected,
   toggleSelectedOriginalCanvas,
   updateCanvasInList,
   updateCurrentCanvas,
@@ -80,8 +81,9 @@ const CanvasBody = () => {
   const [isVariantsEmpty, setIsVariantsEmpty] = useState<boolean>(true);
   const [isCanvasEmpty, setIsCanvasEmpty] = useState<boolean>(true);
   const [isEditBtnShow, setIsEditBtnShow] = useState<boolean>(false);
+  const [isReturnBtnShow, setIsReturnBtnShow] = useState<boolean>(false);
   const [canvasIndex, setCanvasIndex] = useState<number>(0);
-  const { handleApplyOriginalAsMain } = useVariants();
+  const { handleApplyOriginalAsMain, prevVariant } = useVariants();
   const handleLike = () => {
     setActiveLike(!activeLike);
     setActiveDislike(false);
@@ -259,8 +261,14 @@ const CanvasBody = () => {
         dispatch(toggleRegenerateButton(false));
       }
 
+      
       const hasVariants = (canvasList[index].canvas as any).objects.some((obj: any) => obj.name === 'VariantImage');
       setIsEditBtnShow(hasVariants);
+      
+      setIsReturnBtnShow(false)
+      if(!isVariantsEmpty && selectedOriginalCanvas && !hasVariants){
+        setIsReturnBtnShow(true)
+      }
     }
   }, [canvasList[canvasIndex].canvas, dispatch, variantImage, enabledElements, isVariantSelected]);
 
@@ -270,7 +278,13 @@ const CanvasBody = () => {
     }
 
     return true;
-  }
+  };
+
+  function returnToGenSlide() {
+    dispatch(setVariantImageAsMain(prevVariant));
+    dispatch(toggleIsVariantSelected(true));
+    dispatch(toggleSelectedOriginalCanvas(false));
+  };
 
 
   return (
@@ -333,6 +347,14 @@ const CanvasBody = () => {
                   onClick={() => handleApplyOriginalAsMain()}
                 >
                   Edit
+                </Button>}
+                {isReturnBtnShow && <Button
+                  variant="contained"
+                  size="medium"
+                  onClick={() => returnToGenSlide()}
+                  style={{marginLeft:2}}
+                >
+                  Return
                 </Button>}
                 &nbsp;
                 <Button
