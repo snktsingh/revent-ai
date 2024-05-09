@@ -43,7 +43,7 @@ export const fetchSlideImg = createAsyncThunk(
     if (req instanceof FormData) {
       isFormData = true;
     }
-    const currentSlideId = (getState() as RootState).canvas.canvasJS.id;
+    const currentSlideId = (getState() as RootState).canvas.activeSlideID;
     const { canvasList } = (getState() as RootState).canvas;
     const currentSlide = canvasList.findIndex(
       slide => slide.id == currentSlideId
@@ -54,19 +54,15 @@ export const fetchSlideImg = createAsyncThunk(
       req
     );
 
-    dispatch(
-      createSlideJSONData({ pptId, canvasJSON, slideId: res.data.slideId })
-    );
-
-    // if (canvasList[currentSlide].slideId < 999) {
-    //   dispatch(
-    //     createSlideJSONData({ pptId, canvasJSON, slideId: res.data.slideId })
-    //   );
-    // } else {
-    //   dispatch(
-    //     updateSlideJSONData({ pptId, canvasJSON, slideId: res.data.slideId })
-    //   );
-    // }
+    if (canvasList[currentSlide].variants.length === 0) {
+      dispatch(
+        createSlideJSONData({ pptId, canvasJSON, slideId: res.data.slideId })
+      );
+    } else {
+      dispatch(
+        updateSlideJSONData({ pptId, canvasJSON, slideId: res.data.slideId })
+      );
+    }
 
     console.log(res.data);
     dispatch(setVariantImageAsMain(res.data.variants[0].imagesUrl));
@@ -75,6 +71,7 @@ export const fetchSlideImg = createAsyncThunk(
     const updatedCanvasVariants = {
       ...currentCanvas,
       variants: res.data.variants,
+      slideId : res.data.slideId,
     };
     dispatch(updateCurrentCanvas(updatedCanvasVariants));
     dispatch(getUserCredit());

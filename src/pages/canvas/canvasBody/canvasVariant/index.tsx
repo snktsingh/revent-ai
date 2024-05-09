@@ -34,6 +34,7 @@ export const CanvasVariant = () => {
   const [canvasIndex, setCanvasIndex] = useState<number>(0)
   const dispatch = useAppDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [isVariantClicked, setIsVariantClicked] = useState<boolean>(false);
   const params = useParams<{ id: string }>();
   const { selectedSlideIndex } = useAppSelector(state => state.thunk);
   const {
@@ -67,6 +68,7 @@ export const CanvasVariant = () => {
   const pptId = params.id?.split('-')[0];
 
   useEffect(() => {
+    setIsVariantClicked(false);
     const canvasIndex = canvasList.findIndex((slide) => slide.id === activeSlideID);
     if (pptId && slideId && Number(slideId) > 100 && canvasList[canvasIndex].originalSlideData && canvasIndex !== 0) {
       dispatch(getSlideJSONData({ pptId, slideId })).then((res) => {
@@ -77,6 +79,17 @@ export const CanvasVariant = () => {
       })
     }
   }, [slideId]);
+
+  const getClickedClassName = (imgUrl : string, isActive : boolean) : boolean => {
+    
+    if(isActive && !isVariantClicked) {
+      return true;
+    }else if(imgUrl === variantImage && isVariantClicked && !selectedOriginalCanvas){
+      return true;
+    }
+
+    return false;
+  }
 
   return (
     <div>
@@ -152,12 +165,15 @@ export const CanvasVariant = () => {
                       return (
                         <VariantSlide
                           key={el.imagesUrl}
-                          onClick={() => handleVariants(el.imagesUrl, el.slideVariantId, canvasJS.slideId)}
+                          onClick={() => {
+                            setIsVariantClicked(true);
+                            handleVariants(el.imagesUrl, el.slideVariantId, canvasJS.slideId)
+                          }}
                         >
                           <div>{i + 1}</div>
                           <VariantSlideCard
                             className={
-                              el.imagesUrl == variantImage && !selectedOriginalCanvas ? 'clicked-card' : el.active && !variantImage
+                              getClickedClassName(el.imagesUrl, el.active)
                                 ? 'clicked-card'
                                 : ''
                             }
