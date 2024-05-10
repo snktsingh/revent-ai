@@ -59,6 +59,7 @@ import { useParams } from 'react-router-dom';
 const CanvasBody = () => {
   const slide = useAppSelector(state => state.slide);
   const [redirectAlert, setRedirectAlert] = useState<boolean>(false);
+  const [modificationAlert, setModificationAlert] = useState<boolean>(false);
 
   const openRedirectAlert = () => {
     setRedirectAlert(true);
@@ -84,7 +85,7 @@ const CanvasBody = () => {
   const [isEditBtnShow, setIsEditBtnShow] = useState<boolean>(false);
   const [isReturnBtnShow, setIsReturnBtnShow] = useState<boolean>(false);
   const [canvasIndex, setCanvasIndex] = useState<number>(0);
-  const { handleApplyOriginalAsMain, prevVariant } = useVariants();
+  const { handleApplyOriginalAsMain } = useVariants();
   const handleLike = () => {
     setActiveLike(!activeLike);
     setActiveDislike(false);
@@ -154,6 +155,7 @@ const CanvasBody = () => {
 
 
   const handleRequest = () => {
+    setModificationAlert(false)
     const currentCanvas = {
       ...canvasJS,
       originalSlideData: canvasList[canvasJS.id - 1].canvas,
@@ -252,7 +254,9 @@ const CanvasBody = () => {
 
   useEffect(() => {
     const index = canvasList.findIndex((canvas) => canvas.id === canvasJS.id);
-    setCanvasIndex(index);
+    if (index !== -1) {
+      setCanvasIndex(index);
+    }
     if (canvasList && (index || index === 0) && canvasList[index].canvas) {
       const canvasIsEmpty =
         (canvasList[index].canvas as any).objects.length === 0;
@@ -289,10 +293,53 @@ const CanvasBody = () => {
   };
 
   function returnToGenSlide() {
-    dispatch(setVariantImageAsMain(prevVariant));
+    if(areCanvasJsonDataDifferent(canvasJS.canvas, canvasList[canvasIndex].canvas)){
+      setModificationAlert(true);
+      return;
+    }
+    let prevVariant = canvasList[canvasIndex].lastVariant;
+    console.log({ prevVariant, canvasIndex })
     dispatch(toggleIsVariantSelected(true));
     dispatch(toggleSelectedOriginalCanvas(false));
+    dispatch(setVariantImageAsMain(prevVariant));
   };
+
+  const handleBackToPrevVariant = () => {
+    setModificationAlert(false);
+    let prevVariant = canvasList[canvasIndex].lastVariant;
+    dispatch(toggleIsVariantSelected(true));
+    dispatch(toggleSelectedOriginalCanvas(false));
+    dispatch(setVariantImageAsMain(prevVariant));
+  };
+
+  function areCanvasJsonDataDifferent(prevCanvas: any, modifiedCanvas: any): boolean {
+    if (prevCanvas.objects.length !== modifiedCanvas.objects.length) {
+      return true;
+    }
+
+    for (let i = 0; i < prevCanvas.objects.length; i++) {
+      const object1 = prevCanvas.objects[i];
+      const object2 = modifiedCanvas.objects[i];
+
+      if (object1.type === 'textbox' && object2.type === 'textbox') {
+        if (object1.text !== object2.text) {
+          return true;
+        }
+      } else {
+        for (const key in object1) {
+          if (object1.hasOwnProperty(key) && object2.hasOwnProperty(key)) {
+            if (JSON.stringify(object1[key]) !== JSON.stringify(object2[key])) {
+              return true;
+            }
+          }
+        }
+      }
+    }
+
+    return false;
+  }
+
+
 
 
   return (
@@ -396,22 +443,22 @@ const CanvasBody = () => {
                   <div>
                     {
                       disabled ?
-                        <Tooltip title="Sorry, this element can't be added because it conflicts with elements already on the canvas" style={{cursor:'not-allowed'}}>
+                        <Tooltip title="Sorry, this element can't be added because it conflicts with elements already on the canvas" style={{ cursor: 'not-allowed' }}>
                           <span>
-                          <MenuItem
-                            onClick={() => handleAddElementsToCanvas(item)}
-                            style={{ display: 'flex', flexDirection: 'column' }}
-                            key={index}
-                            disabled={disabled}
-                          >
-                            <Stack direction="row" width={'100%'} spacing={2} >
-                              <img src={item.icon} width="30vh" />
-                              <ElementContainer>
-                                <ElementTitle>{item.title}</ElementTitle>
-                                <ElementSubtitle>{item.subtitle}</ElementSubtitle>
-                              </ElementContainer>
-                            </Stack>
-                          </MenuItem>
+                            <MenuItem
+                              onClick={() => handleAddElementsToCanvas(item)}
+                              style={{ display: 'flex', flexDirection: 'column' }}
+                              key={index}
+                              disabled={disabled}
+                            >
+                              <Stack direction="row" width={'100%'} spacing={2} >
+                                <img src={item.icon} width="30vh" />
+                                <ElementContainer>
+                                  <ElementTitle>{item.title}</ElementTitle>
+                                  <ElementSubtitle>{item.subtitle}</ElementSubtitle>
+                                </ElementContainer>
+                              </Stack>
+                            </MenuItem>
                           </span>
                         </Tooltip>
                         :
@@ -457,7 +504,7 @@ const CanvasBody = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={closeRedirectAert}>Close</Button>
-          <Button onClick={handleRedirect} autoFocus>
+          <Button onClick={handleRequest} autoFocus>
             Make Modifications
           </Button>
         </DialogActions>
@@ -477,6 +524,27 @@ const CanvasBody = () => {
         <CircularProgress color="inherit" />
         <p>Regenerating the slide...</p>
       </Backdrop>
+      <Dialog
+        open={modificationAlert}
+        onClose={() => setModificationAlert(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {'Modification Detected !'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+          Please note that the changes made to the slide will only take effect after regeneration. If you wish to regenerate, click the button below. Alternatively, you can go back to the previous variant.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleBackToPrevVariant}>Back to Previous Variant</Button>
+          <Button onClick={handleRedirect} autoFocus>
+            Regenerate
+          </Button>
+        </DialogActions>
+      </Dialog>
     </BodyContainer>
   );
 };

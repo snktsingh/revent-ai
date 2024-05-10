@@ -59,6 +59,7 @@ export const processSlides = (slides: any[], presentationId : number): CanvasIte
       listImages: [],
       slideId: slideData[0].slideId,
       presentationId,
+      lastVariant : ''
     };
 
     slideData.forEach((element: any) => {
@@ -71,6 +72,7 @@ export const processSlides = (slides: any[], presentationId : number): CanvasIte
 
       if (element.active) {
         (slide.canvas as any).objects[0].src = element.thumbnailUrl;
+        slide.lastVariant = element.thumbnailUrl;
       }
     });
 

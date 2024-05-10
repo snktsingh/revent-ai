@@ -2,6 +2,7 @@ import {
   CanvasItem,
   IShapeRequest,
   TableDetails,
+  UpdateLastVariantPayload,
 } from '@/interface/storeTypes';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { fabric } from 'fabric';
@@ -44,6 +45,7 @@ export const initialState: CanvasSate = {
       listImages: [],
       slideId: 1,
       presentationId: 1,
+      lastVariant: ''
     },
   ],
   canvasJS: {
@@ -55,6 +57,7 @@ export const initialState: CanvasSate = {
     listImages: [],
     slideId: 1,
     presentationId: 1,
+    lastVariant:'',
   },
   activeSlideID: 1,
   size: 1,
@@ -121,6 +124,7 @@ export const CanvasReducer = createSlice({
           listImages: [],
           slideId: canvasID,
           presentationId: 1,
+          lastVariant :'',
         },
       ];
 
@@ -137,6 +141,7 @@ export const CanvasReducer = createSlice({
           listImages: [],
           slideId: canvasID,
           presentationId: 1,
+          lastVariant :'',
         },
       };
     },
@@ -160,7 +165,6 @@ export const CanvasReducer = createSlice({
     },
     updateCanvasInList(state, action) {
       const { id, updatedCanvas } = action.payload;
-      console.log({ updatedCanvas });
 
       const updatedList = state.canvasList.map(canvasItem => {
         if (canvasItem.id === id) {
@@ -295,6 +299,14 @@ export const CanvasReducer = createSlice({
       }
       state.canvasJS = state.canvasList[canvasIndex];
     },
+    updateLastVariant(state, action: PayloadAction<UpdateLastVariantPayload>) {
+      const { slideId, lastVariant } = action.payload;
+      const canvasIndex = state.canvasList.findIndex(canvas => canvas.id === slideId);
+      if (canvasIndex !== -1) {
+        state.canvasList[canvasIndex].lastVariant = lastVariant;
+        state.canvasJS.lastVariant = lastVariant;
+      }
+    },
   },
 });
 
@@ -326,6 +338,7 @@ export const {
   updateCanvasList,
   toggleIsVariantSelected,
   updateListImagesWithCanvasId,
+  updateLastVariant,
 } = CanvasReducer.actions;
 
 export default CanvasReducer.reducer;

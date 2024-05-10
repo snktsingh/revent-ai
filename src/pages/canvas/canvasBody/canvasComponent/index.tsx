@@ -66,7 +66,7 @@ const CanvasComponent: React.FC = () => {
 
   useEffect(() => {
     console.log({ canvasJS });
-    console.log("canvas loading");
+    console.log({ canvasList });
     setShowOptions(false);
     const canvas = new fabric.Canvas('canvas', {preserveObjectStacking:true});
     updateCanvasStyle(canvas);
@@ -109,10 +109,7 @@ const CanvasComponent: React.FC = () => {
 
 
         updateCanvasSlideData(canvas, canvasJS.id);
-        console.log('canvas 6');
         forEachCanvasObject(canvas);
-        console.log('canvas 7');
-        console.log('canvas 7');
         // canvas Events
         canvas.on('selection:created', handleElementBarSelection);
         canvas.on('selection:updated', handleElementBarSelection);
@@ -135,9 +132,6 @@ const CanvasComponent: React.FC = () => {
         );
 
         canvas.on('object:added', e => onObjectAddedEvent(e, canvas));
-        // console.log(
-        //   canvas.on('object:added', e => onObjectAddedEvent(e, canvas))
-        // );
         canvas.on('object:removed', e => onObjectRemovedEvent(e, canvas));
         canvas.on('object:modified', e => onObjectModifiedEvent(e, canvas));
         canvas.on('selection:cleared', e => onSelectionClearedEvent(e, canvas));
