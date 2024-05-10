@@ -92,7 +92,7 @@ const useCanvasHeader = () => {
     } else {
       updatePresentationName({
         presentationId: presentationId,
-        name: presentationName,
+        name: e.target.value,
       });
     }
   }, 500);
@@ -106,7 +106,7 @@ const useCanvasHeader = () => {
 
   const handleGoBack = () => {
     dispatch(updateStateLoading(false));
-    navigate('/dashboard', { replace: true });
+    navigate(ROUTES.DASHBOARD, { replace: true });
     let canvas: CanvasItem[] = [
       {
         id: 1,

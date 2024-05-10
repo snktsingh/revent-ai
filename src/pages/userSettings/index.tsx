@@ -65,6 +65,7 @@ import useSettings from './container';
 import { IUserAccountDetails } from '@/interfaces/authInterface';
 import { toast } from 'react-toastify';
 import { error } from 'console';
+import NavBar from '@/common-ui/NavBar';
 
 const initialUserDetails = {
   id: null,
@@ -213,44 +214,7 @@ const UserSettings: React.FC = () => {
 
   return (
     <>
-      <NavbarContainer>
-        <GridContainer container spacing={2}>
-          <GridRowCenter item xs={3}>
-            <Link to="/">
-              <img src={Logo} height="70%" />
-            </Link>
-          </GridRowCenter>
-          <GridRowEven item xs={6}>
-            <MenuButton>About Us</MenuButton>
-            <MenuButton>Services</MenuButton>
-            <MenuButton>Product</MenuButton>
-            <MenuButton>Get in Touch</MenuButton>
-          </GridRowEven>
-          <GridRowCenter xs={3}>
-            <StackColCenter direction="row" spacing={3}>
-              <Button onClick={handleClick}>
-                <Avatar
-                  sx={{
-                    fontSize: '12px',
-                    width: 28,
-                    height: 28,
-                    marginRight: '10px',
-                    bgcolor: `${theme.colorSchemes.light.palette.primary.main}`,
-                  }}
-                >
-                  {getFirstLettersForAvatar(`${userDetails?.firstName} ${userDetails?.lastName}`)}
-                </Avatar>
-                {userDetails?.firstName} {userDetails?.lastName}
-              </Button>
-              <ProfileMenu
-                anchorElForProfileMenu={openProfileMenu}
-                handleCloseProfileMenu={handleCloseProfileMenu}
-                setAnchorElForProfileMenu={setOpenProfileMenu}
-              />
-            </StackColCenter>
-          </GridRowCenter>
-        </GridContainer>
-      </NavbarContainer>
+      <NavBar/>
       {/* main settings */}
       <MainSettingsContainer>
         <BreadCrumb />

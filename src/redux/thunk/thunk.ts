@@ -43,12 +43,18 @@ export const fetchSlideImg = createAsyncThunk(
     if (req instanceof FormData) {
       isFormData = true;
     }
+    const currentSlideId = (getState() as RootState).canvas.activeSlideID;
+    const { canvasList } = (getState() as RootState).canvas;
+    const currentSlide = canvasList.findIndex(
+      slide => slide.id == currentSlideId
+    );
+
     const res = await FetchUtils.postRequest(
       `${isFormData ? ENDPOINT.GEN_PPT_IMAGES : ENDPOINT.GEN_PPT_MULTI}`,
       req
     );
-    const currentSlideId = (getState() as RootState).canvas.canvasJS.slideId;
-    if (currentSlideId == 1) {
+
+    if (canvasList[currentSlide].variants.length === 0) {
       dispatch(
         createSlideJSONData({ pptId, canvasJSON, slideId: res.data.slideId })
       );
@@ -65,6 +71,7 @@ export const fetchSlideImg = createAsyncThunk(
     const updatedCanvasVariants = {
       ...currentCanvas,
       variants: res.data.variants,
+      slideId : res.data.slideId,
     };
     dispatch(updateCurrentCanvas(updatedCanvasVariants));
     dispatch(getUserCredit());
@@ -185,7 +192,7 @@ export const uploadCustomTheme = createAsyncThunk(
 // Refresh button
 export const refreshVariants = createAsyncThunk(
   'ppt/refreshVariants',
-  async (req: any,{dispatch, getState}) => {
+  async (req: any, { dispatch, getState }) => {
     try {
       const res = await FetchUtils.postRequest(
         `${ENDPOINT.GEN_PPT_MULTI}`,
@@ -200,6 +207,33 @@ export const refreshVariants = createAsyncThunk(
       };
       dispatch(updateCurrentCanvas(updatedCanvasVariants));
       dispatch(getUserCredit());
+      return res;
+    } catch (error) {
+      return error;
+    }
+  }
+);
+
+// Download Presentation
+export const downloadPresentation = createAsyncThunk(
+  `ppt/downloadPresentation`,
+  async (pptId : number) => {
+    try {
+      const res = await FetchUtils.getRequest(`${ENDPOINT.PPT.DOWNLOAD_PRESENTATION}?presentationId=${pptId}`);
+      return res.data;
+    } catch (error) {
+      return error;
+    }
+  }
+);
+
+// update active variant 
+export const updateActiveVariantApi = createAsyncThunk(
+  "variant/active",
+  async ({pptId, slideId, variantId} : {pptId : number, slideId : number, variantId :number}) => {
+    try {
+      const res = await FetchUtils.putRequest(`${ENDPOINT.PPT.UPDATE_ACTIVE_VARIANT}?presentationId=${pptId}&slideId=${slideId}&slideVarientId=${variantId}`, null);
+
       return res;
     } catch (error) {
       return error;

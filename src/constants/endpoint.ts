@@ -26,6 +26,8 @@ export const ENDPOINT = {
     CANVAS_JSON : '/canvas-data',
     UPDATE_THEME: 'ppt/change-theme',
     UPLOAD_THEME : '/template/upload-custom',
+    DOWNLOAD_PRESENTATION : '/ppt/download-presentation',
+    UPDATE_ACTIVE_VARIANT : '/ppt/update-active-slide'
   },
   DASHBOARD: {
     FETCH_PPT_LIST: 'ppt/get-all-presentation',
@@ -36,9 +38,9 @@ export const ROUTES = {
   APP_ROOT: '/',
   SIGNUP: '/signup',
   LOGIN: '/login',
-  DASHBOARD: '/dashboard',
+  DASHBOARD: '/my-presentations',
   THEMES: '/themes',
-  CANVAS: '/canvas/:id',
+  CANVAS: '/presentation/:id',
   SETTINGS: '/settings',
   ACTIVATION: '/activation',
   FORGOT_PASSWORD : '/forgot-password',

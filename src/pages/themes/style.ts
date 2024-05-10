@@ -9,6 +9,7 @@ export const TemplateContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
   height: 100vh;
+  padding-top: 6%;
 `;
 export const TemplateTitle = styled.span`
   display: flex;

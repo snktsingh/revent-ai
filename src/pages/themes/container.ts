@@ -20,7 +20,7 @@ const useStartTheme = () => {
     const res = await dispatch(createPresentation());
     const data = res.payload;
     if (data.message === 'SUCCESS') {
-      navigate(`/canvas/${data.presentationId}-${faker.string.uuid()}`);
+      navigate(`/presentation/${data.presentationId}-${faker.string.uuid()}`);
     } else {
       toast.error('Failed to create presentation !');
     }

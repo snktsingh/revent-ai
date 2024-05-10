@@ -48,7 +48,8 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
   };
   const handleNavigateSettings = () => {
     handleClose();
-    navigate(ROUTES.SETTINGS, { state: ROUTES.CANVAS, replace: true });
+    navigate(ROUTES.SETTINGS, { state: { prevPath: location.pathname }, replace: true });
+    
   };
 
   return (
@@ -83,7 +84,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
         <ListItemIcon>
           <DashboardIcon />
         </ListItemIcon>
-        Dashboard
+        My Presentations
       </StyledMenuItem>
       <StyledMenuItem onClick={handleNavigateSettings}>
         <ListItemIcon>

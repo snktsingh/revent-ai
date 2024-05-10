@@ -13,7 +13,7 @@ export const MainContainer = styled.div`
   background-color: #f3f8ff;
   height: 100vh;
   width: 100vw;
-  padding: 2% 4%;
+  padding: 4% 2% 4% 4%;
 `;
 export const Title = styled.p`
   color: ${theme.colorSchemes.light.palette.primary.main};

@@ -5,7 +5,7 @@ import ENDPOINT, { ROUTES } from '@/constants/endpoint';
 import { setFormDisabled } from '@/redux/reducers/apiData';
 import { setToLS } from '@/utils/localStorage';
 import { IUserLogin } from '@/interfaces/authInterface';
-import { FetchUtils } from '@/utils/fetch-utils';
+import { FetchNonHeaderUtils, FetchUtils } from '@/utils/fetch-utils';
 
 const useLogin = () => {
   const dispatch = useAppDispatch();
@@ -17,7 +17,7 @@ const useLogin = () => {
   const userLogin = async (data: IUserLogin) => {
     toast.promise(
       async () => {
-        const res = await FetchUtils.postRequest(
+        const res = await FetchNonHeaderUtils.postRequest(
           `${ENDPOINT.AUTH.LOGIN}`,
           data
         );

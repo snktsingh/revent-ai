@@ -154,14 +154,18 @@ const CanvasThemes = () => {
       open={toggleTheme.openAddTheme}
       onClose={() => dispatch(setNewTheme(false))}
     >
-      {isUploading ? <></> : <DialogTitle>
+      {isUploading ? <></> : 
+      <>
+      { !isFileUploaded && <DialogTitle>
         <HeadText>
         Create new theme
         </HeadText>
-        <SubText>
+       <SubText>
           Add any existing pptx brand file to use as a theme on Revent Press
         </SubText>
       </DialogTitle>}
+      </>
+      }
       <DialogContent>
         {/* <DialogContentText>
           Please select a logo and a color code to create a new theme.

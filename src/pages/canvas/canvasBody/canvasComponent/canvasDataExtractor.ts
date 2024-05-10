@@ -236,12 +236,20 @@ const useCanvasData = () => {
     if (
       outputFormat &&
       outputFormat.elements.length > 0 &&
-      titleText !== "" &&
-      subTitleText !== ""
+      titleText !== "" 
     ) {
       outputFormat.title = titleText;
       outputFormat.subTitle = subTitleText;
       outputFormat.elements[0].title = titleText;
+    };
+    
+    if (
+      outputFormat &&
+      outputFormat.elements.length > 0 &&
+      subTitleText !== ""
+    ) {
+      outputFormat.title = titleText;
+      outputFormat.subTitle = subTitleText;
       outputFormat.elements[0].subTitle = subTitleText;
     }
 

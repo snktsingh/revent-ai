@@ -31,6 +31,8 @@ import ReventingLoader from '@/common-ui/loader';
 import ThumbnailPreview from '@/common-ui/thumbnailPreview';
 import CanvasThemes from '@/common-ui/addTheme';
 import { useState } from 'react';
+import NavBar from '@/common-ui/NavBar';
+import { ROUTES } from '@/constants/endpoint';
 
 const AppThemes = () => {
   const { navigate, thunk, dispatch, selectedThemeId, handleGenerate } =
@@ -47,10 +49,12 @@ const AppThemes = () => {
 
 
   return (
-    <TemplateContainer>
+     <>
+     <NavBar/>
+     <TemplateContainer>
       <span>
         <TemplateTitle>
-          <img src={Back} onClick={() => navigate('/dashboard')} />
+          <img src={Back} onClick={() => navigate(ROUTES.DASHBOARD)} />
           <Title>Create your Presentations</Title>
         </TemplateTitle>
         <br />
@@ -131,6 +135,7 @@ const AppThemes = () => {
       </ButtonContainer> */}
       <CanvasThemes />
     </TemplateContainer>
+     </>
   );
 };
 export default AppThemes;

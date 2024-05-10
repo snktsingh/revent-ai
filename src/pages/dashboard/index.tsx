@@ -39,6 +39,7 @@ import ProfileMenu from '@/common-ui/profileMenu';
 import ThumbnailPreview from '@/common-ui/thumbnailPreview';
 import { faker } from '@faker-js/faker';
 import { Blank } from '@/constants/media';
+import NavBar from '@/common-ui/NavBar';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -82,8 +83,10 @@ const Dashboard = () => {
       : pptList;
 
   return (
-    <MainContainer>
-      <Stack direction="row" display="flex" justifyContent="space-between">
+     <>
+     <NavBar/>
+     <MainContainer>
+      {/* <Stack direction="row" display="flex" justifyContent="space-between">
         <h3>Hello {userDetails?.firstName} !</h3>
         <Button onClick={handleOpenProfile}>
           <Stack direction="row" spacing={1} alignItems="center">
@@ -102,7 +105,7 @@ const Dashboard = () => {
             <span>{`${userDetails?.firstName} ${userDetails?.lastName}`}</span>
           </Stack>
         </Button>
-      </Stack>
+      </Stack> */}
       <ProfileMenu
         anchorElForProfileMenu={openProfileMenu}
         handleCloseProfileMenu={handleCloseProfileMenu}
@@ -191,7 +194,7 @@ const Dashboard = () => {
                       }}
                       onClick={() => {
                         navigate(
-                          `/canvas/${ppt.presentationId}-${faker.string.uuid()}`
+                          `/presentation/${ppt.presentationId}-${faker.string.uuid()}`
                         );
                       }}
                     >
@@ -254,6 +257,7 @@ const Dashboard = () => {
         </Loader>
       )}
     </MainContainer>
+     </>
   );
 };
 export default Dashboard;

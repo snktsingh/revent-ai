@@ -41,6 +41,10 @@ export default function SlideList() {
   } = useSlideList();
 
   const { pptDetails, isLoading } = useAppSelector(state => state.thunk);
+
+  useEffect(() => {
+    dispatch(setActiveSlideId(1));
+  } , [])
   
 
   useEffect(() => {
