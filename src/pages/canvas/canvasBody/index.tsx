@@ -32,6 +32,7 @@ import {
   MenuItem,
   Stack,
   TextField,
+  Tooltip,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Slide, ToastContainer } from 'react-toastify';
@@ -93,12 +94,17 @@ const CanvasBody = () => {
     setActiveDislike(!activeDislike);
     setActiveLike(false);
   };
-  const params = useParams<{ id: string }>(); 
-  const handleRegeneration = (item: any) => {
+  const params = useParams<{ id: string }>();
+
+
+  const handleAddElementsToCanvas = (item: any) => {
+    const hasVariants = (canvasJS.canvas as any).objects.some((obj: any) => obj.name === 'VariantImage');
     if (Array.isArray(canvasJS.variants) && canvasJS.variants.length === 0) {
       handleClose();
       item.onClick();
       dispatch(setMenuItemKey(item.key));
+    } else if (hasVariants) {
+      openRedirectAlert();
     } else {
       handleClose();
       if (selectedOriginalCanvas) {
@@ -108,6 +114,7 @@ const CanvasBody = () => {
       openRedirectAlert();
     }
   };
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -155,9 +162,10 @@ const CanvasBody = () => {
     const canvasJSON = canvasList[canvasJS.id - 1].canvas;
     const pptId = params.id?.split('-')[0];
 
-    const isListImagesPresent = requestData?.elements.some((canvas => canvas.shape === 'List'));
+    const isListImagesPresent = requestData?.elements.some((canvas => canvas.shape === 'ImageSubtitle'));
     const isImagesPresent = requestData?.elements.some((canvas => canvas.shape === 'Images'));
     const isQuoteImagesPresent = requestData?.elements.some((canvas => canvas.shape === 'Quote'));
+
 
     if (isListImagesPresent) {
       let blob = new Blob([JSON.stringify(requestData)], { type: 'application/json' });
@@ -168,7 +176,7 @@ const CanvasBody = () => {
         for (let i = 0; i < listImagesArray.images.length; i++) {
           formData.append("images", listImagesArray.images[i].file);
         }
-        dispatch(fetchSlideImg({req :formData, canvasJSON, pptId}));
+        dispatch(fetchSlideImg({ req: formData, canvasJSON, pptId }));
         dispatch(toggleSelectedOriginalCanvas(false));
       }
       return;
@@ -184,7 +192,7 @@ const CanvasBody = () => {
         for (let i = 0; i < ImagesArray.images.length; i++) {
           formData.append("images", ImagesArray.images[i].file);
         }
-        dispatch(fetchSlideImg({req :formData, canvasJSON, pptId}));
+        dispatch(fetchSlideImg({ req: formData, canvasJSON, pptId }));
         dispatch(toggleSelectedOriginalCanvas(false));
       }
       return;
@@ -200,19 +208,19 @@ const CanvasBody = () => {
           for (let i = 0; i < QuoteImagesArray.images.length; i++) {
             formData.append("images", QuoteImagesArray.images[i].file);
           }
-          dispatch(fetchSlideImg({req :formData, canvasJSON, pptId}));
+          dispatch(fetchSlideImg({ req: formData, canvasJSON, pptId }));
           dispatch(toggleSelectedOriginalCanvas(false));
           return;
         }
       }
       return;
     }
-    let reqData = {...requestData};
-    if(params.id?.split('-')[0] && reqData){
+    let reqData = { ...requestData };
+    if (params.id?.split('-')[0] && reqData) {
       const ptId = Number(params.id?.split('-')[0]);
       reqData.presentationId = ptId;
     }
-    dispatch(fetchSlideImg({req :reqData, canvasJSON, pptId}));
+    dispatch(fetchSlideImg({ req: reqData, canvasJSON, pptId }));
     dispatch(toggleSelectedOriginalCanvas(false));
   };
 
@@ -261,12 +269,12 @@ const CanvasBody = () => {
         dispatch(toggleRegenerateButton(false));
       }
 
-      
+
       const hasVariants = (canvasList[index].canvas as any).objects.some((obj: any) => obj.name === 'VariantImage');
       setIsEditBtnShow(hasVariants);
-      
+
       setIsReturnBtnShow(false)
-      if(!isVariantsEmpty && selectedOriginalCanvas && !hasVariants){
+      if (!isVariantsEmpty && selectedOriginalCanvas && !hasVariants) {
         setIsReturnBtnShow(true)
       }
     }
@@ -295,7 +303,7 @@ const CanvasBody = () => {
         hideProgressBar
         transition={Slide}
       />
-      <Grid  container>
+      <Grid container>
         <Grid item xs={2}>
           <SlideList />
         </Grid>
@@ -352,7 +360,7 @@ const CanvasBody = () => {
                   variant="contained"
                   size="medium"
                   onClick={() => returnToGenSlide()}
-                  style={{marginLeft:2}}
+                  style={{ marginLeft: 2 }}
                 >
                   Return
                 </Button>}
@@ -383,21 +391,46 @@ const CanvasBody = () => {
                 onChange={handleElementSearch}
               />
               {filteredList.map((item, index) => {
+                let disabled = isDisabled(item.title);
                 return (
-                  <MenuItem
-                    onClick={() => handleRegeneration(item)}
-                    style={{ display: 'flex', flexDirection: 'column' }}
-                    key={index}
-                    disabled={isDisabled(item.title)}
-                  >
-                    <Stack direction="row" width={'100%'} spacing={2} >
-                      <img src={item.icon} width="30vh" />
-                      <ElementContainer>
-                        <ElementTitle>{item.title}</ElementTitle>
-                        <ElementSubtitle>{item.subtitle}</ElementSubtitle>
-                      </ElementContainer>
-                    </Stack>
-                  </MenuItem>
+                  <div>
+                    {
+                      disabled ?
+                        <Tooltip title="Sorry, this element can't be added because it conflicts with elements already on the canvas" style={{cursor:'not-allowed'}}>
+                          <span>
+                          <MenuItem
+                            onClick={() => handleAddElementsToCanvas(item)}
+                            style={{ display: 'flex', flexDirection: 'column' }}
+                            key={index}
+                            disabled={disabled}
+                          >
+                            <Stack direction="row" width={'100%'} spacing={2} >
+                              <img src={item.icon} width="30vh" />
+                              <ElementContainer>
+                                <ElementTitle>{item.title}</ElementTitle>
+                                <ElementSubtitle>{item.subtitle}</ElementSubtitle>
+                              </ElementContainer>
+                            </Stack>
+                          </MenuItem>
+                          </span>
+                        </Tooltip>
+                        :
+                        <MenuItem
+                          onClick={() => handleAddElementsToCanvas(item)}
+                          style={{ display: 'flex', flexDirection: 'column' }}
+                          key={index}
+                          disabled={disabled}
+                        >
+                          <Stack direction="row" width={'100%'} spacing={2} >
+                            <img src={item.icon} width="30vh" />
+                            <ElementContainer>
+                              <ElementTitle>{item.title}</ElementTitle>
+                              <ElementSubtitle>{item.subtitle}</ElementSubtitle>
+                            </ElementContainer>
+                          </Stack>
+                        </MenuItem>
+                    }
+                  </div>
                 );
               })}
             </Menu>
@@ -419,7 +452,7 @@ const CanvasBody = () => {
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             Changes cannot be applied on the current design. If you want to make
-            modifications Please visit the original slide from variants section.
+            modifications Please visit the original slide from variants section or Click Below.
           </DialogContentText>
         </DialogContent>
         <DialogActions>

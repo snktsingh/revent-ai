@@ -65,7 +65,7 @@ export const processSlides = (slides: any[], presentationId : number): CanvasIte
       slide.variants.push({
         pptUrl: '',
         imagesUrl: element.thumbnailUrl,
-        active : element.active,
+        activeSlide : element.active,
         slideVariantId : Number(element.slideVariantId)
       });
 

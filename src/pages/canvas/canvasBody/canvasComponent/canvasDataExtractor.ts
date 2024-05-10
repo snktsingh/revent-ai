@@ -210,7 +210,7 @@ const useCanvasData = () => {
           subTitleText = canvasObject.text;
           ConclusionSlide.subTitle = canvasObject.text;
         } else if (canvasObject.name.startsWith(LIST_TEXT)) {
-          const ListImage = getOrCreateElement('List', '1', outputFormat);
+          const ListImage = getOrCreateElement('ImageSubtitle', '1', outputFormat);
           ListImage.data?.push({
             name: canvasObject.text,
             heading: '',

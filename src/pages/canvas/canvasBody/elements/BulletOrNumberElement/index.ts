@@ -156,7 +156,7 @@ export const useBulletOrNumberedText = () => {
 //     this._renderChars(method, ctx, line, left, top, lineIndex);
 //   };
 
-//   const BulletText = new fabric.StaticText({
+//   const BulletText = new StaticTextObject({
 //     text:'Click to add some text.',
 //     fontSize: 12,
 //     width: 250,
