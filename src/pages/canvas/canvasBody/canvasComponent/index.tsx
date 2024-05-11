@@ -93,7 +93,9 @@ const CanvasComponent: React.FC = () => {
           getElementsData(
             canvas.toObject(customFabricProperties)?.objects,
             themeId
-          );
+          ).catch(error => {
+            console.error('An error occurred:', error);
+          });;
         }
 
         if (

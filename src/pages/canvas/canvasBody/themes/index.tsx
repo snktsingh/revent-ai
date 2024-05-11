@@ -87,7 +87,9 @@ export default function Templates() {
     } else {
       dispatch(setThemeId(theme.themeId));
     }
-    getElementsData((canvasJS.originalSlideData as any).objects, theme.themeId);
+    getElementsData((canvasJS.originalSlideData as any).objects, theme.themeId).catch(error => {
+      console.error('An error occurred:', error);
+    });
   };
 
   const handleClose = () => {

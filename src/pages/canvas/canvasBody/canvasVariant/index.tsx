@@ -52,7 +52,9 @@ export const CanvasVariant = () => {
     activeSlideID,
     handleRefreshVariants,
     handleOpenVariantsSlide,
-    isLoading
+    isLoading,
+    themeId,
+    getElementsData
   } = useVariants();
 
   const [canvasJSONdata, setCanvasJson] = useState<string>('');
@@ -62,9 +64,10 @@ export const CanvasVariant = () => {
     setCanvasIndex(index);
     if(canvasList[index].variants.length === 0){
       dispatch(toggleVariantSlide(false));
-      return;
+    } else {
+      dispatch(toggleVariantSlide(true));
     }
-    dispatch(toggleVariantSlide(true));
+
   }, [canvasJS.variants.length > 0]);
 
 
@@ -93,7 +96,7 @@ export const CanvasVariant = () => {
     }
 
     return false;
-  }
+  };
 
   return (
     <div>

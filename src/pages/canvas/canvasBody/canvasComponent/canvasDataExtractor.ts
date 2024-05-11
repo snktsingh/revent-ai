@@ -75,7 +75,7 @@ const useCanvasData = () => {
     }
   };
 
-  function getElementsData(canvasData: any[], themeId: number) {
+  async function getElementsData(canvasData: any[], themeId: number) {
     console.log({ canvasData });
     createDisabledElements(canvasData);
     let tableData: TableDataType | undefined;
@@ -313,8 +313,13 @@ const useCanvasData = () => {
     }
     console.log({ outputFormat });
     dispatch(setRequestData(outputFormat));
+    return new Promise<any>((resolve, reject) => {
+      resolve(outputFormat);
+    });
   }
 
+
+  // segregating bullet points
   function segregateBulletPoints(text: string): BulletPointsFunctionType {
     const lines: string[] = text.split('\n');
     let mainBulletPoints: string[] = [];

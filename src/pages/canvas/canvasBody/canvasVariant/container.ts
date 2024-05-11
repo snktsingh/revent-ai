@@ -100,22 +100,27 @@ const useVariants = () => {
   };
 
   const handleRefreshVariants = () => {
+    const currentSlideIndex = canvasList.findIndex(
+      slide => slide.id === activeSlideID
+    );
     SetIsLoading(true);
-    dispatch(refreshVariants(requestData)).then((res) => {
+    try {
+      getElementsData(
+        (canvasList[currentSlideIndex].originalSlideData as any)?.objects,
+        themeId
+      ).then((req) => {
+        dispatch(refreshVariants(req)).then((res) => {
+          SetIsLoading(false);
+        });
+      });
+    } catch (error) {
       SetIsLoading(false);
-    });
+      console.log(error)
+    }
   };
 
   const handleOpenVariantsSlide = () => {
     dispatch(toggleVariantSlide(!openVariant));
-
-    const currentSlideIndex = canvasList.findIndex(
-      slide => slide.id === activeSlideID
-    );
-    getElementsData(
-      (canvasList[currentSlideIndex].originalSlideData as any)?.objects,
-      themeId
-    );
   };
 
   useEffect(() => {
@@ -138,6 +143,8 @@ const useVariants = () => {
     handleRefreshVariants,
     handleOpenVariantsSlide,
     isLoading,
+    themeId,
+    getElementsData
   };
 };
 export default useVariants;
