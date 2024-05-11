@@ -60,7 +60,11 @@ export const CanvasVariant = () => {
   useEffect(() => {
     const index = canvasList.findIndex((el) => el.id === canvasJS.id);
     setCanvasIndex(index);
-    dispatch(toggleVariantSlide(false));
+    if(canvasList[index].variants.length === 0){
+      dispatch(toggleVariantSlide(false));
+      return;
+    }
+    dispatch(toggleVariantSlide(true));
   }, [canvasJS.variants.length > 0]);
 
 

@@ -494,7 +494,7 @@ const CanvasBody = () => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {'Modification Detected !'}
+          {'Changes Detected !'}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
@@ -504,7 +504,7 @@ const CanvasBody = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={closeRedirectAert}>Close</Button>
-          <Button onClick={handleRequest} autoFocus>
+          <Button onClick={handleRedirect} autoFocus>
             Make Modifications
           </Button>
         </DialogActions>
@@ -540,7 +540,7 @@ const CanvasBody = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleBackToPrevVariant}>Back to Previous Variant</Button>
-          <Button onClick={handleRedirect} autoFocus>
+          <Button onClick={handleRequest} autoFocus>
             Regenerate
           </Button>
         </DialogActions>
