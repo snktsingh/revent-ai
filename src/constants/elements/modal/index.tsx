@@ -10,7 +10,7 @@ import {
   FormControlLabel,
   Stack,
 } from '@mui/material';
-import { deleteCanvasItem } from '@/redux/reducers/canvas';
+import { deleteSlide } from '@/redux/reducers/canvas';
 import { closeModal, updateDeleteAlertShow } from '@/redux/reducers/elements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { CheckBox } from '@mui/icons-material';
@@ -22,7 +22,7 @@ const PopUpModal = () => {
 
   const handleDelete = () => {
     dispatch(closeModal());
-    dispatch(deleteCanvasItem(canvasJS.id));
+    dispatch(deleteSlide(canvasJS.id));
   };
 
   return (

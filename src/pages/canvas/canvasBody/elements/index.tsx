@@ -4,8 +4,8 @@ import { fabric } from 'fabric';
 export default function useAllElements() {
 
   const title = new fabric.Textbox('Click to add a title', {
-    left: 185,
-    top: 60,
+    left: 15,
+    top: 13,
     fontSize: 30,
     width: 400,
     fontWeight: 'bold',
@@ -15,14 +15,13 @@ export default function useAllElements() {
     charSpacing: 2,
     cursorDelay: 1,
     hoverCursor: 'text',
-    textAlign: 'center',
     padding: 5,
     splitByGrapheme: true,
   });
 
   const subtitle = new fabric.Textbox('Click to add a subtitle', {
-    left: 300,
-    top: 130,
+    left: 15,
+    top: 60,
     width: 200,
     fontSize: 20,
     fontFamily: 'Arial',
@@ -182,7 +181,7 @@ export default function useAllElements() {
     const subtitle = new fabric.Textbox('Click to add a subtitle', {
       width: 700,
       left: left - 50,
-      top: top + 150,
+      top: top + 100,
       fontSize: 28,
       fontFamily: 'Arial',
       hoverCursor: 'text',

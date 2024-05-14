@@ -169,6 +169,7 @@ const useCanvasEvents = () => {
     const objectsAtPointer = canvas.getObjects().filter(obj => {
       return obj.containsPoint(pointer);
     });
+    
     console.log({objectsAtPointer})
     const textboxFound = objectsAtPointer.some(
       obj => obj.type === 'textbox' || obj.type === 'text'

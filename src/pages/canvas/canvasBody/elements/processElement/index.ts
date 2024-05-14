@@ -166,8 +166,8 @@ export const useProcessElement = () => {
     };
 
     const mainProcessContainer = new fabric.Rect({
-      left: 20,
-      top: 50,
+      left: 18,
+      top: 104,
       width: 510,
       height: 150,
       fill: 'transparent',

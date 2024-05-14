@@ -99,8 +99,8 @@ export function usePyramidElement() {
       });
       const text = new AutoResizingTextbox('Add Text', {
         fontSize: 18,
-        left: 365,
-        top: 138,
+        left: 565,
+        top: 143,
         width: 100,
         height: 60,
         name: `${PYRAMID_TEXT}_${pyramidId}`,
@@ -134,9 +134,9 @@ export function usePyramidElement() {
 
         const text = new AutoResizingTextbox('Add Text', {
           fontSize: 18,
-          left: 365,
+          left: 565,
           top: 213,
-          width: 140,
+          width: 217,
           name: `${PYRAMID_TEXT}_${pyramidId}`,
           fixedWidth: 150,
           fixedHeight: 50,
@@ -162,8 +162,8 @@ export function usePyramidElement() {
     let pyramidLevels = createLevels(2);
 
     group = new fabric.Group(pyramidLevels, {
-      left: 265,
-      top: 46,
+      left: 458,
+      top: 44,
       name: `${PYRAMID}_${pyramidId}`,
     });
 

@@ -130,8 +130,8 @@ export function useFunnelElement() {
     }
     let Funnel = createLevels(2);
     let group = new fabric.Group(Funnel, {
-      left: 325,
-      top: 253,
+      left: 411,
+      top: 249,
       name: `${FUNNEL}_${funnelId}`,
     });
 
@@ -157,8 +157,8 @@ export function useFunnelElement() {
       return canvas?.add(text);
     }
 
-    addText(376, 268, 'Add Text');
-    addText(377, 319, 'Add Text');
+    addText(461, 311, 'Add Text');
+    addText(461, 261, 'Add Text');
 
     canvas?.renderAll();
     dispatch(updateFunnelId());
