@@ -15,19 +15,22 @@ export function useImageElement() {
       let reader = new FileReader();
       const file = (e.target as HTMLInputElement)?.files?.[0];
       if (file) {
-        const fileSizeInMB = file.size / (1024 * 1024); 
+        const fileSizeInMB = file.size / (1024 * 1024);
         if (fileSizeInMB > 25) {
-          toast.warn('The image size exceeds 25 MB. Please choose a smaller image.', {
-            position: "top-center",
-            autoClose: 2000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-            });
-          fileInput.value = ''; 
+          toast.warn(
+            'The image size exceeds 25 MB. Please choose a smaller image.',
+            {
+              position: 'top-center',
+              autoClose: 2000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: 'light',
+            }
+          );
+          fileInput.value = '';
           return;
         }
 
@@ -36,11 +39,15 @@ export function useImageElement() {
         reader.onload = () => {
           if (canvas) {
             fabric.Image.fromURL(reader.result as string, img => {
+              const scaleFactor = 0.15; 
+
+              const scaledWidth = img.width! * scaleFactor;
+              const scaledHeight = img.height! * scaleFactor;
               img.set({
                 left: 5,
                 top: 5,
-                scaleX: 0.2,
-                scaleY: 0.2,
+                scaleX: scaledWidth / img.width!,
+                scaleY: scaledHeight / img.height!,
                 name: IMAGE,
               });
 

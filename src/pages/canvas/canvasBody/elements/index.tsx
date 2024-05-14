@@ -44,10 +44,10 @@ export default function useAllElements() {
 
   const paragraph = new fabric.Textbox('Click to add a paragraph', {
     left: 100,
-    top: 150, 
-    width: 600, 
+    top: 150,
+    width: 600,
     lineHeight: 1.5,
-    fontSize: 16, 
+    fontSize: 16,
     fontFamily: 'Arial',
     name: PARAGRAPH,
     fill: '#404040',
@@ -113,11 +113,11 @@ export default function useAllElements() {
       (activeObj && activeObj[0]?.type === 'text') ||
       activeObj[0]?.type == 'textbox'
     ) {
-      activeObj[0].setSelectionStyles(
-        { fontWeight: 'bold' },
-        activeObj[0].selectionStart,
-        activeObj[0].selectionEnd
-      );
+      const selectionStyles = activeObj[0].getSelectionStyles();
+      const isBold = selectionStyles.every((style: any) => style.fontWeight === 'bold');
+      const newStyle = isBold ? { fontWeight: 'normal' } : { fontWeight: 'bold' };
+
+      activeObj[0].setSelectionStyles(newStyle, activeObj[0].selectionStart, activeObj[0].selectionEnd);
       canvas?.renderAll();
     }
   };
@@ -127,11 +127,10 @@ export default function useAllElements() {
       (activeObj && activeObj[0]?.type === 'text') ||
       activeObj[0]?.type == 'textbox'
     ) {
-      activeObj[0].setSelectionStyles(
-        { fontStyle: 'italic' },
-        activeObj[0].selectionStart,
-        activeObj[0].selectionEnd
-      );
+      const selectionStyles = activeObj[0].getSelectionStyles();
+      const isItalic = selectionStyles.every((style: any) => style.fontStyle === 'italic');
+      const newItalicStyle = isItalic ? { fontStyle: 'normal' } : { fontStyle: 'italic' };
+      activeObj[0].setSelectionStyles(newItalicStyle, activeObj[0].selectionStart, activeObj[0].selectionEnd);
       canvas?.renderAll();
     }
   };
@@ -141,25 +140,20 @@ export default function useAllElements() {
       (activeObj && activeObj[0]?.type === 'text') ||
       activeObj[0]?.type == 'textbox'
     ) {
-      const selectedText = activeObj[0]?.text.slice(
-        activeObj[0].selectionStart,
-        activeObj[0].selectionEnd
-      );
-      activeObj[0].setSelectionStyles(
-        { underline: true },
-        activeObj[0].selectionStart,
-        activeObj[0].selectionEnd
-      );
+      const selectionStyles = activeObj[0].getSelectionStyles();
+      const isUnderline = selectionStyles.every((style: any) => style.underline);
+      const newUnderlineStyle = isUnderline ? { underline: false } : { underline: true };
+      activeObj[0].setSelectionStyles(newUnderlineStyle, activeObj[0].selectionStart, activeObj[0].selectionEnd);
       canvas?.renderAll();
     }
   };
 
   const addTitleAndSubTileSlide = (
-    left: number, top: number, 
-    canvas: fabric.Canvas | null, 
-    titleName : string, 
-    subtitleName : string
-    ) => {
+    left: number, top: number,
+    canvas: fabric.Canvas | null,
+    titleName: string,
+    subtitleName: string
+  ) => {
     const title = new fabric.Textbox('Click to add a title', {
       width: 600,
       left,
@@ -174,7 +168,7 @@ export default function useAllElements() {
       hoverCursor: 'text',
       textAlign: 'center',
       padding: 5,
-      height : 200,
+      height: 200,
       splitByGrapheme: true,
     });
 
@@ -186,12 +180,12 @@ export default function useAllElements() {
       fontFamily: 'Arial',
       hoverCursor: 'text',
       textAlign: 'center',
-      name : subtitleName,
-      padding :2,
-      height : 300,
+      name: subtitleName,
+      padding: 2,
+      height: 300,
       splitByGrapheme: true,
     });
-    
+
 
     canvas?.add(title, subtitle);
     canvas?.renderAll();
