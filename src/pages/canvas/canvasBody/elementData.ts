@@ -92,13 +92,13 @@ export const elementData: IElementData[] = [
     subtitle: 'Add Images onto the canvas',
     onClick: () => {},
   },
-  {
-    key: 7,
-    icon: AddTable,
-    title: 'Table',
-    subtitle: 'Add Tables onto the canvas',
-    onClick: () => {},
-  },
+  // {
+  //   key: 7,
+  //   icon: AddTable,
+  //   title: 'Table',
+  //   subtitle: 'Add Tables onto the canvas',
+  //   onClick: () => {},
+  // },
   {
     key: 8,
     icon: AddQuote,
