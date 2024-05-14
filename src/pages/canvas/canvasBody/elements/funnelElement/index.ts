@@ -6,6 +6,7 @@ import {
 } from '@/constants/elementNames';
 import { updateFunnelId } from '@/redux/reducers/fabricElements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
+import AutoResizingTextbox from '@/utils/fabric-utils/AutoResizingTextbox';
 import { fabric } from 'fabric';
 export function useFunnelElement() {
   const { funnelId } = useAppSelector(state => state.elementsIds);
@@ -47,9 +48,9 @@ export function useFunnelElement() {
 
     (funnelGroup as fabric.Group)?.addWithUpdate(trapezoid);
 
-    let text = new fabric.Textbox('Add Text', {
+    let text = new AutoResizingTextbox('Add Text', {
       fontSize: 18,
-      left: funnelGroup?.left! + funnelGroup?.width! / 2 - 70, 
+      left: funnelGroup?.left! + funnelGroup?.width! / 2 - 70,
       top: funnelGroup?.top! + 20,
       width: 140,
       editable: true,
@@ -58,22 +59,28 @@ export function useFunnelElement() {
       hasControls: false,
       lockMovementX: true,
       lockMovementY: true,
-      hasBorders: false
+      hasBorders: false,
+      fixedWidth: 140,
+      fixedHeight: 30,
+      splitByGrapheme: true,
     });
 
     let top: number = text.top || 0;
-    canvas.getObjects().reverse().forEach((object, i) => {
-      if (object.name == `${FUNNEL_TEXT}_${currentID}`) {
-        (object as fabric.Textbox).set({ top: top + 50, left: text.left });
-        top = top + 50;
-        object.setCoords();
-      }
-    });
+    canvas
+      .getObjects()
+      .reverse()
+      .forEach((object, i) => {
+        if (object.name == `${FUNNEL_TEXT}_${currentID}`) {
+          (object as fabric.Textbox).set({ top: top + 50, left: text.left });
+          top = top + 50;
+          object.setCoords();
+        }
+      });
 
     canvas.add(text);
-    canvas.discardActiveObject()
+    canvas.discardActiveObject();
     canvas.requestRenderAll();
-}
+  }
 
   //new funnel
   const addFunnel = (canvas: fabric.Canvas | null) => {
@@ -131,7 +138,7 @@ export function useFunnelElement() {
     canvas?.add(group);
 
     function addText(left: number, top: number, textC: string) {
-      let text = new fabric.Textbox(textC, {
+      let text = new AutoResizingTextbox(textC, {
         fontSize: 18,
         left,
         top,
@@ -139,10 +146,13 @@ export function useFunnelElement() {
         editable: true,
         textAlign: 'center',
         name: `${FUNNEL_TEXT}_${funnelId}`,
-        hasControls :false,
-        lockMovementX : true,
-        lockMovementY:true,
-        hasBorders: false
+        hasControls: false,
+        lockMovementX: true,
+        lockMovementY: true,
+        hasBorders: false,
+        fixedWidth: 140,
+        fixedHeight: 30,
+        splitByGrapheme: true,
       });
       return canvas?.add(text);
     }

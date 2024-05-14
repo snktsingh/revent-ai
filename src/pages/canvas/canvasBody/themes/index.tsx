@@ -1,4 +1,19 @@
+import ThumbnailPreview from '@/common-ui/thumbnailPreview';
+import { Add } from '@/constants/media';
+import { toggleTemplateVisibility } from '@/redux/reducers/elements';
+import {
+  setNewTheme,
+  setThemeCode,
+  setThemeId
+} from '@/redux/reducers/theme';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
+import {
+  getAllThemes,
+  toggleThemeChange,
+  updatePresentationTheme
+} from '@/redux/thunk/thunk';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import {
   Button,
   Dialog,
@@ -11,34 +26,13 @@ import {
   Stack,
   styled,
 } from '@mui/material';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { ListSlideCard, SingleSliderContainer } from '../style';
 import { useTheme } from '@mui/material/styles';
-import { toggleTemplateVisibility } from '@/redux/reducers/elements';
-import { Add } from '@/constants/media';
 import { useEffect, useState } from 'react';
-import {
-  setNewTheme,
-  setSelectedTheme,
-  setThemeCode,
-  setThemeId,
-} from '@/redux/reducers/theme';
-import {
-  fetchSlideImg,
-  getAllThemes,
-  toggleThemeChange,
-  updatePresentationTheme,
-} from '@/redux/thunk/thunk';
-import { useCanvasComponent } from '../canvasComponent/container';
 import { toast } from 'react-toastify';
-import ThumbnailPreview from '@/common-ui/thumbnailPreview';
 import useCanvasData from '../canvasComponent/canvasDataExtractor';
+import { useCanvasComponent } from '../canvasComponent/container';
+import { ListSlideCard } from '../style';
 import { ThemesSliderContainer } from './style';
-import { FetchUtils } from '@/utils/fetch-utils';
-import ENDPOINT from '@/constants/endpoint';
-import { processSlides } from '@/utils/transformResData';
-import { updateCanvasList } from '@/redux/reducers/canvas';
 
 export default function Templates() {
   const { customFabricProperties } = useCanvasComponent();

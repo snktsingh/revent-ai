@@ -16,7 +16,8 @@ export default function useAllElements() {
     cursorDelay: 1,
     hoverCursor: 'text',
     textAlign: 'center',
-    padding: 5
+    padding: 5,
+    splitByGrapheme: true,
   });
 
   const subtitle = new fabric.Textbox('Click to add a subtitle', {
@@ -27,7 +28,7 @@ export default function useAllElements() {
     fontFamily: 'Arial',
     name: SUBTITLE,
     fill: '#404040',
-        
+    splitByGrapheme: true,
   });
 
   const heading = new fabric.Textbox('Click to add a heading', {
@@ -38,18 +39,20 @@ export default function useAllElements() {
     fontFamily: 'Arial',
     fontWeight: 'bold',
     name: 'headingbox',
-    fill: '#404040'
+    fill: '#404040',
+    splitByGrapheme: true,
   });
 
   const paragraph = new fabric.Textbox('Click to add a paragraph', {
     left: 100,
-    top: 150, // Adjust the position as needed
-    width: 600, // Adjust the width as needed
+    top: 150, 
+    width: 600, 
     lineHeight: 1.5,
-    fontSize: 16, // Adjust the font size as needed
+    fontSize: 16, 
     fontFamily: 'Arial',
     name: PARAGRAPH,
-    fill: '#404040'
+    fill: '#404040',
+    splitByGrapheme: true,
   });
 
   paragraph.setControlsVisibility({
@@ -61,13 +64,6 @@ export default function useAllElements() {
     mb: true,
     ml: true,
     mr: true,
-  });
-
-  paragraph.on('scaling', function (this: fabric.IText) {
-    const scaleX = this.scaleX;
-    const scaleY = this.scaleY;
-    const newFontSize = (this.fontSize! * (scaleX! + scaleY!)) / 2;
-    this.fontSize = newFontSize;
   });
 
 
@@ -179,7 +175,8 @@ export default function useAllElements() {
       hoverCursor: 'text',
       textAlign: 'center',
       padding: 5,
-      height : 200
+      height : 200,
+      splitByGrapheme: true,
     });
 
     const subtitle = new fabric.Textbox('Click to add a subtitle', {
@@ -192,7 +189,8 @@ export default function useAllElements() {
       textAlign: 'center',
       name : subtitleName,
       padding :2,
-      height : 300
+      height : 300,
+      splitByGrapheme: true,
     });
     
 

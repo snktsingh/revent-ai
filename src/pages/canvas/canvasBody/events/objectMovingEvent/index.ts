@@ -9,6 +9,8 @@ import {
   FUNNEL_BASE,
   FUNNEL_LEVEL,
   FUNNEL_TEXT,
+  LIST_MAIN,
+  LIST_TEXT,
   PROCESS,
   PROCESS_ARROW,
   PROCESS_BOX,
@@ -336,8 +338,7 @@ export function useObjectMovingEvent() {
                top= top && top+50;
         });
       } else if (
-        movedObject.name === 'List_Container' ||
-        movedObject.name === 'LIST_ELEMENT'
+        movedObject.name === `${LIST_MAIN}_${objectID}`
       ) {
         const lastLeft = movedObject.get('lastLeft') || movedObject.left;
         const lastTop = movedObject.get('lastTop') || movedObject.top;
@@ -350,7 +351,7 @@ export function useObjectMovingEvent() {
           let top;
 
           if (
-            obj.name === 'listText' &&
+            obj.name ===  `${LIST_TEXT}_${objectID}` &&
             obj.intersectsWithObject(movedObject, true, true)
           ) {
             obj
