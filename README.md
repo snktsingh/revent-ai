@@ -1,4 +1,4 @@
-# SMI Frontend
+# Revent AI
 
 ### Setup Project
 
