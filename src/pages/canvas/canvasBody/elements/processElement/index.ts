@@ -5,6 +5,7 @@ import {
   PROCESS_TEXT,
 } from '@/constants/elementNames';
 import { customStyles, theme } from '@/constants/theme';
+import { IExtendedRectOptions } from '@/interface/fabricTypes';
 import { updateProcessId } from '@/redux/reducers/fabricElements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import AutoResizingTextbox from '@/utils/fabric-utils/AutoResizingTextbox';
@@ -60,7 +61,8 @@ export const useProcessElement = () => {
       hasControls: false,
       lockMovementX: true,
       lockMovementY: true,
-    });
+      level: `${PROCESS_BOX}_${currentID}_${rectCount + 1}`,
+    } as IExtendedRectOptions);
 
     let text = new AutoResizingTextbox('Add Text', {
       fontSize: 15,
@@ -76,6 +78,7 @@ export const useProcessElement = () => {
       lockMovementY: true,
       hasBorders: false,
       splitByGrapheme: true,
+      level: `${PROCESS_TEXT}_${currentID}_${rectCount + 1}`,
     });
 
     if (rectCount === 3) {
@@ -107,7 +110,8 @@ export const useProcessElement = () => {
       left: number,
       top: number,
       width: number,
-      height: number
+      height: number,
+      level: number
     ) {
       let rect = new fabric.Rect({
         left: left,
@@ -118,10 +122,11 @@ export const useProcessElement = () => {
         rx: 10,
         ry: 10,
         name: `${PROCESS_BOX}_${processId}`,
-      });
+        level: `${PROCESS_BOX}_${processId}_${level}`,
+      } as IExtendedRectOptions);
       return canvas?.add(rect);
     }
-    function addText(left: number, top: number) {
+    function addText(left: number, top: number, level: number) {
       const text = new AutoResizingTextbox('Add Text', {
         fontSize: 15,
         left,
@@ -136,6 +141,7 @@ export const useProcessElement = () => {
         lockMovementY: true,
         hasBorders: false,
         splitByGrapheme: true,
+        level: `${PROCESS_TEXT}_${processId}_${level}`,
       });
       return canvas?.add(text);
     }
@@ -184,11 +190,12 @@ export const useProcessElement = () => {
       mainProcessContainer.left!,
       mainProcessContainer.top! + 20,
       170,
-      130
+      130,
+      1
     );
-    addRectangle(305, mainProcessContainer.top! + 20, 170, 130);
-    addText(mainProcessContainer.left! + 4, mainProcessContainer.top! + 22);
-    addText(309, mainProcessContainer.top! + 22);
+    addRectangle(305, mainProcessContainer.top! + 20, 170, 130, 2);
+    addText(mainProcessContainer.left! + 4, mainProcessContainer.top! + 22, 1);
+    addText(309, mainProcessContainer.top! + 22, 2);
     canvas?.renderAll();
     dispatch(updateProcessId());
   }

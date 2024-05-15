@@ -173,13 +173,13 @@ const dispatch = useAppDispatch();
 
   function addList(canvas: fabric.Canvas, lastElement : fabric.Object | undefined) {
     if (lastElement && lastElement.left && lastElement.top) {
-      if(lastElement.left > 600 && lastElement.top < 240){
-        const newX = 33;
-        const newY = 245;
+      if(lastElement.left > 530 && lastElement.top < 240){
+        const newX = 28;
+        const newY = 275;
   
         addListElement(canvas, newX, newY!);
         return;
-      }else if(lastElement.left > 600 && lastElement.top > 200){
+      }else if(lastElement.left > 530 && lastElement.top > 200){
           console.log('maximum limit added')
       }else{
         const newX = lastElement.left + lastElement.getScaledWidth() + 50;

@@ -57,7 +57,8 @@ export function usePyramidElement() {
         fixedHeight: 100,
         name: `${PYRAMID_TEXT}_${currentID}`,
         fill: 'white',
-        hasBorders: false
+        hasBorders: false,
+        splitByGrapheme: true,
       });
       (activeObject as fabric.Group).addWithUpdate(trapezoid);
 
@@ -110,7 +111,8 @@ export function usePyramidElement() {
         lockMovementX: true,
         lockMovementY: true,
         fill: 'white',
-        hasBorders: false
+        hasBorders: false,
+        splitByGrapheme: true,
       });
 
       textsList.push(text);
