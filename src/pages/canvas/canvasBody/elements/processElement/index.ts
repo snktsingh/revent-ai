@@ -29,8 +29,6 @@ export const useProcessElement = () => {
       }
     });
 
-    
-
     const ArrowPoints = [
       { x: 100, y: 100 },
       { x: 125, y: 100 },
@@ -59,9 +57,9 @@ export const useProcessElement = () => {
       rx: 10,
       ry: 10,
       name: `${PROCESS_BOX}_${currentID}`,
-      hasControls :false,
-        lockMovementX : true,
-        lockMovementY:true
+      hasControls: false,
+      lockMovementX: true,
+      lockMovementY: true,
     });
 
     let text = new AutoResizingTextbox('Add Text', {
@@ -69,37 +67,37 @@ export const useProcessElement = () => {
       left: rect.left! + 5,
       top: rect.top! + 5,
       fill: theme.colorSchemes.light.palette.common.white,
-      width: 110,
-      height: 100,
+      width: 170,
       name: `${PROCESS_TEXT}_${currentID}`,
-      fixedWidth: 200,
-      fixedHeight: 100,
+      fixedWidth: 170,
+      fixedHeight: 125,
       hasControls: false,
       lockMovementX: true,
       lockMovementY: true,
-      hasBorders: false
+      hasBorders: false,
+      splitByGrapheme: true,
     });
 
-    if(rectCount === 3) {
-       rect.left = mainContainer.left!;
-       rect.top = mainContainer.top! + 180;
-       text.left = rect.left! + 5;
-       text.top = rect.top! + 5
+    if (rectCount === 3) {
+      rect.left = mainContainer.left!;
+      rect.top = mainContainer.top! + 180;
+      text.left = rect.left! + 5;
+      text.top = rect.top! + 5;
     }
 
     canvas.forEachObject(obj => {
       if (obj.name == `${PROCESS}_${currentID}`) {
         obj.set({
           width: rectCount < 3 ? obj.width! + 245 : obj.width,
-          height: rectCount === 3 ? 325 : obj.height
+          height: rectCount === 3 ? 325 : obj.height,
         });
       }
-    }); 
+    });
 
     canvas.add(rect);
     rectCount !== 3 && canvas.add(Arrow);
     canvas.add(text);
-    canvas.discardActiveObject()
+    canvas.discardActiveObject();
     canvas.renderAll();
   };
   // new process
@@ -129,15 +127,15 @@ export const useProcessElement = () => {
         left,
         top,
         fill: theme.colorSchemes.light.palette.common.white,
-        width: 110,
-        height: 100,
+        width: 170,
         name: `${PROCESS_TEXT}_${processId}`,
-        fixedHeight: 100,
-        fixedWidth: 200,
+        fixedWidth: 170,
+        fixedHeight: 125,
         hasControls: false,
         lockMovementX: true,
         lockMovementY: true,
         hasBorders: false,
+        splitByGrapheme: true,
       });
       return canvas?.add(text);
     }
@@ -159,17 +157,17 @@ export const useProcessElement = () => {
         angle,
         name: `${PROCESS_ARROW}_${processId}`,
         width: 20,
-        hasControls :false,
-        lockMovementX : true,
-        lockMovementY:true
+        hasControls: false,
+        lockMovementX: true,
+        lockMovementY: true,
       });
 
       return Arrow;
     };
 
     const mainProcessContainer = new fabric.Rect({
-      left: 20,
-      top: 50,
+      left: 18,
+      top: 104,
       width: 510,
       height: 150,
       fill: 'transparent',
@@ -189,8 +187,8 @@ export const useProcessElement = () => {
       130
     );
     addRectangle(305, mainProcessContainer.top! + 20, 170, 130);
-    addText(mainProcessContainer.left! + 10, mainProcessContainer.top! + 25);
-    addText(315, mainProcessContainer.top! + 25);
+    addText(mainProcessContainer.left! + 4, mainProcessContainer.top! + 22);
+    addText(309, mainProcessContainer.top! + 22);
     canvas?.renderAll();
     dispatch(updateProcessId());
   }

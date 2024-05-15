@@ -21,6 +21,7 @@ export interface CanvasItem {
   listImages: listObjType[];
   slideId: number;
   presentationId: number;
+  lastVariant : string;
 }
 
 export interface IPresentationDetails {
@@ -54,7 +55,7 @@ export interface IListofSlides {
 export interface VariantsType {
   pptUrl: string;
   imagesUrl: string;
-  active: boolean;
+  activeSlide: boolean;
   slideVariantId: number;
 }
 
@@ -110,4 +111,10 @@ export interface APIRequest {
   slideNumber: number;
   presentationId: number | null;
   presentationName?: string;
+}
+
+
+export interface UpdateLastVariantPayload {
+  slideId: number;
+  lastVariant: string;
 }

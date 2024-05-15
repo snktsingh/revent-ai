@@ -19,6 +19,7 @@ import { toggleSelectingSlide } from '../reducers/slide';
 import { IUpdateTheme } from '@/interfaces/themeInterface';
 import { Action } from '@dnd-kit/core/dist/store';
 import { getUserCredit } from './user';
+import { toggleVariantSlide } from '../reducers/elements';
 
 const initialState: ISlideRequests = {
   pptUrl: '',

@@ -47,7 +47,9 @@ const useCanvasEvents = () => {
     getElementsData(
       canvas.toObject(customFabricProperties)?.objects,
       themeId
-    );
+    ).catch(error => {
+      console.error('An error occurred:', error);
+    });
   };
 
   const onDoubleClickEvent = (
@@ -85,7 +87,9 @@ const useCanvasEvents = () => {
       const elementsData = getElementsData(
         canvas.toObject(customFabricProperties)?.objects,
         themeId
-      );
+      ).catch(error => {
+        console.error('An error occurred:', error);
+      });
       resolve(elementsData); 
     });
   
@@ -105,7 +109,9 @@ const useCanvasEvents = () => {
     getElementsData(
       canvas.toObject(customFabricProperties)?.objects,
       themeId
-    );
+    ).catch(error => {
+      console.error('An error occurred:', error);
+    });
     if (canvas.toObject()?.objects && canvas.toObject()?.objects.length >= 1) {
       dispatch(toggleRegenerateButton(false));
     } else {
@@ -121,7 +127,9 @@ const useCanvasEvents = () => {
     getElementsData(
       canvas.toObject(customFabricProperties)?.objects,
       themeId
-    );
+    ).catch(error => {
+      console.error('An error occurred:', error);
+    });
   };
 
   const onSelectionClearedEvent = (event: IEvent, canvas: fabric.Canvas) => {
@@ -132,7 +140,9 @@ const useCanvasEvents = () => {
     getElementsData(
       canvas.toObject(customFabricProperties)?.objects,
       themeId
-    );
+    ).catch(error => {
+      console.error('An error occurred:', error);
+    });
   };
 
   const onObjectMovingEvent = (
@@ -159,7 +169,8 @@ const useCanvasEvents = () => {
     const objectsAtPointer = canvas.getObjects().filter(obj => {
       return obj.containsPoint(pointer);
     });
-
+    
+    console.log({objectsAtPointer})
     const textboxFound = objectsAtPointer.some(
       obj => obj.type === 'textbox' || obj.type === 'text'
     );

@@ -79,7 +79,7 @@ export const useQuoteElement = () => {
     //   top: 120,
     // })
 
-    canvas?.add(text, authorText, QuoteContainer, group);
+    canvas?.add(QuoteContainer, group, text, authorText,);
   };
 
 

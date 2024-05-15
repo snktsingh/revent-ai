@@ -4,6 +4,7 @@ import {
   toggleIsVariantSelected,
   toggleSelectedOriginalCanvas,
   updateCanvasInList,
+  updateLastVariant,
 } from '@/redux/reducers/canvas';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { fabric } from 'fabric';
@@ -19,7 +20,7 @@ const useVariants = () => {
   const { updateCanvasDimensions } = useCanvasComponent();
   const { getElementsData } = useCanvasData();
   const dispatch = useAppDispatch();
-  const params = useParams<{ id: string }>(); 
+  const params = useParams<{ id: string }>();
   const [originalImageUrl, setOriginalImageUrl] = useState<string>('');
   const { openVariant } = useAppSelector(state => state.element);
   const [isLoading, SetIsLoading] = useState<boolean>(false);
@@ -37,23 +38,34 @@ const useVariants = () => {
   const [prevVariant, setPrevVariant] = useState<string>('');
   const array: number[] = [1, 2, 3];
 
-  const handleVariants = (CanvasURL: string,variantId : number, slideId : number) => {
-    console.log(variantId)
+  const handleVariants = (
+    CanvasURL: string,
+    variantId: number,
+    slideId: number
+  ) => {
+    console.log(variantId);
     dispatch(toggleIsVariantSelected(true));
     dispatch(toggleSelectedOriginalCanvas(false));
     dispatch(setVariantImageAsMain(CanvasURL));
     updateActiveVariant(slideId, variantId);
+    dispatch(
+      updateLastVariant({ slideId: activeSlideID, lastVariant: CanvasURL })
+    );
   };
 
-  const updateActiveVariant = useDebounce((slideId : number, variantId : number) => {
-    const pptId = Number(params.id?.split('-')[0]);
-    dispatch(updateActiveVariantApi({pptId, slideId, variantId})).then(res=> {
-      console.log(res)
-   });
-  }, 1000);
+  const updateActiveVariant = useDebounce(
+    (slideId: number, variantId: number) => {
+      const pptId = Number(params.id?.split('-')[0]);
+      dispatch(updateActiveVariantApi({ pptId, slideId, variantId })).then(
+        res => {
+          console.log(res);
+        }
+      );
+    },
+    1000
+  );
 
   const handleApplyOriginalAsMain = () => {
-    setPrevVariant(variantImage);
     dispatch(setVariantImageAsMain(''));
     dispatch(toggleIsVariantSelected(false));
     dispatch(toggleSelectedOriginalCanvas(true));
@@ -100,7 +112,7 @@ const useVariants = () => {
 
   const handleRefreshVariants = () => {
     SetIsLoading(true);
-    dispatch(refreshVariants(requestData)).then((res) => {
+    dispatch(refreshVariants(requestData)).then(res => {
       SetIsLoading(false);
     });
   };
@@ -111,10 +123,20 @@ const useVariants = () => {
     const currentSlideIndex = canvasList.findIndex(
       slide => slide.id === activeSlideID
     );
-    getElementsData(
-      (canvasList[currentSlideIndex].originalSlideData as any)?.objects,
-      themeId
-    );
+    SetIsLoading(true);
+    try {
+      getElementsData(
+        (canvasList[currentSlideIndex].originalSlideData as any)?.objects,
+        themeId
+      ).then(req => {
+        dispatch(refreshVariants(req)).then(res => {
+          SetIsLoading(false);
+        });
+      });
+    } catch (error) {
+      SetIsLoading(false);
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -137,7 +159,8 @@ const useVariants = () => {
     handleRefreshVariants,
     handleOpenVariantsSlide,
     isLoading,
-    prevVariant
+    themeId,
+    getElementsData,
   };
 };
 export default useVariants;

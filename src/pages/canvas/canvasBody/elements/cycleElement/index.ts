@@ -84,7 +84,8 @@ export function useCycleElement() {
         hasControls: false,
         lockMovementX: true,
         lockMovementY: true,
-        hasBorders: false
+        hasBorders: false,
+        splitByGrapheme: true,
       });
       return canvas.add(text);
     };
@@ -264,14 +265,14 @@ export function useCycleElement() {
         fontFamily: 'Arial',
         editable: true,
         width: 80,
-        height: 60,
         fill: theme.colorSchemes.light.palette.common.white,
         name: `${CYCLE_TEXT}_${cycleId}`,
         fixedHeight: 60,
         hasControls: false,
         lockMovementX: true,
         lockMovementY: true,
-        hasBorders: false
+        hasBorders: false,
+        splitByGrapheme: true,
       });
 
       const circle = new fabric.Circle({

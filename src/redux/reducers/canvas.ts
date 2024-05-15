@@ -2,6 +2,7 @@ import {
   CanvasItem,
   IShapeRequest,
   TableDetails,
+  UpdateLastVariantPayload,
 } from '@/interface/storeTypes';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { fabric } from 'fabric';
@@ -44,6 +45,7 @@ export const initialState: CanvasSate = {
       listImages: [],
       slideId: 1,
       presentationId: 1,
+      lastVariant: ''
     },
   ],
   canvasJS: {
@@ -55,6 +57,7 @@ export const initialState: CanvasSate = {
     listImages: [],
     slideId: 1,
     presentationId: 1,
+    lastVariant:'',
   },
   activeSlideID: 1,
   size: 1,
@@ -121,6 +124,7 @@ export const CanvasReducer = createSlice({
           listImages: [],
           slideId: canvasID,
           presentationId: 1,
+          lastVariant :'',
         },
       ];
 
@@ -137,6 +141,7 @@ export const CanvasReducer = createSlice({
           listImages: [],
           slideId: canvasID,
           presentationId: 1,
+          lastVariant :'',
         },
       };
     },
@@ -160,7 +165,6 @@ export const CanvasReducer = createSlice({
     },
     updateCanvasInList(state, action) {
       const { id, updatedCanvas } = action.payload;
-      console.log({ updatedCanvas });
 
       const updatedList = state.canvasList.map(canvasItem => {
         if (canvasItem.id === id) {
@@ -208,13 +212,15 @@ export const CanvasReducer = createSlice({
         canvasJS: copiedCanvas,
       };
     },
-    deleteCanvasItem(state, action) {
+    deleteSlide(state, action) {
       const idToDelete = action.payload;
 
       if (idToDelete >= 1 && idToDelete <= state.canvasList.length) {
         const updatedCanvasList = state.canvasList.filter(
           canvas => canvas.id !== idToDelete
         );
+
+        
         const renumberedCanvasList = updatedCanvasList.map((canvas, index) => ({
           ...canvas,
           id: index + 1,
@@ -223,11 +229,12 @@ export const CanvasReducer = createSlice({
         const newActiveSlideId = idToDelete === 1 ? 1 : idToDelete - 1;
 
         const newActiveCanvasJS = renumberedCanvasList[newActiveSlideId - 1];
+        console.log({newActiveCanvasJS, renumberedCanvasList, updatedCanvasList, idToDelete, newActiveSlideId})
         return {
           ...state,
           canvasList: renumberedCanvasList,
           activeSlideID: newActiveSlideId,
-          canvasJS: newActiveCanvasJS || null,
+          canvasJS: newActiveCanvasJS,
         };
       }
       return state;
@@ -295,6 +302,14 @@ export const CanvasReducer = createSlice({
       }
       state.canvasJS = state.canvasList[canvasIndex];
     },
+    updateLastVariant(state, action: PayloadAction<UpdateLastVariantPayload>) {
+      const { slideId, lastVariant } = action.payload;
+      const canvasIndex = state.canvasList.findIndex(canvas => canvas.id === slideId);
+      if (canvasIndex !== -1) {
+        state.canvasList[canvasIndex].lastVariant = lastVariant;
+        state.canvasJS.lastVariant = lastVariant;
+      }
+    },
   },
 });
 
@@ -309,7 +324,7 @@ export const {
   updateCanvasInList,
   updateCurrentCanvas,
   copyCanvasCopy,
-  deleteCanvasItem,
+  deleteSlide,
   setActiveSlideId,
   handleSize,
   handleInputSize,
@@ -326,6 +341,7 @@ export const {
   updateCanvasList,
   toggleIsVariantSelected,
   updateListImagesWithCanvasId,
+  updateLastVariant,
 } = CanvasReducer.actions;
 
 export default CanvasReducer.reducer;

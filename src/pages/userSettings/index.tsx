@@ -1,47 +1,32 @@
-import styled from 'styled-components';
-import {
-  Avatar,
-  Button,
-  Divider,
-  InputAdornment,
-  MenuItem,
-  Select,
-  Tab,
-  Tabs,
-  TextField,
-} from '@mui/material';
+import NavBar from '@/common-ui/NavBar';
+import { IUserAccountDetails } from '@/interfaces/authInterface';
+import { useAppDispatch } from '@/redux/store';
+import { getUserDetails, updateUserDetails } from '@/redux/thunk/user';
+import CancelIcon from '@mui/icons-material/Cancel';
 import EditIcon from '@mui/icons-material/Edit';
-import SettingsIcon from '@mui/icons-material/Settings';
-import PrivacyTipIcon from '@mui/icons-material/PrivacyTip';
+import SaveIcon from '@mui/icons-material/Save';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import CompanyDetails from './companySettings';
+import useSettings from './container';
+import BreadCrumb from './navigationBreadcrumb';
+import ProfileSettings from './profileSettings';
 import {
-  SettingsContainer,
-  GridContainer,
-  InputContainer,
-  MenuButton,
-  NavbarContainer,
-  ProfileContainer,
-  ProfileDetails,
-  ProfileImage,
-  StyledDivider,
-  StyledTab,
-  StyledTabs,
-  UserLink,
-  SideBar,
+  ButtonContainer,
+  ChevronIcon,
+  IconButton,
   MainSettingsContainer,
-  RightSideContainer,
+  ProfileAvatarText,
+  ProfileImage,
   ProfileImgContainer,
   ProfileTitle,
-  ChevronIcon,
-  StyledInput,
-  Label,
-  StyledSelect,
-  PencilIcon,
+  RightSideContainer,
   SectionTitle,
-  ButtonContainer,
-  IconButton,
   SectionTitleContainer,
-  ProfileAvatarText,
+  SettingsContainer,
+  SideBar,
+  StyledTab,
+  StyledTabs
 } from './style';
 import { Link } from 'react-router-dom';
 import { Logo } from '@/constants/media';

@@ -1,5 +1,5 @@
 import { ROUTES } from '@/constants/endpoint';
-import { Home } from '@mui/icons-material';
+import { Home, Settings } from '@mui/icons-material';
 import { Box, Breadcrumbs, Chip, Link } from '@mui/material';
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -46,20 +46,20 @@ const BreadCrumb = () => {
                 {
                     endPoint === 'presentation' ?
                         <Breadcrumbs>
-                            <Chip label="Dashboard" sx={ChipStyle} onClick={handleNavigateDashboard} />
+                            <Chip label="My Presentations" sx={ChipStyle} onClick={handleNavigateDashboard} />
                             <Chip label="Back to Presentation" sx={ChipStyle} onClick={handleNavigateCanvas} />
                         </Breadcrumbs>
                         :
                         endPoint === 'themes' ?
                             <Breadcrumbs>
-                                <Chip label="Dashboard" sx={ChipStyle} onClick={handleNavigateDashboard} />
+                                <Chip label="My Presentations" sx={ChipStyle} onClick={handleNavigateDashboard} />
                                 <Chip label="Back to Themes" sx={ChipStyle} onClick={handleNavigateThemes} />
                             </Breadcrumbs>
                             :
                             endPoint === 'my-presentations' &&
-                            <Chip label="Dashboard" sx={ChipStyle} onClick={handleNavigateDashboard} />
+                            <Chip label="My Presentations" sx={ChipStyle} onClick={handleNavigateDashboard} />
                 }
-                <Chip label="Settings" sx={ChipStyle} />
+                <Chip label="Settings" icon={<Settings sx={{ fontSize: '1.2rem' }} />} sx={ChipStyle} />
             </Breadcrumbs>
         </Box>
     );
