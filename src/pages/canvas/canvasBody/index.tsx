@@ -85,7 +85,7 @@ const CanvasBody = () => {
   const [isEditBtnShow, setIsEditBtnShow] = useState<boolean>(false);
   const [isReturnBtnShow, setIsReturnBtnShow] = useState<boolean>(false);
   const [canvasIndex, setCanvasIndex] = useState<number>(0);
-  const { handleApplyOriginalAsMain } = useVariants();
+  const { handleApplyOriginalAsMain, prevVariant } = useVariants();
   const handleLike = () => {
     setActiveLike(!activeLike);
     setActiveDislike(false);
@@ -273,7 +273,7 @@ const CanvasBody = () => {
         dispatch(toggleRegenerateButton(false));
       }
 
-
+      
       const hasVariants = (canvasList[index].canvas as any).objects.some((obj: any) => obj.name === 'VariantImage');
       setIsEditBtnShow(hasVariants);
 
