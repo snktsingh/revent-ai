@@ -70,12 +70,19 @@ const CanvasBody = () => {
   };
   const { getElementsData } = useCanvasData();
   const dispatch = useAppDispatch();
-  const { canvasJS, canvasList, selectedOriginalCanvas, variantImage, isVariantSelected } =
-    useAppSelector(state => state.canvas);
+  const {
+    canvasJS,
+    canvasList,
+    selectedOriginalCanvas,
+    variantImage,
+    isVariantSelected,
+  } = useAppSelector(state => state.canvas);
   const { isRegenerateDisabled } = useAppSelector(state => state.slide);
   const { isLoading } = useAppSelector(state => state.thunk);
   const { requestData } = useAppSelector(state => state.apiData);
-  const { enabledElements, isDeleteAlertShow } = useAppSelector(state => state.element);
+  const { enabledElements, isDeleteAlertShow } = useAppSelector(
+    state => state.element
+  );
   const [activeLike, setActiveLike] = useState(false);
   const [activeDislike, setActiveDislike] = useState(false);
   const [elementName, setElementName] = useState<string>('');
@@ -85,7 +92,7 @@ const CanvasBody = () => {
   const [isEditBtnShow, setIsEditBtnShow] = useState<boolean>(false);
   const [isReturnBtnShow, setIsReturnBtnShow] = useState<boolean>(false);
   const [canvasIndex, setCanvasIndex] = useState<number>(0);
-  const { handleApplyOriginalAsMain, prevVariant } = useVariants();
+  const { handleApplyOriginalAsMain } = useVariants();
   const handleLike = () => {
     setActiveLike(!activeLike);
     setActiveDislike(false);
@@ -97,9 +104,10 @@ const CanvasBody = () => {
   };
   const params = useParams<{ id: string }>();
 
-
   const handleAddElementsToCanvas = (item: any) => {
-    const hasVariants = (canvasJS.canvas as any).objects.some((obj: any) => obj.name === 'VariantImage');
+    const hasVariants = (canvasJS.canvas as any).objects.some(
+      (obj: any) => obj.name === 'VariantImage'
+    );
     if (Array.isArray(canvasJS.variants) && canvasJS.variants.length === 0) {
       handleClose();
       item.onClick();
@@ -152,10 +160,8 @@ const CanvasBody = () => {
     setOpenDialog(true);
   };
 
-
-
   const handleRequest = () => {
-    setModificationAlert(false)
+    setModificationAlert(false);
     const currentCanvas = {
       ...canvasJS,
       originalSlideData: canvasList[canvasJS.id - 1].canvas,
@@ -164,19 +170,26 @@ const CanvasBody = () => {
     const canvasJSON = canvasList[canvasJS.id - 1].canvas;
     const pptId = params.id?.split('-')[0];
 
-    const isListImagesPresent = requestData?.elements.some((canvas => canvas.shape === 'ImageSubtitle'));
-    const isImagesPresent = requestData?.elements.some((canvas => canvas.shape === 'Images'));
-    const isQuoteImagesPresent = requestData?.elements.some((canvas => canvas.shape === 'Quote'));
-
+    const isListImagesPresent = requestData?.elements.some(
+      canvas => canvas.shape === 'ImageSubtitle'
+    );
+    const isImagesPresent = requestData?.elements.some(
+      canvas => canvas.shape === 'Images'
+    );
+    const isQuoteImagesPresent = requestData?.elements.some(
+      canvas => canvas.shape === 'Quote'
+    );
 
     if (isListImagesPresent) {
-      let blob = new Blob([JSON.stringify(requestData)], { type: 'application/json' });
+      let blob = new Blob([JSON.stringify(requestData)], {
+        type: 'application/json',
+      });
       let formData = new FormData();
       formData.append('data', blob);
-      const listImagesArray = listImages.find((el) => el.canvasId == canvasJS.id);
+      const listImagesArray = listImages.find(el => el.canvasId == canvasJS.id);
       if (listImagesArray && listImagesArray.images) {
         for (let i = 0; i < listImagesArray.images.length; i++) {
-          formData.append("images", listImagesArray.images[i].file);
+          formData.append('images', listImagesArray.images[i].file);
         }
         dispatch(fetchSlideImg({ req: formData, canvasJSON, pptId }));
         dispatch(toggleSelectedOriginalCanvas(false));
@@ -185,14 +198,16 @@ const CanvasBody = () => {
     }
 
     if (isImagesPresent) {
-      let blob = new Blob([JSON.stringify(requestData)], { type: 'application/json' });
+      let blob = new Blob([JSON.stringify(requestData)], {
+        type: 'application/json',
+      });
       let formData = new FormData();
       formData.append('data', blob);
 
-      const ImagesArray = Images.find((el) => el.canvasId == canvasJS.id);
+      const ImagesArray = Images.find(el => el.canvasId == canvasJS.id);
       if (ImagesArray && ImagesArray.images) {
         for (let i = 0; i < ImagesArray.images.length; i++) {
-          formData.append("images", ImagesArray.images[i].file);
+          formData.append('images', ImagesArray.images[i].file);
         }
         dispatch(fetchSlideImg({ req: formData, canvasJSON, pptId }));
         dispatch(toggleSelectedOriginalCanvas(false));
@@ -200,15 +215,19 @@ const CanvasBody = () => {
       return;
     }
     if (isQuoteImagesPresent) {
-      console.log({ requestData })
-      let blob = new Blob([JSON.stringify(requestData)], { type: 'application/json' });
+      console.log({ requestData });
+      let blob = new Blob([JSON.stringify(requestData)], {
+        type: 'application/json',
+      });
       let formData = new FormData();
       formData.append('data', blob);
-      const QuoteImagesArray = QuoteImages.find((el) => el.canvasId == canvasJS.id);
+      const QuoteImagesArray = QuoteImages.find(
+        el => el.canvasId == canvasJS.id
+      );
       if (QuoteImagesArray && QuoteImagesArray.images) {
         if (QuoteImagesArray.images.length !== 0) {
           for (let i = 0; i < QuoteImagesArray.images.length; i++) {
-            formData.append("images", QuoteImagesArray.images[i].file);
+            formData.append('images', QuoteImagesArray.images[i].file);
           }
           dispatch(fetchSlideImg({ req: formData, canvasJSON, pptId }));
           dispatch(toggleSelectedOriginalCanvas(false));
@@ -242,7 +261,7 @@ const CanvasBody = () => {
 
   const handleDeleteSlide = () => {
     if (isDeleteAlertShow) {
-      dispatch(openModal())
+      dispatch(openModal());
     } else {
       if (canvasList && canvasList.length === 1) {
         dispatch(openModal());
@@ -253,7 +272,7 @@ const CanvasBody = () => {
   };
 
   useEffect(() => {
-    const index = canvasList.findIndex((canvas) => canvas.id === canvasJS.id);
+    const index = canvasList.findIndex(canvas => canvas.id === canvasJS.id);
     if (index !== -1) {
       setCanvasIndex(index);
     }
@@ -273,16 +292,23 @@ const CanvasBody = () => {
         dispatch(toggleRegenerateButton(false));
       }
 
-      
-      const hasVariants = (canvasList[index].canvas as any).objects.some((obj: any) => obj.name === 'VariantImage');
+      const hasVariants = (canvasList[index].canvas as any).objects.some(
+        (obj: any) => obj.name === 'VariantImage'
+      );
       setIsEditBtnShow(hasVariants);
 
-      setIsReturnBtnShow(false)
+      setIsReturnBtnShow(false);
       if (!isVariantsEmpty && selectedOriginalCanvas && !hasVariants) {
-        setIsReturnBtnShow(true)
+        setIsReturnBtnShow(true);
       }
     }
-  }, [canvasList[canvasIndex], dispatch, variantImage, enabledElements, isVariantSelected]);
+  }, [
+    canvasList[canvasIndex],
+    dispatch,
+    variantImage,
+    enabledElements,
+    isVariantSelected,
+  ]);
 
   function isDisabled(name: string): boolean {
     if (enabledElements.includes(name)) {
@@ -290,19 +316,24 @@ const CanvasBody = () => {
     }
 
     return true;
-  };
+  }
 
   function returnToGenSlide() {
-    if(areCanvasJsonDataDifferent(canvasJS.canvas, canvasList[canvasIndex].canvas)){
+    if (
+      areCanvasJsonDataDifferent(
+        canvasJS.canvas,
+        canvasList[canvasIndex].canvas
+      )
+    ) {
       setModificationAlert(true);
       return;
     }
     let prevVariant = canvasList[canvasIndex].lastVariant;
-    console.log({ prevVariant, canvasIndex })
+    console.log({ prevVariant, canvasIndex });
     dispatch(toggleIsVariantSelected(true));
     dispatch(toggleSelectedOriginalCanvas(false));
     dispatch(setVariantImageAsMain(prevVariant));
-  };
+  }
 
   const handleBackToPrevVariant = () => {
     setModificationAlert(false);
@@ -312,7 +343,10 @@ const CanvasBody = () => {
     dispatch(setVariantImageAsMain(prevVariant));
   };
 
-  function areCanvasJsonDataDifferent(prevCanvas: any, modifiedCanvas: any): boolean {
+  function areCanvasJsonDataDifferent(
+    prevCanvas: any,
+    modifiedCanvas: any
+  ): boolean {
     if (prevCanvas.objects.length !== modifiedCanvas.objects.length) {
       return true;
     }
@@ -338,9 +372,6 @@ const CanvasBody = () => {
 
     return false;
   }
-
-
-
 
   return (
     <BodyContainer>
@@ -396,21 +427,25 @@ const CanvasBody = () => {
                   />
                 </IconButton>{' '} */}
                 &nbsp;
-                {isEditBtnShow && <Button
-                  variant="contained"
-                  size="medium"
-                  onClick={() => handleApplyOriginalAsMain()}
-                >
-                  Edit
-                </Button>}
-                {isReturnBtnShow && <Button
-                  variant="contained"
-                  size="medium"
-                  onClick={() => returnToGenSlide()}
-                  style={{ marginLeft: 2 }}
-                >
-                  Return
-                </Button>}
+                {isEditBtnShow && (
+                  <Button
+                    variant="contained"
+                    size="medium"
+                    onClick={() => handleApplyOriginalAsMain()}
+                  >
+                    Edit
+                  </Button>
+                )}
+                {isReturnBtnShow && (
+                  <Button
+                    variant="contained"
+                    size="medium"
+                    onClick={() => returnToGenSlide()}
+                    style={{ marginLeft: 2 }}
+                  >
+                    Return
+                  </Button>
+                )}
                 &nbsp;
                 <Button
                   variant="contained"
@@ -441,42 +476,46 @@ const CanvasBody = () => {
                 let disabled = isDisabled(item.title);
                 return (
                   <div>
-                    {
-                      disabled ?
-                        <Tooltip title="Sorry, this element can't be added because it conflicts with elements already on the canvas" style={{ cursor: 'not-allowed' }}>
-                          <span>
-                            <MenuItem
-                              onClick={() => handleAddElementsToCanvas(item)}
-                              style={{ display: 'flex', flexDirection: 'column' }}
-                              key={index}
-                              disabled={disabled}
-                            >
-                              <Stack direction="row" width={'100%'} spacing={2} >
-                                <img src={item.icon} width="30vh" />
-                                <ElementContainer>
-                                  <ElementTitle>{item.title}</ElementTitle>
-                                  <ElementSubtitle>{item.subtitle}</ElementSubtitle>
-                                </ElementContainer>
-                              </Stack>
-                            </MenuItem>
-                          </span>
-                        </Tooltip>
-                        :
-                        <MenuItem
-                          onClick={() => handleAddElementsToCanvas(item)}
-                          style={{ display: 'flex', flexDirection: 'column' }}
-                          key={index}
-                          disabled={disabled}
-                        >
-                          <Stack direction="row" width={'100%'} spacing={2} >
-                            <img src={item.icon} width="30vh" />
-                            <ElementContainer>
-                              <ElementTitle>{item.title}</ElementTitle>
-                              <ElementSubtitle>{item.subtitle}</ElementSubtitle>
-                            </ElementContainer>
-                          </Stack>
-                        </MenuItem>
-                    }
+                    {disabled ? (
+                      <Tooltip
+                        title="Sorry, this element can't be added because it conflicts with elements already on the canvas"
+                        style={{ cursor: 'not-allowed' }}
+                      >
+                        <span>
+                          <MenuItem
+                            onClick={() => handleAddElementsToCanvas(item)}
+                            style={{ display: 'flex', flexDirection: 'column' }}
+                            key={index}
+                            disabled={disabled}
+                          >
+                            <Stack direction="row" width={'100%'} spacing={2}>
+                              <img src={item.icon} width="30vh" />
+                              <ElementContainer>
+                                <ElementTitle>{item.title}</ElementTitle>
+                                <ElementSubtitle>
+                                  {item.subtitle}
+                                </ElementSubtitle>
+                              </ElementContainer>
+                            </Stack>
+                          </MenuItem>
+                        </span>
+                      </Tooltip>
+                    ) : (
+                      <MenuItem
+                        onClick={() => handleAddElementsToCanvas(item)}
+                        style={{ display: 'flex', flexDirection: 'column' }}
+                        key={index}
+                        disabled={disabled}
+                      >
+                        <Stack direction="row" width={'100%'} spacing={2}>
+                          <img src={item.icon} width="30vh" />
+                          <ElementContainer>
+                            <ElementTitle>{item.title}</ElementTitle>
+                            <ElementSubtitle>{item.subtitle}</ElementSubtitle>
+                          </ElementContainer>
+                        </Stack>
+                      </MenuItem>
+                    )}
                   </div>
                 );
               })}
@@ -499,7 +538,8 @@ const CanvasBody = () => {
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             Changes cannot be applied on the current design. If you want to make
-            modifications Please visit the original slide from variants section or Click Below.
+            modifications Please visit the original slide from variants section
+            or Click Below.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -535,11 +575,15 @@ const CanvasBody = () => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-          Please note that the changes made to the slide will only take effect after regeneration. If you wish to regenerate, click the button below. Alternatively, you can go back to the previous variant.
+            Please note that the changes made to the slide will only take effect
+            after regeneration. If you wish to regenerate, click the button
+            below. Alternatively, you can go back to the previous variant.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleBackToPrevVariant}>Back to Previous Variant</Button>
+          <Button onClick={handleBackToPrevVariant}>
+            Back to Previous Variant
+          </Button>
           <Button onClick={handleRequest} autoFocus>
             Regenerate
           </Button>

@@ -139,10 +139,6 @@ const useVariants = () => {
     }
   };
 
-  const handleOpenVariantsSlide = () => {
-    dispatch(toggleVariantSlide(!openVariant));
-  };
-
   useEffect(() => {
     getCanvasImageFromJSON(canvasJS.originalSlideData);
   }, [canvasJS.originalSlideData]);
