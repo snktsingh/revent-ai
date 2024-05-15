@@ -60,7 +60,7 @@ export function useCycleElement() {
         texts.push(obj);
       }
     });
-    const addCircle = (left: number, top: number, level : number) => {
+    const addCircle = (left: number, top: number, level: number) => {
       const circle = new fabric.Circle({
         radius: 50,
         fill: customStyles.elementColors.duskyBlue,
@@ -73,7 +73,7 @@ export function useCycleElement() {
       return canvas.add(circle);
     };
 
-    const addText = (left: number, top: number, level : number) => {
+    const addText = (left: number, top: number, level: number) => {
       const text = new AutoResizingTextbox('Add Text', {
         width: 80,
         fontSize: 16,
@@ -88,7 +88,7 @@ export function useCycleElement() {
         lockMovementY: true,
         hasBorders: false,
         splitByGrapheme: true,
-        level : `${CYCLE_TEXT}_${currentID}_${level}`
+        level: `${CYCLE_TEXT}_${currentID}_${level}`,
       });
       return canvas.add(text);
     };
@@ -260,7 +260,7 @@ export function useCycleElement() {
   //new cycle
 
   const addCycle = (canvas: fabric.Canvas | null) => {
-    function createCircleWithText(left: number, top: number, level : number) {
+    function createCircleWithText(left: number, top: number, level: number) {
       const text = new AutoResizingTextbox(`Add Text`, {
         left: left + 15,
         top: top + 20,
@@ -276,7 +276,7 @@ export function useCycleElement() {
         lockMovementY: true,
         hasBorders: false,
         splitByGrapheme: true,
-        level : `${CYCLE_TEXT}_${cycleId}_${level}`
+        level: `${CYCLE_TEXT}_${cycleId}_${level}`,
       });
 
       const circle = new fabric.Circle({
