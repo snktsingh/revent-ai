@@ -27,8 +27,8 @@ export function useListElement() {
     top: number
   ) => {
     const mainListContainer = new fabric.Rect({
-      width: 150,
-      height: 200,
+      width: 120,
+      height: 170,
       fill: 'transparent',
       strokeWidth: 1,
       stroke: '#cbcbcb',
@@ -36,8 +36,8 @@ export function useListElement() {
     });
 
     const addImage = new fabric.Text('+ Add Image', {
-      top: mainListContainer.top! + 80,
-      left: mainListContainer.left! + 40,
+      top: mainListContainer.top! + 72,
+      left: mainListContainer.left! + 28,
       fill: 'black',
       fontSize: 14,
       hasControls: false,
@@ -54,13 +54,13 @@ export function useListElement() {
 
     const text = new AutoResizingTextbox('Add Text', {
       fontSize: 18,
-      width: 145,
+      width: 120,
       height: 100,
       fixedWidth: 145,
       fixedHeight: 100,
       fill: 'black',
-      left: left + 3,
-      top: top + 175,
+      left: left + 2,
+      top: top + 146,
       textAlign: 'center',
       name: `${LIST_TEXT}_${listID}`,
       hasControls: false,
@@ -82,7 +82,6 @@ export function useListElement() {
     fileInput.click();
     let file: any;
     let reader = new FileReader();
-
     fileInput.addEventListener('change', e => {
       file = (e.target as HTMLInputElement)?.files?.[0];
       
@@ -107,8 +106,8 @@ export function useListElement() {
         reader.onload = () => {
           if (canvas) {
             fabric.Image.fromURL(reader.result as string, img => {
-              const fixedWidth = 147;
-              const fixedHeight = 170;
+              const fixedWidth = 120;
+              const fixedHeight = 150;
               // img.scaleToWidth(fixedWidth);
               // img.scaleToHeight(fixedHeight);
               const scaleX = fixedWidth / img.width!;
@@ -117,12 +116,12 @@ export function useListElement() {
               let TextElement = (object as fabric.Group)._objects[1];
               (object as fabric.Group).removeWithUpdate(TextElement);
               (object as fabric.Group).set({
-                name: LIST_MAIN,
+                name: object.name,
               });
               img.set({
                 left: object && object.left !== undefined ? object.left + 2 : 0,
                 top: object && object.top !== undefined ? object.top + 2 : 0,
-                name: LIST_IMG,
+                name: object.name,
                 scaleX,
                 scaleY,
               });

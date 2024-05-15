@@ -27,7 +27,6 @@ import { theme } from '@/constants/theme';
 import ProfileMenu from '@/common-ui/profileMenu';
 import ProfileSettings from './profileSettings';
 import LinkedinSettings from './linkedinSettings';
-import EditIcon from '@mui/icons-material/Edit';
 import CompanyDetails from './companySettings';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -40,6 +39,7 @@ import { toast } from 'react-toastify';
 import { error } from 'console';
 import NavBar from '@/common-ui/NavBar';
 import { useEffect, useState } from 'react';
+import EditIcon from '@mui/icons-material/Edit';
 
 const initialUserDetails = {
   id: null,

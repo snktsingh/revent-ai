@@ -61,7 +61,8 @@ export function useTimelineElement(){
             width,
             fill: theme.colorSchemes.light.palette.common.black,
             name: timelineName,
-            hasControls :false
+            hasControls :false,
+            splitByGrapheme: true,
           });
           return canvas?.add(text);
         }
@@ -142,6 +143,7 @@ export function useTimelineElement(){
             fill: theme.colorSchemes.light.palette.common.black,
             name: timelineName,
             hasControls :false,
+            splitByGrapheme: true,
           });
           return canvas?.add(text);
         }

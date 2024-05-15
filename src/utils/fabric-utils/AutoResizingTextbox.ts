@@ -1,8 +1,9 @@
 import { fabric } from 'fabric';
 
-interface AutoResizingTextboxOptions extends fabric.ITextboxOptions {
+export interface AutoResizingTextboxOptions extends fabric.ITextboxOptions {
   fixedWidth?: number;
   fixedHeight?: number;
+  level? : string;
 }
 
 class AutoResizingTextbox extends fabric.Textbox {
