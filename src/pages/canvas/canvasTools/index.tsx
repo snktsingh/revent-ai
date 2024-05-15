@@ -51,7 +51,7 @@ import {
   shadesData,
 } from '../canvasBody/elementData';
 import {
-  addCanvas,
+  addCanvasSlide,
   handleInputSize,
   handleSize,
   setBorderColor,
@@ -216,7 +216,7 @@ const CanvasTools = () => {
   };
 
   const handleAddNewSlide = () => {
-    dispatch(addCanvas());
+    dispatch(addCanvasSlide());
     dispatch(addSlide(obj));
   };
   const handleScroll = () => {
