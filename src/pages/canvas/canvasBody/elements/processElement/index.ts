@@ -61,7 +61,7 @@ export const useProcessElement = () => {
       hasControls: false,
       lockMovementX: true,
       lockMovementY: true,
-      level: `${PROCESS_BOX}_${currentID}_${rectCount+1}`,
+      level: `${PROCESS_BOX}_${currentID}_${rectCount + 1}`,
     } as IExtendedRectOptions);
 
     let text = new AutoResizingTextbox('Add Text', {
@@ -78,7 +78,7 @@ export const useProcessElement = () => {
       lockMovementY: true,
       hasBorders: false,
       splitByGrapheme: true,
-      level: `${PROCESS_TEXT}_${currentID}_${rectCount+1}`,
+      level: `${PROCESS_TEXT}_${currentID}_${rectCount + 1}`,
     });
 
     if (rectCount === 3) {
@@ -111,7 +111,7 @@ export const useProcessElement = () => {
       top: number,
       width: number,
       height: number,
-      level : number
+      level: number
     ) {
       let rect = new fabric.Rect({
         left: left,
@@ -122,11 +122,11 @@ export const useProcessElement = () => {
         rx: 10,
         ry: 10,
         name: `${PROCESS_BOX}_${processId}`,
-        level : `${PROCESS_BOX}_${processId}_${level}`
+        level: `${PROCESS_BOX}_${processId}_${level}`,
       } as IExtendedRectOptions);
       return canvas?.add(rect);
     }
-    function addText(left: number, top: number,level : number) {
+    function addText(left: number, top: number, level: number) {
       const text = new AutoResizingTextbox('Add Text', {
         fontSize: 15,
         left,

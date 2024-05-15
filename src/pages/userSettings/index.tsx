@@ -13,7 +13,7 @@ import {
   SettingsContainer,
   SideBar,
   StyledTab,
-  StyledTabs
+  StyledTabs,
 } from './style';
 import { Link } from 'react-router-dom';
 import { Logo } from '@/constants/media';
@@ -62,12 +62,14 @@ const initialUserDetails = {
   companyRole: '',
   termsConditionId: null,
   userCredit: null,
-}
+};
 
 const UserSettings: React.FC = () => {
   const [tab, setTab] = useState(1);
-  const [userAccountOrg, setUserAccount] = useState<IUserAccountDetails>(initialUserDetails);
-  const [userDetails, setUserDetails] = useState<IUserAccountDetails>(initialUserDetails);
+  const [userAccountOrg, setUserAccount] =
+    useState<IUserAccountDetails>(initialUserDetails);
+  const [userDetails, setUserDetails] =
+    useState<IUserAccountDetails>(initialUserDetails);
 
   const { editMode, setEditMode } = useSettings();
   const [openProfileMenu, setOpenProfileMenu] = useState<null | HTMLElement>(
@@ -120,15 +122,13 @@ const UserSettings: React.FC = () => {
     setEditMode(!editMode);
   };
 
-
   function getFirstLettersForAvatar(name: string): string {
     const initials = name
       .split(' ')
       .map(word => word.charAt(0).toUpperCase())
       .join('');
     return initials;
-  };
-
+  }
 
   useEffect(() => {
     dispatch(getUserDetails()).then(res => {
@@ -144,22 +144,22 @@ const UserSettings: React.FC = () => {
 
   const handleUpdateUserDetails = () => {
     const propertiesToCheck: (keyof IUserAccountDetails)[] = [
-      "firstName",
-      "lastName",
-      "email",
-      "linkedIn",
-      "phone",
-      "companyName",
-      "companySize",
-      "companyRole",
+      'firstName',
+      'lastName',
+      'email',
+      'linkedIn',
+      'phone',
+      'companyName',
+      'companySize',
+      'companyRole',
     ];
     let edited = false;
 
     if (userDetails.linkedIn && !isValidLinkedInUrl(userDetails.linkedIn)) {
-      toast.warning("Please add a valid LinkedIn URL.");
-      return; 
+      toast.warning('Please add a valid LinkedIn URL.');
+      return;
     }
-    
+
     for (const property of propertiesToCheck) {
       if (userAccountOrg[property] !== userDetails[property]) {
         edited = true;
@@ -168,27 +168,30 @@ const UserSettings: React.FC = () => {
     }
 
     if (edited) {
-      dispatch(updateUserDetails(userDetails)).then((res) => {
-        toast.success("User details have been updated!");
-        setEditMode(true);
-      }).catch((error)=>{
-        toast.info("Something Went Wrong!");
-        setEditMode(true);
-      })
+      dispatch(updateUserDetails(userDetails))
+        .then(res => {
+          toast.success('User details have been updated!');
+          setEditMode(true);
+        })
+        .catch(error => {
+          toast.info('Something Went Wrong!');
+          setEditMode(true);
+        });
     } else {
       setEditMode(true);
-      toast.info("No changes were made to user details.");
+      toast.info('No changes were made to user details.');
     }
   };
 
   const isValidLinkedInUrl = (url: string): boolean => {
-    const linkedInRegex = /^(https?:\/\/)?(www\.)?linkedin\.com\/in\/[a-zA-Z0-9_-]+\/?$/;
+    const linkedInRegex =
+      /^(https?:\/\/)?(www\.)?linkedin\.com\/in\/[a-zA-Z0-9_-]+\/?$/;
     return linkedInRegex.test(url);
   };
 
   return (
     <>
-      <NavBar/>
+      <NavBar />
       {/* main settings */}
       <MainSettingsContainer>
         <BreadCrumb />
@@ -227,11 +230,19 @@ const UserSettings: React.FC = () => {
             <SectionTitleContainer>
               <SectionTitle>Personal Details</SectionTitle>
             </SectionTitleContainer>
-            <ProfileSettings handleChange={handleChange} userDetails={userDetails} editMode={editMode} />
+            <ProfileSettings
+              handleChange={handleChange}
+              userDetails={userDetails}
+              editMode={editMode}
+            />
             <SectionTitleContainer>
               <SectionTitle>Company Details</SectionTitle>
             </SectionTitleContainer>
-            <CompanyDetails handleChange={handleChange} userDetails={userDetails} editMode={editMode} />
+            <CompanyDetails
+              handleChange={handleChange}
+              userDetails={userDetails}
+              editMode={editMode}
+            />
 
             <ButtonContainer>
               <IconButton
