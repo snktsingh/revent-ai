@@ -22,6 +22,7 @@ import { IExtendedTextBoxOptions } from '@/interface/fabricTypes';
 import { IEvent } from 'fabric/fabric-impl';
 import { toggleRegenerateButton } from '@/redux/reducers/slide';
 import { QUOTE_IMG } from '@/constants/elementNames';
+import { useCanvasSingleClickEvent } from './canvasSingleClickEvent';
 
 const useCanvasEvents = () => {
   const dispatch = useAppDispatch();
@@ -36,6 +37,7 @@ const useCanvasEvents = () => {
     useTextEvents();
   const { setElementPositionsAfterMoving } = useObjectModified();
   const { CanvasClick } = useCanvasClickEvent();
+  const { CanvasSingleClick } = useCanvasSingleClickEvent();
   const { getElementsData } = useCanvasData();
   const {
     customFabricProperties,
@@ -162,6 +164,7 @@ const useCanvasEvents = () => {
   const onMouseDownEvent = (options: IEvent, canvas: fabric.Canvas) => {
     if(options.target) {
       removePlaceholderText(canvas,options.target);
+      CanvasSingleClick(canvas, options);
     }
 
     const pointer: any = canvas.getPointer(options.e);
@@ -170,7 +173,6 @@ const useCanvasEvents = () => {
       return obj.containsPoint(pointer);
     });
     
-    console.log({objectsAtPointer})
     const textboxFound = objectsAtPointer.some(
       obj => obj.type === 'textbox' || obj.type === 'text'
     );
