@@ -28,6 +28,29 @@ import {
   StyledTab,
   StyledTabs
 } from './style';
+import { Link } from 'react-router-dom';
+import { Logo } from '@/constants/media';
+import {
+  GridRowCenter,
+  GridRowEven,
+  StackColCenter,
+} from '@/styles/common-styles/style';
+import { ROUTES } from '@/constants/endpoint';
+import { theme } from '@/constants/theme';
+import ProfileMenu from '@/common-ui/profileMenu';
+import ProfileSettings from './profileSettings';
+import LinkedinSettings from './linkedinSettings';
+import CompanyDetails from './companySettings';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Cancel';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { getUserDetails, updateUserDetails } from '@/redux/thunk/user';
+import BreadCrumb from './navigationBreadcrumb';
+import useSettings from './container';
+import { IUserAccountDetails } from '@/interfaces/authInterface';
+import { toast } from 'react-toastify';
+import { error } from 'console';
+import NavBar from '@/common-ui/NavBar';
 
 const initialUserDetails = {
   id: null,

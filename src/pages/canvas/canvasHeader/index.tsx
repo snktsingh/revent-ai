@@ -22,6 +22,7 @@ import useCanvasHeader from './container';
 import { HeaderContainer, ShareMenu, UserAvatar } from './style';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { downloadPresentation, setPresentationName } from '@/redux/thunk/thunk';
+import { toast } from 'react-toastify';
 
 const MainCanvasHeader = ({ pId }: any) => {
   const dispatch = useAppDispatch();
@@ -43,12 +44,12 @@ const MainCanvasHeader = ({ pId }: any) => {
     updatePresentationName,
     isUpdating,
     handleGoBack,
-    handleInputChange
+    handleInputChange,
   } = useCanvasHeader();
 
-  const { presentationId, presentationName, pptDetails, isLoading } = useAppSelector(
-    state => state.thunk
-  );
+  const [isDownloading, setIsDownloading] = useState<boolean>(false);
+  const { presentationId, presentationName, pptDetails, isLoading } =
+    useAppSelector(state => state.thunk);
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
@@ -60,11 +61,30 @@ const MainCanvasHeader = ({ pId }: any) => {
     }
   };
 
-  const handleDownloadPresentation = () => {
-     dispatch(downloadPresentation(pId)).then(res => {
-        console.log(res.payload)
-     })
-  }
+  const handleDownloadPresentation = async () => {
+    setIsDownloading(true);
+    dispatch(downloadPresentation(pId))
+      .then(res => {
+        const blob = new Blob([res.payload], {
+          type: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute(
+          'download',
+          presentationName ? presentationName : 'untitled-presentation.pptx'
+        );
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode?.removeChild(link);
+        window.URL.revokeObjectURL(url);
+        setIsDownloading(false);
+      })
+      .catch(err => {
+        toast.error('Download failed', err);
+      });
+  };
 
   return (
     <HeaderContainer>
@@ -128,6 +148,7 @@ const MainCanvasHeader = ({ pId }: any) => {
             <Stack direction="row" spacing={2}>
               <img src={PPT} width="10%" />
               <h4>Download PPT</h4>
+              {isDownloading && <CircularProgress size={14} />}
             </Stack>
           </MenuItem>
         </ShareMenu>

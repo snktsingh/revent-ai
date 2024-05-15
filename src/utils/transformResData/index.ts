@@ -46,8 +46,10 @@ export const canvasData = {
   ],
 };
 
-export const processSlides = (slides: any[], presentationId : number): CanvasItem[] => {
-  
+export const processSlides = (
+  slides: any[],
+  presentationId: number
+): CanvasItem[] => {
   return slides.map((slideData, index) => {
     let canvas = JSON.parse(JSON.stringify(canvasData));
     const slide: CanvasItem = {
@@ -59,15 +61,15 @@ export const processSlides = (slides: any[], presentationId : number): CanvasIte
       listImages: [],
       slideId: slideData[0].slideId,
       presentationId,
-      lastVariant : ''
+      lastVariant: '',
     };
 
     slideData.forEach((element: any) => {
       slide.variants.push({
         pptUrl: '',
         imagesUrl: element.thumbnailUrl,
-        activeSlide : element.active,
-        slideVariantId : Number(element.slideVariantId)
+        activeSlide: element.active,
+        slideVariantId: Number(element.slideVariantId),
       });
 
       if (element.active) {
