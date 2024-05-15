@@ -24,7 +24,14 @@ import { useAppDispatch, useAppSelector } from '@/redux/store';
 import WebFont from 'webfontloader';
 import { updateCanvasInList } from '@/redux/reducers/canvas';
 import { useCanvasComponent } from './container';
-import { CONCLUSION_SLIDE_SUBTITLE, CONCLUSION_SLIDE_TITLE, COVER_SLIDE_SUBTITLE, COVER_SLIDE_TITLE, SECTION_SLIDE_SUBTITLE, SECTION_SLIDE_TITLE } from '@/constants/elementNames';
+import {
+  CONCLUSION_SLIDE_SUBTITLE,
+  CONCLUSION_SLIDE_TITLE,
+  COVER_SLIDE_SUBTITLE,
+  COVER_SLIDE_TITLE,
+  SECTION_SLIDE_SUBTITLE,
+  SECTION_SLIDE_TITLE,
+} from '@/constants/elementNames';
 
 export const useElementFunctions = (canvas: fabric.Canvas | null) => {
   const dispatch = useAppDispatch();
@@ -43,7 +50,7 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
     handleBold,
     handleItalic,
     handleUnderLine,
-    addTitleAndSubTileSlide
+    addTitleAndSubTileSlide,
   } = useAllElements();
 
   const {
@@ -69,26 +76,28 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
   const { addQuotes } = useQuoteElement();
   const { BulletText } = useBulletOrNumberedText();
 
-  elementData[1].onClick = () => {
-    canvas?.add(title);
-    title.selectAll();
-    canvas?.setActiveObject(title);
-    canvas?.renderAll();
-  };
+  // elementData[1].onClick = () => {
+  //   canvas?.add(title);
+  //   title.selectAll();
+  //   canvas?.setActiveObject(title);
+  //   canvas?.renderAll();
+  // };
 
-  elementData[2].onClick = () => {
-    canvas?.add(subtitle);
-    subtitle.selectAll();
-    canvas?.setActiveObject(subtitle);
-    canvas?.renderAll();
-  };
+  // elementData[2].onClick = () => {
+  //   canvas?.add(subtitle);
+  //   subtitle.selectAll();
+  //   canvas?.setActiveObject(subtitle);
+  //   canvas?.renderAll();
+  // };
 
-  elementData[3].onClick = () => {
-    canvas?.add(paragraph);
-    paragraph.selectAll();
-    canvas?.setActiveObject(paragraph);
-    canvas?.renderAll();
-  };
+  // elementData[3].onClick = () => {
+  //   canvas?.add(title);
+  //   canvas?.add(subtitle);
+  //   canvas?.add(paragraph);
+  //   paragraph.selectAll();
+  //   canvas?.setActiveObject(paragraph);
+  //   canvas?.renderAll();
+  // };
 
   // elementData[4].onClick = () => {
   //   canvas?.add(BulletText);
@@ -125,6 +134,8 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
         break;
       case 'Paragraph':
         element.onClick = () => {
+          canvas?.add(title);
+          canvas?.add(subtitle);
           canvas?.add(paragraph);
           paragraph.selectAll();
           canvas?.setActiveObject(paragraph);
@@ -133,16 +144,22 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
         break;
       case 'Bullet':
         element.onClick = () => {
+          canvas?.add(title);
+          canvas?.add(subtitle);
           canvas?.add(BulletText);
         };
         break;
       case 'Image':
         element.onClick = () => {
+          canvas?.add(title);
+          canvas?.add(subtitle);
           imageUploader(canvas);
         };
         break;
       case 'Table':
         element.onClick = () => {
+          canvas?.add(title);
+          canvas?.add(subtitle);
           ContentElements.handleOpenTable();
         };
         break;
@@ -153,47 +170,77 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
         break;
       case 'Team List':
         element.onClick = () => {
+          canvas?.add(title);
+          canvas?.add(subtitle);
           addListElement(canvas, 33, 23);
         };
         break;
       case 'Cycle':
         element.onClick = () => {
+          canvas?.add(title);
+          canvas?.add(subtitle);
           ContentElements.handleCycle();
         };
         break;
       case 'Process':
         element.onClick = () => {
+          canvas?.add(title);
+          canvas?.add(subtitle);
           ContentElements.handleProcess();
         };
         break;
       case 'Timeline':
         element.onClick = () => {
+          canvas?.add(title);
+          canvas?.add(subtitle);
           ContentElements.handleTimeline();
         };
         break;
       case 'Funnel':
         element.onClick = () => {
+          canvas?.add(title);
+          canvas?.add(subtitle);
           ContentElements.handleFunnel();
         };
         break;
       case 'Pyramid':
         element.onClick = () => {
+          canvas?.add(title);
+          canvas?.add(subtitle);
           ContentElements.handlePyramid();
         };
         break;
       case 'Cover Slide':
         element.onClick = () => {
-          addTitleAndSubTileSlide(100, 90, canvas, COVER_SLIDE_TITLE, COVER_SLIDE_SUBTITLE );
+          addTitleAndSubTileSlide(
+            106,
+            158,
+            canvas,
+            COVER_SLIDE_TITLE,
+            COVER_SLIDE_SUBTITLE
+          );
         };
         break;
       case 'Section Slide':
         element.onClick = () => {
-          addTitleAndSubTileSlide(100, 90, canvas, SECTION_SLIDE_TITLE, SECTION_SLIDE_SUBTITLE);
+          addTitleAndSubTileSlide(
+            106,
+            158,
+            canvas,
+            SECTION_SLIDE_TITLE,
+            SECTION_SLIDE_SUBTITLE
+          );
         };
         break;
       case 'Conclusion Slide':
         element.onClick = () => {
-          addTitleAndSubTileSlide(100, 90, canvas, CONCLUSION_SLIDE_TITLE, CONCLUSION_SLIDE_SUBTITLE);
+          addTitleAndSubTileSlide(
+            106,
+            158,
+            canvas,
+            CONCLUSION_SLIDE_TITLE,
+            CONCLUSION_SLIDE_SUBTITLE
+          );
         };
         break;
       default:

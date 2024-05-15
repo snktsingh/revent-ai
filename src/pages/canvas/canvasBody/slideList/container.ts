@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useCanvasComponent } from '../canvasComponent/container';
 import { toggleSelectingSlide } from '@/redux/reducers/slide';
 import {
@@ -36,6 +36,10 @@ const useSlideList = () => {
     };
     setSearchParams(params);
   }
+
+  useEffect(() => {
+      handleURl(canvasJS.slideId.toString());
+  }, [ canvasList.length])
 
   const [svgURLs, setsvgURLs] = useState<string[]>([]);
 

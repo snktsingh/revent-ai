@@ -2,7 +2,7 @@ import PopUpModal from '@/constants/elements/modal';
 import { AddElement, Copy, Delete } from '@/constants/media';
 import canvas, {
   copyCanvasCopy,
-  deleteCanvasItem,
+  deleteSlide,
   setCanvas,
   setVariantImageAsMain,
   toggleIsVariantSelected,
@@ -248,7 +248,7 @@ const CanvasBody = () => {
         dispatch(openModal());
         return;
       }
-      dispatch(deleteCanvasItem(canvasJS.id));
+      dispatch(deleteSlide(canvasJS.id));
     }
   };
 
@@ -282,7 +282,7 @@ const CanvasBody = () => {
         setIsReturnBtnShow(true)
       }
     }
-  }, [canvasList[canvasIndex].canvas, dispatch, variantImage, enabledElements, isVariantSelected]);
+  }, [canvasList[canvasIndex], dispatch, variantImage, enabledElements, isVariantSelected]);
 
   function isDisabled(name: string): boolean {
     if (enabledElements.includes(name)) {

@@ -212,13 +212,15 @@ export const CanvasReducer = createSlice({
         canvasJS: copiedCanvas,
       };
     },
-    deleteCanvasItem(state, action) {
+    deleteSlide(state, action) {
       const idToDelete = action.payload;
 
       if (idToDelete >= 1 && idToDelete <= state.canvasList.length) {
         const updatedCanvasList = state.canvasList.filter(
           canvas => canvas.id !== idToDelete
         );
+
+        
         const renumberedCanvasList = updatedCanvasList.map((canvas, index) => ({
           ...canvas,
           id: index + 1,
@@ -227,11 +229,12 @@ export const CanvasReducer = createSlice({
         const newActiveSlideId = idToDelete === 1 ? 1 : idToDelete - 1;
 
         const newActiveCanvasJS = renumberedCanvasList[newActiveSlideId - 1];
+        console.log({newActiveCanvasJS, renumberedCanvasList, updatedCanvasList, idToDelete, newActiveSlideId})
         return {
           ...state,
           canvasList: renumberedCanvasList,
           activeSlideID: newActiveSlideId,
-          canvasJS: newActiveCanvasJS || null,
+          canvasJS: newActiveCanvasJS,
         };
       }
       return state;
@@ -321,7 +324,7 @@ export const {
   updateCanvasInList,
   updateCurrentCanvas,
   copyCanvasCopy,
-  deleteCanvasItem,
+  deleteSlide,
   setActiveSlideId,
   handleSize,
   handleInputSize,
