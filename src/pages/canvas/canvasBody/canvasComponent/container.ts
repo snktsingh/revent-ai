@@ -69,6 +69,7 @@ export const useCanvasComponent = () => {
     'listCounter',
     'name',
     'className',
+    'level'
   ];
   const [canvasDimensions, setCanvasDimensions] = useState({
     width: 0,

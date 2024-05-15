@@ -165,6 +165,8 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
         break;
       case 'Quotes':
         element.onClick = () => {
+          canvas?.add(title);
+          canvas?.add(subtitle);
           addQuotes(canvas);
         };
         break;
@@ -172,7 +174,7 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
         element.onClick = () => {
           canvas?.add(title);
           canvas?.add(subtitle);
-          addListElement(canvas, 33, 23);
+          addListElement(canvas, 27, 100);
         };
         break;
       case 'Cycle':

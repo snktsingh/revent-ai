@@ -1,16 +1,3 @@
-import NavBar from '@/common-ui/NavBar';
-import { IUserAccountDetails } from '@/interfaces/authInterface';
-import { useAppDispatch } from '@/redux/store';
-import { getUserDetails, updateUserDetails } from '@/redux/thunk/user';
-import CancelIcon from '@mui/icons-material/Cancel';
-import EditIcon from '@mui/icons-material/Edit';
-import SaveIcon from '@mui/icons-material/Save';
-import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
-import CompanyDetails from './companySettings';
-import useSettings from './container';
-import BreadCrumb from './navigationBreadcrumb';
-import ProfileSettings from './profileSettings';
 import {
   ButtonContainer,
   ChevronIcon,
@@ -51,6 +38,8 @@ import { IUserAccountDetails } from '@/interfaces/authInterface';
 import { toast } from 'react-toastify';
 import { error } from 'console';
 import NavBar from '@/common-ui/NavBar';
+import { useEffect, useState } from 'react';
+import EditIcon from '@mui/icons-material/Edit';
 
 const initialUserDetails = {
   id: null,
