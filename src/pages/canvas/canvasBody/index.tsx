@@ -1,23 +1,21 @@
 import PopUpModal from '@/constants/elements/modal';
-import { AddElement, Copy, Delete } from '@/constants/media';
-import canvas, {
-  copyCanvasCopy,
+import { Add, Wand } from '@/constants/media';
+import { Images, QuoteImages, listImages } from '@/data/data';
+import {
   deleteSlide,
   setCanvas,
   setVariantImageAsMain,
   toggleIsVariantSelected,
   toggleSelectedOriginalCanvas,
   updateCanvasInList,
-  updateCurrentCanvas,
+  updateCurrentCanvas
 } from '@/redux/reducers/canvas';
 import { openModal, setMenuItemKey } from '@/redux/reducers/elements';
 import { searchElement, toggleRegenerateButton } from '@/redux/reducers/slide';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { fetchSlideImg } from '@/redux/thunk/thunk';
-import { ThumbDownAltRounded } from '@mui/icons-material';
 import {
   Backdrop,
-  Box,
   Button,
   CircularProgress,
   Dialog,
@@ -26,19 +24,19 @@ import {
   DialogContentText,
   DialogTitle,
   Grid,
-  IconButton,
-  InputBase,
   Menu,
   MenuItem,
   Stack,
-  TextField,
-  Tooltip,
+  Tooltip
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Slide, ToastContainer } from 'react-toastify';
 import CanvasComponent from './canvasComponent';
+import useCanvasData from './canvasComponent/canvasDataExtractor';
 import { CanvasNotes } from './canvasNotes';
-import { ContentElements, elementData } from './elementData';
+import useVariants from './canvasVariant/container';
+import { elementData } from './elementData';
 import SlideList from './slideList';
 import {
   BodyContainer,
@@ -46,15 +44,9 @@ import {
   ElementContainer,
   ElementSearchInput,
   ElementSubtitle,
-  ElementTitle,
-  LikeButton,
+  ElementTitle
 } from './style';
 import Templates from './themes';
-import { useCanvasComponent } from './canvasComponent/container';
-import useCanvasData from './canvasComponent/canvasDataExtractor';
-import useVariants from './canvasVariant/container';
-import { Images, QuoteImages, listImages } from '@/data/data';
-import { useParams } from 'react-router-dom';
 
 const CanvasBody = () => {
   const slide = useAppSelector(state => state.slide);
@@ -393,17 +385,26 @@ const CanvasBody = () => {
               width={'91.51%'}
             >
               <span>
-                <IconButton onClick={handleDeleteSlide}>
-                  <img src={Delete} />
+                {/* <Tooltip title="Delete Current Slide" placement="top">
+                <IconButton onClick={handleDeleteSlide}  >
+                  <img src={Delete}  />
                 </IconButton>
+                </Tooltip>
+                <Tooltip title="Copy Current Slide" placement="top">
                 <IconButton
                   onClick={() => dispatch(copyCanvasCopy(canvasJS.id))}
+                  sx={{mr: 1}}
                 >
                   <img src={Copy} />
                 </IconButton>
-                <IconButton onClick={handleClick}>
-                  <img src={AddElement} />
-                </IconButton>
+                </Tooltip> */}
+                <Button variant="contained" size="medium" onClick={handleClick}>
+                <Stack direction="row" spacing={1}>
+                    <img src={Add} />
+                    <p>Add Elements</p>
+                  </Stack>
+                  
+                </Button>
               </span>
               <span>
                 {/* <IconButton onClick={handleLike}>
@@ -452,8 +453,13 @@ const CanvasBody = () => {
                   size="medium"
                   onClick={() => handleRequest()}
                   disabled={isRegenerateDisabled}
+
                 >
-                  Regenerate
+                  <Stack direction="row" spacing={1}>
+                    <img src={Wand} />
+                    <p>Regenerate</p>
+                  </Stack>
+
                 </Button>
               </span>
             </Stack>

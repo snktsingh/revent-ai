@@ -112,18 +112,11 @@ const useVariants = () => {
 
   const handleRefreshVariants = () => {
     SetIsLoading(true);
-    dispatch(refreshVariants(requestData)).then(res => {
-      SetIsLoading(false);
-    });
-  };
-
-  const handleOpenVariantsSlide = () => {
-    dispatch(toggleVariantSlide(!openVariant));
-
+    
     const currentSlideIndex = canvasList.findIndex(
       slide => slide.id === activeSlideID
     );
-    SetIsLoading(true);
+    
     try {
       getElementsData(
         (canvasList[currentSlideIndex].originalSlideData as any)?.objects,
@@ -137,6 +130,10 @@ const useVariants = () => {
       SetIsLoading(false);
       console.log(error);
     }
+  };
+
+  const handleOpenVariantsSlide = () => {
+    dispatch(toggleVariantSlide(!openVariant));
   };
 
   useEffect(() => {
