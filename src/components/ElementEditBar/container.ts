@@ -5,6 +5,7 @@ import {
   CYCLE,
   CYCLE_TEXT,
   FUNNEL,
+  FUNNEL_BASE,
   FUNNEL_LEVEL,
   FUNNEL_TEXT,
   LIST_IMG,
@@ -120,7 +121,7 @@ const dispatch = useAppDispatch();
       showDelForLevelIcon = false;
     }
 
-    if(objectName && ((selectedObject?.name?.startsWith(PYRAMID_LEVEL) || (selectedObject?.name?.startsWith(FUNNEL_LEVEL))) || objectName[0] === LIST_IMG)){
+    if(objectName && ((selectedObject?.name?.startsWith(PYRAMID_LEVEL) || (selectedObject?.name?.startsWith(FUNNEL_LEVEL)) || selectedObject?.name?.startsWith(FUNNEL_BASE)) || objectName[0] === LIST_IMG)){
       showDelForLevelIcon = true;
       showPlusIcon = false; 
     }

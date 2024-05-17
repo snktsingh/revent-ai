@@ -4,6 +4,7 @@ import {
   FUNNEL_LEVEL,
   FUNNEL_TEXT,
 } from '@/constants/elementNames';
+import { IExtendedPolygonOptions } from '@/interface/fabricTypes';
 import { updateFunnelId } from '@/redux/reducers/fabricElements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import AutoResizingTextbox from '@/utils/fabric-utils/AutoResizingTextbox';
@@ -17,18 +18,13 @@ export function useFunnelElement() {
     let funnelGroup = canvas.getActiveObject();
     let elementName = funnelGroup?.name?.split('_');
     let currentID = elementName && elementName[1];
-    if (
-      elementName &&
-      funnelGroup &&
-      elementName[0] === FUNNEL &&
-      funnelGroup.type == 'group'
-    ) {
-      (funnelGroup as fabric.Group).forEachObject(object => {
-        if (object.name == `${FUNNEL_LEVEL}_${currentID}`) {
-          lastLevel = object;
-        }
-      });
-    }
+    let levels: number = 0;
+    canvas.forEachObject(object => {
+      if (object.name == `${FUNNEL_LEVEL}_${currentID}`) {
+        lastLevel = object;
+        levels++;
+      }
+    });
 
     let trapezoid = new fabric.Polygon(
       [
@@ -41,17 +37,21 @@ export function useFunnelElement() {
         fill: '#B0BCDE',
         stroke: 'black',
         name: `${FUNNEL_LEVEL}_${currentID}`,
-        top: funnelGroup?.top! - 50,
-        left: funnelGroup?.left! - 20,
-      }
+        top: lastLevel?.top! - 53,
+        left: lastLevel?.left! - 20,
+        level: `${FUNNEL_LEVEL}_${currentID}_${levels + 1}`,
+        hasControls: false,
+        lockMovementX: true,
+        lockMovementY: true,
+      } as IExtendedPolygonOptions
     );
 
-    (funnelGroup as fabric.Group)?.addWithUpdate(trapezoid);
+    canvas?.add(trapezoid);
 
     let text = new AutoResizingTextbox('Add Text', {
       fontSize: 18,
       left: funnelGroup?.left! + funnelGroup?.width! / 2 - 70,
-      top: funnelGroup?.top! + 20,
+      top: trapezoid?.top! + 20,
       width: 140,
       editable: true,
       textAlign: 'center',
@@ -63,23 +63,30 @@ export function useFunnelElement() {
       fixedWidth: 140,
       fixedHeight: 30,
       splitByGrapheme: true,
+      level: `${FUNNEL_TEXT}_${currentID}_${levels + 1}`,
     });
 
-    let top: number = text.top || 0;
-    canvas
-      .getObjects()
-      .reverse()
-      .forEach((object, i) => {
-        if (object.name == `${FUNNEL_TEXT}_${currentID}`) {
-          (object as fabric.Textbox).set({ top: top + 50, left: text.left });
-          top = top + 50;
-          object.setCoords();
-        }
-      });
+    // let top: number = text.top || 0;
+    // canvas
+    //   .getObjects()
+    //   .reverse()
+    //   .forEach((object, i) => {
+    //     if (object.name == `${FUNNEL_TEXT}_${currentID}`) {
+    //       (object as fabric.Textbox).set({ top: top + 50, left: text.left });
+    //       top = top + 50;
+    //       object.setCoords();
+    //     }
+    //   });
+    funnelGroup?.set({
+      width: trapezoid.width,
+      height: funnelGroup.height! + 48,
+      left: trapezoid.left,
+      top: trapezoid.top,
+    });
 
     canvas.add(text);
     canvas.discardActiveObject();
-    canvas.requestRenderAll();
+    canvas.renderAll();
   }
 
   //new funnel
@@ -90,7 +97,8 @@ export function useFunnelElement() {
       let x3 = 100;
       let x4 = -100;
       let levels: fabric.Object[] = [];
-      let trapTop = -60;
+      let trapTop = 290;
+      let trapLeft = 445;
       for (let i = 1; i <= n; i++) {
         let trapezoid = new fabric.Polygon(
           [
@@ -104,10 +112,16 @@ export function useFunnelElement() {
             stroke: 'black',
             top: trapTop,
             name: `${FUNNEL_LEVEL}_${funnelId}`,
-          }
+            left: trapLeft,
+            level: `${FUNNEL_LEVEL}_${funnelId}_${i}`,
+            hasControls: false,
+            lockMovementX: true,
+            lockMovementY: true,
+          } as IExtendedPolygonOptions
         );
 
-        trapTop = trapTop - 50;
+        trapTop = trapTop - 54;
+        trapLeft -= 20;
         x1 = x1 - 20;
         x2 = x2 + 20;
         x3 = x3 + 20;
@@ -120,24 +134,25 @@ export function useFunnelElement() {
         stroke: 'black',
         width: 160,
         height: 100,
-        top: -10,
-        left: -80,
+        left: 466,
+        top: 343,
         name: `${FUNNEL_BASE}_${funnelId}`,
+        hasControls: false,
+        lockMovementX: true,
+        lockMovementY: true,
       });
       levels.push(rect);
 
       return levels;
     }
     let Funnel = createLevels(2);
-    let group = new fabric.Group(Funnel, {
-      left: 411,
-      top: 249,
-      name: `${FUNNEL}_${funnelId}`,
-    });
+    // let group = new fabric.Group(Funnel, {
+    //   left: 411,
+    //   top: 249,
+    //   name: `${FUNNEL}_${funnelId}`,
+    // });
 
-    canvas?.add(group);
-
-    function addText(left: number, top: number, textC: string) {
+    function addText(left: number, top: number, textC: string, level: number) {
       let text = new AutoResizingTextbox(textC, {
         fontSize: 18,
         left,
@@ -153,12 +168,27 @@ export function useFunnelElement() {
         fixedWidth: 140,
         fixedHeight: 30,
         splitByGrapheme: true,
+        level: `${FUNNEL_TEXT}_${funnelId}_${level}`,
       });
       return canvas?.add(text);
     }
 
-    addText(461, 311, 'Add Text');
-    addText(461, 261, 'Add Text');
+    const mainContainer = new fabric.Rect({
+      left: 395,
+      top: 220,
+      name: `${FUNNEL}_${funnelId}`,
+      width: 300,
+      height: 230,
+      fill: 'transparent',
+      strokeWidth: 1,
+      stroke: 'transparent',
+    });
+
+    canvas?.add(mainContainer);
+    canvas?.add(...Funnel);
+
+    addText(475, 305, 'Add Text', 1);
+    addText(475, 253, 'Add Text', 2);
 
     canvas?.renderAll();
     dispatch(updateFunnelId());

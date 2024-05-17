@@ -266,7 +266,7 @@ export function useObjectMovingEvent() {
           lastLeft: movedObject.left,
           lastTop: movedObject.top,
         });
-      } else if (objectName[0] === FUNNEL) {
+      } else if (movedObject.name?.startsWith(`${FUNNEL}_`)) {
         const lastLeft = movedObject.get('lastLeft') || movedObject.left;
         const lastTop = movedObject.get('lastTop') || movedObject.top;
 
@@ -305,39 +305,26 @@ export function useObjectMovingEvent() {
             top = obj.top! + deltaY;
           }
 
-          // if (
-          //   obj.name == `${FUNNEL_BASE}_${objectID}` &&
-          //   obj.intersectsWithObject(movedObject, true, true)
-          // ) {
-          //   obj
-          //     .set({
-          //       left: obj.left! + deltaX,
-          //       top: obj.top! + deltaY,
-          //     })
-          //     .setCoords();
-          //   left = obj.left! + deltaX;
-          //   top = obj.top! + deltaY;
-          // }
+          if (
+            obj.name == `${FUNNEL_BASE}_${objectID}` &&
+            obj.intersectsWithObject(movedObject, true, true)
+          ) {
+            obj
+              .set({
+                left: obj.left! + deltaX,
+                top: obj.top! + deltaY,
+              })
+              .setCoords();
+            left = obj.left! + deltaX;
+            top = obj.top! + deltaY;
+          }
         });
 
         movedObject.set({
           lastLeft: movedObject.left,
           lastTop: movedObject.top,
         });
-        let top = movedObject.top;
-        canvas.getObjects().reverse().forEach(function (obj) {
-          if (
-            obj.name === `${FUNNEL_TEXT}_${objectID}`
-          ) {
-            obj
-              .set({
-                left: movedObject.left! + movedObject?.width! / 2 - 70,
-                top: top && top+12,
-              })
-              .setCoords();
-          }
-               top= top && top+50;
-        });
+        
       } else if (
         movedObject.name === `${LIST_MAIN}_${objectID}`
       ) {
@@ -501,7 +488,7 @@ export function useObjectMovingEvent() {
         });
       }
     }
-    canvas?.requestRenderAll();
+    canvas?.renderAll();
   };
 
   return { handleObjectMoving };
