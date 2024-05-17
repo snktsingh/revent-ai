@@ -77,8 +77,7 @@ import {
 } from '@/constants/media';
 import { Link, useNavigate } from 'react-router-dom';
 import Footer from '@/common-ui/footer';
-import { Token } from '@/utils/localStorage/data';
-import { ROUTES } from '@/constants/endpoint';
+import { Token, isAuth } from '@/utils/localStorage/data';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { getUserDetails } from '@/redux/thunk/user';
 import ProfileMenu from '@/common-ui/profileMenu';
@@ -145,18 +144,25 @@ const Home = ({ onFileSelect }: any) => {
       mWorkingRef.current.scrollIntoView();
     }
   };
-  const tryRef = useRef<HTMLDivElement>(null);
-  const handleTry = () => {
-    if (tryRef.current) {
+  const productRef = useRef<HTMLDivElement>(null);
+  const handleProductRef = () => {
+    if (productRef.current) {
       const headerHeight = 150;
       const elementPosition =
-        tryRef.current.getBoundingClientRect().top + window.pageYOffset;
+        productRef.current.getBoundingClientRect().top + window.pageYOffset;
       const offsetPosition = elementPosition - headerHeight;
 
       window.scrollTo({
         top: offsetPosition,
         behavior: 'smooth',
       });
+    }
+  };
+  const handleTry = () => {
+    if (isAuth && Token) {
+      navigate('/themes');
+    } else {
+      navigate('/login');
     }
   };
 
@@ -239,7 +245,7 @@ const Home = ({ onFileSelect }: any) => {
             <GridRowEven item xs={6}>
               <MenuButton onClick={handleAbout}>About Us</MenuButton>
               <MenuButton onClick={handleServices}>Services</MenuButton>
-              <MenuButton>Product</MenuButton>
+              <MenuButton onClick={handleProductRef}>Product</MenuButton>
               <MenuButton onClick={handleContact}>Get in Touch</MenuButton>
             </GridRowEven>
             <GridRowCenter xs={3}>
@@ -308,7 +314,7 @@ const Home = ({ onFileSelect }: any) => {
                 </GridRowCenter>
               </MainContainer>
               <ChildContainer>
-                <UploadTitle ref={getStartedRef}>Get Started</UploadTitle>
+                <UploadTitle ref={productRef}>Get Started</UploadTitle>
                 <Stack direction="row" width="80vw" spacing={13}>
                   <UploadContainer>
                     <>
@@ -319,9 +325,9 @@ const Home = ({ onFileSelect }: any) => {
                       style={{
                         cursor: 'pointer',
                       }}
-                      onClick={handleContainerClick}
-                      onDragOver={handleDragOver}
-                      onDrop={handleDrop}
+                      // onClick={handleContainerClick}
+                      // onDragOver={handleDragOver}
+                      // onDrop={handleDrop}
                     >
                       <input
                         type="file"
@@ -382,7 +388,7 @@ const Home = ({ onFileSelect }: any) => {
                   </UploadContainer>
 
                   <UploadContainer
-                    onClick={() => navigate('/themes')}
+                    onClick={handleTry}
                     style={{ cursor: 'pointer' }}
                   >
                     <>
@@ -410,7 +416,7 @@ const Home = ({ onFileSelect }: any) => {
                   <CustomButton variant="contained">
                     <Stack direction="row" spacing={2}>
                       <img src={Wand} />
-                      <p>Generate with Revent</p>
+                      <p>Coming Soon...</p>
                     </Stack>
                   </CustomButton>
                   <ContainerDescription
@@ -535,7 +541,7 @@ const Home = ({ onFileSelect }: any) => {
                 <CardContainer>
                   <CustomCard />
                 </CardContainer>
-                <LaunchContainer ref={tryRef}>
+                <LaunchContainer>
                   <LaunchChild>
                     <LaunchHeading>
                       Be the first to know when we launch!
