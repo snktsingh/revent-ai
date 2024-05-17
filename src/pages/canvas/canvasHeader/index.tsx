@@ -78,7 +78,11 @@ const MainCanvasHeader = ({ pId }: any) => {
         link.href = url;
         link.setAttribute(
           'download',
-          presentationName ? presentationName : 'untitled-presentation.pptx'
+          presentationName
+            ? presentationName
+            : format === 'pdf'
+            ? 'untitled-presentation.pdf'
+            : 'untitled-presentation.pptx'
         );
         document.body.appendChild(link);
         link.click();
