@@ -48,6 +48,8 @@ const MainCanvasHeader = ({ pId }: any) => {
   } = useCanvasHeader();
 
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
+  const [isPdfDownloading, setIsPdfDownloading] = useState<boolean>(false);
+
   const { presentationId, presentationName, pptDetails, isLoading } =
     useAppSelector(state => state.thunk);
 
@@ -61,25 +63,33 @@ const MainCanvasHeader = ({ pId }: any) => {
     }
   };
 
-  const handleDownloadPresentation = async () => {
-    setIsDownloading(true);
-    dispatch(downloadPresentation(pId))
+  const handleDownloadPresentation = async (format: string) => {
+    format === 'pdf' ? setIsPdfDownloading(true) : setIsDownloading(true);
+    dispatch(downloadPresentation({ pId, format }))
       .then(res => {
         const blob = new Blob([res.payload], {
-          type: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+          type:
+            format === 'pdf'
+              ? 'application/pdf'
+              : 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
         });
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute(
           'download',
-          presentationName ? presentationName : 'untitled-presentation.pptx'
+          presentationName
+            ? presentationName
+            : format === 'pdf'
+            ? 'untitled-presentation.pdf'
+            : 'untitled-presentation.pptx'
         );
         document.body.appendChild(link);
         link.click();
         link.parentNode?.removeChild(link);
         window.URL.revokeObjectURL(url);
         setIsDownloading(false);
+        setIsPdfDownloading(false);
       })
       .catch(err => {
         toast.error('Download failed', err);
@@ -138,13 +148,14 @@ const MainCanvasHeader = ({ pId }: any) => {
           open={openShare}
           onClose={handleShareClose}
         >
-          <MenuItem onClick={handleShareClose}>
+          <MenuItem onClick={() => handleDownloadPresentation('pdf')}>
             <Stack direction="row" spacing={2}>
               <img src={PDF} width="10%" />
               <h4>Download PDF</h4>
+              {isPdfDownloading && <CircularProgress size={14} />}
             </Stack>
           </MenuItem>
-          <MenuItem onClick={handleDownloadPresentation}>
+          <MenuItem onClick={() => handleDownloadPresentation('pptx')}>
             <Stack direction="row" spacing={2}>
               <img src={PPT} width="10%" />
               <h4>Download PPT</h4>

@@ -21,6 +21,10 @@ import { Action } from '@dnd-kit/core/dist/store';
 import { getUserCredit } from './user';
 import { toggleVariantSlide } from '../reducers/elements';
 
+interface IFileDownload {
+  pId: number;
+  format: string;
+}
 const initialState: ISlideRequests = {
   pptUrl: '',
   imageUrl: '',
@@ -72,7 +76,7 @@ export const fetchSlideImg = createAsyncThunk(
     const updatedCanvasVariants = {
       ...currentCanvas,
       variants: res.data.variants,
-      slideId : res.data.slideId,
+      slideId: res.data.slideId,
     };
     dispatch(updateCurrentCanvas(updatedCanvasVariants));
     dispatch(getUserCredit());
@@ -218,9 +222,11 @@ export const refreshVariants = createAsyncThunk(
 // Download Presentation
 export const downloadPresentation = createAsyncThunk(
   `ppt/downloadPresentation`,
-  async (pptId : number) => {
+  async ({ pId, format }: IFileDownload) => {
     try {
-      const res = await FetchUtils.getRequest(`${ENDPOINT.PPT.DOWNLOAD_PRESENTATION}?presentationId=${pptId}`);
+      const res = await FetchUtils.getRequest(
+        `${ENDPOINT.PPT.DOWNLOAD_PRESENTATION}?presentationId=${pId}&format=${format}`
+      );
       return res.data;
     } catch (error) {
       return error;
@@ -228,12 +234,23 @@ export const downloadPresentation = createAsyncThunk(
   }
 );
 
-// update active variant 
+// update active variant
 export const updateActiveVariantApi = createAsyncThunk(
-  "variant/active",
-  async ({pptId, slideId, variantId} : {pptId : number, slideId : number, variantId :number}) => {
+  'variant/active',
+  async ({
+    pptId,
+    slideId,
+    variantId,
+  }: {
+    pptId: number;
+    slideId: number;
+    variantId: number;
+  }) => {
     try {
-      const res = await FetchUtils.putRequest(`${ENDPOINT.PPT.UPDATE_ACTIVE_VARIANT}?presentationId=${pptId}&slideId=${slideId}&slideVarientId=${variantId}`, null);
+      const res = await FetchUtils.putRequest(
+        `${ENDPOINT.PPT.UPDATE_ACTIVE_VARIANT}?presentationId=${pptId}&slideId=${slideId}&slideVarientId=${variantId}`,
+        null
+      );
 
       return res;
     } catch (error) {
