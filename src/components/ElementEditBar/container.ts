@@ -5,6 +5,7 @@ import {
   CYCLE,
   CYCLE_TEXT,
   FUNNEL,
+  FUNNEL_LEVEL,
   FUNNEL_TEXT,
   LIST_IMG,
   LIST_MAIN,
@@ -12,6 +13,7 @@ import {
   PROCESS,
   PROCESS_TEXT,
   PYRAMID,
+  PYRAMID_LEVEL,
   PYRAMID_TEXT,
   QUOTE,
   QUOTE_IMG,
@@ -38,6 +40,7 @@ export const useEditBar = () => {
   const [tableIcons, setTableIcon] = useState<boolean>(false);
   const [aiCheckbox, setAICheckbox] = useState<boolean>(false);
   const [imgChangeICon, setImgChangeICon] = useState<boolean>(false);
+  const [levelIcons, setLevelICon] = useState<boolean>(false);
 const dispatch = useAppDispatch();
   const { addProcessSteps } = useProcessElement();
   const { addPyramidLevel } = usePyramidElement();
@@ -74,6 +77,7 @@ const dispatch = useAppDispatch();
     let showTableIcons = false;
     let showAICheckbox = false;
     let showChangeImgIcon = false;
+    let showDelForLevelIcon = false;
 
     if (objectName && selectedObject) {
       if (
@@ -84,7 +88,8 @@ const dispatch = useAppDispatch();
         (objectName[0] === CYCLE && cycleSteps < 6) ||
         objectName[0] === LIST_MAIN && listCount < 8
       ) {
-        showPlusIcon = true; 
+        showPlusIcon = true;
+        showDelForLevelIcon = false;
       }
     }
 
@@ -95,26 +100,36 @@ const dispatch = useAppDispatch();
       (objectName && objectName[0] === FUNNEL && fLevels >= 6) ||
       (objectName && objectName[0] === CYCLE && cycleSteps >= 6)
     ) {
-      showPlusIcon = false; 
+      showPlusIcon = false;
+      showDelForLevelIcon = false;
     }
 
     if (objectName && objectName[0] === TABLE) {
       showPlusIcon = true;
       showTableIcons = true;
+      showDelForLevelIcon = false;
     }
 
     if(objectName && (objectName[0] === BULLET_POINTS || objectName[0] === PARAGRAPH)){
       showAICheckbox = true;
+      showDelForLevelIcon = false;
     }
 
     if(objectName && (selectedObject?.name?.startsWith(QUOTE_IMG) || objectName[0] === LIST_IMG)){
       showChangeImgIcon = true;
+      showDelForLevelIcon = false;
+    }
+
+    if(objectName && ((selectedObject?.name?.startsWith(PYRAMID_LEVEL) || (selectedObject?.name?.startsWith(FUNNEL_LEVEL))) || objectName[0] === LIST_IMG)){
+      showDelForLevelIcon = true;
+      showPlusIcon = false; 
     }
 
     setPlusIcon(showPlusIcon); 
     setTableIcon(showTableIcons); 
     setAICheckbox(showAICheckbox);
     setImgChangeICon(showChangeImgIcon);
+    setLevelICon(showDelForLevelIcon);
   };
 
   const countObjects = (canvas: fabric.Canvas, objectType: string): number => {
@@ -228,6 +243,7 @@ const dispatch = useAppDispatch();
     aiCheckbox,
     imgChangeICon,
     addListImage,
-    handleQuoteImage
+    handleQuoteImage,
+    levelIcons
   };
 };

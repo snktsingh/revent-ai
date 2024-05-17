@@ -16,6 +16,7 @@ import {
   PROCESS_BOX,
   PROCESS_TEXT,
   PYRAMID,
+  PYRAMID_LEVEL,
   PYRAMID_TEXT,
   QUOTE,
   QUOTE_AUTHOR,
@@ -56,7 +57,7 @@ export function useObjectMovingEvent() {
           let top;
 
           if (
-            obj.name === `${PYRAMID_TEXT}_${objectID}` &&
+            (obj.name === `${PYRAMID_TEXT}_${objectID}` || obj.name === `${PYRAMID_LEVEL}_${objectID}` ) &&
             obj.intersectsWithObject(movedObject!, true, true)
           ) {
             obj

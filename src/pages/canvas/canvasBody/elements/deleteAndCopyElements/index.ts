@@ -150,6 +150,10 @@ export function useDelAndCopy() {
         case QUOTE_AUTHOR:
           objectsToDelete.push(QUOTE_IMG, QUOTE);
           break;
+        case `${PYRAMID_LEVEL}_${currentElID}`:
+          const [_, id, level] = (activeObject as any).level && (activeObject as any).level.split('_');
+          objectsToDelete.push(`${PYRAMID_TEXT}_${currentElID}_${level}`);
+          break;
         default:
           break;
       }

@@ -24,6 +24,7 @@ import {
   DialogContentText,
   DialogTitle,
   Grid,
+  IconButton,
   Menu,
   MenuItem,
   Stack,
@@ -47,6 +48,7 @@ import {
   ElementTitle
 } from './style';
 import Templates from './themes';
+import AddIcon from '@mui/icons-material/Add';
 
 const CanvasBody = () => {
   const slide = useAppSelector(state => state.slide);
@@ -399,11 +401,10 @@ const CanvasBody = () => {
                 </IconButton>
                 </Tooltip> */}
                 <Button variant="contained" size="medium" onClick={handleClick}>
-                <Stack direction="row" spacing={1}>
-                    <img src={Add} />
+                  <Stack direction="row" spacing={1}>
+                    <img src="data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 9 9' fill='%23fff' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.96325 5.03632H0.516602V3.96358H3.96325V0.509277H5.036V3.96358H8.4903V5.03632H5.036V8.48298H3.96325V5.03632Z' fill='%23fff'/%3E%3C/svg%3E" alt="" />
                     <p>Add Elements</p>
                   </Stack>
-                  
                 </Button>
               </span>
               <span>

@@ -23,3 +23,9 @@ export  interface FabricObject extends fabric.Object {
   export interface IExtendedCircleOptions extends fabric.ICircleOptions {
     level? : string;
   };
+  export interface IExtendedTriangleOptions extends fabric.ITriangleOptions {
+    level? : string;
+  };
+  export interface IExtendedPolygonOptions extends fabric.IPolylineOptions {
+    level? : string;
+  };
