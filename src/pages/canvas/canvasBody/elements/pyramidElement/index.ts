@@ -15,12 +15,14 @@ export function usePyramidElement() {
     let lastText: any;
     let levelsCount : number = 0;;
     canvas.forEachObject(obj => {
+       if(obj.name == `${PYRAMID_LEVEL}_${currentID}`){
+        console.log({obj})
+        levelsCount++;
+        lastLevel = obj;
+      }
+
       if (obj.name == `${PYRAMID_TEXT}_${currentID}`) {
         lastText = obj;
-        levelsCount++;
-      }
-      if(obj.name == `${PYRAMID_LEVEL}_${currentID}`){
-        lastLevel = obj;
       }
     });
     let activeObject = canvas.getActiveObject();
@@ -69,15 +71,24 @@ export function usePyramidElement() {
         }
       });
 
-      (activeObject as fabric.Object).set({
+
+      const container = new fabric.Rect({
+        left : trapezoid.left! -2,
+        top: activeObject?.top,
+        name: `${PYRAMID}_${currentID}`,
         width : activeObject?.width! + 80,
         height : activeObject?.height! + 60,
-        left : trapezoid.left! -2
+        fill: 'transparent',
+        strokeWidth: 1,
+        stroke: 'transparent',
       })
-
+      if(activeObject){
+        canvas.remove(activeObject);
+      }
+      canvas.add(container);
       canvas.add(text);
       canvas.discardActiveObject()
-      canvas?.requestRenderAll();
+      canvas?.renderAll();
     }
   };
   //new pyramid

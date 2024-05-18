@@ -63,7 +63,6 @@ export function useObjectMovingEvent() {
               .set({
                 left: obj.left! + deltaX,
                 top: obj.top! + deltaY,
-                name: `${PYRAMID_TEXT}_${objectID}`,
               })
               .setCoords();
             left = obj.left! + deltaX;
