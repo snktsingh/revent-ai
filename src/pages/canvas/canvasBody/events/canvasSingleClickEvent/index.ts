@@ -1,11 +1,15 @@
 import { Select } from '@mui/material';
 import {
+  CYCLE,
   CYCLE_CIRCLE,
   CYCLE_TEXT,
+  FUNNEL,
   FUNNEL_LEVEL,
   FUNNEL_TEXT,
+  PROCESS,
   PROCESS_BOX,
   PROCESS_TEXT,
+  PYRAMID,
   PYRAMID_LEVEL,
   PYRAMID_TEXT,
 } from '@/constants/elementNames';
@@ -25,6 +29,18 @@ export function useCanvasSingleClickEvent() {
 
     let object = event.target as any;
     if (object && object.name) {
+      if (
+        (object.name.startsWith(FUNNEL) ||
+         object.name.startsWith(PYRAMID) ||
+         object.name.startsWith(PROCESS)||
+         object.name.startsWith(CYCLE)
+        )
+         &&
+        object.type !== 'textbox'
+      ) {
+        exitTextEditing(canvas);
+      }
+
       if (object.level) {
         if (object.level.startsWith(PROCESS_BOX)) {
           const [_, id, level] = object.level.split('_');
@@ -90,4 +106,12 @@ export function useCanvasSingleClickEvent() {
   }
 
   return { CanvasSingleClick };
+}
+
+function exitTextEditing(canvas : fabric.Canvas) {
+  canvas.forEachObject(function (obj) {
+    if ((obj as fabric.Textbox).isEditing) {
+      (obj as fabric.Textbox).exitEditing();
+    }
+  });
 }

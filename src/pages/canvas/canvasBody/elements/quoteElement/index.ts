@@ -15,16 +15,17 @@ export const useQuoteElement = () => {
   const { canvasJS } = useAppSelector(state => state.canvas);
   const addQuotes = (canvas: fabric.Canvas | null) => {
     let text = new fabric.Textbox('❝Click to add a quote❞', {
-      left: 360,
-      top: 180,
+      left: 290,
+      top: 140,
       width: 300,
       height: 40,
       fill: 'black',
       fontSize: 28,
-      hasRotatingPoint: false,
-      selectable: true,
+      // hasRotatingPoint: false,
+      // selectable: true,
       name: QUOTE_TEXT,
       cursorColor: theme.colorSchemes.light.palette.primary.main,
+      splitByGrapheme : true
     });
 
     let authorText = new fabric.Textbox('- Author Name', {

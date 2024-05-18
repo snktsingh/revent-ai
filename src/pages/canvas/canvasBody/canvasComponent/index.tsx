@@ -145,6 +145,7 @@ const CanvasComponent: React.FC = () => {
         );
         canvas.on('mouse:down', options => onMouseDownEvent(options, canvas));
 
+
         canvas.renderAll();
       },
       (error: Error) => {

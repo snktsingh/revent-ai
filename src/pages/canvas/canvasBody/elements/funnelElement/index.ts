@@ -46,8 +46,7 @@ export function useFunnelElement() {
       } as IExtendedPolygonOptions
     );
 
-    canvas?.add(trapezoid);
-
+    
     let text = new AutoResizingTextbox('Add Text', {
       fontSize: 18,
       left: funnelGroup?.left! + funnelGroup?.width! / 2 - 70,
@@ -81,9 +80,10 @@ export function useFunnelElement() {
       width: trapezoid.width,
       height: funnelGroup.height! + 48,
       left: trapezoid.left,
-      top: trapezoid.top,
-    });
-
+      top: trapezoid.top! - 10,
+    }).setCoords();
+    
+    canvas?.add(trapezoid);
     canvas.add(text);
     canvas.discardActiveObject();
     canvas.renderAll();
