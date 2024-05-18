@@ -65,24 +65,20 @@ export function useFunnelElement() {
       level: `${FUNNEL_TEXT}_${currentID}_${levels + 1}`,
     });
 
-    // let top: number = text.top || 0;
-    // canvas
-    //   .getObjects()
-    //   .reverse()
-    //   .forEach((object, i) => {
-    //     if (object.name == `${FUNNEL_TEXT}_${currentID}`) {
-    //       (object as fabric.Textbox).set({ top: top + 50, left: text.left });
-    //       top = top + 50;
-    //       object.setCoords();
-    //     }
-    //   });
-    funnelGroup?.set({
-      width: trapezoid.width,
-      height: funnelGroup.height! + 48,
+    let container = new fabric.Rect({
       left: trapezoid.left,
       top: trapezoid.top! - 10,
-    }).setCoords();
-    
+      name: `${FUNNEL}_${currentID}`,
+      width: trapezoid.width,
+      height: funnelGroup?.height! + 50,
+      fill: 'transparent',
+      strokeWidth: 1,
+      stroke: 'transparent',
+    });
+    if(funnelGroup){
+      canvas.remove(funnelGroup)
+    };
+    canvas.add(container)
     canvas?.add(trapezoid);
     canvas.add(text);
     canvas.discardActiveObject();

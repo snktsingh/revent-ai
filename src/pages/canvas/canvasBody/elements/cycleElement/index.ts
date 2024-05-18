@@ -97,14 +97,18 @@ export function useCycleElement() {
     };
     switch (Circles && Circles.length + 1) {
       case 4:
-        mainContainer!.set({
+        canvas.remove(mainContainer!);
+        let NewContainer = new fabric.Rect({
           width: 375,
           height: 324,
           top: 60,
           left: 370,
+          fill: 'transparent',
+          strokeWidth: 1,
+          stroke: 'transparent',
+          name: `${CYCLE}_${currentID}`,
         });
-        canvas.add(mainContainer!);
-
+        canvas.add(NewContainer);
         addCircle(505, 60, 2);
         addCircle(636, 172, 3);
         addCircle(505, 284, 4);
@@ -137,13 +141,19 @@ export function useCycleElement() {
           .setCoords();
         break;
       case 5:
-        mainContainer!.set({
+        
+        canvas.remove(mainContainer!);
+        let NewContainer5 = new fabric.Rect({
           width: 406,
           height: 391,
           top: 40,
           left: 330,
+          fill: 'transparent',
+          strokeWidth: 1,
+          stroke: 'transparent',
+          name: `${CYCLE}_${currentID}`,
         });
-        canvas.add(mainContainer!);
+        canvas.add(NewContainer5);
         addCircle(480, 39, 2);
         addCircle(626, 155, 3);
         addCircle(341, 155, 1);
@@ -186,12 +196,20 @@ export function useCycleElement() {
         break;
       case 6:
         mainContainer!.set({
+          
+        });
+        canvas.remove(mainContainer!);
+        let NewContainer6 = new fabric.Rect({
           width: 524,
           height: 409,
           top: 36,
           left: 247,
+          fill: 'transparent',
+          strokeWidth: 1,
+          stroke: 'transparent',
+          name: `${CYCLE}_${currentID}`,
         });
-        canvas.add(mainContainer!);
+        canvas.add(NewContainer6);
         addCircle(361, 36, 2);
         addCircle(561, 36, 3);
         addCircle(248, 181, 1);

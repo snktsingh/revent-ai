@@ -165,6 +165,11 @@ export function useObjectMovingEvent() {
         var deltaX = movedObject.left! - lastLeft!;
         var deltaY = movedObject.top! - lastTop!;
 
+        let activeObj = canvas.getActiveObject();
+        let activeLeft = activeObj?.left || 0;
+        
+
+
         canvas.forEachObject(function (obj) {
           if (
             obj.name === `${FUNNEL_TEXT}_${objectID}` ||
