@@ -43,6 +43,8 @@ const PresentationCardContextMenu: React.FC<PresentationCardContextMenuProps> = 
     //     const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
     //     if (newWindow) newWindow.opener = null;
     //   };
+
+    
     return (
         <Menu
             open={isOpen}
@@ -51,7 +53,7 @@ const PresentationCardContextMenu: React.FC<PresentationCardContextMenuProps> = 
             anchorPosition={isOpen ? { top: anchorPoint.y + 2, left: anchorPoint.x + 2 } : undefined}
             PaperProps={{ style: { maxHeight: 200, width: '20ch' } }}
         >
-            <MenuItem component={Link} to={`/presentation/${presentation.presentationId}-${faker.string.uuid()}`} target="_blank" rel="noopener noreferrer">
+            <MenuItem component={Link} to={presentation && presentation.presentationId ? `/presentation/${presentation.presentationId}-${faker.string.uuid()}` : '/my-presentation'} target="_blank" rel="noopener noreferrer">
                 <ListItemIcon>
                     <ExitToAppIcon fontSize="small" />
                 </ListItemIcon>
