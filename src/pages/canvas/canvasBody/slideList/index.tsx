@@ -1,29 +1,13 @@
-import SvgViewer from '@/components/canvasSvgViewer';
-import { Paper, Skeleton, Stack } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { ListSlideCard, SingleSliderContainer } from '../style';
-import useSlideList from './container';
-import { Dot, LoaderContainer, SlideContainer } from './style';
-import { DndContext, closestCorners } from '@dnd-kit/core';
-import {
-  SortableContext,
-  arrayMove,
-  useSortable,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
-import { CanvasItem } from '@/interface/storeTypes';
-import { CSS } from '@dnd-kit/utilities';
-import {
-  setActiveSlideId,
-  setVariantImageAsMain,
-  updateCanvasList,
-} from '@/redux/reducers/canvas';
-import { useAppSelector } from '@/redux/store';
-import { setEditPptIndex } from '@/redux/thunk/thunk';
-import { useSearchParams } from 'react-router-dom';
-interface SingleSlideComponentProps extends CanvasItem {
-  index: number;
-}
+import { useAppSelector } from "@/redux/store";
+import useSlideList from "./container";
+import { useEffect, useRef, useState } from "react";
+import { setActiveSlideId, updateCanvasList } from "@/redux/reducers/canvas";
+import { SortableContext, arrayMove, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { CanvasItem } from "@/interface/storeTypes";
+import { DndContext, closestCorners } from "@dnd-kit/core";
+import { SlideContainer } from "./style";
+import { SingleSlideComponent } from "./singleSlideComponent";
+import SlidesContextMenu from "@/common-ui/slidesContextMenu";
 
 export default function SlideList() {
   const {
@@ -41,11 +25,12 @@ export default function SlideList() {
   } = useSlideList();
 
   const { pptDetails, isLoading } = useAppSelector(state => state.thunk);
+  const targetRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     dispatch(setActiveSlideId(1));
-  } , [])
-  
+  }, [])
+
 
   useEffect(() => {
     loadSvgs();
@@ -71,86 +56,52 @@ export default function SlideList() {
     dispatch(updateCanvasList(updateCanvasListArray()));
   };
 
-  const SingleSlideComponent: React.FC<SingleSlideComponentProps> = ({
-    index,
-    ...props
-  }) => {
-    const canvas = props;
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
+  const [currentSlide, setCurrentSlide] = useState<CanvasItem | null>(null);
 
-    const { attributes, listeners, setNodeRef, transform, transition } =
-      useSortable({ id: canvas.id });
-
-    const styles = {
-      transition,
-      transform: CSS.Transform.toString(transform),
-    };
-
-    
-
-    return (
-      <>
-        {
-          !svgURLs[index] ?
-            <SingleSliderContainer>
-              <ListSlideCard>
-                  <LoaderContainer>
-                    <Dot />
-                    <Dot />
-                    <Dot />
-                    <Dot />
-                    <Dot />
-                  </LoaderContainer>
-              </ListSlideCard>
-            </SingleSliderContainer>
-            :
-            <div
-              ref={setNodeRef}
-              {...attributes}
-              onPointerDown={event => {
-                {!isLoading && handleSlideCardClick(canvas)};
-                if (listeners?.onPointerDown) {
-                  listeners.onPointerDown(event);
-                }
-              }}
-              onKeyDown={event => {
-                if (listeners?.onKeyDown) {
-                  listeners.onKeyDown(event);
-                }
-              }}
-              style={styles}
-            >
-              <SingleSliderContainer>
-                <Stack direction="row" spacing={1}>
-                  <p>{index + 1}</p>
-                  <ListSlideCard
-                    className={activeSlideID == canvas.id ? 'clicked-card' : ''}
-                  >
-                    <SvgViewer svgContent={svgURLs[index]} />
-                  </ListSlideCard>
-                </Stack>
-              </SingleSliderContainer>
-              <br />
-            </div>
-        }
-      </>
-    );
+  const handleContextMenu = (event: React.MouseEvent, slide: CanvasItem) => {
+    console.log('hai')
+    setCurrentSlide(slide)
+    event.preventDefault();
+    setContextMenu({ x: event.clientX, y: event.clientY });
+    dispatch(setActiveSlideId(slide.id)); 
   };
 
+  const handleClose = () => {
+    setContextMenu(null);
+  };
 
   return (
     <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
-      <SlideContainer>
+      <SlideContainer  >
         <SortableContext
           items={canvasList}
           strategy={verticalListSortingStrategy}
         >
           {canvasList.map((canvas, index) => {
             return (
-              <SingleSlideComponent key={index} {...canvas} index={index} />
+              <>
+                <SingleSlideComponent
+                  key={index}
+                  {...canvas}
+                  index={index}
+                  svgURLs={svgURLs}
+                  activeSlideID={activeSlideID}
+                  isLoading={isLoading}
+                  handleSlideCardClick={handleSlideCardClick}
+                  handleContextMenu={handleContextMenu}
+                />
+              </>
             );
           })}
         </SortableContext>
         <br />
+        <SlidesContextMenu
+          anchorPoint={contextMenu || { x: 0, y: 0 }}
+          isOpen={contextMenu !== null}
+          onClose={handleClose}
+          slide={currentSlide!}
+        />
       </SlideContainer>
     </DndContext>
   );

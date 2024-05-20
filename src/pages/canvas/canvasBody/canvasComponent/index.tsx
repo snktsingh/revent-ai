@@ -65,8 +65,7 @@ const CanvasComponent: React.FC = () => {
   } = useAppSelector(state => state.canvas);
 
   useEffect(() => {
-    console.log({ canvasJS });
-    console.log({ canvasList });
+
     setShowOptions(false);
     const canvas = new fabric.Canvas('canvas', {preserveObjectStacking:true});
     updateCanvasStyle(canvas);

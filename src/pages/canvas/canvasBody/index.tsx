@@ -376,7 +376,7 @@ const CanvasBody = () => {
         transition={Slide}
       />
       <Grid container>
-        <Grid item xs={2}>
+        <Grid item xs={2} onContextMenu={(event) => {event.preventDefault()}}  >
           <SlideList />
         </Grid>
         <Grid item xs={8}>
