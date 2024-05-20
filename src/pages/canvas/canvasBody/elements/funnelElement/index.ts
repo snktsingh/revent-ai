@@ -14,7 +14,7 @@ export function useFunnelElement() {
   const dispatch = useAppDispatch();
   function addFunnelLevels(canvas: fabric.Canvas) {
     let lastLevel: any;
-
+    let lastText : any;
     let funnelGroup = canvas.getActiveObject();
     let elementName = funnelGroup?.name?.split('_');
     let currentID = elementName && elementName[1];
@@ -22,8 +22,13 @@ export function useFunnelElement() {
     canvas.forEachObject(object => {
       if (object.name == `${FUNNEL_LEVEL}_${currentID}`) {
         lastLevel = object;
-        levels++;
+        levels++;    
       }
+
+      if(object.name == `${FUNNEL_TEXT}_${currentID}`) {
+        lastText = object;
+      }
+
     });
 
     let trapezoid = new fabric.Polygon(
@@ -49,9 +54,9 @@ export function useFunnelElement() {
     
     let text = new AutoResizingTextbox('Add Text', {
       fontSize: 18,
-      left: funnelGroup?.left! + funnelGroup?.width! / 2 - 70,
-      top: trapezoid?.top! + 20,
-      width: 140,
+      left: trapezoid.left! + 15,
+      top: trapezoid?.top! + 5,
+      width: lastText.width + 40,
       editable: true,
       textAlign: 'center',
       name: `${FUNNEL_TEXT}_${currentID}`,
@@ -60,7 +65,7 @@ export function useFunnelElement() {
       lockMovementY: true,
       hasBorders: false,
       fixedWidth: 140,
-      fixedHeight: 30,
+      fixedHeight: 50,
       splitByGrapheme: true,
       level: `${FUNNEL_TEXT}_${currentID}_${levels + 1}`,
     });
@@ -78,7 +83,18 @@ export function useFunnelElement() {
     if(funnelGroup){
       canvas.remove(funnelGroup)
     };
-    canvas.add(container)
+    canvas.add(container);
+    canvas.forEachObject(object => {
+      if (object.name == `${FUNNEL_LEVEL}_${currentID}`) {
+        lastLevel = object;
+        levels++;
+        object.bringToFront();
+      }
+
+      if(object.name == `${FUNNEL_TEXT}_${currentID}`) {
+        object.bringToFront();
+      }
+    });
     canvas?.add(trapezoid);
     canvas.add(text);
     canvas.discardActiveObject();
@@ -148,12 +164,12 @@ export function useFunnelElement() {
     //   name: `${FUNNEL}_${funnelId}`,
     // });
 
-    function addText(left: number, top: number, textC: string, level: number) {
+    function addText(left: number, top: number, textC: string, width : number, level: number) {
       let text = new AutoResizingTextbox(textC, {
         fontSize: 18,
         left,
-        top,
-        width: 140,
+        top: top - 15,
+        width,
         editable: true,
         textAlign: 'center',
         name: `${FUNNEL_TEXT}_${funnelId}`,
@@ -162,9 +178,10 @@ export function useFunnelElement() {
         lockMovementY: true,
         hasBorders: false,
         fixedWidth: 140,
-        fixedHeight: 30,
+        fixedHeight: 50,
         splitByGrapheme: true,
         level: `${FUNNEL_TEXT}_${funnelId}_${level}`,
+        
       });
       return canvas?.add(text);
     }
@@ -183,8 +200,9 @@ export function useFunnelElement() {
     canvas?.add(mainContainer);
     canvas?.add(...Funnel);
 
-    addText(475, 305, 'Add Text', 1);
-    addText(475, 253, 'Add Text', 2);
+
+    addText(Funnel[0].left! + 15, 305, 'Add Text', 170, 1);
+    addText(Funnel[1].left! + 15, 253, 'Add Text', 210, 2);
 
     canvas?.renderAll();
     dispatch(updateFunnelId());
