@@ -60,10 +60,9 @@ export default function SlideList() {
   const [currentSlide, setCurrentSlide] = useState<CanvasItem | null>(null);
 
   const handleContextMenu = (event: React.MouseEvent, slide: CanvasItem) => {
-    console.log('hai')
     setCurrentSlide(slide)
     event.preventDefault();
-    setContextMenu({ x: event.clientX, y: event.clientY });
+    setContextMenu(contextMenu === null ? { x: event.clientX, y: event.clientY } : null);
     dispatch(setActiveSlideId(slide.id)); 
   };
 

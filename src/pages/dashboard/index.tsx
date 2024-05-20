@@ -40,6 +40,7 @@ import ThumbnailPreview from '@/common-ui/thumbnailPreview';
 import { faker } from '@faker-js/faker';
 import { Blank } from '@/constants/media';
 import NavBar from '@/common-ui/NavBar';
+import PresentationCardContextMenu from '@/common-ui/presentationContextMenu';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -78,15 +79,27 @@ const Dashboard = () => {
   const filteredPptList =
     searchTerm.length > 0
       ? pptList.filter((ppt: IPresentation) =>
-          ppt.name.toLowerCase().includes(searchTerm.toLowerCase())
-        )
+        ppt.name.toLowerCase().includes(searchTerm.toLowerCase())
+      )
       : pptList;
 
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
+  const [currentPresentation, setCurrentPresentation] = useState<any>(null);
+  const handleContextMenu = (event: React.MouseEvent, presentation : any) => {
+    event.preventDefault();
+    setCurrentPresentation(presentation)
+    setContextMenu(contextMenu === null ? { x: event.clientX, y: event.clientY } : null);
+  };
+
+  const handleCloseContextMenu = () => {
+    setContextMenu(null);
+  };
+
   return (
-     <>
-     <NavBar/>
-     <MainContainer>
-      {/* <Stack direction="row" display="flex" justifyContent="space-between">
+    <>
+      <NavBar />
+      <MainContainer>
+        {/* <Stack direction="row" display="flex" justifyContent="space-between">
         <h3>Hello {userDetails?.firstName} !</h3>
         <Button onClick={handleOpenProfile}>
           <Stack direction="row" spacing={1} alignItems="center">
@@ -106,158 +119,164 @@ const Dashboard = () => {
           </Stack>
         </Button>
       </Stack> */}
-      <ProfileMenu
-        anchorElForProfileMenu={openProfileMenu}
-        handleCloseProfileMenu={handleCloseProfileMenu}
-        setAnchorElForProfileMenu={setOpenProfileMenu}
-      />
-      <span style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Title>Create a Presentation</Title>
-      </span>
-      <br />
-      <CardContainer>
-        {slideData.templates.map((slide, index) => {
-          return (
-            <CardTitle
-              key={slide.title + index}
-              onClick={() => navigate('/themes')}
-            >
-              <CardLink>
-                <PreviewCard>
-                  <AddToQueueIcon
-                    sx={{
-                      fontSize: '3rem',
-                      color: `${theme.colorSchemes.light.palette.primary.main}`,
-                    }}
-                  />
-                </PreviewCard>
-                {slide.title}
-              </CardLink>
-            </CardTitle>
-          );
-        })}
-      </CardContainer>
-      <br />
-      <Divider />
-      <br />
-      <Stack direction="row" display="flex" justifyContent="space-between">
-        <Title>Recent Presentations</Title>
-        <TextField
-          id="outlined-basic"
-          label="Search presentation"
-          variant="outlined"
-          size="small"
-          onChange={e => setSearchTerm(e.target.value)}
+        <ProfileMenu
+          anchorElForProfileMenu={openProfileMenu}
+          handleCloseProfileMenu={handleCloseProfileMenu}
+          setAnchorElForProfileMenu={setOpenProfileMenu}
         />
-      </Stack>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          <b>Delete Presentation ? </b>
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Are you sure you want to delete the current presentation ?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>No</Button>
-          <Button
-            onClick={() => {
-              removePresentation(pptId);
-              handleClose();
-            }}
-            autoFocus
-          >
-            Yes
-          </Button>
-        </DialogActions>
-      </Dialog>
-      {loadingUserDetails === false ? (
-        <Box>
-          <Box height="40vh" overflow="auto">
-            <CardTitle>
-              {filteredPptList.map((ppt: any, index) => {
-                return (
-                  <CardLink key={index}>
-                    <Card
-                      style={{
-                        width: '180px',
-                        height: '13vh',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
+        <span style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Title>Create a Presentation</Title>
+        </span>
+        <br />
+        <CardContainer>
+          {slideData.templates.map((slide, index) => {
+            return (
+              <CardTitle
+                key={slide.title + index}
+                onClick={() => navigate('/themes')}
+              >
+                <CardLink>
+                  <PreviewCard>
+                    <AddToQueueIcon
+                      sx={{
+                        fontSize: '3rem',
+                        color: `${theme.colorSchemes.light.palette.primary.main}`,
                       }}
-                      onClick={() => {
-                        navigate(
-                          `/presentation/${ppt.presentationId}-${faker.string.uuid()}`
-                        );
-                      }}
-                    >
-                      {ppt.thumbnailUrl !== '' ? (
-                        <img src={ppt.thumbnailUrl} width="100%" />
-                      ) : (
-                        <img src={Blank} width="100%" height="30%" />
-                      )}
-                    </Card>
-                    <Stack
-                      direction="row"
-                      justifyContent="space-between"
-                      display="flex"
-                      alignItems="center"
-                    >
-                      <p>
-                        {ppt.name == undefined
-                          ? 'Untitled-presentation'
-                          : ppt.name}
-                      </p>
-                      <IconButton
+                    />
+                  </PreviewCard>
+                  {slide.title}
+                </CardLink>
+              </CardTitle>
+            );
+          })}
+        </CardContainer>
+        <br />
+        <Divider />
+        <br />
+        <Stack direction="row" display="flex" justifyContent="space-between">
+          <Title>Recent Presentations</Title>
+          <TextField
+            id="outlined-basic"
+            label="Search presentation"
+            variant="outlined"
+            size="small"
+            onChange={e => setSearchTerm(e.target.value)}
+          />
+        </Stack>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            <b>Delete Presentation ? </b>
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Are you sure you want to delete the current presentation ?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>No</Button>
+            <Button
+              onClick={() => {
+                removePresentation(pptId);
+                handleClose();
+              }}
+              autoFocus
+            >
+              Yes
+            </Button>
+          </DialogActions>
+        </Dialog>
+        {loadingUserDetails === false ? (
+          <Box>
+            <Box height="40vh" overflow="auto">
+              <CardTitle>
+                {filteredPptList.map((ppt: any, index) => {
+                  return (
+                    <CardLink key={index} onContextMenu={(e) => handleContextMenu(e, ppt)}>
+                      <Card
+                        style={{
+                          width: '180px',
+                          height: '13vh',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                        }}
                         onClick={() => {
-                          handleClickOpen();
-                          setPptId(ppt.presentationId);
+                          navigate(
+                            `/presentation/${ppt.presentationId}-${faker.string.uuid()}`
+                          );
                         }}
                       >
-                        <DeleteIcon fontSize="small" />
-                      </IconButton>
-                    </Stack>
-                  </CardLink>
-                );
-              })}
-            </CardTitle>{' '}
+                        {ppt.thumbnailUrl !== '' ? (
+                          <img src={ppt.thumbnailUrl} width="100%" />
+                        ) : (
+                          <img src={Blank} width="100%" height="30%" />
+                        )}
+                      </Card>
+                      <Stack
+                        direction="row"
+                        justifyContent="space-between"
+                        display="flex"
+                        alignItems="center"
+                      >
+                        <p>
+                          {ppt.name == undefined
+                            ? 'Untitled-presentation'
+                            : ppt.name}
+                        </p>
+                        <IconButton
+                          onClick={() => {
+                            handleClickOpen();
+                            setPptId(ppt.presentationId);
+                          }}
+                        >
+                          <DeleteIcon fontSize="small" />
+                        </IconButton>
+                      </Stack>
+                    </CardLink>
+                  );
+                })}
+              </CardTitle>{' '}
+            </Box>
+            <Button
+              variant="outlined"
+              sx={{ marginTop: '10px' }}
+              onClick={handleMore}
+            >
+              Load more
+            </Button>
           </Box>
-          <Button
-            variant="outlined"
-            sx={{ marginTop: '10px' }}
-            onClick={handleMore}
-          >
-            Load more
-          </Button>
-        </Box>
-      ) : (
-        <Loader>
-          {/* No Recent Presentations */}
-          <MagnifyingGlass
-            visible={true}
-            height="80"
-            width="80"
-            ariaLabel="magnifying-glass-loading"
-            wrapperStyle={{}}
-            wrapperClass="loader"
-            glassColor="#c0efff"
-            color={`${theme.colorSchemes.light.palette.primary.main}`}
-          />
-          <br />
-          <LoaderText>
-            Gathering your Spectacular Presentations. Please hold tight...
-          </LoaderText>
-        </Loader>
-      )}
-    </MainContainer>
-     </>
+        ) : (
+          <Loader>
+            {/* No Recent Presentations */}
+            <MagnifyingGlass
+              visible={true}
+              height="80"
+              width="80"
+              ariaLabel="magnifying-glass-loading"
+              wrapperStyle={{}}
+              wrapperClass="loader"
+              glassColor="#c0efff"
+              color={`${theme.colorSchemes.light.palette.primary.main}`}
+            />
+            <br />
+            <LoaderText>
+              Gathering your Spectacular Presentations. Please hold tight...
+            </LoaderText>
+          </Loader>
+        )}
+        <PresentationCardContextMenu
+          anchorPoint={contextMenu || { x: 0, y: 0 }}
+          isOpen={contextMenu !== null}
+          onClose={handleCloseContextMenu}
+          presentation={currentPresentation}
+        />
+      </MainContainer>
+    </>
   );
 };
 export default Dashboard;
