@@ -23,6 +23,9 @@ export function usePyramidElement() {
 
       if (obj.name == `${PYRAMID_TEXT}_${currentID}`) {
         lastText = obj;
+        obj.set({
+          fill:'white'
+        })
       }
     });
     let activeObject = canvas.getActiveObject();
@@ -50,11 +53,12 @@ export function usePyramidElement() {
       
       const text = new AutoResizingTextbox('Add Text', {
         fontSize: 18,
-        left: lastText.left,
-        top: trapezoid.top! + 20,
-        width: 150,
+        left: trapezoid.left! + 35,
+        top: trapezoid.top! + 5,
+        width: lastText.width + 70,
         fixedWidth: 150,
         fixedHeight: 100,
+        textAlign: 'center',
         name: `${PYRAMID_TEXT}_${currentID}`,
         fill: 'white',
         hasBorders: false,
@@ -62,15 +66,6 @@ export function usePyramidElement() {
         level : `${PYRAMID_TEXT}_${pyramidId}_${levelsCount + 1}`
       });
       canvas.add(trapezoid);
-
-      canvas.getObjects().forEach(obj => {
-        if (obj.name === `${PYRAMID_TEXT}_${currentID}`) {
-          obj.set({
-            left: lastText.left,
-          });
-        }
-      });
-
 
       const container = new fabric.Rect({
         left : trapezoid.left! -2,
@@ -86,6 +81,17 @@ export function usePyramidElement() {
         canvas.remove(activeObject);
       }
       canvas.add(container);
+
+      canvas.getObjects().forEach(obj => {
+         if( obj.name === `${PYRAMID_LEVEL}_${currentID}`){
+          obj.bringToFront();
+        }
+         if( obj.name === `${PYRAMID_TEXT}_${currentID}`){
+          obj.bringToFront();
+        }
+      });
+
+
       canvas.add(text);
       canvas.discardActiveObject()
       canvas?.renderAll();
@@ -164,8 +170,8 @@ export function usePyramidElement() {
 
         const text = new AutoResizingTextbox('Add Text', {
           fontSize: 18,
-          left: 430,
-          top: 215,
+          left: trapezoid.left! + 32,
+          top: 200,
           width: 217,
           name: `${PYRAMID_TEXT}_${pyramidId}`,
           fixedWidth: 150,
@@ -175,7 +181,8 @@ export function usePyramidElement() {
           lockMovementY: true,
           fill: 'white',
           hasBorders: false,
-          level : `${PYRAMID_TEXT}_${pyramidId}_2`
+          level : `${PYRAMID_TEXT}_${pyramidId}_2`,
+          textAlign: 'center'
         });
 
         trapTop = trapTop + 60;
