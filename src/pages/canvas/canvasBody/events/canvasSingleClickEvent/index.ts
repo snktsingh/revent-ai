@@ -4,6 +4,7 @@ import {
   CYCLE_CIRCLE,
   CYCLE_TEXT,
   FUNNEL,
+  FUNNEL_BASE,
   FUNNEL_LEVEL,
   FUNNEL_TEXT,
   PROCESS,
@@ -40,6 +41,15 @@ export function useCanvasSingleClickEvent() {
         object.type !== 'textbox'
       ) {
         exitTextEditing(canvas);
+      }
+
+      if (object.name.startsWith(FUNNEL_BASE)) {
+        const [_, id] = object.name.split('_');
+        canvas.forEachObject((obj: any) => {
+          if(obj.name && obj.name === `${FUNNEL}_${id}`){
+            canvas.setActiveObject(obj);
+          }
+        });
       }
 
       if (object.level) {
@@ -89,7 +99,6 @@ export function useCanvasSingleClickEvent() {
           });
         } else if (object.level.startsWith(FUNNEL_LEVEL)) {
           const [_, id, level] = object.level.split('_');
-          console.log({ id, level });
           canvas.forEachObject((obj: any) => {
             if (
               obj.level === `${FUNNEL_TEXT}_${id}_${level}` &&
@@ -101,8 +110,11 @@ export function useCanvasSingleClickEvent() {
               }
               obj.enterEditing();
             }
+            if(obj.name && obj.name === `${FUNNEL}_${id}`){
+              canvas.setActiveObject(obj);
+            }
           });
-        }
+        }  
       }
     }
 

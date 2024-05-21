@@ -8,6 +8,7 @@ import {
   FUNNEL_BASE,
   FUNNEL_LEVEL,
   FUNNEL_TEXT,
+  IMAGE,
   LIST_IMG,
   LIST_MAIN,
   PARAGRAPH,
@@ -25,6 +26,7 @@ import {
 import {
   useCycleElement,
   useFunnelElement,
+  useImageElement,
   useListElement,
   useProcessElement,
   usePyramidElement,
@@ -50,6 +52,7 @@ const dispatch = useAppDispatch();
   const { addTimelineSteps } = useTimelineElement();
   const { addListElement, addImage } = useListElement();
   const { addQuoteImage } = useQuoteElement();
+  const { imageUploader } = useImageElement();
   const { addTableRow, addTableColumn, removeTableColumn, removeTableRow } =
     useTableElement();
   const { listID } = useAppSelector( state => state.elementsIds )
@@ -116,7 +119,7 @@ const dispatch = useAppDispatch();
       showDelForLevelIcon = false;
     }
 
-    if(objectName && (selectedObject?.name?.startsWith(QUOTE_IMG) || objectName[0] === LIST_IMG)){
+    if(objectName && (selectedObject?.name?.startsWith(QUOTE_IMG) || objectName[0] === LIST_MAIN || selectedObject?.name?.startsWith(IMAGE))){
       showChangeImgIcon = true;
       showDelForLevelIcon = false;
     }
@@ -233,6 +236,13 @@ const dispatch = useAppDispatch();
       dispatch(updateCheckboxForAI(e.target.checked))
   };
 
+  const handleChangeImageElement = (canvas : fabric.Canvas) => {
+     const activeElement = canvas.getActiveObject();
+     if(activeElement && activeElement.type === 'image') {
+        imageUploader(canvas, activeElement);
+     }
+  }
+
   return {
     adjustControlsVisibility,
     handleCopyClick,
@@ -245,6 +255,7 @@ const dispatch = useAppDispatch();
     imgChangeICon,
     addListImage,
     handleQuoteImage,
-    levelIcons
+    levelIcons,
+    handleChangeImageElement
   };
 };

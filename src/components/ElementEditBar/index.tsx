@@ -5,7 +5,7 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import styled from 'styled-components';
 import { useEditBar } from './container';
 import { useTableElement } from '@/pages/canvas/canvasBody/elements/tableElement';
-import { LIST_MAIN, TABLE_HEADER } from '@/constants/elementNames';
+import { IMAGE, LIST_MAIN, QUOTE_IMG, QUOTE_IMG_CONTAINER, TABLE_HEADER } from '@/constants/elementNames';
 import { useAppSelector } from '@/redux/store';
 
 
@@ -33,7 +33,8 @@ const ElementEditBar: React.FC<ElementEditBarProps> = ({ left, top, canvas }) =>
         imgChangeICon,
         addListImage,
         handleQuoteImage,
-        levelIcons
+        levelIcons,
+        handleChangeImageElement
     } = useEditBar();
 
     const handleDelete = () => {
@@ -82,20 +83,35 @@ const ElementEditBar: React.FC<ElementEditBarProps> = ({ left, top, canvas }) =>
         const object = canvas?.getActiveObject();
         if (canvas && object?.name?.startsWith(LIST_MAIN)) {
             addListImage(canvas);
-        } else {
-            handleQuoteImage(canvas!)
+        } else if (canvas && object?.name?.startsWith(QUOTE_IMG)){
+            handleQuoteImage(canvas)
+        } else if (canvas && object?.name?.startsWith(IMAGE)){
+            handleChangeImageElement(canvas)
         }
     }
 
     useEffect(() => {
         adjustControlsVisibility(canvas!);
+        const activeElement = canvas?.getActiveObject();
+        
+
         if (left < 0 && top < 0) {
             left = 100;
             top = -40;
             setPosition({ l: left, t: top });
-        } else {
+        } else if (activeElement && 
+            (activeElement.name?.startsWith(LIST_MAIN) ||
+            activeElement.name?.startsWith(QUOTE_IMG) ||
+            activeElement.name?.startsWith(IMAGE)
+        )
+        ) {
+            setPosition({ l: left - 22, t: top });
+        }
+         else {
             setPosition({ l: left, t: top });
         }
+
+
     }, [canvas?.getActiveObject(), left, top]);
 
     useEffect(() => { }, [plusIcon]);
