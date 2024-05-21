@@ -230,14 +230,14 @@ const Dashboard = () => {
                 })}
               </CardTitle>{' '}
             </Box>
-            <Button
+            {/* <Button
               variant="outlined"
               sx={{ marginTop: '10px' }}
               onClick={handleMore}
               disabled={!hasMore} // Disable the button if no more presentations
             >
               Load more
-            </Button>
+            </Button> */}
           </Box>
         ) : (
           <Loader>

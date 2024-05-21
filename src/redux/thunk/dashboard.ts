@@ -28,7 +28,7 @@ export const fetchPPTList = createAsyncThunk(
   'dashboard/pptList',
   async (pageNo: number) => {
     const res = await FetchUtils.getRequest(
-      `${ENDPOINT.DASHBOARD.FETCH_PPT_LIST}?size=12&page=${pageNo}`
+      `${ENDPOINT.DASHBOARD.FETCH_PPT_LIST}?size=100&page=${pageNo}`
     );
     return res.data;
   }
@@ -54,13 +54,10 @@ const dashboardSlice = createSlice({
       })
       .addCase(fetchPPTList.fulfilled, (state, action) => {
         if (action.meta.arg === 0) {
-          // If it's the first page, replace the list
           state.pptList = action.payload;
         } else {
-          // Append new presentations to the existing list
           state.pptList = [...state.pptList, ...action.payload];
         }
-        // Check if the number of items fetched is less than the expected size (12)
         state.hasMore = action.payload.length === 12;
         state.loadingUserDetails = false;
       })
