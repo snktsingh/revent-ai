@@ -122,8 +122,8 @@ const dispatch = useAppDispatch();
     }
 
     if(objectName && ((selectedObject?.name?.startsWith(PYRAMID_LEVEL) || (selectedObject?.name?.startsWith(FUNNEL_LEVEL)) || selectedObject?.name?.startsWith(FUNNEL_BASE)) || objectName[0] === LIST_IMG)){
-      showDelForLevelIcon = true;
-      showPlusIcon = false; 
+      // showPlusIcon = false; 
+      showDelForLevelIcon = false;
     }
 
     setPlusIcon(showPlusIcon); 

@@ -28,6 +28,7 @@ export function useCanvasSingleClickEvent() {
     });
 
     let object = event.target as any;
+    console.log({object})
     if (object && object.name) {
       if (
         (object.name.startsWith(FUNNEL) ||
@@ -81,6 +82,9 @@ export function useCanvasSingleClickEvent() {
                 obj.selectAll();
               }
               obj.enterEditing();
+            }
+            if(obj.name && obj.name === `${PYRAMID}_${id}`){
+              canvas.setActiveObject(obj);
             }
           });
         } else if (object.level.startsWith(FUNNEL_LEVEL)) {

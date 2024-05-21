@@ -217,3 +217,75 @@ export const UserLink = styled(Link)`
   text-decoration: none;
   color: ${theme.colorSchemes.light.palette.primary.main};
 `;
+
+export const ComingSoonContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40%;
+  margin-top: 5% !important;
+`;
+
+export const CardBox = styled.div`
+  width: 100%;
+  position: relative;
+  border: 2px dashed #ccc;
+  padding: 5% 5% 2%;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  height: 45vh;
+`;
+
+export const CardSpan = styled.span`
+  position: absolute;
+  overflow: hidden;
+  width: 150px;
+  height: 150px;
+  top: -10px;
+  left: -10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &::before {
+    content: 'Coming Soon';
+    position: absolute;
+    width: 150%;
+    height: 40px;
+    background-image: linear-gradient(
+      45deg,
+      #004FBA 0%,
+      #1a79ff 51%,
+      #004FBA 100%
+    );
+    transform: rotate(-45deg) translateY(-20px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.23);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    bottom: 0;
+    left: 0;
+    height: 10px;
+    z-index: -1;
+    box-shadow: 140px -140px #0060e6;
+    background-image: linear-gradient(
+      45deg,
+      #004FBA 0%,
+      #1a79ff 51%,
+      #004FBA 100%
+    );
+  }
+`;
