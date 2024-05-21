@@ -15,18 +15,20 @@ export interface IPresentation {
 interface IDashboard {
   pptList: IPresentation[];
   loadingUserDetails: boolean;
+  hasMore: boolean;
 }
 
 const initialState: IDashboard = {
   pptList: [],
   loadingUserDetails: true,
+  hasMore: true,
 };
 
 export const fetchPPTList = createAsyncThunk(
   'dashboard/pptList',
   async (pageNo: number) => {
     const res = await FetchUtils.getRequest(
-      `${ENDPOINT.DASHBOARD.FETCH_PPT_LIST}?size=14&page=${pageNo}`
+      `${ENDPOINT.DASHBOARD.FETCH_PPT_LIST}?size=12&page=${pageNo}`
     );
     return res.data;
   }
@@ -41,7 +43,6 @@ export const deletePresentation = createAsyncThunk(
     return res.data;
   }
 );
-
 const dashboardSlice = createSlice({
   name: 'dashboard-Data',
   initialState,
@@ -49,15 +50,21 @@ const dashboardSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(fetchPPTList.pending, (state, action) => {
-        state.pptList = [];
         state.loadingUserDetails = true;
       })
       .addCase(fetchPPTList.fulfilled, (state, action) => {
-        state.pptList = action.payload;
+        if (action.meta.arg === 0) {
+          // If it's the first page, replace the list
+          state.pptList = action.payload;
+        } else {
+          // Append new presentations to the existing list
+          state.pptList = [...state.pptList, ...action.payload];
+        }
+        // Check if the number of items fetched is less than the expected size (12)
+        state.hasMore = action.payload.length === 12;
         state.loadingUserDetails = false;
       })
       .addCase(fetchPPTList.rejected, (state, action) => {
-        state.pptList = [];
         state.loadingUserDetails = false;
       });
   },

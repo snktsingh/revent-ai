@@ -60,35 +60,38 @@ const Dashboard = () => {
   } = useDashboard();
 
   const { userDetails } = useAppSelector(state => state.manageUser);
-  const { loadingUserDetails, pptList } = useAppSelector(
+  const { loadingUserDetails, pptList, hasMore } = useAppSelector(
     state => state.manageDashboard
   );
 
   useEffect(() => {
     dispatch(getUserDetails());
     dispatch(fetchPPTList(0));
-  }, []);
+  }, [dispatch]);
 
   const handleMore = async () => {
-    const res = await dispatch(fetchPPTList(1));
-    console.log(res.payload);
-    console.log(pptList);
+    await dispatch(fetchPPTList(1));
   };
 
   const [searchTerm, setSearchTerm] = useState<string>('');
   const filteredPptList =
     searchTerm.length > 0
       ? pptList.filter((ppt: IPresentation) =>
-        ppt.name.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+          ppt.name.toLowerCase().includes(searchTerm.toLowerCase())
+        )
       : pptList;
 
-  const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
+  const [contextMenu, setContextMenu] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
   const [currentPresentation, setCurrentPresentation] = useState<any>(null);
-  const handleContextMenu = (event: React.MouseEvent, presentation : any) => {
+  const handleContextMenu = (event: React.MouseEvent, presentation: any) => {
     event.preventDefault();
-    setCurrentPresentation(presentation)
-    setContextMenu(contextMenu === null ? { x: event.clientX, y: event.clientY } : null);
+    setCurrentPresentation(presentation);
+    setContextMenu(
+      contextMenu === null ? { x: event.clientX, y: event.clientY } : null
+    );
   };
 
   const handleCloseContextMenu = () => {
@@ -99,26 +102,6 @@ const Dashboard = () => {
     <>
       <NavBar />
       <MainContainer>
-        {/* <Stack direction="row" display="flex" justifyContent="space-between">
-        <h3>Hello {userDetails?.firstName} !</h3>
-        <Button onClick={handleOpenProfile}>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Avatar
-              sx={{
-                width: 30,
-                height: 30,
-                fontSize: '12px',
-                bgcolor: `${theme.colorSchemes.light.palette.primary.main}`,
-              }}
-            >
-              {getFirstLettersForAvatar(
-                `${userDetails?.firstName} ${userDetails?.lastName}`
-              )}
-            </Avatar>
-            <span>{`${userDetails?.firstName} ${userDetails?.lastName}`}</span>
-          </Stack>
-        </Button>
-      </Stack> */}
         <ProfileMenu
           anchorElForProfileMenu={openProfileMenu}
           handleCloseProfileMenu={handleCloseProfileMenu}
@@ -196,7 +179,10 @@ const Dashboard = () => {
               <CardTitle>
                 {filteredPptList.map((ppt: any, index) => {
                   return (
-                    <CardLink key={index} onContextMenu={(e) => handleContextMenu(e, ppt)}>
+                    <CardLink
+                      key={index}
+                      onContextMenu={e => handleContextMenu(e, ppt)}
+                    >
                       <Card
                         style={{
                           width: '180px',
@@ -207,7 +193,9 @@ const Dashboard = () => {
                         }}
                         onClick={() => {
                           navigate(
-                            `/presentation/${ppt.presentationId}-${faker.string.uuid()}`
+                            `/presentation/${
+                              ppt.presentationId
+                            }-${faker.string.uuid()}`
                           );
                         }}
                       >
@@ -246,13 +234,13 @@ const Dashboard = () => {
               variant="outlined"
               sx={{ marginTop: '10px' }}
               onClick={handleMore}
+              disabled={!hasMore} // Disable the button if no more presentations
             >
               Load more
             </Button>
           </Box>
         ) : (
           <Loader>
-            {/* No Recent Presentations */}
             <MagnifyingGlass
               visible={true}
               height="80"
@@ -279,4 +267,5 @@ const Dashboard = () => {
     </>
   );
 };
+
 export default Dashboard;
