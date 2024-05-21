@@ -210,7 +210,11 @@ const useCanvasData = () => {
           subTitleText = canvasObject.text;
           ConclusionSlide.subTitle = canvasObject.text;
         } else if (canvasObject.name.startsWith(LIST_TEXT)) {
-          const ListImage = getOrCreateElement('ImageSubtitle', '1', outputFormat);
+          const ListImage = getOrCreateElement(
+            'ImageSubtitle',
+            '1',
+            outputFormat
+          );
           ListImage.data?.push({
             name: canvasObject.text,
             heading: canvasObject.text,
@@ -221,8 +225,17 @@ const useCanvasData = () => {
           const Image = getOrCreateElement('Images', '1', outputFormat);
         } else if (canvasObject.name.startsWith(QUOTE_TEXT)) {
           const Quote = getOrCreateElement('Quote', '1', outputFormat);
+          
+          let newText = canvasObject.text.trim();
+
+          if (
+            newText.charAt(0) === '❝' &&
+            newText.charAt(newText.length - 1) === '❞'
+          ) {
+            newText = newText.slice(1, -1);
+          }
           Quote.data?.push({
-            text: canvasObject.text,
+            text: newText,
           });
         } else if (canvasObject.name.startsWith(QUOTE_AUTHOR)) {
           const Quote = getOrCreateElement('Quote', '1', outputFormat);
@@ -233,20 +246,16 @@ const useCanvasData = () => {
       }
     });
 
-    if (
-      outputFormat &&
-      outputFormat.elements.length > 0 &&
-      titleText !== "" 
-    ) {
+    if (outputFormat && outputFormat.elements.length > 0 && titleText !== '') {
       outputFormat.title = titleText;
       outputFormat.subTitle = subTitleText;
       outputFormat.elements[0].title = titleText;
-    };
-    
+    }
+
     if (
       outputFormat &&
       outputFormat.elements.length > 0 &&
-      subTitleText !== ""
+      subTitleText !== ''
     ) {
       outputFormat.title = titleText;
       outputFormat.subTitle = subTitleText;
@@ -304,7 +313,7 @@ const useCanvasData = () => {
       tableData.tableData.length > 0
     ) {
       outputFormat.elements = [];
-      if(titleText && subTitleText){
+      if (titleText && subTitleText) {
         tableData.title = titleText;
         tableData.subTitle = subTitleText;
       }
@@ -317,7 +326,6 @@ const useCanvasData = () => {
       resolve(outputFormat);
     });
   }
-
 
   // segregating bullet points
   function segregateBulletPoints(text: string): BulletPointsFunctionType {
