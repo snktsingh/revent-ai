@@ -213,7 +213,7 @@ const useCanvasData = () => {
           const ListImage = getOrCreateElement('ImageSubtitle', '1', outputFormat);
           ListImage.data?.push({
             name: canvasObject.text,
-            heading: '',
+            heading: canvasObject.text,
             subHeading: '',
             text: canvasObject.text,
           });
@@ -226,7 +226,7 @@ const useCanvasData = () => {
           });
         } else if (canvasObject.name.startsWith(QUOTE_AUTHOR)) {
           const Quote = getOrCreateElement('Quote', '1', outputFormat);
-          if (Quote.data && Quote.data[0] && Quote.data[0].heading) {
+          if (Quote.data && Quote.data[0]) {
             Quote.data[0].heading = canvasObject.text;
           }
         }

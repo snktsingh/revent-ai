@@ -60,7 +60,7 @@ export function useListElement() {
       fixedHeight: 100,
       fill: 'black',
       left: left + 2,
-      top: top + 146,
+      top: top + 149,
       textAlign: 'center',
       name: `${LIST_TEXT}_${listID}`,
       hasControls: false,
