@@ -16,21 +16,21 @@ export const useQuoteElement = () => {
   const addQuotes = (canvas: fabric.Canvas | null) => {
     let text = new fabric.Textbox('❝Click to add a quote❞', {
       left: 290,
-      top: 140,
+      top: 170,
       width: 300,
       height: 40,
       fill: 'black',
       fontSize: 28,
       // hasRotatingPoint: false,
-      // selectable: true,
+      selectable: true,
       name: QUOTE_TEXT,
       cursorColor: theme.colorSchemes.light.palette.primary.main,
       splitByGrapheme : true
     });
 
     let authorText = new fabric.Textbox('- Author Name', {
-      left: 500,
-      top: 230,
+      left: 290,
+      top: 130,
       width: 200,
       height: 20,
       fill: 'black',
@@ -48,9 +48,9 @@ export const useQuoteElement = () => {
       rx:5,
     });
 
-    const addImage = new fabric.Text('+ Add Image (Optional)', {
+    const addImage = new fabric.Text('+ Add Image (Optional) \n (Double tap Here)', {
       top: mainListContainer.top! + 80,
-      left: mainListContainer.left! + 30,
+      left: mainListContainer.left! + 28,
       fill: 'black',
       fontSize: 12,
       hasControls: false,
@@ -80,7 +80,10 @@ export const useQuoteElement = () => {
     //   top: 120,
     // })
 
-    canvas?.add(QuoteContainer, group, text, authorText,);
+    canvas?.add(QuoteContainer, group);
+    canvas?.add(text);
+    canvas?.add(authorText);
+    canvas?.renderAll()
   };
 
 
