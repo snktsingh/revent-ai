@@ -9,22 +9,24 @@ import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { openModal } from '@/redux/reducers/elements';
 import { deleteSlide } from '@/redux/reducers/slide';
 import { copyCanvasCopy } from '@/redux/reducers/canvas';
+import { StyledContextMenu } from './style';
 
 interface SlidesContextMenuProps {
   anchorPoint: { x: number; y: number };
   isOpen: boolean;
   onClose: () => void;
   slide: CanvasItem;
+  contextMenuRef : any;
 }
 
-const SlidesContextMenu: React.FC<SlidesContextMenuProps> = ({ anchorPoint, isOpen, onClose, slide }) => {
+const SlidesContextMenu: React.FC<SlidesContextMenuProps> = ({ anchorPoint, isOpen, onClose, slide, contextMenuRef }) => {
 
   const { enabledElements, isDeleteAlertShow } = useAppSelector(
     state => state.element
   );
-  const { canvasList } = useAppSelector( state => state.canvas)
- const dispatch = useAppDispatch();
-  const handleCopy = () : void => {
+  const { canvasList } = useAppSelector(state => state.canvas)
+  const dispatch = useAppDispatch();
+  const handleCopy = (): void => {
     dispatch(copyCanvasCopy(slide.id));
     onClose();
   };
@@ -43,12 +45,9 @@ const SlidesContextMenu: React.FC<SlidesContextMenuProps> = ({ anchorPoint, isOp
   };
 
   return (
-    <Menu
-      open={isOpen}
-      onClose={onClose}
-      anchorReference="anchorPosition"
-      anchorPosition={isOpen ? { top: anchorPoint.y, left: anchorPoint.x } : undefined}
-      PaperProps={{ style: { maxHeight: 200, width: '20ch' } }}
+    isOpen && (<StyledContextMenu
+      style={{ top: `${anchorPoint.y + 2}px`, left: `${anchorPoint.x + 2}px` }}
+      ref={contextMenuRef}
     >
       <MenuItem onClick={handleCopy}>
         <ListItemIcon>
@@ -68,7 +67,7 @@ const SlidesContextMenu: React.FC<SlidesContextMenuProps> = ({ anchorPoint, isOp
         </ListItemIcon>
         <ListItemText primary="Delete" />
       </MenuItem>
-    </Menu>
+    </StyledContextMenu>)
   );
 };
 

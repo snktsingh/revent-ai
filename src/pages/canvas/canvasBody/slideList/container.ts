@@ -23,6 +23,9 @@ const useSlideList = () => {
   const [searchParams,setSearchParams] = useSearchParams();
 
   const handleSlideCardClick = (canvas: CanvasItem) => {
+    if(activeSlideID === canvas.id){
+      return;
+    }
     dispatch(toggleSelectingSlide(true));
     dispatch(setCanvas(canvas));
     dispatch(setActiveSlideId(canvas.id));

@@ -26,7 +26,7 @@ import {
 import slideData from './data.json';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { useEffect, useState } from 'react';
+import { HtmlHTMLAttributes, useEffect, useRef, useState } from 'react';
 import { getUserDetails } from '@/redux/thunk/user';
 import { MagnifyingGlass } from 'react-loader-spinner';
 import AddToQueueIcon from '@mui/icons-material/AddToQueue';
@@ -41,6 +41,7 @@ import { faker } from '@faker-js/faker';
 import { Blank } from '@/constants/media';
 import NavBar from '@/common-ui/NavBar';
 import PresentationCardContextMenu from '@/common-ui/presentationContextMenu';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -59,14 +60,32 @@ const Dashboard = () => {
     setOpenProfileMenu,
   } = useDashboard();
 
+  console.log({open})
+
   const { userDetails } = useAppSelector(state => state.manageUser);
   const { loadingUserDetails, pptList } = useAppSelector(
     state => state.manageDashboard
   );
-
+  const contextMenuRef = useRef<HTMLDivElement | null>(null);
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
+  const [currentPresentation, setCurrentPresentation] = useState<any>(null);
   useEffect(() => {
     dispatch(getUserDetails());
     dispatch(fetchPPTList(0));
+
+    function handleClick(e : any) {
+      if(contextMenuRef.current){
+        console.log(e)
+        if (!contextMenuRef.current.contains(e.target) && e.target.id !== 'more_menu') {
+          setContextMenu(null);
+        }
+      }
+    }
+
+    document.addEventListener('click', handleClick);
+    return () => {
+      document.removeEventListener('click', handleClick);
+    }
   }, []);
 
   const handleMore = async () => {
@@ -83,12 +102,11 @@ const Dashboard = () => {
       )
       : pptList;
 
-  const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
-  const [currentPresentation, setCurrentPresentation] = useState<any>(null);
-  const handleContextMenu = (event: React.MouseEvent, presentation : any) => {
+  const handleContextMenu = (event: React.MouseEvent, presentation: any) => {
     event.preventDefault();
     setCurrentPresentation(presentation)
-    setContextMenu(contextMenu === null ? { x: event.clientX, y: event.clientY } : null);
+    setContextMenu({ x: event.clientX, y: event.clientY });
+    // setContextMenu(contextMenu === null ? { x: event.clientX, y: event.clientY } : null);
   };
 
   const handleCloseContextMenu = () => {
@@ -191,7 +209,7 @@ const Dashboard = () => {
           </DialogActions>
         </Dialog>
         {loadingUserDetails === false ? (
-          <Box>
+          <Box onContextMenu={(e) => e.preventDefault()}>
             <Box height="40vh" overflow="auto">
               <CardTitle>
                 {filteredPptList.map((ppt: any, index) => {
@@ -210,6 +228,7 @@ const Dashboard = () => {
                             `/presentation/${ppt.presentationId}-${faker.string.uuid()}`
                           );
                         }}
+                        
                       >
                         {ppt.thumbnailUrl !== '' ? (
                           <img src={ppt.thumbnailUrl} width="100%" />
@@ -229,12 +248,13 @@ const Dashboard = () => {
                             : ppt.name}
                         </p>
                         <IconButton
-                          onClick={() => {
-                            handleClickOpen();
+                          onClick={(event) => {
+                            handleContextMenu(event, ppt)
                             setPptId(ppt.presentationId);
                           }}
+                          id='more_menu'
                         >
-                          <DeleteIcon fontSize="small" />
+                          <MoreVertIcon id='more_menu' fontSize="small" />
                         </IconButton>
                       </Stack>
                     </CardLink>
@@ -274,6 +294,7 @@ const Dashboard = () => {
           isOpen={contextMenu !== null}
           onClose={handleCloseContextMenu}
           presentation={currentPresentation}
+          contextMenuRef={contextMenuRef}
         />
       </MainContainer>
     </>

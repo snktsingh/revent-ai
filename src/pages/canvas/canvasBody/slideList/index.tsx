@@ -23,12 +23,28 @@ export default function SlideList() {
     dispatch,
     canvasJS
   } = useSlideList();
+  const contextMenuRef = useRef<HTMLDivElement | null>(null);
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
+  const [currentSlide, setCurrentSlide] = useState<CanvasItem | null>(null);
 
   const { pptDetails, isLoading } = useAppSelector(state => state.thunk);
   const targetRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     dispatch(setActiveSlideId(1));
+
+    function handleClick(e : any) {
+      if(contextMenuRef.current){
+        if (!contextMenuRef.current.contains(e.target)) {
+          setContextMenu(null);
+        }
+      }
+    }
+
+    document.addEventListener('click', handleClick);
+    return () => {
+      document.removeEventListener('click', handleClick);
+    }
   }, [])
 
 
@@ -56,14 +72,12 @@ export default function SlideList() {
     dispatch(updateCanvasList(updateCanvasListArray()));
   };
 
-  const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
-  const [currentSlide, setCurrentSlide] = useState<CanvasItem | null>(null);
-
+  
   const handleContextMenu = (event: React.MouseEvent, slide: CanvasItem) => {
     setCurrentSlide(slide)
     event.preventDefault();
-    setContextMenu(contextMenu === null ? { x: event.clientX, y: event.clientY } : null);
-    dispatch(setActiveSlideId(slide.id)); 
+    setContextMenu({ x: event.clientX, y: event.clientY });
+    // setContextMenu(contextMenu === null ? { x: event.clientX, y: event.clientY } : null);
   };
 
   const handleClose = () => {
@@ -100,6 +114,7 @@ export default function SlideList() {
           isOpen={contextMenu !== null}
           onClose={handleClose}
           slide={currentSlide!}
+          contextMenuRef={contextMenuRef}
         />
       </SlideContainer>
     </DndContext>
