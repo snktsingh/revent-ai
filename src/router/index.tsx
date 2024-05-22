@@ -13,6 +13,7 @@ import UserSettings from '@/pages/userSettings';
 import ActivateAccount from '@/common-ui/activateAccount';
 import ForgotPasswordPage from '@/common-ui/forgotPassword';
 import ResetPasswordPage from '@/common-ui/resetPassword';
+import Terms from '@/pages/termsofuse';
 
 export const authRoutes: RouteObject[] = [
   { path: ROUTES.APP_ROOT, element: <Home /> },
@@ -22,6 +23,8 @@ export const authRoutes: RouteObject[] = [
   { path: ROUTES.THEMES, element: <AppThemes /> },
   { path: ROUTES.CANVAS, element: <MainCanvas /> },
   { path: ROUTES.SETTINGS, element: <UserSettings /> },
+  { path: ROUTES.TERMS, element: <Terms /> },
+
   // { path: ROUTES.FORGOT_PASSWORD, element: <ForgotPasswordPage /> },
   // { path: ROUTES.RESET_PASSWORD, element: <ResetPasswordPage /> },
   {
@@ -41,6 +44,8 @@ export const defaultRoutes: RouteObject[] = [
   { path: ROUTES.ACTIVATION, element: <ActivateAccount /> },
   { path: ROUTES.FORGOT_PASSWORD, element: <ForgotPasswordPage /> },
   { path: ROUTES.RESET_PASSWORD, element: <ResetPasswordPage /> },
+  { path: ROUTES.TERMS, element: <Terms /> },
+
   {
     path: '/*',
     element: <NotFound />,

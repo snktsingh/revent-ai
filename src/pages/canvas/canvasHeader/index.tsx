@@ -63,6 +63,15 @@ const MainCanvasHeader = ({ pId }: any) => {
     }
   };
 
+  useEffect(() => {
+    if (presentationName === '' || presentationName === undefined) {
+      updatePresentationName({
+        presentationId: presentationId,
+        name: 'Untitled-presentation',
+      });
+    }
+  }, []);
+
   const handleDownloadPresentation = async (format: string) => {
     format === 'pdf' ? setIsPdfDownloading(true) : setIsDownloading(true);
     dispatch(downloadPresentation({ pId, format }))
@@ -74,7 +83,7 @@ const MainCanvasHeader = ({ pId }: any) => {
               : 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
         });
         const url = window.URL.createObjectURL(blob);
-        console.log(url)
+        console.log(url);
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute(

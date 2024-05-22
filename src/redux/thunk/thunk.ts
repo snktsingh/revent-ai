@@ -225,7 +225,10 @@ export const downloadPresentation = createAsyncThunk(
   async ({ pId, format }: IFileDownload) => {
     try {
       const res = await FetchUtils.getRequest(
-        `${ENDPOINT.PPT.DOWNLOAD_PRESENTATION}?presentationId=${pId}&format=${format}`
+        `${ENDPOINT.PPT.DOWNLOAD_PRESENTATION}?presentationId=${pId}&format=${format}`,
+        {
+          responseType: 'arraybuffer',
+        }
       );
       return res.data;
     } catch (error) {

@@ -63,7 +63,7 @@ const Dashboard = () => {
   console.log({open})
 
   const { userDetails } = useAppSelector(state => state.manageUser);
-  const { loadingUserDetails, pptList } = useAppSelector(
+  const { loadingUserDetails, pptList, hasMore } = useAppSelector(
     state => state.manageDashboard
   );
   const contextMenuRef = useRef<HTMLDivElement | null>(null);
@@ -89,17 +89,15 @@ const Dashboard = () => {
   }, []);
 
   const handleMore = async () => {
-    const res = await dispatch(fetchPPTList(1));
-    console.log(res.payload);
-    console.log(pptList);
+    await dispatch(fetchPPTList(1));
   };
 
   const [searchTerm, setSearchTerm] = useState<string>('');
   const filteredPptList =
     searchTerm.length > 0
       ? pptList.filter((ppt: IPresentation) =>
-        ppt.name.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+          ppt.name.toLowerCase().includes(searchTerm.toLowerCase())
+        )
       : pptList;
 
   const handleContextMenu = (event: React.MouseEvent, presentation: any) => {
@@ -117,26 +115,6 @@ const Dashboard = () => {
     <>
       <NavBar />
       <MainContainer>
-        {/* <Stack direction="row" display="flex" justifyContent="space-between">
-        <h3>Hello {userDetails?.firstName} !</h3>
-        <Button onClick={handleOpenProfile}>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Avatar
-              sx={{
-                width: 30,
-                height: 30,
-                fontSize: '12px',
-                bgcolor: `${theme.colorSchemes.light.palette.primary.main}`,
-              }}
-            >
-              {getFirstLettersForAvatar(
-                `${userDetails?.firstName} ${userDetails?.lastName}`
-              )}
-            </Avatar>
-            <span>{`${userDetails?.firstName} ${userDetails?.lastName}`}</span>
-          </Stack>
-        </Button>
-      </Stack> */}
         <ProfileMenu
           anchorElForProfileMenu={openProfileMenu}
           handleCloseProfileMenu={handleCloseProfileMenu}
@@ -214,7 +192,10 @@ const Dashboard = () => {
               <CardTitle>
                 {filteredPptList.map((ppt: any, index) => {
                   return (
-                    <CardLink key={index} onContextMenu={(e) => handleContextMenu(e, ppt)}>
+                    <CardLink
+                      key={index}
+                      onContextMenu={e => handleContextMenu(e, ppt)}
+                    >
                       <Card
                         style={{
                           width: '180px',
@@ -225,7 +206,9 @@ const Dashboard = () => {
                         }}
                         onClick={() => {
                           navigate(
-                            `/presentation/${ppt.presentationId}-${faker.string.uuid()}`
+                            `/presentation/${
+                              ppt.presentationId
+                            }-${faker.string.uuid()}`
                           );
                         }}
                         
@@ -262,17 +245,17 @@ const Dashboard = () => {
                 })}
               </CardTitle>{' '}
             </Box>
-            <Button
+            {/* <Button
               variant="outlined"
               sx={{ marginTop: '10px' }}
               onClick={handleMore}
+              disabled={!hasMore} // Disable the button if no more presentations
             >
               Load more
-            </Button>
+            </Button> */}
           </Box>
         ) : (
           <Loader>
-            {/* No Recent Presentations */}
             <MagnifyingGlass
               visible={true}
               height="80"
@@ -300,4 +283,5 @@ const Dashboard = () => {
     </>
   );
 };
+
 export default Dashboard;
