@@ -74,6 +74,7 @@ const CanvasBody = () => {
   const { isRegenerateDisabled } = useAppSelector(state => state.slide);
   const { isLoading } = useAppSelector(state => state.thunk);
   const { requestData } = useAppSelector(state => state.apiData);
+  const { creditAmount } = useAppSelector(state => state.manageUser);
   const { enabledElements, isDeleteAlertShow } = useAppSelector(
     state => state.element
   );
@@ -376,7 +377,7 @@ const CanvasBody = () => {
         transition={Slide}
       />
       <Grid container>
-        <Grid item xs={2} onContextMenu={(event) => {event.preventDefault()}}  >
+        <Grid item xs={2} onContextMenu={(event) => { event.preventDefault() }}  >
           <SlideList />
         </Grid>
         <Grid item xs={8}>
@@ -449,19 +450,26 @@ const CanvasBody = () => {
                   </Button>
                 )}
                 &nbsp;
-                <Button
-                  variant="contained"
-                  size="medium"
-                  onClick={() => handleRequest()}
-                  disabled={isRegenerateDisabled}
-
+                <Tooltip
+                  title={creditAmount === 0 ? <span> You have zero credits. Please add more credits to enable this action. </span>: ""}
+                  arrow
+                  placement="top"
                 >
-                  <Stack direction="row" spacing={1}>
-                    <img src={Wand} />
-                    <p>Regenerate</p>
-                  </Stack>
+                  <span>
+                    <Button
+                      variant="contained"
+                      size="medium"
+                      onClick={() => handleRequest()}
+                      disabled={creditAmount === 0 || isRegenerateDisabled}
 
-                </Button>
+                    >
+                      <Stack direction="row" spacing={1}>
+                        <img src={Wand} />
+                        <p>Regenerate</p>
+                      </Stack>
+                    </Button>
+                  </span>
+                </Tooltip>
               </span>
             </Stack>
             <CanvasComponent />
