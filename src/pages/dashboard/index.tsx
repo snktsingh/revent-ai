@@ -3,12 +3,14 @@ import {
   Box,
   Button,
   Card,
+  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
   Divider,
+  FormControlLabel,
   IconButton,
   Stack,
   TextField,
@@ -46,20 +48,21 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const {
-    open,
+    isDeletePptAlertOpen,
     openProfileMenu,
     handleCloseProfileMenu,
     handleOpenProfile,
-    handleClickOpen,
+    handleDeletePpt,
     handleClose,
     setPptId,
     pptId,
     removePresentation,
     getFirstLettersForAvatar,
     setOpenProfileMenu,
+    handlePptDelCheckBox
   } = useDashboard();
 
-  console.log({open})
+  console.log({ open })
 
   const { userDetails } = useAppSelector(state => state.manageUser);
   const { loadingUserDetails, pptList, hasMore } = useAppSelector(
@@ -71,8 +74,8 @@ const Dashboard = () => {
   useEffect(() => {
     dispatch(fetchPPTList(0));
 
-    function handleClick(e : any) {
-      if(contextMenuRef.current){
+    function handleClick(e: any) {
+      if (contextMenuRef.current) {
         console.log(e)
         if (!contextMenuRef.current.contains(e.target) && e.target.id !== 'more_menu') {
           setContextMenu(null);
@@ -91,12 +94,25 @@ const Dashboard = () => {
   };
 
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const filteredPptList =
-    searchTerm.length > 0
+  const [filteredPptList, setFilteredPptList] = useState<IPresentation[]>([]);
+  // const filteredPptList =
+  //   searchTerm.length > 0
+  //     ? pptList.filter((ppt: IPresentation) =>
+  //         ppt.name.toLowerCase().includes(searchTerm.toLowerCase())
+  //       )
+  //     : pptList;
+
+  useEffect(() => {
+    const filteredList = searchTerm.length > 0
       ? pptList.filter((ppt: IPresentation) =>
-          ppt.name.toLowerCase().includes(searchTerm.toLowerCase())
-        )
+        ppt.name.toLowerCase().includes(searchTerm.toLowerCase())
+      )
       : pptList;
+
+
+    setFilteredPptList(filteredList)
+  }, [pptList, searchTerm])
+
 
   const handleContextMenu = (event: React.MouseEvent, presentation: any) => {
     event.preventDefault();
@@ -158,7 +174,7 @@ const Dashboard = () => {
           />
         </Stack>
         <Dialog
-          open={open}
+          open={isDeletePptAlertOpen}
           onClose={handleClose}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
@@ -172,16 +188,29 @@ const Dashboard = () => {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>No</Button>
-            <Button
-              onClick={() => {
-                removePresentation(pptId);
-                handleClose();
-              }}
-              autoFocus
+            <Stack
+              direction='row'
+              spacing={10}
+              mt={-1}
+              alignItems={'center'}
             >
-              Yes
-            </Button>
+              <Stack>
+                <FormControlLabel control={<Checkbox size="small" onChange={handlePptDelCheckBox} />} label="Don't show me again" />
+
+              </Stack>
+              <Stack direction='row'>
+                <Button onClick={handleClose}>No</Button>
+                <Button
+                  onClick={() => {
+                    removePresentation(pptId);
+                    handleClose();
+                  }}
+                  autoFocus
+                >
+                  Yes
+                </Button>
+              </Stack>
+            </Stack>
           </DialogActions>
         </Dialog>
         {loadingUserDetails === false ? (
@@ -204,12 +233,11 @@ const Dashboard = () => {
                         }}
                         onClick={() => {
                           navigate(
-                            `/presentation/${
-                              ppt.presentationId
+                            `/presentation/${ppt.presentationId
                             }-${faker.string.uuid()}`
                           );
                         }}
-                        
+
                       >
                         {ppt.thumbnailUrl !== '' ? (
                           <img src={ppt.thumbnailUrl} width="100%" />

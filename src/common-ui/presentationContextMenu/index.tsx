@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useAppDispatch } from '@/redux/store';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { faker } from '@faker-js/faker';
 import { CanvasItem } from '@/interface/storeTypes';
 import { ListItemIcon, ListItemText, Menu, MenuItem, Paper } from '@mui/material';
@@ -9,6 +9,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { StyledContextMenu } from './style';
 import useDashboard from '@/pages/dashboard/container';
+import { togglePptAlertOpen } from '@/redux/reducers/elements';
 
 interface PresentationCardContextMenuProps {
     anchorPoint: { x: number; y: number };
@@ -20,14 +21,19 @@ interface PresentationCardContextMenuProps {
 
 const PresentationCardContextMenu: React.FC<PresentationCardContextMenuProps> = ({ anchorPoint, isOpen, onClose, presentation, contextMenuRef }) => {
     const dispatch = useAppDispatch();
-    const { handleClickOpen } = useDashboard()
+    const { userPreferences } = useAppSelector( state => state.manageUser);
+    const { removePresentation } = useDashboard();
 
     const handleCopyPresentation = (): void => {
         onClose();
     };
     
     const handleDeletePresentation = () => {
-        handleClickOpen();
+        if(!userPreferences.isPresentationDeleteAlert){
+            dispatch(togglePptAlertOpen(true))
+        } else {
+            removePresentation(presentation.presentationId );
+        }
         onClose();
     };
 

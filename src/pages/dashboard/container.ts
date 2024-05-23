@@ -1,32 +1,39 @@
+import { isPresentationDeleteAlert } from '@/constants/userPreferences';
 import { CanvasItem } from '@/interface/storeTypes';
 import {
   setCanvas,
   setVariantImageAsMain,
   updateCanvasList,
 } from '@/redux/reducers/canvas';
+import { togglePptAlertOpen } from '@/redux/reducers/elements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { deletePresentation, fetchPPTList } from '@/redux/thunk/dashboard';
-import { useEffect, useState } from 'react';
+import { setUserPreferences } from '@/redux/thunk/user';
+import React, { useEffect, useState } from 'react';
 
 const useDashboard = () => {
   const dispatch = useAppDispatch();
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
   const [pptId, setPptId] = useState(0);
   const { pptList } = useAppSelector(state => state.manageDashboard);
+  const { isDeletePptAlertOpen } = useAppSelector(state => state.element);
   const [openProfileMenu, setOpenProfileMenu] = useState<null | HTMLElement>(
     null
   );
+  const { userPreferences } = useAppSelector( state => state.manageUser)
   const handleOpenProfile = (event: React.MouseEvent<HTMLButtonElement>) => {
     setOpenProfileMenu(event.currentTarget);
   };
   const handleCloseProfileMenu = () => {
     setOpenProfileMenu(null);
   };
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleDeletePpt = (pptId : number) => {
+    if(userPreferences.isPresentationDeleteAlert){
+      dispatch(togglePptAlertOpen(true));
+    }
   };
   const handleClose = () => {
-    setOpen(false);
+    dispatch(togglePptAlertOpen(false));
   };
 
   const removePresentation = async (presentationId: number) => {
@@ -65,9 +72,13 @@ const useDashboard = () => {
     dispatch(updateCanvasList(canvas));
   }, []);
 
+  const handlePptDelCheckBox = (e : React.ChangeEvent<HTMLInputElement>) => {
+      dispatch(setUserPreferences({key : isPresentationDeleteAlert, value: e.target.checked}));
+  };
+
   return {
-    open,
-    handleClickOpen,
+    isDeletePptAlertOpen,
+    handleDeletePpt,
     handleClose,
     removePresentation,
     setPptId,
@@ -77,6 +88,7 @@ const useDashboard = () => {
     handleCloseProfileMenu,
     openProfileMenu,
     setOpenProfileMenu,
+    handlePptDelCheckBox
   };
 };
 export default useDashboard;

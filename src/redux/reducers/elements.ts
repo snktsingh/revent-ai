@@ -10,6 +10,7 @@ export interface TestState {
   enabledElements: string[];
   isPresentationLoading : boolean;
   isDeleteAlertShow : boolean;
+  isDeletePptAlertOpen : boolean;
 }
 
 const initialState: TestState = {
@@ -21,6 +22,7 @@ const initialState: TestState = {
   openProfileMenu: false,
   isPresentationLoading : true,
   isDeleteAlertShow: true,
+  isDeletePptAlertOpen : false,
   enabledElements: [
     'Title',
     'Subtitle',
@@ -72,6 +74,9 @@ export const ElementReducer = createSlice({
     updateDeleteAlertShow(state,action : PayloadAction<boolean>) {
       state.isDeleteAlertShow = action.payload;
     },
+    togglePptAlertOpen(state, action : PayloadAction<boolean>){
+      state.isDeletePptAlertOpen = action.payload;
+    }
   },
 });
 
@@ -85,7 +90,8 @@ export const {
   setMenuItemKey,
   setEnabledElements,
   updatePresentationLoading,
-  updateDeleteAlertShow
+  updateDeleteAlertShow,
+  togglePptAlertOpen
 } = ElementReducer.actions;
 
 export default ElementReducer.reducer;
