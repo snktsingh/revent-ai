@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { createPresentation } from '@/redux/thunk/thunk';
-import { getUserDetails } from '@/redux/thunk/user';
+
 import React, { useEffect } from 'react';
 import { useFullScreenHandle } from 'react-full-screen';
 

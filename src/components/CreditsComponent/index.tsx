@@ -9,9 +9,7 @@ const CreditsComponent = () => {
     const { activeSlideID, canvasList } = useAppSelector(state => state.canvas);
     const index = canvasList.findIndex((slide) => slide.id === activeSlideID);
 
-    useEffect(()=> {
-        dispatch(getUserCredit())
-    },[])
+
 
 
     return (

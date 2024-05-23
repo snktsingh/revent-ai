@@ -5,7 +5,6 @@ import MainCanvasHeader from './canvasHeader';
 import CanvasTools from './canvasTools';
 import ReventingLoader from '@/common-ui/loader';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { getUserDetails } from '@/redux/thunk/user';
 import { useEffect } from 'react';
 import {
   fetchPptDetails,
@@ -42,9 +41,6 @@ const MainCanvas = () => {
   const pptId = Number(params.id?.split('-')[0]);
 
   useEffect(() => {
-    // console.log(relUrl.search('-'));
-    // console.log(relUrl.slice(0, temp));
-    dispatch(getUserDetails());
     getPresentationData(pptId.toString());
   }, []);
 

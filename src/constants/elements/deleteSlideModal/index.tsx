@@ -14,6 +14,8 @@ import { deleteSlide } from '@/redux/reducers/canvas';
 import { closeModal, updateDeleteAlertShow } from '@/redux/reducers/elements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { CheckBox } from '@mui/icons-material';
+import { setUserPreferences } from '@/redux/thunk/user';
+import { isSlideDeleteAlert } from '@/constants/userPreferences';
 
 const PopUpModal = () => {
   const isVisible = useAppSelector(state => state.element);
@@ -24,6 +26,10 @@ const PopUpModal = () => {
     dispatch(closeModal());
     dispatch(deleteSlide(canvasJS.id));
   };
+
+  const handleSlideDelCheckBox = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setUserPreferences({key: isSlideDeleteAlert, value : e.target.checked}))
+  }
 
   return (
     <Dialog
@@ -50,7 +56,7 @@ const PopUpModal = () => {
           ml={1}
         >
           <Stack>
-            <FormControlLabel control={<Checkbox size="small" onChange={(e) => dispatch(updateDeleteAlertShow(!e.target.checked))} />} label="Don't show me again"/>
+            <FormControlLabel control={<Checkbox size="small" onChange={handleSlideDelCheckBox} />} label="Don't show me again"/>
 
           </Stack>
           <Stack direction='row'>

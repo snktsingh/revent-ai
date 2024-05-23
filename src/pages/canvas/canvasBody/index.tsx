@@ -1,4 +1,4 @@
-import PopUpModal from '@/constants/elements/modal';
+import PopUpModal from '@/constants/elements/deleteSlideModal';
 import { Add, Wand } from '@/constants/media';
 import { Images, QuoteImages, listImages } from '@/data/data';
 import {

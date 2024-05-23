@@ -27,7 +27,6 @@ import slideData from './data.json';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { HtmlHTMLAttributes, useEffect, useRef, useState } from 'react';
-import { getUserDetails } from '@/redux/thunk/user';
 import { MagnifyingGlass } from 'react-loader-spinner';
 import AddToQueueIcon from '@mui/icons-material/AddToQueue';
 import '../../../index.css';
@@ -70,7 +69,6 @@ const Dashboard = () => {
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
   const [currentPresentation, setCurrentPresentation] = useState<any>(null);
   useEffect(() => {
-    dispatch(getUserDetails());
     dispatch(fetchPPTList(0));
 
     function handleClick(e : any) {

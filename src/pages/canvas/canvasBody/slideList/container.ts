@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useCanvasComponent } from '../canvasComponent/container';
 import { toggleSelectingSlide } from '@/redux/reducers/slide';
 import {
+  deleteSlide,
   setActiveSlideId,
   setCanvas,
   updateCanvasList,
@@ -19,6 +20,7 @@ const useSlideList = () => {
   const { canvasList, canvasJS, activeSlideID } = useAppSelector(
     state => state.canvas
   );
+  const { userPreferences } = useAppSelector(state => state.manageUser);
   const { updateCanvasDimensions } = useCanvasComponent();
   const [searchParams,setSearchParams] = useSearchParams();
 
@@ -106,7 +108,13 @@ const useSlideList = () => {
   };
 
   const handleDeleteSlide = () => {
-    dispatch(openModal());
+    if(!userPreferences.isSlideDeleteAlert){
+      dispatch(openModal());
+    }else {
+      if (canvasList && canvasList.length > 1) {
+        dispatch(deleteSlide(activeSlideID));
+      }
+    }
   };
 
   const handleDragStart = (

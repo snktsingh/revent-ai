@@ -48,7 +48,7 @@ export const useQuoteElement = () => {
       rx:5,
     });
 
-    const addImage = new fabric.Text('+ Add Image (Optional) \n (Double tap Here)', {
+    const addImage = new fabric.Text('Double tap to + Image \n       (Optional)', {
       top: mainListContainer.top! + 80,
       left: mainListContainer.left! + 28,
       fill: 'black',

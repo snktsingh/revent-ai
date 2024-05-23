@@ -164,7 +164,7 @@ export const getSlideJSONData = createAsyncThunk(
   }
 );
 
-//Update Theme for Presentation
+//Update or Change Theme for Presentation
 export const updatePresentationTheme = createAsyncThunk(
   'ppt/updatePptTheme',
   async ({ pptId, themeId }: IUpdateTheme, { dispatch }) => {
@@ -172,6 +172,7 @@ export const updatePresentationTheme = createAsyncThunk(
       `${ENDPOINT.PPT.UPDATE_THEME}?presentationId=${pptId}&themeId=${themeId}`
     );
     dispatch(getUserCredit());
+    
     return res;
   }
 );

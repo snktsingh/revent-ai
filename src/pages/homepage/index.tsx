@@ -233,11 +233,11 @@ const Home = ({ onFileSelect }: any) => {
     setOpenProfileMenu(null);
   };
 
-  useEffect(() => {
-    if (Token !== '' && Token !== null) {
-      dispatch(getUserDetails());
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (Token !== '' && Token !== null) {
+  //     // dispatch(getUserDetails());
+  //   }
+  // }, []);
 
   const inputRef = React.createRef<HTMLInputElement>();
   return (

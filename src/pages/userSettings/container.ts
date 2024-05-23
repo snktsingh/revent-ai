@@ -1,6 +1,5 @@
 import { IUserAccountDetails } from '@/interfaces/authInterface';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { getUserDetails, updateUserDetails } from '@/redux/thunk/user';
 import React, { useEffect, useState } from 'react';
 
 const useSettings = () => {
@@ -43,12 +42,6 @@ const useSettings = () => {
     companySize: userDetails?.companySize || '',
   });
 
-  // useEffect(() => {
-  //   dispatch(getUserDetails()).then(res => {
-  //     setUserDetails(res.payload);
-  //     // setUserAccount(res.payload);
-  //   });
-  // }, []);
 
   
 

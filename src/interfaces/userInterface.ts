@@ -1,3 +1,5 @@
+import { IUserAccountDetails } from "./authInterface";
+
 export interface IUserResponse {
   id: number;
   login: string;
@@ -19,7 +21,13 @@ export interface IUserResponse {
   companySize : number;
 }
 
+export interface UserPreferencesType{
+  isSlideDeleteAlert? : boolean;
+  isPresentationDeleteAlert? : boolean;
+}
+
 export interface IUserDetails {
-  userDetails: IUserResponse | null;
+  userDetails: IUserAccountDetails | null;
   creditAmount : number;
+  userPreferences : UserPreferencesType;
 }

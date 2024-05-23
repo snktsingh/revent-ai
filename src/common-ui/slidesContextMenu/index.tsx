@@ -7,8 +7,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { CanvasItem } from '@/interface/storeTypes';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { openModal } from '@/redux/reducers/elements';
-import { deleteSlide } from '@/redux/reducers/slide';
-import { copyCanvasCopy } from '@/redux/reducers/canvas';
+import { copyCanvasCopy, deleteSlide } from '@/redux/reducers/canvas';
 import { StyledContextMenu } from './style';
 
 interface SlidesContextMenuProps {
@@ -25,6 +24,7 @@ const SlidesContextMenu: React.FC<SlidesContextMenuProps> = ({ anchorPoint, isOp
     state => state.element
   );
   const { canvasList } = useAppSelector(state => state.canvas)
+  const { userPreferences } = useAppSelector(state => state.manageUser)
   const dispatch = useAppDispatch();
   const handleCopy = (): void => {
     dispatch(copyCanvasCopy(slide.id));
@@ -32,13 +32,9 @@ const SlidesContextMenu: React.FC<SlidesContextMenuProps> = ({ anchorPoint, isOp
   };
 
   const handleDeleteSlide = () => {
-    if (isDeleteAlertShow) {
+    if (!userPreferences.isSlideDeleteAlert) {
       dispatch(openModal());
     } else {
-      if (canvasList && canvasList.length === 1) {
-        dispatch(openModal());
-        return;
-      }
       dispatch(deleteSlide(slide.id));
     }
     onClose();

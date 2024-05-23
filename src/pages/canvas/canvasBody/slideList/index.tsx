@@ -28,10 +28,13 @@ export default function SlideList() {
   const [currentSlide, setCurrentSlide] = useState<CanvasItem | null>(null);
 
   const { pptDetails, isLoading } = useAppSelector(state => state.thunk);
+  const { userDetails } = useAppSelector(state => state.manageUser);
   const targetRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     dispatch(setActiveSlideId(1));
+    
+  
 
     function handleClick(e : any) {
       if(contextMenuRef.current){
