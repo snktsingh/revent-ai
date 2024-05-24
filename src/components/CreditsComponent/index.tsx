@@ -14,7 +14,7 @@ const CreditsComponent = () => {
 
     return (
         <CreditsContainer>
-            <svg
+            {/* <svg
                 height="1.2rem"
                 width="1.2rem"
                 version="1.1"
@@ -39,7 +39,8 @@ const CreditsComponent = () => {
                         d="M256,315.733v51.2c73.738,0,143.775-9.81,197.21-27.621c24.455-8.151,43.704-17.415,58.79-27.242 V230.4C512,277.528,397.385,315.733,256,315.733z"
                     />
                 </g>
-            </svg>
+            </svg> */}
+            <CreditCoins>Credits Left :</CreditCoins>
             <CreditCoins>{creditAmount}</CreditCoins>
         </CreditsContainer>
     )

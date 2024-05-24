@@ -50,12 +50,12 @@ const PresentationCardContextMenu: React.FC<PresentationCardContextMenuProps> = 
                     <ListItemText primary="Open in new tab" />
                 </MenuItem>
 
-                <MenuItem onClick={handleCopyPresentation}>
+                {/* <MenuItem onClick={handleCopyPresentation}>
                     <ListItemIcon>
                         <ContentCopyIcon fontSize="small" />
                     </ListItemIcon>
                     <ListItemText primary="Copy" />
-                </MenuItem>
+                </MenuItem> */}
                 <MenuItem onClick={handleDeletePresentation}>
                     <ListItemIcon>
                         <DeleteIcon fontSize="small" />

@@ -68,6 +68,7 @@ import LockSvgIcon from "../assets/passwordLock.svg";
 import ResetSuccessIcon from "../assets/succesfullResetPass.jpg";
 import FileUploadIcon from "../assets/fileUploadIcons.svg";
 import DoneGif from "../assets/Done.gif";
+import SWOTIcon from "../assets/canvas/SWOT_svg.svg";
 
 export {
   Back,
@@ -139,5 +140,6 @@ export {
   LockSvgIcon,
   ResetSuccessIcon,
   FileUploadIcon,
-  DoneGif
+  DoneGif,
+  SWOTIcon
 };

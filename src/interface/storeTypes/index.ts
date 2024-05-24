@@ -83,7 +83,7 @@ export interface IShapeRequest {
 
 export interface DataRequestType {
   name?: string;
-  heading?: string;
+  label?: string;
   subHeading?: string;
   text?: string;
 }

@@ -64,7 +64,7 @@ import ColorizeOutlinedIcon from '@mui/icons-material/ColorizeOutlined';
 import WebFont from 'webfontloader';
 import FontsData from '../../../data/fontsData.json';
 import CreditsComponent from '@/components/CreditsComponent';
-import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
+import EmailIcon from '@mui/icons-material/Email';
 import { Link } from 'react-router-dom';
 
 interface FontItem {
@@ -668,13 +668,14 @@ const CanvasTools = () => {
       </ShapesCard> */}
       <Stack direction={'row'} alignItems={'center'} spacing={1}>
         <CreditsComponent />
-        <Tooltip title="Report any issues ">
           <Link to="https://forms.gle/QGrKm1JdjFtKu5iX8" target="_blank" rel="noopener noreferrer">
-          <IconButton sx={{ borderRadius: '.2rem', border: '1px solid #dfdfdf', height: '4.5vh' }}>
-            <ReportGmailerrorredIcon />
-          </IconButton>
+            <ToolOutlinedButton>
+              <Stack direction="row" spacing={1} alignItems={'center'} height={'4.5vh'} justifyContent={'space-around'}>
+                <EmailIcon fontSize='small'/>
+                <p>Send Feedback</p>
+              </Stack>
+            </ToolOutlinedButton>
           </Link>
-        </Tooltip>
       </Stack>
 
       <Menu

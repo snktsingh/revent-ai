@@ -127,7 +127,7 @@ const useCanvasData = () => {
           );
           element.data?.push({
             name: canvasObject.text,
-            heading: '',
+            label: '',
             subHeading: '',
             text: canvasObject.text,
           });
@@ -139,7 +139,7 @@ const useCanvasData = () => {
           );
           paragraphData.data?.push({
             name: canvasObject.text,
-            heading: '',
+            label: '',
             subHeading: '',
             text: canvasObject.text,
           });
@@ -156,7 +156,7 @@ const useCanvasData = () => {
           );
           paragraphData.data?.push({
             name: canvasObject.text,
-            heading: '',
+            label: '',
             subHeading: '',
             text: canvasObject.text,
           });
@@ -212,7 +212,7 @@ const useCanvasData = () => {
           );
           ListImage.data?.push({
             name: canvasObject.text,
-            heading: canvasObject.text,
+            label: canvasObject.text,
             subHeading: '',
             text: canvasObject.text,
           });
@@ -235,7 +235,7 @@ const useCanvasData = () => {
         } else if (canvasObject.name.startsWith(QUOTE_AUTHOR)) {
           const Quote = getOrCreateElement('Quote', '1', outputFormat);
           if (Quote.data && Quote.data[0]) {
-            Quote.data[0].heading = canvasObject.text;
+            Quote.data[0].label = canvasObject.text;
           }
         }
       }
@@ -268,7 +268,7 @@ const useCanvasData = () => {
 
       if (index % 2 === 0) {
         timelineArray.push({
-          heading: item.content,
+          label: item.content,
           text: '',
           name: '',
           subHeading: '',
@@ -282,7 +282,10 @@ const useCanvasData = () => {
     });
 
     Object.entries(organizedTimelineData).forEach(([id, content]) => {
-      getOrCreateElement('Timeline', id, outputFormat).data = content;
+      const timelineElement = getOrCreateElement('Timeline', id, outputFormat);
+      timelineElement.data = content;
+      timelineElement.title = titleText;
+      timelineElement.subTitle = subTitleText;
     });
 
     if (outputFormat && outputFormat.elements.length > 0) {
