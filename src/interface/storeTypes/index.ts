@@ -22,6 +22,7 @@ export interface CanvasItem {
   slideId: number;
   presentationId: number;
   lastVariant : string;
+  selectedOriginalCanvas: boolean;
 }
 
 export interface IPresentationDetails {
@@ -83,7 +84,7 @@ export interface IShapeRequest {
 
 export interface DataRequestType {
   name?: string;
-  heading?: string;
+  label?: string;
   subHeading?: string;
   text?: string;
 }

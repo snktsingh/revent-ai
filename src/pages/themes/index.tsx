@@ -97,8 +97,6 @@ const AppThemes = () => {
                   <ThemeCardTitle
                     key={theme.themeId}
                     onClick={() => {
-                      // dispatch(setSelectedTheme(theme.themeId));
-                      // dispatch(setThemeId(theme.themeId));
                       handleGenerate(theme.themeId);
                     }}
                     className={
@@ -111,7 +109,7 @@ const AppThemes = () => {
                       <ThumbnailPreview
                         src={theme.thumbnailUrl}
                         alt={theme.themeId}
-                        style={{ width: '246px', height: '140px' }}
+                        style={{ width: '100%', height: 'auto', display:'flex',justifyContent:'center', alignItems:"center" }}
                         componentTitle='mainThemes'
                       />
                     </ThemeCard>

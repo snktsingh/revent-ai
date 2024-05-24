@@ -127,7 +127,19 @@ const useCanvasData = () => {
           );
           element.data?.push({
             name: canvasObject.text,
-            heading: '',
+            label: '',
+            subHeading: '',
+            text: canvasObject.text,
+          });
+        } else if (canvasObject.name === PARAGRAPH) {
+          const paragraphData = getOrCreateElement(
+            'Paragraph',
+            '1',
+            outputFormat
+          );
+          paragraphData.data?.push({
+            name: canvasObject.text,
+            label: '',
             subHeading: '',
             text: canvasObject.text,
           });
@@ -144,24 +156,7 @@ const useCanvasData = () => {
           );
           paragraphData.data?.push({
             name: canvasObject.text,
-            heading: '',
-            subHeading: '',
-            text: canvasObject.text,
-          });
-        } else if (
-          canvasObject.name.startsWith(TIMELINE_TEXT) ||
-          canvasObject.name.startsWith(TIMELINE_HEADING)
-        ) {
-          timelineData.push({ content: canvasObject.text, id: elementID });
-        } else if (canvasObject.name === PARAGRAPH) {
-          const paragraphData = getOrCreateElement(
-            'Paragraph',
-            '1',
-            outputFormat
-          );
-          paragraphData.data?.push({
-            name: canvasObject.text,
-            heading: '',
+            label: '',
             subHeading: '',
             text: canvasObject.text,
           });
@@ -210,10 +205,14 @@ const useCanvasData = () => {
           subTitleText = canvasObject.text;
           ConclusionSlide.subTitle = canvasObject.text;
         } else if (canvasObject.name.startsWith(LIST_TEXT)) {
-          const ListImage = getOrCreateElement('ImageSubtitle', '1', outputFormat);
+          const ListImage = getOrCreateElement(
+            'ImageSubtitle',
+            '1',
+            outputFormat
+          );
           ListImage.data?.push({
             name: canvasObject.text,
-            heading: '',
+            label: canvasObject.text,
             subHeading: '',
             text: canvasObject.text,
           });
@@ -221,32 +220,37 @@ const useCanvasData = () => {
           const Image = getOrCreateElement('Images', '1', outputFormat);
         } else if (canvasObject.name.startsWith(QUOTE_TEXT)) {
           const Quote = getOrCreateElement('Quote', '1', outputFormat);
+          
+          let newText = canvasObject.text.trim();
+
+          if (
+            newText.charAt(0) === '❝' &&
+            newText.charAt(newText.length - 1) === '❞'
+          ) {
+            newText = newText.slice(1, -1);
+          }
           Quote.data?.push({
-            text: canvasObject.text,
+            text: newText,
           });
         } else if (canvasObject.name.startsWith(QUOTE_AUTHOR)) {
           const Quote = getOrCreateElement('Quote', '1', outputFormat);
-          if (Quote.data && Quote.data[0] && Quote.data[0].heading) {
-            Quote.data[0].heading = canvasObject.text;
+          if (Quote.data && Quote.data[0]) {
+            Quote.data[0].label = canvasObject.text;
           }
         }
       }
     });
 
-    if (
-      outputFormat &&
-      outputFormat.elements.length > 0 &&
-      titleText !== "" 
-    ) {
+    if (outputFormat && outputFormat.elements.length > 0 && titleText !== '') {
       outputFormat.title = titleText;
       outputFormat.subTitle = subTitleText;
       outputFormat.elements[0].title = titleText;
-    };
-    
+    }
+
     if (
       outputFormat &&
       outputFormat.elements.length > 0 &&
-      subTitleText !== ""
+      subTitleText !== ''
     ) {
       outputFormat.title = titleText;
       outputFormat.subTitle = subTitleText;
@@ -264,7 +268,7 @@ const useCanvasData = () => {
 
       if (index % 2 === 0) {
         timelineArray.push({
-          heading: item.content,
+          label: item.content,
           text: '',
           name: '',
           subHeading: '',
@@ -278,12 +282,21 @@ const useCanvasData = () => {
     });
 
     Object.entries(organizedTimelineData).forEach(([id, content]) => {
-      getOrCreateElement('Timeline', id, outputFormat).data = content;
+      const timelineElement = getOrCreateElement('Timeline', id, outputFormat);
+      timelineElement.data = content;
+      timelineElement.title = titleText;
+      timelineElement.subTitle = subTitleText;
     });
 
     if (outputFormat && outputFormat.elements.length > 0) {
-      // outputFormat['title'] = titleText;
-      // outputFormat['subTitle'] = subTitleText;
+      if(titleText && subTitleText){
+        outputFormat['title'] = titleText;
+        outputFormat['subTitle'] = subTitleText;
+      } else if(titleText){
+        outputFormat['title'] = titleText;
+      } else if( subTitleText){
+        outputFormat['subTitle'] = subTitleText;
+      }
     } else {
       const titleData = getOrCreateElement('cover', '1', outputFormat);
       titleData['title'] = titleText;
@@ -304,7 +317,7 @@ const useCanvasData = () => {
       tableData.tableData.length > 0
     ) {
       outputFormat.elements = [];
-      if(titleText && subTitleText){
+      if (titleText && subTitleText) {
         tableData.title = titleText;
         tableData.subTitle = subTitleText;
       }
@@ -317,7 +330,6 @@ const useCanvasData = () => {
       resolve(outputFormat);
     });
   }
-
 
   // segregating bullet points
   function segregateBulletPoints(text: string): BulletPointsFunctionType {
@@ -508,7 +520,8 @@ const useCanvasData = () => {
         'Pyramid',
         'Cover Slide',
         'Section Slide',
-        'Conclusion Slide'
+        'Conclusion Slide',
+        'SWOT Analysis'
       );
     }
 

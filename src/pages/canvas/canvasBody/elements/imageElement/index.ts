@@ -5,7 +5,7 @@ import { fabric } from 'fabric';
 import { toast } from 'react-toastify';
 export function useImageElement() {
   const { canvasJS } = useAppSelector(state => state.canvas);
-  const imageUploader = (canvas: fabric.Canvas | null) => {
+  const imageUploader = (canvas: fabric.Canvas | null, existingImage? : fabric.Object) => {
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.accept = 'image/*';
@@ -44,14 +44,17 @@ export function useImageElement() {
               const scaledWidth = img.width! * scaleFactor;
               const scaledHeight = img.height! * scaleFactor;
               img.set({
-                left: 5,
-                top: 5,
+                left: existingImage ? existingImage.left : 5,
+                top: existingImage ? existingImage.top : 5,
                 scaleX: scaledWidth / img.width!,
                 scaleY: scaledHeight / img.height!,
                 name: IMAGE,
               });
 
               canvas?.add(img);
+              if(existingImage){
+                canvas.remove(existingImage);
+              }
               canvas?.renderAll();
             });
           }

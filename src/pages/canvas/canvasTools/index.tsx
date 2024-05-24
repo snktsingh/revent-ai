@@ -6,6 +6,7 @@ import {
   Menu,
   Stack,
   TextField,
+  Tooltip,
 } from '@mui/material';
 import {
   BorderColorDiv,
@@ -51,7 +52,7 @@ import {
   shadesData,
 } from '../canvasBody/elementData';
 import {
-  addCanvas,
+  addCanvasSlide,
   handleInputSize,
   handleSize,
   setBorderColor,
@@ -63,6 +64,8 @@ import ColorizeOutlinedIcon from '@mui/icons-material/ColorizeOutlined';
 import WebFont from 'webfontloader';
 import FontsData from '../../../data/fontsData.json';
 import CreditsComponent from '@/components/CreditsComponent';
+import EmailIcon from '@mui/icons-material/Email';
+import { Link } from 'react-router-dom';
 
 interface FontItem {
   family: string;
@@ -216,7 +219,7 @@ const CanvasTools = () => {
   };
 
   const handleAddNewSlide = () => {
-    dispatch(addCanvas());
+    dispatch(addCanvasSlide());
     dispatch(addSlide(obj));
   };
   const handleScroll = () => {
@@ -416,7 +419,7 @@ const CanvasTools = () => {
 
         <FontTool>
           <Stack direction="row" spacing={0}>
-            <IconButton
+            {/* <IconButton
               size="small"
               onClick={() => ContentElements.handleBold()}
             >
@@ -433,7 +436,7 @@ const CanvasTools = () => {
               onClick={() => ContentElements.handleUnderlIne()}
             >
               <FormatUnderlinedRounded />
-            </IconButton>
+            </IconButton> */}
             {/* <IconButton onClick={handleColorClick}>
               <ColorLensOutlinedIcon />
             </IconButton>
@@ -663,8 +666,17 @@ const CanvasTools = () => {
       >
         <img src={ShapesIcon} alt="shapes_icon" />
       </ShapesCard> */}
-
-      <CreditsComponent />
+      <Stack direction={'row'} alignItems={'center'} spacing={1}>
+        <CreditsComponent />
+          <Link to="https://forms.gle/QGrKm1JdjFtKu5iX8" target="_blank" rel="noopener noreferrer">
+            <ToolOutlinedButton>
+              <Stack direction="row" spacing={1} alignItems={'center'} height={'4.5vh'} justifyContent={'space-around'}>
+                <EmailIcon fontSize='small' sx={{color:'#2f2f2f'}}/>
+                <p>Send Feedback</p>
+              </Stack>
+            </ToolOutlinedButton>
+          </Link>
+      </Stack>
 
       <Menu
         id="basic-menu"

@@ -31,7 +31,7 @@ import CompanyDetails from './companySettings';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { getUserDetails, updateUserDetails } from '@/redux/thunk/user';
+import { updateUserDetails } from '@/redux/thunk/user';
 import BreadCrumb from './navigationBreadcrumb';
 import useSettings from './container';
 import { IUserAccountDetails } from '@/interfaces/authInterface';
@@ -75,7 +75,7 @@ const UserSettings: React.FC = () => {
   const [openProfileMenu, setOpenProfileMenu] = useState<null | HTMLElement>(
     null
   );
-  // const { userDetails } = useAppSelector(state => state.manageUser);
+  const userDetailsFrmStore = useAppSelector(state => state.manageUser);
   const [isImageBroken, setIsImageBroken] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -131,10 +131,10 @@ const UserSettings: React.FC = () => {
   }
 
   useEffect(() => {
-    dispatch(getUserDetails()).then(res => {
-      setUserDetails(res.payload);
-      setUserAccount(res.payload);
-    });
+    if(userDetailsFrmStore.userDetails){
+      setUserDetails(userDetailsFrmStore.userDetails);
+      setUserAccount(userDetailsFrmStore.userDetails);
+    }
   }, []);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -5,13 +5,17 @@ import {
   CYCLE,
   CYCLE_TEXT,
   FUNNEL,
+  FUNNEL_BASE,
+  FUNNEL_LEVEL,
   FUNNEL_TEXT,
+  IMAGE,
   LIST_IMG,
   LIST_MAIN,
   PARAGRAPH,
   PROCESS,
   PROCESS_TEXT,
   PYRAMID,
+  PYRAMID_LEVEL,
   PYRAMID_TEXT,
   QUOTE,
   QUOTE_IMG,
@@ -22,6 +26,7 @@ import {
 import {
   useCycleElement,
   useFunnelElement,
+  useImageElement,
   useListElement,
   useProcessElement,
   usePyramidElement,
@@ -38,6 +43,7 @@ export const useEditBar = () => {
   const [tableIcons, setTableIcon] = useState<boolean>(false);
   const [aiCheckbox, setAICheckbox] = useState<boolean>(false);
   const [imgChangeICon, setImgChangeICon] = useState<boolean>(false);
+  const [levelIcons, setLevelICon] = useState<boolean>(false);
 const dispatch = useAppDispatch();
   const { addProcessSteps } = useProcessElement();
   const { addPyramidLevel } = usePyramidElement();
@@ -46,6 +52,7 @@ const dispatch = useAppDispatch();
   const { addTimelineSteps } = useTimelineElement();
   const { addListElement, addImage } = useListElement();
   const { addQuoteImage } = useQuoteElement();
+  const { imageUploader } = useImageElement();
   const { addTableRow, addTableColumn, removeTableColumn, removeTableRow } =
     useTableElement();
   const { listID } = useAppSelector( state => state.elementsIds )
@@ -74,6 +81,7 @@ const dispatch = useAppDispatch();
     let showTableIcons = false;
     let showAICheckbox = false;
     let showChangeImgIcon = false;
+    let showDelForLevelIcon = false;
 
     if (objectName && selectedObject) {
       if (
@@ -84,7 +92,8 @@ const dispatch = useAppDispatch();
         (objectName[0] === CYCLE && cycleSteps < 6) ||
         objectName[0] === LIST_MAIN && listCount < 8
       ) {
-        showPlusIcon = true; 
+        showPlusIcon = true;
+        showDelForLevelIcon = false;
       }
     }
 
@@ -95,26 +104,36 @@ const dispatch = useAppDispatch();
       (objectName && objectName[0] === FUNNEL && fLevels >= 6) ||
       (objectName && objectName[0] === CYCLE && cycleSteps >= 6)
     ) {
-      showPlusIcon = false; 
+      showPlusIcon = false;
+      showDelForLevelIcon = false;
     }
 
     if (objectName && objectName[0] === TABLE) {
       showPlusIcon = true;
       showTableIcons = true;
+      showDelForLevelIcon = false;
     }
 
     if(objectName && (objectName[0] === BULLET_POINTS || objectName[0] === PARAGRAPH)){
       showAICheckbox = true;
+      showDelForLevelIcon = false;
     }
 
-    if(objectName && (selectedObject?.name?.startsWith(QUOTE_IMG) || objectName[0] === LIST_IMG)){
+    if(objectName && (selectedObject?.name?.startsWith(QUOTE_IMG) || objectName[0] === LIST_MAIN || selectedObject?.name?.startsWith(IMAGE))){
       showChangeImgIcon = true;
+      showDelForLevelIcon = false;
+    }
+
+    if(objectName && ((selectedObject?.name?.startsWith(PYRAMID_LEVEL) || (selectedObject?.name?.startsWith(FUNNEL_LEVEL)) || selectedObject?.name?.startsWith(FUNNEL_BASE)) || objectName[0] === LIST_IMG)){
+      // showPlusIcon = false; 
+      showDelForLevelIcon = false;
     }
 
     setPlusIcon(showPlusIcon); 
     setTableIcon(showTableIcons); 
     setAICheckbox(showAICheckbox);
     setImgChangeICon(showChangeImgIcon);
+    setLevelICon(showDelForLevelIcon);
   };
 
   const countObjects = (canvas: fabric.Canvas, objectType: string): number => {
@@ -217,6 +236,13 @@ const dispatch = useAppDispatch();
       dispatch(updateCheckboxForAI(e.target.checked))
   };
 
+  const handleChangeImageElement = (canvas : fabric.Canvas) => {
+     const activeElement = canvas.getActiveObject();
+     if(activeElement && activeElement.type === 'image') {
+        imageUploader(canvas, activeElement);
+     }
+  }
+
   return {
     adjustControlsVisibility,
     handleCopyClick,
@@ -228,6 +254,8 @@ const dispatch = useAppDispatch();
     aiCheckbox,
     imgChangeICon,
     addListImage,
-    handleQuoteImage
+    handleQuoteImage,
+    levelIcons,
+    handleChangeImageElement
   };
 };

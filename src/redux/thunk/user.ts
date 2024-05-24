@@ -3,10 +3,12 @@ import { IUserAccountDetails } from '@/interfaces/authInterface';
 import { IUserDetails } from '@/interfaces/userInterface';
 import { FetchNonHeaderNonJSONUtils, FetchNonHeaderUtils, FetchUtils } from '@/utils/fetch-utils';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { RootState } from '../store';
 
 const initialState: IUserDetails = {
   userDetails: null,
   creditAmount: 0,
+  userPreferences : {}
 };
 
 export const getUserDetails = createAsyncThunk(
@@ -55,6 +57,34 @@ export const resetPassword = createAsyncThunk(
   }
 )
 
+// set userPreferences
+export const setUserPreferences = createAsyncThunk(
+  'user/set_user_preferences',
+  async (userPreferences : {key : string, value : boolean},{dispatch, getState}) => {
+    try {
+      const res = await FetchUtils.postRequest(`${ENDPOINT.USER.USER_PREFERENCE}`, { [userPreferences.key]: userPreferences.value });
+      dispatch(getUserPreferences());
+      return res.data;
+    } catch (error) {
+      return error;
+    }
+  }
+);
+
+// get userPreferences
+export const getUserPreferences = createAsyncThunk(
+  'user/get_user_preferences',
+  async () => {
+    try {
+      const res = await FetchUtils.getRequest(`${ENDPOINT.USER.USER_PREFERENCE}`);
+      return res.data;
+    } catch (error) {
+      return error;
+    }
+  }
+);
+
+
 const userSlice = createSlice({
   name: 'user-management',
   initialState,
@@ -74,11 +104,20 @@ const userSlice = createSlice({
         state.creditAmount = 0;
       })
       .addCase(getUserCredit.fulfilled, (state, action) => {
-        state.creditAmount = action.payload.credit;
+        state.creditAmount = action.payload.data;
       })
       .addCase(getUserCredit.rejected, (state, action) => {
         state.creditAmount = 0;
-      });
+      })
+      .addCase(getUserPreferences.pending, (state, action) => {
+        state.userPreferences = {};
+      })
+      .addCase(getUserPreferences.fulfilled, (state, action) => {
+        state.userPreferences = action.payload;
+      })
+      .addCase(getUserPreferences.rejected, (state, action) => {
+        state.userPreferences = {};
+      }) 
   },
 });
 export const {} = userSlice.actions;

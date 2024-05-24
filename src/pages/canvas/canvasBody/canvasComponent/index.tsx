@@ -62,11 +62,11 @@ const CanvasComponent: React.FC = () => {
     selectedOriginalCanvas,
     isVariantSelected,
     canvasList,
+    activeSlideID
   } = useAppSelector(state => state.canvas);
 
   useEffect(() => {
-    console.log({ canvasJS });
-    console.log({ canvasList });
+
     setShowOptions(false);
     const canvas = new fabric.Canvas('canvas', {preserveObjectStacking:true});
     updateCanvasStyle(canvas);
@@ -145,6 +145,7 @@ const CanvasComponent: React.FC = () => {
         );
         canvas.on('mouse:down', options => onMouseDownEvent(options, canvas));
 
+
         canvas.renderAll();
       },
       (error: Error) => {
@@ -161,8 +162,9 @@ const CanvasComponent: React.FC = () => {
   }, [canvasJS.canvas, selectedOriginalCanvas]);
 
   useEffect(() => {
+    const slide = canvasList.find((slide) => slide.id === activeSlideID);
     setShowOptions(false);
-    if (variantImage && canvasRef.current) {
+    if (variantImage && canvasRef.current && slide && slide.variants && slide.variants.length > 0 ) {
       canvasRef.current?.clear();
 
       canvasRef.current?.setBackgroundColor(

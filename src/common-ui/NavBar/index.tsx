@@ -7,8 +7,7 @@ import { Avatar, Button } from '@mui/material'
 import ProfileMenu from '../profileMenu'
 import { theme } from '@/constants/theme';
 import { IUserAccountDetails } from '@/interfaces/authInterface'
-import { getUserDetails } from '@/redux/thunk/user'
-import { useAppDispatch } from '@/redux/store'
+import { useAppDispatch, useAppSelector } from '@/redux/store'
 
 const initialUserDetails = {
     id: null,
@@ -37,7 +36,8 @@ const NavBar = () => {
     const [openProfileMenu, setOpenProfileMenu] = useState<null | HTMLElement>(
         null
     );
-    const [userDetails, setUserDetails] = useState<IUserAccountDetails>(initialUserDetails);
+    const { userDetails } = useAppSelector( state => state.manageUser);
+    // const [userDetails, setUserDetails] = useState<IUserAccountDetails>(initialUserDetails);
     const dispatch = useAppDispatch();
     function getFirstLettersForAvatar(name: string): string {
         const initials = name
@@ -55,11 +55,7 @@ const NavBar = () => {
     };
 
 
-    useEffect(() => {
-        dispatch(getUserDetails()).then(res => {
-            setUserDetails(res.payload);
-        });
-    }, []);
+
 
     return (
         <NavbarContainer>

@@ -28,7 +28,7 @@ export const SignupRightContainer = styled.span`
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  height: 80vh;
+  height: 72vh;
 `;
 export const FormContainer = styled.span`
   display: flex;

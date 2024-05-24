@@ -45,7 +45,8 @@ export const initialState: CanvasSate = {
       listImages: [],
       slideId: 1,
       presentationId: 1,
-      lastVariant: ''
+      lastVariant: '',
+      selectedOriginalCanvas: false,
     },
   ],
   canvasJS: {
@@ -58,6 +59,7 @@ export const initialState: CanvasSate = {
     slideId: 1,
     presentationId: 1,
     lastVariant:'',
+    selectedOriginalCanvas: false,
   },
   activeSlideID: 1,
   size: 1,
@@ -108,41 +110,39 @@ export const CanvasReducer = createSlice({
     setCanvasData: (state, action) => {
       state.canvasData = action.payload;
     },
-    addCanvas(state) {
+    addCanvasSlide(state) {
+      const activeSlideIndex = state.canvasList.findIndex(canvas => canvas.id === state.activeSlideID);
+
       const canvas = new fabric.Canvas(null);
-      const canvasID =
-        state.canvasList[state.canvasList.length - 1].id + 1 || 2;
-      const canvasJSON = canvas.toObject(); 
+      const newCanvasID = state.canvasList.length > 0 ? state.canvasList[state.canvasList.length - 1].id + 1 : 1;
+      const newCanvasJSON = canvas.toObject(); 
       const updatedCanvasList = [
-        ...state.canvasList,
+        ...state.canvasList.slice(0, activeSlideIndex + 1),
         {
-          id: canvasID,
-          canvas: canvasJSON,
+          id: newCanvasID,
+          canvas: newCanvasJSON,
           notes: '',
           variants: [],
           originalSlideData: {},
           listImages: [],
-          slideId: canvasID,
+          slideId: newCanvasID,
           presentationId: 1,
-          lastVariant :'',
+          lastVariant: '',
+          selectedOriginalCanvas: false,
         },
+        ...state.canvasList.slice(activeSlideIndex + 1),
       ];
+    
+      const updatedCanvasListWithIDs = updatedCanvasList.map((canvas, index) => ({
+        ...canvas,
+        id: index + 1,
+      }));
 
       return {
         ...state,
-        canvasList: updatedCanvasList,
-        activeSlideID: canvasID,
-        canvasJS: {
-          id: canvasID,
-          canvas: canvasJSON,
-          notes: '',
-          variants: [],
-          originalSlideData: {},
-          listImages: [],
-          slideId: canvasID,
-          presentationId: 1,
-          lastVariant :'',
-        },
+        canvasList: updatedCanvasListWithIDs,
+        activeSlideID: state.activeSlideID + 1,
+        canvasJS: updatedCanvasListWithIDs[activeSlideIndex + 1],
       };
     },
     setActiveSlideId(state, action) {
@@ -310,13 +310,21 @@ export const CanvasReducer = createSlice({
         state.canvasJS.lastVariant = lastVariant;
       }
     },
+    updateSelectedOriginalCanvas(state, action : PayloadAction<{id : number, selectedOriginalCanvas : boolean}>){
+       const { id,selectedOriginalCanvas } = action.payload;
+       const updatedCanvasList = state.canvasList.map(item => 
+        item.id === id ? { ...item, selectedOriginalCanvas } : item
+       );
+       state.canvasList = updatedCanvasList;
+       state.canvasJS = updatedCanvasList[id - 1];
+    }
   },
 });
 
 export const {
   initializeCanvas,
   setCanvas,
-  addCanvas,
+  addCanvasSlide,
   setColor,
   setTextColor,
   setBorderColor,
@@ -342,6 +350,7 @@ export const {
   toggleIsVariantSelected,
   updateListImagesWithCanvasId,
   updateLastVariant,
+  updateSelectedOriginalCanvas
 } = CanvasReducer.actions;
 
 export default CanvasReducer.reducer;

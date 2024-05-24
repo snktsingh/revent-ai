@@ -35,7 +35,7 @@ export function useListElement() {
       name: `${LIST_CONTAINER}_${listID}`,
     });
 
-    const addImage = new fabric.Text('+ Add Image', {
+    const addImage = new fabric.Text('Double tap to \n  + Image', {
       top: mainListContainer.top! + 72,
       left: mainListContainer.left! + 28,
       fill: 'black',
@@ -60,7 +60,7 @@ export function useListElement() {
       fixedHeight: 100,
       fill: 'black',
       left: left + 2,
-      top: top + 146,
+      top: top + 149,
       textAlign: 'center',
       name: `${LIST_TEXT}_${listID}`,
       hasControls: false,

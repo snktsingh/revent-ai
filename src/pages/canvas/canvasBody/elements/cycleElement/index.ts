@@ -10,8 +10,11 @@ import { updateCycleId } from '@/redux/reducers/fabricElements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import AutoResizingTextbox from '@/utils/fabric-utils/AutoResizingTextbox';
 import { fabric } from 'fabric';
+import { useCanvasComponent } from '../../canvasComponent/container';
 export function useCycleElement() {
   const dispatch = useAppDispatch();
+  const { updateCanvasSlideData } = useCanvasComponent();
+  const { activeSlideID } = useAppSelector(state => state.canvas)
   const { cycleId } = useAppSelector(state => state.elementsIds);
   const addArrow = (left: number, top: number, angle: number, id: number) => {
     const ArrowPoints = [
@@ -93,167 +96,174 @@ export function useCycleElement() {
       return canvas.add(text);
     };
     switch (Circles && Circles.length + 1) {
-      // case 3:
-      //   createCircleWithText(100, 100);
-      //   canvas?.add(addArrow(220, 124, 0));
-      //   canvas?.add(addArrow(197, 208, 56));
-      //   canvas?.add(addArrow(337, 232, 120));
-      //   createCircleWithText(292, 100);
-      //   createCircleWithText(195, 258);
-      //   break;
       case 4:
-        mainContainer!.set({
-          width: 382,
+        canvas.remove(mainContainer!);
+        let NewContainer = new fabric.Rect({
+          width: 375,
           height: 324,
-          top: 35,
-          left: 178,
+          top: 60,
+          left: 370,
+          fill: 'transparent',
+          strokeWidth: 1,
+          stroke: 'transparent',
+          name: `${CYCLE}_${currentID}`,
         });
-        canvas.add(mainContainer!);
-
-        addCircle(305, 35, 2);
-        addCircle(436, 148, 3);
-        addCircle(305, 259, 4);
-        addCircle(178, 148, 1);
-        canvas?.add(addArrow(242, 132, 311, currentID));
-        canvas?.add(addArrow(428, 85, 29, currentID));
-        canvas?.add(addArrow(279, 298, 221, currentID));
-        canvas?.add(addArrow(466, 263, 124, currentID));
+        canvas.add(NewContainer);
+        addCircle(505, 60, 2);
+        addCircle(636, 172, 3);
+        addCircle(505, 284, 4);
+        addCircle(378, 172, 1);
+        canvas?.add(addArrow(442, 157, 311, currentID));
+        canvas?.add(addArrow(628, 120, 29, currentID));
+        canvas?.add(addArrow(479, 323, 221, currentID));
+        canvas?.add(addArrow(666, 285, 124, currentID));
         canvas.bringToFront(texts[0]);
         canvas.bringToFront(texts[1]);
         canvas.bringToFront(texts[2]);
-        addText(320, 275, 4);
+        addText(520, 295, 4);
         texts[0]
           .set({
-            left: 198,
-            top: 165,
+            left: 398,
+            top: 185,
           })
           .setCoords();
         texts[1]
           .set({
-            left: 320,
-            top: 54,
+            left: 520,
+            top: 74,
           })
           .setCoords();
         texts[2]
           .set({
-            left: 452,
-            top: 166,
+            left: 652,
+            top: 186,
           })
           .setCoords();
-
-        canvas?.requestRenderAll();
         break;
       case 5:
-        mainContainer!.set({
-          width: 386,
+        
+        canvas.remove(mainContainer!);
+        let NewContainer5 = new fabric.Rect({
+          width: 406,
           height: 391,
-          top: 17,
-          left: 191,
+          top: 40,
+          left: 330,
+          fill: 'transparent',
+          strokeWidth: 1,
+          stroke: 'transparent',
+          name: `${CYCLE}_${currentID}`,
         });
-        canvas.add(mainContainer!);
-        addCircle(330, 17, 2);
-        addCircle(476, 133, 3);
-        addCircle(191, 133, 1);
-        addCircle(262, 307, 5);
-        addCircle(452, 307, 4);
-        canvas?.add(addArrow(256, 116, -51, currentID));
-        canvas?.add(addArrow(465, 76, 31, currentID));
-        canvas?.add(addArrow(251, 320, 232, currentID));
-        canvas?.add(addArrow(560, 265, 114, currentID));
-        canvas?.add(addArrow(426, 394, 179, currentID));
+        canvas.add(NewContainer5);
+        addCircle(480, 39, 2);
+        addCircle(626, 155, 3);
+        addCircle(341, 155, 1);
+        addCircle(402, 329, 5);
+        addCircle(583, 329, 4);
+        canvas?.add(addArrow(401, 125, -51, currentID));
+        canvas?.add(addArrow(630, 84, 31, currentID));
+        canvas?.add(addArrow(700, 282, 111, currentID));
+        canvas?.add(addArrow(568, 410, 180, currentID));
+        canvas?.add(addArrow(398, 330, 240, currentID));
         canvas.bringToFront(texts[0]);
         canvas.bringToFront(texts[1]);
         canvas.bringToFront(texts[2]);
         canvas.bringToFront(texts[3]);
-        addText(277, 325, 5);
+        addText(423, 335, 5);
         texts[0]
           .set({
-            left: 217,
+            left: 357,
             top: 162,
           })
           .setCoords();
         texts[1]
           .set({
-            left: 354,
-            top: 36,
+            left: 500,
+            top: 44,
           })
           .setCoords();
         texts[2]
           .set({
-            left: 501,
-            top: 153,
+            left: 647,
+            top: 162,
           })
           .setCoords();
         texts[3]
           .set({
-            left: 478,
-            top: 322,
+            left: 603,
+            top: 335,
           })
           .setCoords();
-        canvas?.requestRenderAll();
         break;
       case 6:
         mainContainer!.set({
+          
+        });
+        canvas.remove(mainContainer!);
+        let NewContainer6 = new fabric.Rect({
           width: 524,
           height: 409,
-          top: 24,
-          left: 148,
+          top: 36,
+          left: 247,
+          fill: 'transparent',
+          strokeWidth: 1,
+          stroke: 'transparent',
+          name: `${CYCLE}_${currentID}`,
         });
-        canvas.add(mainContainer!);
-        addCircle(261, 24, 3);
-        addCircle(461, 24, 1);
-        addCircle(148, 169, 2);
-        addCircle(571, 169, 4);
-        addCircle(261, 327, 6);
-        addCircle(461, 332, 5);
-        canvas?.add(addArrow(388, 38, 358, currentID));
-        canvas?.add(addArrow(211, 140, 311, currentID));
-        canvas?.add(addArrow(584, 102, 51, currentID));
-        canvas?.add(addArrow(234, 336, 235, currentID));
-        canvas?.add(addArrow(614, 301, 124, currentID));
-        canvas?.add(addArrow(436, 408, 180, currentID));
+        canvas.add(NewContainer6);
+        addCircle(361, 36, 2);
+        addCircle(561, 36, 3);
+        addCircle(248, 181, 1);
+        addCircle(671, 181, 4);
+        addCircle(361, 339, 6);
+        addCircle(561, 344, 5);
+        canvas?.add(addArrow(488, 50, 358, currentID));
+        canvas?.add(addArrow(311, 152, 311, currentID));
+        canvas?.add(addArrow(684, 114, 51, currentID));
+        canvas?.add(addArrow(334, 348, 235, currentID));
+        canvas?.add(addArrow(714, 313, 124, currentID));
+        canvas?.add(addArrow(536, 420, 180, currentID));
         canvas.bringToFront(texts[0]);
         canvas.bringToFront(texts[1]);
         canvas.bringToFront(texts[2]);
         canvas.bringToFront(texts[3]);
         canvas.bringToFront(texts[4]);
-        addText(274, 346, 6);
+        addText(377, 356, 6);
         texts[0]
           .set({
-            left: 162,
-            top: 186,
+            left: 262,
+            top: 196,
           })
-          .setCoords();
+
         texts[1]
           .set({
-            left: 276,
-            top: 40,
+            left: 376,
+            top: 50,
           })
           .setCoords();
         texts[2]
           .set({
-            left: 481,
-            top: 43,
+            left: 581,
+            top: 53,
           })
           .setCoords();
         texts[3]
           .set({
-            left: 580,
-            top: 189,
+            left: 683,
+            top: 199,
           })
           .setCoords();
         texts[4]
           .set({
-            left: 474,
-            top: 346,
+            left: 577,
+            top: 356,
           })
           .setCoords();
-        canvas?.requestRenderAll();
         break;
       default:
         break;
-    }
-
+      }
+      
+    updateCanvasSlideData(canvas, activeSlideID);
     canvas?.renderAll();
   }
 
@@ -292,8 +302,8 @@ export function useCycleElement() {
       canvas?.add(circle, text);
     }
     const mainCycleContainer = new fabric.Rect({
-      left: 267,
-      top: 92,
+      left: 390,
+      top: 90,
       width: 293,
       height: 259,
       fill: 'transparent',
@@ -305,12 +315,12 @@ export function useCycleElement() {
     canvas?.add(mainCycleContainer);
     canvas?.setActiveObject(mainCycleContainer);
 
-    canvas?.add(addArrow(387, 116, 0, cycleId));
-    canvas?.add(addArrow(349, 264, 236, cycleId));
-    canvas?.add(addArrow(504, 224, 120, cycleId));
-    createCircleWithText(267, 92, 1);
-    createCircleWithText(459, 92, 2);
-    createCircleWithText(362, 250, 3);
+    canvas?.add(addArrow(507, 116, 0, cycleId));
+    canvas?.add(addArrow(469, 264, 236, cycleId));
+    canvas?.add(addArrow(624, 224, 120, cycleId));
+    createCircleWithText(389, 92, 1);
+    createCircleWithText(581, 92, 2);
+    createCircleWithText(484, 250, 3);
 
     canvas?.requestRenderAll();
     dispatch(updateCycleId());

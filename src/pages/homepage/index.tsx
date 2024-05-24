@@ -3,8 +3,11 @@ import Banner from '../../assets/bannerSub.svg';
 import React, { useEffect } from 'react';
 import {
   AboutContainer,
+  CardBox,
   CardContainer,
+  CardSpan,
   ChildContainer,
+  ComingSoonContainer,
   ContactContainer,
   ContactGrid,
   ContainerDescription,
@@ -77,8 +80,7 @@ import {
 } from '@/constants/media';
 import { Link, useNavigate } from 'react-router-dom';
 import Footer from '@/common-ui/footer';
-import { Token } from '@/utils/localStorage/data';
-import { ROUTES } from '@/constants/endpoint';
+import { Token, isAuth } from '@/utils/localStorage/data';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { getUserDetails } from '@/redux/thunk/user';
 import ProfileMenu from '@/common-ui/profileMenu';
@@ -119,20 +121,26 @@ const Home = ({ onFileSelect }: any) => {
     bottom: false,
     right: false,
   });
+
+  useEffect(() => {
+    handleProductRef();
+  }, [])
+
   type Anchor = 'top' | 'left' | 'bottom' | 'right';
+
 
   const toggleDrawer =
     (anchor: Anchor, open: boolean) =>
-    (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event.type === 'keyRight' &&
-        ((event as React.KeyboardEvent).key === '' ||
-          (event as React.KeyboardEvent).key === '')
-      ) {
-        return;
-      }
-      setState({ ...state, [anchor]: open });
-    };
+      (event: React.KeyboardEvent | React.MouseEvent) => {
+        if (
+          event.type === 'keyRight' &&
+          ((event as React.KeyboardEvent).key === '' ||
+            (event as React.KeyboardEvent).key === '')
+        ) {
+          return;
+        }
+        setState({ ...state, [anchor]: open });
+      };
   const workingRef = useRef<HTMLDivElement>(null);
   const handleWorking = () => {
     if (workingRef.current) {
@@ -145,18 +153,25 @@ const Home = ({ onFileSelect }: any) => {
       mWorkingRef.current.scrollIntoView();
     }
   };
-  const tryRef = useRef<HTMLDivElement>(null);
-  const handleTry = () => {
-    if (tryRef.current) {
+  const productRef = useRef<HTMLDivElement>(null);
+  const handleProductRef = () => {
+    if (productRef.current) {
       const headerHeight = 150;
       const elementPosition =
-        tryRef.current.getBoundingClientRect().top + window.pageYOffset;
+        productRef.current.getBoundingClientRect().top + window.pageYOffset;
       const offsetPosition = elementPosition - headerHeight;
 
       window.scrollTo({
         top: offsetPosition,
         behavior: 'smooth',
       });
+    }
+  };
+  const handleTry = () => {
+    if (isAuth && Token) {
+      navigate('/themes');
+    } else {
+      navigate('/login');
     }
   };
 
@@ -218,11 +233,11 @@ const Home = ({ onFileSelect }: any) => {
     setOpenProfileMenu(null);
   };
 
-  useEffect(() => {
-    if (Token !== '' && Token !== null) {
-      dispatch(getUserDetails());
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (Token !== '' && Token !== null) {
+  //     // dispatch(getUserDetails());
+  //   }
+  // }, []);
 
   const inputRef = React.createRef<HTMLInputElement>();
   return (
@@ -239,7 +254,7 @@ const Home = ({ onFileSelect }: any) => {
             <GridRowEven item xs={6}>
               <MenuButton onClick={handleAbout}>About Us</MenuButton>
               <MenuButton onClick={handleServices}>Services</MenuButton>
-              <MenuButton>Product</MenuButton>
+              <MenuButton onClick={handleProductRef}>Product</MenuButton>
               <MenuButton onClick={handleContact}>Get in Touch</MenuButton>
             </GridRowEven>
             <GridRowCenter xs={3}>
@@ -308,10 +323,12 @@ const Home = ({ onFileSelect }: any) => {
                 </GridRowCenter>
               </MainContainer>
               <ChildContainer>
-                <UploadTitle ref={getStartedRef}>Get Started</UploadTitle>
+                <UploadTitle ref={productRef}>Get Started</UploadTitle>
                 <Stack direction="row" width="80vw" spacing={13}>
-                  <UploadContainer>
-                    <>
+                  <ComingSoonContainer>
+                    <CardBox>
+                      <CardSpan></CardSpan>
+                      <>
                       <UploadSubtitle>Transform</UploadSubtitle>
                       <p>an exisiting document</p>
                     </>
@@ -319,9 +336,9 @@ const Home = ({ onFileSelect }: any) => {
                       style={{
                         cursor: 'pointer',
                       }}
-                      onClick={handleContainerClick}
-                      onDragOver={handleDragOver}
-                      onDrop={handleDrop}
+                    // onClick={handleContainerClick}
+                    // onDragOver={handleDragOver}
+                    // onDrop={handleDrop}
                     >
                       <input
                         type="file"
@@ -379,10 +396,81 @@ const Home = ({ onFileSelect }: any) => {
                         />
                       </span>
                     )}
-                  </UploadContainer>
+                    </CardBox>
+                  </ComingSoonContainer>
+                  {/* <UploadContainer>
+                    <>
+                      <UploadSubtitle>Transform</UploadSubtitle>
+                      <p>an exisiting document</p>
+                    </>
+                    <div
+                      style={{
+                        cursor: 'pointer',
+                      }}
+                    // onClick={handleContainerClick}
+                    // onDragOver={handleDragOver}
+                    // onDrop={handleDrop}
+                    >
+                      <input
+                        type="file"
+                        accept=".pdf,.docx,.doc"
+                        onChange={handleFileChange}
+                        ref={inputRef}
+                        style={{ display: 'none' }}
+                      />
+                      {selectedFile ? (
+                        <></>
+                      ) : (
+                        <>
+                          <br />
+                          <br />
+                          <img src={Folder} width="30px" />
+                          <br />
+                          <br />
+                          <span>
+                            <b>Drag and Drop</b>
+                            <br />
+                            <span>
+                              your document here <br />
+                              or click to Browse
+                            </span>
+                          </span>
+                          <br />
+                          <br />
+                          <br />
+                          <>File should be .pdf, .doc or .docx</>
+                        </>
+                      )}
+                    </div>
+                    {selectedFile === null ? (
+                      <></>
+                    ) : (
+                      <span
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <br />
+                        <img src={UploadTick} width="40px" />
+                        <br />
+                        <b>File Uploaded</b>
+                        <p>{selectedFile.name}</p>
+                        <br />
+                        <img
+                          src={CancelUpload}
+                          width="40px"
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => setSelectedFile(null)}
+                        />
+                      </span>
+                    )}
+                  </UploadContainer> */}
 
                   <UploadContainer
-                    onClick={() => navigate('/themes')}
+                    onClick={handleTry}
                     style={{ cursor: 'pointer' }}
                   >
                     <>
@@ -410,7 +498,7 @@ const Home = ({ onFileSelect }: any) => {
                   <CustomButton variant="contained">
                     <Stack direction="row" spacing={2}>
                       <img src={Wand} />
-                      <p>Generate with Revent</p>
+                      <p>Coming Soon...</p>
                     </Stack>
                   </CustomButton>
                   <ContainerDescription
@@ -535,7 +623,7 @@ const Home = ({ onFileSelect }: any) => {
                 <CardContainer>
                   <CustomCard />
                 </CardContainer>
-                <LaunchContainer ref={tryRef}>
+                <LaunchContainer>
                   <LaunchChild>
                     <LaunchHeading>
                       Be the first to know when we launch!

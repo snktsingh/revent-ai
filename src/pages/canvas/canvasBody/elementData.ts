@@ -50,20 +50,20 @@ export const elementData: IElementData[] = [
     subtitle: 'Add a cover slide at the top of your presentation',
     onClick: () => {},
   },
-  {
-    key: 2,
-    icon: AddTitle,
-    title: 'Title',
-    subtitle: 'Add a Title onto the canvas',
-    onClick: () => {},
-  },
-  {
-    key: 3,
-    icon: AddSubtitle,
-    title: 'Subtitle',
-    subtitle: 'Add a Subtitle onto the canvas',
-    onClick: () => {},
-  },
+  // {
+  //   key: 2,
+  //   icon: AddTitle,
+  //   title: 'Title',
+  //   subtitle: 'Add a Title onto the canvas',
+  //   onClick: () => {},
+  // },
+  // {
+  //   key: 3,
+  //   icon: AddSubtitle,
+  //   title: 'Subtitle',
+  //   subtitle: 'Add a Subtitle onto the canvas',
+  //   onClick: () => {},
+  // },
   {
     key: 4,
     icon: AddParagraph,
@@ -148,6 +148,13 @@ export const elementData: IElementData[] = [
     subtitle: 'Suitable for data in hierarchical order',
     onClick: () => {},
   },
+  // {
+  //   key: 18,
+  //   icon: AddPyramid,
+  //   title: 'SWOT Analysis',
+  //   subtitle: 'Analyzes strengths, weaknesses, opportunities, and threats',
+  //   onClick: () => {},
+  // },
   {
     key: 17,
     icon: TitleSubIcon,
@@ -416,4 +423,3 @@ export const ContentElements: ContentEle = {
 interface variantsType {
   addVariantsCanvas: Function;
 }
-

@@ -31,7 +31,10 @@ import {
   COVER_SLIDE_TITLE,
   SECTION_SLIDE_SUBTITLE,
   SECTION_SLIDE_TITLE,
+  SUBTITLE,
+  TITLE,
 } from '@/constants/elementNames';
+import { useSWOTElement } from '../elements/swotElement';
 
 export const useElementFunctions = (canvas: fabric.Canvas | null) => {
   const dispatch = useAppDispatch();
@@ -75,6 +78,7 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
   const { addTimeline } = useTimelineElement();
   const { addQuotes } = useQuoteElement();
   const { BulletText } = useBulletOrNumberedText();
+  const { addNewSWOTElement } = useSWOTElement();
 
   // elementData[1].onClick = () => {
   //   canvas?.add(title);
@@ -115,6 +119,18 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
   // };
 
   elementData.forEach(element => {
+    let isTitleAvailable: boolean = false;
+    let isSubtitleAvailable: boolean = false;
+
+    canvas?.getObjects().forEach(obj => {
+      if (obj.name === TITLE) {
+        isTitleAvailable = true;
+      }
+      if (obj.name === SUBTITLE) {
+        isSubtitleAvailable = true;
+      }
+    });
+
     switch (element.title) {
       case 'Title':
         element.onClick = () => {
@@ -134,8 +150,14 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
         break;
       case 'Paragraph':
         element.onClick = () => {
-          canvas?.add(title);
-          canvas?.add(subtitle);
+          if (!isTitleAvailable && !isSubtitleAvailable) {
+            canvas?.add(title);
+            canvas?.add(subtitle);
+          } else if (!isTitleAvailable) {
+            canvas?.add(title);
+          } else if (!isSubtitleAvailable) {
+            canvas?.add(subtitle);
+          }
           canvas?.add(paragraph);
           paragraph.selectAll();
           canvas?.setActiveObject(paragraph);
@@ -144,71 +166,131 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
         break;
       case 'Bullet':
         element.onClick = () => {
-          canvas?.add(title);
-          canvas?.add(subtitle);
+          if (!isTitleAvailable && !isSubtitleAvailable) {
+            canvas?.add(title);
+            canvas?.add(subtitle);
+          } else if (!isTitleAvailable) {
+            canvas?.add(title);
+          } else if (!isSubtitleAvailable) {
+            canvas?.add(subtitle);
+          }
           canvas?.add(BulletText);
         };
         break;
       case 'Image':
         element.onClick = () => {
-          canvas?.add(title);
-          canvas?.add(subtitle);
+          if (!isTitleAvailable && !isSubtitleAvailable) {
+            canvas?.add(title);
+            canvas?.add(subtitle);
+          } else if (!isTitleAvailable) {
+            canvas?.add(title);
+          } else if (!isSubtitleAvailable) {
+            canvas?.add(subtitle);
+          }
           imageUploader(canvas);
         };
         break;
       case 'Table':
         element.onClick = () => {
-          canvas?.add(title);
-          canvas?.add(subtitle);
+          if (!isTitleAvailable && !isSubtitleAvailable) {
+            canvas?.add(title);
+            canvas?.add(subtitle);
+          } else if (!isTitleAvailable) {
+            canvas?.add(title);
+          } else if (!isSubtitleAvailable) {
+            canvas?.add(subtitle);
+          }
           ContentElements.handleOpenTable();
         };
         break;
       case 'Quotes':
         element.onClick = () => {
-          canvas?.add(title);
-          canvas?.add(subtitle);
+          if (!isTitleAvailable && !isSubtitleAvailable) {
+            canvas?.add(title);
+            canvas?.add(subtitle);
+          } else if (!isTitleAvailable) {
+            canvas?.add(title);
+          } else if (!isSubtitleAvailable) {
+            canvas?.add(subtitle);
+          }
           addQuotes(canvas);
         };
         break;
       case 'Team List':
         element.onClick = () => {
-          canvas?.add(title);
-          canvas?.add(subtitle);
+          if (!isTitleAvailable && !isSubtitleAvailable) {
+            canvas?.add(title);
+            canvas?.add(subtitle);
+          } else if (!isTitleAvailable) {
+            canvas?.add(title);
+          } else if (!isSubtitleAvailable) {
+            canvas?.add(subtitle);
+          }
           addListElement(canvas, 27, 100);
         };
         break;
       case 'Cycle':
         element.onClick = () => {
-          canvas?.add(title);
-          canvas?.add(subtitle);
+          if (!isTitleAvailable && !isSubtitleAvailable) {
+            canvas?.add(title);
+            canvas?.add(subtitle);
+          } else if (!isTitleAvailable) {
+            canvas?.add(title);
+          } else if (!isSubtitleAvailable) {
+            canvas?.add(subtitle);
+          }
           ContentElements.handleCycle();
         };
         break;
       case 'Process':
         element.onClick = () => {
-          canvas?.add(title);
-          canvas?.add(subtitle);
+          if (!isTitleAvailable && !isSubtitleAvailable) {
+            canvas?.add(title);
+            canvas?.add(subtitle);
+          } else if (!isTitleAvailable) {
+            canvas?.add(title);
+          } else if (!isSubtitleAvailable) {
+            canvas?.add(subtitle);
+          }
           ContentElements.handleProcess();
         };
         break;
       case 'Timeline':
         element.onClick = () => {
-          canvas?.add(title);
-          canvas?.add(subtitle);
+          if (!isTitleAvailable && !isSubtitleAvailable) {
+            canvas?.add(title);
+            canvas?.add(subtitle);
+          } else if (!isTitleAvailable) {
+            canvas?.add(title);
+          } else if (!isSubtitleAvailable) {
+            canvas?.add(subtitle);
+          }
           ContentElements.handleTimeline();
         };
         break;
       case 'Funnel':
         element.onClick = () => {
-          canvas?.add(title);
-          canvas?.add(subtitle);
+          if (!isTitleAvailable && !isSubtitleAvailable) {
+            canvas?.add(title);
+            canvas?.add(subtitle);
+          } else if (!isTitleAvailable) {
+            canvas?.add(title);
+          } else if (!isSubtitleAvailable) {
+            canvas?.add(subtitle);
+          }
           ContentElements.handleFunnel();
         };
         break;
       case 'Pyramid':
         element.onClick = () => {
-          canvas?.add(title);
-          canvas?.add(subtitle);
+          if (!isTitleAvailable && !isSubtitleAvailable) {
+            canvas?.add(title);
+            canvas?.add(subtitle);
+          } else if (!isTitleAvailable) {
+            canvas?.add(title);
+          } else if (!isSubtitleAvailable) {
+            canvas?.add(subtitle);
+          }
           ContentElements.handlePyramid();
         };
         break;
@@ -245,8 +327,14 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
           );
         };
         break;
+      case 'SWOT Analysis':
+        element.onClick = () => {
+          if(canvas){
+            addNewSWOTElement(canvas);
+          }
+        };
+        break;
       default:
-        canvas?.renderAll();
         break;
     }
   });

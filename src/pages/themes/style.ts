@@ -23,8 +23,8 @@ export const ButtonContainer = styled.span`
   justify-content: flex-end;
 `;
 export const ThemeCard = styled(Card)`
-  width: 246px;
-  height: 140px;
+  /* width: 246px;
+  height: 140px; */
   cursor: pointer;
   overflow: hidden;
   box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
@@ -35,10 +35,28 @@ export const ThemeCardTitle = styled.span`
   margin-right: 20px;
 `;
 export const ThemeCardContainer = styled.div`
-  width: fit-content;
+  width: 99.5%;
   height: fit-content;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(246px, 1fr));
+  gap: 16px; 
+  justify-content: end;
+
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+
+  @media (max-width: 992px) {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+
+  @media (max-width: 576px) {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
 `;
 export const ThemeImage = styled.img`
   width: 100%;
@@ -47,7 +65,7 @@ export const ThemeImage = styled.img`
 `;
 export const AddThemeCard = styled.div`
    width: 100%;
-   height: 100%;
+   height: 130px;
    display: flex;
    flex-direction: column;
    align-items: center;

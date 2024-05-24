@@ -1,4 +1,8 @@
 import { PYRAMID, PYRAMID_LEVEL, PYRAMID_TEXT } from '@/constants/elementNames';
+import {
+  IExtendedPolygonOptions,
+  IExtendedTriangleOptions,
+} from '@/interface/fabricTypes';
 import { updatePyramidId } from '@/redux/reducers/fabricElements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import AutoResizingTextbox from '@/utils/fabric-utils/AutoResizingTextbox';
@@ -12,22 +16,23 @@ export function usePyramidElement() {
     const currentID = activePyramid?.name?.split('_')[1];
     let lastLevel: any;
     let lastText: any;
-    let levelsCount : number = 0;;
+    let levelsCount: number = 0;
     canvas.forEachObject(obj => {
+      if (obj.name == `${PYRAMID_LEVEL}_${currentID}`) {
+        console.log({ obj });
+        levelsCount++;
+        lastLevel = obj;
+      }
+
       if (obj.name == `${PYRAMID_TEXT}_${currentID}`) {
         lastText = obj;
-        levelsCount++;
+        obj.set({
+          fill: 'white',
+        });
       }
     });
     let activeObject = canvas.getActiveObject();
-    if (
-      activeObject?.type == 'group' &&
-      activeObject.name?.startsWith(PYRAMID)
-    ) {
-      (activeObject as fabric.Group).forEachObject(obj => {
-        lastLevel = obj;
-      });
-    }
+
     if (lastLevel && lastText) {
       let trapezoid = new fabric.Polygon(
         [
@@ -37,42 +42,65 @@ export function usePyramidElement() {
           { x: lastLevel.points[3].x - 40, y: -60 },
         ],
         {
-          fill: (levelsCount % 2 !== 0)? '#406098' : '#B0BCDE',
+          fill: levelsCount % 2 !== 0 ? '#406098' : '#B0BCDE',
           stroke: 'black',
-          top:
-            (activeObject as fabric.Group)?.getScaledHeight() +
-            (activeObject as fabric.Group).top! -
-            1,
-          left: (activeObject as fabric.Group).left! - 40,
+          top: lastLevel.top + 62,
+          left: (lastLevel as fabric.Object).left! - 39,
           name: `${PYRAMID_LEVEL}_${currentID}`,
-        }
+          level: `${PYRAMID_LEVEL}_${currentID}_${levelsCount + 1}`,
+          hasControls: false,
+          lockMovementX: true,
+          lockMovementY: true,
+          hasBorders: false,
+        } as IExtendedPolygonOptions
       );
-      
+
       const text = new AutoResizingTextbox('Add Text', {
         fontSize: 18,
-        left: lastText.left,
-        top: trapezoid.top! + 20,
-        width: 150,
+        left: trapezoid.left! + 35,
+        top: trapezoid.top! + 5,
+        width: lastText.width + 70,
         fixedWidth: 150,
-        fixedHeight: 100,
+        fixedHeight: 50,
+        textAlign: 'center',
         name: `${PYRAMID_TEXT}_${currentID}`,
         fill: 'white',
         hasBorders: false,
         splitByGrapheme: true,
+        level: `${PYRAMID_TEXT}_${currentID}_${levelsCount + 1}`,
+        hasControls: false,
+        lockMovementX: true,
+        lockMovementY: true,
       });
-      (activeObject as fabric.Group).addWithUpdate(trapezoid);
+      canvas.add(trapezoid);
+
+      const container = new fabric.Rect({
+        left: trapezoid.left! - 2,
+        top: activeObject?.top,
+        name: `${PYRAMID}_${currentID}`,
+        width: activeObject?.width! + 80,
+        height: activeObject?.height! + 60,
+        fill: 'transparent',
+        strokeWidth: 1,
+        stroke: 'transparent',
+      });
+      if (activeObject) {
+        canvas.remove(activeObject);
+      }
+      canvas.add(container);
 
       canvas.getObjects().forEach(obj => {
+        if (obj.name === `${PYRAMID_LEVEL}_${currentID}`) {
+          obj.bringToFront();
+        }
         if (obj.name === `${PYRAMID_TEXT}_${currentID}`) {
-          obj.set({
-            left: lastText.left,
-          });
+          obj.bringToFront();
         }
       });
 
       canvas.add(text);
-      canvas.discardActiveObject()
-      canvas?.requestRenderAll();
+      canvas.discardActiveObject();
+      canvas?.renderAll();
     }
   };
   //new pyramid
@@ -82,7 +110,7 @@ export function usePyramidElement() {
     let x3 = 100;
     let x4 = -100;
 
-    let trapTop = 0;
+    let trapTop = 120;
     let group: fabric.Group;
     let textsList: fabric.Textbox[] = [];
     let textLeft: number;
@@ -93,15 +121,22 @@ export function usePyramidElement() {
       let triangle = new fabric.Triangle({
         width: 200,
         height: 150,
-        left: -101,
-        top: -150,
+        left: 369,
+        top: 40,
         stroke: 'black',
         fill: '#B0BCDE',
-      });
+        name: `${PYRAMID_LEVEL}_${pyramidId}`,
+        level: `${PYRAMID_LEVEL}_${pyramidId}_1`,
+        hasControls: false,
+        lockMovementX: true,
+        lockMovementY: true,
+        hasBorders: false,
+      } as IExtendedTriangleOptions);
+
       const text = new AutoResizingTextbox('Add Text', {
         fontSize: 18,
-        left: 565,
-        top: 143,
+        left: 430,
+        top: 120,
         width: 100,
         height: 60,
         name: `${PYRAMID_TEXT}_${pyramidId}`,
@@ -113,6 +148,7 @@ export function usePyramidElement() {
         fill: 'white',
         hasBorders: false,
         splitByGrapheme: true,
+        level: `${PYRAMID_TEXT}_${pyramidId}_1`,
       });
 
       textsList.push(text);
@@ -129,15 +165,21 @@ export function usePyramidElement() {
           {
             fill: '#406098',
             stroke: 'black',
-            top: trapTop,
+            top: 192,
             name: `${PYRAMID_LEVEL}_${pyramidId}`,
-          }
+            left: 327,
+            level: `${PYRAMID_LEVEL}_${pyramidId}_2`,
+            hasControls: false,
+            lockMovementX: true,
+            lockMovementY: true,
+            hasBorders: false,
+          } as IExtendedPolygonOptions
         );
 
         const text = new AutoResizingTextbox('Add Text', {
           fontSize: 18,
-          left: 565,
-          top: 213,
+          left: trapezoid.left! + 32,
+          top: 200,
           width: 217,
           name: `${PYRAMID_TEXT}_${pyramidId}`,
           fixedWidth: 150,
@@ -146,7 +188,10 @@ export function usePyramidElement() {
           lockMovementX: true,
           lockMovementY: true,
           fill: 'white',
-          hasBorders: false
+          hasBorders: false,
+          level: `${PYRAMID_TEXT}_${pyramidId}_2`,
+          textAlign: 'center',
+          splitByGrapheme: true,
         });
 
         trapTop = trapTop + 60;
@@ -163,13 +208,25 @@ export function usePyramidElement() {
 
     let pyramidLevels = createLevels(2);
 
-    group = new fabric.Group(pyramidLevels, {
-      left: 458,
-      top: 44,
+    const mainContainer = new fabric.Rect({
+      left: 319,
+      top: 32,
       name: `${PYRAMID}_${pyramidId}`,
+      width: 300,
+      height: 230,
+      fill: 'transparent',
+      strokeWidth: 1,
+      stroke: 'transparent',
     });
 
-    canvas?.add(group);
+    // group = new fabric.Group(pyramidLevels, {
+    //   left: 458,
+    //   top: 44,
+    //   name: `${PYRAMID}_${pyramidId}`,
+    // });
+
+    canvas?.add(mainContainer);
+    canvas?.add(...pyramidLevels);
 
     textsList.forEach(el => {
       canvas?.add(el);
