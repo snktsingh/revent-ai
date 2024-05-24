@@ -149,6 +149,13 @@ export const elementData: IElementData[] = [
     onClick: () => {},
   },
   {
+    key: 18,
+    icon: AddPyramid,
+    title: 'SWOT Analysis',
+    subtitle: 'Analyzes strengths, weaknesses, opportunities, and threats',
+    onClick: () => {},
+  },
+  {
     key: 17,
     icon: TitleSubIcon,
     title: 'Conclusion Slide',
@@ -416,4 +423,3 @@ export const ContentElements: ContentEle = {
 interface variantsType {
   addVariantsCanvas: Function;
 }
-

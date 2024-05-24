@@ -6,6 +6,7 @@ import {
   Menu,
   Stack,
   TextField,
+  Tooltip,
 } from '@mui/material';
 import {
   BorderColorDiv,
@@ -63,6 +64,8 @@ import ColorizeOutlinedIcon from '@mui/icons-material/ColorizeOutlined';
 import WebFont from 'webfontloader';
 import FontsData from '../../../data/fontsData.json';
 import CreditsComponent from '@/components/CreditsComponent';
+import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
+import { Link } from 'react-router-dom';
 
 interface FontItem {
   family: string;
@@ -416,7 +419,7 @@ const CanvasTools = () => {
 
         <FontTool>
           <Stack direction="row" spacing={0}>
-            <IconButton
+            {/* <IconButton
               size="small"
               onClick={() => ContentElements.handleBold()}
             >
@@ -433,7 +436,7 @@ const CanvasTools = () => {
               onClick={() => ContentElements.handleUnderlIne()}
             >
               <FormatUnderlinedRounded />
-            </IconButton>
+            </IconButton> */}
             {/* <IconButton onClick={handleColorClick}>
               <ColorLensOutlinedIcon />
             </IconButton>
@@ -663,8 +666,16 @@ const CanvasTools = () => {
       >
         <img src={ShapesIcon} alt="shapes_icon" />
       </ShapesCard> */}
-
-      <CreditsComponent />
+      <Stack direction={'row'} alignItems={'center'} spacing={1}>
+        <CreditsComponent />
+        <Tooltip title="Report any issues ">
+          <Link to="https://forms.gle/QGrKm1JdjFtKu5iX8" target="_blank" rel="noopener noreferrer">
+          <IconButton sx={{ borderRadius: '.2rem', border: '1px solid #dfdfdf', height: '4.5vh' }}>
+            <ReportGmailerrorredIcon />
+          </IconButton>
+          </Link>
+        </Tooltip>
+      </Stack>
 
       <Menu
         id="basic-menu"

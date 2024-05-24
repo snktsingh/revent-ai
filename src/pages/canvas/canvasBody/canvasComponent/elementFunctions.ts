@@ -34,6 +34,7 @@ import {
   SUBTITLE,
   TITLE,
 } from '@/constants/elementNames';
+import { useSWOTElement } from '../elements/swotElement';
 
 export const useElementFunctions = (canvas: fabric.Canvas | null) => {
   const dispatch = useAppDispatch();
@@ -77,6 +78,7 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
   const { addTimeline } = useTimelineElement();
   const { addQuotes } = useQuoteElement();
   const { BulletText } = useBulletOrNumberedText();
+  const { addNewSWOTElement } = useSWOTElement();
 
   // elementData[1].onClick = () => {
   //   canvas?.add(title);
@@ -325,8 +327,14 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
           );
         };
         break;
+      case 'SWOT Analysis':
+        element.onClick = () => {
+          if(canvas){
+            addNewSWOTElement(canvas);
+          }
+        };
+        break;
       default:
-        canvas?.renderAll();
         break;
     }
   });

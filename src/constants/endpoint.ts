@@ -17,7 +17,7 @@ export const ENDPOINT = {
     CREDIT_AMOUNT: '/user-credit',
     RESET_PASS_INIT: '/account/reset-password/init',
     RESET_PASS_FINISH: '/account/reset-password/finish',
-    USER_PREFERENCE : '/template/set-preference',
+    USER_PREFERENCE : '/user-preferences',
   },
   PPT: {
     CREATE_PPT: 'ppt/create-presentation',

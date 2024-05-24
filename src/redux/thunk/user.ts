@@ -61,10 +61,8 @@ export const resetPassword = createAsyncThunk(
 export const setUserPreferences = createAsyncThunk(
   'user/set_user_preferences',
   async (userPreferences : {key : string, value : boolean},{dispatch, getState}) => {
-    const state = (getState() as RootState);
-    const userDetails = state.manageUser.userDetails && state.manageUser.userDetails;
     try {
-      const res = await FetchUtils.postRequest(`${ENDPOINT.USER.USER_PREFERENCE}?key=${userPreferences.key}&value=${userPreferences.value}&userId=${userDetails?.id}`, null);
+      const res = await FetchUtils.postRequest(`${ENDPOINT.USER.USER_PREFERENCE}`, { [userPreferences.key]: userPreferences.value });
       dispatch(getUserPreferences());
       return res.data;
     } catch (error) {
@@ -76,11 +74,9 @@ export const setUserPreferences = createAsyncThunk(
 // get userPreferences
 export const getUserPreferences = createAsyncThunk(
   'user/get_user_preferences',
-  async (_,{dispatch, getState}) => {
-    const state = (getState() as RootState);
-    const userDetails = state.manageUser.userDetails && state.manageUser.userDetails;
+  async () => {
     try {
-      const res = await FetchUtils.getRequest(`${ENDPOINT.USER.USER_PREFERENCE}?userId=${userDetails?.id}`);
+      const res = await FetchUtils.getRequest(`${ENDPOINT.USER.USER_PREFERENCE}`);
       return res.data;
     } catch (error) {
       return error;

@@ -131,11 +131,6 @@ const useCanvasData = () => {
             subHeading: '',
             text: canvasObject.text,
           });
-        } else if (
-          canvasObject.name.startsWith(TIMELINE_TEXT) ||
-          canvasObject.name.startsWith(TIMELINE_HEADING)
-        ) {
-          timelineData.push({ content: canvasObject.text, id: elementID });
         } else if (canvasObject.name === PARAGRAPH) {
           const paragraphData = getOrCreateElement(
             'Paragraph',
@@ -291,8 +286,14 @@ const useCanvasData = () => {
     });
 
     if (outputFormat && outputFormat.elements.length > 0) {
-      // outputFormat['title'] = titleText;
-      // outputFormat['subTitle'] = subTitleText;
+      if(titleText && subTitleText){
+        outputFormat['title'] = titleText;
+        outputFormat['subTitle'] = subTitleText;
+      } else if(titleText){
+        outputFormat['title'] = titleText;
+      } else if( subTitleText){
+        outputFormat['subTitle'] = subTitleText;
+      }
     } else {
       const titleData = getOrCreateElement('cover', '1', outputFormat);
       titleData['title'] = titleText;
@@ -516,7 +517,8 @@ const useCanvasData = () => {
         'Pyramid',
         'Cover Slide',
         'Section Slide',
-        'Conclusion Slide'
+        'Conclusion Slide',
+        'SWOT Analysis'
       );
     }
 
