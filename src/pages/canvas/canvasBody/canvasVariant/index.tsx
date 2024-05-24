@@ -204,7 +204,7 @@ export const CanvasVariant = () => {
                         <div>{i + 1}</div>
                         <VariantSlideCard
                           className={
-                            getClickedClassName(el.imagesUrl, el.activeSlide)
+                            getClickedClassName(el.imagesUrl, el.activeSlide) && !selectedOriginalCanvas
                               ? 'clicked-card'
                               : ''
                           }

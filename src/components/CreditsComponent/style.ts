@@ -7,8 +7,8 @@ export const CreditsContainer = styled.div`
     align-items: center;
     border-radius: .2rem;
     border: 1px solid #dfdfdf;
-    width: max-content;
-    padding: 0.2rem;
+    max-width: 180px;
+    padding: 0.2rem .4rem;
     height: 4.5vh;
 `;
 

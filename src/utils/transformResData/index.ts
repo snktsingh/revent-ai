@@ -62,6 +62,7 @@ export const processSlides = (
       slideId: slideData[0].slideId,
       presentationId,
       lastVariant: '',
+      selectedOriginalCanvas: false,
     };
 
     slideData.forEach((element: any) => {

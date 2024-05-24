@@ -22,6 +22,7 @@ export interface CanvasItem {
   slideId: number;
   presentationId: number;
   lastVariant : string;
+  selectedOriginalCanvas: boolean;
 }
 
 export interface IPresentationDetails {

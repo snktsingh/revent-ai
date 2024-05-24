@@ -45,7 +45,8 @@ export const initialState: CanvasSate = {
       listImages: [],
       slideId: 1,
       presentationId: 1,
-      lastVariant: ''
+      lastVariant: '',
+      selectedOriginalCanvas: false,
     },
   ],
   canvasJS: {
@@ -58,6 +59,7 @@ export const initialState: CanvasSate = {
     slideId: 1,
     presentationId: 1,
     lastVariant:'',
+    selectedOriginalCanvas: false,
   },
   activeSlideID: 1,
   size: 1,
@@ -126,6 +128,7 @@ export const CanvasReducer = createSlice({
           slideId: newCanvasID,
           presentationId: 1,
           lastVariant: '',
+          selectedOriginalCanvas: false,
         },
         ...state.canvasList.slice(activeSlideIndex + 1),
       ];
@@ -307,6 +310,14 @@ export const CanvasReducer = createSlice({
         state.canvasJS.lastVariant = lastVariant;
       }
     },
+    updateSelectedOriginalCanvas(state, action : PayloadAction<{id : number, selectedOriginalCanvas : boolean}>){
+       const { id,selectedOriginalCanvas } = action.payload;
+       const updatedCanvasList = state.canvasList.map(item => 
+        item.id === id ? { ...item, selectedOriginalCanvas } : item
+       );
+       state.canvasList = updatedCanvasList;
+       state.canvasJS = updatedCanvasList[id - 1];
+    }
   },
 });
 
@@ -339,6 +350,7 @@ export const {
   toggleIsVariantSelected,
   updateListImagesWithCanvasId,
   updateLastVariant,
+  updateSelectedOriginalCanvas
 } = CanvasReducer.actions;
 
 export default CanvasReducer.reducer;

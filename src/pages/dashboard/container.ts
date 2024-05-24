@@ -64,7 +64,8 @@ const useDashboard = () => {
         listImages: [],
         slideId: 1,
         presentationId: 1,
-        lastVariant : ''
+        lastVariant : '',
+        selectedOriginalCanvas: false,
       },
     ];
     dispatch(setCanvas(canvas[0]));

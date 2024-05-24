@@ -671,7 +671,7 @@ const CanvasTools = () => {
           <Link to="https://forms.gle/QGrKm1JdjFtKu5iX8" target="_blank" rel="noopener noreferrer">
             <ToolOutlinedButton>
               <Stack direction="row" spacing={1} alignItems={'center'} height={'4.5vh'} justifyContent={'space-around'}>
-                <EmailIcon fontSize='small'/>
+                <EmailIcon fontSize='small' sx={{color:'#2f2f2f'}}/>
                 <p>Send Feedback</p>
               </Stack>
             </ToolOutlinedButton>
