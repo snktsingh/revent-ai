@@ -7,15 +7,15 @@ import {
 } from './style';
 import Logo from '../../assets/logo.svg';
 import SignUpImage from '../../assets/signup.svg';
-import { Box, Button, Grid, IconButton } from '@mui/material';
+import { Box, Button, Grid, IconButton, Link } from '@mui/material';
 import { TextInput } from '../login/style';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import useSignup from './container';
 import { Slide, ToastContainer } from 'react-toastify';
-import { Link } from 'react-router-dom';
 import EmailPreview from '../emailPreview';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { theme } from '@/constants/theme';
 
 const SignUp = () => {
   const {
@@ -32,7 +32,7 @@ const SignUp = () => {
     handleMouseDownPassword,
     showConfirmPassword,
     showPassword,
-    handleClickShowConfirmPassword
+    handleClickShowConfirmPassword,
   } = useSignup();
 
   if (isPreview) {
@@ -73,7 +73,7 @@ const SignUp = () => {
                   <TextInput
                     id="fullWidth"
                     name="email"
-                    type='email'
+                    type="email"
                     label="Enter your Email"
                     variant="outlined"
                     fullWidth
@@ -85,7 +85,7 @@ const SignUp = () => {
                   <TextInput
                     id="fullWidth"
                     name="firstName"
-                    type='text'
+                    type="text"
                     label="Enter your First Name"
                     variant="outlined"
                     fullWidth
@@ -95,7 +95,7 @@ const SignUp = () => {
                   <TextInput
                     id="fullWidth"
                     name="lastName"
-                    type='text'
+                    type="text"
                     label="Enter your Last Name"
                     variant="outlined"
                     fullWidth
@@ -141,7 +141,11 @@ const SignUp = () => {
                         onMouseDown={handleMouseDownPassword}
                         edge="end"
                       >
-                        {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                        {showConfirmPassword ? (
+                          <VisibilityOff />
+                        ) : (
+                          <Visibility />
+                        )}
                       </IconButton>
                     ),
                   }}
@@ -156,7 +160,32 @@ const SignUp = () => {
                   control={
                     <Checkbox onClick={() => setIsDisabled(!isDisabled)} />
                   }
-                  label="I have read and accept Terms of use and Privacy Notice"
+                  label={
+                    <div>
+                      I agree to all{' '}
+                      <Link
+                        href="https://revent-ppt-templates.s3.ap-south-1.amazonaws.com/Terms+of+Service+-+Revent.pdf"
+                        target="_blank"
+                        style={{
+                          color: `${theme.colorSchemes.light.palette.primary}`,
+                          textDecoration: 'none',
+                        }}
+                      >
+                        terms of service
+                      </Link>{' '}
+                      and{' '}
+                      <Link
+                        href="https://revent-ppt-templates.s3.ap-south-1.amazonaws.com/Privacy+and+Cookie+Policy+-+Revent.pdf"
+                        target="_blank"
+                        style={{
+                          color: `${theme.colorSchemes.light.palette.primary}`,
+                          textDecoration: 'none',
+                        }}
+                      >
+                        privacy policy
+                      </Link>
+                    </div>
+                  }
                 />
                 <br />
                 <Button
