@@ -95,10 +95,9 @@ export default function SlideList() {
           strategy={verticalListSortingStrategy}
         >
           {canvasList.map((canvas, index) => {
-            return (
-              <>
+            return (      
                 <SingleSlideComponent
-                  key={index}
+                  key={canvas.id}
                   {...canvas}
                   index={index}
                   svgURLs={svgURLs}
@@ -107,7 +106,6 @@ export default function SlideList() {
                   handleSlideCardClick={handleSlideCardClick}
                   handleContextMenu={handleContextMenu}
                 />
-              </>
             );
           })}
         </SortableContext>

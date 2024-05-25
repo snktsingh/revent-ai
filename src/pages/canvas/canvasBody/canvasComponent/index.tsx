@@ -68,7 +68,18 @@ const CanvasComponent: React.FC = () => {
   useEffect(() => {
 
     setShowOptions(false);
-    const canvas = new fabric.Canvas('canvas', {preserveObjectStacking:true});
+    const canvasElement = document.getElementById('canvas');
+    if (!canvasElement) {
+      console.error('Canvas element not found');
+      return;
+    }
+
+    const canvas = new fabric.Canvas('canvas', { preserveObjectStacking: true });
+    if (!canvas) {
+      console.error('Failed to initialize Fabric canvas');
+      return;
+    }
+
     updateCanvasStyle(canvas);
     canvas.clear();
     fabric.Object.prototype.set({
@@ -84,6 +95,8 @@ const CanvasComponent: React.FC = () => {
       canvasJS.canvas,
       () => {
         canvasRef.current = canvas;
+        // console.log('Loading canvas JSON data:', canvasJS.canvas);
+
         if (canvas) {
           updateCanvasStyle(canvas);
           updateCanvasDimensions(canvas);
@@ -156,7 +169,7 @@ const CanvasComponent: React.FC = () => {
     window.addEventListener('keydown', e => handleKeyDown(e, canvas));
     return () => {
       window.removeEventListener('keydown', e => handleKeyDown(e, canvas));
-      window.removeEventListener('resize', () => {});
+      window.removeEventListener('resize', () => { });
       canvas.dispose();
     };
   }, [canvasJS.canvas, selectedOriginalCanvas]);
@@ -164,7 +177,8 @@ const CanvasComponent: React.FC = () => {
   useEffect(() => {
     const slide = canvasList.find((slide) => slide.id === activeSlideID);
     setShowOptions(false);
-    if (variantImage && canvasRef.current && slide && slide.variants && slide.variants.length > 0 ) {
+    console.log(canvasRef)
+    if (variantImage && canvasRef.current && slide && slide.variants && slide.variants.length > 0) {
       canvasRef.current?.clear();
 
       canvasRef.current?.setBackgroundColor(
@@ -197,7 +211,7 @@ const CanvasComponent: React.FC = () => {
     }
   }, [variantImage, isVariantSelected]);
 
-  useEffect(() => {}, [selectedElementPosition, showOptions]);
+  useEffect(() => { }, [selectedElementPosition, showOptions]);
 
   return (
     <CanvasContainer onContextMenu={e => e.preventDefault()}>

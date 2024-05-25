@@ -43,7 +43,6 @@ const useVariants = () => {
     variantId: number,
     slideId: number
   ) => {
-    console.log(variantId);
     dispatch(toggleIsVariantSelected(true));
     dispatch(toggleSelectedOriginalCanvas(false));
     dispatch(setVariantImageAsMain(CanvasURL));

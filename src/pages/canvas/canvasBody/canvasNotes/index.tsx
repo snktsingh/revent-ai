@@ -6,16 +6,40 @@ import {
 } from './style';
 import { ChangeEvent } from 'react';
 import { updateCurrentCanvas } from '@/redux/reducers/canvas';
+import { useDebounce } from '@/hooks/useDebounce';
+import { updateSlideJSONData } from '@/redux/thunk/thunk';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 export const CanvasNotes = () => {
   const dispatch = useAppDispatch();
   const { openNotes } = useAppSelector(store => store.element);
-  const { canvasJS } = useAppSelector((state)=> state.canvas);
+  const { canvasJS, canvasList } = useAppSelector((state) => state.canvas);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const params = useParams<{ id: string }>();
 
-  const handleNotesChange = (e : ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-     const updateCanvas = {...canvasJS,notes: e.target.value};
-     dispatch(updateCurrentCanvas(updateCanvas));
-  }
+  const pptId = Number(params.id?.split('-')[0]);
+  const slideId = searchParams.get('slide');
+  const slideIndex = canvasList.findIndex(slide => slide.id === canvasJS.id);
+  const handleNotesChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const updateCanvas = { ...canvasJS, notes: e.target.value };
+    dispatch(updateCurrentCanvas(updateCanvas));
+
+
+    if (canvasList[slideIndex].variants.length > 0) {
+      debounceNotes(e);
+    }
+  };
+
+  const debounceNotes = useDebounce((e: any) => {
+    const updatedSlideNotes = {
+      pptId,
+      slideJSON: canvasList[slideIndex].originalSlideData,
+      notes: e.target.value,
+      slideId,
+    };
+    dispatch(updateSlideJSONData(updatedSlideNotes))
+  }, 500)
+
 
   return (
     <NotesBodyContainer>

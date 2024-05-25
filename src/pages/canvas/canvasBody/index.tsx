@@ -162,7 +162,8 @@ const CanvasBody = () => {
       originalSlideData: canvasList[canvasJS.id - 1].canvas,
     };
     dispatch(updateCurrentCanvas(currentCanvas));
-    const canvasJSON = canvasList[canvasJS.id - 1].canvas;
+    const slideJSON = canvasList[canvasJS.id - 1].canvas;
+    const notes = canvasList[canvasJS.id -1].notes;
     const pptId = params.id?.split('-')[0];
 
     const isListImagesPresent = requestData?.elements.some(
@@ -186,7 +187,7 @@ const CanvasBody = () => {
         for (let i = 0; i < listImagesArray.images.length; i++) {
           formData.append('images', listImagesArray.images[i].file);
         }
-        dispatch(fetchSlideImg({ req: formData, canvasJSON, pptId }));
+        dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes }));
         dispatch(toggleSelectedOriginalCanvas(false));
       }
       return;
@@ -204,7 +205,7 @@ const CanvasBody = () => {
         for (let i = 0; i < ImagesArray.images.length; i++) {
           formData.append('images', ImagesArray.images[i].file);
         }
-        dispatch(fetchSlideImg({ req: formData, canvasJSON, pptId }));
+        dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes }));
         dispatch(toggleSelectedOriginalCanvas(false));
       }
       return;
@@ -224,7 +225,7 @@ const CanvasBody = () => {
           for (let i = 0; i < QuoteImagesArray.images.length; i++) {
             formData.append('images', QuoteImagesArray.images[i].file);
           }
-          dispatch(fetchSlideImg({ req: formData, canvasJSON, pptId }));
+          dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes }));
           dispatch(toggleSelectedOriginalCanvas(false));
           return;
         }
@@ -236,7 +237,7 @@ const CanvasBody = () => {
       const ptId = Number(params.id?.split('-')[0]);
       reqData.presentationId = ptId;
     }
-    dispatch(fetchSlideImg({ req: reqData, canvasJSON, pptId }));
+    dispatch(fetchSlideImg({ req: reqData, slideJSON, pptId, notes }));
     dispatch(toggleSelectedOriginalCanvas(false));
   };
 
@@ -490,7 +491,7 @@ const CanvasBody = () => {
               {filteredList.map((item, index) => {
                 let disabled = isDisabled(item.title);
                 return (
-                  <div>
+                  <div key={item.title}>
                     {disabled ? (
                       <Tooltip
                         title="Sorry, this element can't be added because it conflicts with elements already on the canvas"

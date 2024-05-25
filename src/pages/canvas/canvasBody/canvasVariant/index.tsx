@@ -85,18 +85,30 @@ export const CanvasVariant = () => {
       pptId &&
       slideId &&
       Number(slideId) > 100 &&
-      canvasList[canvasIndex].originalSlideData &&
+      Object.keys(canvasList[canvasIndex].originalSlideData).length === 0 &&
       canvasIndex !== 0
     ) {
       dispatch(getSlideJSONData({ pptId, slideId })).then(res => {
         if (res.payload) {
-          getCanvasImageFromJSON(res.payload);
-          dispatch(
-            updateCurrentCanvas({
-              ...canvasList[canvasIndex],
-              originalSlideData: res.payload,
-            })
-          );
+          if (res.payload.hasOwnProperty('slideJSON')) {
+            getCanvasImageFromJSON(res.payload.slideJSON);
+            dispatch(
+              updateCurrentCanvas({
+                ...canvasList[canvasIndex],
+                originalSlideData: res.payload.slideJSON,
+                notes : res.payload.notes
+              })
+            );
+          } else {
+            getCanvasImageFromJSON(res.payload);
+            dispatch(
+              updateCurrentCanvas({
+                ...canvasList[canvasIndex],
+                originalSlideData: res.payload,
+              })
+            );
+          }
+
         }
       });
     }
