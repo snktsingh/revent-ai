@@ -65,6 +65,12 @@ const LIST_IMG = 'ListImg';
 
 const IMAGE = 'IMAGE';
 
+//SWOT
+const SWOT = 'SWOT';
+const SWOT_TEXT = 'SWOTText';
+const SWOT_BOX = 'SWOTBox';
+const SWOT_ICON = 'SWOTIcon';
+
 export {
     FUNNEL,
     FUNNEL_TEXT,
@@ -110,5 +116,9 @@ export {
     LIST_TEXT,
     LIST_CONTAINER,
     LIST_IMG,
-    IMAGE
+    IMAGE,
+    SWOT,
+    SWOT_BOX,
+    SWOT_ICON,
+    SWOT_TEXT
 };

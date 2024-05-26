@@ -22,6 +22,9 @@ import {
   QUOTE_AUTHOR,
   QUOTE_IMG,
   QUOTE_TEXT,
+  SWOT,
+  SWOT_BOX,
+  SWOT_TEXT,
   TABLE,
   TABLE_HEADER,
   TABLE_TEXT,
@@ -31,6 +34,7 @@ import {
   TIMELINE_HEADING,
   TIMELINE_TEXT,
 } from '@/constants/elementNames';
+import { SWOTIcon } from '@/constants/media';
 
 export function useObjectMovingEvent() {
   const handleObjectMoving = (
@@ -275,6 +279,35 @@ export function useObjectMovingEvent() {
             obj.name?.startsWith(QUOTE_AUTHOR) ||
             obj.name?.startsWith(QUOTE_TEXT) ||
             obj.name?.startsWith(QUOTE_IMG)
+          ) {
+            obj
+              .set({
+                left: obj.left! + deltaX,
+                top: obj.top! + deltaY,
+              })
+              .setCoords();
+          }
+        });
+
+        movedObject
+          .set({
+            lastLeft: movedObject.left,
+            lastTop: movedObject.top,
+          })
+          .setCoords();
+      }
+      else if (objectName[0] === SWOT) {
+        const lastLeft = movedObject.get('lastLeft') || movedObject.left;
+        const lastTop = movedObject.get('lastTop') || movedObject.top;
+
+        const deltaX = movedObject.left! - lastLeft!;
+        const deltaY = movedObject.top! - lastTop!;
+
+        canvas.forEachObject(function (obj) {
+          if (
+            obj.name?.startsWith(SWOT_BOX) ||
+            obj.name?.startsWith(SWOT_TEXT) ||
+            obj.name?.startsWith(SWOTIcon)
           ) {
             obj
               .set({

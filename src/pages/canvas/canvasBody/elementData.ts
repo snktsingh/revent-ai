@@ -148,13 +148,13 @@ export const elementData: IElementData[] = [
     subtitle: 'Suitable for data in hierarchical order',
     onClick: () => {},
   },
-  // {
-  //   key: 18,
-  //   icon: AddPyramid,
-  //   title: 'SWOT Analysis',
-  //   subtitle: 'Analyzes strengths, weaknesses, opportunities, and threats',
-  //   onClick: () => {},
-  // },
+  {
+    key: 18,
+    icon: AddPyramid,
+    title: 'SWOT Analysis',
+    subtitle: 'Analyzes strengths, weaknesses, opportunities, and threats',
+    onClick: () => {},
+  },
   {
     key: 17,
     icon: TitleSubIcon,

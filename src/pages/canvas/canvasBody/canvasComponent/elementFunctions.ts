@@ -330,6 +330,14 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
       case 'SWOT Analysis':
         element.onClick = () => {
           if(canvas){
+            if (!isTitleAvailable && !isSubtitleAvailable) {
+              canvas?.add(title);
+              canvas?.add(subtitle);
+            } else if (!isTitleAvailable) {
+              canvas?.add(title);
+            } else if (!isSubtitleAvailable) {
+              canvas?.add(subtitle);
+            }
             addNewSWOTElement(canvas);
           }
         };

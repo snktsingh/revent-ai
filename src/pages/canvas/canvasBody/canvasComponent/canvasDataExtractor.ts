@@ -22,6 +22,8 @@ import {
   SECTION_SLIDE_SUBTITLE,
   SECTION_SLIDE_TITLE,
   SUBTITLE,
+  SWOT,
+  SWOT_TEXT,
   TABLE,
   TABLE_HEADER,
   TABLE_TEXT,
@@ -116,6 +118,10 @@ const useCanvasData = () => {
 
           case canvasObject.name.startsWith(PROCESS_TEXT):
             elementType = 'Process';
+            break;
+
+          case canvasObject.name.startsWith(SWOT_TEXT):
+            elementType = 'Swot';
             break;
         }
 
@@ -441,6 +447,7 @@ const useCanvasData = () => {
           QUOTE,
           BULLET_POINTS,
           PARAGRAPH,
+          SWOT
         ].some(elName => obj.name.startsWith(elName));
       }
     });
@@ -467,7 +474,8 @@ const useCanvasData = () => {
         'Process',
         'Timeline',
         'Funnel',
-        'Pyramid'
+        'Pyramid',
+        'SWOT Analysis'
       );
     } else if (isTitleAdded) {
       enabledEl.push(
@@ -482,7 +490,8 @@ const useCanvasData = () => {
         'Timeline',
         'Funnel',
         'Pyramid',
-        'Subtitle'
+        'Subtitle',
+        'SWOT Analysis'
       );
     } else if (isSubtitleAdded) {
       enabledEl.push(
@@ -497,7 +506,8 @@ const useCanvasData = () => {
         'Timeline',
         'Funnel',
         'Pyramid',
-        'Title'
+        'Title',
+        'SWOT Analysis'
       );
     } else {
       if (!isTitleAdded) {
