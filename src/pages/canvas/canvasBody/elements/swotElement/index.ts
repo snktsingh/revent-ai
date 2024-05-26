@@ -29,6 +29,10 @@ export function useSWOTElement() {
         ry: 10,
         name: `${SWOT_BOX}_${swotID}`,
         level: `${SWOT_BOX}_${swotID}_${level}`,
+        hasControls: false,
+        lockMovementX: true,
+        lockMovementY: true,
+        hasBorders: false,
       } as IExtendedRectOptions);
       canvas?.add(rect);
       return rect;
@@ -82,15 +86,15 @@ export function useSWOTElement() {
       });
 
       canvas.add(svg);
+      canvas.add(SWOTMainContainer);
       const rect1 = addRectangle(96, 105, 170, 130, 1);
       const rect2 = addRectangle(566, 105, 170, 130, 2);
       const rect3 = addRectangle(96, 275, 170, 130, 3);
       const rect4 = addRectangle(566, 275, 170, 130, 4);
-      canvas.add(SWOTMainContainer);
       addText(rect1.left! + 2, rect1.top! + 2, 1);
-      addText(rect2.left! + 2, rect2.top! + 2, 1);
-      addText(rect3.left! + 2, rect3.top! + 2, 1);
-      addText(rect4.left! + 2, rect4.top! + 2, 1);
+      addText(rect2.left! + 2, rect2.top! + 2, 2);
+      addText(rect3.left! + 2, rect3.top! + 2, 3);
+      addText(rect4.left! + 2, rect4.top! + 2, 4);
       canvas.renderAll();
       dispatch(updateSwotId());
     });

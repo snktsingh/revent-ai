@@ -12,6 +12,8 @@ import {
   QUOTE_AUTHOR,
   QUOTE_IMG,
   QUOTE_TEXT,
+  SWOT_BOX,
+  SWOT_TEXT,
   TABLE,
   TABLE_HEADER,
   TABLE_TEXT,
@@ -40,6 +42,7 @@ import {
 } from '../events/eventExports';
 import { useBulletOrNumberedText } from '../elements/BulletOrNumberElement';
 import useCanvasData from './canvasDataExtractor';
+import { SWOTIcon } from '@/constants/media';
 
 export const useCanvasComponent = () => {
   const [showOptions, setShowOptions] = useState(false);
@@ -206,7 +209,10 @@ export const useCanvasComponent = () => {
       elementName.startsWith(TABLE_HEADER) || 
       elementName.startsWith(QUOTE_AUTHOR) ||
       elementName.startsWith(QUOTE_TEXT) ||
-      elementName.startsWith(LIST_TEXT) 
+      elementName.startsWith(LIST_TEXT) ||
+      elementName.startsWith(SWOTIcon) ||
+      elementName.startsWith(SWOT_TEXT) ||
+      elementName.startsWith(SWOT_BOX) 
     ) {
       return true;
     }
