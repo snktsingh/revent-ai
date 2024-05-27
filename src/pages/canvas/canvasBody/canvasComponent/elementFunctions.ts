@@ -36,6 +36,7 @@ import {
 } from '@/constants/elementNames';
 import { useSWOTElement } from '../elements/swotElement';
 import { useTableOfContents } from '../elements/tableofContents';
+import { useClientListElement } from '../elements/clientListElement';
 
 export const useElementFunctions = (canvas: fabric.Canvas | null) => {
   const dispatch = useAppDispatch();
@@ -81,6 +82,7 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
   const { BulletText } = useBulletOrNumberedText();
   const { addNewSWOTElement } = useSWOTElement();
   const { addTableOfContents } = useTableOfContents();
+  const { addClientListElement } = useClientListElement();
 
   // elementData[1].onClick = () => {
   //   canvas?.add(title);
@@ -392,7 +394,7 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
             } else if (!isSubtitleAvailable) {
               canvas?.add(subtitle);
             }
-            
+            addClientListElement(canvas, 27, 100);
           }
         };
         break;

@@ -1,11 +1,13 @@
 import { fabric } from 'fabric';
 import { useTextEvents } from '../textEvents';
 import { useListElement } from '../../elements/listElement';
-import { LIST_MAIN, QUOTE_IMG } from '@/constants/elementNames';
+import { CLIENT_LIST_MAIN, LIST_MAIN, QUOTE_IMG } from '@/constants/elementNames';
 import { useQuoteElement } from '../../elements/quoteElement';
+import { useClientListElement } from '../../elements/clientListElement';
 export function useCanvasClickEvent() {
   const { textEnteringEvent } = useTextEvents();
   const { addImage } = useListElement();
+  const { addClientImage } = useClientListElement();
   const { addQuoteImage } = useQuoteElement();
 
   function CanvasClick(
@@ -30,6 +32,11 @@ export function useCanvasClickEvent() {
         addImage(canvas, object);
         canvas.requestRenderAll();
       }
+      if (object?.name?.startsWith(CLIENT_LIST_MAIN)) {
+        addClientImage(canvas, object);
+        canvas.requestRenderAll();
+      }
+      
       if (object?.name === QUOTE_IMG) {
         addQuoteImage(canvas, object);
         canvas.requestRenderAll();

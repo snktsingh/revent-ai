@@ -8,6 +8,7 @@ interface ElementsIds {
   cycleId: number;
   listID: number;
   swotID: number;
+  clientListId: number;
 }
 
 const initialState: ElementsIds = {
@@ -18,6 +19,7 @@ const initialState: ElementsIds = {
   cycleId: 1,
   listID: 1,
   swotID: 1,
+  clientListId: 1,
 };
 
 export const elementsIdsReducer = createSlice({
@@ -45,6 +47,9 @@ export const elementsIdsReducer = createSlice({
     updateSwotId: state => {
       state.swotID += 1;
     },
+    updateClientListId: state => {
+      state.clientListId += 1;
+    },
   },
 });
 
@@ -55,6 +60,7 @@ export const {
   updateTimelineId,
   updatePyramidId,
   updateListId,
-  updateSwotId
+  updateSwotId,
+  updateClientListId
 } = elementsIdsReducer.actions;
 export default elementsIdsReducer.reducer;

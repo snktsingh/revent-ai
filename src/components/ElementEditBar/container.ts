@@ -1,7 +1,9 @@
+import { addClientListImages } from '@/data/data';
 import React, { useState } from 'react';
 import { useDelAndCopy } from '@/pages/canvas/canvasBody/elements/deleteAndCopyElements';
 import {
   BULLET_POINTS,
+  CLIENT_LIST_MAIN,
   CYCLE,
   CYCLE_TEXT,
   FUNNEL,
@@ -36,7 +38,8 @@ import {
 } from '@/pages/canvas/canvasBody/elements/elementExports';
 import { updateCheckboxForAI } from '@/redux/reducers/apiData';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { updateListId } from '@/redux/reducers/fabricElements';
+import { updateClientListId, updateListId } from '@/redux/reducers/fabricElements';
+import { useClientListElement } from '@/pages/canvas/canvasBody/elements/clientListElement';
 
 export const useEditBar = () => {
   const [plusIcon, setPlusIcon] = useState<boolean>(false);
@@ -51,6 +54,7 @@ const dispatch = useAppDispatch();
   const { addCycleSteps } = useCycleElement();
   const { addTimelineSteps } = useTimelineElement();
   const { addListElement, addImage } = useListElement();
+  const { addClientListElement, addClientImage } = useClientListElement();
   const { addQuoteImage } = useQuoteElement();
   const { imageUploader } = useImageElement();
   const { addTableRow, addTableColumn, removeTableColumn, removeTableRow } =
@@ -76,6 +80,7 @@ const dispatch = useAppDispatch();
     let pLevels = countObjects(canvas, `${PYRAMID_TEXT}_${currentElementId}`);
     let fLevels = countObjects(canvas, `${FUNNEL_TEXT}_${currentElementId}`);
     let listCount = countObjects(canvas, LIST_MAIN);
+    let clientListCount = countObjects(canvas, CLIENT_LIST_MAIN);
 
     let showPlusIcon = false;
     let showTableIcons = false;
@@ -90,7 +95,8 @@ const dispatch = useAppDispatch();
         (objectName[0] === TIMELINE && timelineLevels < 8) ||
         (objectName[0] === FUNNEL && fLevels < 6) ||
         (objectName[0] === CYCLE && cycleSteps < 6) ||
-        objectName[0] === LIST_MAIN && listCount < 8
+        objectName[0] === LIST_MAIN && listCount < 8 ||
+        objectName[0] === CLIENT_LIST_MAIN && clientListCount < 11
       ) {
         showPlusIcon = true;
         showDelForLevelIcon = false;
@@ -102,7 +108,9 @@ const dispatch = useAppDispatch();
       (objectName && objectName[0] === PROCESS && processStepsTotal >= 6) ||
       (objectName && objectName[0] === TIMELINE && timelineLevels >= 8) ||
       (objectName && objectName[0] === FUNNEL && fLevels >= 6) ||
-      (objectName && objectName[0] === CYCLE && cycleSteps >= 6)
+      (objectName && objectName[0] === CYCLE && cycleSteps >= 6) ||
+      (objectName && objectName[0] === LIST_MAIN && listCount >= 8) ||
+      (objectName && objectName[0] === CLIENT_LIST_MAIN && clientListCount >= 10)
     ) {
       showPlusIcon = false;
       showDelForLevelIcon = false;
@@ -119,7 +127,7 @@ const dispatch = useAppDispatch();
       showDelForLevelIcon = false;
     }
 
-    if(objectName && (selectedObject?.name?.startsWith(QUOTE_IMG) || objectName[0] === LIST_MAIN || selectedObject?.name?.startsWith(IMAGE))){
+    if(objectName && (selectedObject?.name?.startsWith(QUOTE_IMG) || objectName[0] === (LIST_MAIN) || selectedObject?.name?.startsWith(IMAGE) || objectName[0] === (CLIENT_LIST_MAIN)) ){
       showChangeImgIcon = true;
       showDelForLevelIcon = false;
     }
@@ -184,6 +192,10 @@ const dispatch = useAppDispatch();
           addList(canvas,lastListElement);
           dispatch(updateListId());
           break;
+        case CLIENT_LIST_MAIN:
+          addClientList(canvas,lastListElement);
+          dispatch(updateClientListId());
+          break;
         default:
           break;
       }
@@ -210,6 +222,8 @@ const dispatch = useAppDispatch();
       addListElement(canvas, 0, 0); 
     }
   }
+
+ 
   function addListImage(canvas: fabric.Canvas) {
     let selectedElement = canvas.getActiveObject();
     addImage(canvas, selectedElement!);
@@ -236,6 +250,38 @@ const dispatch = useAppDispatch();
       dispatch(updateCheckboxForAI(e.target.checked))
   };
 
+  function addClientList(canvas: fabric.Canvas, lastElement : fabric.Object | undefined) {
+    if (lastElement && lastElement.left && lastElement.top) {
+      if(lastElement.left > 530 && lastElement.top < 240){
+        const newX = 28;
+        const newY = 275;
+  
+        addClientListElement(canvas, newX, newY!);
+        return;
+      }else if(lastElement.left > 530 && lastElement.top > 200){
+          console.log('maximum limit added')
+      }else{
+        const newX = lastElement.left + lastElement.getScaledWidth() + 50;
+        const newY = lastElement.top;
+  
+        addClientListElement(canvas, newX, newY);
+      }
+    } else {
+      addClientListElement(canvas, 0, 0); 
+    }
+  }
+
+  function addClientListImage(canvas: fabric.Canvas) {
+    let selectedElement = canvas.getActiveObject();
+    addClientImage(canvas, selectedElement!);
+    selectedElement &&
+      (selectedElement as fabric.Group).remove(
+        (selectedElement as fabric.Group)._objects[1]
+      );
+    (selectedElement as fabric.Group).setCoords();
+    canvas.renderAll();
+  };
+
   const handleChangeImageElement = (canvas : fabric.Canvas) => {
      const activeElement = canvas.getActiveObject();
      if(activeElement && activeElement.type === 'image') {
@@ -256,6 +302,7 @@ const dispatch = useAppDispatch();
     addListImage,
     handleQuoteImage,
     levelIcons,
-    handleChangeImageElement
+    handleChangeImageElement,
+    addClientListImage
   };
 };

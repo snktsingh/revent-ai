@@ -75,6 +75,13 @@ const SWOT_ICON = 'SWOTIcon';
 export const TABLE_OF_CONTENTS_HEADING = 'TableOfContentsHeading';
 export const TABLE_OF_CONTENTS_TEXT = 'TableOfContentsText';
 
+//Client List
+//List
+export const CLIENT_LIST_MAIN = 'ClientListMain';
+export const CLIENT_LIST_CONTAINER = 'ClientListContainer';
+export const CLIENT_LIST_TEXT = 'ClientListText';
+export const CLIENT_LIST_IMG = 'ClientListImg';
+
 export {
     FUNNEL,
     FUNNEL_TEXT,
