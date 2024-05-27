@@ -18,6 +18,7 @@ import {
   SECTION_SLIDE_TITLE,
   SUBTITLE,
   SWOT_TEXT,
+  TABLE_OF_CONTENTS_TEXT,
   TIMELINE_HEADING,
   TIMELINE_TEXT,
   TITLE,
@@ -115,6 +116,14 @@ export function useTextEvents() {
         if (!textBox.isEditing) {
           textBox.enterEditing();
         }
+      } else if (
+        textBox.text === 'Click to add Sections' &&
+        textBox.name?.startsWith(TABLE_OF_CONTENTS_TEXT)
+      ) {
+        textBox.set({ text: '' });
+        if (!textBox.isEditing) {
+          textBox.enterEditing();
+        }
       }
     }
     canvas.renderAll();
@@ -170,6 +179,14 @@ export function useTextEvents() {
       }else if (
         textBox.text === 'Add Text' &&
         textBox.name?.startsWith(SWOT_TEXT)
+      ) {
+        textBox.set({ text: '' });
+        if (!textBox.isEditing) {
+          textBox.enterEditing();
+        }
+      }else if (
+        textBox.text === 'Click to add Sections' &&
+        textBox.name?.startsWith(TABLE_OF_CONTENTS_TEXT)
       ) {
         textBox.set({ text: '' });
         if (!textBox.isEditing) {
@@ -304,6 +321,13 @@ export function useTextEvents() {
     ) {
       if (textBox.text == '') {
         textBox.text = 'Add Text';
+      }
+      canvas.renderAll();
+    }else if (
+      textBox.name?.startsWith(TABLE_OF_CONTENTS_TEXT)
+    ) {
+      if (textBox.text == '') {
+        textBox.text = 'Click to add Sections';
       }
       canvas.renderAll();
     }

@@ -71,6 +71,10 @@ const SWOT_TEXT = 'SWOTText';
 const SWOT_BOX = 'SWOTBox';
 const SWOT_ICON = 'SWOTIcon';
 
+//Table of Contents
+export const TABLE_OF_CONTENTS_HEADING = 'TableOfContentsHeading';
+export const TABLE_OF_CONTENTS_TEXT = 'TableOfContentsText';
+
 export {
     FUNNEL,
     FUNNEL_TEXT,
