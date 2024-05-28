@@ -6,6 +6,8 @@ import {
   COVER_SLIDE_TITLE,
   CYCLE_TEXT,
   FUNNEL_TEXT,
+  HUB_AND_SPOKE_BOX_HEADING,
+  HUB_AND_SPOKE_BOX_TEXT,
   LIST_TEXT,
   PARAGRAPH,
   PROCESS_TEXT,
@@ -124,6 +126,16 @@ export function useTextEvents() {
         if (!textBox.isEditing) {
           textBox.enterEditing();
         }
+      } else if (
+        (textBox.text === 'Add Title' &&
+        textBox.name?.startsWith(HUB_AND_SPOKE_BOX_HEADING)) ||
+        (textBox.text === 'Add Text' &&
+        textBox.name?.startsWith(HUB_AND_SPOKE_BOX_TEXT))
+      ) {
+        textBox.set({ text: '' });
+        if (!textBox.isEditing) {
+          textBox.enterEditing();
+        }
       }
     }
     canvas.renderAll();
@@ -187,6 +199,16 @@ export function useTextEvents() {
       }else if (
         textBox.text === 'Click to add Sections' &&
         textBox.name?.startsWith(TABLE_OF_CONTENTS_TEXT)
+      ) {
+        textBox.set({ text: '' });
+        if (!textBox.isEditing) {
+          textBox.enterEditing();
+        }
+      }else if (
+        (textBox.text === 'Add Title' &&
+        textBox.name?.startsWith(HUB_AND_SPOKE_BOX_HEADING)) ||
+        (textBox.text === 'Add Text' &&
+        textBox.name?.startsWith(HUB_AND_SPOKE_BOX_TEXT))
       ) {
         textBox.set({ text: '' });
         if (!textBox.isEditing) {
@@ -328,6 +350,20 @@ export function useTextEvents() {
     ) {
       if (textBox.text == '') {
         textBox.text = 'Click to add Sections';
+      }
+      canvas.renderAll();
+    } else if (
+      textBox.name?.startsWith(HUB_AND_SPOKE_BOX_HEADING)
+    ) {
+      if (textBox.text == '') {
+        textBox.text = 'Add Title';
+      }
+      canvas.renderAll();
+    } else if (
+      textBox.name?.startsWith(HUB_AND_SPOKE_BOX_TEXT)
+    ) {
+      if (textBox.text == '') {
+        textBox.text = 'Add Text';
       }
       canvas.renderAll();
     }

@@ -10,6 +10,8 @@ import {
   FUNNEL_BASE,
   FUNNEL_LEVEL,
   FUNNEL_TEXT,
+  HUB_AND_SPOKE,
+  HUB_AND_SPOKE_BOX,
   IMAGE,
   LIST_IMG,
   LIST_MAIN,
@@ -40,6 +42,7 @@ import { updateCheckboxForAI } from '@/redux/reducers/apiData';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { updateClientListId, updateListId } from '@/redux/reducers/fabricElements';
 import { useClientListElement } from '@/pages/canvas/canvasBody/elements/clientListElement';
+import { useHubAndSpoke } from '@/pages/canvas/canvasBody/elements/hubAndSpoke';
 
 export const useEditBar = () => {
   const [plusIcon, setPlusIcon] = useState<boolean>(false);
@@ -57,6 +60,7 @@ const dispatch = useAppDispatch();
   const { addClientListElement, addClientImage } = useClientListElement();
   const { addQuoteImage } = useQuoteElement();
   const { imageUploader } = useImageElement();
+  const { addHubAndSpokeLevel } = useHubAndSpoke();
   const { addTableRow, addTableColumn, removeTableColumn, removeTableRow } =
     useTableElement();
   const { listID } = useAppSelector( state => state.elementsIds )
@@ -81,6 +85,7 @@ const dispatch = useAppDispatch();
     let fLevels = countObjects(canvas, `${FUNNEL_TEXT}_${currentElementId}`);
     let listCount = countObjects(canvas, LIST_MAIN);
     let clientListCount = countObjects(canvas, CLIENT_LIST_MAIN);
+    let hubAndSpokeCount = countObjects(canvas, HUB_AND_SPOKE_BOX);
 
     let showPlusIcon = false;
     let showTableIcons = false;
@@ -95,8 +100,9 @@ const dispatch = useAppDispatch();
         (objectName[0] === TIMELINE && timelineLevels < 8) ||
         (objectName[0] === FUNNEL && fLevels < 6) ||
         (objectName[0] === CYCLE && cycleSteps < 6) ||
-        objectName[0] === LIST_MAIN && listCount < 8 ||
-        objectName[0] === CLIENT_LIST_MAIN && clientListCount < 11
+        (objectName[0] === LIST_MAIN && listCount < 8 )||
+        (objectName[0] === CLIENT_LIST_MAIN && clientListCount < 11) ||
+        (objectName[0] === HUB_AND_SPOKE && hubAndSpokeCount < 9)
       ) {
         showPlusIcon = true;
         showDelForLevelIcon = false;
@@ -110,7 +116,8 @@ const dispatch = useAppDispatch();
       (objectName && objectName[0] === FUNNEL && fLevels >= 6) ||
       (objectName && objectName[0] === CYCLE && cycleSteps >= 6) ||
       (objectName && objectName[0] === LIST_MAIN && listCount >= 8) ||
-      (objectName && objectName[0] === CLIENT_LIST_MAIN && clientListCount >= 10)
+      (objectName && objectName[0] === CLIENT_LIST_MAIN && clientListCount >= 10) ||
+      (objectName && objectName[0] === HUB_AND_SPOKE && hubAndSpokeCount >=8)
     ) {
       showPlusIcon = false;
       showDelForLevelIcon = false;
@@ -157,7 +164,6 @@ const dispatch = useAppDispatch();
   const checkElementForAddLevel = (canvas: fabric.Canvas) => {
     const activeElement = canvas?.getActiveObject();
     const elName = activeElement?.name?.split('_');
-    console.log(elName);
 
     elName && addElement(canvas, elName[0]);
   };
@@ -196,6 +202,9 @@ const dispatch = useAppDispatch();
         case CLIENT_LIST_MAIN:
           addClientList(canvas,lastClientListElement);
           dispatch(updateClientListId());
+          break;
+        case HUB_AND_SPOKE:
+          addHubAndSpokeLevel(canvas);
           break;
         default:
           break;

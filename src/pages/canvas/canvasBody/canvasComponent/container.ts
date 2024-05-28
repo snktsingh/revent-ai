@@ -3,6 +3,10 @@ import {
   CYCLE_CIRCLE,
   CYCLE_TEXT,
   FUNNEL_TEXT,
+  HUB_AND_SPOKE_BOX,
+  HUB_AND_SPOKE_BOX_HEADING,
+  HUB_AND_SPOKE_BOX_TEXT,
+  HUB_AND_SPOKE_CIRCLE,
   LIST_TEXT,
   PROCESS_ARROW,
   PROCESS_BOX,
@@ -212,7 +216,11 @@ export const useCanvasComponent = () => {
       elementName.startsWith(LIST_TEXT) ||
       elementName.startsWith(SWOTIcon) ||
       elementName.startsWith(SWOT_TEXT) ||
-      elementName.startsWith(SWOT_BOX) 
+      elementName.startsWith(SWOT_BOX)  ||
+      elementName.startsWith(HUB_AND_SPOKE_BOX) ||
+      elementName.startsWith(HUB_AND_SPOKE_BOX_HEADING) ||
+      elementName.startsWith(HUB_AND_SPOKE_BOX_TEXT) ||
+      elementName.startsWith(HUB_AND_SPOKE_CIRCLE) 
     ) {
       return true;
     }
