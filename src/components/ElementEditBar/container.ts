@@ -165,6 +165,7 @@ const dispatch = useAppDispatch();
     const activeElement = canvas?.getActiveObject();
     if (!activeElement) return false;
     const lastListElement = canvas?.getObjects().reverse().find(obj => obj.name?.startsWith(LIST_MAIN));
+    const lastClientListElement = canvas?.getObjects().reverse().find(obj => obj.name?.startsWith(CLIENT_LIST_MAIN));
     if (activeElement.name?.startsWith(type) && canvas) {
       switch (type) {
         case 'PYRAMID':
@@ -193,7 +194,7 @@ const dispatch = useAppDispatch();
           dispatch(updateListId());
           break;
         case CLIENT_LIST_MAIN:
-          addClientList(canvas,lastListElement);
+          addClientList(canvas,lastClientListElement);
           dispatch(updateClientListId());
           break;
         default:
@@ -249,19 +250,19 @@ const dispatch = useAppDispatch();
   const handleAICheckbox = (e : React.ChangeEvent<HTMLInputElement>) => {
       dispatch(updateCheckboxForAI(e.target.checked))
   };
-
+  //client list 
   function addClientList(canvas: fabric.Canvas, lastElement : fabric.Object | undefined) {
     if (lastElement && lastElement.left && lastElement.top) {
-      if(lastElement.left > 530 && lastElement.top < 240){
+      if(lastElement.left > 640 && lastElement.top < 240){
         const newX = 28;
-        const newY = 275;
+        const newY = 250;
   
         addClientListElement(canvas, newX, newY!);
         return;
-      }else if(lastElement.left > 530 && lastElement.top > 200){
+      }else if(lastElement.left > 640 && lastElement.top > 200){
           console.log('maximum limit added')
       }else{
-        const newX = lastElement.left + lastElement.getScaledWidth() + 50;
+        const newX = lastElement.left + lastElement.getScaledWidth() + 15;
         const newY = lastElement.top;
   
         addClientListElement(canvas, newX, newY);
