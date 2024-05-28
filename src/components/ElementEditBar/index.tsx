@@ -34,7 +34,8 @@ const ElementEditBar: React.FC<ElementEditBarProps> = ({ left, top, canvas }) =>
         addListImage,
         handleQuoteImage,
         levelIcons,
-        handleChangeImageElement
+        handleChangeImageElement,
+        addClientListImage
     } = useEditBar();
 
     const handleDelete = () => {

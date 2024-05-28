@@ -65,6 +65,33 @@ const LIST_IMG = 'ListImg';
 
 const IMAGE = 'IMAGE';
 
+//SWOT
+const SWOT = 'SWOT';
+const SWOT_TEXT = 'SWOTText';
+const SWOT_BOX = 'SWOTBox';
+const SWOT_ICON = 'SWOTIcon';
+
+//Table of Contents
+export const TABLE_OF_CONTENTS_HEADING = 'TableOfContentsHeading';
+export const TABLE_OF_CONTENTS_TEXT = 'TableOfContentsText';
+
+//Client List
+//List
+export const CLIENT_LIST_MAIN = 'ClientListMain';
+export const CLIENT_LIST_CONTAINER = 'ClientListContainer';
+export const CLIENT_LIST_TEXT = 'ClientListText';
+export const CLIENT_LIST_IMG = 'ClientListImg';
+
+//Hub and Spoke
+export const HUB_AND_SPOKE = 'MainHubAndSpoke';
+export const HUB_AND_SPOKE_MAIN = 'HubAndSpokeMain';
+export const HUB_AND_SPOKE_MAIN_TEXT = 'HubAndSpokeMainText';
+export const HUB_AND_SPOKE_BOX = 'BoxHubAndSpoke';
+export const HUB_AND_SPOKE_BOX_HEADING = 'HubAndSpokeBoxHeading';
+export const HUB_AND_SPOKE_BOX_TEXT = 'HubAndSpokeBoxText';
+export const HUB_AND_SPOKE_CIRCLE = 'HubAndSpokeCircle';
+
+
 export {
     FUNNEL,
     FUNNEL_TEXT,
@@ -110,5 +137,9 @@ export {
     LIST_TEXT,
     LIST_CONTAINER,
     LIST_IMG,
-    IMAGE
+    IMAGE,
+    SWOT,
+    SWOT_BOX,
+    SWOT_ICON,
+    SWOT_TEXT
 };

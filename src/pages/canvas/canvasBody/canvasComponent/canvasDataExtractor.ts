@@ -22,8 +22,11 @@ import {
   SECTION_SLIDE_SUBTITLE,
   SECTION_SLIDE_TITLE,
   SUBTITLE,
+  SWOT,
+  SWOT_TEXT,
   TABLE,
   TABLE_HEADER,
+  TABLE_OF_CONTENTS_TEXT,
   TABLE_TEXT,
   TIMELINE,
   TIMELINE_HEADING,
@@ -116,6 +119,10 @@ const useCanvasData = () => {
 
           case canvasObject.name.startsWith(PROCESS_TEXT):
             elementType = 'Process';
+            break;
+
+          case canvasObject.name.startsWith(SWOT_TEXT):
+            elementType = 'Swot';
             break;
         }
 
@@ -220,7 +227,7 @@ const useCanvasData = () => {
           const Image = getOrCreateElement('Images', '1', outputFormat);
         } else if (canvasObject.name.startsWith(QUOTE_TEXT)) {
           const Quote = getOrCreateElement('Quote', '1', outputFormat);
-          
+
           let newText = canvasObject.text.trim();
 
           if (
@@ -237,6 +244,14 @@ const useCanvasData = () => {
           if (Quote.data && Quote.data[0]) {
             Quote.data[0].label = canvasObject.text;
           }
+        } else if (canvasObject?.name === TABLE_OF_CONTENTS_TEXT) {
+          const { mainBulletPoints, nestedBulletPoints } =
+            segregateBulletPoints(canvasObject.text);
+          const contentsData = mainBulletPoints.map((text, index) => {
+            return { heading: text, text };
+          });
+          const Bullets = getOrCreateElement('TableOfContent', '1', outputFormat);
+          Bullets.data = contentsData;
         }
       }
     });
@@ -289,12 +304,12 @@ const useCanvasData = () => {
     });
 
     if (outputFormat && outputFormat.elements.length > 0) {
-      if(titleText && subTitleText){
+      if (titleText && subTitleText) {
         outputFormat['title'] = titleText;
         outputFormat['subTitle'] = subTitleText;
-      } else if(titleText){
+      } else if (titleText) {
         outputFormat['title'] = titleText;
-      } else if( subTitleText){
+      } else if (subTitleText) {
         outputFormat['subTitle'] = subTitleText;
       }
     } else {
@@ -441,6 +456,8 @@ const useCanvasData = () => {
           QUOTE,
           BULLET_POINTS,
           PARAGRAPH,
+          SWOT,
+          
         ].some(elName => obj.name.startsWith(elName));
       }
     });
@@ -467,7 +484,12 @@ const useCanvasData = () => {
         'Process',
         'Timeline',
         'Funnel',
-        'Pyramid'
+        'Pyramid',
+        'SWOT Analysis',
+        'Table of Contents',
+        'Hubs and Spoke',
+        'Statistics',
+        'Client List'
       );
     } else if (isTitleAdded) {
       enabledEl.push(
@@ -482,7 +504,12 @@ const useCanvasData = () => {
         'Timeline',
         'Funnel',
         'Pyramid',
-        'Subtitle'
+        'Subtitle',
+        'SWOT Analysis',
+        'Table of Contents',
+        'Hubs and Spoke',
+        'Statistics',
+        'Client List'
       );
     } else if (isSubtitleAdded) {
       enabledEl.push(
@@ -497,7 +524,12 @@ const useCanvasData = () => {
         'Timeline',
         'Funnel',
         'Pyramid',
-        'Title'
+        'Title',
+        'SWOT Analysis',
+        'Table of Contents',
+        'Hubs and Spoke',
+        'Statistics',
+        'Client List'
       );
     } else {
       if (!isTitleAdded) {
@@ -521,7 +553,11 @@ const useCanvasData = () => {
         'Cover Slide',
         'Section Slide',
         'Conclusion Slide',
-        'SWOT Analysis'
+        'SWOT Analysis',
+        'Table of Contents',
+        'Hubs and Spoke',
+        'Statistics',
+        'Client List'
       );
     }
 

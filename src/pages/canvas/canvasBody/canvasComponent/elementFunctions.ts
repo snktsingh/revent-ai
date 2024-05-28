@@ -35,6 +35,9 @@ import {
   TITLE,
 } from '@/constants/elementNames';
 import { useSWOTElement } from '../elements/swotElement';
+import { useTableOfContents } from '../elements/tableofContents';
+import { useClientListElement } from '../elements/clientListElement';
+import { useHubAndSpoke } from '../elements/hubAndSpoke';
 
 export const useElementFunctions = (canvas: fabric.Canvas | null) => {
   const dispatch = useAppDispatch();
@@ -79,6 +82,9 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
   const { addQuotes } = useQuoteElement();
   const { BulletText } = useBulletOrNumberedText();
   const { addNewSWOTElement } = useSWOTElement();
+  const { addTableOfContents } = useTableOfContents();
+  const { addClientListElement } = useClientListElement();
+  const { addNewHubAndSokeElement  } = useHubAndSpoke();
 
   // elementData[1].onClick = () => {
   //   canvas?.add(title);
@@ -330,7 +336,68 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
       case 'SWOT Analysis':
         element.onClick = () => {
           if(canvas){
+            if (!isTitleAvailable && !isSubtitleAvailable) {
+              canvas?.add(title);
+              canvas?.add(subtitle);
+            } else if (!isTitleAvailable) {
+              canvas?.add(title);
+            } else if (!isSubtitleAvailable) {
+              canvas?.add(subtitle);
+            }
             addNewSWOTElement(canvas);
+          }
+        };
+        break;
+      case 'Table of Contents':
+        element.onClick = () => {
+          if(canvas){
+            addTableOfContents(canvas);
+          }
+        };
+        break;
+      case 'Hubs and Spoke':
+        element.onClick = () => {
+          if(canvas){
+            if (!isTitleAvailable && !isSubtitleAvailable) {
+              canvas?.add(title);
+              canvas?.add(subtitle);
+            } else if (!isTitleAvailable) {
+              canvas?.add(title);
+            } else if (!isSubtitleAvailable) {
+              canvas?.add(subtitle);
+            }
+            addNewHubAndSokeElement(canvas);
+          }
+        };
+        break;
+      case 'Statistics':
+        element.onClick = () => {
+          if(canvas){
+            if (!isTitleAvailable && !isSubtitleAvailable) {
+              canvas?.add(title);
+              canvas?.add(subtitle);
+            } else if (!isTitleAvailable) {
+              canvas?.add(title);
+            } else if (!isSubtitleAvailable) {
+              canvas?.add(subtitle);
+            }
+            
+          }
+        };
+        break;
+      case 'Client List':
+        element.onClick = () => {
+          if(canvas){
+            if (!isTitleAvailable && !isSubtitleAvailable) {
+              canvas?.add(title);
+              canvas?.add(subtitle);
+            } else if (!isTitleAvailable) {
+              canvas?.add(title);
+            } else if (!isSubtitleAvailable) {
+              canvas?.add(subtitle);
+            }
+            addClientListElement(canvas, 25, 100);
+            addClientListElement(canvas, 180, 100);
           }
         };
         break;
