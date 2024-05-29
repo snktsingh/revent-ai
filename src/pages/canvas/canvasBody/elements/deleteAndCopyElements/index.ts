@@ -7,6 +7,10 @@ import {
   FUNNEL_BASE,
   FUNNEL_LEVEL,
   FUNNEL_TEXT,
+  HUB_AND_SPOKE,
+  HUB_AND_SPOKE_BOX,
+  HUB_AND_SPOKE_BOX_HEADING,
+  HUB_AND_SPOKE_BOX_TEXT,
   LIST_IMG,
   LIST_MAIN,
   LIST_TEXT,
@@ -166,6 +170,9 @@ export function useDelAndCopy() {
           break;
         case `${SWOT}_${currentElID}`:
           objectsToDelete.push(`${SWOT_BOX}_${currentElID}`, `${SWOT_TEXT}_${currentElID}`, `${SWOTIcon}_${currentElID}`);
+          break;
+        case `${HUB_AND_SPOKE}_${currentElID}`:
+          objectsToDelete.push(`${HUB_AND_SPOKE_BOX}_${currentElID}`, `${HUB_AND_SPOKE_BOX_HEADING}_${currentElID}`, `${HUB_AND_SPOKE_BOX_TEXT}_${currentElID}`);
           break;
         default:
           break;
