@@ -23,6 +23,8 @@ import {
   PYRAMID_TEXT,
   QUOTE,
   QUOTE_IMG,
+  STATISTICS,
+  STATISTICS_BOX,
   TABLE,
   TIMELINE,
   TIMELINE_TEXT,
@@ -43,6 +45,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { updateClientListId, updateListId } from '@/redux/reducers/fabricElements';
 import { useClientListElement } from '@/pages/canvas/canvasBody/elements/clientListElement';
 import { useHubAndSpoke } from '@/pages/canvas/canvasBody/elements/hubAndSpoke';
+import { useStatisticsElement } from '@/pages/canvas/canvasBody/elements/statisticElement';
 
 export const useEditBar = () => {
   const [plusIcon, setPlusIcon] = useState<boolean>(false);
@@ -61,6 +64,7 @@ const dispatch = useAppDispatch();
   const { addQuoteImage } = useQuoteElement();
   const { imageUploader } = useImageElement();
   const { addHubAndSpokeLevel } = useHubAndSpoke();
+  const { addStatisticsLevels } = useStatisticsElement();
   const { addTableRow, addTableColumn, removeTableColumn, removeTableRow } =
     useTableElement();
   const { listID } = useAppSelector( state => state.elementsIds )
@@ -86,6 +90,9 @@ const dispatch = useAppDispatch();
     let listCount = countObjects(canvas, LIST_MAIN);
     let clientListCount = countObjects(canvas, CLIENT_LIST_MAIN);
     let hubAndSpokeCount = countObjects(canvas, HUB_AND_SPOKE_BOX);
+    let statisticElCount = countObjects(canvas, STATISTICS_BOX);
+
+    console.log(statisticElCount)
 
     let showPlusIcon = false;
     let showTableIcons = false;
@@ -102,7 +109,8 @@ const dispatch = useAppDispatch();
         (objectName[0] === CYCLE && cycleSteps < 6) ||
         (objectName[0] === LIST_MAIN && listCount < 8 )||
         (objectName[0] === CLIENT_LIST_MAIN && clientListCount < 11) ||
-        (objectName[0] === HUB_AND_SPOKE && hubAndSpokeCount < 9)
+        (objectName[0] === HUB_AND_SPOKE && hubAndSpokeCount < 9) ||
+        (objectName[0] === STATISTICS && statisticElCount < 7) 
       ) {
         showPlusIcon = true;
         showDelForLevelIcon = false;
@@ -117,7 +125,8 @@ const dispatch = useAppDispatch();
       (objectName && objectName[0] === CYCLE && cycleSteps >= 6) ||
       (objectName && objectName[0] === LIST_MAIN && listCount >= 8) ||
       (objectName && objectName[0] === CLIENT_LIST_MAIN && clientListCount >= 10) ||
-      (objectName && objectName[0] === HUB_AND_SPOKE && hubAndSpokeCount >=8)
+      (objectName && objectName[0] === HUB_AND_SPOKE && hubAndSpokeCount >=8) ||
+      (objectName && objectName[0] === STATISTICS && statisticElCount >= 6)
     ) {
       showPlusIcon = false;
       showDelForLevelIcon = false;
@@ -205,6 +214,8 @@ const dispatch = useAppDispatch();
           break;
         case HUB_AND_SPOKE:
           addHubAndSpokeLevel(canvas);
+        case STATISTICS:
+          addStatisticsLevels(canvas);
           break;
         default:
           break;

@@ -27,6 +27,10 @@ import {
   QUOTE_AUTHOR,
   QUOTE_IMG,
   QUOTE_TEXT,
+  STATISTICS,
+  STATISTICS_BOX,
+  STATISTICS_TEXT,
+  STATISTICS_TITLE_TEXT,
   SWOT,
   SWOT_BOX,
   SWOT_TEXT,
@@ -343,6 +347,35 @@ export function useObjectMovingEvent() {
             obj.name?.startsWith(HUB_AND_SPOKE_BOX_HEADING) ||
             obj.name?.startsWith(HUB_AND_SPOKE_BOX_TEXT) ||
             obj.name?.startsWith(HUB_AND_SPOKE_CIRCLE) 
+          ) {
+            obj
+              .set({
+                left: obj.left! + deltaX,
+                top: obj.top! + deltaY,
+              })
+              .setCoords();
+          }
+        });
+
+        movedObject
+          .set({
+            lastLeft: movedObject.left,
+            lastTop: movedObject.top,
+          })
+          .setCoords();
+      }
+      else if (objectName[0] === STATISTICS) {
+        const lastLeft = movedObject.get('lastLeft') || movedObject.left;
+        const lastTop = movedObject.get('lastTop') || movedObject.top;
+
+        const deltaX = movedObject.left! - lastLeft!;
+        const deltaY = movedObject.top! - lastTop!;
+
+        canvas.forEachObject(function (obj) {
+          if (
+            obj.name?.startsWith(STATISTICS_BOX) ||
+            obj.name?.startsWith(STATISTICS_TEXT) ||
+            obj.name?.startsWith(STATISTICS_TITLE_TEXT) 
           ) {
             obj
               .set({

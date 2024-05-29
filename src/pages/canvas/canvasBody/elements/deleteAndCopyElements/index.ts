@@ -27,6 +27,10 @@ import {
   QUOTE_AUTHOR,
   QUOTE_IMG,
   QUOTE_TEXT,
+  STATISTICS,
+  STATISTICS_BOX,
+  STATISTICS_TEXT,
+  STATISTICS_TITLE_TEXT,
   SWOT,
   SWOT_BOX,
   SWOT_ICON,
@@ -171,10 +175,27 @@ export function useDelAndCopy() {
           objectsToDelete.push(`${PYRAMID_TEXT}_${currentElID}_${level}`);
           break;
         case `${SWOT}_${currentElID}`:
-          objectsToDelete.push(`${SWOT_BOX}_${currentElID}`, `${SWOT_TEXT}_${currentElID}`, `${SWOTIcon}_${currentElID}`);
+          objectsToDelete.push(
+            `${SWOT_BOX}_${currentElID}`,
+            `${SWOT_TEXT}_${currentElID}`,
+            `${SWOTIcon}_${currentElID}`
+          );
           break;
         case `${HUB_AND_SPOKE}_${currentElID}`:
-          objectsToDelete.push(`${HUB_AND_SPOKE_BOX}_${currentElID}`, `${HUB_AND_SPOKE_BOX_HEADING}_${currentElID}`, `${HUB_AND_SPOKE_BOX_TEXT}_${currentElID}`, `${HUB_AND_SPOKE_CIRCLE}_${currentElID}`, `${HUB_AND_SPOKE_MAIN_TEXT}_${currentElID}`);
+          objectsToDelete.push(
+            `${HUB_AND_SPOKE_BOX}_${currentElID}`,
+            `${HUB_AND_SPOKE_BOX_HEADING}_${currentElID}`,
+            `${HUB_AND_SPOKE_BOX_TEXT}_${currentElID}`,
+            `${HUB_AND_SPOKE_CIRCLE}_${currentElID}`,
+            `${HUB_AND_SPOKE_MAIN_TEXT}_${currentElID}`
+          );
+          break;
+        case `${STATISTICS}_${currentElID}`:
+          objectsToDelete.push(
+            `${STATISTICS_BOX}_${currentElID}`,
+            `${STATISTICS_TITLE_TEXT}_${currentElID}`,
+            `${STATISTICS_TEXT}_${currentElID}`
+          );
           break;
         default:
           break;
