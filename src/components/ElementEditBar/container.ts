@@ -297,7 +297,7 @@ const dispatch = useAppDispatch();
      if(activeElement && activeElement.type === 'image') {
         imageUploader(canvas, activeElement);
      }
-  }
+  };
 
   return {
     adjustControlsVisibility,

@@ -8,6 +8,9 @@ import {
   CYCLE_TEXT,
   FUNNEL,
   FUNNEL_TEXT,
+  HUB_AND_SPOKE_BOX_HEADING,
+  HUB_AND_SPOKE_BOX_TEXT,
+  HUB_AND_SPOKE_MAIN_TEXT,
   IMAGE,
   LIST_MAIN,
   LIST_TEXT,
@@ -35,6 +38,7 @@ import {
 } from '@/constants/elementNames';
 import {
   BulletPointsFunctionType,
+  HunNSpokeDataType,
   TimelineDataType,
 } from '@/interface/elDataTypes';
 import {
@@ -94,8 +98,10 @@ const useCanvasData = () => {
       // presentationName: 'Presentation-1',
     };
     let timelineData: TimelineDataType[] = [];
+    let hubAndSpokeData: HunNSpokeDataType[] = [];
     let titleText: string = '';
     let subTitleText: string = '';
+    let hubAndSpokeMainText: string = '';
     canvasData.forEach(canvasObject => {
       if (
         (canvasObject.type === 'textbox' || canvasObject.type === 'image') &&
@@ -123,6 +129,9 @@ const useCanvasData = () => {
 
           case canvasObject.name.startsWith(SWOT_TEXT):
             elementType = 'Swot';
+            break;
+
+          default:
             break;
         }
 
@@ -250,8 +259,23 @@ const useCanvasData = () => {
           const contentsData = mainBulletPoints.map((text, index) => {
             return { heading: text, text };
           });
-          const Bullets = getOrCreateElement('TableOfContent', '1', outputFormat);
+          const Bullets = getOrCreateElement(
+            'TableOfContent',
+            '1',
+            outputFormat
+          );
           Bullets.data = contentsData;
+        } else if (
+          canvasObject.name.startsWith(HUB_AND_SPOKE_BOX_HEADING) ||
+          canvasObject.name.startsWith(HUB_AND_SPOKE_BOX_TEXT)
+        ) {
+          const [_, id] = canvasObject.name.split('_');
+          hubAndSpokeData.push({ content: canvasObject.text, id: id });
+        }
+        else if (
+          canvasObject.name.startsWith(HUB_AND_SPOKE_MAIN_TEXT)
+        ) {
+          hubAndSpokeMainText = canvasObject.text;
         }
       }
     });
@@ -271,7 +295,7 @@ const useCanvasData = () => {
       outputFormat.subTitle = subTitleText;
       outputFormat.elements[0].subTitle = subTitleText;
     }
-
+    // arrange timeline data
     type OrganizedTimelineData = Record<string, DataRequestType[]>;
 
     const organizedTimelineData: OrganizedTimelineData = {};
@@ -301,6 +325,39 @@ const useCanvasData = () => {
       timelineElement.data = content;
       timelineElement.title = titleText;
       timelineElement.subTitle = subTitleText;
+    });
+
+    // arrange HUB and SPOKE data
+    type OrganizedHubAndSpokeData = Record<string, DataRequestType[]>;
+
+    const organizedHubAndSpokeData: OrganizedHubAndSpokeData = {};
+
+    hubAndSpokeData.forEach((item, index) => {
+      const id = item.id;
+      const hubArray =
+      organizedHubAndSpokeData[id] || (organizedHubAndSpokeData[id] = []);
+
+      if (index % 2 === 0) {
+        hubArray.push({
+          label: item.content,
+          text: '',
+        });
+      } else {
+        if (hubArray && hubArray.length) {
+          const lastTimeline = hubArray[hubArray.length - 1];
+          lastTimeline && (lastTimeline.text = item.content);
+        }
+      }
+    });
+
+    Object.entries(organizedHubAndSpokeData).forEach(([id, content]) => {
+      const hubAndSpokeElement = getOrCreateElement('Hub', id, outputFormat);
+      hubAndSpokeElement.heading = hubAndSpokeMainText;
+      hubAndSpokeElement.data = content;
+      hubAndSpokeElement.title = titleText;
+      hubAndSpokeElement.subTitle = subTitleText;
+      
+      // console.log({hubAndSpokeElement})
     });
 
     if (outputFormat && outputFormat.elements.length > 0) {
@@ -457,7 +514,6 @@ const useCanvasData = () => {
           BULLET_POINTS,
           PARAGRAPH,
           SWOT,
-          
         ].some(elName => obj.name.startsWith(elName));
       }
     });
