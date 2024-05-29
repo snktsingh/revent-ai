@@ -73,10 +73,8 @@ export const NotesInput = styled.textarea`
   overflow: auto; 
   border: none;
   font-size: 0.9rem;
-  /* box-sizing: border-box; */
   outline: none;
   font-family: ${customStyles.fonts.robotoSansSerif};
-  line-height: 1.5;
 `;
 
 // export const NotesInput = styled.input`
