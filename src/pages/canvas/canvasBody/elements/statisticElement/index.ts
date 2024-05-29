@@ -48,6 +48,7 @@ export const useStatisticsElement = () => {
       splitByGrapheme: true,
       fontWeight: 'bold',
       fontFamily: 'Red Hat Display, sans-serif',
+      textAlign :'center'
     });
     return textBox;
   };

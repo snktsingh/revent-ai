@@ -24,6 +24,8 @@ import {
   QUOTE_TEXT,
   SECTION_SLIDE_SUBTITLE,
   SECTION_SLIDE_TITLE,
+  STATISTICS_TEXT,
+  STATISTICS_TITLE_TEXT,
   SUBTITLE,
   SWOT,
   SWOT_TEXT,
@@ -39,6 +41,7 @@ import {
 import {
   BulletPointsFunctionType,
   HunNSpokeDataType,
+  StatisticsDataType,
   TimelineDataType,
 } from '@/interface/elDataTypes';
 import {
@@ -99,6 +102,7 @@ const useCanvasData = () => {
     };
     let timelineData: TimelineDataType[] = [];
     let hubAndSpokeData: HunNSpokeDataType[] = [];
+    let statisticsData: StatisticsDataType[] = [];
     let titleText: string = '';
     let subTitleText: string = '';
     let hubAndSpokeMainText: string = '';
@@ -276,6 +280,12 @@ const useCanvasData = () => {
           canvasObject.name.startsWith(HUB_AND_SPOKE_MAIN_TEXT)
         ) {
           hubAndSpokeMainText = canvasObject.text;
+        } else if (
+          canvasObject.name.startsWith(STATISTICS_TEXT) ||
+          canvasObject.name.startsWith(STATISTICS_TITLE_TEXT)
+        ) {
+          const [_, id] = canvasObject.name.split('_');
+          statisticsData.push({ content: canvasObject.text, id: id });
         }
       }
     });
@@ -358,6 +368,37 @@ const useCanvasData = () => {
       hubAndSpokeElement.subTitle = subTitleText;
       
       // console.log({hubAndSpokeElement})
+    });
+
+    // arrange STATISTICS data
+    type OrganizedStatisticsData = Record<string, DataRequestType[]>;
+
+    const organizedStatisticsData: OrganizedStatisticsData = {};
+
+    statisticsData.forEach((item, index) => {
+      const id = item.id;
+      const statsArray =
+      organizedStatisticsData[id] || (organizedStatisticsData[id] = []);
+
+      if (index % 2 === 0) {
+        statsArray.push({
+          label: item.content,
+          text: '',
+        });
+      } else {
+        if (statsArray && statsArray.length) {
+          const lastTimeline = statsArray[statsArray.length - 1];
+          lastTimeline && (lastTimeline.text = item.content);
+        }
+      }
+    });
+
+    Object.entries(organizedStatisticsData).forEach(([id, content]) => {
+      const statsElement = getOrCreateElement('Statistics', id, outputFormat);
+      statsElement.data = content;
+      statsElement.title = titleText;
+      statsElement.subTitle = subTitleText;
+
     });
 
     if (outputFormat && outputFormat.elements.length > 0) {
