@@ -83,13 +83,20 @@ export const CLIENT_LIST_TEXT = 'ClientListText';
 export const CLIENT_LIST_IMG = 'ClientListImg';
 
 //Hub and Spoke
-export const HUB_AND_SPOKE = 'MainHubAndSpoke';
+export const HUB_AND_SPOKE = 'HUBANDSPOKE';
 export const HUB_AND_SPOKE_MAIN = 'HubAndSpokeMain';
 export const HUB_AND_SPOKE_MAIN_TEXT = 'HubAndSpokeMainText';
 export const HUB_AND_SPOKE_BOX = 'BoxHubAndSpoke';
 export const HUB_AND_SPOKE_BOX_HEADING = 'HubAndSpokeBoxHeading';
 export const HUB_AND_SPOKE_BOX_TEXT = 'HubAndSpokeBoxText';
 export const HUB_AND_SPOKE_CIRCLE = 'HubAndSpokeCircle';
+
+//Statistics
+export const STATISTICS = 'STATISTICS';
+export const STATISTICS_BOX = 'StatisticsBox';
+export const STATISTICS_TITLE_TEXT = 'StatisticsTitleText';
+export const STATISTICS_TEXT = 'StatisticsText';
+
 
 
 export {

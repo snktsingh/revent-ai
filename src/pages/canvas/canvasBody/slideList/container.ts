@@ -25,6 +25,7 @@ const useSlideList = () => {
   const [searchParams,setSearchParams] = useSearchParams();
 
   const handleSlideCardClick = (canvas: CanvasItem) => {
+    console.log({canvas, canvasList, canvasJS})
     if(activeSlideID === canvas.id){
       return;
     }
