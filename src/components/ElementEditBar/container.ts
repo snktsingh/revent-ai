@@ -309,13 +309,6 @@ const dispatch = useAppDispatch();
      if(activeElement && activeElement.type === 'image') {
         imageUploader(canvas, activeElement);
      }
-  };
-
-  const handleChangeImageElement = (canvas : fabric.Canvas) => {
-     const activeElement = canvas.getActiveObject();
-     if(activeElement && activeElement.type === 'image') {
-        imageUploader(canvas, activeElement);
-     }
   }
 
   return {
