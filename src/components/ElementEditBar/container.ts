@@ -110,7 +110,7 @@ const dispatch = useAppDispatch();
         (objectName[0] === LIST_MAIN && listCount < 8 )||
         (objectName[0] === CLIENT_LIST_MAIN && clientListCount < 11) ||
         (objectName[0] === HUB_AND_SPOKE && hubAndSpokeCount < 9) ||
-        (objectName[0] === STATISTICS && statisticElCount < 7) 
+        (objectName[0] === STATISTICS && statisticElCount <= 9) 
       ) {
         showPlusIcon = true;
         showDelForLevelIcon = false;
@@ -126,7 +126,7 @@ const dispatch = useAppDispatch();
       (objectName && objectName[0] === LIST_MAIN && listCount >= 8) ||
       (objectName && objectName[0] === CLIENT_LIST_MAIN && clientListCount >= 10) ||
       (objectName && objectName[0] === HUB_AND_SPOKE && hubAndSpokeCount >=8) ||
-      (objectName && objectName[0] === STATISTICS && statisticElCount >= 6)
+      (objectName && objectName[0] === STATISTICS && statisticElCount > 9)
     ) {
       showPlusIcon = false;
       showDelForLevelIcon = false;

@@ -114,8 +114,8 @@ export const useCanvasComponent = () => {
 
   const updateCanvasDimensions = (canvas: fabric.Canvas) => {
     const aspectRatio = 16 / 9;
-    const canvasWidthPercentage = 58;
-    const canvasHeightPercentage = 58 / aspectRatio;
+    const canvasWidthPercentage = 60;
+    const canvasHeightPercentage = 60 / aspectRatio;
 
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerWidth;
