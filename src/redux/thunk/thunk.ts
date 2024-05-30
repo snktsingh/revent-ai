@@ -43,7 +43,7 @@ const initialState: ISlideRequests = {
 
 export const fetchSlideImg = createAsyncThunk(
   'slide/fetchimage-ppt',
-  async ({ req, canvasJSON, pptId }: any, { dispatch, getState }) => {
+  async ({ req, slideJSON, pptId, notes }: any, { dispatch, getState }) => {
     let isFormData = false;
     if (req instanceof FormData) {
       isFormData = true;
@@ -61,11 +61,11 @@ export const fetchSlideImg = createAsyncThunk(
 
     if (canvasList[currentSlide].variants.length === 0) {
       dispatch(
-        createSlideJSONData({ pptId, canvasJSON, slideId: res.data.slideId })
+        createSlideJSONData({ pptId, slideJSON, slideId: res.data.slideId, notes })
       );
     } else {
       dispatch(
-        updateSlideJSONData({ pptId, canvasJSON, slideId: res.data.slideId })
+        updateSlideJSONData({ pptId, slideJSON, slideId: res.data.slideId, notes })
       );
     }
 
@@ -124,22 +124,23 @@ export const fetchPptDetails = createAsyncThunk(
 // Create Slide JSON Data
 export const createSlideJSONData = createAsyncThunk(
   'slide/update-json',
-  async ({ pptId, slideId, canvasJSON }: any) => {
+  async ({ pptId, slideId, slideJSON, notes }: any) => {
     const res = await FetchUtils.postRequest(
       `${ENDPOINT.PPT.CANVAS_JSON}/${pptId}/${slideId}`,
-      canvasJSON
+      {slideJSON,notes}
     );
     console.log({ json: res.data });
     return res.data;
   }
 );
+
 // update Slide JSON Data
 export const updateSlideJSONData = createAsyncThunk(
   'slide/update-json',
-  async ({ pptId, slideId, canvasJSON }: any) => {
+  async ({ pptId, slideId, slideJSON, notes }: any) => {
     const res = await FetchUtils.putRequest(
       `${ENDPOINT.PPT.CANVAS_JSON}/${pptId}/${slideId}`,
-      canvasJSON
+      {slideJSON, notes}
     );
     console.log({ json: res.data });
     return res.data;

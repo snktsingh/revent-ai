@@ -17,26 +17,24 @@ export const NotesBodyContainer = styled.div`
 export const AddNotesContainer = styled.div<ContainerProps>`
   width: 100%;
   height: 6vh;
-  background:  ${theme.colorSchemes.light.palette.common.white};
+  background: ${theme.colorSchemes.light.palette.common.white};
   box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25);
-  transform: translateY(200%);
-  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-  z-index: -1;
+  /* transform: translateY(200%); */
+  /* transition: opacity 0.5s ease-out, transform 0.5s ease-out; */
+  /* z-index: -1; */
   display: flex;
   align-items: center;
-  ${props =>
+  /* ${props =>
     props.isactive === 'true' &&
     css`
       transform: translateY(0);
       transition: opacity 0.5s ease-in, transform 0.5s ease-in;
       z-index: -1;
-    `}
-
+    `} */
   span {
     color: ${theme.colorSchemes.light.palette.common.darkGrey};
-    text-align: center;
-    font-size: 0.8rem;
     margin: 2%;
+    width : 60%;
   }
 `;
 export const NotesHeadingContainer = styled.div`
@@ -67,12 +65,26 @@ export const NotesHeading = styled.div`
   }
 `;
 
-export const NotesInput = styled.input`
+export const NotesInput = styled.textarea`
+  width: 100%;
+  padding: 10px;
+  height: 5vh;
+  resize: none; 
+  overflow: auto; 
   border: none;
+  font-size: 0.9rem;
+  /* box-sizing: border-box; */
+  opacity: 80%;
   outline: none;
-  background: none;
-  color: ${theme.colorSchemes.light.palette.common.darkGrey};
   font-family: ${customStyles.fonts.robotoSansSerif};
-  font-size: 0.8vw;
-  height: 100%;
 `;
+
+// export const NotesInput = styled.input`
+//   border: none;
+//   outline: none;
+//   background: none;
+//   color: ${theme.colorSchemes.light.palette.common.darkGrey};
+//   font-family: ${customStyles.fonts.robotoSansSerif};
+//   font-size: 0.8vw;
+//   height: 100%;
+// `;
