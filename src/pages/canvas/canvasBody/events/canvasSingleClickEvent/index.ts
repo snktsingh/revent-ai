@@ -13,6 +13,8 @@ import {
   PYRAMID,
   PYRAMID_LEVEL,
   PYRAMID_TEXT,
+  SWOT_BOX,
+  SWOT_TEXT,
 } from '@/constants/elementNames';
 import { AutoResizingTextboxOptions } from '@/utils/fabric-utils/AutoResizingTextbox';
 import { fabric } from 'fabric';
@@ -114,7 +116,20 @@ export function useCanvasSingleClickEvent() {
               canvas.setActiveObject(obj);
             }
           });
-        }  
+        } else if (object.level.startsWith(SWOT_BOX)) {
+          const [_, id, level] = object.level.split('_');
+          canvas.forEachObject((obj: any) => {
+            if (
+              obj.level === `${SWOT_TEXT}_${id}_${level}` &&
+              obj.type === 'textbox'
+            ) {
+              if (obj.text === 'Add Text') {
+                obj.selectAll();
+              }
+              obj.enterEditing();
+            }
+          });
+        }
       }
     }
 

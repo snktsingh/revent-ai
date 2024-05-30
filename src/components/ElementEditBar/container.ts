@@ -1,13 +1,17 @@
+import { addClientListImages } from '@/data/data';
 import React, { useState } from 'react';
 import { useDelAndCopy } from '@/pages/canvas/canvasBody/elements/deleteAndCopyElements';
 import {
   BULLET_POINTS,
+  CLIENT_LIST_MAIN,
   CYCLE,
   CYCLE_TEXT,
   FUNNEL,
   FUNNEL_BASE,
   FUNNEL_LEVEL,
   FUNNEL_TEXT,
+  HUB_AND_SPOKE,
+  HUB_AND_SPOKE_BOX,
   IMAGE,
   LIST_IMG,
   LIST_MAIN,
@@ -19,6 +23,8 @@ import {
   PYRAMID_TEXT,
   QUOTE,
   QUOTE_IMG,
+  STATISTICS,
+  STATISTICS_BOX,
   TABLE,
   TIMELINE,
   TIMELINE_TEXT,
@@ -36,7 +42,10 @@ import {
 } from '@/pages/canvas/canvasBody/elements/elementExports';
 import { updateCheckboxForAI } from '@/redux/reducers/apiData';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { updateListId } from '@/redux/reducers/fabricElements';
+import { updateClientListId, updateListId } from '@/redux/reducers/fabricElements';
+import { useClientListElement } from '@/pages/canvas/canvasBody/elements/clientListElement';
+import { useHubAndSpoke } from '@/pages/canvas/canvasBody/elements/hubAndSpoke';
+import { useStatisticsElement } from '@/pages/canvas/canvasBody/elements/statisticElement';
 
 export const useEditBar = () => {
   const [plusIcon, setPlusIcon] = useState<boolean>(false);
@@ -51,8 +60,11 @@ const dispatch = useAppDispatch();
   const { addCycleSteps } = useCycleElement();
   const { addTimelineSteps } = useTimelineElement();
   const { addListElement, addImage } = useListElement();
+  const { addClientListElement, addClientImage } = useClientListElement();
   const { addQuoteImage } = useQuoteElement();
   const { imageUploader } = useImageElement();
+  const { addHubAndSpokeLevel } = useHubAndSpoke();
+  const { addStatisticsLevels } = useStatisticsElement();
   const { addTableRow, addTableColumn, removeTableColumn, removeTableRow } =
     useTableElement();
   const { listID } = useAppSelector( state => state.elementsIds )
@@ -76,6 +88,11 @@ const dispatch = useAppDispatch();
     let pLevels = countObjects(canvas, `${PYRAMID_TEXT}_${currentElementId}`);
     let fLevels = countObjects(canvas, `${FUNNEL_TEXT}_${currentElementId}`);
     let listCount = countObjects(canvas, LIST_MAIN);
+    let clientListCount = countObjects(canvas, CLIENT_LIST_MAIN);
+    let hubAndSpokeCount = countObjects(canvas, HUB_AND_SPOKE_BOX);
+    let statisticElCount = countObjects(canvas, STATISTICS_BOX);
+
+    console.log(statisticElCount)
 
     let showPlusIcon = false;
     let showTableIcons = false;
@@ -90,7 +107,10 @@ const dispatch = useAppDispatch();
         (objectName[0] === TIMELINE && timelineLevels < 8) ||
         (objectName[0] === FUNNEL && fLevels < 6) ||
         (objectName[0] === CYCLE && cycleSteps < 6) ||
-        objectName[0] === LIST_MAIN && listCount < 8
+        (objectName[0] === LIST_MAIN && listCount < 8 )||
+        (objectName[0] === CLIENT_LIST_MAIN && clientListCount < 11) ||
+        (objectName[0] === HUB_AND_SPOKE && hubAndSpokeCount < 9) ||
+        (objectName[0] === STATISTICS && statisticElCount < 7) 
       ) {
         showPlusIcon = true;
         showDelForLevelIcon = false;
@@ -102,7 +122,11 @@ const dispatch = useAppDispatch();
       (objectName && objectName[0] === PROCESS && processStepsTotal >= 6) ||
       (objectName && objectName[0] === TIMELINE && timelineLevels >= 8) ||
       (objectName && objectName[0] === FUNNEL && fLevels >= 6) ||
-      (objectName && objectName[0] === CYCLE && cycleSteps >= 6)
+      (objectName && objectName[0] === CYCLE && cycleSteps >= 6) ||
+      (objectName && objectName[0] === LIST_MAIN && listCount >= 8) ||
+      (objectName && objectName[0] === CLIENT_LIST_MAIN && clientListCount >= 10) ||
+      (objectName && objectName[0] === HUB_AND_SPOKE && hubAndSpokeCount >=8) ||
+      (objectName && objectName[0] === STATISTICS && statisticElCount >= 6)
     ) {
       showPlusIcon = false;
       showDelForLevelIcon = false;
@@ -120,6 +144,7 @@ const dispatch = useAppDispatch();
     }
 
     if(objectName && (selectedObject?.name?.startsWith(QUOTE_IMG) || objectName[0] === LIST_MAIN || selectedObject?.name?.startsWith(IMAGE))){
+
       showChangeImgIcon = true;
       showDelForLevelIcon = false;
     }
@@ -149,7 +174,6 @@ const dispatch = useAppDispatch();
   const checkElementForAddLevel = (canvas: fabric.Canvas) => {
     const activeElement = canvas?.getActiveObject();
     const elName = activeElement?.name?.split('_');
-    console.log(elName);
 
     elName && addElement(canvas, elName[0]);
   };
@@ -157,6 +181,7 @@ const dispatch = useAppDispatch();
     const activeElement = canvas?.getActiveObject();
     if (!activeElement) return false;
     const lastListElement = canvas?.getObjects().reverse().find(obj => obj.name?.startsWith(LIST_MAIN));
+    const lastClientListElement = canvas?.getObjects().reverse().find(obj => obj.name?.startsWith(CLIENT_LIST_MAIN));
     if (activeElement.name?.startsWith(type) && canvas) {
       switch (type) {
         case 'PYRAMID':
@@ -184,6 +209,15 @@ const dispatch = useAppDispatch();
           addList(canvas,lastListElement);
           dispatch(updateListId());
           break;
+        case CLIENT_LIST_MAIN:
+          addClientList(canvas,lastClientListElement);
+          dispatch(updateClientListId());
+          break;
+        case HUB_AND_SPOKE:
+          addHubAndSpokeLevel(canvas);
+        case STATISTICS:
+          addStatisticsLevels(canvas);
+          break;
         default:
           break;
       }
@@ -210,6 +244,8 @@ const dispatch = useAppDispatch();
       addListElement(canvas, 0, 0); 
     }
   }
+
+ 
   function addListImage(canvas: fabric.Canvas) {
     let selectedElement = canvas.getActiveObject();
     addImage(canvas, selectedElement!);
@@ -235,6 +271,45 @@ const dispatch = useAppDispatch();
   const handleAICheckbox = (e : React.ChangeEvent<HTMLInputElement>) => {
       dispatch(updateCheckboxForAI(e.target.checked))
   };
+  //client list 
+  function addClientList(canvas: fabric.Canvas, lastElement : fabric.Object | undefined) {
+    if (lastElement && lastElement.left && lastElement.top) {
+      if(lastElement.left > 640 && lastElement.top < 240){
+        const newX = 28;
+        const newY = 250;
+  
+        addClientListElement(canvas, newX, newY!);
+        return;
+      }else if(lastElement.left > 640 && lastElement.top > 200){
+          console.log('maximum limit added')
+      }else{
+        const newX = lastElement.left + lastElement.getScaledWidth() + 15;
+        const newY = lastElement.top;
+  
+        addClientListElement(canvas, newX, newY);
+      }
+    } else {
+      addClientListElement(canvas, 0, 0); 
+    }
+  }
+
+  function addClientListImage(canvas: fabric.Canvas) {
+    let selectedElement = canvas.getActiveObject();
+    addClientImage(canvas, selectedElement!);
+    selectedElement &&
+      (selectedElement as fabric.Group).remove(
+        (selectedElement as fabric.Group)._objects[1]
+      );
+    (selectedElement as fabric.Group).setCoords();
+    canvas.renderAll();
+  };
+
+  const handleChangeImageElement = (canvas : fabric.Canvas) => {
+     const activeElement = canvas.getActiveObject();
+     if(activeElement && activeElement.type === 'image') {
+        imageUploader(canvas, activeElement);
+     }
+  };
 
   const handleChangeImageElement = (canvas : fabric.Canvas) => {
      const activeElement = canvas.getActiveObject();
@@ -256,6 +331,7 @@ const dispatch = useAppDispatch();
     addListImage,
     handleQuoteImage,
     levelIcons,
-    handleChangeImageElement
+    handleChangeImageElement,
+    addClientListImage
   };
 };

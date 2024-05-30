@@ -9,6 +9,11 @@ import {
   FUNNEL_BASE,
   FUNNEL_LEVEL,
   FUNNEL_TEXT,
+  HUB_AND_SPOKE,
+  HUB_AND_SPOKE_BOX,
+  HUB_AND_SPOKE_BOX_HEADING,
+  HUB_AND_SPOKE_BOX_TEXT,
+  HUB_AND_SPOKE_CIRCLE,
   LIST_MAIN,
   LIST_TEXT,
   PROCESS,
@@ -22,6 +27,13 @@ import {
   QUOTE_AUTHOR,
   QUOTE_IMG,
   QUOTE_TEXT,
+  STATISTICS,
+  STATISTICS_BOX,
+  STATISTICS_TEXT,
+  STATISTICS_TITLE_TEXT,
+  SWOT,
+  SWOT_BOX,
+  SWOT_TEXT,
   TABLE,
   TABLE_HEADER,
   TABLE_TEXT,
@@ -31,6 +43,7 @@ import {
   TIMELINE_HEADING,
   TIMELINE_TEXT,
 } from '@/constants/elementNames';
+import { SWOTIcon } from '@/constants/media';
 
 export function useObjectMovingEvent() {
   const handleObjectMoving = (
@@ -161,8 +174,9 @@ export function useObjectMovingEvent() {
         const lastLeft = movedObject.get('lastLeft') || movedObject.left;
         const lastTop = movedObject.get('lastTop') || movedObject.top;
 
-        var deltaX = movedObject.left! - lastLeft!;
-        var deltaY = movedObject.top! - lastTop!;
+        const deltaX = movedObject.left! - lastLeft!;
+        const deltaY = movedObject.top! - lastTop!;
+
 
         let activeObj = canvas.getActiveObject();
         let activeLeft = activeObj?.left || 0;
@@ -223,13 +237,10 @@ export function useObjectMovingEvent() {
         const lastLeft = movedObject.get('lastLeft') || movedObject.left;
         const lastTop = movedObject.get('lastTop') || movedObject.top;
 
-        var deltaX = movedObject.left! - lastLeft!;
-        var deltaY = movedObject.top! - lastTop!;
+        const deltaX = movedObject.left! - lastLeft!;
+        const deltaY = movedObject.top! - lastTop!;
 
         canvas.forEachObject(function (obj) {
-          let left;
-          let top;
-
           if (
             obj.name?.startsWith(`${TABLE_TEXT}_`) &&
             obj.intersectsWithObject(movedObject, true, true)
@@ -275,6 +286,94 @@ export function useObjectMovingEvent() {
             obj.name?.startsWith(QUOTE_AUTHOR) ||
             obj.name?.startsWith(QUOTE_TEXT) ||
             obj.name?.startsWith(QUOTE_IMG)
+          ) {
+            obj
+              .set({
+                left: obj.left! + deltaX,
+                top: obj.top! + deltaY,
+              })
+              .setCoords();
+          }
+        });
+
+        movedObject
+          .set({
+            lastLeft: movedObject.left,
+            lastTop: movedObject.top,
+          })
+          .setCoords();
+      }
+      else if (objectName[0] === SWOT) {
+        const lastLeft = movedObject.get('lastLeft') || movedObject.left;
+        const lastTop = movedObject.get('lastTop') || movedObject.top;
+
+        const deltaX = movedObject.left! - lastLeft!;
+        const deltaY = movedObject.top! - lastTop!;
+
+        canvas.forEachObject(function (obj) {
+          if (
+            obj.name?.startsWith(SWOT_BOX) ||
+            obj.name?.startsWith(SWOT_TEXT) ||
+            obj.name?.startsWith(SWOTIcon)
+          ) {
+            obj
+              .set({
+                left: obj.left! + deltaX,
+                top: obj.top! + deltaY,
+              })
+              .setCoords();
+          }
+        });
+
+        movedObject
+          .set({
+            lastLeft: movedObject.left,
+            lastTop: movedObject.top,
+          })
+          .setCoords();
+      }
+      else if (objectName[0] === HUB_AND_SPOKE) {
+        const lastLeft = movedObject.get('lastLeft') || movedObject.left;
+        const lastTop = movedObject.get('lastTop') || movedObject.top;
+
+        const deltaX = movedObject.left! - lastLeft!;
+        const deltaY = movedObject.top! - lastTop!;
+
+        canvas.forEachObject(function (obj) {
+          if (
+            obj.name?.startsWith(HUB_AND_SPOKE_BOX) ||
+            obj.name?.startsWith(HUB_AND_SPOKE_BOX_HEADING) ||
+            obj.name?.startsWith(HUB_AND_SPOKE_BOX_TEXT) ||
+            obj.name?.startsWith(HUB_AND_SPOKE_CIRCLE) 
+          ) {
+            obj
+              .set({
+                left: obj.left! + deltaX,
+                top: obj.top! + deltaY,
+              })
+              .setCoords();
+          }
+        });
+
+        movedObject
+          .set({
+            lastLeft: movedObject.left,
+            lastTop: movedObject.top,
+          })
+          .setCoords();
+      }
+      else if (objectName[0] === STATISTICS) {
+        const lastLeft = movedObject.get('lastLeft') || movedObject.left;
+        const lastTop = movedObject.get('lastTop') || movedObject.top;
+
+        const deltaX = movedObject.left! - lastLeft!;
+        const deltaY = movedObject.top! - lastTop!;
+
+        canvas.forEachObject(function (obj) {
+          if (
+            obj.name?.startsWith(STATISTICS_BOX) ||
+            obj.name?.startsWith(STATISTICS_TEXT) ||
+            obj.name?.startsWith(STATISTICS_TITLE_TEXT) 
           ) {
             obj
               .set({

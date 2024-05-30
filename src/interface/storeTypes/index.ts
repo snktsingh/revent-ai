@@ -96,6 +96,7 @@ export interface ElementBaseType {
   subTitle?: string;
   templateName?: string;
   elementId?: string;
+  heading?: string;
 }
 
 export interface TableDataType extends ElementBaseType {

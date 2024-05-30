@@ -79,8 +79,9 @@ const MainCanvas = () => {
             }
           }
         });
+        
         dispatch(setThemeId(res.payload.themeId));
-        dispatch(setActiveSlideId(1));
+        dispatch(setActiveSlideId(slidesData[slidesData.length-1].id));
         dispatch(updateCanvasList(slidesData));
         res.payload.slides[0].forEach((variant: any) => {
           if (variant.active) {
@@ -88,7 +89,8 @@ const MainCanvas = () => {
           }
         });
         dispatch(toggleSelectingSlide(true));
-        dispatch(setCanvas({ ...canvasJS, variants: slidesData[0].variants }));
+        // dispatch(setCanvas({ ...canvasJS, variants: slidesData[0].variants }));
+        dispatch(setCanvas(slidesData[slidesData.length-1]));
       }
       dispatch(updatePresentationLoading(false));
       dispatch(setAuthenticateLoader());

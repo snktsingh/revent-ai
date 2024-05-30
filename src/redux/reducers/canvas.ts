@@ -317,6 +317,14 @@ export const CanvasReducer = createSlice({
        );
        state.canvasList = updatedCanvasList;
        state.canvasJS = updatedCanvasList[id - 1];
+    },
+    updateSlideIdInList(state, action : PayloadAction<{slideId : number, canvasId : number}>) {
+      const {slideId, canvasId}  = action.payload;
+      const canvasIndex = state.canvasList.findIndex(canvas => canvas.id === canvasId);
+      if (canvasIndex !== -1) {
+        state.canvasList[canvasIndex].slideId = slideId;
+        state.canvasJS.slideId = slideId;
+      }
     }
   },
 });
@@ -350,7 +358,8 @@ export const {
   toggleIsVariantSelected,
   updateListImagesWithCanvasId,
   updateLastVariant,
-  updateSelectedOriginalCanvas
+  updateSelectedOriginalCanvas,
+  updateSlideIdInList
 } = CanvasReducer.actions;
 
 export default CanvasReducer.reducer;

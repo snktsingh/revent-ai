@@ -8,7 +8,8 @@ import {
   toggleIsVariantSelected,
   toggleSelectedOriginalCanvas,
   updateCanvasInList,
-  updateCurrentCanvas
+  updateCurrentCanvas,
+  updateSlideIdInList
 } from '@/redux/reducers/canvas';
 import { openModal, setMenuItemKey } from '@/redux/reducers/elements';
 import { searchElement, toggleRegenerateButton } from '@/redux/reducers/slide';
@@ -31,7 +32,7 @@ import {
   Tooltip
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { Slide, ToastContainer } from 'react-toastify';
 import CanvasComponent from './canvasComponent';
 import useCanvasData from './canvasComponent/canvasDataExtractor';
@@ -88,6 +89,7 @@ const CanvasBody = () => {
   const [isReturnBtnShow, setIsReturnBtnShow] = useState<boolean>(false);
   const [canvasIndex, setCanvasIndex] = useState<number>(0);
   const { handleApplyOriginalAsMain } = useVariants();
+  const [searchParams, setSearchParams] = useSearchParams();
   const handleLike = () => {
     setActiveLike(!activeLike);
     setActiveDislike(false);
@@ -187,7 +189,12 @@ const CanvasBody = () => {
         for (let i = 0; i < listImagesArray.images.length; i++) {
           formData.append('images', listImagesArray.images[i].file);
         }
-        dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes }));
+
+        dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes })).then((res)=> {
+          if (res && res.payload.slideId) {
+            setSearchParams({ slide: res.payload.slideId });
+          }
+        });;
         dispatch(toggleSelectedOriginalCanvas(false));
       }
       return;
@@ -205,7 +212,11 @@ const CanvasBody = () => {
         for (let i = 0; i < ImagesArray.images.length; i++) {
           formData.append('images', ImagesArray.images[i].file);
         }
-        dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes }));
+        dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes })).then((res)=> {
+          if (res && res.payload.slideId) {
+            setSearchParams({ slide: res.payload.slideId });
+          }
+        });;
         dispatch(toggleSelectedOriginalCanvas(false));
       }
       return;
@@ -225,7 +236,11 @@ const CanvasBody = () => {
           for (let i = 0; i < QuoteImagesArray.images.length; i++) {
             formData.append('images', QuoteImagesArray.images[i].file);
           }
-          dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes }));
+          dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes })).then((res)=> {
+            if (res && res.payload.slideId) {
+              setSearchParams({ slide: res.payload.slideId });
+            }
+          });;
           dispatch(toggleSelectedOriginalCanvas(false));
           return;
         }
@@ -237,7 +252,12 @@ const CanvasBody = () => {
       const ptId = Number(params.id?.split('-')[0]);
       reqData.presentationId = ptId;
     }
-    dispatch(fetchSlideImg({ req: reqData, slideJSON, pptId, notes }));
+    dispatch(fetchSlideImg({ req: reqData, slideJSON, pptId, notes })).then((res)=> {
+      if (res && res.payload.slideId) {
+        setSearchParams({ slide: res.payload.slideId });
+        dispatch(updateSlideIdInList({slideId : res.payload.slideId, canvasId : canvasJS.id}));
+      }
+    });
     dispatch(toggleSelectedOriginalCanvas(false));
   };
 

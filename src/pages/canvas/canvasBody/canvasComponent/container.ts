@@ -3,6 +3,10 @@ import {
   CYCLE_CIRCLE,
   CYCLE_TEXT,
   FUNNEL_TEXT,
+  HUB_AND_SPOKE_BOX,
+  HUB_AND_SPOKE_BOX_HEADING,
+  HUB_AND_SPOKE_BOX_TEXT,
+  HUB_AND_SPOKE_CIRCLE,
   LIST_TEXT,
   PROCESS_ARROW,
   PROCESS_BOX,
@@ -12,6 +16,11 @@ import {
   QUOTE_AUTHOR,
   QUOTE_IMG,
   QUOTE_TEXT,
+  STATISTICS_BOX,
+  STATISTICS_TEXT,
+  STATISTICS_TITLE_TEXT,
+  SWOT_BOX,
+  SWOT_TEXT,
   TABLE,
   TABLE_HEADER,
   TABLE_TEXT,
@@ -40,6 +49,7 @@ import {
 } from '../events/eventExports';
 import { useBulletOrNumberedText } from '../elements/BulletOrNumberElement';
 import useCanvasData from './canvasDataExtractor';
+import { SWOTIcon } from '@/constants/media';
 
 export const useCanvasComponent = () => {
   const [showOptions, setShowOptions] = useState(false);
@@ -206,7 +216,18 @@ export const useCanvasComponent = () => {
       elementName.startsWith(TABLE_HEADER) || 
       elementName.startsWith(QUOTE_AUTHOR) ||
       elementName.startsWith(QUOTE_TEXT) ||
-      elementName.startsWith(LIST_TEXT) 
+      elementName.startsWith(LIST_TEXT) ||
+      elementName.startsWith(SWOTIcon) ||
+      elementName.startsWith(SWOT_TEXT) ||
+      elementName.startsWith(SWOT_BOX)  ||
+      elementName.startsWith(HUB_AND_SPOKE_BOX) ||
+      elementName.startsWith(HUB_AND_SPOKE_BOX_HEADING) ||
+      elementName.startsWith(HUB_AND_SPOKE_BOX_TEXT) ||
+      elementName.startsWith(HUB_AND_SPOKE_CIRCLE) ||
+      elementName.startsWith(STATISTICS_BOX) ||
+      elementName.startsWith(STATISTICS_TITLE_TEXT) ||
+      elementName.startsWith(STATISTICS_TEXT)
+
     ) {
       return true;
     }
