@@ -144,7 +144,6 @@ const dispatch = useAppDispatch();
     }
 
     if(objectName && (selectedObject?.name?.startsWith(QUOTE_IMG) || objectName[0] === LIST_MAIN || selectedObject?.name?.startsWith(IMAGE))){
-
       showChangeImgIcon = true;
       showDelForLevelIcon = false;
     }
@@ -303,7 +302,6 @@ const dispatch = useAppDispatch();
     (selectedElement as fabric.Group).setCoords();
     canvas.renderAll();
   };
-
   const handleChangeImageElement = (canvas : fabric.Canvas) => {
      const activeElement = canvas.getActiveObject();
      if(activeElement && activeElement.type === 'image') {
