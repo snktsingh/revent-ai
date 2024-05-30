@@ -11,8 +11,7 @@ export const NotesBodyContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  
-`;
+  `;
 
 export const AddNotesContainer = styled.div<ContainerProps>`
   width: 100%;
@@ -31,6 +30,7 @@ export const AddNotesContainer = styled.div<ContainerProps>`
       transition: opacity 0.5s ease-in, transform 0.5s ease-in;
       z-index: -1;
     `} */
+
   span {
     color: ${theme.colorSchemes.light.palette.common.darkGrey};
     margin: 2%;
@@ -40,7 +40,7 @@ export const AddNotesContainer = styled.div<ContainerProps>`
 export const NotesHeadingContainer = styled.div`
   width: 100%;
   height: 6vh;
-  background:  ${theme.colorSchemes.light.palette.common.white};
+  background: ${theme.colorSchemes.light.palette.common.white};
   box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25);
 `;
 

@@ -541,6 +541,7 @@ const useCanvasData = () => {
         );
       }
     });
+    const isImageAdded = objects.some(obj => obj.name === IMAGE);
     const isShapeAdded = objects.some(obj => {
       if (obj.name) {
         return [
@@ -563,7 +564,11 @@ const useCanvasData = () => {
       enabledEl = [];
     } else if (isShapeAdded && isTitleAdded && isSubtitleAdded) {
       enabledEl = [];
-    } else if (isShapeAdded && isTitleAdded) {
+    } else if(isImageAdded) {
+      enabledEl.push(
+        'Image'
+      );
+    }else if (isShapeAdded && isTitleAdded) {
       enabledEl.push('Subtitle');
     } else if (isShapeAdded && isSubtitleAdded) {
       enabledEl.push('Title');
@@ -628,7 +633,8 @@ const useCanvasData = () => {
         'Statistics',
         'Client List'
       );
-    } else {
+    } 
+     else {
       if (!isTitleAdded) {
         enabledEl.push('Title');
       }

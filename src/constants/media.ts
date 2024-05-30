@@ -71,6 +71,11 @@ import DoneGif from "../assets/Done.gif";
 import SWOTIcon from "../assets/canvas/SWOT_svg.svg";
 import CreditIcon from "../assets/creditIcon.svg";
 import ErrorCloud from "../assets/error.svg";
+import iconSWOT from "../assets/elements/swot.svg";
+import iconHunNSpoke from "../assets/elements/hubAndSpoke.svg";
+import iconTableOfContents from "../assets/elements/tableOfContents.svg";
+import iconStatistics from "../assets/elements/statisticsicon.svg";
+
 
 export {
   Back,
@@ -146,4 +151,8 @@ export {
   SWOTIcon,
   CreditIcon,
   ErrorCloud
+  iconSWOT,
+  iconHunNSpoke,
+  iconTableOfContents,
+  iconStatistics
 };
