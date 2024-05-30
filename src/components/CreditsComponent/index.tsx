@@ -15,7 +15,7 @@ const CreditsComponent = () => {
 
     return (
         <CreditsContainer>
-            <img src={CreditIcon} style={{marginBottom : '.3rem'}} alt="credit" />
+            <img src={CreditIcon} style={{marginBottom : '5%'}} alt="credit" />
             <CreditCoins>Credits Left :</CreditCoins>
             <CreditCoins>{creditAmount}</CreditCoins>
         </CreditsContainer>
