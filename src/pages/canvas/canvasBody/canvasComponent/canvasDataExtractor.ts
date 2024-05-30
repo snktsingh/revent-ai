@@ -240,7 +240,7 @@ const useCanvasData = () => {
           const Image = getOrCreateElement('Images', '1', outputFormat);
         } else if (canvasObject.name.startsWith(QUOTE_TEXT)) {
           const Quote = getOrCreateElement('Quote', '1', outputFormat);
-
+          
           let newText = canvasObject.text.trim();
 
           if (

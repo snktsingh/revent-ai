@@ -30,7 +30,6 @@ export const AddNotesContainer = styled.div<ContainerProps>`
       transition: opacity 0.5s ease-in, transform 0.5s ease-in;
       z-index: -1;
     `} */
-
   span {
     color: ${theme.colorSchemes.light.palette.common.darkGrey};
     margin: 2%;
@@ -73,8 +72,21 @@ export const NotesInput = styled.textarea`
   overflow: auto; 
   border: none;
   font-size: 0.9rem;
+  /* box-sizing: border-box; */
+  opacity: 80%;
   outline: none;
   font-family: ${customStyles.fonts.robotoSansSerif};
+`;
+
+// export const NotesInput = styled.input`
+//   border: none;
+//   outline: none;
+//   background: none;
+//   color: ${theme.colorSchemes.light.palette.common.darkGrey};
+//   font-family: ${customStyles.fonts.robotoSansSerif};
+//   font-size: 0.8vw;
+//   height: 100%;
+// `;
 `;
 
 // export const NotesInput = styled.input`
