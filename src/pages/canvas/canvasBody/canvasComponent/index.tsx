@@ -177,6 +177,7 @@ const CanvasComponent: React.FC = () => {
   useEffect(() => {
     const slide = canvasList.find((slide) => slide.id === activeSlideID);
     setShowOptions(false);
+
     console.log(canvasRef)
     if (variantImage && canvasRef.current && slide && slide.variants && slide.variants.length > 0) {
       canvasRef.current?.clear();

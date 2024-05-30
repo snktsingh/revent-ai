@@ -70,6 +70,7 @@ import FileUploadIcon from "../assets/fileUploadIcons.svg";
 import DoneGif from "../assets/Done.gif";
 import SWOTIcon from "../assets/canvas/SWOT_svg.svg";
 import CreditIcon from "../assets/creditIcon.svg";
+import ErrorCloud from "../assets/error.svg";
 
 export {
   Back,
@@ -143,5 +144,6 @@ export {
   FileUploadIcon,
   DoneGif,
   SWOTIcon,
-  CreditIcon
+  CreditIcon,
+  ErrorCloud
 };

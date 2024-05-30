@@ -143,7 +143,8 @@ const dispatch = useAppDispatch();
       showDelForLevelIcon = false;
     }
 
-    if(objectName && (selectedObject?.name?.startsWith(QUOTE_IMG) || objectName[0] === (LIST_MAIN) || selectedObject?.name?.startsWith(IMAGE) || objectName[0] === (CLIENT_LIST_MAIN)) ){
+    if(objectName && (selectedObject?.name?.startsWith(QUOTE_IMG) || objectName[0] === LIST_MAIN || selectedObject?.name?.startsWith(IMAGE))){
+
       showChangeImgIcon = true;
       showDelForLevelIcon = false;
     }
@@ -309,6 +310,13 @@ const dispatch = useAppDispatch();
         imageUploader(canvas, activeElement);
      }
   };
+
+  const handleChangeImageElement = (canvas : fabric.Canvas) => {
+     const activeElement = canvas.getActiveObject();
+     if(activeElement && activeElement.type === 'image') {
+        imageUploader(canvas, activeElement);
+     }
+  }
 
   return {
     adjustControlsVisibility,

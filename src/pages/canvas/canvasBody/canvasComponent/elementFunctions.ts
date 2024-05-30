@@ -346,10 +346,12 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
             } else if (!isSubtitleAvailable) {
               canvas?.add(subtitle);
             }
+
             addNewSWOTElement(canvas);
           }
         };
         break;
+
       case 'Table of Contents':
         element.onClick = () => {
           if(canvas){

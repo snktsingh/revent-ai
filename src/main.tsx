@@ -9,9 +9,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import './styles/app.css';
 import Application from './application';
 import { Slide, ToastContainer } from 'react-toastify';
+import ErrorBoundary from './components/Error';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
+    <ErrorBoundary>
     <Provider store={store}>
       <CssVarsProvider theme={theme}>
         <BrowserRouter>
@@ -25,6 +27,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         </BrowserRouter>
       </CssVarsProvider>
     </Provider>
+    </ErrorBoundary>
   </React.StrictMode>
 );
 ``;

@@ -2,7 +2,8 @@ import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { InputBase } from '@mui/material';
 import {
   AddNotesContainer,
-  NotesBodyContainer
+  NotesBodyContainer,
+  NotesInput
 } from './style';
 import { ChangeEvent } from 'react';
 import { updateCurrentCanvas } from '@/redux/reducers/canvas';
@@ -45,7 +46,7 @@ export const CanvasNotes = () => {
     <NotesBodyContainer>
       <AddNotesContainer isactive="true">
         <span>
-          <InputBase placeholder="Click here to add notes..." value={canvasJS.notes} onChange={handleNotesChange} />
+          <NotesInput placeholder="Click here to add notes..." value={canvasJS.notes} onChange={handleNotesChange} />
         </span>
       </AddNotesContainer>
       {/* <NotesHeadingContainer>

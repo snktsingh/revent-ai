@@ -174,8 +174,9 @@ export function useObjectMovingEvent() {
         const lastLeft = movedObject.get('lastLeft') || movedObject.left;
         const lastTop = movedObject.get('lastTop') || movedObject.top;
 
-        var deltaX = movedObject.left! - lastLeft!;
-        var deltaY = movedObject.top! - lastTop!;
+        const deltaX = movedObject.left! - lastLeft!;
+        const deltaY = movedObject.top! - lastTop!;
+
 
         let activeObj = canvas.getActiveObject();
         let activeLeft = activeObj?.left || 0;
@@ -236,13 +237,10 @@ export function useObjectMovingEvent() {
         const lastLeft = movedObject.get('lastLeft') || movedObject.left;
         const lastTop = movedObject.get('lastTop') || movedObject.top;
 
-        var deltaX = movedObject.left! - lastLeft!;
-        var deltaY = movedObject.top! - lastTop!;
+        const deltaX = movedObject.left! - lastLeft!;
+        const deltaY = movedObject.top! - lastTop!;
 
         canvas.forEachObject(function (obj) {
-          let left;
-          let top;
-
           if (
             obj.name?.startsWith(`${TABLE_TEXT}_`) &&
             obj.intersectsWithObject(movedObject, true, true)

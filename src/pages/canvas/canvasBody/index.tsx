@@ -189,6 +189,7 @@ const CanvasBody = () => {
         for (let i = 0; i < listImagesArray.images.length; i++) {
           formData.append('images', listImagesArray.images[i].file);
         }
+
         dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes })).then((res)=> {
           if (res && res.payload.slideId) {
             setSearchParams({ slide: res.payload.slideId });

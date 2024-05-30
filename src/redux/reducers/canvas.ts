@@ -325,7 +325,6 @@ export const CanvasReducer = createSlice({
         state.canvasList[canvasIndex].slideId = slideId;
         state.canvasJS.slideId = slideId;
       }
-        
     }
   },
 });
