@@ -61,12 +61,22 @@ const MainCanvas = () => {
           getSlideJSONData({ pptId, slideId: res.payload.slides[0][0].slideId })
         ).then(response => {
           if (response.payload) {
-            dispatch(
-              updateCurrentCanvas({
-                ...slidesData[0],
-                originalSlideData: response.payload,
-              })
-            );
+            if (response.payload.hasOwnProperty('slideJSON')) {
+              dispatch(
+                updateCurrentCanvas({
+                  ...slidesData[0],
+                  originalSlideData: response.payload.slideJSON,
+                  notes : response.payload.notes
+                })
+              );
+            } else {
+              dispatch(
+                updateCurrentCanvas({
+                  ...slidesData[0],
+                  originalSlideData: response.payload,
+                })
+              );
+            }
           }
         });
         dispatch(setThemeId(res.payload.themeId));
