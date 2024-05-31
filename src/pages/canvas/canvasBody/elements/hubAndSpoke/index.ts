@@ -8,6 +8,7 @@ import {
   HUB_AND_SPOKE_MAIN_TEXT,
   HUB_AND_SPOKE_TEXT_BOX,
 } from '@/constants/elementNames';
+import { IExtendedRectOptions } from '@/interface/fabricTypes';
 import { updateHubAndSpokeId } from '@/redux/reducers/fabricElements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import AutoResizingTextbox from '@/utils/fabric-utils/AutoResizingTextbox';
@@ -24,7 +25,8 @@ export const useHubAndSpoke = () => {
       top: top,
       width: 250,
       height: 30,
-      name: `${HUB_AND_SPOKE_BOX}_${id}_${level}`,
+      name: `${HUB_AND_SPOKE_BOX}_${id}`,
+      level: `${HUB_AND_SPOKE_BOX}_${id}_${level}`,
       fill: '#406098',
       hasControls: false,
       lockMovementX: true,
@@ -32,7 +34,7 @@ export const useHubAndSpoke = () => {
       hasBorders: false,
       rx: 5,
       ry: 5,
-    });
+    } as IExtendedRectOptions);
     return rect;
   };
 
@@ -42,7 +44,8 @@ export const useHubAndSpoke = () => {
       top: top,
       width: 250,
       height: 90,
-      name: `${HUB_AND_SPOKE_TEXT_BOX}_${id}_${level}`,
+      name: `${HUB_AND_SPOKE_TEXT_BOX}_${id}`,
+      level: `${HUB_AND_SPOKE_TEXT_BOX}_${id}_${level}`,
       fill: '#406098',
       hasControls: false,
       lockMovementX: true,
@@ -50,7 +53,7 @@ export const useHubAndSpoke = () => {
       hasBorders: false,
       rx: 5,
       ry: 5,
-    });
+    } as IExtendedRectOptions);
     return rect;
   };
 
@@ -78,7 +81,8 @@ export const useHubAndSpoke = () => {
       left: left,
       top: top,
       width: 248,
-      name: `${HUB_AND_SPOKE_BOX_HEADING}_${id}_${level}`,
+      name: `${HUB_AND_SPOKE_BOX_HEADING}_${id}`,
+      level: `${HUB_AND_SPOKE_BOX_HEADING}_${id}_${level}`,
       fill: 'white',
       fixedWidth: 248,
       fixedHeight: 20,
@@ -97,7 +101,8 @@ export const useHubAndSpoke = () => {
       left: left,
       top: top,
       width: 250,
-      name: `${HUB_AND_SPOKE_BOX_TEXT}_${id}_${level}`,
+      name: `${HUB_AND_SPOKE_BOX_TEXT}_${id}`,
+      level: `${HUB_AND_SPOKE_BOX_TEXT}_${id}_${level}`,
       fill: 'white',
       fixedWidth: 250,
       fixedHeight: 90,
@@ -111,7 +116,7 @@ export const useHubAndSpoke = () => {
   };
 
   const addHubAndSpokeText = (left: number, top: number) => {
-    const textBox = new AutoResizingTextbox('Hub \nand \n Spoke', {
+    const textBox = new AutoResizingTextbox('Add \nHeading', {
       fontSize: 25,
       left: left,
       top: top,

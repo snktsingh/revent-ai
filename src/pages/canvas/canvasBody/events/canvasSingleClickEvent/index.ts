@@ -7,9 +7,12 @@ import {
   FUNNEL_BASE,
   FUNNEL_LEVEL,
   FUNNEL_TEXT,
+  HUB_AND_SPOKE,
   HUB_AND_SPOKE_BOX,
   HUB_AND_SPOKE_BOX_HEADING,
   HUB_AND_SPOKE_BOX_TEXT,
+  HUB_AND_SPOKE_CIRCLE,
+  HUB_AND_SPOKE_MAIN_TEXT,
   HUB_AND_SPOKE_TEXT_BOX,
   PROCESS,
   PROCESS_BOX,
@@ -55,6 +58,24 @@ export function useCanvasSingleClickEvent() {
           if(obj.name && obj.name === `${FUNNEL}_${id}`){
             canvas.setActiveObject(obj);
           }
+        });
+      }
+       if (object.name.startsWith(HUB_AND_SPOKE_CIRCLE)) {
+         const [_, id] = object.name.split('_');
+         canvas.forEachObject((obj: any) => {
+           if (
+             obj.name === `${HUB_AND_SPOKE_MAIN_TEXT}_${id}` &&
+             obj.type === 'textbox'
+            ) {
+            if (obj.text === 'Add \nHeading') {
+              obj.selectAll();
+            }
+            obj.enterEditing();
+          }
+          if(obj.name === `${HUB_AND_SPOKE}_${id}`){
+            canvas.setActiveObject(obj);
+            canvas.renderAll();
+         }
         });
       }
 
@@ -145,6 +166,11 @@ export function useCanvasSingleClickEvent() {
               }
               obj.enterEditing();
             }
+
+            if(obj.name === `${HUB_AND_SPOKE}_${id}`){
+               canvas.setActiveObject(obj);
+               canvas.renderAll();
+            }
           });
         } else if (object.level.startsWith(HUB_AND_SPOKE_TEXT_BOX)) {
           const [_, id, level] = object.level.split('_');
@@ -158,8 +184,12 @@ export function useCanvasSingleClickEvent() {
               }
               obj.enterEditing();
             }
+            if(obj.name === `${HUB_AND_SPOKE}_${id}`){
+              canvas.setActiveObject(obj);
+              canvas.renderAll();
+           }
           });
-        }
+        } 
       }
     }
 

@@ -183,7 +183,7 @@ const Dashboard = () => {
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-            Are you sure you want to permanently delete the current presentation?
+              Are you sure you want to permanently delete the current presentation?
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -239,11 +239,15 @@ const Dashboard = () => {
                         }}
 
                       >
-                        {ppt.thumbnailUrl !== '' ? (
-                          <img src={ppt.thumbnailUrl} width="100%" />
-                        ) : (
-                          <img src={Blank} width="100%" height="30%" />
-                        )}
+                        <img
+                          src={ppt.thumbnailUrl || Blank}
+                          style={{
+                            width: '100%',
+                            height: ppt.thumbnailUrl ? 'auto' : '30%',
+                            objectFit: 'cover',
+                          }}
+                          alt={ppt.name || 'Untitled presentation'}
+                        />
                       </Card>
                       <Stack
                         direction="row"
