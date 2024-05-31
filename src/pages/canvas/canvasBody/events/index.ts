@@ -46,6 +46,7 @@ const useCanvasEvents = () => {
   } = useCanvasComponent();
   
   const onTextChangedEvent = (event: IEvent, canvas: fabric.Canvas) => {
+    updateCanvasSlideData(canvas, canvasJS.id);
     getElementsData(
       canvas.toObject(customFabricProperties)?.objects,
       themeId

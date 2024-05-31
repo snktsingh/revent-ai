@@ -311,13 +311,6 @@ const dispatch = useAppDispatch();
      }
   };
 
-  const handleChangeImageElement = (canvas : fabric.Canvas) => {
-     const activeElement = canvas.getActiveObject();
-     if(activeElement && activeElement.type === 'image') {
-        imageUploader(canvas, activeElement);
-     }
-  }
-
   return {
     adjustControlsVisibility,
     handleCopyClick,
