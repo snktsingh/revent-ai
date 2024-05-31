@@ -97,7 +97,7 @@ const ElementEditBar: React.FC<ElementEditBarProps> = ({ left, top, canvas }) =>
         
 
         if (left < 0 && top < 0) {
-            left = 100;
+            left = 150;
             top = -40;
             setPosition({ l: left, t: top });
         } else if (activeElement && 

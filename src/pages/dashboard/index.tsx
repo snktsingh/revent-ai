@@ -62,7 +62,6 @@ const Dashboard = () => {
     handlePptDelCheckBox
   } = useDashboard();
 
-  console.log({ open })
 
   const { userDetails } = useAppSelector(state => state.manageUser);
   const { loadingUserDetails, pptList, hasMore } = useAppSelector(
@@ -184,13 +183,13 @@ const Dashboard = () => {
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Are you sure you want to delete the current presentation ?
+            Are you sure you want to permanently delete the current presentation?
             </DialogContentText>
           </DialogContent>
           <DialogActions>
             <Stack
               direction='row'
-              spacing={10}
+              spacing={19}
               mt={-1}
               alignItems={'center'}
             >
@@ -201,8 +200,9 @@ const Dashboard = () => {
               <Stack direction='row'>
                 <Button onClick={handleClose}>No</Button>
                 <Button
+                  color='error'
                   onClick={() => {
-                    removePresentation(pptId);
+                    removePresentation(currentPresentation.presentationId);
                     handleClose();
                   }}
                   autoFocus

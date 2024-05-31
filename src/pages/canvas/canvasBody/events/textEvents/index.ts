@@ -18,6 +18,8 @@ import {
   QUOTE_TEXT,
   SECTION_SLIDE_SUBTITLE,
   SECTION_SLIDE_TITLE,
+  STATISTICS_TEXT,
+  STATISTICS_TITLE_TEXT,
   SUBTITLE,
   SWOT_TEXT,
   TABLE_OF_CONTENTS_TEXT,
@@ -136,6 +138,16 @@ export function useTextEvents() {
         if (!textBox.isEditing) {
           textBox.enterEditing();
         }
+      } else if (
+        (textBox.text === 'Add Metric' &&
+        textBox.name?.startsWith(STATISTICS_TITLE_TEXT)) ||
+        (textBox.text === 'Add Text' &&
+        textBox.name?.startsWith(STATISTICS_TEXT))
+      ) {
+        textBox.set({ text: '' });
+        if (!textBox.isEditing) {
+          textBox.enterEditing();
+        }
       }
     }
     canvas.renderAll();
@@ -209,6 +221,16 @@ export function useTextEvents() {
         textBox.name?.startsWith(HUB_AND_SPOKE_BOX_HEADING)) ||
         (textBox.text === 'Add Text' &&
         textBox.name?.startsWith(HUB_AND_SPOKE_BOX_TEXT))
+      ) {
+        textBox.set({ text: '' });
+        if (!textBox.isEditing) {
+          textBox.enterEditing();
+        }
+      } else if (
+        (textBox.text === 'Add Metric' &&
+        textBox.name?.startsWith(STATISTICS_TITLE_TEXT)) ||
+        (textBox.text === 'Add Text' &&
+        textBox.name?.startsWith(STATISTICS_TEXT))
       ) {
         textBox.set({ text: '' });
         if (!textBox.isEditing) {
@@ -366,7 +388,21 @@ export function useTextEvents() {
         textBox.text = 'Add Text';
       }
       canvas.renderAll();
-    }
+    } else if (
+      textBox.name?.startsWith(STATISTICS_TITLE_TEXT)
+    ) {
+      if (textBox.text == '') {
+        textBox.text = 'Add Metric';
+      }
+      canvas.renderAll();
+    } else if (
+      textBox.name?.startsWith(STATISTICS_TEXT)
+    ) {
+      if (textBox.text == '') {
+        textBox.text = 'Add Text';
+      }
+      canvas.renderAll();
+    } 
   };
   return { textEnteringEvent, textExitedEvent, removePlaceholderText };
 }

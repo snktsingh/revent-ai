@@ -24,6 +24,10 @@ import {
   StarIcon,
   TitleSubIcon,
   TriangleIcon,
+  iconHunNSpoke,
+  iconSWOT,
+  iconStatistics,
+  iconTableOfContents,
 } from '@/constants/media';
 import { listObjType } from '@/interface/storeTypes';
 
@@ -157,35 +161,35 @@ export const elementData: IElementData[] = [
   // },
   {
     key: 18,
-    icon: AddPyramid,
+    icon: iconSWOT,
     title: 'SWOT Analysis',
     subtitle: 'Analyzes strengths, weaknesses, opportunities, and threats',
     onClick: () => {},
   },
   {
     key: 19,
-    icon: AddPyramid,
+    icon: iconTableOfContents,
     title: 'Table of Contents',
     subtitle: 'Suitable for easy navigation through structured sections',
     onClick: () => {},
   },
   {
     key: 20,
-    icon: AddPyramid,
+    icon: iconHunNSpoke,
     title: 'Hubs and Spoke',
     subtitle: 'Suitable for centralized connection points and streamlined communication',
     onClick: () => {},
   },
   {
     key: 21,
-    icon: AddPyramid,
+    icon: iconStatistics,
     title: 'Statistics',
     subtitle: 'Suitable for comprehensive data insights and analytics',
     onClick: () => {},
   },
   {
     key: 22,
-    icon: AddPyramid,
+    icon: AddList,
     title: 'Client List',
     subtitle: 'Suitable for detailed directories of customers and partners',
     onClick: () => {},

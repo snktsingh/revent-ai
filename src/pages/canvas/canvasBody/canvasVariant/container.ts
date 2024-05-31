@@ -55,11 +55,7 @@ const useVariants = () => {
   const updateActiveVariant = useDebounce(
     (slideId: number, variantId: number) => {
       const pptId = Number(params.id?.split('-')[0]);
-      dispatch(updateActiveVariantApi({ pptId, slideId, variantId })).then(
-        res => {
-          console.log(res);
-        }
-      );
+      dispatch(updateActiveVariantApi({ pptId, slideId, variantId }))
     },
     1000
   );

@@ -18,7 +18,7 @@ export const useStatisticsElement = () => {
       left: left,
       top: top,
       width: 230,
-      height: 120,
+      height: 100,
       name: `${STATISTICS_BOX}_${id}`,
       stroke: '#406098',
       fill: 'transparent',
@@ -32,15 +32,15 @@ export const useStatisticsElement = () => {
   };
 
   const addTitleText = (left: number, top: number, id: number) => {
-    const textBox = new AutoResizingTextbox('100%', {
-      fontSize: 16,
+    const textBox = new AutoResizingTextbox('Add Metric', {
+      fontSize: 32,
       left: left,
       top: top,
-      width: 248,
+      width: 228,
       name: `${STATISTICS_TITLE_TEXT}_${id}`,
       fill: '#406098',
       fixedWidth: 228,
-      fixedHeight: 20,
+      fixedHeight: 35,
       hasControls: false,
       lockMovementX: true,
       lockMovementY: true,
@@ -55,22 +55,23 @@ export const useStatisticsElement = () => {
 
   const addSubText = (left: number, top: number, id: number) => {
     const textBox = new AutoResizingTextbox(
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt aliqua. Mauris nunc congue nisi vitae suscipi.',
+      'Add Text',
       {
-        fontSize: 15,
+        fontSize: 16,
         left: left,
         top: top,
         width: 229,
         name: `${STATISTICS_TEXT}_${id}`,
         fill: 'black',
         fixedWidth: 230,
-        fixedHeight: 90,
+        fixedHeight: 50,
         hasControls: false,
         lockMovementX: true,
         lockMovementY: true,
         hasBorders: false,
         splitByGrapheme: true,
         fontFamily: 'Red Hat Display, sans-serif',
+        textAlign :'center'
       }
     );
     return textBox;
@@ -85,7 +86,7 @@ export const useStatisticsElement = () => {
       left: 23,
       top: 82,
       width: rectWidth * 3 + 80,
-      height: 300,
+      height: 370,
       fill: 'transparent',
       strokeWidth: 1,
       stroke: 'transparent',
@@ -109,32 +110,32 @@ export const useStatisticsElement = () => {
     canvas.add(rect1, rect2, rect3);
     const rect1Heading = addTitleText(
       rect1.left! + 2,
-      rect1.top! + 2,
+      rect1.top! + 3,
       statisticsId
     );
     const rect1Text = addSubText(
       rect1.left! + 2,
-      rect1.top! + 30,
+      rect1.top! + 50,
       statisticsId
     );
     const rect2Heading = addTitleText(
       rect2.left! + 2,
-      rect2.top! + 2,
+      rect2.top! + 3,
       statisticsId
     );
     const rect2Text = addSubText(
       rect2.left! + 2,
-      rect2.top! + 30,
+      rect2.top! + 50,
       statisticsId
     );
     const rect3Heading = addTitleText(
       rect3.left! + 2,
-      rect3.top! + 2,
+      rect3.top! + 3,
       statisticsId
     );
     const rect3Text = addSubText(
       rect3.left! + 2,
-      rect3.top! + 30,
+      rect3.top! + 50,
       statisticsId
     );
     canvas.add(
@@ -163,39 +164,72 @@ export const useStatisticsElement = () => {
 
     if (lastRect && activeObject) {
         const [_, id] = lastRect?.name?.split('_') as string[];
+        let subTxtTop = 50;
+        let titleTxtTop = 3;
+        let txtLeft = 2;
+        let rectWidth = 230;
 
         switch (level + 1) {
             case 4:
-                const rect4 = addRectBox(activeObject.left! + 20, activeObject.top! + 160, 4, +id);
+                const rect4 = addRectBox(activeObject.left! + 22, lastRect.top! + 120, 4, +id);
                 canvas.add(rect4);
                 canvas.add(
-                    addTitleText(rect4.left! + 2, rect4.top! + 2, +id),
-                    addSubText(rect4.left! + 2, rect4.top! + 30, +id)
+                    addTitleText(rect4.left! + txtLeft, rect4.top! + titleTxtTop, +id),
+                    addSubText(rect4.left! + txtLeft, rect4.top! + subTxtTop, +id)
                 );
                 canvas.discardActiveObject();
                 canvas.renderAll();
                 break;
             case 5:
-                const rect5 = addRectBox(lastRect.left! + 230 + 20, lastRect.top! , 5, +id);
+                const rect5 = addRectBox(lastRect.left! + rectWidth + 20, lastRect.top! , 5, +id);
                 canvas.add(rect5);
                 canvas.add(
-                    addTitleText(rect5.left! + 2, rect5.top! + 2, +id),
-                    addSubText(rect5.left! + 2, rect5.top! + 30, +id)
+                    addTitleText(rect5.left! + txtLeft, rect5.top! + titleTxtTop, +id),
+                    addSubText(rect5.left! + txtLeft, rect5.top! + subTxtTop, +id)
                 );
                 canvas.discardActiveObject();
                 canvas.renderAll();
                 break;
             case 6:
-                const rect6 = addRectBox(lastRect.left! + 230 + 20, lastRect.top! , 5, +id);
+                const rect6 = addRectBox(lastRect.left! + rectWidth + 20, lastRect.top! , 5, +id);
                 canvas.add(rect6);
                 canvas.add(
-                    addTitleText(rect6.left! + 2, rect6.top! + 2, +id),
-                    addSubText(rect6.left! + 2, rect6.top! + 30, +id)
+                    addTitleText(rect6.left! + txtLeft, rect6.top! + titleTxtTop, +id),
+                    addSubText(rect6.left! + txtLeft, rect6.top! + subTxtTop, +id)
                 );
                 canvas.discardActiveObject();
                 canvas.renderAll();
                 break;
-        
+            case 7:
+                const rect7 = addRectBox(activeObject.left! + 22, lastRect.top! + 120, 4, +id);
+                canvas.add(rect7);
+                canvas.add(
+                    addTitleText(rect7.left! + txtLeft, rect7.top! + titleTxtTop, +id),
+                    addSubText(rect7.left! + txtLeft, rect7.top! + subTxtTop, +id)
+                );
+                canvas.discardActiveObject();
+                canvas.renderAll();
+                break;
+            case 8:
+                const rect8 = addRectBox(lastRect.left! + rectWidth + 20, lastRect.top! , 5, +id);
+                canvas.add(rect8);
+                canvas.add(
+                    addTitleText(rect8.left! + txtLeft, rect8.top! + titleTxtTop, +id),
+                    addSubText(rect8.left! + txtLeft, rect8.top! + subTxtTop, +id)
+                );
+                canvas.discardActiveObject();
+                canvas.renderAll();
+                break;
+            case 9:
+                const rect9 = addRectBox(lastRect.left! + rectWidth + 20, lastRect.top! , 5, +id);
+                canvas.add(rect9);
+                canvas.add(
+                    addTitleText(rect9.left! + txtLeft, rect9.top! + titleTxtTop, +id),
+                    addSubText(rect9.left! + txtLeft, rect9.top! + subTxtTop, +id)
+                );
+                canvas.discardActiveObject();
+                canvas.renderAll();
+                break;
             default:
                 break;
         }

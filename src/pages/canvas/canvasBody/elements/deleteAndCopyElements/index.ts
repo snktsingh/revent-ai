@@ -13,6 +13,7 @@ import {
   HUB_AND_SPOKE_BOX_TEXT,
   HUB_AND_SPOKE_CIRCLE,
   HUB_AND_SPOKE_MAIN_TEXT,
+  HUB_AND_SPOKE_TEXT_BOX,
   LIST_IMG,
   LIST_MAIN,
   LIST_TEXT,
@@ -182,13 +183,19 @@ export function useDelAndCopy() {
           );
           break;
         case `${HUB_AND_SPOKE}_${currentElID}`:
-          objectsToDelete.push(
-            `${HUB_AND_SPOKE_BOX}_${currentElID}`,
-            `${HUB_AND_SPOKE_BOX_HEADING}_${currentElID}`,
-            `${HUB_AND_SPOKE_BOX_TEXT}_${currentElID}`,
+          objectsToDelete.push(   
             `${HUB_AND_SPOKE_CIRCLE}_${currentElID}`,
-            `${HUB_AND_SPOKE_MAIN_TEXT}_${currentElID}`
+            `${HUB_AND_SPOKE_MAIN_TEXT}_${currentElID}`,
           );
+          canvas?.forEachObject((obj) => {
+            if(
+              obj.name?.startsWith(`${HUB_AND_SPOKE_BOX}_${currentElID}_`) ||
+              obj.name?.startsWith(`${HUB_AND_SPOKE_TEXT_BOX}_${currentElID}_`) ||
+              obj.name?.startsWith(`${HUB_AND_SPOKE_BOX_HEADING}_${currentElID}`) ||
+              obj.name?.startsWith(`${HUB_AND_SPOKE_BOX_TEXT}_${currentElID}`)
+            )
+              objectsToDelete.push(obj.name);
+          })
           break;
         case `${STATISTICS}_${currentElID}`:
           objectsToDelete.push(

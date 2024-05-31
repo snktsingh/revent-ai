@@ -406,7 +406,7 @@ const CanvasBody = () => {
             <Stack
               direction="row"
               justifyContent="space-between"
-              width={'91.51%'}
+              width={'94.51%'}
             >
               <span>
                 {/* <Tooltip title="Delete Current Slide" placement="top">
