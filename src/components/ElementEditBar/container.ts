@@ -301,12 +301,13 @@ const dispatch = useAppDispatch();
     (selectedElement as fabric.Group).setCoords();
     canvas.renderAll();
   };
+
   const handleChangeImageElement = (canvas : fabric.Canvas) => {
      const activeElement = canvas.getActiveObject();
      if(activeElement && activeElement.type === 'image') {
         imageUploader(canvas, activeElement);
      }
-  }
+  };
 
   return {
     adjustControlsVisibility,
