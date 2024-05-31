@@ -24,7 +24,7 @@ export const useHubAndSpoke = () => {
       top: top,
       width: 250,
       height: 30,
-      name: `${HUB_AND_SPOKE_BOX}_${id}`,
+      name: `${HUB_AND_SPOKE_BOX}_${id}_${level}`,
       fill: '#406098',
       hasControls: false,
       lockMovementX: true,
@@ -42,7 +42,7 @@ export const useHubAndSpoke = () => {
       top: top,
       width: 250,
       height: 90,
-      name: `${HUB_AND_SPOKE_TEXT_BOX}_${id}`,
+      name: `${HUB_AND_SPOKE_TEXT_BOX}_${id}_${level}`,
       fill: '#406098',
       hasControls: false,
       lockMovementX: true,
@@ -72,13 +72,13 @@ export const useHubAndSpoke = () => {
     return circle;
   };
 
-  const addHeadingText = (left: number, top: number, id : number) => {
+  const addHeadingText = (left: number, top: number, id : number, level : number) => {
     const textBox = new AutoResizingTextbox('Add Title', {
       fontSize: 16,
       left: left,
       top: top,
       width: 248,
-      name: `${HUB_AND_SPOKE_BOX_HEADING}_${id}`,
+      name: `${HUB_AND_SPOKE_BOX_HEADING}_${id}_${level}`,
       fill: 'white',
       fixedWidth: 248,
       fixedHeight: 20,
@@ -91,13 +91,13 @@ export const useHubAndSpoke = () => {
     return textBox;
   };
 
-  const addSubText = (left: number, top: number, id : number) => {
+  const addSubText = (left: number, top: number, id : number, level : number) => {
     const textBox = new AutoResizingTextbox('Add Text', {
       fontSize: 15,
       left: left,
       top: top,
       width: 250,
-      name: `${HUB_AND_SPOKE_BOX_TEXT}_${id}`,
+      name: `${HUB_AND_SPOKE_BOX_TEXT}_${id}_${level}`,
       fill: 'white',
       fixedWidth: 250,
       fixedHeight: 90,
@@ -149,20 +149,20 @@ export const useHubAndSpoke = () => {
 
     canvas.add(mainContainer);
     const titleRect1 = addTitleRectBox(45, 100, 1, hubAndSpokeId);
-    const rect1Heading = addHeadingText(titleRect1.left! + 2, titleRect1.top! + 2, hubAndSpokeId);
+    const rect1Heading = addHeadingText(titleRect1.left! + 2, titleRect1.top! + 2, hubAndSpokeId, 1);
     const titleRect2 = addTitleRectBox(titleRect1.left! + titleRectWidth + 20, 100, 2, hubAndSpokeId);
-    const rect2Heading = addHeadingText(titleRect2.left! + 2, titleRect2.top! + 2, hubAndSpokeId);
+    const rect2Heading = addHeadingText(titleRect2.left! + 2, titleRect2.top! + 2, hubAndSpokeId, 2);
     const titleRect3 = addTitleRectBox(titleRect2.left! + titleRectWidth + 20, 100, 3, hubAndSpokeId);
-    const rect3Heading = addHeadingText(titleRect3.left! + 2, titleRect3.top! + 2, hubAndSpokeId);
+    const rect3Heading = addHeadingText(titleRect3.left! + 2, titleRect3.top! + 2, hubAndSpokeId, 3);
 
     const circle = addCircle(titleRect1.left! + titleRectWidth + 80, 230, hubAndSpokeId);
 
     const textRect1 = addTextRectBox(titleRect1.left! , titleRect1.top! + titleRectHeight + 3, 1, hubAndSpokeId);
-    const text1 = addSubText(textRect1.left! + 2, textRect1.top! + 2, hubAndSpokeId);
+    const text1 = addSubText(textRect1.left! + 2, textRect1.top! + 2, hubAndSpokeId, 1);
     const textRect2 = addTextRectBox(titleRect2.left! , titleRect2.top! + titleRectHeight + 3, 2, hubAndSpokeId);
-    const text2 = addSubText(textRect2.left! + 2, textRect2.top! + 2, hubAndSpokeId);
+    const text2 = addSubText(textRect2.left! + 2, textRect2.top! + 2, hubAndSpokeId, 2);
     const textRect3 = addTextRectBox(titleRect3.left! , titleRect3.top! + titleRectHeight + 3, 3, hubAndSpokeId);
-    const text3 = addSubText(textRect3.left! + 2, textRect3.top! + 2, hubAndSpokeId);
+    const text3 = addSubText(textRect3.left! + 2, textRect3.top! + 2, hubAndSpokeId, 3);
 
     canvas.add(circle);
     canvas.add(titleRect1, textRect1);
@@ -201,8 +201,8 @@ export const useHubAndSpoke = () => {
           const rect = addTitleRectBox(lastRect.left!, lastRect.top! + textRectHeight + 10, 4, +id);
           const textRect = addTextRectBox(rect.left!, rect.top! + titleRectHeight + 3, 4, +id)
           canvas.add(rect, textRect);
-          canvas.add(addHeadingText(rect.left! + 2, rect.top! + 2, +id));
-          canvas.add(addSubText(textRect.left! + 2, textRect.top! + 2, +id));
+          canvas.add(addHeadingText(rect.left! + 2, rect.top! + 2, +id, 4));
+          canvas.add(addSubText(textRect.left! + 2, textRect.top! + 2, +id, 4));
           canvas.discardActiveObject()
           canvas.renderAll();
           break;
@@ -217,8 +217,8 @@ export const useHubAndSpoke = () => {
           const rect5 = addTitleRectBox(lastRect.left!, lastRect.top! + textRectHeight + 10, 5, +id);
           const textRect5 = addTextRectBox(rect5.left!, rect5.top! + titleRectHeight + 3, 5, +id)
           canvas.add(rect5, textRect5);
-          canvas.add(addHeadingText(rect5.left! + 2, rect5.top! + 2, +id));
-          canvas.add(addSubText(textRect5.left! + 2, textRect5.top! + 2, +id));
+          canvas.add(addHeadingText(rect5.left! + 2, rect5.top! + 2, +id, 5));
+          canvas.add(addSubText(textRect5.left! + 2, textRect5.top! + 2, +id, 5));
           canvas.discardActiveObject()
           canvas.renderAll();
           break;
@@ -226,8 +226,8 @@ export const useHubAndSpoke = () => {
           const rect6 = addTitleRectBox(lastRect.left! - titleRectWidth - 20, lastRect.top! - titleRectHeight - 3, 6, +id);
           const textRect6 = addTextRectBox(rect6.left!, rect6.top! + titleRectHeight + 3, 6, +id);
           canvas.add(rect6, textRect6);
-          canvas.add(addHeadingText(rect6.left! + 2, rect6.top! + 2, +id));
-          canvas.add(addSubText(rect6.left! + 2, rect6.top! + 30, +id));
+          canvas.add(addHeadingText(rect6.left! + 2, rect6.top! + 2, +id, 6));
+          canvas.add(addSubText(rect6.left! + 2, rect6.top! + 30, +id, 6));
           canvas.discardActiveObject()
           canvas.renderAll();
           break;
@@ -235,8 +235,8 @@ export const useHubAndSpoke = () => {
           const rect7 = addTitleRectBox(lastRect.left! - titleRectWidth - 20, lastRect.top! - titleRectHeight - 3, 7, +id);
           const textRect7 = addTextRectBox(rect7.left!, rect7.top! + titleRectHeight + 3, 7, +id);
           canvas.add(rect7, textRect7);
-          canvas.add(addHeadingText(rect7.left! + 2, rect7.top! + 2, +id));
-          canvas.add(addSubText(textRect7.left! + 2, textRect7.top! + 30, +id));
+          canvas.add(addHeadingText(rect7.left! + 2, rect7.top! + 2, +id, 7));
+          canvas.add(addSubText(textRect7.left! + 2, textRect7.top! + 30, +id, 7));
           canvas.discardActiveObject()
           canvas.renderAll();
           break;
@@ -244,8 +244,8 @@ export const useHubAndSpoke = () => {
           const rect8 = addTitleRectBox(lastRect.left!, lastRect.top! - titleRectHeight - 3 - 120 - 10 -3, 8, +id);
           const textRect8 = addTextRectBox(rect8.left!, rect8.top! + titleRectHeight + 3, 8, +id);
           canvas.add(rect8, textRect8);
-          canvas.add(addHeadingText(rect8.left! + 2, rect8.top! + 2, +id));
-          canvas.add(addSubText(textRect8.left! + 2, textRect8.top! + 30, +id));
+          canvas.add(addHeadingText(rect8.left! + 2, rect8.top! + 2, +id, 8));
+          canvas.add(addSubText(textRect8.left! + 2, textRect8.top! + 30, +id, 8));
           canvas.discardActiveObject()
           canvas.renderAll();
           break;

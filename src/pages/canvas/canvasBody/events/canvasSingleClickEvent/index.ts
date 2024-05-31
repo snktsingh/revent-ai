@@ -7,6 +7,10 @@ import {
   FUNNEL_BASE,
   FUNNEL_LEVEL,
   FUNNEL_TEXT,
+  HUB_AND_SPOKE_BOX,
+  HUB_AND_SPOKE_BOX_HEADING,
+  HUB_AND_SPOKE_BOX_TEXT,
+  HUB_AND_SPOKE_TEXT_BOX,
   PROCESS,
   PROCESS_BOX,
   PROCESS_TEXT,
@@ -121,6 +125,32 @@ export function useCanvasSingleClickEvent() {
           canvas.forEachObject((obj: any) => {
             if (
               obj.level === `${SWOT_TEXT}_${id}_${level}` &&
+              obj.type === 'textbox'
+            ) {
+              if (obj.text === 'Add Text') {
+                obj.selectAll();
+              }
+              obj.enterEditing();
+            }
+          });
+        } else if (object.level.startsWith(HUB_AND_SPOKE_BOX)) {
+          const [_, id, level] = object.level.split('_');
+          canvas.forEachObject((obj: any) => {
+            if (
+              obj.level === `${HUB_AND_SPOKE_BOX_HEADING}_${id}_${level}` &&
+              obj.type === 'textbox'
+            ) {
+              if (obj.text === 'Add Title') {
+                obj.selectAll();
+              }
+              obj.enterEditing();
+            }
+          });
+        } else if (object.level.startsWith(HUB_AND_SPOKE_TEXT_BOX)) {
+          const [_, id, level] = object.level.split('_');
+          canvas.forEachObject((obj: any) => {
+            if (
+              obj.level === `${HUB_AND_SPOKE_BOX_TEXT}_${id}_${level}` &&
               obj.type === 'textbox'
             ) {
               if (obj.text === 'Add Text') {

@@ -394,7 +394,7 @@ const useCanvasData = () => {
     });
 
     Object.entries(organizedStatisticsData).forEach(([id, content]) => {
-      const statsElement = getOrCreateElement('Statistics', id, outputFormat);
+      const statsElement = getOrCreateElement('Metric', id, outputFormat);
       statsElement.data = content;
       statsElement.title = titleText;
       statsElement.subTitle = subTitleText;

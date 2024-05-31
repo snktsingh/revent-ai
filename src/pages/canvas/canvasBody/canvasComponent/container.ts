@@ -7,6 +7,8 @@ import {
   HUB_AND_SPOKE_BOX_HEADING,
   HUB_AND_SPOKE_BOX_TEXT,
   HUB_AND_SPOKE_CIRCLE,
+  HUB_AND_SPOKE_MAIN_TEXT,
+  HUB_AND_SPOKE_TEXT_BOX,
   LIST_TEXT,
   PROCESS_ARROW,
   PROCESS_BOX,
@@ -224,6 +226,8 @@ export const useCanvasComponent = () => {
       elementName.startsWith(HUB_AND_SPOKE_BOX_HEADING) ||
       elementName.startsWith(HUB_AND_SPOKE_BOX_TEXT) ||
       elementName.startsWith(HUB_AND_SPOKE_CIRCLE) ||
+      elementName.startsWith(HUB_AND_SPOKE_TEXT_BOX) ||
+      elementName.startsWith(HUB_AND_SPOKE_MAIN_TEXT) ||
       elementName.startsWith(STATISTICS_BOX) ||
       elementName.startsWith(STATISTICS_TITLE_TEXT) ||
       elementName.startsWith(STATISTICS_TEXT)
