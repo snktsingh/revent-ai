@@ -13,6 +13,7 @@ import {
   HUB_AND_SPOKE_BOX_TEXT,
   HUB_AND_SPOKE_CIRCLE,
   HUB_AND_SPOKE_MAIN_TEXT,
+  HUB_AND_SPOKE_TEXT_BOX,
   LIST_IMG,
   LIST_MAIN,
   LIST_TEXT,
@@ -187,7 +188,8 @@ export function useDelAndCopy() {
             `${HUB_AND_SPOKE_BOX_HEADING}_${currentElID}`,
             `${HUB_AND_SPOKE_BOX_TEXT}_${currentElID}`,
             `${HUB_AND_SPOKE_CIRCLE}_${currentElID}`,
-            `${HUB_AND_SPOKE_MAIN_TEXT}_${currentElID}`
+            `${HUB_AND_SPOKE_MAIN_TEXT}_${currentElID}`,
+            `${HUB_AND_SPOKE_TEXT_BOX}_${currentElID}`
           );
           break;
         case `${STATISTICS}_${currentElID}`:

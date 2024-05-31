@@ -14,6 +14,8 @@ import {
   HUB_AND_SPOKE_BOX_HEADING,
   HUB_AND_SPOKE_BOX_TEXT,
   HUB_AND_SPOKE_CIRCLE,
+  HUB_AND_SPOKE_MAIN_TEXT,
+  HUB_AND_SPOKE_TEXT_BOX,
   LIST_MAIN,
   LIST_TEXT,
   PROCESS,
@@ -236,11 +238,12 @@ export function useObjectMovingEvent() {
       } else if (objectName[0] === TABLE) {
         const lastLeft = movedObject.get('lastLeft') || movedObject.left;
         const lastTop = movedObject.get('lastTop') || movedObject.top;
-
         const deltaX = movedObject.left! - lastLeft!;
         const deltaY = movedObject.top! - lastTop!;
-
+        
         canvas.forEachObject(function (obj) {
+          let left;
+          let top;
           if (
             obj.name?.startsWith(`${TABLE_TEXT}_`) &&
             obj.intersectsWithObject(movedObject, true, true)
@@ -344,7 +347,9 @@ export function useObjectMovingEvent() {
             obj.name?.startsWith(HUB_AND_SPOKE_BOX) ||
             obj.name?.startsWith(HUB_AND_SPOKE_BOX_HEADING) ||
             obj.name?.startsWith(HUB_AND_SPOKE_BOX_TEXT) ||
-            obj.name?.startsWith(HUB_AND_SPOKE_CIRCLE) 
+            obj.name?.startsWith(HUB_AND_SPOKE_CIRCLE) ||
+            obj.name?.startsWith(HUB_AND_SPOKE_TEXT_BOX) ||
+            obj.name?.startsWith(HUB_AND_SPOKE_MAIN_TEXT) 
           ) {
             obj
               .set({

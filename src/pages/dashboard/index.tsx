@@ -200,6 +200,7 @@ const Dashboard = () => {
               <Stack direction='row'>
                 <Button onClick={handleClose}>No</Button>
                 <Button
+                  color='error'
                   onClick={() => {
                     removePresentation(currentPresentation.presentationId);
                     handleClose();

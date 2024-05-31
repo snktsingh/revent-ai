@@ -92,7 +92,6 @@ const dispatch = useAppDispatch();
     let hubAndSpokeCount = countObjects(canvas, HUB_AND_SPOKE_BOX);
     let statisticElCount = countObjects(canvas, STATISTICS_BOX);
 
-    console.log(statisticElCount)
 
     let showPlusIcon = false;
     let showTableIcons = false;

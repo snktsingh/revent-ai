@@ -61,7 +61,7 @@ const PopUpModal = () => {
           </Stack>
           <Stack direction='row'>
             <Button color="primary" onClick={() => dispatch(closeModal())}>Cancel</Button>
-            <Button color="secondary" onClick={handleDelete} disabled={(canvasList && canvasList.length === 1)}>
+            <Button color='error' onClick={handleDelete} disabled={(canvasList && canvasList.length === 1)}>
               Delete
             </Button>
           </Stack>
