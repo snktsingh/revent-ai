@@ -80,9 +80,8 @@ const CanvasComponent: React.FC = () => {
       return;
     }
     updateCanvasDimensions(canvas);
-    const center = canvas.getCenter();
     canvas.clear();
-    // updateCanvasStyle(canvas);
+    updateCanvasStyle(canvas);
     fabric.Object.prototype.set({
       cornerStyle: 'circle',
       transparentCorners: false,
