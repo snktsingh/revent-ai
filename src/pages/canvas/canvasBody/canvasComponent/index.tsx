@@ -79,9 +79,10 @@ const CanvasComponent: React.FC = () => {
       console.error('Failed to initialize Fabric canvas');
       return;
     }
-
-    updateCanvasStyle(canvas);
+    updateCanvasDimensions(canvas);
+    const center = canvas.getCenter();
     canvas.clear();
+    // updateCanvasStyle(canvas);
     fabric.Object.prototype.set({
       cornerStyle: 'circle',
       transparentCorners: false,

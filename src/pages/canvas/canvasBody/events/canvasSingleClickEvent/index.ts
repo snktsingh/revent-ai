@@ -20,6 +20,8 @@ import {
   PYRAMID,
   PYRAMID_LEVEL,
   PYRAMID_TEXT,
+  STATISTICS,
+  STATISTICS_BOX,
   SWOT_BOX,
   SWOT_TEXT,
 } from '@/constants/elementNames';
@@ -73,6 +75,15 @@ export function useCanvasSingleClickEvent() {
             obj.enterEditing();
           }
           if(obj.name === `${HUB_AND_SPOKE}_${id}`){
+            canvas.setActiveObject(obj);
+            canvas.renderAll();
+         }
+        });
+      }
+       if (object.name.startsWith(STATISTICS_BOX)) {
+         const [_, id] = object.name.split('_');
+         canvas.forEachObject((obj: any) => {
+          if(obj.name === `${STATISTICS}_${id}`){
             canvas.setActiveObject(obj);
             canvas.renderAll();
          }
