@@ -239,15 +239,11 @@ const Dashboard = () => {
                         }}
 
                       >
-                        <img
-                          src={ppt.thumbnailUrl || Blank}
-                          style={{
-                            width: '100%',
-                            height: ppt.thumbnailUrl ? 'auto' : '30%',
-                            objectFit: 'cover',
-                          }}
-                          alt={ppt.name || 'Untitled presentation'}
-                        />
+                         {ppt.thumbnailUrl !== '' ? (
+                          <img src={ppt.thumbnailUrl} width="100%" />
+                        ) : (
+                          <img src={Blank} width="100%" height="30%" />
+                        )}
                       </Card>
                       <Stack
                         direction="row"
