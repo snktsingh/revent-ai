@@ -17,7 +17,7 @@ export const ENDPOINT = {
     CREDIT_AMOUNT: '/user-credit',
     RESET_PASS_INIT: '/account/reset-password/init',
     RESET_PASS_FINISH: '/account/reset-password/finish',
-    USER_PREFERENCE : '/user-preferences',
+    USER_PREFERENCE: '/user-preferences',
   },
   PPT: {
     CREATE_PPT: 'ppt/create-presentation',
@@ -29,6 +29,7 @@ export const ENDPOINT = {
     UPLOAD_THEME: '/template/upload-custom',
     DOWNLOAD_PRESENTATION: '/ppt/download-presentation',
     UPDATE_ACTIVE_VARIANT: '/ppt/update-active-slide',
+    CREATE_DOC_PPT: '/ppt/transform',
   },
   DASHBOARD: {
     FETCH_PPT_LIST: 'ppt/get-all-presentation',

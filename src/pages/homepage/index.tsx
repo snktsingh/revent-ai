@@ -84,6 +84,9 @@ import { Token, isAuth } from '@/utils/localStorage/data';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { getUserDetails } from '@/redux/thunk/user';
 import ProfileMenu from '@/common-ui/profileMenu';
+import { FetchUtils } from '@/utils/fetch-utils';
+import ENDPOINT from '@/constants/endpoint';
+import { setSelectedDocFile } from '@/redux/reducers/theme';
 
 interface FileUploadProps {
   onFileSelect: (file: File) => void;
@@ -92,6 +95,10 @@ const Home = ({ onFileSelect }: any) => {
   const [data, handleSubmit] = useForm('mbjvbjvd');
   const [data2, handleEmailSubmit] = useForm('xrgwdbzz');
   const { userDetails } = useAppSelector(state => state.manageUser);
+  const { themeId, selectedDocFile } = useAppSelector(
+    state => state.slideTheme
+  );
+
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const {
@@ -124,23 +131,22 @@ const Home = ({ onFileSelect }: any) => {
 
   useEffect(() => {
     handleProductRef();
-  }, [])
+  }, []);
 
   type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
-
   const toggleDrawer =
     (anchor: Anchor, open: boolean) =>
-      (event: React.KeyboardEvent | React.MouseEvent) => {
-        if (
-          event.type === 'keyRight' &&
-          ((event as React.KeyboardEvent).key === '' ||
-            (event as React.KeyboardEvent).key === '')
-        ) {
-          return;
-        }
-        setState({ ...state, [anchor]: open });
-      };
+    (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (
+        event.type === 'keyRight' &&
+        ((event as React.KeyboardEvent).key === '' ||
+          (event as React.KeyboardEvent).key === '')
+      ) {
+        return;
+      }
+      setState({ ...state, [anchor]: open });
+    };
   const workingRef = useRef<HTMLDivElement>(null);
   const handleWorking = () => {
     if (workingRef.current) {
@@ -197,6 +203,7 @@ const Home = ({ onFileSelect }: any) => {
     if (files && files.length > 0) {
       const selected = files[0];
       setSelectedFile(selected);
+      dispatch(setSelectedDocFile(selected));
       onFileSelect(selected);
     }
   };
@@ -219,6 +226,7 @@ const Home = ({ onFileSelect }: any) => {
     if (files && files.length > 0) {
       const droppedFile = files[0];
       setSelectedFile(droppedFile);
+      dispatch(setSelectedDocFile(droppedFile));
       onFileSelect(droppedFile);
     }
   };
@@ -233,13 +241,35 @@ const Home = ({ onFileSelect }: any) => {
     setOpenProfileMenu(null);
   };
 
-  // useEffect(() => {
-  //   if (Token !== '' && Token !== null) {
-  //     // dispatch(getUserDetails());
-  //   }
-  // }, []);
-
   const inputRef = React.createRef<HTMLInputElement>();
+
+  const handleDocsPPt = async () => {
+    if (isAuth && Token) {
+      try {
+        const docData = new FormData();
+        if (themeId && selectedFile) {
+          docData.append('file', selectedDocFile);
+          docData.append('themeId', themeId);
+        }
+        const res = await FetchUtils.postRequest(
+          `${ENDPOINT.PPT.CREATE_DOC_PPT}`,
+          docData
+        );
+        setSelectedFile(null);
+        toast.success(
+          'Your Presentation is under creation, Please visit the dashboard to see the status.'
+        );
+      } catch (error) {
+        toast.error('Conversion failed');
+      }
+    } else {
+      toast.warning('Please login to Generate');
+      setTimeout(() => {
+        navigate('/login');
+      }, 1000);
+    }
+  };
+
   return (
     <>
       <ToastContainer position="top-center" autoClose={1000} />
@@ -327,148 +357,76 @@ const Home = ({ onFileSelect }: any) => {
                 <Stack direction="row" width="80vw" spacing={13}>
                   <ComingSoonContainer>
                     <CardBox>
-                      <CardSpan></CardSpan>
                       <>
-                      <UploadSubtitle>Transform</UploadSubtitle>
-                      <p>an exisiting document</p>
-                    </>
-                    <div
-                      style={{
-                        cursor: 'pointer',
-                      }}
-                    // onClick={handleContainerClick}
-                    // onDragOver={handleDragOver}
-                    // onDrop={handleDrop}
-                    >
-                      <input
-                        type="file"
-                        accept=".pdf,.docx,.doc"
-                        onChange={handleFileChange}
-                        ref={inputRef}
-                        style={{ display: 'none' }}
-                      />
-                      {selectedFile ? (
-                        <></>
-                      ) : (
-                        <>
-                          <br />
-                          <br />
-                          <img src={Folder} width="30px" />
-                          <br />
-                          <br />
-                          <span>
-                            <b>Drag and Drop</b>
+                        <UploadSubtitle>Transform</UploadSubtitle>
+                        <p>an exisiting document</p>
+                      </>
+                      <div
+                        style={{
+                          cursor: 'pointer',
+                        }}
+                        onClick={handleContainerClick}
+                        onDragOver={handleDragOver}
+                        onDrop={handleDrop}
+                      >
+                        <input
+                          type="file"
+                          accept=".pdf,.docx,.doc"
+                          onChange={handleFileChange}
+                          ref={inputRef}
+                          style={{ display: 'none' }}
+                        />
+                        {selectedFile ? (
+                          <></>
+                        ) : (
+                          <>
+                            <br />
+                            <br />
+                            <img src={Folder} width="30px" />
+                            <br />
                             <br />
                             <span>
-                              your document here <br />
-                              or click to Browse
+                              <b>Drag and Drop</b>
+                              <br />
+                              <span>
+                                your document here <br />
+                                or click to Browse
+                              </span>
                             </span>
-                          </span>
+                            <br />
+                            <br />
+                            <br />
+                            <>File should be .pdf, .doc or .docx</>
+                          </>
+                        )}
+                      </div>
+                      {selectedFile === null ? (
+                        <></>
+                      ) : (
+                        <span
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}
+                        >
                           <br />
+                          <img src={UploadTick} width="40px" />
                           <br />
+                          <b>File Uploaded</b>
+                          <p>{selectedFile.name}</p>
                           <br />
-                          <>File should be .pdf, .doc or .docx</>
-                        </>
+                          <img
+                            src={CancelUpload}
+                            width="40px"
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => setSelectedFile(null)}
+                          />
+                        </span>
                       )}
-                    </div>
-                    {selectedFile === null ? (
-                      <></>
-                    ) : (
-                      <span
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <br />
-                        <img src={UploadTick} width="40px" />
-                        <br />
-                        <b>File Uploaded</b>
-                        <p>{selectedFile.name}</p>
-                        <br />
-                        <img
-                          src={CancelUpload}
-                          width="40px"
-                          style={{ cursor: 'pointer' }}
-                          onClick={() => setSelectedFile(null)}
-                        />
-                      </span>
-                    )}
                     </CardBox>
                   </ComingSoonContainer>
-                  {/* <UploadContainer>
-                    <>
-                      <UploadSubtitle>Transform</UploadSubtitle>
-                      <p>an exisiting document</p>
-                    </>
-                    <div
-                      style={{
-                        cursor: 'pointer',
-                      }}
-                    // onClick={handleContainerClick}
-                    // onDragOver={handleDragOver}
-                    // onDrop={handleDrop}
-                    >
-                      <input
-                        type="file"
-                        accept=".pdf,.docx,.doc"
-                        onChange={handleFileChange}
-                        ref={inputRef}
-                        style={{ display: 'none' }}
-                      />
-                      {selectedFile ? (
-                        <></>
-                      ) : (
-                        <>
-                          <br />
-                          <br />
-                          <img src={Folder} width="30px" />
-                          <br />
-                          <br />
-                          <span>
-                            <b>Drag and Drop</b>
-                            <br />
-                            <span>
-                              your document here <br />
-                              or click to Browse
-                            </span>
-                          </span>
-                          <br />
-                          <br />
-                          <br />
-                          <>File should be .pdf, .doc or .docx</>
-                        </>
-                      )}
-                    </div>
-                    {selectedFile === null ? (
-                      <></>
-                    ) : (
-                      <span
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <br />
-                        <img src={UploadTick} width="40px" />
-                        <br />
-                        <b>File Uploaded</b>
-                        <p>{selectedFile.name}</p>
-                        <br />
-                        <img
-                          src={CancelUpload}
-                          width="40px"
-                          style={{ cursor: 'pointer' }}
-                          onClick={() => setSelectedFile(null)}
-                        />
-                      </span>
-                    )}
-                  </UploadContainer> */}
-
                   <UploadContainer
                     onClick={handleTry}
                     style={{ cursor: 'pointer' }}
@@ -495,10 +453,14 @@ const Home = ({ onFileSelect }: any) => {
                     alignItems: 'center',
                   }}
                 >
-                  <CustomButton variant="contained">
+                  <CustomButton
+                    variant="contained"
+                    disabled={selectedFile ? false : true}
+                    onClick={handleDocsPPt}
+                  >
                     <Stack direction="row" spacing={2}>
                       <img src={Wand} />
-                      <p>Coming Soon...</p>
+                      <p>Generate Presentation</p>
                     </Stack>
                   </CustomButton>
                   <ContainerDescription
