@@ -45,11 +45,10 @@ export const PreviewCard = styled(Card)`
 `;
 export const CardTitle = styled.span`
   margin-bottom: 20px;
-
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
-  gap: 3%;
+  gap: 2.5%;
 `;
 export const CardLink = styled(Link)`
   text-decoration: none !important;

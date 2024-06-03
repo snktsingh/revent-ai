@@ -119,6 +119,7 @@ const MainCanvasHeader = ({ pId }: any) => {
         <CanvasHeaderInput
           placeholder="Untitled presentation"
           value={presentationName}
+          style={{ width: 'auto', minWidth: '50px' }}
           onKeyDown={handleKeyDown}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             dispatch(setPresentationName(e.target.value));
