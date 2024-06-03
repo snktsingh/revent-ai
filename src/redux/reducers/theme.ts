@@ -6,6 +6,7 @@ interface slideThemes {
   jsonData: any;
   themeId: number;
   selectedThemeId: number;
+  selectedDocFile: any;
 }
 
 const initialState: slideThemes = {
@@ -14,6 +15,7 @@ const initialState: slideThemes = {
   themeId: 1,
   jsonData: null,
   selectedThemeId: 0,
+  selectedDocFile: null,
 };
 
 export const themeReducer = createSlice({
@@ -26,7 +28,7 @@ export const themeReducer = createSlice({
     setThemeCode: (state, action) => {
       state.themeCode = action.payload;
     },
-    setThemeId: (state, action : PayloadAction<number>) => {
+    setThemeId: (state, action: PayloadAction<number>) => {
       state.themeId = action.payload;
     },
     setPptData: (state, action) => {
@@ -34,6 +36,9 @@ export const themeReducer = createSlice({
     },
     setSelectedTheme: (state, action) => {
       state.selectedThemeId = action.payload;
+    },
+    setSelectedDocFile: (state, action) => {
+      state.selectedDocFile = action.payload;
     },
   },
 });
@@ -44,5 +49,6 @@ export const {
   setPptData,
   setThemeId,
   setSelectedTheme,
+  setSelectedDocFile,
 } = themeReducer.actions;
 export default themeReducer.reducer;

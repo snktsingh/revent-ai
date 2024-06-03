@@ -44,9 +44,6 @@ export const useBulletOrNumberedText = () => {
   return { BulletText, renderBulletOrNumTextLine };
 };
 
-
-
-
 // export const useBulletOrNumberedText = () => {
 //   const text = `Click to add a bullet point`;
 
@@ -116,8 +113,5 @@ export const useBulletOrNumberedText = () => {
 //   } as IExtendedTextBoxOptions);
 //   BulletText.toggleBulletOnText();
 
-  
-
 //   return { BulletText, renderBulletOrNumTextLine };
 // };
-
