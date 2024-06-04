@@ -59,24 +59,29 @@ const Dashboard = () => {
     removePresentation,
     getFirstLettersForAvatar,
     setOpenProfileMenu,
-    handlePptDelCheckBox
+    handlePptDelCheckBox,
   } = useDashboard();
-
 
   const { userDetails } = useAppSelector(state => state.manageUser);
   const { loadingUserDetails, pptList, hasMore } = useAppSelector(
     state => state.manageDashboard
   );
   const contextMenuRef = useRef<HTMLDivElement | null>(null);
-  const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
+  const [contextMenu, setContextMenu] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
   const [currentPresentation, setCurrentPresentation] = useState<any>(null);
   useEffect(() => {
     dispatch(fetchPPTList(0));
 
     function handleClick(e: any) {
       if (contextMenuRef.current) {
-        console.log(e)
-        if (!contextMenuRef.current.contains(e.target) && e.target.id !== 'more_menu') {
+        console.log(e);
+        if (
+          !contextMenuRef.current.contains(e.target) &&
+          e.target.id !== 'more_menu'
+        ) {
           setContextMenu(null);
         }
       }
@@ -85,7 +90,7 @@ const Dashboard = () => {
     document.addEventListener('click', handleClick);
     return () => {
       document.removeEventListener('click', handleClick);
-    }
+    };
   }, []);
 
   const handleMore = async () => {
@@ -102,20 +107,19 @@ const Dashboard = () => {
   //     : pptList;
 
   useEffect(() => {
-    const filteredList = searchTerm.length > 0
-      ? pptList.filter((ppt: IPresentation) =>
-        ppt.name.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-      : pptList;
+    const filteredList =
+      searchTerm.length > 0
+        ? pptList.filter((ppt: IPresentation) =>
+            ppt.name.toLowerCase().includes(searchTerm.toLowerCase())
+          )
+        : pptList;
 
-
-    setFilteredPptList(filteredList)
-  }, [pptList, searchTerm])
-
+    setFilteredPptList(filteredList);
+  }, [pptList, searchTerm]);
 
   const handleContextMenu = (event: React.MouseEvent, presentation: any) => {
     event.preventDefault();
-    setCurrentPresentation(presentation)
+    setCurrentPresentation(presentation);
     setContextMenu({ x: event.clientX, y: event.clientY });
     // setContextMenu(contextMenu === null ? { x: event.clientX, y: event.clientY } : null);
   };
@@ -153,7 +157,7 @@ const Dashboard = () => {
                       }}
                     />
                   </PreviewCard>
-                  {slide.title}
+                  <span title={slide.title}>{slide.title}</span>
                 </CardLink>
               </CardTitle>
             );
@@ -183,24 +187,24 @@ const Dashboard = () => {
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Are you sure you want to permanently delete the current presentation?
+              Are you sure you want to permanently delete the current
+              presentation?
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Stack
-              direction='row'
-              spacing={19}
-              mt={-1}
-              alignItems={'center'}
-            >
+            <Stack direction="row" spacing={19} mt={-1} alignItems={'center'}>
               <Stack>
-                <FormControlLabel control={<Checkbox size="small" onChange={handlePptDelCheckBox} />} label="Don't show me again" />
-
+                <FormControlLabel
+                  control={
+                    <Checkbox size="small" onChange={handlePptDelCheckBox} />
+                  }
+                  label="Don't show me again"
+                />
               </Stack>
-              <Stack direction='row'>
+              <Stack direction="row">
                 <Button onClick={handleClose}>No</Button>
                 <Button
-                  color='error'
+                  color="error"
                   onClick={() => {
                     removePresentation(currentPresentation.presentationId);
                     handleClose();
@@ -214,59 +218,73 @@ const Dashboard = () => {
           </DialogActions>
         </Dialog>
         {loadingUserDetails === false ? (
-          <Box onContextMenu={(e) => e.preventDefault()}>
+          <Box onContextMenu={e => e.preventDefault()}>
             <Box height="40vh" overflow="auto">
               <CardTitle>
                 {filteredPptList.map((ppt: any, index) => {
                   return (
-                    <CardLink
-                      key={index}
-                      onContextMenu={e => handleContextMenu(e, ppt)}
-                    >
-                      <Card
-                        style={{
-                          width: '180px',
-                          height: '13vh',
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                        }}
-                        onClick={() => {
-                          navigate(
-                            `/presentation/${ppt.presentationId
-                            }-${faker.string.uuid()}`
-                          );
-                        }}
-
+                    <Box sx={{ marginBottom: '10px' }}>
+                      <CardLink
+                        key={index}
+                        onContextMenu={e => handleContextMenu(e, ppt)}
                       >
-                         {ppt.thumbnailUrl !== '' ? (
-                          <img src={ppt.thumbnailUrl} width="100%" />
-                        ) : (
-                          <img src={Blank} width="100%" height="30%" />
-                        )}
-                      </Card>
-                      <Stack
-                        direction="row"
-                        justifyContent="space-between"
-                        display="flex"
-                        alignItems="center"
-                      >
-                        <p>
-                          {ppt.name == undefined
-                            ? 'Untitled-presentation'
-                            : ppt.name}
-                        </p>
-                        <IconButton
-                          onClick={(event) => {
-                            handleContextMenu(event, ppt)
-                            setPptId(ppt.presentationId);
+                        <Card
+                          style={{
+                            width: '180px',
+                            height: '13vh',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
                           }}
-                          id='more_menu'
+                          onClick={() => {
+                            navigate(
+                              `/presentation/${
+                                ppt.presentationId
+                              }-${faker.string.uuid()}`
+                            );
+                          }}
                         >
-                          <MoreVertIcon id='more_menu' fontSize="small" />
-                        </IconButton>
-                      </Stack>
-                    </CardLink>
+                          <img
+                            src={ppt.thumbnailUrl || Blank}
+                            style={{
+                              width: '100%',
+                              height: ppt.thumbnailUrl ? 'auto' : '30%',
+                              objectFit: 'cover',
+                            }}
+                            alt={ppt.name || 'Untitled presentation'}
+                          />
+                        </Card>
+                        <Stack
+                          direction="row"
+                          justifyContent="space-between"
+                          display="flex"
+                          alignItems="center"
+                        >
+                          <p
+                            title={ppt.name}
+                            style={{
+                              maxWidth: '160px',
+                              whiteSpace: 'nowrap',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                            }}
+                          >
+                            {ppt.name == undefined
+                              ? 'Untitled-presentation'
+                              : ppt.name}
+                          </p>
+                          <IconButton
+                            onClick={event => {
+                              handleContextMenu(event, ppt);
+                              setPptId(ppt.presentationId);
+                            }}
+                            id="more_menu"
+                          >
+                            <MoreVertIcon id="more_menu" fontSize="small" />
+                          </IconButton>
+                        </Stack>
+                      </CardLink>
+                    </Box>
                   );
                 })}
               </CardTitle>{' '}

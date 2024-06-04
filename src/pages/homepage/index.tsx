@@ -244,30 +244,31 @@ const Home = ({ onFileSelect }: any) => {
   const inputRef = React.createRef<HTMLInputElement>();
 
   const handleDocsPPt = async () => {
-    if (isAuth && Token) {
-      try {
-        const docData = new FormData();
-        if (themeId && selectedFile) {
-          docData.append('file', selectedDocFile);
-          docData.append('themeId', themeId);
-        }
-        const res = await FetchUtils.postRequest(
-          `${ENDPOINT.PPT.CREATE_DOC_PPT}`,
-          docData
-        );
-        setSelectedFile(null);
-        toast.success(
-          'Your Presentation is under creation, Please visit the dashboard to see the status.'
-        );
-      } catch (error) {
-        toast.error('Conversion failed');
-      }
-    } else {
-      toast.warning('Please login to Generate');
-      setTimeout(() => {
-        navigate('/login');
-      }, 1000);
-    }
+    navigate("/themes")
+    // if (isAuth && Token) {
+    //   try {
+    //     const docData = new FormData();
+    //     if (themeId && selectedFile) {
+    //       docData.append('file', selectedDocFile);
+    //       docData.append('themeId', themeId);
+    //     }
+    //     const res = await FetchUtils.postRequest(
+    //       `${ENDPOINT.PPT.CREATE_DOC_PPT}`,
+    //       docData
+    //     );
+    //     setSelectedFile(null);
+    //     toast.success(
+    //       'Your Presentation is under creation, Please visit the dashboard to see the status.'
+    //     );
+    //   } catch (error) {
+    //     toast.error('Conversion failed');
+    //   }
+    // } else {
+    //   toast.warning('Please login to Generate');
+    //   setTimeout(() => {
+    //     navigate('/login');
+    //   }, 1000);
+    // }
   };
 
   return (
