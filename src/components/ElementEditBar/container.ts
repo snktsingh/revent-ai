@@ -121,10 +121,10 @@ export const useEditBar = () => {
 
       //Minus Icon
       if (
-        (objectName[0] === PYRAMID && pLevels < 6 && pLevels > 2) ||
+        (objectName[0] === PYRAMID && pLevels > 2) ||
         (objectName[0] === PROCESS && processStepsTotal < 6) ||
-        (objectName[0] === TIMELINE && timelineLevels < 8) ||
-        (objectName[0] === FUNNEL && fLevels < 6 && fLevels > 2) ||
+        (objectName[0] === TIMELINE && timelineLevels > 2) ||
+        (objectName[0] === FUNNEL && fLevels > 2) ||
         (objectName[0] === CYCLE && cycleSteps < 6) ||
         (objectName[0] === LIST_MAIN && listCount < 8) ||
         (objectName[0] === CLIENT_LIST_MAIN && clientListCount < 11) ||
