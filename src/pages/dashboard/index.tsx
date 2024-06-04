@@ -110,8 +110,8 @@ const Dashboard = () => {
     const filteredList =
       searchTerm.length > 0
         ? pptList.filter((ppt: IPresentation) =>
-            ppt.name.toLowerCase().includes(searchTerm.toLowerCase())
-          )
+          ppt.name.toLowerCase().includes(searchTerm.toLowerCase())
+        )
         : pptList;
 
     setFilteredPptList(filteredList);
@@ -238,21 +238,16 @@ const Dashboard = () => {
                           }}
                           onClick={() => {
                             navigate(
-                              `/presentation/${
-                                ppt.presentationId
+                              `/presentation/${ppt.presentationId
                               }-${faker.string.uuid()}`
                             );
                           }}
                         >
-                          <img
-                            src={ppt.thumbnailUrl || Blank}
-                            style={{
-                              width: '100%',
-                              height: ppt.thumbnailUrl ? 'auto' : '30%',
-                              objectFit: 'cover',
-                            }}
-                            alt={ppt.name || 'Untitled presentation'}
-                          />
+                          {ppt.thumbnailUrl !== '' ? (
+                            <img src={ppt.thumbnailUrl} width="100%" />
+                          ) : (
+                            <img src={Blank} width="100%" height="30%" />
+                          )}
                         </Card>
                         <Stack
                           direction="row"
