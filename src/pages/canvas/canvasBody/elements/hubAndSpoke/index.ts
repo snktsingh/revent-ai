@@ -60,19 +60,21 @@ export const useHubAndSpoke = () => {
 
 
   const addCircle = (left: number, top: number, id : number) => {
-    const circle = new fabric.Circle({
-      radius: 60,
+    const rect = new fabric.Rect({
       left,
       top,
       fill: '#B0BCDE',
+      width: 250,
       height: 120,
       name: `${HUB_AND_SPOKE_CIRCLE}_${id}`,
       hasControls: false,
       lockMovementX: true,
       lockMovementY: true,
       hasBorders: false,
+      rx: 5,
+      ry: 5,
     });
-    return circle;
+    return rect;
   };
 
   const addHeadingText = (left: number, top: number, id : number, level : number) => {
@@ -116,14 +118,14 @@ export const useHubAndSpoke = () => {
   };
 
   const addHubAndSpokeText = (left: number, top: number) => {
-    const textBox = new AutoResizingTextbox('Add \nHeading', {
+    const textBox = new AutoResizingTextbox('Add Heading', {
       fontSize: 25,
       left: left,
       top: top,
-      width: 100,
+      width: 250,
       name: `${HUB_AND_SPOKE_MAIN_TEXT}_${hubAndSpokeId}`,
       fill: 'white',
-      fixedWidth: 100,
+      fixedWidth: 250,
       fixedHeight: 90,
       hasControls: false,
       lockMovementX: true,
@@ -153,14 +155,14 @@ export const useHubAndSpoke = () => {
     });
 
     canvas.add(mainContainer);
-    const titleRect1 = addTitleRectBox(45, 100, 1, hubAndSpokeId);
+    const titleRect1 = addTitleRectBox(45, 110, 1, hubAndSpokeId);
     const rect1Heading = addHeadingText(titleRect1.left! + 2, titleRect1.top! + 2, hubAndSpokeId, 1);
-    const titleRect2 = addTitleRectBox(titleRect1.left! + titleRectWidth + 20, 100, 2, hubAndSpokeId);
+    const titleRect2 = addTitleRectBox(titleRect1.left! + titleRectWidth + 20, 80, 2, hubAndSpokeId);
     const rect2Heading = addHeadingText(titleRect2.left! + 2, titleRect2.top! + 2, hubAndSpokeId, 2);
-    const titleRect3 = addTitleRectBox(titleRect2.left! + titleRectWidth + 20, 100, 3, hubAndSpokeId);
+    const titleRect3 = addTitleRectBox(titleRect2.left! + titleRectWidth + 20, 110, 3, hubAndSpokeId);
     const rect3Heading = addHeadingText(titleRect3.left! + 2, titleRect3.top! + 2, hubAndSpokeId, 3);
 
-    const circle = addCircle(titleRect1.left! + titleRectWidth + 80, 230, hubAndSpokeId);
+    const circle = addCircle(titleRect2.left!, 220, hubAndSpokeId);
 
     const textRect1 = addTextRectBox(titleRect1.left! , titleRect1.top! + titleRectHeight + 3, 1, hubAndSpokeId);
     const text1 = addSubText(textRect1.left! + 2, textRect1.top! + 2, hubAndSpokeId, 1);
@@ -179,7 +181,7 @@ export const useHubAndSpoke = () => {
     canvas.add(titleRect3, textRect3);
     canvas.add(rect3Heading);
     canvas.add(text3);
-    canvas.add(addHubAndSpokeText(circle.left! + 10, circle.top! + 20));
+    canvas.add(addHubAndSpokeText(circle.left! + 2, circle.top! + 10));
     dispatch(updateHubAndSpokeId());
     canvas.renderAll();
   };
@@ -205,7 +207,7 @@ export const useHubAndSpoke = () => {
 
       switch (+level + 1) {
         case 4:
-          const rect = addTitleRectBox(lastRect.left!, lastRect.top! + textRectHeight + 10, 4, +id);
+          const rect = addTitleRectBox(lastRect.left!, lastRect.top! + textRectHeight + 20, 4, +id);
           const textRect = addTextRectBox(rect.left!, rect.top! + titleRectHeight + 3, 4, +id)
           canvas.add(rect, textRect);
           canvas.add(addHeadingText(rect.left! + 2, rect.top! + 2, +id, 4));
@@ -221,7 +223,7 @@ export const useHubAndSpoke = () => {
           });
           canvas.add(newContainer);
           canvas.remove(mainContainer!);
-          const rect5 = addTitleRectBox(lastRect.left!, lastRect.top! + textRectHeight + 10, 5, +id);
+          const rect5 = addTitleRectBox(lastRect.left! - titleRectWidth - 20, lastRect.top! + textRectHeight - 20, 5, +id);
           const textRect5 = addTextRectBox(rect5.left!, rect5.top! + titleRectHeight + 3, 5, +id)
           canvas.add(rect5, textRect5);
           canvas.add(addHeadingText(rect5.left! + 2, rect5.top! + 2, +id, 5));
@@ -230,7 +232,7 @@ export const useHubAndSpoke = () => {
           canvas.renderAll();
           break;
         case 6:
-          const rect6 = addTitleRectBox(lastRect.left! - titleRectWidth - 20, lastRect.top! - titleRectHeight - 3, 6, +id);
+          const rect6 = addTitleRectBox(lastRect.left! - titleRectWidth - 20, lastRect.top! - titleRectHeight - textRectHeight - 15 , 6, +id);
           const textRect6 = addTextRectBox(rect6.left!, rect6.top! + titleRectHeight + 3, 6, +id);
           canvas.add(rect6, textRect6);
           canvas.add(addHeadingText(rect6.left! + 2, rect6.top! + 2, +id, 6));
@@ -238,24 +240,24 @@ export const useHubAndSpoke = () => {
           canvas.discardActiveObject()
           canvas.renderAll();
           break;
-        case 7:
-          const rect7 = addTitleRectBox(lastRect.left! - titleRectWidth - 20, lastRect.top! - titleRectHeight - 3, 7, +id);
-          const textRect7 = addTextRectBox(rect7.left!, rect7.top! + titleRectHeight + 3, 7, +id);
-          canvas.add(rect7, textRect7);
-          canvas.add(addHeadingText(rect7.left! + 2, rect7.top! + 2, +id, 7));
-          canvas.add(addSubText(textRect7.left! + 2, textRect7.top! + 30, +id, 7));
-          canvas.discardActiveObject()
-          canvas.renderAll();
-          break;
-        case 8:
-          const rect8 = addTitleRectBox(lastRect.left!, lastRect.top! - titleRectHeight - 3 - 120 - 10 -3, 8, +id);
-          const textRect8 = addTextRectBox(rect8.left!, rect8.top! + titleRectHeight + 3, 8, +id);
-          canvas.add(rect8, textRect8);
-          canvas.add(addHeadingText(rect8.left! + 2, rect8.top! + 2, +id, 8));
-          canvas.add(addSubText(textRect8.left! + 2, textRect8.top! + 30, +id, 8));
-          canvas.discardActiveObject()
-          canvas.renderAll();
-          break;
+        // case 7:
+        //   const rect7 = addTitleRectBox(lastRect.left! - titleRectWidth - 20, lastRect.top! - titleRectHeight - 3, 7, +id);
+        //   const textRect7 = addTextRectBox(rect7.left!, rect7.top! + titleRectHeight + 3, 7, +id);
+        //   canvas.add(rect7, textRect7);
+        //   canvas.add(addHeadingText(rect7.left! + 2, rect7.top! + 2, +id, 7));
+        //   canvas.add(addSubText(textRect7.left! + 2, textRect7.top! + 30, +id, 7));
+        //   canvas.discardActiveObject()
+        //   canvas.renderAll();
+        //   break;
+        // case 8:
+        //   const rect8 = addTitleRectBox(lastRect.left!, lastRect.top! - titleRectHeight - 3 - 120 - 10 -3, 8, +id);
+        //   const textRect8 = addTextRectBox(rect8.left!, rect8.top! + titleRectHeight + 3, 8, +id);
+        //   canvas.add(rect8, textRect8);
+        //   canvas.add(addHeadingText(rect8.left! + 2, rect8.top! + 2, +id, 8));
+        //   canvas.add(addSubText(textRect8.left! + 2, textRect8.top! + 30, +id, 8));
+        //   canvas.discardActiveObject()
+        //   canvas.renderAll();
+        //   break;
         default:
           break;
       }

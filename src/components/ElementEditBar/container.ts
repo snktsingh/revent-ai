@@ -112,7 +112,7 @@ export const useEditBar = () => {
         (objectName[0] === CYCLE && cycleSteps < 6) ||
         (objectName[0] === LIST_MAIN && listCount < 8) ||
         (objectName[0] === CLIENT_LIST_MAIN && clientListCount < 11) ||
-        (objectName[0] === HUB_AND_SPOKE && hubAndSpokeCount < 9) ||
+        (objectName[0] === HUB_AND_SPOKE && hubAndSpokeCount < 6) ||
         (objectName[0] === STATISTICS && statisticElCount <= 9)
       ) {
         showPlusIcon = true;
