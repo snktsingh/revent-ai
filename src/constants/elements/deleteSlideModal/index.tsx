@@ -43,9 +43,7 @@ const PopUpModal = () => {
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          {(canvasList && canvasList.length === 1)
-            ? 'You cannot delete the only slide.'
-            : `You want to delete slide ${canvasJS.id}`}
+          {`You want to delete slide ${canvasJS.id}`}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
@@ -61,7 +59,7 @@ const PopUpModal = () => {
           </Stack>
           <Stack direction='row'>
             <Button color="primary" onClick={() => dispatch(closeModal())}>Cancel</Button>
-            <Button color='error' onClick={handleDelete} disabled={(canvasList && canvasList.length === 1)}>
+            <Button color='error' onClick={handleDelete} >
               Delete
             </Button>
           </Stack>

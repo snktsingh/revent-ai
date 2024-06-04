@@ -30,37 +30,26 @@ export interface CanvasSate {
 const canvas = new fabric.Canvas(null);
 const canvasJSON = canvas.toObject();
 
+const newSlide : CanvasItem = {
+  id: 1,
+  canvas: canvasJSON,
+  notes: '',
+  variants: [],
+  originalSlideData: {},
+  listImages: [],
+  slideId: 1,
+  presentationId: 1,
+  lastVariant: '',
+  selectedOriginalCanvas: false,
+}
+
 export const initialState: CanvasSate = {
   color: '',
   textColor: '',
   borderColor: '',
   tableDetails: null,
-  canvasList: [
-    {
-      id: 1,
-      canvas: canvasJSON,
-      notes: '',
-      variants: [],
-      originalSlideData: {},
-      listImages: [],
-      slideId: 1,
-      presentationId: 1,
-      lastVariant: '',
-      selectedOriginalCanvas: false,
-    },
-  ],
-  canvasJS: {
-    id: 1,
-    canvas: canvasJSON,
-    notes: '',
-    variants: [],
-    originalSlideData: {},
-    listImages: [],
-    slideId: 1,
-    presentationId: 1,
-    lastVariant:'',
-    selectedOriginalCanvas: false,
-  },
+  canvasList: [newSlide],
+  canvasJS: newSlide,
   activeSlideID: 1,
   size: 1,
   canvasData: [],
@@ -215,7 +204,14 @@ export const CanvasReducer = createSlice({
     deleteSlide(state, action) {
       const idToDelete = action.payload;
 
-      if (idToDelete >= 1 && idToDelete <= state.canvasList.length) {
+      if(state.canvasList.length === 1 && idToDelete === 1) {
+         state.canvasList = [newSlide];
+         state.canvasJS = newSlide;
+         state.activeSlideID = 1;
+         return;
+      }
+
+      if (idToDelete > 1 && idToDelete <= state.canvasList.length) {
         const updatedCanvasList = state.canvasList.filter(
           canvas => canvas.id !== idToDelete
         );
@@ -230,14 +226,16 @@ export const CanvasReducer = createSlice({
 
         const newActiveCanvasJS = renumberedCanvasList[newActiveSlideId - 1];
         console.log({newActiveCanvasJS, renumberedCanvasList, updatedCanvasList, idToDelete, newActiveSlideId})
-        return {
-          ...state,
-          canvasList: renumberedCanvasList,
-          activeSlideID: newActiveSlideId,
-          canvasJS: newActiveCanvasJS,
-        };
+        state.canvasList = renumberedCanvasList;
+        state.activeSlideID = newActiveSlideId;
+        state.canvasJS = newActiveCanvasJS;
+        // return {
+        //   ...state,
+        //   canvasList: renumberedCanvasList,
+        //   activeSlideID: newActiveSlideId,
+        //   canvasJS: newActiveCanvasJS,
+        // };
       }
-      return state;
     },
     updateCurrentCanvas(state, action: PayloadAction<CanvasItem>) {
       const updatedList = state.canvasList.map(canvasItem => {

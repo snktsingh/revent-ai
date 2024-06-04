@@ -33,9 +33,10 @@ const SlidesContextMenu: React.FC<SlidesContextMenuProps> = ({ anchorPoint, isOp
 
   const handleDeleteSlide = () => {
     if (!userPreferences.isSlideDeleteAlert) {
-      dispatch(openModal());
+        dispatch(openModal());
     } else {
-      if (canvasList && canvasList.length > 1) {
+      
+      if (canvasList && canvasList.length >= 1) {
         dispatch(deleteSlide(slide.id));
       }
     }
