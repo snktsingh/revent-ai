@@ -2,6 +2,10 @@ import {
   FUNNEL,
   FUNNEL_LEVEL,
   FUNNEL_TEXT,
+  PROCESS,
+  PROCESS_ARROW,
+  PROCESS_BOX,
+  PROCESS_TEXT,
   PYRAMID,
   PYRAMID_LEVEL,
   PYRAMID_TEXT,
@@ -45,7 +49,9 @@ export const useRemoveLevels = () => {
           canvas.remove(lastLevel);
           canvas.remove(lastTextBox);
         }
-      } else if (activeObject?.name.startsWith(FUNNEL)) {
+      } 
+      
+      else if (activeObject?.name.startsWith(FUNNEL)) {
         let lastLevel: fabric.Object | undefined;
         let lastTextBox: fabric.Object | undefined;
         canvas.forEachObject(obj => {
@@ -112,6 +118,39 @@ export const useRemoveLevels = () => {
         }
       }
 
+      else if (activeObject?.name.startsWith(PROCESS)) {
+        let lastLevel: fabric.Object | undefined;
+        let lastTextBox: fabric.Object | undefined;
+        let lastArrow: fabric.Object | undefined;
+        let rectCount : number = 0;
+        canvas.forEachObject(obj => {
+          if (obj.name === `${PROCESS_BOX}_${id}`) {
+            lastLevel = obj;
+            rectCount++;
+          } else if (obj.name === `${PROCESS_TEXT}_${id}`) {
+            lastTextBox = obj;
+          } else if (obj.name === `${PROCESS_ARROW}_${id}`) {
+            lastArrow = obj;
+          }
+        });
+        if (lastLevel && lastTextBox && lastArrow) {
+          const mainContainer = new fabric.Rect({
+            left: activeObject.left!,
+            top: activeObject.top!,
+            name: `${PROCESS}_${id}`,
+            width: rectCount <= 3 ? activeObject.width! - 245 : activeObject.width,
+            height: rectCount === 4 ? activeObject.height! - 170 : activeObject.height,
+            fill: 'transparent',
+            strokeWidth: 1,
+            stroke: 'transparent',
+          });
+          canvas.add(mainContainer);
+          canvas.remove(activeObject);
+          canvas.remove(lastLevel);
+          canvas.remove(lastTextBox);
+          canvas.remove(lastArrow);
+        }
+      }
 
     }
 
