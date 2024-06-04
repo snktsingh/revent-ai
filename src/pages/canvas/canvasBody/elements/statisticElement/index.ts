@@ -95,19 +95,19 @@ export const useStatisticsElement = () => {
 
     canvas.add(mainContainer);
     const rect1 = addRectBox(45, 100, 1, statisticsId);
-    const rect2 = addRectBox(
-      rect1.left! + rectWidth + 20,
-      100,
-      2,
-      statisticsId
-    );
-    const rect3 = addRectBox(
-      rect2.left! + rectWidth + 20,
-      100,
-      3,
-      statisticsId
-    );
-    canvas.add(rect1, rect2, rect3);
+    // const rect2 = addRectBox(
+    //   rect1.left! + rectWidth + 20,
+    //   100,
+    //   2,
+    //   statisticsId
+    // );
+    // const rect3 = addRectBox(
+    //   rect2.left! + rectWidth + 20,
+    //   100,
+    //   3,
+    //   statisticsId
+    // );
+    canvas.add(rect1);
     const rect1Heading = addTitleText(
       rect1.left! + 2,
       rect1.top! + 3,
@@ -118,33 +118,29 @@ export const useStatisticsElement = () => {
       rect1.top! + 50,
       statisticsId
     );
-    const rect2Heading = addTitleText(
-      rect2.left! + 2,
-      rect2.top! + 3,
-      statisticsId
-    );
-    const rect2Text = addSubText(
-      rect2.left! + 2,
-      rect2.top! + 50,
-      statisticsId
-    );
-    const rect3Heading = addTitleText(
-      rect3.left! + 2,
-      rect3.top! + 3,
-      statisticsId
-    );
-    const rect3Text = addSubText(
-      rect3.left! + 2,
-      rect3.top! + 50,
-      statisticsId
-    );
+    // const rect2Heading = addTitleText(
+    //   rect2.left! + 2,
+    //   rect2.top! + 3,
+    //   statisticsId
+    // );
+    // const rect2Text = addSubText(
+    //   rect2.left! + 2,
+    //   rect2.top! + 50,
+    //   statisticsId
+    // );
+    // const rect3Heading = addTitleText(
+    //   rect3.left! + 2,
+    //   rect3.top! + 3,
+    //   statisticsId
+    // );
+    // const rect3Text = addSubText(
+    //   rect3.left! + 2,
+    //   rect3.top! + 50,
+    //   statisticsId
+    // );
     canvas.add(
       rect1Heading,
       rect1Text,
-      rect2Heading,
-      rect2Text,
-      rect3Heading,
-      rect3Text
     );
     canvas.renderAll();
     dispatch(updateStatisticsId());
@@ -170,6 +166,26 @@ export const useStatisticsElement = () => {
         let rectWidth = 230;
 
         switch (level + 1) {
+          case 2:
+            const rect2 = addRectBox(lastRect.left! + rectWidth + 20, lastRect.top! , 2, +id);
+            canvas.add(rect2);
+            canvas.add(
+                addTitleText(rect2.left! + txtLeft, rect2.top! + titleTxtTop, +id),
+                addSubText(rect2.left! + txtLeft, rect2.top! + subTxtTop, +id)
+            );
+            canvas.discardActiveObject();
+            canvas.renderAll();
+            break;
+          case 3:
+            const rect3 = addRectBox(lastRect.left! + rectWidth + 20, lastRect.top! , 3, +id);
+            canvas.add(rect3);
+            canvas.add(
+                addTitleText(rect3.left! + txtLeft, rect3.top! + titleTxtTop, +id),
+                addSubText(rect3.left! + txtLeft, rect3.top! + subTxtTop, +id)
+            );
+            canvas.discardActiveObject();
+            canvas.renderAll();
+            break;
             case 4:
                 const rect4 = addRectBox(activeObject.left! + 22, lastRect.top! + 120, 4, +id);
                 canvas.add(rect4);
