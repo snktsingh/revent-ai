@@ -7,7 +7,8 @@ import { useEditBar } from './container';
 import { useTableElement } from '@/pages/canvas/canvasBody/elements/tableElement';
 import { IMAGE, LIST_MAIN, QUOTE_IMG, QUOTE_IMG_CONTAINER, TABLE_HEADER } from '@/constants/elementNames';
 import { useAppSelector } from '@/redux/store';
-
+import RemoveIcon from '@mui/icons-material/Remove';
+import { useRemoveLevels } from '@/pages/canvas/canvasBody/events/removeLevels';
 
 interface ElementEditBarProps {
     left: number;
@@ -35,9 +36,10 @@ const ElementEditBar: React.FC<ElementEditBarProps> = ({ left, top, canvas }) =>
         handleQuoteImage,
         levelIcons,
         handleChangeImageElement,
-        addClientListImage
+        addClientListImage,
+        minusIcon
     } = useEditBar();
-
+    const { handleRemovingLastLevel } = useRemoveLevels();
     const handleDelete = () => {
         deleteObject(canvas);
     };
@@ -197,6 +199,13 @@ const ElementEditBar: React.FC<ElementEditBarProps> = ({ left, top, canvas }) =>
                     <AiSlashIcon/>
                     <AiIcon/>
                 </CheckboxContainer>
+            </Tooltip>}
+            {(!tableIcons && !levelIcons) && <Tooltip title="Undo Last Level" placement="top">
+                <span>
+                    <IconButton onClick={() => handleRemovingLastLevel(canvas!)} disabled={!minusIcon} style={{ color: minusIcon ? '' : '#e0e0e0' }}>
+                        <RemoveIcon />
+                    </IconButton>
+                </span>
             </Tooltip>}
         </EditBarContainer>
     );
