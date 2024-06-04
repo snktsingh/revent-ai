@@ -171,12 +171,14 @@ export const useHubAndSpoke = () => {
 
     canvas.add(circle);
     canvas.add(titleRect1, textRect1);
-    canvas.add(titleRect2, textRect2);
-    canvas.add(titleRect3, textRect3);
-    canvas.add(text1, text2, text3);
     canvas.add(rect1Heading);
+    canvas.add(text1);
+    canvas.add(titleRect2, textRect2);
     canvas.add(rect2Heading);
+    canvas.add(text2);
+    canvas.add(titleRect3, textRect3);
     canvas.add(rect3Heading);
+    canvas.add(text3);
     canvas.add(addHubAndSpokeText(circle.left! + 10, circle.top! + 20));
     dispatch(updateHubAndSpokeId());
     canvas.renderAll();

@@ -79,6 +79,7 @@ const useCanvasData = () => {
         templateName: '',
         elementId,
         data: [],
+        heading : ''
       };
       outputFormat.elements.push(newElement);
       return newElement;
@@ -148,7 +149,6 @@ const useCanvasData = () => {
           element.data?.push({
             name: canvasObject.text,
             label: '',
-            subHeading: '',
             text: canvasObject.text,
           });
         } else if (canvasObject.name === PARAGRAPH) {
@@ -160,7 +160,6 @@ const useCanvasData = () => {
           paragraphData.data?.push({
             name: canvasObject.text,
             label: '',
-            subHeading: '',
             text: canvasObject.text,
           });
         } else if (
@@ -177,7 +176,6 @@ const useCanvasData = () => {
           paragraphData.data?.push({
             name: canvasObject.text,
             label: '',
-            subHeading: '',
             text: canvasObject.text,
           });
         } else if (canvasObject?.name === BULLET_POINTS) {
@@ -279,6 +277,7 @@ const useCanvasData = () => {
         else if (
           canvasObject.name.startsWith(HUB_AND_SPOKE_MAIN_TEXT)
         ) {
+          const [_, id] = canvasObject.name.split('_');
           hubAndSpokeMainText = canvasObject.text;
         } else if (
           canvasObject.name.startsWith(STATISTICS_TEXT) ||
@@ -362,12 +361,10 @@ const useCanvasData = () => {
 
     Object.entries(organizedHubAndSpokeData).forEach(([id, content]) => {
       const hubAndSpokeElement = getOrCreateElement('Hub', id, outputFormat);
-      hubAndSpokeElement.heading = hubAndSpokeMainText;
       hubAndSpokeElement.data = content;
+      hubAndSpokeElement["heading"] = hubAndSpokeMainText;
       hubAndSpokeElement.title = titleText;
       hubAndSpokeElement.subTitle = subTitleText;
-      
-      // console.log({hubAndSpokeElement})
     });
 
     // arrange STATISTICS data
@@ -410,6 +407,11 @@ const useCanvasData = () => {
       } else if (subTitleText) {
         outputFormat['subTitle'] = subTitleText;
       }
+
+      if(outputFormat.elements[0].shape == 'Hub'){
+         outputFormat.elements[0].heading = hubAndSpokeMainText
+      }
+
     } else {
       const titleData = getOrCreateElement('cover', '1', outputFormat);
       titleData['title'] = titleText;
