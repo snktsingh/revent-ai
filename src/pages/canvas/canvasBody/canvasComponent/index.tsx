@@ -62,11 +62,10 @@ const CanvasComponent: React.FC = () => {
     selectedOriginalCanvas,
     isVariantSelected,
     canvasList,
-    activeSlideID
+    activeSlideID,
   } = useAppSelector(state => state.canvas);
 
   useEffect(() => {
-
     setShowOptions(false);
     const canvasElement = document.getElementById('canvas');
     if (!canvasElement) {
@@ -74,7 +73,9 @@ const CanvasComponent: React.FC = () => {
       return;
     }
 
-    const canvas = new fabric.Canvas('canvas', { preserveObjectStacking: true });
+    const canvas = new fabric.Canvas('canvas', {
+      preserveObjectStacking: true,
+    });
     if (!canvas) {
       console.error('Failed to initialize Fabric canvas');
       return;
@@ -108,7 +109,7 @@ const CanvasComponent: React.FC = () => {
             themeId
           ).catch(error => {
             console.error('An error occurred:', error);
-          });;
+          });
         }
 
         if (
@@ -120,12 +121,8 @@ const CanvasComponent: React.FC = () => {
           dispatch(toggleRegenerateButton(true));
         }
 
-
-
-
         updateCanvasSlideData(canvas, canvasJS.id);
         forEachCanvasObject(canvas);
-        // canvas Events
         canvas.on('selection:created', handleElementBarSelection);
         canvas.on('selection:updated', handleElementBarSelection);
 
@@ -158,7 +155,6 @@ const CanvasComponent: React.FC = () => {
         );
         canvas.on('mouse:down', options => onMouseDownEvent(options, canvas));
 
-
         canvas.renderAll();
       },
       (error: Error) => {
@@ -169,17 +165,23 @@ const CanvasComponent: React.FC = () => {
     window.addEventListener('keydown', e => handleKeyDown(e, canvas));
     return () => {
       window.removeEventListener('keydown', e => handleKeyDown(e, canvas));
-      window.removeEventListener('resize', () => { });
+      window.removeEventListener('resize', () => {});
       canvas.dispose();
     };
   }, [canvasJS.canvas, selectedOriginalCanvas]);
 
   useEffect(() => {
-    const slide = canvasList.find((slide) => slide.id === activeSlideID);
+    const slide = canvasList.find(slide => slide.id === activeSlideID);
     setShowOptions(false);
 
-    console.log(canvasRef)
-    if (variantImage && canvasRef.current && slide && slide.variants && slide.variants.length > 0) {
+    console.log(canvasRef);
+    if (
+      variantImage &&
+      canvasRef.current &&
+      slide &&
+      slide.variants &&
+      slide.variants.length > 0
+    ) {
       canvasRef.current?.clear();
 
       canvasRef.current?.setBackgroundColor(
@@ -212,7 +214,7 @@ const CanvasComponent: React.FC = () => {
     }
   }, [variantImage, isVariantSelected]);
 
-  useEffect(() => { }, [selectedElementPosition, showOptions]);
+  useEffect(() => {}, [selectedElementPosition, showOptions]);
 
   return (
     <CanvasContainer onContextMenu={e => e.preventDefault()}>

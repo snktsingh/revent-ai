@@ -1,16 +1,12 @@
 import ThumbnailPreview from '@/common-ui/thumbnailPreview';
 import { Add } from '@/constants/media';
 import { toggleTemplateVisibility } from '@/redux/reducers/elements';
-import {
-  setNewTheme,
-  setThemeCode,
-  setThemeId
-} from '@/redux/reducers/theme';
+import { setNewTheme, setThemeCode, setThemeId } from '@/redux/reducers/theme';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import {
   getAllThemes,
   toggleThemeChange,
-  updatePresentationTheme
+  updatePresentationTheme,
 } from '@/redux/thunk/thunk';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -75,13 +71,17 @@ export default function Templates() {
   const handleClickOpen = (theme: any) => {
     setCurrentTheme(theme);
     dispatch(setThemeId(theme.themeId));
-
+    console.log(theme);
     if (hasVariantsInCanvasList) {
       setOpen(true);
     } else {
+      setOpen(true);
       dispatch(setThemeId(theme.themeId));
     }
-    getElementsData((canvasJS.originalSlideData as any).objects, theme.themeId).catch(error => {
+    getElementsData(
+      (canvasJS.originalSlideData as any).objects,
+      theme.themeId
+    ).catch(error => {
       console.error('An error occurred:', error);
     });
   };

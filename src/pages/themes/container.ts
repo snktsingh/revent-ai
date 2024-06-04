@@ -1,4 +1,8 @@
-import { setSelectedTheme, setThemeId } from '@/redux/reducers/theme';
+import {
+  setSelectedDocFile,
+  setSelectedTheme,
+  setThemeId,
+} from '@/redux/reducers/theme';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import {
   createPresentation,
@@ -47,6 +51,7 @@ const useStartTheme = () => {
           toast.success(
             'Your Presentation is under creation, Please visit the dashboard to see the status.'
           );
+          dispatch(setSelectedDocFile(null));
           setTimeout(() => {
             navigate('/my-presentations');
           }, 1000);
