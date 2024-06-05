@@ -32,6 +32,7 @@ const CanvasComponent: React.FC = () => {
     handleWindowResize,
     forEachCanvasObject,
     updateCanvasStyle,
+    handleBulletIndent,
   } = useCanvasComponent();
 
   const ElementFunctions = useElementFunctions(canvasRef.current);
@@ -96,7 +97,7 @@ const CanvasComponent: React.FC = () => {
       canvasJS.canvas,
       () => {
         canvasRef.current = canvas;
-        // console.log('Loading canvas JSON data:', canvasJS.canvas);
+        console.log('Loading canvas JSON data:', canvasJS);
 
         if (canvas) {
           updateCanvasStyle(canvas);
@@ -161,9 +162,13 @@ const CanvasComponent: React.FC = () => {
         console.error('Error loading canvas:', error);
       }
     );
+    document.addEventListener('keydown', e => handleBulletIndent(e, canvas));
     window.addEventListener('resize', () => updateCanvasDimensions(canvas));
     window.addEventListener('keydown', e => handleKeyDown(e, canvas));
     return () => {
+      document.removeEventListener('keydown', e =>
+        handleBulletIndent(e, canvas)
+      );
       window.removeEventListener('keydown', e => handleKeyDown(e, canvas));
       window.removeEventListener('resize', () => {});
       canvas.dispose();

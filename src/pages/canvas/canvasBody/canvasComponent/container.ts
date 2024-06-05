@@ -52,6 +52,7 @@ import {
 import { useBulletOrNumberedText } from '../elements/BulletOrNumberElement';
 import useCanvasData from './canvasDataExtractor';
 import { SWOTIcon } from '@/constants/media';
+import { CustomTextbox } from '@/utils/fabric-utils/renderBullet';
 
 export const useCanvasComponent = () => {
   const [showOptions, setShowOptions] = useState(false);
@@ -81,7 +82,7 @@ export const useCanvasComponent = () => {
     'listCounter',
     'name',
     'className',
-    'level'
+    'level',
   ];
   const [canvasDimensions, setCanvasDimensions] = useState({
     width: 0,
@@ -132,7 +133,7 @@ export const useCanvasComponent = () => {
         width: canvasWidth,
         height: canvasHeight,
       });
-      
+
       canvas.renderAll();
     }
   };
@@ -153,7 +154,7 @@ export const useCanvasComponent = () => {
         setShowOptions(false);
         return;
       }
-      
+
       setShowOptions(true);
       const boundingRect = selectedObject.getBoundingRect();
       const { left, top, width, height } = boundingRect;
@@ -215,13 +216,13 @@ export const useCanvasComponent = () => {
       elementName.startsWith(TIMELINE_CIRCLE) ||
       elementName.startsWith(TIMELINE_DIRECTION) ||
       elementName.startsWith(TABLE_TEXT) ||
-      elementName.startsWith(TABLE_HEADER) || 
+      elementName.startsWith(TABLE_HEADER) ||
       elementName.startsWith(QUOTE_AUTHOR) ||
       elementName.startsWith(QUOTE_TEXT) ||
       elementName.startsWith(LIST_TEXT) ||
       elementName.startsWith(SWOTIcon) ||
       elementName.startsWith(SWOT_TEXT) ||
-      elementName.startsWith(SWOT_BOX)  ||
+      elementName.startsWith(SWOT_BOX) ||
       elementName.startsWith(HUB_AND_SPOKE_BOX) ||
       elementName.startsWith(HUB_AND_SPOKE_BOX_HEADING) ||
       elementName.startsWith(HUB_AND_SPOKE_BOX_TEXT) ||
@@ -231,7 +232,6 @@ export const useCanvasComponent = () => {
       elementName.startsWith(STATISTICS_BOX) ||
       elementName.startsWith(STATISTICS_TITLE_TEXT) ||
       elementName.startsWith(STATISTICS_TEXT)
-
     ) {
       return true;
     }
@@ -242,7 +242,6 @@ export const useCanvasComponent = () => {
     dispatch(toggleSelectingSlide(false));
   };
 
- 
   const handleKeyDown = (e: KeyboardEvent, canvas: fabric.Canvas) => {
     if (e.key === 'Delete' && canvas.getActiveObject()) {
       canvas.remove(canvas.getActiveObject()!);
@@ -256,6 +255,22 @@ export const useCanvasComponent = () => {
 
       canvas.discardActiveObject();
       canvas.renderAll();
+    }
+  };
+
+  const handleBulletIndent = (event: KeyboardEvent, canvas: fabric.Canvas) => {
+    if (!canvas) return;
+
+    const activeObject = canvas.getActiveObject();
+    if (!activeObject || !(activeObject instanceof CustomTextbox)) return;
+
+    const text = activeObject as CustomTextbox;
+    if (event.key === 'Enter') {
+      text.insertNewline();
+      event.preventDefault();
+    } else if (event.key === 'Tab') {
+      text.insertIndent();
+      event.preventDefault();
     }
   };
 
@@ -293,15 +308,14 @@ export const useCanvasComponent = () => {
     canvas.selectionBorderColor =
       theme.colorSchemes.light.palette.common.steelBlue;
     canvas.selectionLineWidth = 0.5;
-  }
-
+  };
 
   const forEachCanvasObject = (canvas: fabric.Canvas) => {
     canvas.forEachObject(obj => {
       if (obj && (obj as IExtendedTextBoxOptions)?.listType === 'bullet') {
         (obj as IExtendedTextBoxOptions)._renderTextLine =
           renderBulletOrNumTextLine;
-      }else if(obj.name && obj.name == "VariantImage"){
+      } else if (obj.name && obj.name == 'VariantImage') {
         const canvasWidth = canvas?.width || 0;
         const canvasHeight = canvas?.height || 0;
         const scaleWidth = canvasWidth / obj.width!;
@@ -323,8 +337,10 @@ export const useCanvasComponent = () => {
     });
   };
 
-
-  const handleClickOutsideCanvas = (event: MouseEvent, canvas : fabric.Canvas) => {
+  const handleClickOutsideCanvas = (
+    event: MouseEvent,
+    canvas: fabric.Canvas
+  ) => {
     if (
       canvas &&
       canvas.getActiveObject() &&
@@ -360,6 +376,7 @@ export const useCanvasComponent = () => {
     handleKeyDown,
     handleWindowResize,
     forEachCanvasObject,
-    updateCanvasStyle
+    updateCanvasStyle,
+    handleBulletIndent,
   };
 };
