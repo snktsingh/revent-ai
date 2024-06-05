@@ -7,7 +7,6 @@ import { groupBy, pick, uniqueId } from 'lodash';
 export const useBulletOrNumberedText = () => {
   const text = `Click to add a bullet point`;
 
-  
   class CustomTextbox
     extends fabric.Textbox
     implements IExtendedTextBoxOptions
