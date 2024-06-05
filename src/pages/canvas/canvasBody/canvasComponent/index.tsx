@@ -3,16 +3,20 @@ import { theme } from '@/constants/theme';
 import { toggleRegenerateButton } from '@/redux/reducers/slide';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { fabric } from 'fabric';
-import React, { useEffect, useRef } from 'react';
+import React, { RefObject, useEffect, useRef } from 'react';
 import useCanvasEvents from '../events';
 import useCanvasData from './canvasDataExtractor';
 import { useCanvasComponent } from './container';
 import { useElementFunctions } from './elementFunctions';
 import FullscreenCanvas from './fullscreenCanvas';
 import { CanvasContainer } from './style';
+import { Canvas } from 'fabric/fabric-impl';
 
-const CanvasComponent: React.FC = () => {
-  const FabricRef = useRef<fabric.Canvas | null>(null);
+interface CanvasComponentProps {
+   fabricRef : React.MutableRefObject<Canvas | null>;
+}
+
+const CanvasComponent: React.FC<CanvasComponentProps> = ({ fabricRef }) => {
   const canvasRef = useRef<fabric.Canvas | null>(null);
   const ContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -96,6 +100,9 @@ const CanvasComponent: React.FC = () => {
       canvasJS.canvas,
       () => {
         canvasRef.current = canvas;
+        if (fabricRef) {
+          fabricRef.current = canvas;
+       }
         // console.log('Loading canvas JSON data:', canvasJS.canvas);
 
         if (canvas) {

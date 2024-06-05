@@ -31,7 +31,7 @@ import {
   Stack,
   Tooltip
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { Slide, ToastContainer } from 'react-toastify';
 import CanvasComponent from './canvasComponent';
@@ -50,11 +50,13 @@ import {
 } from './style';
 import Templates from './themes';
 import AddIcon from '@mui/icons-material/Add';
+import TableGenerator from '@/components/TableInput';
 
 const CanvasBody = () => {
   const slide = useAppSelector(state => state.slide);
   const [redirectAlert, setRedirectAlert] = useState<boolean>(false);
   const [modificationAlert, setModificationAlert] = useState<boolean>(false);
+  const canvasRef = useRef<fabric.Canvas | null>(null);
 
   const openRedirectAlert = () => {
     setRedirectAlert(true);
@@ -389,6 +391,16 @@ const CanvasBody = () => {
     return false;
   }
 
+  const [tableAnchorEl, setTableAnchorEl] = React.useState<null | HTMLElement>(null);
+  const openTable = Boolean(tableAnchorEl);
+  const handleTableClick = (event: React.MouseEvent<HTMLElement>) => {
+    console.log(event.currentTarget)
+    setTableAnchorEl(event.currentTarget);
+  };
+  const handleTableClose = () => {
+    setTableAnchorEl(null);
+  };
+
   return (
     <BodyContainer>
       <ToastContainer
@@ -493,7 +505,7 @@ const CanvasBody = () => {
                 </Tooltip>
               </span>
             </Stack>
-            <CanvasComponent />
+            <CanvasComponent fabricRef={canvasRef}/>
             <Menu
               anchorEl={anchorEl}
               open={open}
@@ -538,7 +550,13 @@ const CanvasBody = () => {
                       </Tooltip>
                     ) : (
                       <MenuItem
-                        onClick={() => handleAddElementsToCanvas(item)}
+                        onClick={(e) => {
+                          if(item.title === "Table"){
+                            handleTableClick(e);
+                          }else {
+                            handleAddElementsToCanvas(item);
+                          }
+                        }}
                         style={{ display: 'flex', flexDirection: 'column' }}
                         key={index}
                         disabled={disabled}
@@ -625,6 +643,8 @@ const CanvasBody = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      {/* Table Input */}
+      <TableGenerator handleClose={handleTableClose} open={openTable} anchorEl={tableAnchorEl} canvas={canvasRef.current} />
     </BodyContainer>
   );
 };

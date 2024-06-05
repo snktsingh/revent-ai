@@ -121,15 +121,14 @@ export function useCycleElement() {
         canvas.bringToFront(texts[0]);
         canvas.bringToFront(texts[1]);
         canvas.bringToFront(texts[2]);
-        addText(520, 295, 4, canvas, currentID);
         texts[0]
-          .set({
-            left: 398,
-            top: 185,
-          })
-          .setCoords();
+        .set({
+          left: 398,
+          top: 185,
+        })
+        .setCoords();
         texts[1]
-          .set({
+        .set({
             left: 520,
             top: 74,
           })
@@ -140,7 +139,8 @@ export function useCycleElement() {
             top: 186,
           })
           .setCoords();
-        break;
+        addText(520, 295, 4, canvas, currentID);
+          break;
       case 5:
         
         canvas.remove(mainContainer!);
@@ -169,13 +169,12 @@ export function useCycleElement() {
         canvas.bringToFront(texts[1]);
         canvas.bringToFront(texts[2]);
         canvas.bringToFront(texts[3]);
-        addText(423, 335, 5, canvas, currentID);
         texts[0]
-          .set({
-            left: 357,
-            top: 162,
-          })
-          .setCoords();
+        .set({
+          left: 357,
+          top: 162,
+        })
+        .setCoords();
         texts[1]
           .set({
             left: 500,
@@ -194,7 +193,8 @@ export function useCycleElement() {
             top: 335,
           })
           .setCoords();
-        break;
+        addText(423, 335, 5, canvas, currentID);
+          break;
       case 6:
         mainContainer!.set({
           
@@ -228,9 +228,8 @@ export function useCycleElement() {
         canvas.bringToFront(texts[2]);
         canvas.bringToFront(texts[3]);
         canvas.bringToFront(texts[4]);
-        addText(377, 356, 6, canvas, currentID);
         texts[0]
-          .set({
+        .set({
             left: 262,
             top: 196,
           })
@@ -247,19 +246,20 @@ export function useCycleElement() {
             top: 53,
           })
           .setCoords();
-        texts[3]
+          texts[3]
           .set({
             left: 683,
             top: 199,
           })
           .setCoords();
-        texts[4]
+          texts[4]
           .set({
             left: 577,
             top: 356,
           })
           .setCoords();
-        break;
+        addText(377, 356, 6, canvas, currentID);
+          break;
       default:
         break;
       }

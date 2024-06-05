@@ -200,7 +200,7 @@ const ElementEditBar: React.FC<ElementEditBarProps> = ({ left, top, canvas }) =>
                     <AiIcon/>
                 </CheckboxContainer>
             </Tooltip>}
-            {(!tableIcons && !levelIcons) && <Tooltip title="Undo Last Level" placement="top">
+            {(!tableIcons && !levelIcons && minusIcon) && <Tooltip title="Undo Last Level" placement="top">
                 <span>
                     <IconButton onClick={() => handleRemovingLastLevel(canvas!)} disabled={!minusIcon} style={{ color: minusIcon ? '' : '#e0e0e0' }}>
                         <RemoveIcon />
