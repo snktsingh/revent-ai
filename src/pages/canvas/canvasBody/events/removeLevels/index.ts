@@ -18,6 +18,10 @@ import {
   PYRAMID,
   PYRAMID_LEVEL,
   PYRAMID_TEXT,
+  STATISTICS,
+  STATISTICS_BOX,
+  STATISTICS_TEXT,
+  STATISTICS_TITLE_TEXT,
   TIMELINE,
   TIMELINE_CIRCLE,
   TIMELINE_DIRECTION,
@@ -281,6 +285,27 @@ export const useRemoveLevels = () => {
           canvas.remove(lastText);
           canvas.remove(lastHeadingText);
           canvas.remove(lastLevelHeadingRect);
+          canvas.remove(lastLevelTextRect);
+        }
+      }
+
+      else if (activeObject?.name.startsWith(STATISTICS)) {
+        let lastLevelTextRect: fabric.Object | undefined;
+        let lastText: fabric.Object | undefined;
+        let lastHeadingText : fabric.Object | undefined;
+        canvas.forEachObject(obj => {
+          if (obj.name === `${STATISTICS_BOX}_${id}`) {
+            lastLevelTextRect = obj;
+          } else if (obj.name === `${STATISTICS_TITLE_TEXT}_${id}`) {
+            lastHeadingText = obj;
+          } else if (obj.name === `${STATISTICS_TEXT}_${id}`) {
+            lastText = obj;
+          }
+        });
+        if (lastText && lastHeadingText && lastLevelTextRect) {
+          canvas.discardActiveObject();
+          canvas.remove(lastText);
+          canvas.remove(lastHeadingText);
           canvas.remove(lastLevelTextRect);
         }
       }
