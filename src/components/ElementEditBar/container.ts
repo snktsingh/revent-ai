@@ -126,8 +126,6 @@ export const useEditBar = () => {
         (objectName[0] === TIMELINE && timelineLevels > 2) ||
         (objectName[0] === FUNNEL && fLevels > 2) ||
         (objectName[0] === CYCLE && cycleSteps > 3) ||
-        (objectName[0] === LIST_MAIN && listCount < 8) ||
-        (objectName[0] === CLIENT_LIST_MAIN && clientListCount < 11) ||
         (objectName[0] === HUB_AND_SPOKE && hubAndSpokeCount > 3) ||
         (objectName[0] === STATISTICS && statisticElCount > 1)
       ) {

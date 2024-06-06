@@ -51,6 +51,7 @@ import {
 import Templates from './themes';
 import AddIcon from '@mui/icons-material/Add';
 import TableGenerator from '@/components/TableInput';
+import { APIRequest } from '@/interface/storeTypes';
 
 const CanvasBody = () => {
   const slide = useAppSelector(state => state.slide);
@@ -167,7 +168,7 @@ const CanvasBody = () => {
     };
     dispatch(updateCurrentCanvas(currentCanvas));
     const slideJSON = canvasList[canvasJS.id - 1].canvas;
-    const notes = canvasList[canvasJS.id -1].notes;
+    const notes = canvasList[canvasJS.id - 1].notes;
     const pptId = params.id?.split('-')[0];
 
     const isListImagesPresent = requestData?.elements.some(
@@ -180,8 +181,26 @@ const CanvasBody = () => {
       canvas => canvas.shape === 'Quote'
     );
 
-    if (isListImagesPresent) {
-      let blob = new Blob([JSON.stringify(requestData)], {
+    if (isListImagesPresent && requestData) {
+
+      let requestListData : APIRequest = requestData;
+      const listData = requestData?.elements?.find((el) => el.shape === 'ImageSubtitle');
+      const isTextEmpty = listData?.data?.every(obj => obj.text === "");
+
+
+      if (isTextEmpty) {
+        requestListData = {
+          ...requestListData,
+          elements: requestListData.elements.map(element => 
+              element.shape === 'ImageSubtitle' 
+              ? { ...element, shape: 'Images' } 
+              : element
+          )
+      };
+      }
+
+      console.log({requestListData})
+      let blob = new Blob([JSON.stringify(requestListData)], {
         type: 'application/json',
       });
       let formData = new FormData();
@@ -214,7 +233,7 @@ const CanvasBody = () => {
         for (let i = 0; i < ImagesArray.images.length; i++) {
           formData.append('images', ImagesArray.images[i].file);
         }
-        dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes })).then((res)=> {
+        dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes })).then((res) => {
           if (res && res.payload.slideId) {
             setSearchParams({ slide: res.payload.slideId });
           }
@@ -233,13 +252,13 @@ const CanvasBody = () => {
       const QuoteImagesArray = QuoteImages.find(
         el => el.canvasId == canvasJS.id
       );
-   
+
       if (QuoteImagesArray && QuoteImagesArray.images) {
         if (QuoteImagesArray.images.length !== 0) {
           for (let i = 0; i < QuoteImagesArray.images.length; i++) {
             formData.append('images', QuoteImagesArray.images[i].file);
           }
-          dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes })).then((res)=> {
+          dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes })).then((res) => {
             if (res && res.payload.slideId) {
               setSearchParams({ slide: res.payload.slideId });
             }
@@ -248,7 +267,7 @@ const CanvasBody = () => {
           return;
         }
       }
-      dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes })).then((res)=> {
+      dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes })).then((res) => {
         if (res && res.payload.slideId) {
           setSearchParams({ slide: res.payload.slideId });
         }
@@ -261,10 +280,10 @@ const CanvasBody = () => {
       const ptId = Number(params.id?.split('-')[0]);
       reqData.presentationId = ptId;
     }
-    dispatch(fetchSlideImg({ req: reqData, slideJSON, pptId, notes })).then((res)=> {
+    dispatch(fetchSlideImg({ req: reqData, slideJSON, pptId, notes })).then((res) => {
       if (res && res.payload.slideId) {
         setSearchParams({ slide: res.payload.slideId });
-        dispatch(updateSlideIdInList({slideId : res.payload.slideId, canvasId : canvasJS.id}));
+        dispatch(updateSlideIdInList({ slideId: res.payload.slideId, canvasId: canvasJS.id }));
       }
     });
     dispatch(toggleSelectedOriginalCanvas(false));
@@ -491,7 +510,7 @@ const CanvasBody = () => {
                 )}
                 &nbsp;
                 <Tooltip
-                  title={creditAmount === 0 ? <span> You have zero credits. Please add more credits to enable this action. </span>: ""}
+                  title={creditAmount === 0 ? <span> You have zero credits. Please add more credits to enable this action. </span> : ""}
                   arrow
                   placement="top"
                 >
@@ -512,7 +531,7 @@ const CanvasBody = () => {
                 </Tooltip>
               </span>
             </Stack>
-            <CanvasComponent fabricRef={canvasRef}/>
+            <CanvasComponent fabricRef={canvasRef} />
             <Menu
               anchorEl={anchorEl}
               open={open}
@@ -558,9 +577,9 @@ const CanvasBody = () => {
                     ) : (
                       <MenuItem
                         onClick={(e) => {
-                          if(item.title === "Table"){
+                          if (item.title === "Table") {
                             handleTableClick(e);
-                          }else {
+                          } else {
                             handleAddElementsToCanvas(item);
                           }
                         }}

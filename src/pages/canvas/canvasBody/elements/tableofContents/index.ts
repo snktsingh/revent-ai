@@ -1,4 +1,4 @@
-import { TABLE_OF_CONTENTS_HEADING, TABLE_OF_CONTENTS_TEXT } from "@/constants/elementNames";
+import { TABLE_OF_CONTENTS_HEADING, TABLE_OF_CONTENTS_TEXT, TITLE } from "@/constants/elementNames";
 import { IExtendedTextBoxOptions } from "@/interface/fabricTypes";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { renderBulletOrNumTextLine } from "@/utils/fabric-utils/renderBullet";
@@ -16,7 +16,7 @@ export const useTableOfContents = () => {
             width: 400,
             fontWeight: 'bold',
             fontFamily: 'Red Hat Display, sans-serif',
-            name: TABLE_OF_CONTENTS_HEADING,
+            name: TITLE,
             fill: '#404040',
             charSpacing: 2,
             cursorDelay: 1,

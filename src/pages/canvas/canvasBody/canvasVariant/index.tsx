@@ -203,7 +203,7 @@ export const CanvasVariant = () => {
                   canvasJS.variants.map((el: VariantsType, i: number) => {
                     return (
                       <VariantSlide
-                        key={el.imagesUrl}
+                        key={el && el.imagesUrl ? el.imagesUrl : "default"}
                         onClick={() => {
                           setIsVariantClicked(true);
                           handleVariants(
@@ -222,7 +222,7 @@ export const CanvasVariant = () => {
                           }
                         >
                           <ThumbnailPreview
-                            src={el.imagesUrl}
+                            src={el && el.imagesUrl ? el.imagesUrl : ""}
                             alt={`Variant ${i + 1}`}
                             style={{
                               width: '100%',

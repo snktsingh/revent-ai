@@ -31,6 +31,7 @@ import {
   SWOT_TEXT,
   TABLE,
   TABLE_HEADER,
+  TABLE_OF_CONTENTS_HEADING,
   TABLE_OF_CONTENTS_TEXT,
   TABLE_TEXT,
   TIMELINE,
@@ -229,10 +230,10 @@ const useCanvasData = () => {
             outputFormat
           );
           ListImage.data?.push({
-            name: canvasObject.text,
-            label: canvasObject.text,
+            name: canvasObject.text === "Add Text" ? "" : canvasObject.text,
+            label: canvasObject.text === "Add Text" ? "" : canvasObject.text,
             subHeading: '',
-            text: canvasObject.text,
+            text: canvasObject.text === "Add Text" ? "" : canvasObject.text,
           });
         } else if (canvasObject.name.startsWith(IMAGE)) {
           const Image = getOrCreateElement('Images', '1', outputFormat);
@@ -286,7 +287,7 @@ const useCanvasData = () => {
         ) {
           const [_, id] = canvasObject.name.split('_');
           statisticsData.push({ content: canvasObject.text, id: id });
-        }
+        } 
       }
     });
 
