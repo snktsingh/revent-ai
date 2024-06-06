@@ -70,6 +70,7 @@ const CanvasComponent: React.FC<CanvasComponentProps> = ({ fabricRef }) => {
     activeSlideID,
   } = useAppSelector(state => state.canvas);
 
+
   useEffect(() => {
     setShowOptions(false);
     const canvasElement = document.getElementById('canvas');
@@ -100,6 +101,7 @@ const CanvasComponent: React.FC<CanvasComponentProps> = ({ fabricRef }) => {
     canvas.loadFromJSON(
       canvasJS.canvas,
       () => {
+        console.log({canvas})
         canvasRef.current = canvas;
         if (fabricRef) {
           fabricRef.current = canvas;

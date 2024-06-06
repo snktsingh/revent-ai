@@ -54,6 +54,13 @@ export const elementData: IElementData[] = [
     subtitle: 'Add a cover slide at the top of your presentation',
     onClick: () => {},
   },
+  {
+    key: 19,
+    icon: iconTableOfContents,
+    title: 'Table of Contents',
+    subtitle: 'Suitable for easy navigation through structured sections',
+    onClick: () => {},
+  },
   // {
   //   key: 2,
   //   icon: AddTitle,
@@ -111,10 +118,24 @@ export const elementData: IElementData[] = [
     onClick: () => {},
   },
   {
+    key: 21,
+    icon: iconStatistics,
+    title: 'Statistics',
+    subtitle: 'Suitable for comprehensive data insights and analytics',
+    onClick: () => {},
+  },
+  {
     key: 9,
     icon: AddList,
     title: 'Team List',
     subtitle: 'Suitable for Team Member Lists',
+    onClick: () => {},
+  },
+  {
+    key: 22,
+    icon: AddList,
+    title: 'Client List',
+    subtitle: 'Suitable for detailed directories of customers and partners',
     onClick: () => {},
   },
   {
@@ -167,34 +188,13 @@ export const elementData: IElementData[] = [
     onClick: () => {},
   },
   {
-    key: 19,
-    icon: iconTableOfContents,
-    title: 'Table of Contents',
-    subtitle: 'Suitable for easy navigation through structured sections',
-    onClick: () => {},
-  },
-  {
     key: 20,
     icon: iconHunNSpoke,
     title: 'Hubs and Spoke',
     subtitle: 'Suitable for centralized connection points and streamlined communication',
     onClick: () => {},
   },
-  {
-    key: 21,
-    icon: iconStatistics,
-    title: 'Statistics',
-    subtitle: 'Suitable for comprehensive data insights and analytics',
-    onClick: () => {},
-  },
-  {
-    key: 22,
-    icon: AddList,
-    title: 'Client List',
-    subtitle: 'Suitable for detailed directories of customers and partners',
-    onClick: () => {},
-  },
-  {
+ {
     key: 17,
     icon: TitleSubIcon,
     title: 'Conclusion Slide',

@@ -262,7 +262,7 @@ const useCanvasData = () => {
             return { heading: text, text };
           });
           const Bullets = getOrCreateElement(
-            'TableOfContent',
+            'Toc',
             '1',
             outputFormat
           );
