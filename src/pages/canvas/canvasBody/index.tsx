@@ -233,6 +233,7 @@ const CanvasBody = () => {
       const QuoteImagesArray = QuoteImages.find(
         el => el.canvasId == canvasJS.id
       );
+   
       if (QuoteImagesArray && QuoteImagesArray.images) {
         if (QuoteImagesArray.images.length !== 0) {
           for (let i = 0; i < QuoteImagesArray.images.length; i++) {
@@ -247,6 +248,12 @@ const CanvasBody = () => {
           return;
         }
       }
+      dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes })).then((res)=> {
+        if (res && res.payload.slideId) {
+          setSearchParams({ slide: res.payload.slideId });
+        }
+      });;
+      dispatch(toggleSelectedOriginalCanvas(false));
       return;
     }
     let reqData = { ...requestData };

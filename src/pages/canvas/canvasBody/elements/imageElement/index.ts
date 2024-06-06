@@ -27,7 +27,6 @@ export function useImageElement() {
           const compressedFile = await imageCompression(file, options);
           
           const compressedImageUrl = URL.createObjectURL(compressedFile);
-          console.log({compressedFile});
           const fileSizeInMB = compressedFile.size / (1024 * 1024);
           if (fileSizeInMB > 25) {
             toast.warn(

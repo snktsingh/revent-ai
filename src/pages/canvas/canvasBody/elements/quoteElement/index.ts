@@ -11,6 +11,8 @@ import { QuoteImages, addQuoteImageForStore } from '@/data/data';
 import { useAppSelector } from '@/redux/store';
 import { fabric } from 'fabric';
 import { toast } from 'react-toastify';
+import imageCompression from 'browser-image-compression';
+
 export const useQuoteElement = () => {
   const { canvasJS } = useAppSelector(state => state.canvas);
   const addQuotes = (canvas: fabric.Canvas | null) => {
@@ -95,55 +97,73 @@ export const useQuoteElement = () => {
     fileInput.click();
     let file;
     let reader = new FileReader();
-    fileInput.addEventListener('change', e => {
+    fileInput.addEventListener('change', async (e) => {
       file = (e.target as HTMLInputElement)?.files?.[0];
       if (file) {
-        const fileSizeInMB = file.size / (1024 * 1024); 
-        if (fileSizeInMB > 25) {
-          toast.warn('The image size exceeds 25 MB. Please choose a smaller image.', {
-            position: "top-center",
-            autoClose: 2000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-            });
-          fileInput.value = ''; 
-          return;
-        }
-        addQuoteImageForStore({canvasId : canvasJS.id, file, path : ''});
-
-        reader.onload = () => {
-          if (canvas) {
-            fabric.Image.fromURL(reader.result as string, img => {
-              const fixedWidth = 147; 
-              const fixedHeight = 170; 
-              // img.scaleToWidth(fixedWidth);
-              // img.scaleToHeight(fixedHeight);
-              const scaleX = fixedWidth / img.width!;
-              const scaleY = fixedHeight / img.height!;
-              let container = (object as fabric.Group)._objects[1];
-              let TextElement = (object as fabric.Group)._objects[1];
-              (object as fabric.Group).removeWithUpdate(TextElement);
-              (object as fabric.Group).set({
-                name: `${QUOTE_IMG}_`,
-              });
-              img.set({
-                left: object && object.left !== undefined ? object.left + 2 : 0,
-                top: object && object.top !== undefined ? object.top + 2 : 0,
-                name: 'QuoteImage',
-                scaleX,
-                scaleY,
-              });
-              object && (object as fabric.Group).addWithUpdate(img);
-              object && canvas.sendBackwards(object);
-              object?.setCoords();
-            });
-          }
+        const options = {
+          maxSizeMB: 1,          
+          maxWidthOrHeight: 800, 
+          useWebWorker: true,    
         };
-        reader.readAsDataURL(file);
+
+        let TextElement = (object as fabric.Group)._objects[1];
+        (TextElement as fabric.Text).set({
+           text : 'Please wait \nadding image...'
+        }).setCoords()
+        canvas.renderAll()
+
+        try {
+          
+          // const fileSizeInMB = file.size / (1024 * 1024); 
+          // if (fileSizeInMB > 25) {
+          //   toast.warn('The image size exceeds 25 MB. Please choose a smaller image.', {
+          //     position: "top-center",
+          //     autoClose: 2000,
+          //     hideProgressBar: true,
+          //     closeOnClick: true,
+          //     pauseOnHover: true,
+          //     draggable: true,
+          //     progress: undefined,
+          //     theme: "light",
+          //     });
+          //   fileInput.value = ''; 
+          //   return;
+          // }
+          
+          const compressedFile = await imageCompression(file, options);
+          addQuoteImageForStore({canvasId : canvasJS.id, file : compressedFile, path : ''});
+          reader.onload = () => {
+            if (canvas) {
+              fabric.Image.fromURL(reader.result as string, img => {
+                const fixedWidth = 147; 
+                const fixedHeight = 170; 
+                // img.scaleToWidth(fixedWidth);
+                // img.scaleToHeight(fixedHeight);
+                const scaleX = fixedWidth / img.width!;
+                const scaleY = fixedHeight / img.height!;
+                let container = (object as fabric.Group)._objects[1];
+                let TextElement = (object as fabric.Group)._objects[1];
+                // (object as fabric.Group).removeWithUpdate(TextElement);
+                (object as fabric.Group).set({
+                  name: `${QUOTE_IMG}_`,
+                });
+                img.set({
+                  left: object && object.left !== undefined ? object.left + 2 : 0,
+                  top: object && object.top !== undefined ? object.top + 2 : 0,
+                  name: 'QuoteImage',
+                  scaleX,
+                  scaleY,
+                });
+                object && (object as fabric.Group).addWithUpdate(img);
+                object && canvas.sendBackwards(object);
+                object?.setCoords();
+              });
+            }
+          };
+          reader.readAsDataURL(compressedFile);
+        } catch (error) {
+          console.error('Error compressing image:', error);
+        }
       }
     });
   };

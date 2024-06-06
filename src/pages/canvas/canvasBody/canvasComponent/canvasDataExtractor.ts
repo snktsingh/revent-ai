@@ -252,8 +252,9 @@ const useCanvasData = () => {
           });
         } else if (canvasObject.name.startsWith(QUOTE_AUTHOR)) {
           const Quote = getOrCreateElement('Quote', '1', outputFormat);
+          let newText = canvasObject.text.trim();
           if (Quote.data && Quote.data[0]) {
-            Quote.data[0].label = canvasObject.text;
+            Quote.data[0].label = canvasObject.text.slice(1).trimStart();
           }
         } else if (canvasObject?.name === TABLE_OF_CONTENTS_TEXT) {
           const { mainBulletPoints, nestedBulletPoints } =
