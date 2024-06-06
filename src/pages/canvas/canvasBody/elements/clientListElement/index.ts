@@ -56,7 +56,7 @@ export function useClientListElement() {
     const objectName = object.name?.split('_');
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
-    fileInput.accept = 'image/*';
+    fileInput.accept = '.jpeg, .jpg, .png, .svg';
     fileInput.click();
     let file: any;
     let reader = new FileReader();

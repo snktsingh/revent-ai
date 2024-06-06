@@ -13,6 +13,8 @@ import {
 import { updateListId } from '@/redux/reducers/fabricElements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import AutoResizingTextbox from '@/utils/fabric-utils/AutoResizingTextbox';
+import imageCompression from 'browser-image-compression';
+
 import { fabric } from 'fabric';
 import { toast } from 'react-toastify';
 
@@ -78,11 +80,11 @@ export function useListElement() {
     const objectName = object.name?.split('_');
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
-    fileInput.accept = 'image/*';
+    fileInput.accept = '.jpeg, .jpg, .png, .svg';
     fileInput.click();
     let file: any;
     let reader = new FileReader();
-    fileInput.addEventListener('change', e => {
+    fileInput.addEventListener('change', async (e) => {
       file = (e.target as HTMLInputElement)?.files?.[0];
       
       if (file) {
@@ -101,7 +103,15 @@ export function useListElement() {
           fileInput.value = ''; 
           return;
         }
-        addListImages({ canvasId : canvasJS.id, file, path : '' });
+        const options = {
+          maxSizeMB: 1,          
+          maxWidthOrHeight: 800, 
+          useWebWorker: true,    
+        };
+  
+        try {
+          const compressedFile = await imageCompression(file, options);
+          addListImages({ canvasId : canvasJS.id, file : compressedFile, path : '' });
 
         reader.onload = () => {
           if (canvas) {
@@ -131,7 +141,10 @@ export function useListElement() {
             });
           }
         };
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(compressedFile);
+      } catch (error) {
+        console.error('Error compressing image:', error);
+      }
       }
     });
   };

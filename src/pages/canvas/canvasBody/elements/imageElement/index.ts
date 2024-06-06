@@ -9,7 +9,7 @@ export function useImageElement() {
   const imageUploader = (canvas: fabric.Canvas | null, existingImage? : fabric.Object) => {
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
-    fileInput.accept = 'image/*';
+    fileInput.accept = '.jpeg, .jpg, .png, .svg';
     fileInput.click();
 
     fileInput.addEventListener('change', async (e) => {
