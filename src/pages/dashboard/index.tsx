@@ -16,14 +16,20 @@ import {
   TextField,
 } from '@mui/material';
 import {
+  BlankImageCard,
   CardContainer,
   CardLink,
   CardTitle,
   Loader,
   LoaderText,
   MainContainer,
+  NewPPTCard,
+  PPTCard,
+  PPTTitle,
   PreviewCard,
+  ThumbnailCard,
   Title,
+  TitleCard,
 } from './style';
 import slideData from './data.json';
 import { useNavigate } from 'react-router-dom';
@@ -77,7 +83,6 @@ const Dashboard = () => {
 
     function handleClick(e: any) {
       if (contextMenuRef.current) {
-        console.log(e);
         if (
           !contextMenuRef.current.contains(e.target) &&
           e.target.id !== 'more_menu'
@@ -144,7 +149,7 @@ const Dashboard = () => {
         <CardContainer>
           {slideData.templates.map((slide, index) => {
             return (
-              <CardTitle
+              <NewPPTCard
                 key={slide.title + index}
                 onClick={() => navigate('/themes')}
               >
@@ -159,7 +164,7 @@ const Dashboard = () => {
                   </PreviewCard>
                   <span title={slide.title}>{slide.title}</span>
                 </CardLink>
-              </CardTitle>
+              </NewPPTCard>
             );
           })}
         </CardContainer>
@@ -223,53 +228,46 @@ const Dashboard = () => {
               <CardTitle>
                 {filteredPptList.map((ppt: any, index) => {
                   return (
-                    <Box sx={{ marginBottom: '10px' }}>
-                      <CardLink
-                        key={index}
-                        onContextMenu={e => handleContextMenu(e, ppt)}
+                    <PPTCard  key={ppt.presentationId} onContextMenu={e => handleContextMenu(e, ppt)}>
+                      <ThumbnailCard
+                      onClick={() => {
+                        navigate(
+                          `/presentation/${ppt.presentationId
+                          }-${faker.string.uuid()}`
+                        );
+                      }}
                       >
-                        <Card
-                          style={{
-                            width: '180px',
-                            height: '13vh',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                          }}
-                          onClick={() => {
-                            navigate(
-                              `/presentation/${ppt.presentationId
-                              }-${faker.string.uuid()}`
-                            );
-                          }}
-                        >
-                          {ppt.thumbnailUrl !== '' ? (
-                            <img src={ppt.thumbnailUrl} width="100%" />
-                          ) : (
-                            <img src={Blank} width="100%" height="30%" />
-                          )}
-                        </Card>
+                        {ppt.thumbnailUrl !== '' ? (
+                          <img src={ppt.thumbnailUrl} alt={ppt.name} width={'100%'} style={{ borderRadius: 'inherit' }} />
+                        ) : (
+                          <BlankImageCard >
+                            <img src={Blank} />
+                          </BlankImageCard>
+                        )}
+                      </ThumbnailCard>
+                      <TitleCard>
                         <Stack
                           direction="row"
                           justifyContent="space-between"
                           display="flex"
                           alignItems="center"
                         >
-                          <p
+                          <PPTTitle
                             title={ppt.name}
-                            style={{
-                              maxWidth: '160px',
-                              whiteSpace: 'nowrap',
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
+                            onClick={() => {
+                              navigate(
+                                `/presentation/${ppt.presentationId
+                                }-${faker.string.uuid()}`
+                              );
                             }}
                           >
                             {ppt.name == undefined
                               ? 'Untitled-presentation'
                               : ppt.name}
-                          </p>
+                          </PPTTitle>
                           <IconButton
                             onClick={event => {
+
                               handleContextMenu(event, ppt);
                               setPptId(ppt.presentationId);
                             }}
@@ -278,8 +276,8 @@ const Dashboard = () => {
                             <MoreVertIcon id="more_menu" fontSize="small" />
                           </IconButton>
                         </Stack>
-                      </CardLink>
-                    </Box>
+                      </TitleCard>
+                    </PPTCard>
                   );
                 })}
               </CardTitle>{' '}
