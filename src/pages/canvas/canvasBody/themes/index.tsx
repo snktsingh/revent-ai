@@ -29,6 +29,7 @@ import useCanvasData from '../canvasComponent/canvasDataExtractor';
 import { useCanvasComponent } from '../canvasComponent/container';
 import { ListSlideCard } from '../style';
 import { ThemesSliderContainer } from './style';
+import { setCanvas, updateCanvasList } from '@/redux/reducers/canvas';
 
 export default function Templates() {
   const { customFabricProperties } = useCanvasComponent();
@@ -44,6 +45,8 @@ export default function Templates() {
   const { canvasJS, originalCanvasSlide, canvasList } = useAppSelector(
     state => state.canvas
   );
+  const { preset } = useAppSelector(state => state.manageDashboard);
+
   const [currentTheme, setCurrentTheme] = useState<any>({});
   const [canvasIndex, setCanvasIndex] = useState<number>(0);
   const [hasVariantsInCanvasList, setIsVariantsAvailable] =
@@ -71,6 +74,7 @@ export default function Templates() {
   const handleClickOpen = (theme: any) => {
     setCurrentTheme(theme);
     dispatch(setThemeId(theme.themeId));
+    console.log(preset);
     console.log(theme);
     if (hasVariantsInCanvasList) {
       setOpen(true);

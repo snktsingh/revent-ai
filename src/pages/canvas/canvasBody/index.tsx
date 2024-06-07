@@ -9,7 +9,7 @@ import {
   toggleSelectedOriginalCanvas,
   updateCanvasInList,
   updateCurrentCanvas,
-  updateSlideIdInList
+  updateSlideIdInList,
 } from '@/redux/reducers/canvas';
 import { openModal, setMenuItemKey } from '@/redux/reducers/elements';
 import { searchElement, toggleRegenerateButton } from '@/redux/reducers/slide';
@@ -29,7 +29,7 @@ import {
   Menu,
   MenuItem,
   Stack,
-  Tooltip
+  Tooltip,
 } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
@@ -46,7 +46,7 @@ import {
   ElementContainer,
   ElementSearchInput,
   ElementSubtitle,
-  ElementTitle
+  ElementTitle,
 } from './style';
 import Templates from './themes';
 import AddIcon from '@mui/icons-material/Add';
@@ -211,11 +211,13 @@ const CanvasBody = () => {
           formData.append('images', listImagesArray.images[i].file);
         }
 
-        dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes })).then((res)=> {
+        dispatch(
+          fetchSlideImg({ req: formData, slideJSON, pptId, notes })
+        ).then(res => {
           if (res && res.payload.slideId) {
             setSearchParams({ slide: res.payload.slideId });
           }
-        });;
+        });
         dispatch(toggleSelectedOriginalCanvas(false));
       }
       return;
@@ -237,7 +239,7 @@ const CanvasBody = () => {
           if (res && res.payload.slideId) {
             setSearchParams({ slide: res.payload.slideId });
           }
-        });;
+        });
         dispatch(toggleSelectedOriginalCanvas(false));
       }
       return;
@@ -262,7 +264,7 @@ const CanvasBody = () => {
             if (res && res.payload.slideId) {
               setSearchParams({ slide: res.payload.slideId });
             }
-          });;
+          });
           dispatch(toggleSelectedOriginalCanvas(false));
           return;
         }
@@ -280,12 +282,19 @@ const CanvasBody = () => {
       const ptId = Number(params.id?.split('-')[0]);
       reqData.presentationId = ptId;
     }
-    dispatch(fetchSlideImg({ req: reqData, slideJSON, pptId, notes })).then((res) => {
-      if (res && res.payload.slideId) {
-        setSearchParams({ slide: res.payload.slideId });
-        dispatch(updateSlideIdInList({ slideId: res.payload.slideId, canvasId: canvasJS.id }));
+    dispatch(fetchSlideImg({ req: reqData, slideJSON, pptId, notes })).then(
+      res => {
+        if (res && res.payload.slideId) {
+          setSearchParams({ slide: res.payload.slideId });
+          dispatch(
+            updateSlideIdInList({
+              slideId: res.payload.slideId,
+              canvasId: canvasJS.id,
+            })
+          );
+        }
       }
-    });
+    );
     dispatch(toggleSelectedOriginalCanvas(false));
   };
 
@@ -436,7 +445,13 @@ const CanvasBody = () => {
         transition={Slide}
       />
       <Grid container>
-        <Grid item xs={2} onContextMenu={(event) => { event.preventDefault() }}  >
+        <Grid
+          item
+          xs={2}
+          onContextMenu={event => {
+            event.preventDefault();
+          }}
+        >
           <SlideList />
         </Grid>
         <Grid item xs={8}>
@@ -462,7 +477,10 @@ const CanvasBody = () => {
                 </Tooltip> */}
                 <Button variant="contained" size="medium" onClick={handleClick}>
                   <Stack direction="row" spacing={1}>
-                    <img src="data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 9 9' fill='%23fff' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.96325 5.03632H0.516602V3.96358H3.96325V0.509277H5.036V3.96358H8.4903V5.03632H5.036V8.48298H3.96325V5.03632Z' fill='%23fff'/%3E%3C/svg%3E" alt="" />
+                    <img
+                      src="data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 9 9' fill='%23fff' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.96325 5.03632H0.516602V3.96358H3.96325V0.509277H5.036V3.96358H8.4903V5.03632H5.036V8.48298H3.96325V5.03632Z' fill='%23fff'/%3E%3C/svg%3E"
+                      alt=""
+                    />
                     <p>Add Elements</p>
                   </Stack>
                 </Button>
@@ -510,7 +528,17 @@ const CanvasBody = () => {
                 )}
                 &nbsp;
                 <Tooltip
-                  title={creditAmount === 0 ? <span> You have zero credits. Please add more credits to enable this action. </span> : ""}
+                  title={
+                    creditAmount === 0 ? (
+                      <span>
+                        {' '}
+                        You have zero credits. Please add more credits to enable
+                        this action.{' '}
+                      </span>
+                    ) : (
+                      ''
+                    )
+                  }
                   arrow
                   placement="top"
                 >
@@ -520,7 +548,6 @@ const CanvasBody = () => {
                       size="medium"
                       onClick={() => handleRequest()}
                       disabled={creditAmount === 0 || isRegenerateDisabled}
-
                     >
                       <Stack direction="row" spacing={1}>
                         <img src={Wand} />
@@ -633,9 +660,7 @@ const CanvasBody = () => {
         sx={{
           color: '#fff',
           zIndex: theme => theme.zIndex.drawer + 1,
-          top: '14%',
-          left: '17%',
-          bottom: '6%',
+
           display: 'flex',
           flexDirection: 'column',
         }}

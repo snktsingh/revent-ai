@@ -1,13 +1,17 @@
-import { useAppSelector } from "@/redux/store";
-import useSlideList from "./container";
-import { useEffect, useRef, useState } from "react";
-import { setActiveSlideId, updateCanvasList } from "@/redux/reducers/canvas";
-import { SortableContext, arrayMove, verticalListSortingStrategy } from "@dnd-kit/sortable";
-import { CanvasItem } from "@/interface/storeTypes";
-import { DndContext, closestCorners } from "@dnd-kit/core";
-import { SlideContainer } from "./style";
-import { SingleSlideComponent } from "./singleSlideComponent";
-import SlidesContextMenu from "@/common-ui/slidesContextMenu";
+import { useAppSelector } from '@/redux/store';
+import useSlideList from './container';
+import { useEffect, useRef, useState } from 'react';
+import { setActiveSlideId, updateCanvasList } from '@/redux/reducers/canvas';
+import {
+  SortableContext,
+  arrayMove,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CanvasItem } from '@/interface/storeTypes';
+import { DndContext, closestCorners } from '@dnd-kit/core';
+import { SlideContainer } from './style';
+import { SingleSlideComponent } from './singleSlideComponent';
+import SlidesContextMenu from '@/common-ui/slidesContextMenu';
 
 export default function SlideList() {
   const {
@@ -21,10 +25,13 @@ export default function SlideList() {
     handleDragOver,
     handleDrop,
     dispatch,
-    canvasJS
+    canvasJS,
   } = useSlideList();
   const contextMenuRef = useRef<HTMLDivElement | null>(null);
-  const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
+  const [contextMenu, setContextMenu] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
   const [currentSlide, setCurrentSlide] = useState<CanvasItem | null>(null);
 
   const { pptDetails, isLoading } = useAppSelector(state => state.thunk);
@@ -33,11 +40,9 @@ export default function SlideList() {
 
   useEffect(() => {
     dispatch(setActiveSlideId(1));
-    
-  
 
-    function handleClick(e : any) {
-      if(contextMenuRef.current){
+    function handleClick(e: any) {
+      if (contextMenuRef.current) {
         if (!contextMenuRef.current.contains(e.target)) {
           setContextMenu(null);
         }
@@ -47,9 +52,8 @@ export default function SlideList() {
     document.addEventListener('click', handleClick);
     return () => {
       document.removeEventListener('click', handleClick);
-    }
-  }, [])
-
+    };
+  }, []);
 
   useEffect(() => {
     loadSvgs();
@@ -75,9 +79,8 @@ export default function SlideList() {
     dispatch(updateCanvasList(updateCanvasListArray()));
   };
 
-  
   const handleContextMenu = (event: React.MouseEvent, slide: CanvasItem) => {
-    setCurrentSlide(slide)
+    setCurrentSlide(slide);
     event.preventDefault();
     setContextMenu({ x: event.clientX, y: event.clientY });
     // setContextMenu(contextMenu === null ? { x: event.clientX, y: event.clientY } : null);
@@ -89,23 +92,23 @@ export default function SlideList() {
 
   return (
     <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
-      <SlideContainer  >
+      <SlideContainer>
         <SortableContext
           items={canvasList}
           strategy={verticalListSortingStrategy}
         >
           {canvasList.map((canvas, index) => {
-            return (      
-                <SingleSlideComponent
-                  key={canvas.id}
-                  {...canvas}
-                  index={index}
-                  svgURLs={svgURLs}
-                  activeSlideID={activeSlideID}
-                  isLoading={isLoading}
-                  handleSlideCardClick={handleSlideCardClick}
-                  handleContextMenu={handleContextMenu}
-                />
+            return (
+              <SingleSlideComponent
+                key={canvas.id}
+                {...canvas}
+                index={index}
+                svgURLs={svgURLs}
+                activeSlideID={activeSlideID}
+                isLoading={isLoading}
+                handleSlideCardClick={handleSlideCardClick}
+                handleContextMenu={handleContextMenu}
+              />
             );
           })}
         </SortableContext>

@@ -23,7 +23,7 @@ export const CardContainer = styled.div`
   width: 100%;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  gap: 2.5%;
 `;
 export const Subtitle = styled.p`
   color: ${theme.colorSchemes.light.palette.primary.main};

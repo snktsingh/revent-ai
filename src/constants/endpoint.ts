@@ -33,6 +33,7 @@ export const ENDPOINT = {
   },
   DASHBOARD: {
     FETCH_PPT_LIST: 'ppt/get-all-presentation',
+    FETCH_PRESETS:"/presets"
   },
 } as const;
 

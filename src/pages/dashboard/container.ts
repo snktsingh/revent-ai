@@ -7,7 +7,11 @@ import {
 } from '@/redux/reducers/canvas';
 import { togglePptAlertOpen } from '@/redux/reducers/elements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { deletePresentation, fetchPPTList } from '@/redux/thunk/dashboard';
+import {
+  deletePresentation,
+  fetchPPTList,
+  fetchPresetsById,
+} from '@/redux/thunk/dashboard';
 import { setUserPreferences } from '@/redux/thunk/user';
 import React, { useEffect, useState } from 'react';
 
@@ -20,15 +24,15 @@ const useDashboard = () => {
   const [openProfileMenu, setOpenProfileMenu] = useState<null | HTMLElement>(
     null
   );
-  const { userPreferences } = useAppSelector( state => state.manageUser)
+  const { userPreferences } = useAppSelector(state => state.manageUser);
   const handleOpenProfile = (event: React.MouseEvent<HTMLButtonElement>) => {
     setOpenProfileMenu(event.currentTarget);
   };
   const handleCloseProfileMenu = () => {
     setOpenProfileMenu(null);
   };
-  const handleDeletePpt = (pptId : number) => {
-    if(userPreferences.isPresentationDeleteAlert){
+  const handleDeletePpt = (pptId: number) => {
+    if (userPreferences.isPresentationDeleteAlert) {
       dispatch(togglePptAlertOpen(true));
     }
   };
@@ -39,6 +43,14 @@ const useDashboard = () => {
   const removePresentation = async (presentationId: number) => {
     const res = await dispatch(deletePresentation(presentationId));
     dispatch(fetchPPTList(0));
+  };
+
+  const fetchPreset = async (presetId: number) => {
+    const res = await dispatch(fetchPresetsById(presetId));
+    const presetList = res.payload;
+     dispatch(updateCanvasList(presetList));
+    dispatch(setCanvas(presetList[0]));
+
   };
 
   function getFirstLettersForAvatar(name: string): string {
@@ -64,7 +76,7 @@ const useDashboard = () => {
         listImages: [],
         slideId: 1,
         presentationId: 1,
-        lastVariant : '',
+        lastVariant: '',
         selectedOriginalCanvas: false,
       },
     ];
@@ -73,8 +85,13 @@ const useDashboard = () => {
     dispatch(updateCanvasList(canvas));
   }, []);
 
-  const handlePptDelCheckBox = (e : React.ChangeEvent<HTMLInputElement>) => {
-      dispatch(setUserPreferences({key : isPresentationDeleteAlert, value: e.target.checked}));
+  const handlePptDelCheckBox = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(
+      setUserPreferences({
+        key: isPresentationDeleteAlert,
+        value: e.target.checked,
+      })
+    );
   };
 
   return {
@@ -89,7 +106,8 @@ const useDashboard = () => {
     handleCloseProfileMenu,
     openProfileMenu,
     setOpenProfileMenu,
-    handlePptDelCheckBox
+    handlePptDelCheckBox,
+    fetchPreset,
   };
 };
 export default useDashboard;
