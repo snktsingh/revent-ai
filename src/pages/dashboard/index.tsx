@@ -39,7 +39,11 @@ import { MagnifyingGlass } from 'react-loader-spinner';
 import AddToQueueIcon from '@mui/icons-material/AddToQueue';
 import '../../../index.css';
 import { theme } from '@/constants/theme';
-import { IPresentation, fetchPPTList } from '@/redux/thunk/dashboard';
+import {
+  IPresentation,
+  fetchPPTList,
+  fetchPresets,
+} from '@/redux/thunk/dashboard';
 import DeleteIcon from '@mui/icons-material/Delete';
 import useDashboard from './container';
 import ProfileMenu from '@/common-ui/profileMenu';
@@ -66,10 +70,11 @@ const Dashboard = () => {
     getFirstLettersForAvatar,
     setOpenProfileMenu,
     handlePptDelCheckBox,
+    fetchPreset,
   } = useDashboard();
 
   const { userDetails } = useAppSelector(state => state.manageUser);
-  const { loadingUserDetails, pptList, hasMore } = useAppSelector(
+  const { loadingUserDetails, pptList, presetList } = useAppSelector(
     state => state.manageDashboard
   );
   const contextMenuRef = useRef<HTMLDivElement | null>(null);
@@ -80,6 +85,7 @@ const Dashboard = () => {
   const [currentPresentation, setCurrentPresentation] = useState<any>(null);
   useEffect(() => {
     dispatch(fetchPPTList(0));
+    dispatch(fetchPresets());
 
     function handleClick(e: any) {
       if (contextMenuRef.current) {
@@ -115,8 +121,8 @@ const Dashboard = () => {
     const filteredList =
       searchTerm.length > 0
         ? pptList.filter((ppt: IPresentation) =>
-          ppt.name.toLowerCase().includes(searchTerm.toLowerCase())
-        )
+            ppt.name.toLowerCase().includes(searchTerm.toLowerCase())
+          )
         : pptList;
 
     setFilteredPptList(filteredList);
@@ -167,6 +173,28 @@ const Dashboard = () => {
               </NewPPTCard>
             );
           })}
+          {presetList.length > 0 && (
+            <>
+              {presetList.map((preset, index) => {
+                return (
+                  <CardTitle
+                    key={preset.presetName + index}
+                    onClick={() => {
+                      navigate('/themes');
+                      fetchPreset(preset.id);
+                    }}
+                  >
+                    <CardLink>
+                      <PreviewCard>
+                        <img src={Blank} width="100%" height="30%" />
+                      </PreviewCard>
+                      <span title={preset.presetName}>{preset.presetName}</span>
+                    </CardLink>
+                  </CardTitle>
+                );
+              })}
+            </>
+          )}
         </CardContainer>
         <br />
         <Divider />

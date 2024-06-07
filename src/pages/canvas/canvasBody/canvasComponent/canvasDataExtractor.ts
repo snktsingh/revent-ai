@@ -80,7 +80,7 @@ const useCanvasData = () => {
         templateName: '',
         elementId,
         data: [],
-        heading : ''
+        heading: '',
       };
       outputFormat.elements.push(newElement);
       return newElement;
@@ -239,7 +239,7 @@ const useCanvasData = () => {
           const Image = getOrCreateElement('Images', '1', outputFormat);
         } else if (canvasObject.name.startsWith(QUOTE_TEXT)) {
           const Quote = getOrCreateElement('Quote', '1', outputFormat);
-          
+
           let newText = canvasObject.text.trim();
 
           if (
@@ -275,10 +275,7 @@ const useCanvasData = () => {
         ) {
           const [_, id] = canvasObject.name.split('_');
           hubAndSpokeData.push({ content: canvasObject.text, id: id });
-        }
-        else if (
-          canvasObject.name.startsWith(HUB_AND_SPOKE_MAIN_TEXT)
-        ) {
+        } else if (canvasObject.name.startsWith(HUB_AND_SPOKE_MAIN_TEXT)) {
           const [_, id] = canvasObject.name.split('_');
           hubAndSpokeMainText = canvasObject.text;
         } else if (
@@ -332,7 +329,7 @@ const useCanvasData = () => {
     });
 
     Object.entries(organizedTimelineData).forEach(([id, content]) => {
-      const timelineElement = getOrCreateElement('Timeline', id, outputFormat);
+      const timelineElement = getOrCreateElement('TimeLine', id, outputFormat);
       timelineElement.data = content;
       timelineElement.title = titleText;
       timelineElement.subTitle = subTitleText;
@@ -346,7 +343,7 @@ const useCanvasData = () => {
     hubAndSpokeData.forEach((item, index) => {
       const id = item.id;
       const hubArray =
-      organizedHubAndSpokeData[id] || (organizedHubAndSpokeData[id] = []);
+        organizedHubAndSpokeData[id] || (organizedHubAndSpokeData[id] = []);
 
       if (index % 2 === 0) {
         hubArray.push({
@@ -364,7 +361,7 @@ const useCanvasData = () => {
     Object.entries(organizedHubAndSpokeData).forEach(([id, content]) => {
       const hubAndSpokeElement = getOrCreateElement('Hub', id, outputFormat);
       hubAndSpokeElement.data = content;
-      hubAndSpokeElement["heading"] = hubAndSpokeMainText;
+      hubAndSpokeElement['heading'] = hubAndSpokeMainText;
       hubAndSpokeElement.title = titleText;
       hubAndSpokeElement.subTitle = subTitleText;
     });
@@ -377,7 +374,7 @@ const useCanvasData = () => {
     statisticsData.forEach((item, index) => {
       const id = item.id;
       const statsArray =
-      organizedStatisticsData[id] || (organizedStatisticsData[id] = []);
+        organizedStatisticsData[id] || (organizedStatisticsData[id] = []);
 
       if (index % 2 === 0) {
         statsArray.push({
@@ -397,7 +394,6 @@ const useCanvasData = () => {
       statsElement.data = content;
       statsElement.title = titleText;
       statsElement.subTitle = subTitleText;
-
     });
 
     if (outputFormat && outputFormat.elements.length > 0) {
@@ -410,10 +406,9 @@ const useCanvasData = () => {
         outputFormat['subTitle'] = subTitleText;
       }
 
-      if(outputFormat.elements[0].shape == 'Hub'){
-         outputFormat.elements[0].heading = hubAndSpokeMainText
+      if (outputFormat.elements[0].shape == 'Hub') {
+        outputFormat.elements[0].heading = hubAndSpokeMainText;
       }
-
     } else {
       const titleData = getOrCreateElement('cover', '1', outputFormat);
       titleData['title'] = titleText;
@@ -587,11 +582,9 @@ const useCanvasData = () => {
       enabledEl = [];
     } else if (isShapeAdded && isTitleAdded && isSubtitleAdded) {
       enabledEl = [];
-    } else if(isImageAdded) {
-      enabledEl.push(
-        'Image'
-      );
-    }else if (isShapeAdded && isTitleAdded) {
+    } else if (isImageAdded) {
+      enabledEl.push('Image');
+    } else if (isShapeAdded && isTitleAdded) {
       enabledEl.push('Subtitle');
     } else if (isShapeAdded && isSubtitleAdded) {
       enabledEl.push('Title');
@@ -656,8 +649,7 @@ const useCanvasData = () => {
         'Statistics',
         'Client List'
       );
-    } 
-     else {
+    } else {
       if (!isTitleAdded) {
         enabledEl.push('Title');
       }
