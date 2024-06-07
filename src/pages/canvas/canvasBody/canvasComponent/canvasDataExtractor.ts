@@ -94,7 +94,7 @@ const useCanvasData = () => {
     if (canvasData) {
       tableData = extractTableData(canvasData);
     }
-    const outputFormat: APIRequest = {
+    let outputFormat: APIRequest = {
       themeId: themeId,
       imagesCount: '',
       slideNumber: canvasJS.id,
@@ -441,6 +441,25 @@ const useCanvasData = () => {
       tableData.data = [];
       outputFormat.elements.push(tableData);
     }
+
+    outputFormat = {
+      ...outputFormat,
+      elements: outputFormat.elements.map(element => {
+        if ('shape' in element && element.shape === 'Funnel' && element.data) {
+          return {
+            ...element,
+            data: [...element.data].reverse()
+          };
+        }else if ('shape' in element && element.shape === 'Hub' && element.data) {
+          return {
+            ...element,
+            heading : hubAndSpokeMainText
+          }
+        }
+        return element;
+      })
+    };
+    
     console.log({ outputFormat });
     dispatch(setRequestData(outputFormat));
     return new Promise<any>((resolve, reject) => {
