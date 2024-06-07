@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { CheckboxContainer, EditBarContainer, IconButton, SvgContainer } from './style';
 import Tooltip from '@mui/material/Tooltip';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
@@ -22,6 +22,7 @@ const ElementEditBar: React.FC<ElementEditBarProps> = ({ left, top, canvas }) =>
     const [position, setPosition] = useState({ l: left, t: top });
     const { enhancementWithAI } = useAppSelector(state => state.apiData);
     const { addTableColumn, addTableRow, removeTableColumn, removeTableRow, removeTableHeader, addTableHeader } = useTableElement();
+    const editBarRef = useRef<HTMLDivElement>(null);
     const {
         adjustControlsVisibility,
         handleCopyClick,
@@ -102,30 +103,38 @@ const ElementEditBar: React.FC<ElementEditBarProps> = ({ left, top, canvas }) =>
             left = 150;
             top = -40;
             setPosition({ l: left, t: top });
-        } else if (activeElement && 
-            (activeElement.name?.startsWith(LIST_MAIN) ||
-            activeElement.name?.startsWith(QUOTE_IMG) ||
-            activeElement.name?.startsWith(IMAGE)
-        )
-        ) {
-            setPosition({ l: left - 22, t: top });
-        }
-         else {
+        } else {
+            if(editBarRef.current){
+                const editBarWidth = editBarRef.current.offsetWidth;
+                if(editBarWidth < 145) {
+                    setPosition({ l: left - 12, t: top });
+                }else if (editBarWidth < 202) {
+                    setPosition({ l: left - 33, t: top });
+                }
+                return;
+            }
             setPosition({ l: left, t: top });
         }
 
 
-    }, [canvas?.getActiveObject(), left, top]);
+    }, [canvas?.getActiveObject(), left, top, editBarRef.current?.offsetWidth]);
 
     useEffect(() => { }, [plusIcon]);
 
 
     return (
-        <EditBarContainer left={position.l} top={position.t}>
+        <EditBarContainer ref={editBarRef} left={position.l} top={position.t}>
             {(!tableIcons && !levelIcons) && <Tooltip title="Add Level" placement="top">
                 <span>
                     <IconButton onClick={handleAdd} disabled={!plusIcon} style={{ color: plusIcon ? '' : '#e0e0e0' }}>
                         <AddOutlinedIcon />
+                    </IconButton>
+                </span>
+            </Tooltip>}
+            {(!tableIcons && !levelIcons && minusIcon) && <Tooltip title="Undo Last Level" placement="top">
+                <span>
+                    <IconButton onClick={() => handleRemovingLastLevel(canvas!)} disabled={!minusIcon} style={{ color: minusIcon ? '' : '#e0e0e0' }}>
+                        <RemoveIcon />
                     </IconButton>
                 </span>
             </Tooltip>}
@@ -199,13 +208,6 @@ const ElementEditBar: React.FC<ElementEditBarProps> = ({ left, top, canvas }) =>
                     <AiSlashIcon/>
                     <AiIcon/>
                 </CheckboxContainer>
-            </Tooltip>}
-            {(!tableIcons && !levelIcons && minusIcon) && <Tooltip title="Undo Last Level" placement="top">
-                <span>
-                    <IconButton onClick={() => handleRemovingLastLevel(canvas!)} disabled={!minusIcon} style={{ color: minusIcon ? '' : '#e0e0e0' }}>
-                        <RemoveIcon />
-                    </IconButton>
-                </span>
             </Tooltip>}
         </EditBarContainer>
     );
