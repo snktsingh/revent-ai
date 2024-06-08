@@ -114,7 +114,8 @@ export const useEditBar = () => {
         (objectName[0] === LIST_MAIN && listCount < 8) ||
         (objectName[0] === CLIENT_LIST_MAIN && clientListCount < 11) ||
         (objectName[0] === HUB_AND_SPOKE && hubAndSpokeCount < 6) ||
-        (objectName[0] === STATISTICS && statisticElCount < 9)
+        (objectName[0] === STATISTICS && statisticElCount < 9) ||
+        (objectName[0] === IMAGE)
       ) {
         showPlusIcon = true;
         showDelForLevelIcon = false;
@@ -255,6 +256,9 @@ export const useEditBar = () => {
           addHubAndSpokeLevel(canvas);
         case STATISTICS:
           addStatisticsLevels(canvas);
+          break;
+        case IMAGE:
+          imageUploader(canvas);
           break;
         default:
           break;

@@ -9,6 +9,7 @@ import {
   HUB_AND_SPOKE_CIRCLE,
   HUB_AND_SPOKE_MAIN_TEXT,
   HUB_AND_SPOKE_TEXT_BOX,
+  IMAGE,
   LIST_TEXT,
   PROCESS_ARROW,
   PROCESS_BOX,
@@ -231,7 +232,8 @@ export const useCanvasComponent = () => {
       elementName.startsWith(HUB_AND_SPOKE_MAIN_TEXT) ||
       elementName.startsWith(STATISTICS_BOX) ||
       elementName.startsWith(STATISTICS_TITLE_TEXT) ||
-      elementName.startsWith(STATISTICS_TEXT)
+      elementName.startsWith(STATISTICS_TEXT) 
+      
     ) {
       return true;
     }

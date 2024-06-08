@@ -1,5 +1,6 @@
 import {
   BULLET_POINTS,
+  CLIENT_LIST_MAIN,
   CONCLUSION_SLIDE_SUBTITLE,
   CONCLUSION_SLIDE_TITLE,
   COVER_SLIDE_SUBTITLE,
@@ -574,6 +575,8 @@ const useCanvasData = () => {
           BULLET_POINTS,
           PARAGRAPH,
           SWOT,
+          IMAGE,
+          CLIENT_LIST_MAIN
         ].some(elName => obj.name.startsWith(elName));
       }
     });
@@ -584,7 +587,10 @@ const useCanvasData = () => {
       enabledEl = [];
     } else if (isImageAdded) {
       enabledEl.push('Image');
-    } else if (isShapeAdded && isTitleAdded) {
+    } else if (isTitleAdded && isSubtitleAdded && isImageAdded) {
+      enabledEl.push('Image');
+    }
+    else if (isShapeAdded && isTitleAdded) {
       enabledEl.push('Subtitle');
     } else if (isShapeAdded && isSubtitleAdded) {
       enabledEl.push('Title');
