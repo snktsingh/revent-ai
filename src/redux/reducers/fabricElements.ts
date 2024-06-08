@@ -11,6 +11,8 @@ interface ElementsIds {
   clientListId: number;
   hubAndSpokeId: number;
   statisticsId: number;
+  imageId : number;
+  QuoteImageId : number;
 }
 
 const initialState: ElementsIds = {
@@ -21,9 +23,11 @@ const initialState: ElementsIds = {
   cycleId: 1,
   listID: 1,
   swotID: 1,
-  clientListId: 1,
+  clientListId: 2,
   hubAndSpokeId: 1,
   statisticsId: 1,
+  imageId : 1,
+  QuoteImageId : 1,
 };
 
 export const elementsIdsReducer = createSlice({
@@ -60,6 +64,13 @@ export const elementsIdsReducer = createSlice({
     updateStatisticsId: state => {
       state.statisticsId += 1;
     },
+    updateImageId: state => {
+      state.imageId +=1;
+    },
+    updateQuoteImageId: state => {
+      state.QuoteImageId +=1;
+    },
+
   },
 });
 
@@ -73,6 +84,8 @@ export const {
   updateSwotId,
   updateClientListId,
   updateHubAndSpokeId,
-  updateStatisticsId
+  updateStatisticsId,
+  updateImageId,
+  updateQuoteImageId
 } = elementsIdsReducer.actions;
 export default elementsIdsReducer.reducer;

@@ -1,11 +1,14 @@
 import { IMAGE } from '@/constants/elementNames';
-import { Images, addImages } from '@/data/data';
-import { useAppSelector } from '@/redux/store';
+import { Images, addOrReplaceImage } from '@/data/data';
+import { updateImageId } from '@/redux/reducers/fabricElements';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
 import imageCompression from 'browser-image-compression';
 import { fabric } from 'fabric';
 import { toast } from 'react-toastify';
 export function useImageElement() {
   const { canvasJS } = useAppSelector(state => state.canvas);
+  const { imageId } = useAppSelector(state => state.elementsIds);
+  const dispatch = useAppDispatch();
   const imageUploader = (canvas: fabric.Canvas | null, existingImage? : fabric.Object) => {
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
@@ -45,8 +48,9 @@ export function useImageElement() {
             fileInput.value = '';
             return;
           }
-  
-          addImages({ canvasId: canvasJS.id, file : compressedFile, path: '' });
+          const id = existingImage?.name ? existingImage.name.split('_')[1] : imageId;
+
+          addOrReplaceImage(canvasJS.id, +id, compressedFile);
   
           reader.onload = () => {
             if (canvas) {
@@ -60,7 +64,7 @@ export function useImageElement() {
                   top: existingImage ? existingImage.top : 5,
                   scaleX: scaledWidth / img.width!,
                   scaleY: scaledHeight / img.height!,
-                  name: IMAGE,
+                  name: existingImage?.name ? existingImage.name : `${IMAGE}_${imageId}`,
                 });
   
                 canvas?.add(img);
@@ -72,6 +76,9 @@ export function useImageElement() {
             }
           };
           reader.readAsDataURL(compressedFile);
+          if(!existingImage) {
+            dispatch(updateImageId());
+          }
         } catch (error) {
           console.error('Error compressing image:', error);
         }

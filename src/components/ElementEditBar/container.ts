@@ -1,4 +1,4 @@
-import { addClientListImages } from '@/data/data';
+import { QuoteImages, clientListImages, deleteClientListImage, deleteImage, deleteQuoteImage, deleteTeamListImage } from '@/data/data';
 import { fabric } from "fabric";
 import React, { useState } from 'react';
 import { useDelAndCopy } from '@/pages/canvas/canvasBody/elements/deleteAndCopyElements';
@@ -73,8 +73,9 @@ export const useEditBar = () => {
   const { addTableRow, addTableColumn, removeTableColumn, removeTableRow } =
     useTableElement();
   const { deleteObject, handleCopyClick } = useDelAndCopy();
+  const { canvasJS } = useAppSelector(state => state.canvas);
 
-  const adjustControlsVisibility = (canvas: fabric.Canvas): void => {
+   const adjustControlsVisibility = (canvas: fabric.Canvas): void => {
     const selectedObject = canvas.getActiveObject();
 
     const objectName = selectedObject?.name?.split('_');
@@ -246,11 +247,9 @@ export const useEditBar = () => {
           break;
         case LIST_MAIN:
           addList(canvas, lastListElement);
-          dispatch(updateListId());
           break;
         case CLIENT_LIST_MAIN:
           addClientList(canvas, lastClientListElement);
-          dispatch(updateClientListId());
           break;
         case HUB_AND_SPOKE:
           addHubAndSpokeLevel(canvas);
@@ -285,6 +284,7 @@ export const useEditBar = () => {
     } else {
       addListElement(canvas, 0, 0);
     }
+    
   }
 
   function addListImage(canvas: fabric.Canvas) {
@@ -355,6 +355,24 @@ export const useEditBar = () => {
     }
   };
 
+
+  const updateDeletedObject = (canvas : fabric.Canvas) => {
+    const activeObject = canvas?.getActiveObject();
+    const [_, id] = (activeObject?.name?.split('_') ?? []);
+    if(activeObject?.name?.startsWith(`${LIST_MAIN}_`)) {
+      deleteTeamListImage(canvasJS.id, +id);
+    } 
+    else if(activeObject?.name?.startsWith(`${IMAGE}_`)) {
+      deleteImage(canvasJS.id, +id);
+    }
+    else if(activeObject?.name?.startsWith(`${QUOTE_IMG}_`)) {
+      deleteQuoteImage(canvasJS.id, +id);
+    }
+    else if(activeObject?.name?.startsWith(`${CLIENT_LIST_MAIN}_`)) {
+      deleteClientListImage(canvasJS.id, +id);
+    }
+  };
+
   return {
     adjustControlsVisibility,
     handleCopyClick,
@@ -370,6 +388,7 @@ export const useEditBar = () => {
     levelIcons,
     handleChangeImageElement,
     addClientListImage,
-    minusIcon
+    minusIcon,
+    updateDeletedObject
   };
 };

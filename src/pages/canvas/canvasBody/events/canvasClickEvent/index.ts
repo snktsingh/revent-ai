@@ -37,7 +37,7 @@ export function useCanvasClickEvent() {
         canvas.requestRenderAll();
       }
       
-      if (object?.name === QUOTE_IMG) {
+      if (object?.name?.startsWith(QUOTE_IMG)) {
         addQuoteImage(canvas, object);
         canvas.requestRenderAll();
       }

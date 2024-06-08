@@ -7,14 +7,17 @@ import {
   QUOTE_TEXT,
 } from '@/constants/elementNames';
 import { theme } from '@/constants/theme';
-import { QuoteImages, addQuoteImageForStore } from '@/data/data';
-import { useAppSelector } from '@/redux/store';
+import { QuoteImages, addOrReplaceQuoteImage } from '@/data/data';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { fabric } from 'fabric';
 import { toast } from 'react-toastify';
 import imageCompression from 'browser-image-compression';
+import { updateQuoteImageId } from '@/redux/reducers/fabricElements';
 
 export const useQuoteElement = () => {
   const { canvasJS } = useAppSelector(state => state.canvas);
+  const { QuoteImageId } = useAppSelector(state => state.elementsIds);
+  const dispatch = useAppDispatch();
   const addQuotes = (canvas: fabric.Canvas | null) => {
     let text = new fabric.Textbox('❝Click to add a quote❞', {
       left: 290,
@@ -63,13 +66,13 @@ export const useQuoteElement = () => {
     let group = new fabric.Group([mainListContainer, addImage], {
       left: 110,
       top: 120,
-      name: QUOTE_IMG,
+      name: `${QUOTE_IMG}_${QuoteImageId}`,
     });
 
     let QuoteContainer = new fabric.Rect({
       fill: 'transparent',
       strokeWidth: 1,
-      name: `${QUOTE}_`,
+      name: `${QUOTE}_${QuoteImageId}`,
       rx: 5,
       left: 110,
       top: 120,
@@ -81,7 +84,7 @@ export const useQuoteElement = () => {
     //   left: 110,
     //   top: 120,
     // })
-
+    dispatch(updateQuoteImageId());
     canvas?.add(QuoteContainer, group);
     canvas?.add(text);
     canvas?.add(authorText);
@@ -97,9 +100,11 @@ export const useQuoteElement = () => {
     fileInput.click();
     let file;
     let reader = new FileReader();
-    fileInput.addEventListener('change', async (e) => {
+    fileInput.addEventListener('change', async (e) : Promise<void> => {
       file = (e.target as HTMLInputElement)?.files?.[0];
       if (file) {
+        const [_, id] = (object.name?.split('_') ?? []);
+
         const options = {
           maxSizeMB: 1,          
           maxWidthOrHeight: 800, 
@@ -131,7 +136,7 @@ export const useQuoteElement = () => {
           // }
           
           const compressedFile = await imageCompression(file, options);
-          addQuoteImageForStore({canvasId : canvasJS.id, file : compressedFile, path : ''});
+          addOrReplaceQuoteImage(canvasJS.id, +id, compressedFile);
           reader.onload = () => {
             if (canvas) {
               fabric.Image.fromURL(reader.result as string, img => {
@@ -145,12 +150,12 @@ export const useQuoteElement = () => {
                 let TextElement = (object as fabric.Group)._objects[1];
                 // (object as fabric.Group).removeWithUpdate(TextElement);
                 (object as fabric.Group).set({
-                  name: `${QUOTE_IMG}_`,
+                  name: object.name,
                 });
                 img.set({
                   left: object && object.left !== undefined ? object.left + 2 : 0,
                   top: object && object.top !== undefined ? object.top + 2 : 0,
-                  name: 'QuoteImage',
+                  name: object.name,
                   scaleX,
                   scaleY,
                 });

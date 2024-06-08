@@ -400,8 +400,8 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
             } else if (!isSubtitleAvailable) {
               canvas?.add(subtitle);
             }
-            addClientListElement(canvas, 25, 100);
-            addClientListElement(canvas, 180, 100);
+            addClientListElement(canvas, 25, 100, 1);
+            addClientListElement(canvas, 180, 100, 2);
           }
         };
         break;

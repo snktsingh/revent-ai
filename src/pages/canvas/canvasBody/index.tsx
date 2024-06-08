@@ -199,7 +199,6 @@ const CanvasBody = () => {
       };
       }
 
-      console.log({requestListData})
       let blob = new Blob([JSON.stringify(requestListData)], {
         type: 'application/json',
       });
@@ -208,7 +207,7 @@ const CanvasBody = () => {
       const listImagesArray = listImages.find(el => el.canvasId == canvasJS.id);
       if (listImagesArray && listImagesArray.images) {
         for (let i = 0; i < listImagesArray.images.length; i++) {
-          formData.append('images', listImagesArray.images[i].file);
+          formData.append('images', listImagesArray.images[i].imageFile);
         }
 
         dispatch(
@@ -233,7 +232,7 @@ const CanvasBody = () => {
       const ImagesArray = Images.find(el => el.canvasId == canvasJS.id);
       if (ImagesArray && ImagesArray.images) {
         for (let i = 0; i < ImagesArray.images.length; i++) {
-          formData.append('images', ImagesArray.images[i].file);
+          formData.append('images', ImagesArray.images[i].imageFile);
         }
         dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes })).then((res) => {
           if (res && res.payload.slideId) {
@@ -258,7 +257,7 @@ const CanvasBody = () => {
       if (QuoteImagesArray && QuoteImagesArray.images) {
         if (QuoteImagesArray.images.length !== 0) {
           for (let i = 0; i < QuoteImagesArray.images.length; i++) {
-            formData.append('images', QuoteImagesArray.images[i].file);
+            formData.append('images', QuoteImagesArray.images[i].imageFile);
           }
           dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes })).then((res) => {
             if (res && res.payload.slideId) {

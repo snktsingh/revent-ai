@@ -163,8 +163,8 @@ export function useDelAndCopy() {
         case `${TABLE}_`:
           objectsToDelete.push(TABLE);
           break;
-        case `${QUOTE}_`:
-          objectsToDelete.push(QUOTE_IMG, QUOTE_AUTHOR, QUOTE_TEXT);
+        case `${QUOTE}_${currentElID}`:
+          objectsToDelete.push(`${QUOTE_IMG}_${currentElID}`, QUOTE_AUTHOR, QUOTE_TEXT);
           break;
         case QUOTE_AUTHOR:
           objectsToDelete.push(QUOTE_IMG, QUOTE);
