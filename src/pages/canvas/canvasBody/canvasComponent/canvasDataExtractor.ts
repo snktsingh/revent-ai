@@ -9,6 +9,7 @@ import {
   CYCLE_TEXT,
   FUNNEL,
   FUNNEL_TEXT,
+  HUB_AND_SPOKE,
   HUB_AND_SPOKE_BOX_HEADING,
   HUB_AND_SPOKE_BOX_TEXT,
   HUB_AND_SPOKE_MAIN_TEXT,
@@ -576,7 +577,9 @@ const useCanvasData = () => {
           PARAGRAPH,
           SWOT,
           IMAGE,
-          CLIENT_LIST_MAIN
+          CLIENT_LIST_MAIN,
+          HUB_AND_SPOKE,
+          TABLE_OF_CONTENTS_TEXT
         ].some(elName => obj.name.startsWith(elName));
       }
     });
