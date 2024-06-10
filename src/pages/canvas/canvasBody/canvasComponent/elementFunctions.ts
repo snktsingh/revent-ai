@@ -359,7 +359,7 @@ export const useElementFunctions = (canvas: fabric.Canvas | null) => {
           }
         };
         break;
-      case 'Hubs and Spoke':
+      case 'Hub and Spoke':
         element.onClick = () => {
           if(canvas){
             if (!isTitleAvailable && !isSubtitleAvailable) {

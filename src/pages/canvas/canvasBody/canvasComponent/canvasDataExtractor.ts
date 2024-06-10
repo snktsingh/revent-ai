@@ -611,7 +611,7 @@ const useCanvasData = () => {
         'Pyramid',
         'SWOT Analysis',
         'Table of Contents',
-        'Hubs and Spoke',
+        'Hub and Spoke',
         'Statistics',
         'Client List'
       );
@@ -631,7 +631,7 @@ const useCanvasData = () => {
         'Subtitle',
         'SWOT Analysis',
         'Table of Contents',
-        'Hubs and Spoke',
+        'Hub and Spoke',
         'Statistics',
         'Client List'
       );
@@ -651,7 +651,7 @@ const useCanvasData = () => {
         'Title',
         'SWOT Analysis',
         'Table of Contents',
-        'Hubs and Spoke',
+        'Hub and Spoke',
         'Statistics',
         'Client List'
       );
@@ -679,7 +679,7 @@ const useCanvasData = () => {
         'Conclusion Slide',
         'SWOT Analysis',
         'Table of Contents',
-        'Hubs and Spoke',
+        'Hub and Spoke',
         'Statistics',
         'Client List'
       );

@@ -7,7 +7,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { CanvasItem } from '@/interface/storeTypes';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { openModal } from '@/redux/reducers/elements';
-import { copyCanvasCopy, deleteSlide } from '@/redux/reducers/canvas';
+import { copyCanvasCopy, deleteSlide, setActiveSlideId, setCanvas, updateCanvasList } from '@/redux/reducers/canvas';
 import { StyledContextMenu } from './style';
 
 interface SlidesContextMenuProps {
@@ -15,7 +15,7 @@ interface SlidesContextMenuProps {
   isOpen: boolean;
   onClose: () => void;
   slide: CanvasItem;
-  contextMenuRef : any;
+  contextMenuRef: any;
 }
 
 const SlidesContextMenu: React.FC<SlidesContextMenuProps> = ({ anchorPoint, isOpen, onClose, slide, contextMenuRef }) => {
@@ -33,10 +33,32 @@ const SlidesContextMenu: React.FC<SlidesContextMenuProps> = ({ anchorPoint, isOp
 
   const handleDeleteSlide = () => {
     if (!userPreferences.isSlideDeleteAlert) {
-        dispatch(openModal());
+      dispatch(openModal());
     } else {
-      
-      if (canvasList && canvasList.length >= 1) {
+
+      const newSlide: CanvasItem = {
+        id: 1,
+        canvas: {
+          "version": "5.3.0",
+          "objects": [],
+          "background": "#fff"
+        },
+        notes: '',
+        variants: [],
+        originalSlideData: {},
+        listImages: [],
+        slideId: 1,
+        presentationId: 1,
+        lastVariant: '',
+        selectedOriginalCanvas: false,
+      }
+      if (canvasList && canvasList.length == 1) {
+         dispatch(setCanvas(newSlide));
+         dispatch(setActiveSlideId(1));
+         dispatch(updateCanvasList([newSlide]))
+      }
+
+      if (canvasList && canvasList.length > 1) {
         dispatch(deleteSlide(slide.id));
       }
     }

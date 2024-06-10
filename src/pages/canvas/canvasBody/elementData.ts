@@ -190,8 +190,8 @@ export const elementData: IElementData[] = [
   {
     key: 20,
     icon: iconHunNSpoke,
-    title: 'Hubs and Spoke',
-    subtitle: 'Suitable for centralized connection points and streamlined communication',
+    title: 'Hub and Spoke',
+    subtitle: 'Suitable for presenting concepts with multiple related sub-points or categories',
     onClick: () => {},
   },
  {
