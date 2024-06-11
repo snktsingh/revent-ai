@@ -1,6 +1,6 @@
 import PopUpModal from '@/constants/elements/deleteSlideModal';
 import { Add, Wand } from '@/constants/media';
-import { Images, QuoteImages, listImages } from '@/data/data';
+import { Images, QuoteImages, clientListImages, listImages } from '@/data/data';
 import {
   deleteSlide,
   setCanvas,
@@ -180,6 +180,9 @@ const CanvasBody = () => {
     const isQuoteImagesPresent = requestData?.elements.some(
       canvas => canvas.shape === 'Quote'
     );
+    const isClientListImagesPresent = requestData?.elements.some(
+      canvas => canvas.shape === 'ClientList'
+    );
 
     if (isListImagesPresent && requestData) {
 
@@ -276,6 +279,43 @@ const CanvasBody = () => {
       dispatch(toggleSelectedOriginalCanvas(false));
       return;
     }
+
+    if (isClientListImagesPresent) {
+      console.log({ requestData });
+      let blob = new Blob([JSON.stringify(requestData)], {
+        type: 'application/json',
+      });
+      let formData = new FormData();
+      formData.append('data', blob);
+      const clientImagesArray = clientListImages.find(
+        el => el.canvasId == canvasJS.id
+      );
+
+      if (clientImagesArray && clientImagesArray.images) {
+        if (clientImagesArray.images.length !== 0) {
+          for (let i = 0; i < clientImagesArray.images.length; i++) {
+            formData.append('images', clientImagesArray.images[i].imageFile);
+          }
+          dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes })).then((res) => {
+            if (res && res.payload.slideId) {
+              setSearchParams({ slide: res.payload.slideId });
+            }
+          });
+          dispatch(toggleSelectedOriginalCanvas(false));
+          return;
+        }
+      }
+      dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes })).then((res) => {
+        if (res && res.payload.slideId) {
+          setSearchParams({ slide: res.payload.slideId });
+        }
+      });;
+      dispatch(toggleSelectedOriginalCanvas(false));
+      return;
+    }
+
+
+
     let reqData = { ...requestData };
     if (params.id?.split('-')[0] && reqData) {
       const ptId = Number(params.id?.split('-')[0]);

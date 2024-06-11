@@ -139,6 +139,10 @@ const useCanvasData = () => {
             elementType = 'Swot';
             break;
 
+          // case canvasObject.name.startsWith(CLIENT_LIST_MAIN):
+          //   elementType = 'ClientList';
+          //   break;
+
           default:
             break;
         }
@@ -286,7 +290,13 @@ const useCanvasData = () => {
         ) {
           const [_, id] = canvasObject.name.split('_');
           statisticsData.push({ content: canvasObject.text, id: id });
-        } 
+        }
+      }
+      if (
+        canvasObject.name.startsWith(CLIENT_LIST_MAIN) 
+      ) {
+          const clientList = getOrCreateElement('ClientList', '1', outputFormat);
+          console.log({clientList})
       }
     });
 
