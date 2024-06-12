@@ -296,7 +296,6 @@ const useCanvasData = () => {
         canvasObject.name.startsWith(CLIENT_LIST_MAIN) 
       ) {
           const clientList = getOrCreateElement('ClientList', '1', outputFormat);
-          console.log({clientList})
       }
     });
 

@@ -69,7 +69,7 @@ export function useCanvasSingleClickEvent() {
              obj.name === `${HUB_AND_SPOKE_MAIN_TEXT}_${id}` &&
              obj.type === 'textbox'
             ) {
-            if (obj.text === 'Add \nHeading') {
+            if (obj.text === 'Add Heading') {
               obj.selectAll();
             }
             obj.enterEditing();

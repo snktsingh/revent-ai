@@ -30,6 +30,7 @@ export const ENDPOINT = {
     DOWNLOAD_PRESENTATION: '/ppt/download-presentation',
     UPDATE_ACTIVE_VARIANT: '/ppt/update-active-slide',
     CREATE_DOC_PPT: '/ppt/transform',
+    REORDER_SLIDES : '/ppt/update-slide-number'
   },
   DASHBOARD: {
     FETCH_PPT_LIST: 'ppt/get-all-presentation',

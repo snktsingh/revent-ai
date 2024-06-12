@@ -8,6 +8,7 @@ import {
   FUNNEL_TEXT,
   HUB_AND_SPOKE_BOX_HEADING,
   HUB_AND_SPOKE_BOX_TEXT,
+  HUB_AND_SPOKE_MAIN_TEXT,
   LIST_TEXT,
   PARAGRAPH,
   PROCESS_TEXT,
@@ -132,7 +133,9 @@ export function useTextEvents() {
         (textBox.text === 'Add Title' &&
         textBox.name?.startsWith(HUB_AND_SPOKE_BOX_HEADING)) ||
         (textBox.text === 'Add Text' &&
-        textBox.name?.startsWith(HUB_AND_SPOKE_BOX_TEXT))
+        textBox.name?.startsWith(HUB_AND_SPOKE_BOX_TEXT)) ||
+        (textBox.text === 'Add Heading' &&
+        textBox.name?.startsWith(HUB_AND_SPOKE_MAIN_TEXT)) 
       ) {
         textBox.set({ text: '' });
         if (!textBox.isEditing) {
@@ -220,7 +223,9 @@ export function useTextEvents() {
         (textBox.text === 'Add Title' &&
         textBox.name?.startsWith(HUB_AND_SPOKE_BOX_HEADING)) ||
         (textBox.text === 'Add Text' &&
-        textBox.name?.startsWith(HUB_AND_SPOKE_BOX_TEXT))
+        textBox.name?.startsWith(HUB_AND_SPOKE_BOX_TEXT)) ||
+        (textBox.text === 'Add Heading' &&
+          textBox.name?.startsWith(HUB_AND_SPOKE_MAIN_TEXT)) 
       ) {
         textBox.set({ text: '' });
         if (!textBox.isEditing) {
@@ -388,6 +393,11 @@ export function useTextEvents() {
         textBox.text = 'Add Text';
       }
       canvas.renderAll();
+    } else if (textBox.name?.startsWith(HUB_AND_SPOKE_MAIN_TEXT)) {
+        if (textBox.text == '') {
+          textBox.text = 'Add Heading';
+        }
+        canvas.renderAll();
     } else if (
       textBox.name?.startsWith(STATISTICS_TITLE_TEXT)
     ) {

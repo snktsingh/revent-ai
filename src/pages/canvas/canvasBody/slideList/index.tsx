@@ -12,6 +12,7 @@ import { DndContext, closestCorners } from '@dnd-kit/core';
 import { SlideContainer } from './style';
 import { SingleSlideComponent } from './singleSlideComponent';
 import SlidesContextMenu from '@/common-ui/slidesContextMenu';
+import { reorderSlidesApi } from '@/redux/thunk/slides';
 
 export default function SlideList() {
   const {
@@ -75,8 +76,20 @@ export default function SlideList() {
       const newPos = getSlideId(over.id);
       return arrayMove(canvasList, originalPos, newPos);
     };
-
-    dispatch(updateCanvasList(updateCanvasListArray()));
+    let reorderArray = updateCanvasListArray();
+    const reorderedSlides = reorderArray.map((slide, i) => {
+      return {
+        slideId: slide.slideId,
+        slideNumber: i + 1
+      }
+    });
+    let req = {
+      presentationId: reorderArray[0].presentationId,
+      slides: reorderedSlides
+    }
+    dispatch(reorderSlidesApi(req)).then((res) => {
+      dispatch(updateCanvasList(updateCanvasListArray()));
+    })
   };
 
   const handleContextMenu = (event: React.MouseEvent, slide: CanvasItem) => {

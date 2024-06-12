@@ -9,6 +9,7 @@ import elementsIdsReducer from './reducers/fabricElements';
 import themeReducer from './reducers/theme';
 import userReducer from './thunk/user';
 import dashboardReducer from './thunk/dashboard';
+import slidesReducer from './thunk/dashboard';
 
 export const store = configureStore({
   reducer: {
@@ -21,6 +22,7 @@ export const store = configureStore({
     slideTheme: themeReducer,
     manageUser: userReducer,
     manageDashboard: dashboardReducer,
+    slidesThunk : slidesReducer,
   },
 });
 

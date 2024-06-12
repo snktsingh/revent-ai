@@ -111,7 +111,7 @@ const MainCanvasHeader = ({ pId }: any) => {
       <MainIconButton onClick={handleGoBack}>
         <Stack direction="row" spacing={2}>
           <img src={CanvasBack} />
-          <ButtonName>Back</ButtonName>
+          <ButtonName>My Presentations</ButtonName>
         </Stack>
       </MainIconButton>
       <Stack direction="row" spacing={1}></Stack>
