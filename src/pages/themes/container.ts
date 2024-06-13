@@ -55,8 +55,8 @@ const useStartTheme = () => {
           setTimeout(() => {
             navigate('/my-presentations');
           }, 1000);
-        } catch (error) {
-          toast.error('Conversion failed');
+        } catch (error: any) {
+          toast.error(error.message);
         }
       } else {
         toast.warning('Please login to Generate');
