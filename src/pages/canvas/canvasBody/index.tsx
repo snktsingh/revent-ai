@@ -546,7 +546,7 @@ const CanvasBody = () => {
                   />
                 </IconButton>{' '} */}
                 &nbsp;
-                {isEditBtnShow && (
+                {!isVariantsEmpty && isEditBtnShow && (
                   <Button
                     variant="contained"
                     size="medium"
@@ -555,7 +555,7 @@ const CanvasBody = () => {
                     Edit
                   </Button>
                 )}
-                {isReturnBtnShow && (
+                {!isVariantsEmpty && isReturnBtnShow && (
                   <Button
                     variant="contained"
                     size="medium"

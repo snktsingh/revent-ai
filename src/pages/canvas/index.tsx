@@ -35,6 +35,7 @@ const MainCanvas = () => {
   );
   const { canvasJS } = useAppSelector(state => state.canvas);
   const { isPresentationLoading } = useAppSelector(state => state.element);
+  const { themeId } = useAppSelector(state => state.slideTheme);
   const [searchParams, setSearchParams] = useSearchParams();
   const params = useParams<{ id: string }>(); 
 
@@ -80,10 +81,11 @@ const MainCanvas = () => {
           }
         });
         
-        dispatch(setThemeId(res.payload.themeId));
+        dispatch(setThemeId(res.payload.themeId || themeId));
         dispatch(setActiveSlideId(slidesData[slidesData.length-1].id));
         dispatch(updateCanvasList(slidesData));
-        res.payload.slides.forEach((variant: any) => {
+        const lastSlide = res.payload.slides.length-1
+        res.payload.slides[lastSlide].variants.forEach((variant: any) => {
           if (variant.active) {
             dispatch(setVariantImageAsMain(variant.thumbnailUrl));
           }
