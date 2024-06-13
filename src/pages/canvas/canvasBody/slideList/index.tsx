@@ -12,7 +12,7 @@ import { DndContext, closestCorners } from '@dnd-kit/core';
 import { SlideContainer } from './style';
 import { SingleSlideComponent } from './singleSlideComponent';
 import SlidesContextMenu from '@/common-ui/slidesContextMenu';
-import { reorderSlidesApi } from '@/redux/thunk/slides';
+import { reorderSlidesApi } from '@/redux/thunk/slidesThunk';
 
 export default function SlideList() {
   const {
