@@ -59,13 +59,13 @@ export const processSlides = (
       variants: [],
       originalSlideData: {},
       listImages: [],
-      slideId: slideData[0].slideId,
+      slideId: slideData.slideId,
       presentationId,
       lastVariant: '',
       selectedOriginalCanvas: false,
     };
 
-    slideData.forEach((element: any) => {
+    slideData.variants.forEach((element: any) => {
       slide.variants.push({
         pptUrl: '',
         imagesUrl: element.thumbnailUrl,
