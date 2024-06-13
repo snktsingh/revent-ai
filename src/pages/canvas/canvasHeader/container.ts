@@ -6,6 +6,7 @@ import {
   setPresentationTitle,
   updateCanvasList,
 } from '@/redux/reducers/canvas';
+import { setSelectedTheme } from '@/redux/reducers/theme';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import {
   setPresentationName,
@@ -126,6 +127,7 @@ const useCanvasHeader = () => {
       },
     ];
     dispatch(updateCanvasList(canvas));
+    dispatch(setSelectedTheme(0))
   };
 
   return {

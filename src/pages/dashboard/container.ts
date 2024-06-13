@@ -6,6 +6,7 @@ import {
   updateCanvasList,
 } from '@/redux/reducers/canvas';
 import { togglePptAlertOpen } from '@/redux/reducers/elements';
+import { setSelectedTheme } from '@/redux/reducers/theme';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import {
   deletePresentation,
@@ -83,6 +84,7 @@ const useDashboard = () => {
     dispatch(setCanvas(canvas[0]));
     dispatch(setVariantImageAsMain(''));
     dispatch(updateCanvasList(canvas));
+    dispatch(setSelectedTheme(0))
   }, []);
 
   const handlePptDelCheckBox = (e: React.ChangeEvent<HTMLInputElement>) => {
