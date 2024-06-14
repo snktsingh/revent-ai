@@ -34,7 +34,7 @@ import {
 import slideData from './data.json';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { HtmlHTMLAttributes, useEffect, useRef, useState } from 'react';
+import React, { HtmlHTMLAttributes, useEffect, useRef, useState } from 'react';
 import { MagnifyingGlass } from 'react-loader-spinner';
 import AddToQueueIcon from '@mui/icons-material/AddToQueue';
 import '../../../index.css';
@@ -50,12 +50,25 @@ import useDashboard from './container';
 import ProfileMenu from '@/common-ui/profileMenu';
 import ThumbnailPreview from '@/common-ui/thumbnailPreview';
 import { faker } from '@faker-js/faker';
-import { Blank } from '@/constants/media';
+import {
+  Blank,
+  CancelUpload,
+  DeleteFile,
+  Folder,
+  Proceed,
+  UploadTick,
+} from '@/constants/media';
 import NavBar from '@/common-ui/NavBar';
 import PresentationCardContextMenu from '@/common-ui/presentationContextMenu';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { CardBox, UploadSubtitle } from '../homepage/style';
+import { setSelectedDocFile } from '@/redux/reducers/theme';
 
-const Dashboard = () => {
+interface FileUploadProps {
+  onFileSelect: (file: File) => void;
+}
+
+const Dashboard = ({ onFileSelect }: any) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const {
@@ -140,6 +153,47 @@ const Dashboard = () => {
     setContextMenu(null);
   };
 
+  const inputRef = React.createRef<HTMLInputElement>();
+  const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+
+    if (files && files.length > 0) {
+      const selected = files[0];
+      setSelectedFile(selected);
+      dispatch(setSelectedDocFile(selected));
+      onFileSelect(selected);
+    }
+  };
+
+  const handleContainerClick = () => {
+    if (inputRef.current) {
+      inputRef.current.click();
+    }
+  };
+
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  };
+
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+
+    const files = event.dataTransfer.files;
+
+    if (files && files.length > 0) {
+      const droppedFile = files[0];
+      setSelectedFile(droppedFile);
+      dispatch(setSelectedDocFile(droppedFile));
+      onFileSelect(droppedFile);
+    }
+  };
+
+  const handleDocsPPt = async () => {
+    navigate('/themes');
+  };
+
   return (
     <>
       <NavBar />
@@ -174,6 +228,99 @@ const Dashboard = () => {
               </NewPPTCard>
             );
           })}
+          <CardLink>
+            <PreviewCard>
+              <CardBox
+                style={{
+                  border: 'none',
+                }}
+              >
+                <div
+                  style={{
+                    cursor: 'pointer',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                  }}
+                  onClick={handleContainerClick}
+                  onDragOver={handleDragOver}
+                  onDrop={handleDrop}
+                >
+                  <input
+                    type="file"
+                    accept=".docx,.doc"
+                    onChange={handleFileChange}
+                    ref={inputRef}
+                    style={{ display: 'none' }}
+                  />
+                  {selectedFile !== null ? (
+                    <span
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <br />
+                      <img src={UploadTick} width="30px" />
+                      <p
+                        style={{
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'inherit',
+                          textAlign: 'center',
+                          width: '140px',
+                          height: '16px',
+                        }}
+                      >
+                        {selectedFile.name}
+                      </p>
+                    </span>
+                  ) : (
+                    <div style={{ textAlign: 'center' }}>
+                      <img src={Folder} width="30px" />
+                      <br /> <br />
+                      <span>
+                        <b>Browse Files</b>
+                        <br />
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </CardBox>
+            </PreviewCard>{' '}
+            <span
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: '6px',
+              }}
+            >
+              <span>Transform</span>
+              <span>
+                {selectedFile && (
+                  <img
+                    title="Delete File"
+                    src={DeleteFile}
+                    width="25px"
+                    style={{ cursor: 'pointer', marginRight: '10px' }}
+                    onClick={() => setSelectedFile(null)}
+                  />
+                )}
+                {selectedFile && (
+                  <img
+                    title="Proceed for Transformation"
+                    src={Proceed}
+                    width="25px"
+                    style={{ cursor: 'pointer' }}
+                    onClick={handleDocsPPt}
+                  />
+                )}
+              </span>
+            </span>
+          </CardLink>
           {presetList.length > 0 && (
             <>
               {presetList.map((preset, index) => {
@@ -258,19 +405,28 @@ const Dashboard = () => {
               <CardTitle>
                 {filteredPptList.map((ppt: any, index) => {
                   return (
-                    <PPTCard  key={ppt.presentationId} onContextMenu={e => handleContextMenu(e, ppt)}>
+                    <PPTCard
+                      key={ppt.presentationId}
+                      onContextMenu={e => handleContextMenu(e, ppt)}
+                    >
                       <ThumbnailCard
-                      onClick={() => {
-                        navigate(
-                          `/presentation/${ppt.presentationId
-                          }-${faker.string.uuid()}`
-                        );
-                      }}
+                        onClick={() => {
+                          navigate(
+                            `/presentation/${
+                              ppt.presentationId
+                            }-${faker.string.uuid()}`
+                          );
+                        }}
                       >
                         {ppt.thumbnailUrl !== '' ? (
-                          <img src={ppt.thumbnailUrl} alt={ppt.name} width={'100%'} style={{ borderRadius: 'inherit' }} />
+                          <img
+                            src={ppt.thumbnailUrl}
+                            alt={ppt.name}
+                            width={'100%'}
+                            style={{ borderRadius: 'inherit' }}
+                          />
                         ) : (
-                          <BlankImageCard >
+                          <BlankImageCard>
                             <img src={Blank} />
                           </BlankImageCard>
                         )}
@@ -286,7 +442,8 @@ const Dashboard = () => {
                             title={ppt.name}
                             onClick={() => {
                               navigate(
-                                `/presentation/${ppt.presentationId
+                                `/presentation/${
+                                  ppt.presentationId
                                 }-${faker.string.uuid()}`
                               );
                             }}
@@ -297,7 +454,6 @@ const Dashboard = () => {
                           </PPTTitle>
                           <IconButton
                             onClick={event => {
-
                               handleContextMenu(event, ppt);
                               setPptId(ppt.presentationId);
                             }}
