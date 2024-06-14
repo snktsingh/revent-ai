@@ -99,7 +99,7 @@ export const CanvasReducer = createSlice({
     setCanvasData: (state, action) => {
       state.canvasData = action.payload;
     },
-    addCanvasSlide(state) {
+    addCanvasSlide(state, action : PayloadAction<{slideId : number, slideNo : number}>) {
       const activeSlideIndex = state.canvasList.findIndex(canvas => canvas.id === state.activeSlideID);
 
       const canvas = new fabric.Canvas(null);
@@ -108,13 +108,13 @@ export const CanvasReducer = createSlice({
       const updatedCanvasList = [
         ...state.canvasList.slice(0, activeSlideIndex + 1),
         {
-          id: newCanvasID,
+          id: action.payload.slideNo,
           canvas: newCanvasJSON,
           notes: '',
           variants: [],
           originalSlideData: {},
           listImages: [],
-          slideId: newCanvasID,
+          slideId: action.payload.slideId,
           presentationId: 1,
           lastVariant: '',
           selectedOriginalCanvas: false,

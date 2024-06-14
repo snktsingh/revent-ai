@@ -51,7 +51,7 @@ import {
   colorChange,
   shadesData,
 } from '../canvasBody/elementData';
-import {
+import canvas, {
   addCanvasSlide,
   handleInputSize,
   handleSize,
@@ -66,6 +66,7 @@ import FontsData from '../../../data/fontsData.json';
 import CreditsComponent from '@/components/CreditsComponent';
 import EmailIcon from '@mui/icons-material/Email';
 import { Link } from 'react-router-dom';
+import { addNewSlideApi } from '@/redux/thunk/slidesThunk';
 
 interface FontItem {
   family: string;
@@ -80,7 +81,7 @@ interface FontItem {
 }
 
 
-const CanvasTools = () => {
+const CanvasTools = ({ pId }: any) => {
   const dispatch = useAppDispatch();
   const newKey = useAppSelector(state => state.slide);
   const { color, textColor, borderColor, canvasList, size } = useAppSelector(
@@ -219,8 +220,13 @@ const CanvasTools = () => {
   };
 
   const handleAddNewSlide = () => {
-    dispatch(addCanvasSlide());
-    dispatch(addSlide(obj));
+    const greatestIdObject = canvasList.reduce((max, obj) => (obj.id > max.id ? obj : max), canvasList[0]);
+    // console.log({greatestIdObject})
+    // console.log({canvasList, lastSLide: canvasList[canvasList.length-1]})
+    dispatch(addNewSlideApi({pId, slideNo : greatestIdObject.id + 1})).then((res) => {
+      dispatch(addCanvasSlide({slideId : res.payload.slideId, slideNo : res.payload.slideNumber}));
+      dispatch(addSlide(obj));
+    })
   };
   const handleScroll = () => {
     if (

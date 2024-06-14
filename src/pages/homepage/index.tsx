@@ -356,76 +356,77 @@ const Home = ({ onFileSelect }: any) => {
               <ChildContainer>
                 <UploadTitle ref={productRef}>Get Started</UploadTitle>
                 <Stack direction="row" width="80vw" spacing={13}>
-                  <ComingSoonContainer>
+                <ComingSoonContainer>
                     <CardBox>
+                      <CardSpan></CardSpan>
                       <>
-                        <UploadSubtitle>Transform</UploadSubtitle>
-                        <p>an exisiting document</p>
-                      </>
-                      <div
-                        style={{
-                          cursor: 'pointer',
-                        }}
-                        onClick={handleContainerClick}
-                        onDragOver={handleDragOver}
-                        onDrop={handleDrop}
-                      >
-                        <input
-                          type="file"
-                          accept=".pdf,.docx,.doc"
-                          onChange={handleFileChange}
-                          ref={inputRef}
-                          style={{ display: 'none' }}
-                        />
-                        {selectedFile ? (
-                          <></>
-                        ) : (
-                          <>
-                            <br />
-                            <br />
-                            <img src={Folder} width="30px" />
-                            <br />
-                            <br />
-                            <span>
-                              <b>Drag and Drop</b>
-                              <br />
-                              <span>
-                                your document here <br />
-                                or click to Browse
-                              </span>
-                            </span>
-                            <br />
-                            <br />
-                            <br />
-                            <>File should be .pdf, .doc or .docx</>
-                          </>
-                        )}
-                      </div>
-                      {selectedFile === null ? (
+                      <UploadSubtitle>Transform</UploadSubtitle>
+                      <p>an exisiting document</p>
+                    </>
+                    <div
+                      style={{
+                        cursor: 'pointer',
+                      }}
+                    onClick={handleContainerClick}
+                    onDragOver={handleDragOver}
+                    onDrop={handleDrop}
+                    >
+                      <input
+                        type="file"
+                        accept=".pdf,.docx,.doc"
+                        onChange={handleFileChange}
+                        ref={inputRef}
+                        style={{ display: 'none' }}
+                      />
+                      {selectedFile ? (
                         <></>
                       ) : (
-                        <span
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}
-                        >
+                        <>
                           <br />
-                          <img src={UploadTick} width="40px" />
                           <br />
-                          <b>File Uploaded</b>
-                          <p>{selectedFile.name}</p>
+                          <img src={Folder} width="30px" />
                           <br />
-                          <img
-                            src={CancelUpload}
-                            width="40px"
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => setSelectedFile(null)}
-                          />
-                        </span>
+                          <br />
+                          <span>
+                            <b>Drag and Drop</b>
+                            <br />
+                            <span>
+                              your document here <br />
+                              or click to Browse
+                            </span>
+                          </span>
+                          <br />
+                          <br />
+                          <br />
+                          <>File should be .pdf, .doc or .docx</>
+                        </>
                       )}
+                    </div>
+                    {selectedFile === null ? (
+                      <></>
+                    ) : (
+                      <span
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <br />
+                        <img src={UploadTick} width="40px" />
+                        <br />
+                        <b>File Uploaded</b>
+                        <p>{selectedFile.name}</p>
+                        <br />
+                        <img
+                          src={CancelUpload}
+                          width="40px"
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => setSelectedFile(null)}
+                        />
+                      </span>
+                    )}
                     </CardBox>
                   </ComingSoonContainer>
                   <UploadContainer

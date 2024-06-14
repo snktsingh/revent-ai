@@ -298,7 +298,7 @@ const Dashboard = ({ onFileSelect }: any) => {
                 gap: '6px',
               }}
             >
-              <span>Transform</span>
+              <span>Transform Document</span>
               <span>
                 {selectedFile && (
                   <img
