@@ -36,13 +36,22 @@ const MainCanvas = () => {
   const { canvasJS } = useAppSelector(state => state.canvas);
   const { isPresentationLoading } = useAppSelector(state => state.element);
   const { themeId } = useAppSelector(state => state.slideTheme);
+  const { preset, isPresetOpened } = useAppSelector(state => state.manageDashboard);
   const [searchParams, setSearchParams] = useSearchParams();
   const params = useParams<{ id: string }>(); 
 
   const pptId = Number(params.id?.split('-')[0]);
 
   useEffect(() => {
-    getPresentationData(pptId.toString());
+    dispatch(updatePresentationLoading(true));
+    if(preset && isPresetOpened) {
+      dispatch(updateCanvasList(preset));
+      dispatch(setCanvas(preset[0]));
+      dispatch(updatePresentationLoading(false));
+      dispatch(setAuthenticateLoader());
+    } else {
+      getPresentationData(pptId.toString());
+    }
   }, []);
 
   const getPresentationData = async (pptId: string) => {
@@ -99,6 +108,7 @@ const MainCanvas = () => {
     } else {
       dispatch(setAuthenticateLoader());
     }
+    
   };
 
   if (isAuthenticating) {

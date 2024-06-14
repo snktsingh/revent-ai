@@ -12,6 +12,7 @@ import {
   deletePresentation,
   fetchPPTList,
   fetchPresetsById,
+  togglePresetOpened,
 } from '@/redux/thunk/dashboard';
 import { setUserPreferences } from '@/redux/thunk/user';
 import React, { useEffect, useState } from 'react';
@@ -84,7 +85,8 @@ const useDashboard = () => {
     dispatch(setCanvas(canvas[0]));
     dispatch(setVariantImageAsMain(''));
     dispatch(updateCanvasList(canvas));
-    dispatch(setSelectedTheme(0))
+    dispatch(setSelectedTheme(0));
+    dispatch(togglePresetOpened(false));
   }, []);
 
   const handlePptDelCheckBox = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,6 +1,6 @@
 import ENDPOINT from '@/constants/endpoint';
 import { FetchUtils } from '@/utils/fetch-utils';
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface IPresets {
   id: number;
@@ -13,7 +13,7 @@ export interface IPresentation {
   name: string;
   thumbnailUrl: string;
   lastModifiedBy: string;
-  lastModifiedDate: string;
+  lastModifiedDate: string; 
 }
 
 interface IDashboard {
@@ -22,6 +22,7 @@ interface IDashboard {
   hasMore: boolean;
   presetList: IPresets[];
   preset: any[];
+  isPresetOpened : boolean;
 }
 
 const initialState: IDashboard = {
@@ -30,6 +31,7 @@ const initialState: IDashboard = {
   hasMore: true,
   presetList: [],
   preset: [],
+  isPresetOpened : false,
 };
 
 export const fetchPPTList = createAsyncThunk(
@@ -75,7 +77,11 @@ export const fetchPresetsById = createAsyncThunk(
 const dashboardSlice = createSlice({
   name: 'dashboard-Data',
   initialState,
-  reducers: {},
+  reducers: {
+    togglePresetOpened : (state, action : PayloadAction<boolean>) => {
+       state.isPresetOpened = action.payload;
+    }
+  },
   extraReducers: builder => {
     builder
       .addCase(fetchPPTList.pending, (state, action) => {
@@ -113,6 +119,8 @@ const dashboardSlice = createSlice({
       });
   },
 });
-export const {} = dashboardSlice.actions;
+export const {
+  togglePresetOpened
+} = dashboardSlice.actions;
 
 export default dashboardSlice.reducer;

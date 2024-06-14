@@ -43,6 +43,7 @@ import {
   IPresentation,
   fetchPPTList,
   fetchPresets,
+  togglePresetOpened,
 } from '@/redux/thunk/dashboard';
 import DeleteIcon from '@mui/icons-material/Delete';
 import useDashboard from './container';
@@ -182,6 +183,7 @@ const Dashboard = () => {
                     onClick={() => {
                       navigate('/themes');
                       fetchPreset(preset.id);
+                      dispatch(togglePresetOpened(true));
                     }}
                   >
                     <CardLink>

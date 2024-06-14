@@ -8,6 +8,7 @@ import {
 } from '@/redux/reducers/canvas';
 import { setSelectedTheme } from '@/redux/reducers/theme';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { togglePresetOpened } from '@/redux/thunk/dashboard';
 import {
   setPresentationName,
   updatePptName,
@@ -127,7 +128,8 @@ const useCanvasHeader = () => {
       },
     ];
     dispatch(updateCanvasList(canvas));
-    dispatch(setSelectedTheme(0))
+    dispatch(setSelectedTheme(0));
+    dispatch(togglePresetOpened(false));
   };
 
   return {
