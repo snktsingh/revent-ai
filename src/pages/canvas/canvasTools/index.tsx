@@ -58,6 +58,7 @@ import canvas, {
   setBorderColor,
   setColor,
   setTextColor,
+  toggleIsVariantSelected,
 } from '@/redux/reducers/canvas';
 import FontDownloadOutlinedIcon from '@mui/icons-material/FontDownloadOutlined';
 import ColorizeOutlinedIcon from '@mui/icons-material/ColorizeOutlined';
@@ -226,6 +227,7 @@ const CanvasTools = ({ pId }: any) => {
     dispatch(addNewSlideApi({pId, slideNo : greatestIdObject.id + 1})).then((res) => {
       dispatch(addCanvasSlide({slideId : res.payload.slideId, slideNo : res.payload.slideNumber}));
       dispatch(addSlide(obj));
+    dispatch(toggleIsVariantSelected(false));
     })
   };
   const handleScroll = () => {

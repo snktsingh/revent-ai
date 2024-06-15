@@ -14,7 +14,7 @@ import {
 import { openModal, setMenuItemKey } from '@/redux/reducers/elements';
 import { searchElement, toggleRegenerateButton } from '@/redux/reducers/slide';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { fetchSlideImg } from '@/redux/thunk/thunk';
+import { fetchSlideImg, toggleIsRegenerating } from '@/redux/thunk/thunk';
 import {
   Backdrop,
   Button,
@@ -168,8 +168,8 @@ const CanvasBody = () => {
     };
     dispatch(updateCurrentCanvas(currentCanvas));
     const slideJSON = canvasList[canvasJS.id - 1].canvas;
-    const notes = canvasList[canvasJS.id - 1].notes;
-    const pptId = params.id?.split('-')[0];
+    const notes : string = canvasList[canvasJS.id - 1].notes? canvasList[canvasJS.id - 1].notes! : '';
+    const pptId : number = +params.id?.split('-')[0]!;
 
     const isListImagesPresent = requestData?.elements.some(
       canvas => canvas.shape === 'ImageSubtitle'

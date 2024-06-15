@@ -76,43 +76,43 @@ export const CanvasVariant = () => {
   const slideId = searchParams.get('slide');
   const pptId = params.id?.split('-')[0];
 
-  useEffect(() => {
-    setIsVariantClicked(false);
-    const canvasIndex = canvasList.findIndex(
-      slide => slide.id === activeSlideID
-    );
-    if (
-      pptId &&
-      slideId &&
-      Number(slideId) > 100 &&
-      Object.keys(canvasList[canvasIndex].originalSlideData).length === 0 &&
-      canvasIndex !== 0
-    ) {
-      dispatch(getSlideJSONData({ pptId, slideId })).then(res => {
-        if (res.payload) {
-          if (res.payload.hasOwnProperty('slideJSON')) {
-            getCanvasImageFromJSON(res.payload.slideJSON);
-            dispatch(
-              updateCurrentCanvas({
-                ...canvasList[canvasIndex],
-                originalSlideData: res.payload.slideJSON,
-                notes : res.payload.notes
-              })
-            );
-          } else {
-            getCanvasImageFromJSON(res.payload);
-            dispatch(
-              updateCurrentCanvas({
-                ...canvasList[canvasIndex],
-                originalSlideData: res.payload,
-              })
-            );
-          }
+  // useEffect(() => {
+  //   setIsVariantClicked(false);
+  //   const canvasIndex = canvasList.findIndex(
+  //     slide => slide.id === activeSlideID
+  //   );
+  //   if (
+  //     pptId &&
+  //     slideId &&
+  //     Number(slideId) > 100 &&
+  //     Object.keys(canvasList[canvasIndex].originalSlideData).length === 0 &&
+  //     canvasIndex !== 0
+  //   ) {
+  //     dispatch(getSlideJSONData({ pptId, slideId })).then(res => {
+  //       if (res.payload) {
+  //         if (res.payload.hasOwnProperty('slideJSON')) {
+  //           getCanvasImageFromJSON(res.payload.slideJSON);
+  //           dispatch(
+  //             updateCurrentCanvas({
+  //               ...canvasList[canvasIndex],
+  //               originalSlideData: res.payload.slideJSON,
+  //               notes : res.payload.notes
+  //             })
+  //           );
+  //         } else {
+  //           getCanvasImageFromJSON(res.payload);
+  //           dispatch(
+  //             updateCurrentCanvas({
+  //               ...canvasList[canvasIndex],
+  //               originalSlideData: res.payload,
+  //             })
+  //           );
+  //         }
 
-        }
-      });
-    }
-  }, [slideId]);
+  //       }
+  //     });
+  //   }
+  // }, [slideId]);
 
   const getClickedClassName = (imgUrl: string, isActive: boolean): boolean => {
     if (isActive && !isVariantClicked) {

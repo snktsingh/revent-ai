@@ -46,6 +46,7 @@ export const PreviewCard = styled(Card)`
 export const CardTitle = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  /* grid-auto-rows: 5fr; */
   grid-auto-rows: auto;
   margin-bottom: 20px;
   gap: 2%;
@@ -74,9 +75,9 @@ export const LoaderText = styled.p`
   background-clip: text;
   -webkit-text-fill-color: transparent;
 `;
-export const BlankImageCard = styled(Card)`
+export const BlankImageCard = styled.div`
   width: 100%;
-  height: 100%;
+  height: 7rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -84,7 +85,7 @@ export const BlankImageCard = styled(Card)`
 
 export const PPTCard = styled.div`
   width: 100%;
-  height: 100%;
+  height: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -118,4 +119,56 @@ export const NewPPTCard = styled.div`
   display: flex;
   flex-direction: column;
   
+`;
+
+export const CardSpan = styled.span`
+  position: absolute;
+  overflow: hidden;
+  width: 90px;
+  height: 100px;
+  top: 100px;
+  left: -4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &::before {
+    content: 'Beta Access';
+    position: absolute;
+    width: 150%;
+    height: 20px;
+    background-image: linear-gradient(
+      45deg,
+      #004FBA 0%,
+      #1a79ff 51%,
+      #004FBA 100%
+    );
+    transform: rotate(-45deg) translateY(-20px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-size: .4rem;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.23);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    bottom: 0;
+    left: 0;
+    height: 10px;
+    z-index: -1;
+    box-shadow: 140px -140px #0060e6;
+    background-image: linear-gradient(
+      45deg,
+      #004FBA 0%,
+      #1a79ff 51%,
+      #004FBA 100%
+    );
+  }
 `;

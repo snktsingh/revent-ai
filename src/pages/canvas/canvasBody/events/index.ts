@@ -23,10 +23,12 @@ import { IEvent } from 'fabric/fabric-impl';
 import { toggleRegenerateButton } from '@/redux/reducers/slide';
 import { QUOTE_IMG } from '@/constants/elementNames';
 import { useCanvasSingleClickEvent } from './canvasSingleClickEvent';
+import { toggleIsRegenerating } from '@/redux/thunk/thunk';
 
 const useCanvasEvents = () => {
   const dispatch = useAppDispatch();
   const { themeCode, themeId } = useAppSelector(state => state.slideTheme);
+  const { isRegenerating } = useAppSelector(state => state.thunk);
   const { canvasJS, isVariantSelected } = useAppSelector(state => state.canvas);
   
   const { renderBulletOrNumTextLine } = useBulletOrNumberedText();
@@ -108,6 +110,7 @@ const useCanvasEvents = () => {
   };
 
   const onObjectRemovedEvent = (event: IEvent, canvas: fabric.Canvas) => {
+    console.log({isRegenerating})
     updateCanvasSlideData(canvas, canvasJS.id);
     getElementsData(
       canvas.toObject(customFabricProperties)?.objects,
@@ -139,7 +142,7 @@ const useCanvasEvents = () => {
     if(event.deselected){
       textExitedEvent(canvas, event.deselected[0]);
     }
-    updateCanvasSlideData(canvas, canvasJS.id);
+    // updateCanvasSlideData(canvas, canvasJS.id);
     getElementsData(
       canvas.toObject(customFabricProperties)?.objects,
       themeId

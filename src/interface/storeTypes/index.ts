@@ -74,6 +74,7 @@ export interface ISlideRequests {
   unAuthMessage: boolean;
   selectedSlideIndex: number;
   themePreviewLoader: boolean;
+  isRegenerating : boolean;
 }
 
 export interface IShapeRequest {

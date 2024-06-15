@@ -46,12 +46,18 @@ export const canvasData = {
   ],
 };
 
+export const canvasDataEmpty = {
+  background: '#fff',
+  version: '5.3.0',
+  objects: [],
+};
+
 export const processSlides = (
   slides: any[],
   presentationId: number
 ): CanvasItem[] => {
   return slides.map((slideData, index) => {
-    let canvas = JSON.parse(JSON.stringify(canvasData));
+    let canvas = slideData.variants.length > 0 ? JSON.parse(JSON.stringify(canvasData)) : JSON.parse(JSON.stringify(canvasDataEmpty));
     const slide: CanvasItem = {
       id: index + 1,
       canvas,

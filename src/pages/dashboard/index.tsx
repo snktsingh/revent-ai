@@ -19,6 +19,7 @@ import {
   BlankImageCard,
   CardContainer,
   CardLink,
+  CardSpan,
   CardTitle,
   Loader,
   LoaderText,
@@ -233,8 +234,9 @@ const Dashboard = ({ onFileSelect }: any) => {
               <CardBox
                 style={{
                   border: 'none',
-                }}
-              >
+                  }}
+                  >
+                <CardSpan></CardSpan>
                 <div
                   style={{
                     cursor: 'pointer',

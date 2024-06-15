@@ -54,6 +54,8 @@ import { useBulletOrNumberedText } from '../elements/BulletOrNumberElement';
 import useCanvasData from './canvasDataExtractor';
 import { SWOTIcon } from '@/constants/media';
 import { CustomTextbox } from '@/utils/fabric-utils/renderBullet';
+import { useDebounce } from '@/hooks/useDebounce';
+import { createSlideJSONData } from '@/redux/thunk/thunk';
 
 export const useCanvasComponent = () => {
   const [showOptions, setShowOptions] = useState(false);
@@ -76,6 +78,9 @@ export const useCanvasComponent = () => {
   const { jsonData, themeCode, themeId } = useAppSelector(
     state => state.slideTheme
   );
+  const { isRegenerating } = useAppSelector(
+    state => state.thunk
+  );
 
   const customFabricProperties = [
     'listType',
@@ -90,8 +95,20 @@ export const useCanvasComponent = () => {
     height: 0,
   });
   const dispatch = useAppDispatch();
-  const { canvasJS } = useAppSelector(state => state.canvas);
+  const { canvasJS, canvasList, isVariantSelected } = useAppSelector(state => state.canvas);
   const { presentationId } = useAppSelector(state => state.thunk);
+  const updateSlideJSONOnDB = useDebounce((pptId : number, slideJSON: any, slideId : number) => {
+    if(isRegenerating) {
+      return;
+    }
+    dispatch(
+      createSlideJSONData({ pptId, slideId, slideJSON, notes: canvasJS.notes!})
+    ).then((res) => {
+      console.log('Slide JSON updated successfully',res);
+    });
+  }, 1500)
+
+
   const handleAllElements = (event: fabric.IEvent, canvas: fabric.Canvas) => {
     const { target } = event;
 
@@ -141,7 +158,19 @@ export const useCanvasComponent = () => {
 
   const updateCanvasSlideData = (canvas: fabric.Canvas, id: number) => {
     const updatedCanvas = canvas?.toObject(customFabricProperties);
+    if((updatedCanvas as any).objects.length === 0) {
+        return;
+    }
+
     dispatch(updateCanvasInList({ id, updatedCanvas }));
+    const hasVariants = (updatedCanvas as any).objects.some(
+      (obj: any) => obj.name === 'VariantImage'
+    );
+
+    
+    if(presentationId && !hasVariants && !isRegenerating ) {
+      updateSlideJSONOnDB(presentationId, updatedCanvas, canvasJS.slideId);
+    }
   };
 
   const handleElementBarSelection = (event: fabric.IEvent) => {

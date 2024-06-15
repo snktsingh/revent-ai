@@ -33,6 +33,7 @@ export const ENDPOINT = {
     REORDER_SLIDES : '/ppt/update-slide-number',
     ADD_SLIDE : '/ppt/create-slide',
     DELETE_SLIDE : '/ppt/delete-slide',
+    GET_ALL_JSON : '/canvas-data',
   },
   DASHBOARD: {
     FETCH_PPT_LIST: 'ppt/get-all-presentation',

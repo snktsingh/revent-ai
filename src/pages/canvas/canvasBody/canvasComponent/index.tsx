@@ -11,6 +11,7 @@ import { useElementFunctions } from './elementFunctions';
 import FullscreenCanvas from './fullscreenCanvas';
 import { CanvasContainer } from './style';
 import { Canvas } from 'fabric/fabric-impl';
+import { toggleIsRegenerating } from '@/redux/thunk/thunk';
 
 interface CanvasComponentProps {
    fabricRef : React.MutableRefObject<Canvas | null>;
@@ -131,7 +132,7 @@ const CanvasComponent: React.FC<CanvasComponentProps> = ({ fabricRef }) => {
           dispatch(toggleRegenerateButton(true));
         }
 
-        updateCanvasSlideData(canvas, canvasJS.id);
+        // updateCanvasSlideData(canvas, canvasJS.id);
         forEachCanvasObject(canvas);
         canvas.on('selection:created', handleElementBarSelection);
         canvas.on('selection:updated', handleElementBarSelection);
@@ -187,16 +188,16 @@ const CanvasComponent: React.FC<CanvasComponentProps> = ({ fabricRef }) => {
   useEffect(() => {
     const slide = canvasList.find(slide => slide.id === activeSlideID);
     setShowOptions(false);
-
-    console.log(canvasRef);
+    console.log(canvasRef.current?.getObjects())
     if (
       variantImage &&
       canvasRef.current &&
       slide &&
       slide.variants &&
       slide.variants.length > 0
-    ) {
-      canvasRef.current?.clear();
+      ) {
+        dispatch(toggleIsRegenerating(true));
+        canvasRef.current?.clear();
 
       canvasRef.current?.setBackgroundColor(
         `${theme.colorSchemes.light.palette.common.white}`,
@@ -223,9 +224,16 @@ const CanvasComponent: React.FC<CanvasComponentProps> = ({ fabricRef }) => {
         });
 
         canvasRef.current?.add(img);
-      });
       canvasRef.current?.renderAll();
-    }
+      });
+      canvasRef.current.forEachObject((obj) => {
+        if (obj.name !== 'VariantImage') {
+          canvasRef.current?.remove(obj);
+        }
+      })
+      canvasRef.current?.renderAll();
+      }
+    dispatch(toggleIsRegenerating(false));
   }, [variantImage, isVariantSelected]);
 
   useEffect(() => {}, [selectedElementPosition, showOptions]);

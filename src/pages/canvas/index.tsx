@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { useEffect } from 'react';
 import {
   fetchPptDetails,
+  getAllSlidesJSONApi,
   getSlideJSONData,
   setAuthenticateLoader,
   setUnauthMessage,
@@ -67,32 +68,53 @@ const MainCanvas = () => {
         res.payload.presentationId
       );
       if (slidesData && slidesData.length > 0 && slidesData[0].canvas) {
-        dispatch(
-          getSlideJSONData({ pptId, slideId: res.payload.slides[0].slideId })
-        ).then(response => {
-          if (response.payload) {
-            if (response.payload.hasOwnProperty('slideJSON')) {
-              dispatch(
-                updateCurrentCanvas({
-                  ...slidesData[0],
-                  originalSlideData: response.payload.slideJSON,
-                  notes : response.payload.notes
-                })
-              );
-            } else {
-              dispatch(
-                updateCurrentCanvas({
-                  ...slidesData[0],
-                  originalSlideData: response.payload,
-                })
-              );
+        // dispatch(
+        //   getSlideJSONData({ pptId, slideId: res.payload.slides[0].slideId })
+        // ).then(response => {
+        //   if (response.payload) {
+        //     if (response.payload.hasOwnProperty('slideJSON')) {
+        //       dispatch(
+        //         updateCurrentCanvas({
+        //           ...slidesData[0],
+        //           originalSlideData: response.payload.slideJSON,
+        //           notes : response.payload.notes
+        //         })
+        //       );
+        //     } else {
+        //       dispatch(
+        //         updateCurrentCanvas({
+        //           ...slidesData[0],
+        //           originalSlideData: response.payload,
+        //         })
+        //       );
+        //     }
+        //   }
+        // });
+
+        dispatch(getAllSlidesJSONApi(+pptId)).then((response) => {
+           const jsonData = response.payload;
+           const updatedCanvasList = slidesData.map(item2 => {
+            const matchingItem = jsonData.find((item1: any) => item1.slideId === item2.slideId);
+            if (matchingItem) {
+              const parsedJson = JSON.parse(matchingItem.canvasData);
+              return { 
+                ...item2,
+                originalSlideData : parsedJson.slideJSON,
+                notes : parsedJson.notes,
+                canvas : item2.variants.length === 0 && matchingItem.canvasData ? parsedJson.slideJSON : item2.canvas,
+              };
             }
-          }
-        });
+            return item2;
+          });
+
+          console.log({jsonData, updatedCanvasList});
+
+        dispatch(updateCanvasList(updatedCanvasList));
+        dispatch(setCanvas(updatedCanvasList[updatedCanvasList.length-1]));
+        })
         
         dispatch(setThemeId(res.payload.themeId || themeId));
         dispatch(setActiveSlideId(slidesData[slidesData.length-1].id));
-        dispatch(updateCanvasList(slidesData));
         const lastSlide = res.payload.slides.length-1
         res.payload.slides[lastSlide].variants.forEach((variant: any) => {
           if (variant.active) {
@@ -101,7 +123,6 @@ const MainCanvas = () => {
         });
         dispatch(toggleSelectingSlide(true));
         // dispatch(setCanvas({ ...canvasJS, variants: slidesData[0].variants }));
-        dispatch(setCanvas(slidesData[slidesData.length-1]));
       }
       dispatch(updatePresentationLoading(false));
       dispatch(setAuthenticateLoader());
