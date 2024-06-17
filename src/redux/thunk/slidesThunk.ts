@@ -40,7 +40,7 @@ export const deleteSlideApi = createAsyncThunk(
     'slide-deleteSlide',
     async ({pId, slideNo} : {pId : number, slideNo : number}) => {
         try{
-            const res = await FetchUtils.postRequest(`${ENDPOINT.PPT.DELETE_PPT}?presentationId=${pId}&slideNumber=${slideNo}`, null)
+            const res = await FetchUtils.postRequest(`${ENDPOINT.PPT.DELETE_SLIDE}?presentationId=${pId}&slideNumber=${slideNo}`, null)
         } catch (error) {
             return error;
         }

@@ -10,12 +10,14 @@ import {
   FormControlLabel,
   Stack,
 } from '@mui/material';
-import { deleteSlide } from '@/redux/reducers/canvas';
+import { deleteSlide, setActiveSlideId, setCanvas, updateCanvasList } from '@/redux/reducers/canvas';
 import { closeModal, updateDeleteAlertShow } from '@/redux/reducers/elements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { CheckBox } from '@mui/icons-material';
 import { setUserPreferences } from '@/redux/thunk/user';
 import { isSlideDeleteAlert } from '@/constants/userPreferences';
+import { CanvasItem } from '@/interface/storeTypes';
+import { deleteSlideApi } from '@/redux/thunk/slidesThunk';
 
 const PopUpModal = () => {
   const isVisible = useAppSelector(state => state.element);
@@ -24,7 +26,36 @@ const PopUpModal = () => {
 
   const handleDelete = () => {
     dispatch(closeModal());
-    dispatch(deleteSlide(canvasJS.id));
+
+    const newSlide: CanvasItem = {
+      id: 1,
+      canvas: {
+        "version": "5.3.0",
+        "objects": [],
+        "background": "#fff"
+      },
+      notes: '',
+      variants: [],
+      originalSlideData: {},
+      listImages: [],
+      slideId: 1,
+      presentationId: 1,
+      lastVariant: '',
+      selectedOriginalCanvas: false,
+    }
+    if (canvasList && canvasList.length == 1) {
+      dispatch(deleteSlideApi({pId : canvasJS.presentationId,slideNo : canvasJS.id})).then((res) => {
+        dispatch(setCanvas(newSlide));
+        dispatch(setActiveSlideId(1));
+        dispatch(updateCanvasList([newSlide]))
+      })
+    }
+
+    if (canvasList && canvasList.length > 1) {
+      dispatch(deleteSlideApi({pId : canvasJS.presentationId,slideNo : canvasJS.id})).then((res) => {
+        dispatch(deleteSlide(canvasJS.id));
+      })
+    }
   };
 
   const handleSlideDelCheckBox = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { openModal } from '@/redux/reducers/elements';
 import { copyCanvasCopy, deleteSlide, setActiveSlideId, setCanvas, updateCanvasList } from '@/redux/reducers/canvas';
 import { StyledContextMenu } from './style';
+import { deleteSlideApi } from '@/redux/thunk/slidesThunk';
 
 interface SlidesContextMenuProps {
   anchorPoint: { x: number; y: number };
@@ -53,13 +54,17 @@ const SlidesContextMenu: React.FC<SlidesContextMenuProps> = ({ anchorPoint, isOp
         selectedOriginalCanvas: false,
       }
       if (canvasList && canvasList.length == 1) {
-         dispatch(setCanvas(newSlide));
-         dispatch(setActiveSlideId(1));
-         dispatch(updateCanvasList([newSlide]))
+        dispatch(deleteSlideApi({pId : slide.presentationId,slideNo : slide.id})).then((res) => {
+          dispatch(setCanvas(newSlide));
+          dispatch(setActiveSlideId(1));
+          dispatch(updateCanvasList([newSlide]))
+        })
       }
 
       if (canvasList && canvasList.length > 1) {
-        dispatch(deleteSlide(slide.id));
+        dispatch(deleteSlideApi({pId : slide.presentationId,slideNo : slide.id})).then((res) => {
+          dispatch(deleteSlide(slide.id));
+        })
       }
     }
     onClose();

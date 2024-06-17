@@ -224,13 +224,8 @@ const CanvasComponent: React.FC<CanvasComponentProps> = ({ fabricRef }) => {
         });
 
         canvasRef.current?.add(img);
-      canvasRef.current?.renderAll();
+      
       });
-      canvasRef.current.forEachObject((obj) => {
-        if (obj.name !== 'VariantImage') {
-          canvasRef.current?.remove(obj);
-        }
-      })
       canvasRef.current?.renderAll();
       }
     dispatch(toggleIsRegenerating(false));
