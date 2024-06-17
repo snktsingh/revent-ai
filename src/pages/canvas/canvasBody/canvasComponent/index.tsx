@@ -12,6 +12,7 @@ import FullscreenCanvas from './fullscreenCanvas';
 import { CanvasContainer } from './style';
 import { Canvas } from 'fabric/fabric-impl';
 import { toggleIsRegenerating } from '@/redux/thunk/thunk';
+import { setRegenerateMode } from '@/data/data';
 
 interface CanvasComponentProps {
    fabricRef : React.MutableRefObject<Canvas | null>;
@@ -69,6 +70,7 @@ const CanvasComponent: React.FC<CanvasComponentProps> = ({ fabricRef }) => {
     isVariantSelected,
     canvasList,
     activeSlideID,
+    variantMode
   } = useAppSelector(state => state.canvas);
 
 
@@ -188,16 +190,16 @@ const CanvasComponent: React.FC<CanvasComponentProps> = ({ fabricRef }) => {
   useEffect(() => {
     const slide = canvasList.find(slide => slide.id === activeSlideID);
     setShowOptions(false);
-    console.log(canvasRef.current?.getObjects())
+    
     if (
       variantImage &&
       canvasRef.current &&
       slide &&
       slide.variants &&
       slide.variants.length > 0
-      ) {
-        dispatch(toggleIsRegenerating(true));
-        canvasRef.current?.clear();
+    ) {
+      canvasRef.current?.clear();
+      console.log('after',canvasRef.current?.getObjects())
 
       canvasRef.current?.setBackgroundColor(
         `${theme.colorSchemes.light.palette.common.white}`,
@@ -227,8 +229,12 @@ const CanvasComponent: React.FC<CanvasComponentProps> = ({ fabricRef }) => {
       
       });
       canvasRef.current?.renderAll();
+      dispatch(toggleIsRegenerating(false));
       }
-    dispatch(toggleIsRegenerating(false));
+      if (canvasRef.current?.getObjects().length === 0) {
+        dispatch(toggleIsRegenerating(false));
+        setRegenerateMode(false);
+      }
   }, [variantImage, isVariantSelected]);
 
   useEffect(() => {}, [selectedElementPosition, showOptions]);

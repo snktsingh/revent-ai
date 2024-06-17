@@ -44,7 +44,7 @@ const PopUpModal = () => {
       selectedOriginalCanvas: false,
     }
     if (canvasList && canvasList.length == 1) {
-      dispatch(deleteSlideApi({pId : canvasJS.presentationId,slideNo : canvasJS.id})).then((res) => {
+      dispatch(deleteSlideApi({pId : canvasJS.presentationId,slideID : canvasJS.slideId})).then((res) => {
         dispatch(setCanvas(newSlide));
         dispatch(setActiveSlideId(1));
         dispatch(updateCanvasList([newSlide]))
@@ -52,7 +52,7 @@ const PopUpModal = () => {
     }
 
     if (canvasList && canvasList.length > 1) {
-      dispatch(deleteSlideApi({pId : canvasJS.presentationId,slideNo : canvasJS.id})).then((res) => {
+      dispatch(deleteSlideApi({pId : canvasJS.presentationId,slideID : canvasJS.slideId})).then((res) => {
         dispatch(deleteSlide(canvasJS.id));
       })
     }

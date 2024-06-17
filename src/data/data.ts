@@ -142,3 +142,8 @@ export function deleteClientListImage(canvasId: number, id: number): void {
     console.warn(`Canvas with id ${canvasId} not found.`);
   }
 }
+
+export let regenerateMode : boolean = false;
+export function setRegenerateMode(mode: boolean): void {
+  regenerateMode = mode;
+}

@@ -1,6 +1,6 @@
 import PopUpModal from '@/constants/elements/deleteSlideModal';
 import { Add, Wand } from '@/constants/media';
-import { Images, QuoteImages, clientListImages, listImages } from '@/data/data';
+import { Images, QuoteImages, clientListImages, listImages, setRegenerateMode } from '@/data/data';
 import {
   deleteSlide,
   setCanvas,
@@ -161,6 +161,8 @@ const CanvasBody = () => {
   };
 
   const handleRequest = () => {
+    dispatch(toggleIsRegenerating(true));
+    setRegenerateMode(true);
     setModificationAlert(false);
     const currentCanvas = {
       ...canvasJS,

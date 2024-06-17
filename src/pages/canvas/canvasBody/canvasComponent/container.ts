@@ -56,6 +56,7 @@ import { SWOTIcon } from '@/constants/media';
 import { CustomTextbox } from '@/utils/fabric-utils/renderBullet';
 import { useDebounce } from '@/hooks/useDebounce';
 import { createSlideJSONData } from '@/redux/thunk/thunk';
+import { regenerateMode } from '@/data/data';
 
 export const useCanvasComponent = () => {
   const [showOptions, setShowOptions] = useState(false);
@@ -104,7 +105,7 @@ export const useCanvasComponent = () => {
     dispatch(
       createSlideJSONData({ pptId, slideId, slideJSON, notes: canvasJS.notes!})
     ).then((res) => {
-      console.log('Slide JSON updated successfully',res);
+      console.log('Slide JSON updated successfully',res.payload);
     });
   }, 1500)
 
@@ -157,6 +158,7 @@ export const useCanvasComponent = () => {
   };
 
   const updateCanvasSlideData = (canvas: fabric.Canvas, id: number) => {
+    console.log('hello world')
     const updatedCanvas = canvas?.toObject(customFabricProperties);
     if((updatedCanvas as any).objects.length === 0) {
         return;
@@ -166,9 +168,10 @@ export const useCanvasComponent = () => {
     const hasVariants = (updatedCanvas as any).objects.some(
       (obj: any) => obj.name === 'VariantImage'
     );
-
+    console.log({isRegenerating})
     
-    if(presentationId && !hasVariants && !isRegenerating ) {
+    if(presentationId && !hasVariants && !regenerateMode ) {
+      console.log('Updating slide JSON on Db', {updatedCanvas})
       updateSlideJSONOnDB(presentationId, updatedCanvas, canvasJS.slideId);
     }
   };

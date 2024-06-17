@@ -101,7 +101,7 @@ const userSlice = createSlice({
         state.userDetails = null;
       })
       .addCase(getUserCredit.pending, (state, action) => {
-        state.creditAmount = 0;
+        state.creditAmount = state.creditAmount;
       })
       .addCase(getUserCredit.fulfilled, (state, action) => {
         state.creditAmount = action.payload.data;

@@ -54,7 +54,7 @@ const SlidesContextMenu: React.FC<SlidesContextMenuProps> = ({ anchorPoint, isOp
         selectedOriginalCanvas: false,
       }
       if (canvasList && canvasList.length == 1) {
-        dispatch(deleteSlideApi({pId : slide.presentationId,slideNo : slide.id})).then((res) => {
+        dispatch(deleteSlideApi({pId : slide.presentationId,slideID : slide.slideId})).then((res) => {
           dispatch(setCanvas(newSlide));
           dispatch(setActiveSlideId(1));
           dispatch(updateCanvasList([newSlide]))
@@ -62,7 +62,7 @@ const SlidesContextMenu: React.FC<SlidesContextMenuProps> = ({ anchorPoint, isOp
       }
 
       if (canvasList && canvasList.length > 1) {
-        dispatch(deleteSlideApi({pId : slide.presentationId,slideNo : slide.id})).then((res) => {
+        dispatch(deleteSlideApi({pId : slide.presentationId,slideID : slide.slideId})).then((res) => {
           dispatch(deleteSlide(slide.id));
         })
       }
