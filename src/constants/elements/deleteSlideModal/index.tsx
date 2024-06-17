@@ -17,7 +17,7 @@ import { CheckBox } from '@mui/icons-material';
 import { setUserPreferences } from '@/redux/thunk/user';
 import { isSlideDeleteAlert } from '@/constants/userPreferences';
 import { CanvasItem } from '@/interface/storeTypes';
-import { deleteSlideApi } from '@/redux/thunk/slidesThunk';
+import { addNewSlideApi, deleteSlideApi } from '@/redux/thunk/slidesThunk';
 
 const PopUpModal = () => {
   const isVisible = useAppSelector(state => state.element);
@@ -44,16 +44,36 @@ const PopUpModal = () => {
       selectedOriginalCanvas: false,
     }
     if (canvasList && canvasList.length == 1) {
-      dispatch(deleteSlideApi({pId : canvasJS.presentationId,slideID : canvasJS.slideId})).then((res) => {
-        dispatch(setCanvas(newSlide));
-        dispatch(setActiveSlideId(1));
-        dispatch(updateCanvasList([newSlide]))
-      })
+      let lastCanvas = canvasJS;
+      dispatch(
+        deleteSlideApi({
+          pId: canvasJS.presentationId,
+          slideID: canvasJS.slideId,
+        })
+      ).then((res: any) => {
+        if (res.payload.status >= 200 && res.payload.status < 300) {
+          dispatch(addNewSlideApi({pId : lastCanvas.presentationId, slideNo : 1})).then((response: any) => {
+            if (response.payload.status >= 200 && response.payload.status < 300) {
+              const slideNew : CanvasItem = {...newSlide, presentationId : lastCanvas.presentationId, slideId : response.payload.data.slideId}
+              dispatch(setCanvas(slideNew));
+              dispatch(setActiveSlideId(1));
+              dispatch(updateCanvasList([slideNew]))
+            }
+            return;
+          });
+          const slideNew : CanvasItem = {...newSlide, presentationId : lastCanvas.presentationId}
+          dispatch(setCanvas(slideNew));
+          dispatch(setActiveSlideId(1));
+          dispatch(updateCanvasList([slideNew]))
+        }
+      });
     }
 
     if (canvasList && canvasList.length > 1) {
-      dispatch(deleteSlideApi({pId : canvasJS.presentationId,slideID : canvasJS.slideId})).then((res) => {
-        dispatch(deleteSlide(canvasJS.id));
+      dispatch(deleteSlideApi({pId : canvasJS.presentationId,slideID : canvasJS.slideId})).then((res: any) => {
+        if (res.payload.status >= 200 && res.payload.status < 300) {
+          dispatch(deleteSlide(canvasJS.id));
+        }
       })
     }
   };

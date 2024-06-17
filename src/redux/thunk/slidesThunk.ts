@@ -28,7 +28,7 @@ export const addNewSlideApi = createAsyncThunk(
     async ({pId, slideNo} : {pId : number, slideNo : number}) => {
         try {
             const res = await FetchUtils.postRequest(`${ENDPOINT.PPT.ADD_SLIDE}?presentationId=${pId}&slideNumber=${slideNo}`, null);
-            return res.data;
+            return res;
         } catch (error) {
            return error; 
         }
@@ -41,6 +41,7 @@ export const deleteSlideApi = createAsyncThunk(
     async ({pId, slideID} : {pId : number, slideID : number}) => {
         try{
             const res = await FetchUtils.postRequest(`${ENDPOINT.PPT.DELETE_SLIDE}?presentationId=${pId}&slideId=${slideID}`, null)
+            return res;
         } catch (error) {
             return error;
         }
