@@ -57,6 +57,7 @@ import { CustomTextbox } from '@/utils/fabric-utils/renderBullet';
 import { useDebounce } from '@/hooks/useDebounce';
 import { createSlideJSONData } from '@/redux/thunk/thunk';
 import { regenerateMode } from '@/data/data';
+import { useSearchParams } from 'react-router-dom';
 
 export const useCanvasComponent = () => {
   const [showOptions, setShowOptions] = useState(false);
@@ -64,7 +65,7 @@ export const useCanvasComponent = () => {
     top: 0,
     left: 0,
   });
-
+  const [searchParams, setSearchParams] = useSearchParams();
   // const { handleAddCustomIcon } = useCustomSelectionIcons();
   // const { CustomBorderIcons } = useDelAndCopy();
   const { renderBulletOrNumTextLine } = useBulletOrNumberedText();
@@ -98,16 +99,21 @@ export const useCanvasComponent = () => {
   const dispatch = useAppDispatch();
   const { canvasJS, canvasList, isVariantSelected } = useAppSelector(state => state.canvas);
   const { presentationId } = useAppSelector(state => state.thunk);
+  const slideId = searchParams.get('slide');
+
+
   const updateSlideJSONOnDB = useDebounce((pptId : number, slideJSON: any, slideId : number) => {
     if(isRegenerating) {
       return;
     }
-    dispatch(
-      createSlideJSONData({ pptId, slideId, slideJSON, notes: canvasJS.notes!})
-    ).then((res) => {
-      console.log('Slide JSON updated successfully',res.payload);
-    });
-  }, 1500)
+    if(pptId && slideJSON && slideId > 100) {
+      dispatch(
+        createSlideJSONData({ pptId, slideId, slideJSON, notes: canvasJS.notes!})
+      ).then((res) => {
+        console.log('Slide JSON updated successfully',res.payload);
+      });
+    }
+  }, 1500);
 
 
   const handleAllElements = (event: fabric.IEvent, canvas: fabric.Canvas) => {
@@ -158,7 +164,6 @@ export const useCanvasComponent = () => {
   };
 
   const updateCanvasSlideData = (canvas: fabric.Canvas, id: number) => {
-    console.log('hello world')
     const updatedCanvas = canvas?.toObject(customFabricProperties);
     if((updatedCanvas as any).objects.length === 0) {
         return;
@@ -168,11 +173,11 @@ export const useCanvasComponent = () => {
     const hasVariants = (updatedCanvas as any).objects.some(
       (obj: any) => obj.name === 'VariantImage'
     );
-    console.log({isRegenerating})
+    console.log({regenerateMode:!regenerateMode})
     
-    if(presentationId && !hasVariants && !regenerateMode ) {
+    if(presentationId && !hasVariants && !regenerateMode && slideId ) {
       console.log('Updating slide JSON on Db', {updatedCanvas})
-      updateSlideJSONOnDB(presentationId, updatedCanvas, canvasJS.slideId);
+      updateSlideJSONOnDB(presentationId, updatedCanvas, +slideId);
     }
   };
 

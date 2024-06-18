@@ -36,8 +36,9 @@ export const CanvasNotes = () => {
       pptId,
       slideJSON: canvasList[slideIndex].originalSlideData,
       notes: e.target.value,
-      slideId,
+      slideId : slideId? +slideId : canvasList[slideIndex].slideId,
     };
+
     dispatch(updateSlideJSONData(updatedSlideNotes))
   }, 500)
 
