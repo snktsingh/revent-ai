@@ -227,16 +227,9 @@ export const CanvasReducer = createSlice({
         const newActiveSlideId = idToDelete === 1 ? 1 : idToDelete - 1;
 
         const newActiveCanvasJS = renumberedCanvasList[newActiveSlideId - 1];
-        console.log({newActiveCanvasJS, renumberedCanvasList, updatedCanvasList, idToDelete, newActiveSlideId})
         state.canvasList = renumberedCanvasList;
         state.activeSlideID = newActiveSlideId;
         state.canvasJS = newActiveCanvasJS;
-        // return {
-        //   ...state,
-        //   canvasList: renumberedCanvasList,
-        //   activeSlideID: newActiveSlideId,
-        //   canvasJS: newActiveCanvasJS,
-        // };
       }
     },
     updateCurrentCanvas(state, action: PayloadAction<CanvasItem>) {

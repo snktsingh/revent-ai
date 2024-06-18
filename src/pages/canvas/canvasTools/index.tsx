@@ -222,12 +222,13 @@ const CanvasTools = ({ pId }: any) => {
 
   const handleAddNewSlide = () => {
     const greatestIdObject = canvasList.reduce((max, obj) => (obj.id > max.id ? obj : max), canvasList[0]);
-    // console.log({greatestIdObject})
-    // console.log({canvasList, lastSLide: canvasList[canvasList.length-1]})
-    dispatch(addNewSlideApi({pId, slideNo : greatestIdObject.id + 1})).then((res) => {
-      dispatch(addCanvasSlide({slideId : res.payload.slideId, slideNo : res.payload.slideNumber}));
-      dispatch(addSlide(obj));
-    dispatch(toggleIsVariantSelected(false));
+  
+    dispatch(addNewSlideApi({ pId, slideNo: greatestIdObject.id + 1 })).then((res: any) => {
+      if (res.payload.status >= 200 && res.payload.status < 300) {   
+        dispatch(addCanvasSlide({ slideId: res.payload.slideId, slideNo: res.payload.slideNumber }));
+        dispatch(addSlide(obj));
+        dispatch(toggleIsVariantSelected(false));
+      }
     })
   };
   const handleScroll = () => {
@@ -676,14 +677,14 @@ const CanvasTools = ({ pId }: any) => {
       </ShapesCard> */}
       <Stack direction={'row'} alignItems={'center'} spacing={1}>
         <CreditsComponent />
-          <Link to="https://forms.gle/QGrKm1JdjFtKu5iX8" target="_blank" rel="noopener noreferrer">
-            <ToolOutlinedButton>
-              <Stack direction="row" spacing={1} alignItems={'center'} height={'4.5vh'} justifyContent={'space-around'}>
-                <EmailIcon fontSize='small' sx={{color:'#2f2f2f'}}/>
-                <p>Send Feedback</p>
-              </Stack>
-            </ToolOutlinedButton>
-          </Link>
+        <Link to="https://forms.gle/QGrKm1JdjFtKu5iX8" target="_blank" rel="noopener noreferrer">
+          <ToolOutlinedButton>
+            <Stack direction="row" spacing={1} alignItems={'center'} height={'4.5vh'} justifyContent={'space-around'}>
+              <EmailIcon fontSize='small' sx={{ color: '#2f2f2f' }} />
+              <p>Send Feedback</p>
+            </Stack>
+          </ToolOutlinedButton>
+        </Link>
       </Stack>
 
       <Menu

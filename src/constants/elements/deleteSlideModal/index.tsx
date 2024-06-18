@@ -94,7 +94,7 @@ const PopUpModal = () => {
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          {`You want to permanently delete this slide ${canvasJS.id} ?`}
+          {`You want to permanently delete this slide ?`}
         </DialogContentText>
       </DialogContent>
       <DialogActions>

@@ -44,8 +44,10 @@ const useSlideList = () => {
   }
 
   useEffect(() => {
+    if(canvasJS && canvasJS.slideId){
       handleURl(canvasJS.slideId.toString());
-  }, [ canvasList.length])
+    }
+  }, [canvasList.length])
 
   const [svgURLs, setsvgURLs] = useState<string[]>([]);
 
