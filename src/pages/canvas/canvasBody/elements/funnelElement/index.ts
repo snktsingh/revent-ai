@@ -70,20 +70,20 @@ export function useFunnelElement() {
       level: `${FUNNEL_TEXT}_${currentID}_${levels + 1}`,
     });
 
-    let container = new fabric.Rect({
-      left: trapezoid.left,
-      top: trapezoid.top! - 10,
-      name: `${FUNNEL}_${currentID}`,
-      width: trapezoid.width,
-      height: funnelGroup?.height! + 50,
-      fill: 'transparent',
-      strokeWidth: 1,
-      stroke: 'transparent',
-    });
-    if(funnelGroup){
-      canvas.remove(funnelGroup)
-    };
-    canvas.add(container);
+    // let container = new fabric.Rect({
+    //   left: trapezoid.left,
+    //   top: trapezoid.top! - 10,
+    //   name: `${FUNNEL}_${currentID}`,
+    //   width: trapezoid.width,
+    //   height: funnelGroup?.height! + 50,
+    //   fill: 'transparent',
+    //   strokeWidth: 1,
+    //   stroke: 'transparent',
+    // });
+    // if(funnelGroup){
+    //   canvas.remove(funnelGroup)
+    // };
+    // canvas.add(container);
     canvas.forEachObject(object => {
       if (object.name == `${FUNNEL_LEVEL}_${currentID}`) {
         lastLevel = object;
@@ -187,11 +187,11 @@ export function useFunnelElement() {
     }
 
     const mainContainer = new fabric.Rect({
-      left: 395,
-      top: 220,
+      left: 285,
+      top: 20,
       name: `${FUNNEL}_${funnelId}`,
-      width: 300,
-      height: 230,
+      width: 500,
+      height: 430,
       fill: 'transparent',
       strokeWidth: 1,
       stroke: 'transparent',

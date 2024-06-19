@@ -112,14 +112,14 @@ export function useTimelineElement(){
           `${TIMELINE_TEXT}_${currentID}`
         );
     
-        canvas.forEachObject(obj => {
-          if (obj.name == `${TIMELINE}_${currentID}`) {
-            obj.set({
-              width: circleCount < 4? obj.width! + 170 : obj.width,
-              height : circleCount === 4? obj.height! + 160 : obj.height!
-            });
-          }
-        });
+        // canvas.forEachObject(obj => {
+        //   if (obj.name == `${TIMELINE}_${currentID}`) {
+        //     obj.set({
+        //       width: circleCount < 4? obj.width! + 170 : obj.width,
+        //       height : circleCount === 4? obj.height! + 160 : obj.height!
+        //     });
+        //   }
+        // });
         canvas.discardActiveObject();
         canvas?.renderAll();
       };
@@ -174,8 +174,8 @@ export function useTimelineElement(){
         const mainTimelineContainer = new fabric.Rect({
           left: 20,
           top: 120,
-          width: 450,
-          height: 150,
+          width: 820,
+          height: 380,
           fill: 'transparent',
           strokeWidth: 1,
           stroke: 'transparent',
