@@ -104,12 +104,10 @@ const CanvasComponent: React.FC<CanvasComponentProps> = ({ fabricRef }) => {
     canvas.loadFromJSON(
       canvasJS.canvas,
       () => {
-        console.log({canvas})
         canvasRef.current = canvas;
         if (fabricRef) {
           fabricRef.current = canvas;
        }
-        console.log('Loading canvas JSON data:', canvasJS);
 
         if (canvas) {
           updateCanvasStyle(canvas);
@@ -199,7 +197,6 @@ const CanvasComponent: React.FC<CanvasComponentProps> = ({ fabricRef }) => {
       slide.variants.length > 0
     ) {
       canvasRef.current?.clear();
-      console.log('after',canvasRef.current?.getObjects())
 
       canvasRef.current?.setBackgroundColor(
         `${theme.colorSchemes.light.palette.common.white}`,

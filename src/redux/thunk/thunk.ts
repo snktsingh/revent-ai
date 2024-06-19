@@ -67,6 +67,8 @@ export const fetchSlideImg = createAsyncThunk(
       req
     );
 
+    console.log({ pptId, slideJSON, slideId: res.data.slideId, notes })
+
     if (canvasList[currentSlide].variants.length === 0) {
       dispatch(
         createSlideJSONData({ pptId, slideJSON, slideId: res.data.slideId, notes })

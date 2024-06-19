@@ -166,10 +166,10 @@ const CanvasBody = () => {
     setModificationAlert(false);
     const currentCanvas = {
       ...canvasJS,
-      originalSlideData: canvasList[canvasJS.id - 1].canvas,
+      originalSlideData: canvasList[canvasJS.id - 1].canvas || canvasJS.canvas,
     };
     dispatch(updateCurrentCanvas(currentCanvas));
-    const slideJSON = canvasList[canvasJS.id - 1].canvas;
+    const slideJSON = canvasList[canvasJS.id - 1].canvas || canvasJS.canvas;
     const notes : string = canvasList[canvasJS.id - 1].notes? canvasList[canvasJS.id - 1].notes! : '';
     const pptId : number = +params.id?.split('-')[0]!;
 
@@ -423,7 +423,6 @@ const CanvasBody = () => {
       return;
     }
     let prevVariant = canvasList[canvasIndex].lastVariant;
-    console.log({ prevVariant, canvasIndex });
     dispatch(toggleIsVariantSelected(true));
     dispatch(toggleSelectedOriginalCanvas(false));
     dispatch(setVariantImageAsMain(prevVariant));
@@ -470,7 +469,6 @@ const CanvasBody = () => {
   const [tableAnchorEl, setTableAnchorEl] = React.useState<null | HTMLElement>(null);
   const openTable = Boolean(tableAnchorEl);
   const handleTableClick = (event: React.MouseEvent<HTMLElement>) => {
-    console.log(event.currentTarget)
     setTableAnchorEl(event.currentTarget);
   };
   const handleTableClose = () => {
