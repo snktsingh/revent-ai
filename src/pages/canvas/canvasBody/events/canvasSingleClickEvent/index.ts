@@ -34,7 +34,6 @@ export function useCanvasSingleClickEvent() {
     event: fabric.IEvent<Event>
   ) {
     const pointer: any = canvas.getPointer(event.e);
-
     const objectsAtPointer = canvas.getObjects().filter(obj => {
       return obj.containsPoint(pointer);
     });

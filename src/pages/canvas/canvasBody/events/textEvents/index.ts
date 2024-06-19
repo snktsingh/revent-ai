@@ -50,6 +50,8 @@ export function useTextEvents() {
         });
         if (textBox.isEditing) {
           textBox.exitEditing();
+        }else {
+          textBox.enterEditing();
         }
       } else if (
         (textBox.text === 'Add Text' &&
@@ -63,6 +65,8 @@ export function useTextEvents() {
         });
         if (!textBox.isEditing) {
           textBox.enterEditing();
+        }else {
+          textBox.enterEditing();
         }
       } else if (
         textBox.text === 'Add Text' &&
@@ -70,6 +74,8 @@ export function useTextEvents() {
       ) {
         textBox.set({ text: '' });
         if (!textBox.isEditing) {
+          textBox.enterEditing();
+        }else {
           textBox.enterEditing();
         }
       } else if (
@@ -80,6 +86,8 @@ export function useTextEvents() {
         textBox.set({ text: '' });
         if (!textBox.isEditing) {
           textBox.enterEditing();
+        }else {
+          textBox.enterEditing();
         }
       } else if (
         textBox.name === QUOTE_TEXT &&
@@ -87,6 +95,8 @@ export function useTextEvents() {
       ) {
         textBox.set({ text: '❝❞' });
         if (!textBox.isEditing) {
+          textBox.enterEditing();
+        }else {
           textBox.enterEditing();
         }
       } else if (
@@ -96,6 +106,8 @@ export function useTextEvents() {
         textBox.set({ text: '' });
         if (!textBox.isEditing) {
           textBox.enterEditing();
+        }else {
+          textBox.enterEditing();
         }
       }else if (
         textBox.text === '- Author Name' &&
@@ -103,6 +115,8 @@ export function useTextEvents() {
       ) {
         textBox.set({ text: '' });
         if (!textBox.isEditing) {
+          textBox.enterEditing();
+        }else {
           textBox.enterEditing();
         }
       }else if (
@@ -112,6 +126,8 @@ export function useTextEvents() {
         textBox.set({ text: '' });
         if (!textBox.isEditing) {
           textBox.enterEditing();
+        }else {
+          textBox.enterEditing();
         }
       } else if (
         textBox.text === 'Add Text' &&
@@ -120,6 +136,8 @@ export function useTextEvents() {
         textBox.set({ text: '' });
         if (!textBox.isEditing) {
           textBox.enterEditing();
+        }else {
+          textBox.enterEditing();
         }
       } else if (
         textBox.text === 'Click to add Sections' &&
@@ -127,6 +145,8 @@ export function useTextEvents() {
       ) {
         textBox.set({ text: '' });
         if (!textBox.isEditing) {
+          textBox.enterEditing();
+        }else {
           textBox.enterEditing();
         }
       } else if (
@@ -140,6 +160,8 @@ export function useTextEvents() {
         textBox.set({ text: '' });
         if (!textBox.isEditing) {
           textBox.enterEditing();
+        }else {
+          textBox.enterEditing();
         }
       } else if (
         (textBox.text === 'Add Metric' &&
@@ -149,6 +171,8 @@ export function useTextEvents() {
       ) {
         textBox.set({ text: '' });
         if (!textBox.isEditing) {
+          textBox.enterEditing();
+        }else {
           textBox.enterEditing();
         }
       }
