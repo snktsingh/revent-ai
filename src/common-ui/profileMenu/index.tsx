@@ -3,6 +3,7 @@ import { useAppSelector } from '@/redux/store';
 import HomeIcon from '@mui/icons-material/Home';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
+import HelpIcon from '@mui/icons-material/Help';
 import { ListItemIcon, Typography } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import React from 'react';
@@ -52,6 +53,13 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
     
   };
 
+  const handleTutorials = () => {
+    handleClose();
+    navigate(ROUTES.TUTORIALS, { replace: true });
+  };
+
+  
+
   return (
     <StyledMenu
       id="profile-menu"
@@ -85,6 +93,12 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
           <DashboardIcon />
         </ListItemIcon>
         My Presentations
+      </StyledMenuItem>
+      <StyledMenuItem onClick={handleTutorials}>
+        <ListItemIcon>
+          <HelpIcon />
+        </ListItemIcon>
+        Tutorials
       </StyledMenuItem>
       <StyledMenuItem onClick={handleNavigateSettings}>
         <ListItemIcon>
