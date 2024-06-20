@@ -74,20 +74,20 @@ export function usePyramidElement() {
       });
       canvas.add(trapezoid);
 
-      const container = new fabric.Rect({
-        left: trapezoid.left! - 2,
-        top: activeObject?.top,
-        name: `${PYRAMID}_${currentID}`,
-        width: activeObject?.width! + 80,
-        height: activeObject?.height! + 60,
-        fill: 'transparent',
-        strokeWidth: 1,
-        stroke: 'transparent',
-      });
-      if (activeObject) {
-        canvas.remove(activeObject);
-      }
-      canvas.add(container);
+      // const container = new fabric.Rect({
+      //   left: trapezoid.left! - 2,
+      //   top: activeObject?.top,
+      //   name: `${PYRAMID}_${currentID}`,
+      //   width: activeObject?.width! + 80,
+      //   height: activeObject?.height! + 60,
+      //   fill: 'transparent',
+      //   strokeWidth: 1,
+      //   stroke: 'transparent',
+      // });
+      // if (activeObject) {
+      //   canvas.remove(activeObject);
+      // }
+      // canvas.add(container);
 
       canvas.getObjects().forEach(obj => {
         if (obj.name === `${PYRAMID_LEVEL}_${currentID}`) {
@@ -121,7 +121,7 @@ export function usePyramidElement() {
       let triangle = new fabric.Triangle({
         width: 200,
         height: 150,
-        left: 369,
+        left: 430,
         top: 40,
         stroke: 'black',
         fill: '#B0BCDE',
@@ -135,7 +135,7 @@ export function usePyramidElement() {
 
       const text = new AutoResizingTextbox('Add Text', {
         fontSize: 18,
-        left: 430,
+        left: 490,
         top: 120,
         width: 100,
         height: 60,
@@ -167,7 +167,7 @@ export function usePyramidElement() {
             stroke: 'black',
             top: 192,
             name: `${PYRAMID_LEVEL}_${pyramidId}`,
-            left: 327,
+            left: 390,
             level: `${PYRAMID_LEVEL}_${pyramidId}_2`,
             hasControls: false,
             lockMovementX: true,
@@ -209,11 +209,11 @@ export function usePyramidElement() {
     let pyramidLevels = createLevels(2);
 
     const mainContainer = new fabric.Rect({
-      left: 319,
+      left: 219,
       top: 32,
       name: `${PYRAMID}_${pyramidId}`,
-      width: 300,
-      height: 230,
+      width: 630,
+      height: 530,
       fill: 'transparent',
       strokeWidth: 1,
       stroke: 'transparent',

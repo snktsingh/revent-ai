@@ -54,6 +54,7 @@ export const ROUTES = {
   RESET_PASSWORD: '/reset-password',
   TERMS: '/terms-of-use',
   PRIVACY: '/privacy-policy',
+  TUTORIALS: '/tutorials',
 } as const;
 
 export default ENDPOINT;

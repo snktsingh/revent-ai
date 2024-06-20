@@ -88,14 +88,14 @@ export const useProcessElement = () => {
       text.top = rect.top! + 5;
     }
 
-    canvas.forEachObject(obj => {
-      if (obj.name == `${PROCESS}_${currentID}`) {
-        obj.set({
-          width: rectCount < 3 ? obj.width! + 245 : obj.width,
-          height: rectCount === 3 ? 325 : obj.height,
-        });
-      }
-    });
+    // canvas.forEachObject(obj => {
+    //   if (obj.name == `${PROCESS}_${currentID}`) {
+    //     obj.set({
+    //       width: rectCount < 3 ? obj.width! + 245 : obj.width,
+    //       height: rectCount === 3 ? 325 : obj.height,
+    //     });
+    //   }
+    // });
 
     canvas.add(rect);
     rectCount !== 3 && canvas.add(Arrow);
@@ -174,8 +174,8 @@ export const useProcessElement = () => {
     const mainProcessContainer = new fabric.Rect({
       left: 18,
       top: 104,
-      width: 510,
-      height: 150,
+      width: 840,
+      height: 380,
       fill: 'transparent',
       strokeWidth: 1,
       stroke: 'transparent',

@@ -147,7 +147,7 @@ export const useHubAndSpoke = () => {
       left: 23,
       top: 80,
       width: titleRectWidth * 3 + 80,
-      height: 300,
+      height: 420,
       fill: 'transparent',
       strokeWidth: 1,
       stroke: 'transparent',
@@ -216,13 +216,13 @@ export const useHubAndSpoke = () => {
           canvas.renderAll();
           break;
         case 5:
-          const mainContainer = canvas.getActiveObject();
-          const newContainer = new fabric.Rect({
-            ...mainContainer,
-            height: mainContainer?.height! + 130,
-          });
-          canvas.add(newContainer);
-          canvas.remove(mainContainer!);
+          // const mainContainer = canvas.getActiveObject();
+          // const newContainer = new fabric.Rect({
+          //   ...mainContainer,
+          //   height: mainContainer?.height! + 130,
+          // });
+          // canvas.add(newContainer);
+          // canvas.remove(mainContainer!);
           const rect5 = addTitleRectBox(lastRect.left! - titleRectWidth - 20, lastRect.top! + textRectHeight - 20, 5, +id);
           const textRect5 = addTextRectBox(rect5.left!, rect5.top! + titleRectHeight + 3, 5, +id)
           canvas.add(rect5, textRect5);
