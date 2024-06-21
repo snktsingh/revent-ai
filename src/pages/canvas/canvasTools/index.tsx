@@ -66,7 +66,7 @@ import WebFont from 'webfontloader';
 import FontsData from '../../../data/fontsData.json';
 import CreditsComponent from '@/components/CreditsComponent';
 import EmailIcon from '@mui/icons-material/Email';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { addNewSlideApi } from '@/redux/thunk/slidesThunk';
 
 interface FontItem {
@@ -112,6 +112,7 @@ const CanvasTools = ({ pId }: any) => {
   const handleClose = () => {
     setAnchorShapesEl(null);
   };
+  const [ searchParams, setSearchParams ] = useSearchParams();
 
   const [anchorColorEl, setAnchorColorEl] = useState<null | HTMLElement>(null);
   const openColor = Boolean(anchorColorEl);
@@ -225,7 +226,7 @@ const CanvasTools = ({ pId }: any) => {
   
     dispatch(addNewSlideApi({ pId, slideNo: greatestIdObject.id + 1 })).then((res: any) => {
       if (res.payload.status >= 200 && res.payload.status < 300) {   
-        dispatch(addCanvasSlide({ slideId: res.payload.slideId, slideNo: res.payload.slideNumber }));
+        dispatch(addCanvasSlide({ slideId: res.payload.data.slideId, slideNo: res.payload.data.slideNumber }));
         dispatch(addSlide(obj));
         dispatch(toggleIsVariantSelected(false));
       }

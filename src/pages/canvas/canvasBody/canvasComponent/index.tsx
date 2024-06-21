@@ -164,7 +164,13 @@ const CanvasComponent: React.FC<CanvasComponentProps> = ({ fabricRef }) => {
         canvas.on('object:scaling', options =>
           onObjectScalingEvent(options, canvas)
         );
-        canvas.on('mouse:down', options => onMouseDownEvent(options, canvas));
+        canvas.on('mouse:down', options => {
+          onMouseDownEvent(options, canvas)
+          if (!options.target) {
+          
+            console.log('Clicked on empty canvas');
+          }
+        });
 
         canvas.renderAll();
       },
