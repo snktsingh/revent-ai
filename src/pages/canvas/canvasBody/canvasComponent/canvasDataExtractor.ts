@@ -26,6 +26,7 @@ import {
   QUOTE_TEXT,
   SECTION_SLIDE_SUBTITLE,
   SECTION_SLIDE_TITLE,
+  STATISTICS,
   STATISTICS_TEXT,
   STATISTICS_TITLE_TEXT,
   SUBTITLE,
@@ -588,7 +589,8 @@ const useCanvasData = () => {
           IMAGE,
           CLIENT_LIST_MAIN,
           HUB_AND_SPOKE,
-          TABLE_OF_CONTENTS_TEXT
+          TABLE_OF_CONTENTS_TEXT,
+          STATISTICS
         ].some(elName => obj.name.startsWith(elName));
       }
     });
