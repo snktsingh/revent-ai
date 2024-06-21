@@ -386,7 +386,7 @@ const Dashboard = ({ onFileSelect }: any) => {
                 />
               </Stack>
               <Stack direction="row">
-                <Button onClick={handleClose}>No</Button>
+                <Button onClick={handleClose}>Cancel</Button>
                 <Button
                   color="error"
                   onClick={() => {
@@ -395,7 +395,7 @@ const Dashboard = ({ onFileSelect }: any) => {
                   }}
                   autoFocus
                 >
-                  Yes
+                  Permanently delete
                 </Button>
               </Stack>
             </Stack>
