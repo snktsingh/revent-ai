@@ -18,6 +18,7 @@ export const ENDPOINT = {
     RESET_PASS_INIT: '/account/reset-password/init',
     RESET_PASS_FINISH: '/account/reset-password/finish',
     USER_PREFERENCE: '/user-preferences',
+    FEEDBACK: '/user-feedback',
   },
   PPT: {
     CREATE_PPT: 'ppt/create-presentation',

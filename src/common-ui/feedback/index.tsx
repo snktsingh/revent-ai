@@ -13,10 +13,15 @@ import { FeedbackContainer } from './style';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/endpoint';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { postFeedbackApi } from '@/redux/thunk/user';
+import EmailIcon from '@mui/icons-material/Email';
 
 const Feedback = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [feedback, setFeedback] = useState('');
+  const dispatch = useAppDispatch();
+  const { userDetails } = useAppSelector((state) => state.manageUser);
 
   const navigate = useNavigate();
 
@@ -29,7 +34,9 @@ const Feedback = () => {
   };
 
   const handleSubmit = () => {
-    console.log(feedback);
+    dispatch(postFeedbackApi({ username: `${userDetails?.login}`, email: userDetails?.email!, message: feedback })).then((res : any) => {
+      if(res.payload.status >= 200 && res.payload.status < 300) { }
+    })
     handleClose();
   };
 
@@ -91,18 +98,18 @@ const Feedback = () => {
             variant="outlined"
           />
           </Stack>
+          <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}  sx={{ width: '100%', p: '5px 16px 5px 16px'}}>
           <Button
             variant="contained"
             color="primary"
+            endIcon={<EmailIcon />}
             onClick={handleSubmit}
-            style={{ margin: '16px' }}
           >
             Send Feedback
           </Button>
           <Button
             variant="contained"
             color="primary"
-            sx={{ m: '5px 16px' }}
             endIcon={<OpenInNewIcon />}
             onClick={() => {
               handleClose();
@@ -111,6 +118,7 @@ const Feedback = () => {
           >
             Tutorials
           </Button>
+          </Stack>
         </Stack>
       </Menu>
       {anchorEl && (
