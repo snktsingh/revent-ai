@@ -47,7 +47,6 @@ const SlidesContextMenu: React.FC<SlidesContextMenuProps> = ({ anchorPoint, isOp
       if (res.payload.status >= 200 && res.payload.status < 300) {   
         dispatch(addCanvasSlide({ slideId: res.payload.data.slideId, slideNo: res.payload.data.slideNumber }));
         dispatch(toggleIsVariantSelected(false));
-        dispatch(setActiveSlideId(res.payload.data.slideNumber));
       }
     })
     

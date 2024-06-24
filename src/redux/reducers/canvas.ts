@@ -102,12 +102,16 @@ export const CanvasReducer = createSlice({
     setCanvasData: (state, action) => {
       state.canvasData = action.payload;
     },
-    addCanvasSlide(state, action : PayloadAction<{slideId : number, slideNo : number}>) {
-      const activeSlideIndex = state.canvasList.findIndex(canvas => canvas.id === state.activeSlideID);
+    addCanvasSlide(
+      state,
+      action: PayloadAction<{ slideId: number; slideNo: number }>
+    ) {
+      const activeSlideIndex = state.canvasList.findIndex(
+        canvas => canvas.id === state.activeSlideID
+      );
 
       const canvas = new fabric.Canvas(null);
-      const newCanvasID = state.canvasList.length > 0 ? state.canvasList[state.canvasList.length - 1].id + 1 : 1;
-      const newCanvasJSON = canvas.toObject(); 
+      const newCanvasJSON = canvas.toObject();
       const updatedCanvasList = [
         ...state.canvasList.slice(0, activeSlideIndex + 1),
         {
@@ -118,24 +122,25 @@ export const CanvasReducer = createSlice({
           originalSlideData: {},
           listImages: [],
           slideId: action.payload.slideId,
-          presentationId: 1,
+          presentationId: state.canvasList[0].presentationId || 1,
           lastVariant: '',
           selectedOriginalCanvas: false,
         },
         ...state.canvasList.slice(activeSlideIndex + 1),
       ];
-    
-      const updatedCanvasListWithIDs = updatedCanvasList.map((canvas, index) => ({
-        ...canvas,
-        id: index + 1,
-      }));
-      // state.variantMode = false;
-      return {
-        ...state,
-        canvasList: updatedCanvasListWithIDs,
-        activeSlideID: state.activeSlideID + 1,
-        canvasJS: updatedCanvasListWithIDs[activeSlideIndex + 1],
-      };
+
+      const updatedCanvasListWithIDs = updatedCanvasList.map(
+        (canvas, index) => ({
+          ...canvas,
+          id: index + 1,
+        })
+      );
+
+      console.log({ canv: updatedCanvasListWithIDs[activeSlideIndex + 1] });
+
+      state.activeSlideID = updatedCanvasListWithIDs[activeSlideIndex + 1].id;
+      state.canvasList = updatedCanvasListWithIDs;
+      state.canvasJS = updatedCanvasListWithIDs[activeSlideIndex + 1];
     },
     setActiveSlideId(state, action) {
       return {

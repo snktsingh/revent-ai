@@ -68,7 +68,7 @@ import FontsData from '../../../data/fontsData.json';
 import CreditsComponent from '@/components/CreditsComponent';
 import EmailIcon from '@mui/icons-material/Email';
 import { Link, useSearchParams } from 'react-router-dom';
-import { addNewSlideApi } from '@/redux/thunk/slidesThunk';
+import { addNewSlideApi, reorderSlidesApi } from '@/redux/thunk/slidesThunk';
 
 interface FontItem {
   family: string;
@@ -86,7 +86,7 @@ interface FontItem {
 const CanvasTools = ({ pId }: any) => {
   const dispatch = useAppDispatch();
   const newKey = useAppSelector(state => state.slide);
-  const { color, textColor, borderColor, canvasList, size } = useAppSelector(
+  const { color, textColor, borderColor, canvasList, size, activeSlideID } = useAppSelector(
     state => state.canvas
   );
   const tools = useAppSelector(state => state.thunk);
@@ -230,7 +230,23 @@ const CanvasTools = ({ pId }: any) => {
         dispatch(addCanvasSlide({ slideId: res.payload.data.slideId, slideNo: res.payload.data.slideNumber }));
         dispatch(addSlide(obj));
         dispatch(toggleIsVariantSelected(false));
-        dispatch(setActiveSlideId(res.payload.data.slideNumber));
+        console.log(canvasList[canvasList.length - 1].id !== activeSlideID)
+        if(canvasList[canvasList.length - 1].id !== activeSlideID) {
+          const reorderedSlides = canvasList.map((slide, i) => {
+            return {
+              slideId: slide.slideId,
+              slideNumber: slide.id
+            }
+          });
+          let req = {
+            presentationId: canvasList[0].presentationId,
+            slides: reorderedSlides
+          }
+
+          dispatch(reorderSlidesApi(req)).then((res) => {
+             console.log(res);
+          });
+        }
       }
     })
   };

@@ -12,7 +12,6 @@ const initialState = {
 export const reorderSlidesApi = createAsyncThunk(
     'slides-reorderSlides',
     async (req : any) => {
-        console.log({req})
         try {
             const res = await FetchUtils.putRequest(`${ENDPOINT.PPT.REORDER_SLIDES}`, req);
             return res;

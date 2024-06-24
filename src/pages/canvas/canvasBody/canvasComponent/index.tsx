@@ -75,6 +75,7 @@ const CanvasComponent: React.FC<CanvasComponentProps> = ({ fabricRef }) => {
 
 
   useEffect(() => {
+    console.log({canvasList, activeSlideID})
     setShowOptions(false);
     const canvasElement = document.getElementById('canvas');
     if (!canvasElement) {
