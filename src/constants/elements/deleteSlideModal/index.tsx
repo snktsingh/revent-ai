@@ -18,11 +18,15 @@ import { setUserPreferences } from '@/redux/thunk/user';
 import { isSlideDeleteAlert } from '@/constants/userPreferences';
 import { CanvasItem } from '@/interface/storeTypes';
 import { addNewSlideApi, deleteSlideApi } from '@/redux/thunk/slidesThunk';
+import { useParams } from 'react-router-dom';
 
 const PopUpModal = () => {
   const isVisible = useAppSelector(state => state.element);
   const { canvasJS, canvasList } = useAppSelector(state => state.canvas);
   const dispatch = useAppDispatch();
+
+  const params = useParams<{ id: string }>(); 
+  const pptId = Number(params.id?.split('-')[0]);
 
   const handleDelete = () => {
     dispatch(closeModal());
@@ -71,7 +75,7 @@ const PopUpModal = () => {
     }
 
     if (canvasList && canvasList.length > 1) {
-      dispatch(deleteSlideApi({pId : canvasJS.presentationId,slideID : canvasJS.slideId})).then((res: any) => {
+      dispatch(deleteSlideApi({pId : pptId, slideID : canvasJS.slideId})).then((res: any) => {
         if (res.payload.status >= 200 && res.payload.status < 300) {
           dispatch(deleteSlide(canvasJS.id));
         }

@@ -102,7 +102,7 @@ const SlidesContextMenu: React.FC<SlidesContextMenuProps> = ({ anchorPoint, isOp
       }
 
       if (canvasList && canvasList.length > 1) {
-        dispatch(deleteSlideApi({pId : slide.presentationId,slideID : slide.slideId})).then((res: any) => {
+        dispatch(deleteSlideApi({pId : pptId, slideID : slide.slideId})).then((res: any) => {
           if (res.payload.status >= 200 && res.payload.status < 300) {
             dispatch(deleteSlide(slide.id));
           }
