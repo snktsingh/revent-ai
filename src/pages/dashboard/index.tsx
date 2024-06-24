@@ -136,8 +136,8 @@ const Dashboard = ({ onFileSelect }: any) => {
     const filteredList =
       searchTerm.length > 0
         ? pptList.filter((ppt: IPresentation) =>
-            ppt.name.toLowerCase().includes(searchTerm.toLowerCase())
-          )
+          ppt.name.toLowerCase().includes(searchTerm.toLowerCase())
+        )
         : pptList;
 
     setFilteredPptList(filteredList);
@@ -234,8 +234,8 @@ const Dashboard = ({ onFileSelect }: any) => {
               <CardBox
                 style={{
                   border: 'none',
-                  }}
-                  >
+                }}
+              >
                 <CardSpan></CardSpan>
                 <div
                   style={{
@@ -371,18 +371,18 @@ const Dashboard = ({ onFileSelect }: any) => {
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Are you sure you want to permanently delete the current
-              presentation?
+              Would you like to permanently delete this presentation?
+              Once deleted, this presentation will no longer be accessible
             </DialogContentText>
           </DialogContent>
-          <DialogActions>
-            <Stack direction="row" spacing={19} mt={-1} alignItems={'center'}>
+          <DialogActions sx={{mt: '-5px'}}>
+            <Stack sx={{ width: '96%', m:'auto'  }} direction="row" justifyContent={'space-between'} alignContent={'center'}>
               <Stack>
                 <FormControlLabel
                   control={
                     <Checkbox size="small" onChange={handlePptDelCheckBox} />
                   }
-                  label="Don't show me again"
+                  label="Don't show this again"
                 />
               </Stack>
               <Stack direction="row">
@@ -414,8 +414,7 @@ const Dashboard = ({ onFileSelect }: any) => {
                       <ThumbnailCard
                         onClick={() => {
                           navigate(
-                            `/presentation/${
-                              ppt.presentationId
+                            `/presentation/${ppt.presentationId
                             }-${faker.string.uuid()}`
                           );
                         }}
@@ -444,8 +443,7 @@ const Dashboard = ({ onFileSelect }: any) => {
                             title={ppt.name}
                             onClick={() => {
                               navigate(
-                                `/presentation/${
-                                  ppt.presentationId
+                                `/presentation/${ppt.presentationId
                                 }-${faker.string.uuid()}`
                               );
                             }}

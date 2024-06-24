@@ -10,10 +10,15 @@ import {
 } from '@mui/material';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { FeedbackContainer } from './style';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '@/constants/endpoint';
 
 const Feedback = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [feedback, setFeedback] = useState('');
+
+  const navigate = useNavigate();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -28,7 +33,6 @@ const Feedback = () => {
     handleClose();
   };
 
-  console.log({ anchorEl });
 
   return (
     <FeedbackContainer >
@@ -74,24 +78,38 @@ const Feedback = () => {
           },
         }}
       >
-        <Stack>
+        <Stack width={'100%'} direction={'column'} >
+          <Stack sx={{ width: '100%', p: '5px 16px 5px 16px' }} spacing={1.2}>
+          <p style={{color:'#333333'}}>Let us know what you think!</p>
           <TextField
             label="Feedback"
             multiline
             rows={6}
-            sx={{ width: '18rem' }}
+            sx={{ width: '18rem', m: '0 16px 5px 16px' }}
             value={feedback}
             onChange={e => setFeedback(e.target.value)}
             variant="outlined"
-            style={{ margin: '16px' }}
           />
+          </Stack>
           <Button
             variant="contained"
             color="primary"
             onClick={handleSubmit}
             style={{ margin: '16px' }}
           >
-            Submit
+            Send Feedback
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{ m: '5px 16px' }}
+            endIcon={<OpenInNewIcon />}
+            onClick={() => {
+              handleClose();
+              navigate(ROUTES.TUTORIALS)
+            }}
+          >
+            Tutorials
           </Button>
         </Stack>
       </Menu>

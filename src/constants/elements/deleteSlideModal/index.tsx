@@ -105,7 +105,7 @@ const PopUpModal = () => {
           ml={1}
         >
           <Stack>
-            <FormControlLabel control={<Checkbox size="small" onChange={handleSlideDelCheckBox} />} label="Don't show me again"/>
+            <FormControlLabel control={<Checkbox size="small" onChange={handleSlideDelCheckBox} />} label="Don't show this again"/>
 
           </Stack>
           <Stack direction='row'>
