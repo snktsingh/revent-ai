@@ -14,7 +14,7 @@ import { SingleSlideComponent } from './singleSlideComponent';
 import SlidesContextMenu from '@/common-ui/slidesContextMenu';
 import { reorderSlidesApi } from '@/redux/thunk/slidesThunk';
 
-export default function SlideList() {
+const SlideList: React.FC<{notesRef:  React.MutableRefObject<HTMLTextAreaElement | null>}> = ({notesRef}) => {
   const {
     handleKeyDown,
     svgURLs,
@@ -132,8 +132,11 @@ export default function SlideList() {
           onClose={handleClose}
           slide={currentSlide!}
           contextMenuRef={contextMenuRef}
+          notesRef={notesRef}
         />
       </SlideContainer>
     </DndContext>
   );
 }
+
+export default SlideList;

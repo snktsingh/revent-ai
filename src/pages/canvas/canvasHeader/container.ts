@@ -125,6 +125,7 @@ const useCanvasHeader = () => {
         presentationId: 1,
         lastVariant : '',
         selectedOriginalCanvas: false,
+        slideShape: '',
       },
     ];
     dispatch(updateCanvasList(canvas));

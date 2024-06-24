@@ -11,7 +11,7 @@ import { useDebounce } from '@/hooks/useDebounce';
 import { updateSlideJSONData } from '@/redux/thunk/thunk';
 import { useParams, useSearchParams } from 'react-router-dom';
 
-export const CanvasNotes = () => {
+export const CanvasNotes : React.FC<{notesRef:  React.MutableRefObject<HTMLTextAreaElement | null>}> = ({notesRef}) => {
   const dispatch = useAppDispatch();
   const { openNotes } = useAppSelector(store => store.element);
   const { canvasJS, canvasList } = useAppSelector((state) => state.canvas);
@@ -47,7 +47,7 @@ export const CanvasNotes = () => {
     <NotesBodyContainer>
       <AddNotesContainer isactive="true">
         <span>
-          <NotesInput placeholder="Click here to add notes..." value={canvasJS.notes} onChange={handleNotesChange} />
+          <NotesInput placeholder="Click here to add notes..." ref={notesRef} value={canvasJS.notes} onChange={handleNotesChange} />
         </span>
       </AddNotesContainer>
       {/* <NotesHeadingContainer>

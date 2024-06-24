@@ -60,7 +60,7 @@ const MainCanvas = () => {
     const res: any = await dispatch(fetchPptDetails(pptId));
     if (res.meta.requestStatus === 'fulfilled') {
       if (res.payload.slides) {
-        setSearchParams({ slide: res.payload.slides[0].slideId });
+        setSearchParams({ slide: res.payload.slides.slideId });
       }
 
       const slidesData = processSlides(

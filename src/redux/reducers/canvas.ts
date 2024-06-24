@@ -42,6 +42,7 @@ const newSlide : CanvasItem = {
   presentationId: 1,
   lastVariant: '',
   selectedOriginalCanvas: false,
+  slideShape: '',
 }
 
 export const initialState: CanvasSate = {
@@ -321,6 +322,13 @@ export const CanvasReducer = createSlice({
     },
     toggleVariantMode : (state, action : PayloadAction<boolean>) => {
       state.variantMode = action.payload;
+    },
+    setSlideShape(state, action: PayloadAction<{id : number, shape : string}>) {
+      const canvasIndex = state.canvasList.findIndex(canvas => canvas.id === action.payload.id);
+      if (canvasIndex!== -1) {
+        state.canvasList[canvasIndex].slideShape = action.payload.shape;
+      }
+      state.canvasJS = state.canvasList[canvasIndex];
     }
   },
 });
@@ -356,7 +364,8 @@ export const {
   updateLastVariant,
   updateSelectedOriginalCanvas,
   updateSlideIdInList,
-  toggleVariantMode
+  toggleVariantMode,
+  setSlideShape
 } = CanvasReducer.actions;
 
 export default CanvasReducer.reducer;

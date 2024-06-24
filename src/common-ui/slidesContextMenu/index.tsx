@@ -7,9 +7,12 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { CanvasItem } from '@/interface/storeTypes';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { openModal } from '@/redux/reducers/elements';
-import { copyCanvasCopy, deleteSlide, setActiveSlideId, setCanvas, updateCanvasList } from '@/redux/reducers/canvas';
+import { addCanvasSlide, copyCanvasCopy, deleteSlide, setActiveSlideId, setCanvas, toggleIsVariantSelected, updateCanvasList } from '@/redux/reducers/canvas';
 import { StyledContextMenu } from './style';
 import { addNewSlideApi, deleteSlideApi } from '@/redux/thunk/slidesThunk';
+import EditNoteIcon from '@mui/icons-material/EditNote';
+import AddIcon from '@mui/icons-material/Add';
+import { useParams } from 'react-router-dom';
 
 interface SlidesContextMenuProps {
   anchorPoint: { x: number; y: number };
@@ -17,18 +20,42 @@ interface SlidesContextMenuProps {
   onClose: () => void;
   slide: CanvasItem;
   contextMenuRef: any;
+  notesRef :  React.MutableRefObject<HTMLTextAreaElement | null>;
 }
 
-const SlidesContextMenu: React.FC<SlidesContextMenuProps> = ({ anchorPoint, isOpen, onClose, slide, contextMenuRef }) => {
+const SlidesContextMenu: React.FC<SlidesContextMenuProps> = ({ anchorPoint, isOpen, onClose, slide, contextMenuRef, notesRef }) => {
 
   const { enabledElements, isDeleteAlertShow } = useAppSelector(
     state => state.element
   );
+  const params = useParams<{ id: string }>(); 
+
+  const pptId = Number(params.id?.split('-')[0]);
   const { canvasList } = useAppSelector(state => state.canvas)
   const { userPreferences } = useAppSelector(state => state.manageUser)
   const dispatch = useAppDispatch();
   const handleCopy = (): void => {
     dispatch(copyCanvasCopy(slide.id));
+    onClose();
+  };
+
+  const handleAddSlide = (): void => {
+
+    const greatestIdObject = canvasList.reduce((max, obj) => (obj.id > max.id ? obj : max), canvasList[0]);
+  
+    dispatch(addNewSlideApi({ pId : pptId, slideNo: greatestIdObject.id + 1 })).then((res: any) => {
+      if (res.payload.status >= 200 && res.payload.status < 300) {   
+        dispatch(addCanvasSlide({ slideId: res.payload.data.slideId, slideNo: res.payload.data.slideNumber }));
+        dispatch(toggleIsVariantSelected(false));
+        dispatch(setActiveSlideId(res.payload.data.slideNumber));
+      }
+    })
+    
+    onClose();
+  };
+
+  const handleAddNotes = (): void => {
+    notesRef.current?.focus();
     onClose();
   };
 
@@ -90,11 +117,11 @@ const SlidesContextMenu: React.FC<SlidesContextMenuProps> = ({ anchorPoint, isOp
       style={{ top: `${anchorPoint.y + 2}px`, left: `${anchorPoint.x + 2}px` }}
       ref={contextMenuRef}
     >
-      <MenuItem onClick={handleCopy}>
+      <MenuItem onClick={handleAddSlide}>
         <ListItemIcon>
-          <ContentCopyIcon fontSize="small" />
+          <AddIcon fontSize="small" />
         </ListItemIcon>
-        <ListItemText primary="Copy" />
+        <ListItemText primary="Add Slide" />
       </MenuItem>
       {/* <MenuItem onClick={handleCopy}>
         <ListItemIcon>
@@ -107,6 +134,12 @@ const SlidesContextMenu: React.FC<SlidesContextMenuProps> = ({ anchorPoint, isOp
           <DeleteIcon fontSize="small" />
         </ListItemIcon>
         <ListItemText primary="Delete" />
+      </MenuItem>
+      <MenuItem onClick={handleAddNotes}>
+        <ListItemIcon>
+          <EditNoteIcon fontSize="small" />
+        </ListItemIcon>
+        <ListItemText primary="Add Notes" />
       </MenuItem>
     </StyledContextMenu>)
   );

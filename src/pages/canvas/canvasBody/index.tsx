@@ -59,6 +59,8 @@ const CanvasBody = () => {
   const [modificationAlert, setModificationAlert] = useState<boolean>(false);
   const canvasRef = useRef<fabric.Canvas | null>(null);
 
+  const NotesInputRef = useRef<HTMLTextAreaElement | null>(null);
+
   const openRedirectAlert = () => {
     setRedirectAlert(true);
   };
@@ -491,7 +493,7 @@ const CanvasBody = () => {
             event.preventDefault();
           }}
         >
-          <SlideList />
+          <SlideList notesRef={NotesInputRef}/>
         </Grid>
         <Grid item xs={8}>
           <EditSlideContainer>
@@ -667,7 +669,7 @@ const CanvasBody = () => {
               })}
             </Menu>
           </EditSlideContainer>
-          <CanvasNotes />
+          <CanvasNotes notesRef={NotesInputRef} />
         </Grid>
       </Grid>
       <Templates />

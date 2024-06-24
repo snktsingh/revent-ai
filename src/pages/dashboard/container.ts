@@ -80,6 +80,7 @@ const useDashboard = () => {
         presentationId: 1,
         lastVariant: '',
         selectedOriginalCanvas: false,
+        slideShape: '',
       },
     ];
     dispatch(setCanvas(canvas[0]));

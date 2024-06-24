@@ -55,6 +55,7 @@ import canvas, {
   addCanvasSlide,
   handleInputSize,
   handleSize,
+  setActiveSlideId,
   setBorderColor,
   setColor,
   setTextColor,
@@ -229,6 +230,7 @@ const CanvasTools = ({ pId }: any) => {
         dispatch(addCanvasSlide({ slideId: res.payload.data.slideId, slideNo: res.payload.data.slideNumber }));
         dispatch(addSlide(obj));
         dispatch(toggleIsVariantSelected(false));
+        dispatch(setActiveSlideId(res.payload.data.slideNumber));
       }
     })
   };

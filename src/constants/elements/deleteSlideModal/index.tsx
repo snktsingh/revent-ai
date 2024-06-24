@@ -42,6 +42,7 @@ const PopUpModal = () => {
       presentationId: 1,
       lastVariant: '',
       selectedOriginalCanvas: false,
+      slideShape: '',
     }
     if (canvasList && canvasList.length == 1) {
       let lastCanvas = canvasJS;
@@ -90,23 +91,23 @@ const PopUpModal = () => {
       aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title">
-        {"Are you sure?"}
+        {"Permanently delete this slide?"}
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          {`You want to permanently delete this slide ?`}
+          {`Once deleted, you may not be able to recover the slide`}
         </DialogContentText>
       </DialogContent>
-      <DialogActions>
+      <DialogActions sx={{mt:'-10px'}}>
         <Stack
           direction='row'
-          spacing={5}
-          mt={-1}
-          ml={1}
+          width={'100%'}
+          justifyContent={'space-between'}
+          alignItems={'center'}
+          sx={{ml:'4%'}}
         >
           <Stack>
-            <FormControlLabel control={<Checkbox size="small" onChange={handleSlideDelCheckBox} />} label="Don't show this again"/>
-
+            <FormControlLabel control={<Checkbox size="small" onChange={handleSlideDelCheckBox} />} label="Don't show this again"/>
           </Stack>
           <Stack direction='row'>
             <Button color="primary" onClick={() => dispatch(closeModal())}>Cancel</Button>
