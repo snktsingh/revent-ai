@@ -129,8 +129,12 @@ const useCanvasHeader = () => {
       },
     ];
     dispatch(updateCanvasList(canvas));
+<<<<<<< staging
     dispatch(setSelectedTheme(0));
     dispatch(togglePresetOpened(false));
+=======
+    dispatch(setSelectedTheme(0))
+>>>>>>> prod
   };
 
   return {
