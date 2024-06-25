@@ -1,6 +1,6 @@
 import PopUpModal from '@/constants/elements/deleteSlideModal';
 import { Add, Wand } from '@/constants/media';
-import { Images, QuoteImages, listImages } from '@/data/data';
+import { Images, QuoteImages, clientListImages, listImages, setRegenerateMode } from '@/data/data';
 import {
   deleteSlide,
   setCanvas,
@@ -8,12 +8,13 @@ import {
   toggleIsVariantSelected,
   toggleSelectedOriginalCanvas,
   updateCanvasInList,
-  updateCurrentCanvas
+  updateCurrentCanvas,
+  updateSlideIdInList,
 } from '@/redux/reducers/canvas';
 import { openModal, setMenuItemKey } from '@/redux/reducers/elements';
 import { searchElement, toggleRegenerateButton } from '@/redux/reducers/slide';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { fetchSlideImg } from '@/redux/thunk/thunk';
+import { fetchSlideImg, toggleIsRegenerating } from '@/redux/thunk/thunk';
 import {
   Backdrop,
   Button,
@@ -28,10 +29,10 @@ import {
   Menu,
   MenuItem,
   Stack,
-  Tooltip
+  Tooltip,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { Slide, ToastContainer } from 'react-toastify';
 import CanvasComponent from './canvasComponent';
 import useCanvasData from './canvasComponent/canvasDataExtractor';
@@ -45,15 +46,20 @@ import {
   ElementContainer,
   ElementSearchInput,
   ElementSubtitle,
-  ElementTitle
+  ElementTitle,
 } from './style';
 import Templates from './themes';
 import AddIcon from '@mui/icons-material/Add';
+import TableGenerator from '@/components/TableInput';
+import { APIRequest } from '@/interface/storeTypes';
 
 const CanvasBody = () => {
   const slide = useAppSelector(state => state.slide);
   const [redirectAlert, setRedirectAlert] = useState<boolean>(false);
   const [modificationAlert, setModificationAlert] = useState<boolean>(false);
+  const canvasRef = useRef<fabric.Canvas | null>(null);
+
+  const NotesInputRef = useRef<HTMLTextAreaElement | null>(null);
 
   const openRedirectAlert = () => {
     setRedirectAlert(true);
@@ -88,6 +94,7 @@ const CanvasBody = () => {
   const [isReturnBtnShow, setIsReturnBtnShow] = useState<boolean>(false);
   const [canvasIndex, setCanvasIndex] = useState<number>(0);
   const { handleApplyOriginalAsMain } = useVariants();
+  const [searchParams, setSearchParams] = useSearchParams();
   const handleLike = () => {
     setActiveLike(!activeLike);
     setActiveDislike(false);
@@ -156,15 +163,17 @@ const CanvasBody = () => {
   };
 
   const handleRequest = () => {
+    dispatch(toggleIsRegenerating(true));
+    setRegenerateMode(true);
     setModificationAlert(false);
     const currentCanvas = {
       ...canvasJS,
-      originalSlideData: canvasList[canvasJS.id - 1].canvas,
+      originalSlideData: canvasList[canvasJS.id - 1].canvas || canvasJS.canvas,
     };
     dispatch(updateCurrentCanvas(currentCanvas));
-    const slideJSON = canvasList[canvasJS.id - 1].canvas;
-    const notes = canvasList[canvasJS.id -1].notes;
-    const pptId = params.id?.split('-')[0];
+    const slideJSON = canvasList[canvasJS.id - 1].canvas || canvasJS.canvas;
+    const notes : string = canvasList[canvasJS.id - 1].notes? canvasList[canvasJS.id - 1].notes! : '';
+    const pptId : number = +params.id?.split('-')[0]!;
 
     const isListImagesPresent = requestData?.elements.some(
       canvas => canvas.shape === 'ImageSubtitle'
@@ -175,9 +184,29 @@ const CanvasBody = () => {
     const isQuoteImagesPresent = requestData?.elements.some(
       canvas => canvas.shape === 'Quote'
     );
+    const isClientListImagesPresent = requestData?.elements.some(
+      canvas => canvas.shape === 'ClientList'
+    );
 
-    if (isListImagesPresent) {
-      let blob = new Blob([JSON.stringify(requestData)], {
+    if (isListImagesPresent && requestData) {
+
+      let requestListData : APIRequest = requestData;
+      const listData = requestData?.elements?.find((el) => el.shape === 'ImageSubtitle');
+      const isTextEmpty = listData?.data?.every(obj => obj.text === "");
+
+
+      if (isTextEmpty) {
+        requestListData = {
+          ...requestListData,
+          elements: requestListData.elements.map(element => 
+              element.shape === 'ImageSubtitle' 
+              ? { ...element, shape: 'Images' } 
+              : element
+          )
+      };
+      }
+
+      let blob = new Blob([JSON.stringify(requestListData)], {
         type: 'application/json',
       });
       let formData = new FormData();
@@ -185,9 +214,16 @@ const CanvasBody = () => {
       const listImagesArray = listImages.find(el => el.canvasId == canvasJS.id);
       if (listImagesArray && listImagesArray.images) {
         for (let i = 0; i < listImagesArray.images.length; i++) {
-          formData.append('images', listImagesArray.images[i].file);
+          formData.append('images', listImagesArray.images[i].imageFile);
         }
-        dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes }));
+
+        dispatch(
+          fetchSlideImg({ req: formData, slideJSON, pptId, notes })
+        ).then(res => {
+          if (res && res.payload.slideId) {
+            setSearchParams({ slide: res.payload.slideId });
+          }
+        });
         dispatch(toggleSelectedOriginalCanvas(false));
       }
       return;
@@ -203,9 +239,13 @@ const CanvasBody = () => {
       const ImagesArray = Images.find(el => el.canvasId == canvasJS.id);
       if (ImagesArray && ImagesArray.images) {
         for (let i = 0; i < ImagesArray.images.length; i++) {
-          formData.append('images', ImagesArray.images[i].file);
+          formData.append('images', ImagesArray.images[i].imageFile);
         }
-        dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes }));
+        dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes })).then((res) => {
+          if (res && res.payload.slideId) {
+            setSearchParams({ slide: res.payload.slideId });
+          }
+        });
         dispatch(toggleSelectedOriginalCanvas(false));
       }
       return;
@@ -220,24 +260,84 @@ const CanvasBody = () => {
       const QuoteImagesArray = QuoteImages.find(
         el => el.canvasId == canvasJS.id
       );
+
       if (QuoteImagesArray && QuoteImagesArray.images) {
         if (QuoteImagesArray.images.length !== 0) {
           for (let i = 0; i < QuoteImagesArray.images.length; i++) {
-            formData.append('images', QuoteImagesArray.images[i].file);
+            formData.append('images', QuoteImagesArray.images[i].imageFile);
           }
-          dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes }));
+          dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes })).then((res) => {
+            if (res && res.payload.slideId) {
+              setSearchParams({ slide: res.payload.slideId });
+            }
+          });
           dispatch(toggleSelectedOriginalCanvas(false));
           return;
         }
       }
+      dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes })).then((res) => {
+        if (res && res.payload.slideId) {
+          setSearchParams({ slide: res.payload.slideId });
+        }
+      });;
+      dispatch(toggleSelectedOriginalCanvas(false));
       return;
     }
+
+    if (isClientListImagesPresent) {
+      console.log({ requestData });
+      let blob = new Blob([JSON.stringify(requestData)], {
+        type: 'application/json',
+      });
+      let formData = new FormData();
+      formData.append('data', blob);
+      const clientImagesArray = clientListImages.find(
+        el => el.canvasId == canvasJS.id
+      );
+
+      if (clientImagesArray && clientImagesArray.images) {
+        if (clientImagesArray.images.length !== 0) {
+          for (let i = 0; i < clientImagesArray.images.length; i++) {
+            formData.append('images', clientImagesArray.images[i].imageFile);
+          }
+          dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes })).then((res) => {
+            if (res && res.payload.slideId) {
+              setSearchParams({ slide: res.payload.slideId });
+            }
+          });
+          dispatch(toggleSelectedOriginalCanvas(false));
+          return;
+        }
+      }
+      dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes })).then((res) => {
+        if (res && res.payload.slideId) {
+          setSearchParams({ slide: res.payload.slideId });
+        }
+      });;
+      dispatch(toggleSelectedOriginalCanvas(false));
+      return;
+    }
+
+
+
     let reqData = { ...requestData };
     if (params.id?.split('-')[0] && reqData) {
       const ptId = Number(params.id?.split('-')[0]);
       reqData.presentationId = ptId;
     }
-    dispatch(fetchSlideImg({ req: reqData, slideJSON, pptId, notes }));
+    dispatch(fetchSlideImg({ req: reqData, slideJSON, pptId, notes })).then(
+      res => {
+        if (res && res.payload.slideId) {
+          setSearchParams({ slide: res.payload.slideId });
+          dispatch(
+            updateSlideIdInList({
+              slideId: res.payload.slideId,
+              canvasId: canvasJS.id,
+            })
+          );
+        }
+      }
+    );
     dispatch(toggleSelectedOriginalCanvas(false));
   };
 
@@ -325,7 +425,6 @@ const CanvasBody = () => {
       return;
     }
     let prevVariant = canvasList[canvasIndex].lastVariant;
-    console.log({ prevVariant, canvasIndex });
     dispatch(toggleIsVariantSelected(true));
     dispatch(toggleSelectedOriginalCanvas(false));
     dispatch(setVariantImageAsMain(prevVariant));
@@ -369,6 +468,15 @@ const CanvasBody = () => {
     return false;
   }
 
+  const [tableAnchorEl, setTableAnchorEl] = React.useState<null | HTMLElement>(null);
+  const openTable = Boolean(tableAnchorEl);
+  const handleTableClick = (event: React.MouseEvent<HTMLElement>) => {
+    setTableAnchorEl(event.currentTarget);
+  };
+  const handleTableClose = () => {
+    setTableAnchorEl(null);
+  };
+
   return (
     <BodyContainer>
       <ToastContainer
@@ -378,15 +486,21 @@ const CanvasBody = () => {
         transition={Slide}
       />
       <Grid container>
-        <Grid item xs={2} onContextMenu={(event) => { event.preventDefault() }}  >
-          <SlideList />
+        <Grid
+          item
+          xs={2}
+          onContextMenu={event => {
+            event.preventDefault();
+          }}
+        >
+          <SlideList notesRef={NotesInputRef}/>
         </Grid>
         <Grid item xs={8}>
           <EditSlideContainer>
             <Stack
               direction="row"
               justifyContent="space-between"
-              width={'91.51%'}
+              width={'94.51%'}
             >
               <span>
                 {/* <Tooltip title="Delete Current Slide" placement="top">
@@ -404,7 +518,10 @@ const CanvasBody = () => {
                 </Tooltip> */}
                 <Button variant="contained" size="medium" onClick={handleClick}>
                   <Stack direction="row" spacing={1}>
-                    <img src="data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 9 9' fill='%23fff' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.96325 5.03632H0.516602V3.96358H3.96325V0.509277H5.036V3.96358H8.4903V5.03632H5.036V8.48298H3.96325V5.03632Z' fill='%23fff'/%3E%3C/svg%3E" alt="" />
+                    <img
+                      src="data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 9 9' fill='%23fff' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.96325 5.03632H0.516602V3.96358H3.96325V0.509277H5.036V3.96358H8.4903V5.03632H5.036V8.48298H3.96325V5.03632Z' fill='%23fff'/%3E%3C/svg%3E"
+                      alt=""
+                    />
                     <p>Add Elements</p>
                   </Stack>
                 </Button>
@@ -452,7 +569,17 @@ const CanvasBody = () => {
                 )}
                 &nbsp;
                 <Tooltip
-                  title={creditAmount === 0 ? <span> You have zero credits. Please add more credits to enable this action. </span>: ""}
+                  title={
+                    creditAmount === 0 ? (
+                      <span>
+                        {' '}
+                        You have zero credits. Please add more credits to enable
+                        this action.{' '}
+                      </span>
+                    ) : (
+                      ''
+                    )
+                  }
                   arrow
                   placement="top"
                 >
@@ -462,7 +589,6 @@ const CanvasBody = () => {
                       size="medium"
                       onClick={() => handleRequest()}
                       disabled={creditAmount === 0 || isRegenerateDisabled}
-
                     >
                       <Stack direction="row" spacing={1}>
                         <img src={Wand} />
@@ -473,7 +599,7 @@ const CanvasBody = () => {
                 </Tooltip>
               </span>
             </Stack>
-            <CanvasComponent />
+            <CanvasComponent fabricRef={canvasRef} />
             <Menu
               anchorEl={anchorEl}
               open={open}
@@ -518,7 +644,13 @@ const CanvasBody = () => {
                       </Tooltip>
                     ) : (
                       <MenuItem
-                        onClick={() => handleAddElementsToCanvas(item)}
+                        onClick={(e) => {
+                          if (item.title === "Table") {
+                            handleTableClick(e);
+                          } else {
+                            handleAddElementsToCanvas(item);
+                          }
+                        }}
                         style={{ display: 'flex', flexDirection: 'column' }}
                         key={index}
                         disabled={disabled}
@@ -537,7 +669,7 @@ const CanvasBody = () => {
               })}
             </Menu>
           </EditSlideContainer>
-          <CanvasNotes />
+          <CanvasNotes notesRef={NotesInputRef} />
         </Grid>
       </Grid>
       <Templates />
@@ -569,9 +701,7 @@ const CanvasBody = () => {
         sx={{
           color: '#fff',
           zIndex: theme => theme.zIndex.drawer + 1,
-          top: '14%',
-          left: '17%',
-          bottom: '6%',
+
           display: 'flex',
           flexDirection: 'column',
         }}
@@ -605,6 +735,8 @@ const CanvasBody = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      {/* Table Input */}
+      <TableGenerator handleClose={handleTableClose} open={openTable} anchorEl={tableAnchorEl} canvas={canvasRef.current} />
     </BodyContainer>
   );
 };

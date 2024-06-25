@@ -4,7 +4,7 @@ import {
   LIST_IMG,
   LIST_TEXT,
 } from '@/constants/elementNames';
-import { addListImages, listImages } from '@/data/data';
+import { addOrReplaceTeamListImage, listImages } from '@/data/data';
 import { CanvasItem, listObjType } from '@/interface/storeTypes';
 import {
   updateCurrentCanvas,
@@ -13,6 +13,8 @@ import {
 import { updateListId } from '@/redux/reducers/fabricElements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import AutoResizingTextbox from '@/utils/fabric-utils/AutoResizingTextbox';
+import imageCompression from 'browser-image-compression';
+
 import { fabric } from 'fabric';
 import { toast } from 'react-toastify';
 
@@ -75,17 +77,18 @@ export function useListElement() {
   };
 
   const addImage = (canvas: fabric.Canvas, object: fabric.Object) => {
-    const objectName = object.name?.split('_');
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
-    fileInput.accept = 'image/*';
+    fileInput.accept = '.jpeg, .jpg, .png, .svg';
     fileInput.click();
     let file: any;
     let reader = new FileReader();
-    fileInput.addEventListener('change', e => {
+    fileInput.addEventListener('change', async (e) => {
       file = (e.target as HTMLInputElement)?.files?.[0];
       
-      if (file) {
+      if (file && object) {
+        const [_, id] = (object.name?.split('_') ?? []);
+        console.log({object,id})
         const fileSizeInMB = file.size / (1024 * 1024); 
         if (fileSizeInMB > 25) {
           toast.warn('The image size exceeds 25 MB. Please choose a smaller image.', {
@@ -101,7 +104,16 @@ export function useListElement() {
           fileInput.value = ''; 
           return;
         }
-        addListImages({ canvasId : canvasJS.id, file, path : '' });
+        const options = {
+          maxSizeMB: 1,          
+          maxWidthOrHeight: 800, 
+          useWebWorker: true,    
+        };
+  
+        try {
+          const compressedFile = await imageCompression(file, options);
+          console.log({compressedFile})
+          addOrReplaceTeamListImage(canvasJS.id, +id, compressedFile);
 
         reader.onload = () => {
           if (canvas) {
@@ -128,10 +140,14 @@ export function useListElement() {
               object && (object as fabric.Group).addWithUpdate(img);
               object && canvas.sendBackwards(object);
               object?.setCoords();
-            });
-          }
-        };
-        reader.readAsDataURL(file);
+              canvas.discardActiveObject()
+              });
+              }
+              };
+              reader.readAsDataURL(compressedFile);
+      } catch (error) {
+        console.error('Error compressing image:', error);
+      }
       }
     });
   };

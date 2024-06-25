@@ -3,6 +3,13 @@ import {
   CYCLE_CIRCLE,
   CYCLE_TEXT,
   FUNNEL_TEXT,
+  HUB_AND_SPOKE_BOX,
+  HUB_AND_SPOKE_BOX_HEADING,
+  HUB_AND_SPOKE_BOX_TEXT,
+  HUB_AND_SPOKE_CIRCLE,
+  HUB_AND_SPOKE_MAIN_TEXT,
+  HUB_AND_SPOKE_TEXT_BOX,
+  IMAGE,
   LIST_TEXT,
   PROCESS_ARROW,
   PROCESS_BOX,
@@ -12,6 +19,11 @@ import {
   QUOTE_AUTHOR,
   QUOTE_IMG,
   QUOTE_TEXT,
+  STATISTICS_BOX,
+  STATISTICS_TEXT,
+  STATISTICS_TITLE_TEXT,
+  SWOT_BOX,
+  SWOT_TEXT,
   TABLE,
   TABLE_HEADER,
   TABLE_TEXT,
@@ -40,6 +52,12 @@ import {
 } from '../events/eventExports';
 import { useBulletOrNumberedText } from '../elements/BulletOrNumberElement';
 import useCanvasData from './canvasDataExtractor';
+import { SWOTIcon } from '@/constants/media';
+import { CustomTextbox } from '@/utils/fabric-utils/renderBullet';
+import { useDebounce } from '@/hooks/useDebounce';
+import { createSlideJSONData } from '@/redux/thunk/thunk';
+import { regenerateMode } from '@/data/data';
+import { useSearchParams } from 'react-router-dom';
 
 export const useCanvasComponent = () => {
   const [showOptions, setShowOptions] = useState(false);
@@ -47,7 +65,7 @@ export const useCanvasComponent = () => {
     top: 0,
     left: 0,
   });
-
+  const [searchParams, setSearchParams] = useSearchParams();
   // const { handleAddCustomIcon } = useCustomSelectionIcons();
   // const { CustomBorderIcons } = useDelAndCopy();
   const { renderBulletOrNumTextLine } = useBulletOrNumberedText();
@@ -62,6 +80,9 @@ export const useCanvasComponent = () => {
   const { jsonData, themeCode, themeId } = useAppSelector(
     state => state.slideTheme
   );
+  const { isRegenerating } = useAppSelector(
+    state => state.thunk
+  );
 
   const customFabricProperties = [
     'listType',
@@ -69,15 +90,32 @@ export const useCanvasComponent = () => {
     'listCounter',
     'name',
     'className',
-    'level'
+    'level',
   ];
   const [canvasDimensions, setCanvasDimensions] = useState({
     width: 0,
     height: 0,
   });
   const dispatch = useAppDispatch();
-  const { canvasJS } = useAppSelector(state => state.canvas);
+  const { canvasJS, canvasList, isVariantSelected } = useAppSelector(state => state.canvas);
   const { presentationId } = useAppSelector(state => state.thunk);
+  const slideId = searchParams.get('slide');
+
+
+  const updateSlideJSONOnDB = useDebounce((pptId : number, slideJSON: any, slideId : number) => {
+    if(isRegenerating) {
+      return;
+    }
+    if(pptId && slideJSON && slideId > 100) {
+      dispatch(
+        createSlideJSONData({ pptId, slideId, slideJSON, notes: canvasJS.notes!})
+      ).then((res) => {
+        console.log('Slide JSON updated successfully',res.payload);
+      });
+    }
+  }, 1500);
+
+
   const handleAllElements = (event: fabric.IEvent, canvas: fabric.Canvas) => {
     const { target } = event;
 
@@ -104,8 +142,8 @@ export const useCanvasComponent = () => {
 
   const updateCanvasDimensions = (canvas: fabric.Canvas) => {
     const aspectRatio = 16 / 9;
-    const canvasWidthPercentage = 58;
-    const canvasHeightPercentage = 58 / aspectRatio;
+    const canvasWidthPercentage = 60;
+    const canvasHeightPercentage = 60 / aspectRatio;
 
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerWidth;
@@ -120,14 +158,27 @@ export const useCanvasComponent = () => {
         width: canvasWidth,
         height: canvasHeight,
       });
-      
+
       canvas.renderAll();
     }
   };
 
   const updateCanvasSlideData = (canvas: fabric.Canvas, id: number) => {
     const updatedCanvas = canvas?.toObject(customFabricProperties);
+    if((updatedCanvas as any).objects.length === 0) {
+        return;
+    }
+
     dispatch(updateCanvasInList({ id, updatedCanvas }));
+    const hasVariants = (updatedCanvas as any).objects.some(
+      (obj: any) => obj.name === 'VariantImage'
+    );
+    console.log({regenerateMode:!regenerateMode})
+    
+    if(presentationId && !hasVariants && !regenerateMode && slideId ) {
+      console.log('Updating slide JSON on Db', {updatedCanvas})
+      updateSlideJSONOnDB(presentationId, updatedCanvas, +slideId);
+    }
   };
 
   const handleElementBarSelection = (event: fabric.IEvent) => {
@@ -141,7 +192,7 @@ export const useCanvasComponent = () => {
         setShowOptions(false);
         return;
       }
-      
+
       setShowOptions(true);
       const boundingRect = selectedObject.getBoundingRect();
       const { left, top, width, height } = boundingRect;
@@ -203,10 +254,23 @@ export const useCanvasComponent = () => {
       elementName.startsWith(TIMELINE_CIRCLE) ||
       elementName.startsWith(TIMELINE_DIRECTION) ||
       elementName.startsWith(TABLE_TEXT) ||
-      elementName.startsWith(TABLE_HEADER) || 
+      elementName.startsWith(TABLE_HEADER) ||
       elementName.startsWith(QUOTE_AUTHOR) ||
       elementName.startsWith(QUOTE_TEXT) ||
-      elementName.startsWith(LIST_TEXT) 
+      elementName.startsWith(LIST_TEXT) ||
+      elementName.startsWith(SWOTIcon) ||
+      elementName.startsWith(SWOT_TEXT) ||
+      elementName.startsWith(SWOT_BOX) ||
+      elementName.startsWith(HUB_AND_SPOKE_BOX) ||
+      elementName.startsWith(HUB_AND_SPOKE_BOX_HEADING) ||
+      elementName.startsWith(HUB_AND_SPOKE_BOX_TEXT) ||
+      elementName.startsWith(HUB_AND_SPOKE_CIRCLE) ||
+      elementName.startsWith(HUB_AND_SPOKE_TEXT_BOX) ||
+      elementName.startsWith(HUB_AND_SPOKE_MAIN_TEXT) ||
+      elementName.startsWith(STATISTICS_BOX) ||
+      elementName.startsWith(STATISTICS_TITLE_TEXT) ||
+      elementName.startsWith(STATISTICS_TEXT) 
+      
     ) {
       return true;
     }
@@ -217,7 +281,6 @@ export const useCanvasComponent = () => {
     dispatch(toggleSelectingSlide(false));
   };
 
- 
   const handleKeyDown = (e: KeyboardEvent, canvas: fabric.Canvas) => {
     if (e.key === 'Delete' && canvas.getActiveObject()) {
       canvas.remove(canvas.getActiveObject()!);
@@ -231,6 +294,22 @@ export const useCanvasComponent = () => {
 
       canvas.discardActiveObject();
       canvas.renderAll();
+    }
+  };
+
+  const handleBulletIndent = (event: KeyboardEvent, canvas: fabric.Canvas) => {
+    if (!canvas) return;
+
+    const activeObject = canvas.getActiveObject();
+    if (!activeObject || !(activeObject instanceof CustomTextbox)) return;
+
+    const text = activeObject as CustomTextbox;
+    if (event.key === 'Enter') {
+      text.insertNewline();
+      event.preventDefault();
+    } else if (event.key === 'Tab') {
+      text.insertIndent();
+      event.preventDefault();
     }
   };
 
@@ -268,15 +347,14 @@ export const useCanvasComponent = () => {
     canvas.selectionBorderColor =
       theme.colorSchemes.light.palette.common.steelBlue;
     canvas.selectionLineWidth = 0.5;
-  }
-
+  };
 
   const forEachCanvasObject = (canvas: fabric.Canvas) => {
     canvas.forEachObject(obj => {
       if (obj && (obj as IExtendedTextBoxOptions)?.listType === 'bullet') {
         (obj as IExtendedTextBoxOptions)._renderTextLine =
           renderBulletOrNumTextLine;
-      }else if(obj.name && obj.name == "VariantImage"){
+      } else if (obj.name && obj.name == 'VariantImage') {
         const canvasWidth = canvas?.width || 0;
         const canvasHeight = canvas?.height || 0;
         const scaleWidth = canvasWidth / obj.width!;
@@ -298,8 +376,10 @@ export const useCanvasComponent = () => {
     });
   };
 
-
-  const handleClickOutsideCanvas = (event: MouseEvent, canvas : fabric.Canvas) => {
+  const handleClickOutsideCanvas = (
+    event: MouseEvent,
+    canvas: fabric.Canvas
+  ) => {
     if (
       canvas &&
       canvas.getActiveObject() &&
@@ -335,6 +415,7 @@ export const useCanvasComponent = () => {
     handleKeyDown,
     handleWindowResize,
     forEachCanvasObject,
-    updateCanvasStyle
+    updateCanvasStyle,
+    handleBulletIndent,
   };
 };

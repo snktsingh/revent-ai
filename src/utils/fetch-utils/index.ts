@@ -31,7 +31,7 @@ generateInstance.interceptors.response.use(
   (error: AxiosError) => {
     const responseStatusCode = error.response;
     console.log(error);
-    toast.error(error.message);
+    // toast.error(error.response.data.message);
     switch (responseStatusCode?.status) {
       case 404: {
         toast.error('URL does not exist on specified resource');
@@ -52,9 +52,9 @@ generateInstance.interceptors.response.use(
         window.location.replace('/login');
         break;
       }
-      default: {
-        toast.error('Something went wrong !');
-      }
+      // default: {
+      //   toast.error('Something went wrong !');
+      // }
     }
     if (error.response && error.response.data) {
       console.log(error);
@@ -156,9 +156,9 @@ export { FetchNonHeaderUtils };
 export const nonHeaderJSONInstance: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 30000,
-  headers : {
-    "Content-Type" : 'text/plain'
-  }
+  headers: {
+    'Content-Type': 'text/plain',
+  },
 });
 
 nonHeaderJSONInstance.interceptors.request.use(config => {

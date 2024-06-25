@@ -7,12 +7,23 @@ import {
   FUNNEL_BASE,
   FUNNEL_LEVEL,
   FUNNEL_TEXT,
+  HUB_AND_SPOKE,
+  HUB_AND_SPOKE_BOX,
+  HUB_AND_SPOKE_BOX_HEADING,
+  HUB_AND_SPOKE_BOX_TEXT,
+  HUB_AND_SPOKE_CIRCLE,
+  HUB_AND_SPOKE_MAIN_TEXT,
+  HUB_AND_SPOKE_TEXT_BOX,
   PROCESS,
   PROCESS_BOX,
   PROCESS_TEXT,
   PYRAMID,
   PYRAMID_LEVEL,
   PYRAMID_TEXT,
+  STATISTICS,
+  STATISTICS_BOX,
+  SWOT_BOX,
+  SWOT_TEXT,
 } from '@/constants/elementNames';
 import { AutoResizingTextboxOptions } from '@/utils/fabric-utils/AutoResizingTextbox';
 import { fabric } from 'fabric';
@@ -23,7 +34,6 @@ export function useCanvasSingleClickEvent() {
     event: fabric.IEvent<Event>
   ) {
     const pointer: any = canvas.getPointer(event.e);
-
     const objectsAtPointer = canvas.getObjects().filter(obj => {
       return obj.containsPoint(pointer);
     });
@@ -49,6 +59,33 @@ export function useCanvasSingleClickEvent() {
           if(obj.name && obj.name === `${FUNNEL}_${id}`){
             canvas.setActiveObject(obj);
           }
+        });
+      }
+       if (object.name.startsWith(HUB_AND_SPOKE_CIRCLE)) {
+         const [_, id] = object.name.split('_');
+         canvas.forEachObject((obj: any) => {
+           if (
+             obj.name === `${HUB_AND_SPOKE_MAIN_TEXT}_${id}` &&
+             obj.type === 'textbox'
+            ) {
+            if (obj.text === 'Add Heading') {
+              obj.selectAll();
+            }
+            obj.enterEditing();
+          }
+          if(obj.name === `${HUB_AND_SPOKE}_${id}`){
+            canvas.setActiveObject(obj);
+            canvas.renderAll();
+         }
+        });
+      }
+       if (object.name.startsWith(STATISTICS_BOX)) {
+         const [_, id] = object.name.split('_');
+         canvas.forEachObject((obj: any) => {
+          if(obj.name === `${STATISTICS}_${id}`){
+            canvas.setActiveObject(obj);
+            canvas.renderAll();
+         }
         });
       }
 
@@ -114,7 +151,55 @@ export function useCanvasSingleClickEvent() {
               canvas.setActiveObject(obj);
             }
           });
-        }  
+        } else if (object.level.startsWith(SWOT_BOX)) {
+          const [_, id, level] = object.level.split('_');
+          canvas.forEachObject((obj: any) => {
+            if (
+              obj.level === `${SWOT_TEXT}_${id}_${level}` &&
+              obj.type === 'textbox'
+            ) {
+              if (obj.text === 'Add Text') {
+                obj.selectAll();
+              }
+              obj.enterEditing();
+            }
+          });
+        } else if (object.level.startsWith(HUB_AND_SPOKE_BOX)) {
+          const [_, id, level] = object.level.split('_');
+          canvas.forEachObject((obj: any) => {
+            if (
+              obj.level === `${HUB_AND_SPOKE_BOX_HEADING}_${id}_${level}` &&
+              obj.type === 'textbox'
+            ) {
+              if (obj.text === 'Add Title') {
+                obj.selectAll();
+              }
+              obj.enterEditing();
+            }
+
+            if(obj.name === `${HUB_AND_SPOKE}_${id}`){
+               canvas.setActiveObject(obj);
+               canvas.renderAll();
+            }
+          });
+        } else if (object.level.startsWith(HUB_AND_SPOKE_TEXT_BOX)) {
+          const [_, id, level] = object.level.split('_');
+          canvas.forEachObject((obj: any) => {
+            if (
+              obj.level === `${HUB_AND_SPOKE_BOX_TEXT}_${id}_${level}` &&
+              obj.type === 'textbox'
+            ) {
+              if (obj.text === 'Add Text') {
+                obj.selectAll();
+              }
+              obj.enterEditing();
+            }
+            if(obj.name === `${HUB_AND_SPOKE}_${id}`){
+              canvas.setActiveObject(obj);
+              canvas.renderAll();
+           }
+          });
+        } 
       }
     }
 

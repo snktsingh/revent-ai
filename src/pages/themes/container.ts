@@ -1,4 +1,8 @@
-import { setSelectedTheme, setThemeId } from '@/redux/reducers/theme';
+import {
+  setSelectedDocFile,
+  setSelectedTheme,
+  setThemeId,
+} from '@/redux/reducers/theme';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import {
   createPresentation,
@@ -9,10 +13,15 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { faker } from '@faker-js/faker';
+import { Token, isAuth } from '@/utils/localStorage/data';
+import ENDPOINT from '@/constants/endpoint';
+import { FetchUtils } from '@/utils/fetch-utils';
 
 const useStartTheme = () => {
   const thunk = useAppSelector(state => state.thunk);
-  const { selectedThemeId } = useAppSelector(state => state.slideTheme);
+  const { selectedThemeId, selectedDocFile, themeId } = useAppSelector(
+    state => state.slideTheme
+  );
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -26,13 +35,43 @@ const useStartTheme = () => {
     }
   };
 
-  const handleGenerate = (themeId: number) => {
-    if (themeId === null) {
-      toast.warning('Please select at least one theme !');
+  const handleGenerate = async (themeId: number) => {
+    if (selectedDocFile) {
+      if (isAuth && Token) {
+        try {
+          const docData = new FormData();
+          if (themeId && selectedDocFile) {
+            docData.append('file', selectedDocFile);
+            docData.append('themeId', themeId);
+          }
+          const res = await FetchUtils.postRequest(
+            `${ENDPOINT.PPT.CREATE_DOC_PPT}`,
+            docData
+          );
+          toast.success(
+            'Your Presentation is under creation, Please visit the dashboard to see the status.'
+          );
+          dispatch(setSelectedDocFile(null));
+          setTimeout(() => {
+            navigate('/my-presentations');
+          }, 1000);
+        } catch (error: any) {
+          toast.error(error.message);
+        }
+      } else {
+        toast.warning('Please login to Generate');
+        setTimeout(() => {
+          navigate('/login');
+        }, 1000);
+      }
     } else {
-      dispatch(setSelectedTheme(themeId));
-      dispatch(setThemeId(themeId));
-      handleCreatePPT();
+      if (themeId === null) {
+        toast.warning('Please select at least one theme !');
+      } else {
+        dispatch(setSelectedTheme(themeId));
+        dispatch(setThemeId(themeId));
+        handleCreatePPT();
+      }
     }
   };
 

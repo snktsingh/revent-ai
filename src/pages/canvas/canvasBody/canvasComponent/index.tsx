@@ -3,16 +3,22 @@ import { theme } from '@/constants/theme';
 import { toggleRegenerateButton } from '@/redux/reducers/slide';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { fabric } from 'fabric';
-import React, { useEffect, useRef } from 'react';
+import React, { RefObject, useEffect, useRef } from 'react';
 import useCanvasEvents from '../events';
 import useCanvasData from './canvasDataExtractor';
 import { useCanvasComponent } from './container';
 import { useElementFunctions } from './elementFunctions';
 import FullscreenCanvas from './fullscreenCanvas';
 import { CanvasContainer } from './style';
+import { Canvas } from 'fabric/fabric-impl';
+import { toggleIsRegenerating } from '@/redux/thunk/thunk';
+import { setRegenerateMode } from '@/data/data';
 
-const CanvasComponent: React.FC = () => {
-  const FabricRef = useRef<fabric.Canvas | null>(null);
+interface CanvasComponentProps {
+   fabricRef : React.MutableRefObject<Canvas | null>;
+}
+
+const CanvasComponent: React.FC<CanvasComponentProps> = ({ fabricRef }) => {
   const canvasRef = useRef<fabric.Canvas | null>(null);
   const ContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -32,6 +38,7 @@ const CanvasComponent: React.FC = () => {
     handleWindowResize,
     forEachCanvasObject,
     updateCanvasStyle,
+    handleBulletIndent,
   } = useCanvasComponent();
 
   const ElementFunctions = useElementFunctions(canvasRef.current);
@@ -62,15 +69,30 @@ const CanvasComponent: React.FC = () => {
     selectedOriginalCanvas,
     isVariantSelected,
     canvasList,
-    activeSlideID
+    activeSlideID,
+    variantMode
   } = useAppSelector(state => state.canvas);
 
-  useEffect(() => {
 
+  useEffect(() => {
+    console.log({canvasList, activeSlideID})
     setShowOptions(false);
-    const canvas = new fabric.Canvas('canvas', {preserveObjectStacking:true});
-    updateCanvasStyle(canvas);
+    const canvasElement = document.getElementById('canvas');
+    if (!canvasElement) {
+      console.error('Canvas element not found');
+      return;
+    }
+
+    const canvas = new fabric.Canvas('canvas', {
+      preserveObjectStacking: true,
+    });
+    if (!canvas) {
+      console.error('Failed to initialize Fabric canvas');
+      return;
+    }
+    updateCanvasDimensions(canvas);
     canvas.clear();
+    updateCanvasStyle(canvas);
     fabric.Object.prototype.set({
       cornerStyle: 'circle',
       transparentCorners: false,
@@ -84,6 +106,10 @@ const CanvasComponent: React.FC = () => {
       canvasJS.canvas,
       () => {
         canvasRef.current = canvas;
+        if (fabricRef) {
+          fabricRef.current = canvas;
+       }
+
         if (canvas) {
           updateCanvasStyle(canvas);
           updateCanvasDimensions(canvas);
@@ -95,7 +121,7 @@ const CanvasComponent: React.FC = () => {
             themeId
           ).catch(error => {
             console.error('An error occurred:', error);
-          });;
+          });
         }
 
         if (
@@ -107,12 +133,8 @@ const CanvasComponent: React.FC = () => {
           dispatch(toggleRegenerateButton(true));
         }
 
-
-
-
-        updateCanvasSlideData(canvas, canvasJS.id);
+        // updateCanvasSlideData(canvas, canvasJS.id);
         forEachCanvasObject(canvas);
-        // canvas Events
         canvas.on('selection:created', handleElementBarSelection);
         canvas.on('selection:updated', handleElementBarSelection);
 
@@ -143,8 +165,13 @@ const CanvasComponent: React.FC = () => {
         canvas.on('object:scaling', options =>
           onObjectScalingEvent(options, canvas)
         );
-        canvas.on('mouse:down', options => onMouseDownEvent(options, canvas));
-
+        canvas.on('mouse:down', options => {
+          onMouseDownEvent(options, canvas)
+          if (!options.target) {
+          
+            console.log('Clicked on empty canvas');
+          }
+        });
 
         canvas.renderAll();
       },
@@ -152,9 +179,13 @@ const CanvasComponent: React.FC = () => {
         console.error('Error loading canvas:', error);
       }
     );
+    document.addEventListener('keydown', e => handleBulletIndent(e, canvas));
     window.addEventListener('resize', () => updateCanvasDimensions(canvas));
     window.addEventListener('keydown', e => handleKeyDown(e, canvas));
     return () => {
+      document.removeEventListener('keydown', e =>
+        handleBulletIndent(e, canvas)
+      );
       window.removeEventListener('keydown', e => handleKeyDown(e, canvas));
       window.removeEventListener('resize', () => {});
       canvas.dispose();
@@ -162,9 +193,16 @@ const CanvasComponent: React.FC = () => {
   }, [canvasJS.canvas, selectedOriginalCanvas]);
 
   useEffect(() => {
-    const slide = canvasList.find((slide) => slide.id === activeSlideID);
+    const slide = canvasList.find(slide => slide.id === activeSlideID);
     setShowOptions(false);
-    if (variantImage && canvasRef.current && slide && slide.variants && slide.variants.length > 0 ) {
+    
+    if (
+      variantImage &&
+      canvasRef.current &&
+      slide &&
+      slide.variants &&
+      slide.variants.length > 0
+    ) {
       canvasRef.current?.clear();
 
       canvasRef.current?.setBackgroundColor(
@@ -192,9 +230,15 @@ const CanvasComponent: React.FC = () => {
         });
 
         canvasRef.current?.add(img);
+      
       });
       canvasRef.current?.renderAll();
-    }
+      dispatch(toggleIsRegenerating(false));
+      }
+      if (canvasRef.current?.getObjects().length === 0) {
+        dispatch(toggleIsRegenerating(false));
+        setRegenerateMode(false);
+      }
   }, [variantImage, isVariantSelected]);
 
   useEffect(() => {}, [selectedElementPosition, showOptions]);
@@ -202,11 +246,12 @@ const CanvasComponent: React.FC = () => {
   return (
     <CanvasContainer onContextMenu={e => e.preventDefault()}>
       <div
+      
         style={{ position: 'relative' }}
         ref={ContainerRef}
         onClick={canvasClickEvent}
       >
-        <canvas id="canvas"></canvas>
+        <canvas id="canvas" ></canvas>
         {showOptions && (
           <ElementEditBar
             left={selectedElementPosition.left}

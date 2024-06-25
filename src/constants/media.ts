@@ -63,14 +63,20 @@ import AccessDenied from '../assets/acessDenied.svg';
 import Verify from '../assets/verify.svg';
 import Blank from '../assets/blankPpt.svg';
 const Canvas_Arrow = `<svg fill="#000000" height="256px" width="256px" version="1.1" id="Icons" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" xml:space="preserve"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path d="M21,23c-0.3,0-0.5-0.1-0.7-0.3c-0.4-0.4-0.4-1,0-1.4l5.3-5.3l-5.3-5.3c-0.4-0.4-0.4-1,0-1.4s1-0.4,1.4,0l6,6 c0.4,0.4,0.4,1,0,1.4l-6,6C21.5,22.9,21.3,23,21,23z"></path> </g> <g> <path d="M27,17H5c-0.6,0-1-0.4-1-1s0.4-1,1-1h22c0.6,0,1,0.4,1,1S27.6,17,27,17z"></path> </g> </g></svg>`;
-import ForgotSvgIcon from "../assets/forgotPng.svg";
-import LockSvgIcon from "../assets/passwordLock.svg";
-import ResetSuccessIcon from "../assets/succesfullResetPass.jpg";
-import FileUploadIcon from "../assets/fileUploadIcons.svg";
-import DoneGif from "../assets/Done.gif";
-import SWOTIcon from "../assets/canvas/SWOT_svg.svg";
-import CreditIcon from "../assets/creditIcon.svg";
-import ErrorCloud from "../assets/error.svg";
+import ForgotSvgIcon from '../assets/forgotPng.svg';
+import LockSvgIcon from '../assets/passwordLock.svg';
+import ResetSuccessIcon from '../assets/succesfullResetPass.jpg';
+import FileUploadIcon from '../assets/fileUploadIcons.svg';
+import DoneGif from '../assets/Done.gif';
+import SWOTIcon from '../assets/canvas/SWOT_svg.svg';
+import CreditIcon from '../assets/creditIcon.svg';
+import ErrorCloud from '../assets/error.svg';
+import iconSWOT from '../assets/elements/swot.svg';
+import iconHunNSpoke from '../assets/elements/hubAndSpoke.svg';
+import iconTableOfContents from '../assets/elements/tableOfContents.svg';
+import iconStatistics from '../assets/elements/statisticsicon.svg';
+import DeleteFile from '../assets/deleteFile.svg';
+import Proceed from '../assets/proceed.svg';
 
 export {
   Back,
@@ -137,6 +143,7 @@ export {
   LinkedIn,
   AccessDenied,
   Verify,
+  Proceed,
   Blank,
   ForgotSvgIcon,
   LockSvgIcon,
@@ -145,5 +152,10 @@ export {
   DoneGif,
   SWOTIcon,
   CreditIcon,
-  ErrorCloud
+  ErrorCloud,
+  iconSWOT,
+  iconHunNSpoke,
+  iconTableOfContents,
+  iconStatistics,
+  DeleteFile,
 };

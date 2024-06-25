@@ -84,7 +84,10 @@ export const SingleSlideComponent: React.FC<SingleSlideComponentProps> = ({
           >
             <SingleSliderContainer onContextMenu={(event) => handleContextMenu(event, canvas)}  >
               <Stack direction="row" spacing={1}>
-                <p>{index + 1}</p>
+              <p style={{ fontSize: `${0.9 / String(index + 1).length}rem` }}>
+                {index + 1}
+              </p>
+
                 <ListSlideCard
                   className={activeSlideID == canvas.id ? 'clicked-card' : ''}
                 >

@@ -76,7 +76,7 @@ export const ElementReducer = createSlice({
     },
     togglePptAlertOpen(state, action : PayloadAction<boolean>){
       state.isDeletePptAlertOpen = action.payload;
-    }
+    },
   },
 });
 

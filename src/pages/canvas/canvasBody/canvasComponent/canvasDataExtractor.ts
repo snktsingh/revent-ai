@@ -1,5 +1,6 @@
 import {
   BULLET_POINTS,
+  CLIENT_LIST_MAIN,
   CONCLUSION_SLIDE_SUBTITLE,
   CONCLUSION_SLIDE_TITLE,
   COVER_SLIDE_SUBTITLE,
@@ -8,6 +9,10 @@ import {
   CYCLE_TEXT,
   FUNNEL,
   FUNNEL_TEXT,
+  HUB_AND_SPOKE,
+  HUB_AND_SPOKE_BOX_HEADING,
+  HUB_AND_SPOKE_BOX_TEXT,
+  HUB_AND_SPOKE_MAIN_TEXT,
   IMAGE,
   LIST_MAIN,
   LIST_TEXT,
@@ -21,9 +26,16 @@ import {
   QUOTE_TEXT,
   SECTION_SLIDE_SUBTITLE,
   SECTION_SLIDE_TITLE,
+  STATISTICS,
+  STATISTICS_TEXT,
+  STATISTICS_TITLE_TEXT,
   SUBTITLE,
+  SWOT,
+  SWOT_TEXT,
   TABLE,
   TABLE_HEADER,
+  TABLE_OF_CONTENTS_HEADING,
+  TABLE_OF_CONTENTS_TEXT,
   TABLE_TEXT,
   TIMELINE,
   TIMELINE_HEADING,
@@ -32,6 +44,8 @@ import {
 } from '@/constants/elementNames';
 import {
   BulletPointsFunctionType,
+  HunNSpokeDataType,
+  StatisticsDataType,
   TimelineDataType,
 } from '@/interface/elDataTypes';
 import {
@@ -69,6 +83,7 @@ const useCanvasData = () => {
         templateName: '',
         elementId,
         data: [],
+        heading: '',
       };
       outputFormat.elements.push(newElement);
       return newElement;
@@ -82,7 +97,7 @@ const useCanvasData = () => {
     if (canvasData) {
       tableData = extractTableData(canvasData);
     }
-    const outputFormat: APIRequest = {
+    let outputFormat: APIRequest = {
       themeId: themeId,
       imagesCount: '',
       slideNumber: canvasJS.id,
@@ -91,8 +106,11 @@ const useCanvasData = () => {
       // presentationName: 'Presentation-1',
     };
     let timelineData: TimelineDataType[] = [];
+    let hubAndSpokeData: HunNSpokeDataType[] = [];
+    let statisticsData: StatisticsDataType[] = [];
     let titleText: string = '';
     let subTitleText: string = '';
+    let hubAndSpokeMainText: string = '';
     canvasData.forEach(canvasObject => {
       if (
         (canvasObject.type === 'textbox' || canvasObject.type === 'image') &&
@@ -117,6 +135,17 @@ const useCanvasData = () => {
           case canvasObject.name.startsWith(PROCESS_TEXT):
             elementType = 'Process';
             break;
+
+          case canvasObject.name.startsWith(SWOT_TEXT):
+            elementType = 'Swot';
+            break;
+
+          // case canvasObject.name.startsWith(CLIENT_LIST_MAIN):
+          //   elementType = 'ClientList';
+          //   break;
+
+          default:
+            break;
         }
 
         if (elementType) {
@@ -128,7 +157,6 @@ const useCanvasData = () => {
           element.data?.push({
             name: canvasObject.text,
             label: '',
-            subHeading: '',
             text: canvasObject.text,
           });
         } else if (canvasObject.name === PARAGRAPH) {
@@ -140,7 +168,6 @@ const useCanvasData = () => {
           paragraphData.data?.push({
             name: canvasObject.text,
             label: '',
-            subHeading: '',
             text: canvasObject.text,
           });
         } else if (
@@ -157,7 +184,6 @@ const useCanvasData = () => {
           paragraphData.data?.push({
             name: canvasObject.text,
             label: '',
-            subHeading: '',
             text: canvasObject.text,
           });
         } else if (canvasObject?.name === BULLET_POINTS) {
@@ -211,16 +237,16 @@ const useCanvasData = () => {
             outputFormat
           );
           ListImage.data?.push({
-            name: canvasObject.text,
-            label: canvasObject.text,
+            name: canvasObject.text === "Add Text" ? "" : canvasObject.text,
+            label: canvasObject.text === "Add Text" ? "" : canvasObject.text,
             subHeading: '',
-            text: canvasObject.text,
+            text: canvasObject.text === "Add Text" ? "" : canvasObject.text,
           });
         } else if (canvasObject.name.startsWith(IMAGE)) {
           const Image = getOrCreateElement('Images', '1', outputFormat);
         } else if (canvasObject.name.startsWith(QUOTE_TEXT)) {
           const Quote = getOrCreateElement('Quote', '1', outputFormat);
-          
+
           let newText = canvasObject.text.trim();
 
           if (
@@ -234,10 +260,43 @@ const useCanvasData = () => {
           });
         } else if (canvasObject.name.startsWith(QUOTE_AUTHOR)) {
           const Quote = getOrCreateElement('Quote', '1', outputFormat);
+          let newText = canvasObject.text.trim();
           if (Quote.data && Quote.data[0]) {
-            Quote.data[0].label = canvasObject.text;
+            Quote.data[0].label = canvasObject.text.slice(1).trimStart();
           }
+        } else if (canvasObject?.name === TABLE_OF_CONTENTS_TEXT) {
+          const { mainBulletPoints, nestedBulletPoints } =
+            segregateBulletPoints(canvasObject.text);
+          const contentsData = mainBulletPoints.map((text, index) => {
+            return { heading: text, text };
+          });
+          const Bullets = getOrCreateElement(
+            'Toc',
+            '1',
+            outputFormat
+          );
+          Bullets.data = contentsData;
+        } else if (
+          canvasObject.name.startsWith(HUB_AND_SPOKE_BOX_HEADING) ||
+          canvasObject.name.startsWith(HUB_AND_SPOKE_BOX_TEXT)
+        ) {
+          const [_, id] = canvasObject.name.split('_');
+          hubAndSpokeData.push({ content: canvasObject.text, id: id });
+        } else if (canvasObject.name.startsWith(HUB_AND_SPOKE_MAIN_TEXT)) {
+          const [_, id] = canvasObject.name.split('_');
+          hubAndSpokeMainText = canvasObject.text;
+        } else if (
+          canvasObject.name.startsWith(STATISTICS_TEXT) ||
+          canvasObject.name.startsWith(STATISTICS_TITLE_TEXT)
+        ) {
+          const [_, id] = canvasObject.name.split('_');
+          statisticsData.push({ content: canvasObject.text, id: id });
         }
+      }
+      if (
+        canvasObject.name.startsWith(CLIENT_LIST_MAIN) 
+      ) {
+          const clientList = getOrCreateElement('ClientList', '1', outputFormat);
       }
     });
 
@@ -256,7 +315,7 @@ const useCanvasData = () => {
       outputFormat.subTitle = subTitleText;
       outputFormat.elements[0].subTitle = subTitleText;
     }
-
+    // arrange timeline data
     type OrganizedTimelineData = Record<string, DataRequestType[]>;
 
     const organizedTimelineData: OrganizedTimelineData = {};
@@ -282,20 +341,85 @@ const useCanvasData = () => {
     });
 
     Object.entries(organizedTimelineData).forEach(([id, content]) => {
-      const timelineElement = getOrCreateElement('Timeline', id, outputFormat);
+      const timelineElement = getOrCreateElement('TimeLine', id, outputFormat);
       timelineElement.data = content;
       timelineElement.title = titleText;
       timelineElement.subTitle = subTitleText;
     });
 
+    // arrange HUB and SPOKE data
+    type OrganizedHubAndSpokeData = Record<string, DataRequestType[]>;
+
+    const organizedHubAndSpokeData: OrganizedHubAndSpokeData = {};
+
+    hubAndSpokeData.forEach((item, index) => {
+      const id = item.id;
+      const hubArray =
+        organizedHubAndSpokeData[id] || (organizedHubAndSpokeData[id] = []);
+
+      if (index % 2 === 0) {
+        hubArray.push({
+          label: item.content,
+          text: '',
+        });
+      } else {
+        if (hubArray && hubArray.length) {
+          const lastTimeline = hubArray[hubArray.length - 1];
+          lastTimeline && (lastTimeline.text = item.content);
+        }
+      }
+    });
+
+    Object.entries(organizedHubAndSpokeData).forEach(([id, content]) => {
+      const hubAndSpokeElement = getOrCreateElement('Hub', id, outputFormat);
+      hubAndSpokeElement.data = content;
+      hubAndSpokeElement['heading'] = hubAndSpokeMainText;
+      hubAndSpokeElement.title = titleText;
+      hubAndSpokeElement.subTitle = subTitleText;
+    });
+
+    // arrange STATISTICS data
+    type OrganizedStatisticsData = Record<string, DataRequestType[]>;
+
+    const organizedStatisticsData: OrganizedStatisticsData = {};
+
+    statisticsData.forEach((item, index) => {
+      const id = item.id;
+      const statsArray =
+        organizedStatisticsData[id] || (organizedStatisticsData[id] = []);
+
+      if (index % 2 === 0) {
+        statsArray.push({
+          label: item.content,
+          text: '',
+        });
+      } else {
+        if (statsArray && statsArray.length) {
+          const lastTimeline = statsArray[statsArray.length - 1];
+          lastTimeline && (lastTimeline.text = item.content);
+        }
+      }
+    });
+
+    Object.entries(organizedStatisticsData).forEach(([id, content]) => {
+      const statsElement = getOrCreateElement('Metric', id, outputFormat);
+      statsElement.data = content;
+      statsElement.title = titleText;
+      statsElement.subTitle = subTitleText;
+    });
+
     if (outputFormat && outputFormat.elements.length > 0) {
-      if(titleText && subTitleText){
+      if (titleText && subTitleText) {
         outputFormat['title'] = titleText;
         outputFormat['subTitle'] = subTitleText;
-      } else if(titleText){
+      } else if (titleText) {
         outputFormat['title'] = titleText;
-      } else if( subTitleText){
+      } else if (subTitleText) {
         outputFormat['subTitle'] = subTitleText;
+      }
+
+      if (outputFormat.elements[0].shape == 'Hub') {
+        outputFormat.elements[0].heading = hubAndSpokeMainText;
       }
     } else {
       const titleData = getOrCreateElement('cover', '1', outputFormat);
@@ -324,6 +448,25 @@ const useCanvasData = () => {
       tableData.data = [];
       outputFormat.elements.push(tableData);
     }
+
+    outputFormat = {
+      ...outputFormat,
+      elements: outputFormat.elements.map(element => {
+        if ('shape' in element && element.shape === 'Funnel' && element.data) {
+          return {
+            ...element,
+            data: [...element.data].reverse()
+          };
+        }else if ('shape' in element && element.shape === 'Hub' && element.data) {
+          return {
+            ...element,
+            heading : hubAndSpokeMainText
+          }
+        }
+        return element;
+      })
+    };
+    
     console.log({ outputFormat });
     dispatch(setRequestData(outputFormat));
     return new Promise<any>((resolve, reject) => {
@@ -428,6 +571,7 @@ const useCanvasData = () => {
         );
       }
     });
+    const isImageAdded = objects.some(obj => obj.name === IMAGE);
     const isShapeAdded = objects.some(obj => {
       if (obj.name) {
         return [
@@ -441,6 +585,12 @@ const useCanvasData = () => {
           QUOTE,
           BULLET_POINTS,
           PARAGRAPH,
+          SWOT,
+          IMAGE,
+          CLIENT_LIST_MAIN,
+          HUB_AND_SPOKE,
+          TABLE_OF_CONTENTS_TEXT,
+          STATISTICS
         ].some(elName => obj.name.startsWith(elName));
       }
     });
@@ -449,7 +599,12 @@ const useCanvasData = () => {
       enabledEl = [];
     } else if (isShapeAdded && isTitleAdded && isSubtitleAdded) {
       enabledEl = [];
-    } else if (isShapeAdded && isTitleAdded) {
+    } else if (isImageAdded) {
+      enabledEl.push('Image');
+    } else if (isTitleAdded && isSubtitleAdded && isImageAdded) {
+      enabledEl.push('Image');
+    }
+    else if (isShapeAdded && isTitleAdded) {
       enabledEl.push('Subtitle');
     } else if (isShapeAdded && isSubtitleAdded) {
       enabledEl.push('Title');
@@ -467,7 +622,12 @@ const useCanvasData = () => {
         'Process',
         'Timeline',
         'Funnel',
-        'Pyramid'
+        'Pyramid',
+        'SWOT Analysis',
+        'Table of Contents',
+        'Hub and Spoke',
+        'Statistics',
+        'Client List'
       );
     } else if (isTitleAdded) {
       enabledEl.push(
@@ -482,7 +642,12 @@ const useCanvasData = () => {
         'Timeline',
         'Funnel',
         'Pyramid',
-        'Subtitle'
+        'Subtitle',
+        'SWOT Analysis',
+        'Table of Contents',
+        'Hub and Spoke',
+        'Statistics',
+        'Client List'
       );
     } else if (isSubtitleAdded) {
       enabledEl.push(
@@ -497,7 +662,12 @@ const useCanvasData = () => {
         'Timeline',
         'Funnel',
         'Pyramid',
-        'Title'
+        'Title',
+        'SWOT Analysis',
+        'Table of Contents',
+        'Hub and Spoke',
+        'Statistics',
+        'Client List'
       );
     } else {
       if (!isTitleAdded) {
@@ -521,7 +691,11 @@ const useCanvasData = () => {
         'Cover Slide',
         'Section Slide',
         'Conclusion Slide',
-        'SWOT Analysis'
+        'SWOT Analysis',
+        'Table of Contents',
+        'Hub and Spoke',
+        'Statistics',
+        'Client List'
       );
     }
 

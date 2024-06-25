@@ -154,10 +154,11 @@ export default function useAllElements() {
     titleName: string,
     subtitleName: string
   ) => {
+    const center = canvas?.getCenter();
     const title = new fabric.Textbox('Click to add a title', {
       width: 600,
-      left,
-      top,
+      left : center?.left,
+      top : center?.top! - 25,
       fontSize: 42,
       fontWeight: 'bold',
       fontFamily: 'sans-serif',
@@ -170,12 +171,14 @@ export default function useAllElements() {
       padding: 5,
       height: 200,
       splitByGrapheme: true,
+      originX: 'center',
+      originY: 'center',
     });
 
     const subtitle = new fabric.Textbox('Click to add a subtitle', {
       width: 700,
-      left: left - 50,
-      top: top + 100,
+      left: center?.left,
+      top: center?.top! + 25,
       fontSize: 28,
       fontFamily: 'Arial',
       hoverCursor: 'text',
@@ -184,6 +187,8 @@ export default function useAllElements() {
       padding: 2,
       height: 300,
       splitByGrapheme: true,
+      originX: 'center',
+      originY: 'center',
     });
 
 

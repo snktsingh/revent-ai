@@ -39,11 +39,19 @@ const initialState: ISlideRequests = {
   unAuthMessage: false,
   selectedSlideIndex: 0,
   themePreviewLoader: false,
+  isRegenerating : false,
 };
+
+interface FetchSlideTypes { 
+  req : any, 
+  slideJSON : any, 
+  pptId: number, 
+  notes : string
+ }
 
 export const fetchSlideImg = createAsyncThunk(
   'slide/fetchimage-ppt',
-  async ({ req, slideJSON, pptId, notes }: any, { dispatch, getState }) => {
+  async ({ req, slideJSON, pptId, notes }: FetchSlideTypes, { dispatch, getState }) => {
     let isFormData = false;
     if (req instanceof FormData) {
       isFormData = true;
@@ -59,6 +67,8 @@ export const fetchSlideImg = createAsyncThunk(
       req
     );
 
+    console.log({ pptId, slideJSON, slideId: res.data.slideId, notes })
+
     if (canvasList[currentSlide].variants.length === 0) {
       dispatch(
         createSlideJSONData({ pptId, slideJSON, slideId: res.data.slideId, notes })
@@ -69,14 +79,13 @@ export const fetchSlideImg = createAsyncThunk(
       );
     }
 
-    console.log(res.data);
     dispatch(setVariantImageAsMain(res.data.variants[0].imagesUrl));
     dispatch(toggleIsVariantSelected(true));
     const currentCanvas = (getState() as RootState).canvas.canvasJS;
     const updatedCanvasVariants = {
       ...currentCanvas,
       variants: res.data.variants,
-      slideId: res.data.slideId,
+      slideId: canvasList[currentSlide].slideId,
     };
     dispatch(updateCurrentCanvas(updatedCanvasVariants));
     dispatch(getUserCredit());
@@ -124,20 +133,20 @@ export const fetchPptDetails = createAsyncThunk(
 // Create Slide JSON Data
 export const createSlideJSONData = createAsyncThunk(
   'slide/update-json',
-  async ({ pptId, slideId, slideJSON, notes }: any) => {
+  async ({ pptId, slideId, slideJSON, notes }: {pptId : number, slideId: number, slideJSON: any, notes: string}) => {
     const res = await FetchUtils.postRequest(
       `${ENDPOINT.PPT.CANVAS_JSON}/${pptId}/${slideId}`,
       {slideJSON,notes}
     );
     console.log({ json: res.data });
-    return res.data;
+    return res;
   }
 );
 
 // update Slide JSON Data
 export const updateSlideJSONData = createAsyncThunk(
   'slide/update-json',
-  async ({ pptId, slideId, slideJSON, notes }: any) => {
+  async ({ pptId, slideId, slideJSON, notes }: {pptId : number, slideId: number, slideJSON: any, notes: string}) => {
     const res = await FetchUtils.putRequest(
       `${ENDPOINT.PPT.CANVAS_JSON}/${pptId}/${slideId}`,
       {slideJSON, notes}
@@ -162,6 +171,20 @@ export const getSlideJSONData = createAsyncThunk(
       `${ENDPOINT.PPT.CANVAS_JSON}/${pptId}/${slideId}`
     );
     return res.data;
+  }
+);
+
+
+//Get All Slide's JSON data 
+export const getAllSlidesJSONApi = createAsyncThunk(
+  'slide/get-all-slides-json',
+  async (pId : number) => {
+    try {
+      const res = await FetchUtils.getRequest(`${ENDPOINT.PPT.GET_ALL_JSON}/${pId}`);
+      return res.data;
+    } catch (error) {
+      return error;
+    }
   }
 );
 
@@ -289,6 +312,9 @@ const thunkSlice = createSlice({
     toggleThemeChange: state => {
       state.themePreviewLoader = !state.themePreviewLoader;
     },
+    toggleIsRegenerating : (state, action : PayloadAction<boolean>) => {
+      state.isRegenerating = action.payload;
+    }
   },
   extraReducers(builder) {
     builder
@@ -370,6 +396,7 @@ export const {
   setPresentationID,
   updateStateLoading,
   toggleThemeChange,
+  toggleIsRegenerating
 } = thunkSlice.actions;
 
 export default thunkSlice.reducer;

@@ -23,6 +23,7 @@ export interface CanvasItem {
   presentationId: number;
   lastVariant : string;
   selectedOriginalCanvas: boolean;
+  slideShape?: string;
 }
 
 export interface IPresentationDetails {
@@ -74,6 +75,7 @@ export interface ISlideRequests {
   unAuthMessage: boolean;
   selectedSlideIndex: number;
   themePreviewLoader: boolean;
+  isRegenerating : boolean;
 }
 
 export interface IShapeRequest {
@@ -96,6 +98,7 @@ export interface ElementBaseType {
   subTitle?: string;
   templateName?: string;
   elementId?: string;
+  heading?: string;
 }
 
 export interface TableDataType extends ElementBaseType {

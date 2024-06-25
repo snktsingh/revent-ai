@@ -1,16 +1,12 @@
 import ThumbnailPreview from '@/common-ui/thumbnailPreview';
 import { Add } from '@/constants/media';
 import { toggleTemplateVisibility } from '@/redux/reducers/elements';
-import {
-  setNewTheme,
-  setThemeCode,
-  setThemeId
-} from '@/redux/reducers/theme';
+import { setNewTheme, setThemeCode, setThemeId } from '@/redux/reducers/theme';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import {
   getAllThemes,
   toggleThemeChange,
-  updatePresentationTheme
+  updatePresentationTheme,
 } from '@/redux/thunk/thunk';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -33,6 +29,7 @@ import useCanvasData from '../canvasComponent/canvasDataExtractor';
 import { useCanvasComponent } from '../canvasComponent/container';
 import { ListSlideCard } from '../style';
 import { ThemesSliderContainer } from './style';
+import { setCanvas, updateCanvasList } from '@/redux/reducers/canvas';
 
 export default function Templates() {
   const { customFabricProperties } = useCanvasComponent();
@@ -48,6 +45,8 @@ export default function Templates() {
   const { canvasJS, originalCanvasSlide, canvasList } = useAppSelector(
     state => state.canvas
   );
+  const { preset } = useAppSelector(state => state.manageDashboard);
+
   const [currentTheme, setCurrentTheme] = useState<any>({});
   const [canvasIndex, setCanvasIndex] = useState<number>(0);
   const [hasVariantsInCanvasList, setIsVariantsAvailable] =
@@ -75,13 +74,18 @@ export default function Templates() {
   const handleClickOpen = (theme: any) => {
     setCurrentTheme(theme);
     dispatch(setThemeId(theme.themeId));
-
+    console.log(preset);
+    console.log(theme);
     if (hasVariantsInCanvasList) {
       setOpen(true);
     } else {
+      setOpen(true);
       dispatch(setThemeId(theme.themeId));
     }
-    getElementsData((canvasJS.originalSlideData as any).objects, theme.themeId).catch(error => {
+    getElementsData(
+      (canvasJS.originalSlideData as any).objects,
+      theme.themeId
+    ).catch(error => {
       console.error('An error occurred:', error);
     });
   };

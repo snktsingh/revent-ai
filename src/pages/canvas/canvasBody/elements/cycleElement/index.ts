@@ -37,6 +37,39 @@ export function useCycleElement() {
 
     return Arrow;
   };
+  
+  const addCircle = (left: number, top: number, level: number, canvas : fabric.Canvas, currentID : number) => {
+    const circle = new fabric.Circle({
+      radius: 50,
+      fill: customStyles.elementColors.duskyBlue,
+      stroke: theme.colorSchemes.light.palette.primary.main,
+      top,
+      left,
+      name: `${CYCLE_CIRCLE}_${currentID}`,
+      level: `${CYCLE_CIRCLE}_${currentID}_${level}`,
+    } as IExtendedCircleOptions);
+    return canvas.add(circle);
+  };
+
+  const addText = (left: number, top: number, level: number, canvas : fabric.Canvas, currentID : number) => {
+    const text = new AutoResizingTextbox('Add Text', {
+      width: 80,
+      fontSize: 16,
+      fontFamily: 'Arial',
+      fill: theme.colorSchemes.light.palette.common.white,
+      top,
+      left,
+      name: `${CYCLE_TEXT}_${currentID}`,
+      fixedHeight: 60,
+      hasControls: false,
+      lockMovementX: true,
+      lockMovementY: true,
+      hasBorders: false,
+      splitByGrapheme: true,
+      level: `${CYCLE_TEXT}_${currentID}_${level}`,
+    });
+    return canvas.add(text);
+  };
 
   function addCycleSteps(canvas: fabric.Canvas) {
     const activeCycle = canvas.getActiveObject();
@@ -63,38 +96,6 @@ export function useCycleElement() {
         texts.push(obj);
       }
     });
-    const addCircle = (left: number, top: number, level: number) => {
-      const circle = new fabric.Circle({
-        radius: 50,
-        fill: customStyles.elementColors.duskyBlue,
-        stroke: theme.colorSchemes.light.palette.primary.main,
-        top,
-        left,
-        name: `${CYCLE_CIRCLE}_${currentID}`,
-        level: `${CYCLE_CIRCLE}_${currentID}_${level}`,
-      } as IExtendedCircleOptions);
-      return canvas.add(circle);
-    };
-
-    const addText = (left: number, top: number, level: number) => {
-      const text = new AutoResizingTextbox('Add Text', {
-        width: 80,
-        fontSize: 16,
-        fontFamily: 'Arial',
-        fill: theme.colorSchemes.light.palette.common.white,
-        top,
-        left,
-        name: `${CYCLE_TEXT}_${currentID}`,
-        fixedHeight: 60,
-        hasControls: false,
-        lockMovementX: true,
-        lockMovementY: true,
-        hasBorders: false,
-        splitByGrapheme: true,
-        level: `${CYCLE_TEXT}_${currentID}_${level}`,
-      });
-      return canvas.add(text);
-    };
     switch (Circles && Circles.length + 1) {
       case 4:
         canvas.remove(mainContainer!);
@@ -109,10 +110,10 @@ export function useCycleElement() {
           name: `${CYCLE}_${currentID}`,
         });
         canvas.add(NewContainer);
-        addCircle(505, 60, 2);
-        addCircle(636, 172, 3);
-        addCircle(505, 284, 4);
-        addCircle(378, 172, 1);
+        addCircle(505, 60, 2, canvas, currentID);
+        addCircle(636, 172, 3, canvas, currentID);
+        addCircle(505, 284, 4, canvas, currentID);
+        addCircle(378, 172, 1, canvas, currentID);
         canvas?.add(addArrow(442, 157, 311, currentID));
         canvas?.add(addArrow(628, 120, 29, currentID));
         canvas?.add(addArrow(479, 323, 221, currentID));
@@ -120,15 +121,14 @@ export function useCycleElement() {
         canvas.bringToFront(texts[0]);
         canvas.bringToFront(texts[1]);
         canvas.bringToFront(texts[2]);
-        addText(520, 295, 4);
         texts[0]
-          .set({
-            left: 398,
-            top: 185,
-          })
-          .setCoords();
+        .set({
+          left: 398,
+          top: 185,
+        })
+        .setCoords();
         texts[1]
-          .set({
+        .set({
             left: 520,
             top: 74,
           })
@@ -139,7 +139,8 @@ export function useCycleElement() {
             top: 186,
           })
           .setCoords();
-        break;
+        addText(520, 295, 4, canvas, currentID);
+          break;
       case 5:
         
         canvas.remove(mainContainer!);
@@ -154,11 +155,11 @@ export function useCycleElement() {
           name: `${CYCLE}_${currentID}`,
         });
         canvas.add(NewContainer5);
-        addCircle(480, 39, 2);
-        addCircle(626, 155, 3);
-        addCircle(341, 155, 1);
-        addCircle(402, 329, 5);
-        addCircle(583, 329, 4);
+        addCircle(480, 39, 2, canvas, currentID);
+        addCircle(626, 155, 3, canvas, currentID);
+        addCircle(341, 155, 1, canvas, currentID);
+        addCircle(402, 329, 5, canvas, currentID);
+        addCircle(583, 329, 4, canvas, currentID);
         canvas?.add(addArrow(401, 125, -51, currentID));
         canvas?.add(addArrow(630, 84, 31, currentID));
         canvas?.add(addArrow(700, 282, 111, currentID));
@@ -168,13 +169,12 @@ export function useCycleElement() {
         canvas.bringToFront(texts[1]);
         canvas.bringToFront(texts[2]);
         canvas.bringToFront(texts[3]);
-        addText(423, 335, 5);
         texts[0]
-          .set({
-            left: 357,
-            top: 162,
-          })
-          .setCoords();
+        .set({
+          left: 357,
+          top: 162,
+        })
+        .setCoords();
         texts[1]
           .set({
             left: 500,
@@ -193,7 +193,8 @@ export function useCycleElement() {
             top: 335,
           })
           .setCoords();
-        break;
+        addText(423, 335, 5, canvas, currentID);
+          break;
       case 6:
         mainContainer!.set({
           
@@ -210,12 +211,12 @@ export function useCycleElement() {
           name: `${CYCLE}_${currentID}`,
         });
         canvas.add(NewContainer6);
-        addCircle(361, 36, 2);
-        addCircle(561, 36, 3);
-        addCircle(248, 181, 1);
-        addCircle(671, 181, 4);
-        addCircle(361, 339, 6);
-        addCircle(561, 344, 5);
+        addCircle(361, 36, 2, canvas, currentID);
+        addCircle(561, 36, 3, canvas, currentID);
+        addCircle(248, 181, 1, canvas, currentID);
+        addCircle(671, 181, 4, canvas, currentID);
+        addCircle(361, 339, 6, canvas, currentID);
+        addCircle(561, 344, 5, canvas, currentID);
         canvas?.add(addArrow(488, 50, 358, currentID));
         canvas?.add(addArrow(311, 152, 311, currentID));
         canvas?.add(addArrow(684, 114, 51, currentID));
@@ -227,9 +228,8 @@ export function useCycleElement() {
         canvas.bringToFront(texts[2]);
         canvas.bringToFront(texts[3]);
         canvas.bringToFront(texts[4]);
-        addText(377, 356, 6);
         texts[0]
-          .set({
+        .set({
             left: 262,
             top: 196,
           })
@@ -246,19 +246,20 @@ export function useCycleElement() {
             top: 53,
           })
           .setCoords();
-        texts[3]
+          texts[3]
           .set({
             left: 683,
             top: 199,
           })
           .setCoords();
-        texts[4]
+          texts[4]
           .set({
             left: 577,
             top: 356,
           })
           .setCoords();
-        break;
+        addText(377, 356, 6, canvas, currentID);
+          break;
       default:
         break;
       }
@@ -325,5 +326,5 @@ export function useCycleElement() {
     canvas?.requestRenderAll();
     dispatch(updateCycleId());
   };
-  return { addCycle, addCycleSteps };
+  return { addCycle, addCycleSteps, addArrow, addCircle, addText };
 }

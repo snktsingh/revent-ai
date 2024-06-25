@@ -11,8 +11,7 @@ export const NotesBodyContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  
-`;
+  `;
 
 export const AddNotesContainer = styled.div<ContainerProps>`
   width: 100%;
@@ -40,7 +39,7 @@ export const AddNotesContainer = styled.div<ContainerProps>`
 export const NotesHeadingContainer = styled.div`
   width: 100%;
   height: 6vh;
-  background:  ${theme.colorSchemes.light.palette.common.white};
+  background: ${theme.colorSchemes.light.palette.common.white};
   box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25);
 `;
 
@@ -77,6 +76,17 @@ export const NotesInput = styled.textarea`
   opacity: 80%;
   outline: none;
   font-family: ${customStyles.fonts.robotoSansSerif};
+`;
+
+// export const NotesInput = styled.input`
+//   border: none;
+//   outline: none;
+//   background: none;
+//   color: ${theme.colorSchemes.light.palette.common.darkGrey};
+//   font-family: ${customStyles.fonts.robotoSansSerif};
+//   font-size: 0.8vw;
+//   height: 100%;
+// `;
 `;
 
 // export const NotesInput = styled.input`

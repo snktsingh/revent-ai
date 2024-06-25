@@ -1,5 +1,5 @@
 import { theme } from '@/constants/theme';
-import { Card, Link, TextField } from '@mui/material';
+import { Card, Grid, Link, TextField } from '@mui/material';
 import styled from 'styled-components';
 import {
   Accordion,
@@ -23,7 +23,7 @@ export const CardContainer = styled.div`
   width: 100%;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  gap: 2.5%;
 `;
 export const Subtitle = styled.p`
   color: ${theme.colorSchemes.light.palette.primary.main};
@@ -35,21 +35,24 @@ export const TextInput = styled(TextField)`
   background-color: #fff;
 `;
 export const PreviewCard = styled(Card)`
-  width: 180px;
-  height: 15vh;
+  width: 190px;
+  height: 115px;
   margin-bottom: 5%;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
 `;
-export const CardTitle = styled.span`
+export const CardTitle = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  /* grid-auto-rows: 5fr; */
+  grid-auto-rows: auto;
   margin-bottom: 20px;
-
-  display: flex;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  gap: 3%;
+  gap: 2%;
+  padding-right: 10px;
+  padding-left: 5px;
+  padding-top: 2px;
 `;
 export const CardLink = styled(Link)`
   text-decoration: none !important;
@@ -71,4 +74,101 @@ export const LoaderText = styled.p`
   background: linear-gradient(45deg, blue, red);
   background-clip: text;
   -webkit-text-fill-color: transparent;
+`;
+export const BlankImageCard = styled.div`
+  width: 100%;
+  height: 7rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const PPTCard = styled.div`
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+`;
+
+export const ThumbnailCard = styled(Card)`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  border-radius: 0.2rem;
+  /* box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px; */
+`;
+
+export const TitleCard = styled.div`
+  width: 100%;
+  padding-left: 2px;
+`;
+
+export const PPTTitle = styled.p`
+  max-width: 160px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: ${theme.colorSchemes.light.palette.primary.main};
+`;
+
+export const NewPPTCard = styled.div`
+  display: flex;
+  flex-direction: column;
+  
+`;
+
+export const CardSpan = styled.span`
+  position: absolute;
+  overflow: hidden;
+  width: 90px;
+  height: 100px;
+  top: 100px;
+  left: -4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &::before {
+    content: 'Beta Access';
+    position: absolute;
+    width: 150%;
+    height: 20px;
+    background-image: linear-gradient(
+      45deg,
+      #004FBA 0%,
+      #1a79ff 51%,
+      #004FBA 100%
+    );
+    transform: rotate(-45deg) translateY(-20px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-size: .4rem;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.23);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    bottom: 0;
+    left: 0;
+    height: 10px;
+    z-index: -1;
+    box-shadow: 140px -140px #0060e6;
+    background-image: linear-gradient(
+      45deg,
+      #004FBA 0%,
+      #1a79ff 51%,
+      #004FBA 100%
+    );
+  }
 `;

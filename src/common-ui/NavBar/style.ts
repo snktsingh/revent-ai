@@ -5,6 +5,9 @@ import styled from "styled-components";
 
 export const NavbarContainer = styled.div`
   position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   width: 100%;
   background-color: ${theme.colorSchemes.light.palette.common.white};
   height: 8vh;
@@ -12,6 +15,8 @@ export const NavbarContainer = styled.div`
     rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
   display: flex;
   align-items: center;
+  justify-content: space-between; 
+  padding: 0 20px;
   z-index: 999;
 `;
 

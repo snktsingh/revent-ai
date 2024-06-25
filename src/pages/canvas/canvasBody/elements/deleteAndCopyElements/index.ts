@@ -7,6 +7,13 @@ import {
   FUNNEL_BASE,
   FUNNEL_LEVEL,
   FUNNEL_TEXT,
+  HUB_AND_SPOKE,
+  HUB_AND_SPOKE_BOX,
+  HUB_AND_SPOKE_BOX_HEADING,
+  HUB_AND_SPOKE_BOX_TEXT,
+  HUB_AND_SPOKE_CIRCLE,
+  HUB_AND_SPOKE_MAIN_TEXT,
+  HUB_AND_SPOKE_TEXT_BOX,
   LIST_IMG,
   LIST_MAIN,
   LIST_TEXT,
@@ -21,6 +28,14 @@ import {
   QUOTE_AUTHOR,
   QUOTE_IMG,
   QUOTE_TEXT,
+  STATISTICS,
+  STATISTICS_BOX,
+  STATISTICS_TEXT,
+  STATISTICS_TITLE_TEXT,
+  SWOT,
+  SWOT_BOX,
+  SWOT_ICON,
+  SWOT_TEXT,
   TABLE,
   TABLE_HEADER,
   TABLE_TEXT,
@@ -30,16 +45,17 @@ import {
   TIMELINE_HEADING,
   TIMELINE_TEXT,
 } from '@/constants/elementNames';
-import { Copy, DeleteX } from '@/constants/media';
+import { Copy, DeleteX, SWOTIcon } from '@/constants/media';
 import {
   updateFunnelId,
   updatePyramidId,
+  updateSwotId,
 } from '@/redux/reducers/fabricElements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { fabric } from 'fabric';
 
 export function useDelAndCopy() {
-  const { pyramidId, funnelId, timelineId, processId, cycleId } =
+  const { pyramidId, funnelId, timelineId, processId, cycleId, swotID } =
     useAppSelector(state => state.elementsIds);
   const dispatch = useAppDispatch();
   const CustomBorderIcons = (canvas: fabric.Canvas | null) => {
@@ -139,20 +155,49 @@ export function useDelAndCopy() {
           );
           break;
         case `${LIST_MAIN}_${currentElID}`:
-          objectsToDelete.push(`${LIST_TEXT}_${currentElID}`, `${LIST_IMG}_${currentElID}`);
+          objectsToDelete.push(
+            `${LIST_TEXT}_${currentElID}`,
+            `${LIST_IMG}_${currentElID}`
+          );
           break;
         case `${TABLE}_`:
           objectsToDelete.push(TABLE);
           break;
-        case `${QUOTE}_`:
-          objectsToDelete.push(QUOTE_IMG, QUOTE_AUTHOR, QUOTE_TEXT);
+        case `${QUOTE}_${currentElID}`:
+          objectsToDelete.push(`${QUOTE_IMG}_${currentElID}`, QUOTE_AUTHOR, QUOTE_TEXT);
           break;
         case QUOTE_AUTHOR:
           objectsToDelete.push(QUOTE_IMG, QUOTE);
           break;
         case `${PYRAMID_LEVEL}_${currentElID}`:
-          const [_, id, level] = (activeObject as any).level && (activeObject as any).level.split('_');
+          const [_, id, level] =
+            (activeObject as any).level &&
+            (activeObject as any).level.split('_');
           objectsToDelete.push(`${PYRAMID_TEXT}_${currentElID}_${level}`);
+          break;
+        case `${SWOT}_${currentElID}`:
+          objectsToDelete.push(
+            `${SWOT_BOX}_${currentElID}`,
+            `${SWOT_TEXT}_${currentElID}`,
+            `${SWOTIcon}_${currentElID}`
+          );
+          break;
+        case `${HUB_AND_SPOKE}_${currentElID}`:
+          objectsToDelete.push(
+            `${HUB_AND_SPOKE_BOX}_${currentElID}`,
+            `${HUB_AND_SPOKE_BOX_HEADING}_${currentElID}`,
+            `${HUB_AND_SPOKE_BOX_TEXT}_${currentElID}`,
+            `${HUB_AND_SPOKE_CIRCLE}_${currentElID}`,
+            `${HUB_AND_SPOKE_MAIN_TEXT}_${currentElID}`,
+            `${HUB_AND_SPOKE_TEXT_BOX}_${currentElID}`
+          );
+          break;
+        case `${STATISTICS}_${currentElID}`:
+          objectsToDelete.push(
+            `${STATISTICS_BOX}_${currentElID}`,
+            `${STATISTICS_TITLE_TEXT}_${currentElID}`,
+            `${STATISTICS_TEXT}_${currentElID}`
+          );
           break;
         default:
           break;
@@ -376,6 +421,32 @@ export function useDelAndCopy() {
             }
             canvas?.renderAll();
           });
+        } else if (target.name?.startsWith(SWOT)) {
+          const elName = target.name?.split('_');
+          target.clone(function (cloned: fabric.Object) {
+            cloned.top! += cloned.height! + 10;
+            cloned.name = elName && elementNameGenerate(elName[0], cloned);
+            canvas?.add(cloned);
+            if (
+              canvas &&
+              elName &&
+              cloned.left &&
+              cloned.top &&
+              cloned.width &&
+              cloned.height
+            ) {
+              copyGroupedElements(
+                canvas,
+                elName[0],
+                +elName[1],
+                cloned.left,
+                cloned.top,
+                cloned.width,
+                cloned.height
+              );
+            }
+            canvas?.renderAll();
+          });
         } else {
           target.clone(function (cloned: fabric.Object) {
             cloned.left! += 50;
@@ -475,7 +546,7 @@ export function useDelAndCopy() {
           cloned.name = newElementName;
           canvas?.add(cloned);
         });
-      }else if (
+      } else if (
         elementName.startsWith(QUOTE) &&
         (obj.name === QUOTE_TEXT ||
           obj.name === QUOTE_AUTHOR ||
@@ -489,6 +560,25 @@ export function useDelAndCopy() {
             : obj.name === QUOTE_IMG
             ? QUOTE_IMG
             : QUOTE;
+        obj.clone(function (cloned: fabric.Object) {
+          cloned.top! += elHeight + 10;
+          cloned.name = newElementName;
+          canvas?.add(cloned);
+        });
+      } else if (
+        elementName.startsWith(SWOT) &&
+        (obj.name === `${SWOT_TEXT}_${id}` ||
+          obj.name === `${SWOT_BOX}_${id}` ||
+          obj.name === `${SWOTIcon}_${id}`)
+      ) {
+        let newElementName =
+          obj.name === `${SWOT_TEXT}_${id}`
+            ? `${SWOT_TEXT}_${swotID}`
+            : obj.name === `${SWOT_BOX}_${id}`
+            ? `${SWOT_BOX}_${swotID}`
+            : obj.name === `${SWOTIcon}_${id}`
+            ? `${SWOTIcon}_${swotID}`
+            : SWOT;
         obj.clone(function (cloned: fabric.Object) {
           cloned.top! += elHeight + 10;
           cloned.name = newElementName;
@@ -541,6 +631,10 @@ export function useDelAndCopy() {
       case CYCLE:
         newElementName = `${CYCLE}_${cycleId}`;
         dispatch(updatePyramidId());
+        break;
+      case SWOT:
+        newElementName = `${SWOT}_${swotID}`;
+        dispatch(updateSwotId());
         break;
       default:
         break;

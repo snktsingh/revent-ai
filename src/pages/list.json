@@ -1,35 +1,35 @@
 {
-  "id": 1,
-  "canvas": "canvasJSON",
-  "notes": "",
-  "variants": [
-    {
-                "slideId": 794,
-                "slideNumber": 1,
-                "thumbnailUrl": "https://revent-ppt-output.s3.amazonaws.com/thumbnails/b648f597-481f-4203-a73d-1c34cba5e96e13479282574393263750.svg",
-                "active": true
-            },
-            {
-                "slideId": 795,
-                "slideNumber": 1,
-                "thumbnailUrl": "https://revent-ppt-output.s3.amazonaws.com/thumbnails/4bcf2073-99e2-4c7e-82df-5e8acbf0e9051875635333612688571.svg",
-                "active": false
-            },
-            {
-                "slideId": 796,
-                "slideNumber": 1,
-                "thumbnailUrl": "https://revent-ppt-output.s3.amazonaws.com/thumbnails/a73156c7-ac8f-43ab-8ca7-522b5c206aa87721961671310847378.svg",
-                "active": false
-            },
-            {
-                "slideId": 797,
-                "slideNumber": 1,
-                "thumbnailUrl": "https://revent-ppt-output.s3.amazonaws.com/thumbnails/abcce564-20f9-444a-8337-5c7453a7932e14174897730859445003.svg",
-                "active": false
-            }
-  ],
-  "originalSlideData": {},
-  "listImages": []
+    "id": 1,
+    "canvas": "canvasJSON",
+    "notes": "",
+    "variants": [
+        {
+            "slideId": 794,
+            "slideNumber": 1,
+            "thumbnailUrl": "https://revent-ppt-output.s3.amazonaws.com/thumbnails/b648f597-481f-4203-a73d-1c34cba5e96e13479282574393263750.svg",
+            "active": true
+        },
+        {
+            "slideId": 795,
+            "slideNumber": 1,
+            "thumbnailUrl": "https://revent-ppt-output.s3.amazonaws.com/thumbnails/4bcf2073-99e2-4c7e-82df-5e8acbf0e9051875635333612688571.svg",
+            "active": false
+        },
+        {
+            "slideId": 796,
+            "slideNumber": 1,
+            "thumbnailUrl": "https://revent-ppt-output.s3.amazonaws.com/thumbnails/a73156c7-ac8f-43ab-8ca7-522b5c206aa87721961671310847378.svg",
+            "active": false
+        },
+        {
+            "slideId": 797,
+            "slideNumber": 1,
+            "thumbnailUrl": "https://revent-ppt-output.s3.amazonaws.com/thumbnails/abcce564-20f9-444a-8337-5c7453a7932e14174897730859445003.svg",
+            "active": false
+        }
+    ],
+    "originalSlideData": {},
+    "listImages": []
 }
 
 {

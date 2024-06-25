@@ -25,6 +25,7 @@ const useSlideList = () => {
   const [searchParams,setSearchParams] = useSearchParams();
 
   const handleSlideCardClick = (canvas: CanvasItem) => {
+    console.log({canvas, canvasList, canvasJS})
     if(activeSlideID === canvas.id){
       return;
     }
@@ -43,8 +44,10 @@ const useSlideList = () => {
   }
 
   useEffect(() => {
+    if(canvasJS && canvasJS.slideId){
       handleURl(canvasJS.slideId.toString());
-  }, [ canvasList.length])
+    }
+  }, [canvasList.length])
 
   const [svgURLs, setsvgURLs] = useState<string[]>([]);
 

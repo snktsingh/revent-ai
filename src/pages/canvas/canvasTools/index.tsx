@@ -51,13 +51,15 @@ import {
   colorChange,
   shadesData,
 } from '../canvasBody/elementData';
-import {
+import canvas, {
   addCanvasSlide,
   handleInputSize,
   handleSize,
+  setActiveSlideId,
   setBorderColor,
   setColor,
   setTextColor,
+  toggleIsVariantSelected,
 } from '@/redux/reducers/canvas';
 import FontDownloadOutlinedIcon from '@mui/icons-material/FontDownloadOutlined';
 import ColorizeOutlinedIcon from '@mui/icons-material/ColorizeOutlined';
@@ -65,7 +67,8 @@ import WebFont from 'webfontloader';
 import FontsData from '../../../data/fontsData.json';
 import CreditsComponent from '@/components/CreditsComponent';
 import EmailIcon from '@mui/icons-material/Email';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
+import { addNewSlideApi, reorderSlidesApi } from '@/redux/thunk/slidesThunk';
 
 interface FontItem {
   family: string;
@@ -80,10 +83,10 @@ interface FontItem {
 }
 
 
-const CanvasTools = () => {
+const CanvasTools = ({ pId }: any) => {
   const dispatch = useAppDispatch();
   const newKey = useAppSelector(state => state.slide);
-  const { color, textColor, borderColor, canvasList, size } = useAppSelector(
+  const { color, textColor, borderColor, canvasList, size, activeSlideID } = useAppSelector(
     state => state.canvas
   );
   const tools = useAppSelector(state => state.thunk);
@@ -110,6 +113,7 @@ const CanvasTools = () => {
   const handleClose = () => {
     setAnchorShapesEl(null);
   };
+  const [ searchParams, setSearchParams ] = useSearchParams();
 
   const [anchorColorEl, setAnchorColorEl] = useState<null | HTMLElement>(null);
   const openColor = Boolean(anchorColorEl);
@@ -219,8 +223,32 @@ const CanvasTools = () => {
   };
 
   const handleAddNewSlide = () => {
-    dispatch(addCanvasSlide());
-    dispatch(addSlide(obj));
+    const greatestIdObject = canvasList.reduce((max, obj) => (obj.id > max.id ? obj : max), canvasList[0]);
+  
+    dispatch(addNewSlideApi({ pId, slideNo: greatestIdObject.id + 1 })).then((res: any) => {
+      if (res.payload.status >= 200 && res.payload.status < 300) {   
+        dispatch(addCanvasSlide({ slideId: res.payload.data.slideId, slideNo: res.payload.data.slideNumber }));
+        dispatch(addSlide(obj));
+        dispatch(toggleIsVariantSelected(false));
+        console.log(canvasList[canvasList.length - 1].id !== activeSlideID)
+        if(canvasList[canvasList.length - 1].id !== activeSlideID) {
+          const reorderedSlides = canvasList.map((slide, i) => {
+            return {
+              slideId: slide.slideId,
+              slideNumber: slide.id
+            }
+          });
+          let req = {
+            presentationId: canvasList[0].presentationId,
+            slides: reorderedSlides
+          }
+
+          dispatch(reorderSlidesApi(req)).then((res) => {
+             console.log(res);
+          });
+        }
+      }
+    })
   };
   const handleScroll = () => {
     if (
@@ -668,14 +696,14 @@ const CanvasTools = () => {
       </ShapesCard> */}
       <Stack direction={'row'} alignItems={'center'} spacing={1}>
         <CreditsComponent />
-          <Link to="https://forms.gle/QGrKm1JdjFtKu5iX8" target="_blank" rel="noopener noreferrer">
-            <ToolOutlinedButton>
-              <Stack direction="row" spacing={1} alignItems={'center'} height={'4.5vh'} justifyContent={'space-around'}>
-                <EmailIcon fontSize='small' sx={{color:'#2f2f2f'}}/>
-                <p>Send Feedback</p>
-              </Stack>
-            </ToolOutlinedButton>
-          </Link>
+        {/* <Link to="https://forms.gle/QGrKm1JdjFtKu5iX8" target="_blank" rel="noopener noreferrer">
+          <ToolOutlinedButton>
+            <Stack direction="row" spacing={1} alignItems={'center'} height={'4.5vh'} justifyContent={'space-around'}>
+              <EmailIcon fontSize='small' sx={{ color: '#2f2f2f' }} />
+              <p>Send Feedback</p>
+            </Stack>
+          </ToolOutlinedButton>
+        </Link> */}
       </Stack>
 
       <Menu

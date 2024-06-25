@@ -22,7 +22,7 @@ export const CanvasHeaderInput = styled.input`
     border-radius: 5px;
   }
   &::selection {
-    background-color: white; 
-    color:  ${theme.colorSchemes.light.palette.primary.main}; 
+    background-color: white;
+    color: ${theme.colorSchemes.light.palette.primary.main};
   }
 `;

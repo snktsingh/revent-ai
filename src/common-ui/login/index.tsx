@@ -16,7 +16,7 @@ import { CommonLink, CustomButton } from '@/styles/common-styles/style';
 import { Slide, ToastContainer } from 'react-toastify';
 import useLogin from './container';
 import { useAppSelector } from '@/redux/store';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/endpoint';
@@ -31,6 +31,19 @@ const Login = () => {
   ) => {
     event.preventDefault();
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        handleLogin();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [email, password, handleLogin]);
 
   const { isDisabled } = useAppSelector(state => state.apiData);
   return (

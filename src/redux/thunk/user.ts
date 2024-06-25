@@ -84,6 +84,19 @@ export const getUserPreferences = createAsyncThunk(
   }
 );
 
+// post feedback
+export const postFeedbackApi = createAsyncThunk(
+  'user/post_feedback',
+  async (feedbackData : {email : string, message : string, username : string}) => {
+    try {
+      const res = await FetchUtils.postRequest(`${ENDPOINT.USER.FEEDBACK}`, feedbackData);
+      return res;
+    } catch (error) {
+      return error;
+    }
+  }
+);
+
 
 const userSlice = createSlice({
   name: 'user-management',
@@ -101,7 +114,7 @@ const userSlice = createSlice({
         state.userDetails = null;
       })
       .addCase(getUserCredit.pending, (state, action) => {
-        state.creditAmount = 0;
+        state.creditAmount = state.creditAmount;
       })
       .addCase(getUserCredit.fulfilled, (state, action) => {
         state.creditAmount = action.payload.data;

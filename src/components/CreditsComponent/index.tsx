@@ -12,7 +12,6 @@ const CreditsComponent = () => {
 
 
 
-
     return (
         <CreditsContainer>
             <img src={CreditIcon} style={{marginBottom : '5%'}} alt="credit" />

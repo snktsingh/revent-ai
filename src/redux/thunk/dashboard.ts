@@ -1,7 +1,11 @@
 import ENDPOINT from '@/constants/endpoint';
 import { FetchUtils } from '@/utils/fetch-utils';
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+interface IPresets {
+  id: number;
+  presetName: string;
+}
 export interface IPresentation {
   code: number;
   message: string;
@@ -9,19 +13,25 @@ export interface IPresentation {
   name: string;
   thumbnailUrl: string;
   lastModifiedBy: string;
-  lastModifiedDate: string;
+  lastModifiedDate: string; 
 }
 
 interface IDashboard {
   pptList: IPresentation[];
   loadingUserDetails: boolean;
   hasMore: boolean;
+  presetList: IPresets[];
+  preset: any[];
+  isPresetOpened : boolean;
 }
 
 const initialState: IDashboard = {
   pptList: [],
   loadingUserDetails: true,
   hasMore: true,
+  presetList: [],
+  preset: [],
+  isPresetOpened : false,
 };
 
 export const fetchPPTList = createAsyncThunk(
@@ -43,10 +53,35 @@ export const deletePresentation = createAsyncThunk(
     return res.data;
   }
 );
+
+export const fetchPresets = createAsyncThunk(
+  'dashboard,fetchPresets',
+  async () => {
+    const res = await FetchUtils.getRequest(
+      `${ENDPOINT.DASHBOARD.FETCH_PRESETS}`
+    );
+    return res.data;
+  }
+);
+
+export const fetchPresetsById = createAsyncThunk(
+  'dashboard,fetchPresetsById',
+  async (presetId: number) => {
+    const res = await FetchUtils.getRequest(
+      `${ENDPOINT.DASHBOARD.FETCH_PRESETS}/${presetId}`
+    );
+    return res.data.data;
+  }
+);
+
 const dashboardSlice = createSlice({
   name: 'dashboard-Data',
   initialState,
-  reducers: {},
+  reducers: {
+    togglePresetOpened : (state, action : PayloadAction<boolean>) => {
+       state.isPresetOpened = action.payload;
+    }
+  },
   extraReducers: builder => {
     builder
       .addCase(fetchPPTList.pending, (state, action) => {
@@ -63,9 +98,29 @@ const dashboardSlice = createSlice({
       })
       .addCase(fetchPPTList.rejected, (state, action) => {
         state.loadingUserDetails = false;
+      })
+      .addCase(fetchPresets.pending, (state, action) => {
+        state.presetList = [];
+      })
+      .addCase(fetchPresets.fulfilled, (state, action) => {
+        state.presetList = action.payload;
+      })
+      .addCase(fetchPresets.rejected, (state, action) => {
+        state.presetList = [];
+      })
+      .addCase(fetchPresetsById.pending, (state, action) => {
+        state.preset = [];
+      })
+      .addCase(fetchPresetsById.fulfilled, (state, action) => {
+        state.preset = action.payload;
+      })
+      .addCase(fetchPresetsById.rejected, (state, action) => {
+        state.preset = [];
       });
   },
 });
-export const {} = dashboardSlice.actions;
+export const {
+  togglePresetOpened
+} = dashboardSlice.actions;
 
 export default dashboardSlice.reducer;

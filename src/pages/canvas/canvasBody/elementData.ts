@@ -24,6 +24,10 @@ import {
   StarIcon,
   TitleSubIcon,
   TriangleIcon,
+  iconHunNSpoke,
+  iconSWOT,
+  iconStatistics,
+  iconTableOfContents,
 } from '@/constants/media';
 import { listObjType } from '@/interface/storeTypes';
 
@@ -48,6 +52,13 @@ export const elementData: IElementData[] = [
     icon: TitleSubIcon,
     title: 'Cover Slide',
     subtitle: 'Add a cover slide at the top of your presentation',
+    onClick: () => {},
+  },
+  {
+    key: 19,
+    icon: iconTableOfContents,
+    title: 'Table of Contents',
+    subtitle: 'Suitable for easy navigation through structured sections',
     onClick: () => {},
   },
   // {
@@ -92,13 +103,13 @@ export const elementData: IElementData[] = [
     subtitle: 'Add Images onto the canvas',
     onClick: () => {},
   },
-  // {
-  //   key: 7,
-  //   icon: AddTable,
-  //   title: 'Table',
-  //   subtitle: 'Add Tables onto the canvas',
-  //   onClick: () => {},
-  // },
+  {
+    key: 7,
+    icon: AddTable,
+    title: 'Table',
+    subtitle: 'Add Tables onto the canvas',
+    onClick: () => {},
+  },
   {
     key: 8,
     icon: AddQuote,
@@ -107,10 +118,24 @@ export const elementData: IElementData[] = [
     onClick: () => {},
   },
   {
+    key: 21,
+    icon: iconStatistics,
+    title: 'Statistics',
+    subtitle: 'Suitable for comprehensive data insights and analytics',
+    onClick: () => {},
+  },
+  {
     key: 9,
     icon: AddList,
     title: 'Team List',
     subtitle: 'Suitable for Team Member Lists',
+    onClick: () => {},
+  },
+  {
+    key: 22,
+    icon: AddList,
+    title: 'Client List',
+    subtitle: 'Suitable for detailed directories of customers and partners',
     onClick: () => {},
   },
   {
@@ -156,6 +181,20 @@ export const elementData: IElementData[] = [
   //   onClick: () => {},
   // },
   {
+    key: 18,
+    icon: iconSWOT,
+    title: 'SWOT Analysis',
+    subtitle: 'Analyzes strengths, weaknesses, opportunities, and threats',
+    onClick: () => {},
+  },
+  {
+    key: 20,
+    icon: iconHunNSpoke,
+    title: 'Hub and Spoke',
+    subtitle: 'Suitable for presenting concepts with multiple related sub-points or categories',
+    onClick: () => {},
+  },
+ {
     key: 17,
     icon: TitleSubIcon,
     title: 'Conclusion Slide',

@@ -3,6 +3,7 @@ import {
   setVariantImageAsMain,
   toggleIsVariantSelected,
   toggleSelectedOriginalCanvas,
+  toggleVariantMode,
   updateCanvasInList,
   updateLastVariant,
 } from '@/redux/reducers/canvas';
@@ -43,8 +44,8 @@ const useVariants = () => {
     variantId: number,
     slideId: number
   ) => {
-    console.log(variantId);
     dispatch(toggleIsVariantSelected(true));
+    dispatch(toggleVariantMode(true));
     dispatch(toggleSelectedOriginalCanvas(false));
     dispatch(setVariantImageAsMain(CanvasURL));
     updateActiveVariant(slideId, variantId);
@@ -56,11 +57,7 @@ const useVariants = () => {
   const updateActiveVariant = useDebounce(
     (slideId: number, variantId: number) => {
       const pptId = Number(params.id?.split('-')[0]);
-      dispatch(updateActiveVariantApi({ pptId, slideId, variantId })).then(
-        res => {
-          console.log(res);
-        }
-      );
+      dispatch(updateActiveVariantApi({ pptId, slideId, variantId }))
     },
     1000
   );
@@ -68,6 +65,7 @@ const useVariants = () => {
   const handleApplyOriginalAsMain = () => {
     dispatch(setVariantImageAsMain(''));
     dispatch(toggleIsVariantSelected(false));
+    dispatch(toggleVariantMode(false));
     dispatch(toggleSelectedOriginalCanvas(true));
     dispatch(
       updateCanvasInList({
