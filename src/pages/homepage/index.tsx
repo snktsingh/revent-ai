@@ -367,17 +367,17 @@ const Home = ({ onFileSelect }: any) => {
                       style={{
                         cursor: 'pointer',
                       }}
-                    onClick={handleContainerClick}
-                    onDragOver={handleDragOver}
-                    onDrop={handleDrop}
+                    // onClick={handleContainerClick}
+                    // onDragOver={handleDragOver}
+                    // onDrop={handleDrop}
                     >
-                      <input
+                      {/* <input
                         type="file"
                         accept=".pdf,.docx,.doc"
                         onChange={handleFileChange}
                         ref={inputRef}
                         style={{ display: 'none' }}
-                      />
+                      /> */}
                       {selectedFile ? (
                         <></>
                       ) : (
