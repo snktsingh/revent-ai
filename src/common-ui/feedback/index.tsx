@@ -102,7 +102,7 @@ const Feedback = () => {
           <Button
             variant="contained"
             color="primary"
-            endIcon={<EmailIcon />}
+            startIcon={<EmailIcon />}
             onClick={handleSubmit}
           >
             Send Feedback
@@ -110,7 +110,7 @@ const Feedback = () => {
           <Button
             variant="contained"
             color="primary"
-            endIcon={<OpenInNewIcon />}
+            startIcon={<OpenInNewIcon />}
             onClick={() => {
               handleClose();
               navigate(ROUTES.TUTORIALS)
