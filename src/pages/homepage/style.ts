@@ -251,7 +251,7 @@ export const CardSpan = styled.span`
   justify-content: center;
 
   &::before {
-    content: 'Beta Access';
+    content: 'Coming Soon';
     position: absolute;
     width: 150%;
     height: 40px;
