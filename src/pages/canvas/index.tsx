@@ -61,7 +61,7 @@ const MainCanvas = () => {
     if (res.meta.requestStatus === 'fulfilled') {
       if (res.payload.slides) {
         let slides = res.payload.slides;
-        setSearchParams({ slide: res.payload.slides[slides.length - 1].slideId });
+        setSearchParams({ slide: res.payload.slides[0].slideId });
       }
 
       const slidesData = processSlides(
@@ -108,16 +108,13 @@ const MainCanvas = () => {
             return item2;
           });
 
-          console.log({jsonData, updatedCanvasList});
-
         dispatch(updateCanvasList(updatedCanvasList));
-        dispatch(setCanvas(updatedCanvasList[updatedCanvasList.length-1]));
+        dispatch(setCanvas(updatedCanvasList[0]));
         })
         
         dispatch(setThemeId(res.payload.themeId || themeId));
-        dispatch(setActiveSlideId(slidesData[slidesData.length-1].id));
-        const lastSlide = res.payload.slides.length-1
-        res.payload.slides[lastSlide].variants.forEach((variant: any) => {
+        dispatch(setActiveSlideId(slidesData[0].id));
+        res.payload.slides[0].variants.forEach((variant: any) => {
           if (variant.active) {
             dispatch(setVariantImageAsMain(variant.thumbnailUrl));
           }

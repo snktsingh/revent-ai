@@ -375,8 +375,8 @@ const Dashboard = ({ onFileSelect }: any) => {
               Once deleted, this presentation will no longer be accessible
             </DialogContentText>
           </DialogContent>
-          <DialogActions sx={{mt: '-5px'}}>
-            <Stack sx={{ width: '96%', m:'auto'  }} direction="row" justifyContent={'space-between'} alignContent={'center'}>
+          <DialogActions sx={{ mt: '-5px' }}>
+            <Stack sx={{ width: '96%', m: 'auto' }} direction="row" justifyContent={'space-between'} alignContent={'center'}>
               <Stack>
                 <FormControlLabel
                   control={
@@ -415,7 +415,7 @@ const Dashboard = ({ onFileSelect }: any) => {
                         onClick={() => {
                           navigate(
                             `/presentation/${ppt.presentationId
-                            }-${faker.string.uuid()}`
+                            }-${ppt.uuid}`
                           );
                         }}
                       >
@@ -444,7 +444,7 @@ const Dashboard = ({ onFileSelect }: any) => {
                             onClick={() => {
                               navigate(
                                 `/presentation/${ppt.presentationId
-                                }-${faker.string.uuid()}`
+                                }-${ppt.uuid}`
                               );
                             }}
                           >
