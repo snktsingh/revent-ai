@@ -83,6 +83,7 @@ export const useProcessElement = () => {
       hasBorders: false,
       splitByGrapheme: true,
       level: `${PROCESS_TEXT}_${currentID}_${rectCount + 1}`,
+      textAlign: 'center',
     });
 
     if (rectCount === 3) {
@@ -147,6 +148,7 @@ export const useProcessElement = () => {
         hasBorders: false,
         splitByGrapheme: true,
         level: `${PROCESS_TEXT}_${processId}_${level}`,
+        textAlign: 'center',
       });
       return canvas?.add(text);
     }

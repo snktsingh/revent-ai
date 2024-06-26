@@ -7,6 +7,8 @@ import {
   Button,
   Stack,
   Backdrop,
+  IconButton,
+  Tooltip,
 } from '@mui/material';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { FeedbackContainer } from './style';
@@ -16,46 +18,36 @@ import { ROUTES } from '@/constants/endpoint';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { postFeedbackApi } from '@/redux/thunk/user';
 import EmailIcon from '@mui/icons-material/Email';
+import { customStyles } from '@/constants/theme';
 
-const Feedback = () => {
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+const Feedback: React.FC<{ anchorEl: HTMLElement | null, handleClose: () => void }> = ({ anchorEl, handleClose }) => {
   const [feedback, setFeedback] = useState('');
   const dispatch = useAppDispatch();
   const { userDetails } = useAppSelector((state) => state.manageUser);
 
   const navigate = useNavigate();
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   const handleSubmit = () => {
-    dispatch(postFeedbackApi({ username: `${userDetails?.login}`, email: userDetails?.email!, message: feedback })).then((res : any) => {
-      if(res.payload.status >= 200 && res.payload.status < 300) { }
-    })
+    if (feedback.length !== 0) {
+      dispatch(postFeedbackApi({ username: `${userDetails?.login}`, email: userDetails?.email!, message: feedback })).then((res: any) => {
+        if (res.payload.status >= 200 && res.payload.status < 300) { }
+      })
+    }
     handleClose();
   };
 
-
   return (
-    <FeedbackContainer >
-      <Fab color="primary" aria-label="feedback" onClick={handleClick}>
-        <HelpOutlineIcon style={{ width: '80%', height: '80%' }} />
-      </Fab>
+    <>
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: 'top',
+          vertical: 'bottom',
           horizontal: 'left',
         }}
         transformOrigin={{
-          vertical: 'bottom',
+          vertical: 'top',
           horizontal: 'left',
         }}
         PaperProps={{
@@ -63,7 +55,7 @@ const Feedback = () => {
           sx: {
             overflow: 'visible',
             filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-            mt: -1.5, 
+            mt: 1.5,
             '& .MuiAvatar-root': {
               width: 32,
               height: 32,
@@ -74,7 +66,7 @@ const Feedback = () => {
               content: '""',
               display: 'block',
               position: 'absolute',
-              top: '100%',
+              top: 0,
               right: 18,
               width: 10,
               height: 10,
@@ -85,52 +77,66 @@ const Feedback = () => {
           },
         }}
       >
-        <Stack width={'100%'} direction={'column'} >
+        <Stack width={'100%'} direction={'column'}>
           <Stack sx={{ width: '100%', p: '5px 16px 5px 16px' }} spacing={1.2}>
-          <p style={{color:'#333333'}}>Let us know what you think!</p>
-          <TextField
-            label="Feedback"
-            multiline
-            rows={6}
-            sx={{ width: '18rem', m: '0 16px 5px 16px' }}
-            value={feedback}
-            onChange={e => setFeedback(e.target.value)}
-            variant="outlined"
-          />
+            <Stack
+              sx={{ width: '100%', height:'1.2rem' }}
+              direction={'row'}
+              alignItems={'center'}
+              justifyContent={'space-between'}
+            >
+              <p
+                style={{
+                  color: 'gray',
+                  fontFamily: `${customStyles.fonts.robotoSansSerif}`,
+                }}
+              >
+                Let us know what you think!
+              </p>
+              <Tooltip title="Tutorials">
+                <IconButton
+                  color="primary"
+                  onClick={() => navigate(ROUTES.TUTORIALS)}
+                  sx={{ width: '1rem', height: '1rem' }}
+                >
+                  <HelpOutlineIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            </Stack>
+
+            <TextField
+              label="Feedback"
+              multiline
+              rows={6}
+              sx={{ width: '18rem', m: '0px 16px 5px 16px'}}
+              value={feedback}
+              onChange={e => setFeedback(e.target.value)}
+              variant="outlined"
+            />
           </Stack>
-          <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}  sx={{ width: '100%', p: '5px 16px 5px 16px'}}>
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<EmailIcon />}
-            onClick={handleSubmit}
-          >
-            Send Feedback
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<OpenInNewIcon />}
-            onClick={() => {
-              handleClose();
-              navigate(ROUTES.TUTORIALS)
-            }}
-          >
-            Tutorials
-          </Button>
+          <Stack direction={'row'} justifyContent={'right'} alignItems={'center'} sx={{ width: '100%', p: '5px 16px 5px 16px' }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleClose}
+              size='small'
+              sx={{ mr: 1 }}
+            >
+              Close
+            </Button>
+
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleSubmit}
+              size='small'
+            >
+              Send Feedback
+            </Button>
           </Stack>
         </Stack>
       </Menu>
-      {anchorEl && (
-        <Backdrop
-          open={Boolean(anchorEl)}
-          onClick={handleClose}
-          sx={{
-            zIndex: theme => theme.zIndex.drawer - 1,
-          }}
-        />
-      )}
-    </FeedbackContainer>
+    </>
   );
 };
 

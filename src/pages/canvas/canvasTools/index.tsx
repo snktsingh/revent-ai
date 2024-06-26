@@ -1,5 +1,6 @@
 import {
   Autocomplete,
+  Box,
   Button,
   Divider,
   IconButton,
@@ -69,6 +70,7 @@ import CreditsComponent from '@/components/CreditsComponent';
 import EmailIcon from '@mui/icons-material/Email';
 import { Link, useSearchParams } from 'react-router-dom';
 import { addNewSlideApi, reorderSlidesApi } from '@/redux/thunk/slidesThunk';
+import Feedback from '@/common-ui/feedback';
 
 interface FontItem {
   family: string;
@@ -114,6 +116,15 @@ const CanvasTools = ({ pId }: any) => {
     setAnchorShapesEl(null);
   };
   const [ searchParams, setSearchParams ] = useSearchParams();
+  const [anchorFeedbackEl, setAnchorFeedbackEl] = useState<HTMLElement | null>(null);
+
+  const handleFeedbackClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorFeedbackEl(event.currentTarget);
+  };
+
+  const handleFeedbackClose = () => {
+    setAnchorFeedbackEl(null);
+  };
 
   const [anchorColorEl, setAnchorColorEl] = useState<null | HTMLElement>(null);
   const openColor = Boolean(anchorColorEl);
@@ -696,14 +707,15 @@ const CanvasTools = ({ pId }: any) => {
       </ShapesCard> */}
       <Stack direction={'row'} alignItems={'center'} spacing={1}>
         <CreditsComponent />
-        {/* <Link to="https://forms.gle/QGrKm1JdjFtKu5iX8" target="_blank" rel="noopener noreferrer">
-          <ToolOutlinedButton>
+        <>
+          <ToolOutlinedButton onClick={handleFeedbackClick}>
             <Stack direction="row" spacing={1} alignItems={'center'} height={'4.5vh'} justifyContent={'space-around'}>
               <EmailIcon fontSize='small' sx={{ color: '#2f2f2f' }} />
               <p>Send Feedback</p>
             </Stack>
           </ToolOutlinedButton>
-        </Link> */}
+        </>
+        <Feedback anchorEl={anchorFeedbackEl} handleClose={handleFeedbackClose} />
       </Stack>
 
       <Menu

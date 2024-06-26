@@ -93,6 +93,7 @@ export const useHubAndSpoke = () => {
       lockMovementY: true,
       hasBorders: false,
       splitByGrapheme: true,
+      textAlign: 'center',
     });
     return textBox;
   };
@@ -113,6 +114,7 @@ export const useHubAndSpoke = () => {
       lockMovementY: true,
       hasBorders: false,
       splitByGrapheme: true,
+      textAlign: 'center',
     });
     return textBox;
   };
