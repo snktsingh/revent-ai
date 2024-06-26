@@ -19,10 +19,14 @@ export const useProcessElement = () => {
     let lastRect: any;
     let mainContainer: any;
     let rectCount = 0;
-
+    let firstRect : any;
+    
     canvas.forEachObject(obj => {
       if (obj.name === `${PROCESS_BOX}_${currentID}`) {
         lastRect = obj;
+        if(rectCount == 0){
+          firstRect = obj;
+        };
         rectCount++;
       }
       if (obj.name == `${PROCESS}_${currentID}`) {
@@ -50,7 +54,7 @@ export const useProcessElement = () => {
     });
 
     let rect = new fabric.Rect({
-      left: Arrow.left! + 80,
+      left: Arrow.left! + 88,
       top: lastRect.top,
       width: 170,
       height: 130,
@@ -82,7 +86,7 @@ export const useProcessElement = () => {
     });
 
     if (rectCount === 3) {
-      rect.left = mainContainer.left!;
+      rect.left = firstRect.left!;
       rect.top = mainContainer.top! + 180;
       text.left = rect.left! + 5;
       text.top = rect.top! + 5;
@@ -124,7 +128,8 @@ export const useProcessElement = () => {
         name: `${PROCESS_BOX}_${processId}`,
         level: `${PROCESS_BOX}_${processId}_${level}`,
       } as IExtendedRectOptions);
-      return canvas?.add(rect);
+       canvas?.add(rect);
+       return rect;
     }
     function addText(left: number, top: number, level: number) {
       const text = new AutoResizingTextbox('Add Text', {
@@ -172,9 +177,9 @@ export const useProcessElement = () => {
     };
 
     const mainProcessContainer = new fabric.Rect({
-      left: 18,
+      left: -5,
       top: 104,
-      width: 840,
+      width: 870,
       height: 380,
       fill: 'transparent',
       strokeWidth: 1,
@@ -185,17 +190,17 @@ export const useProcessElement = () => {
     canvas?.add(mainProcessContainer);
     canvas?.setActiveObject(mainProcessContainer);
 
-    canvas?.add(addArrow(225, mainProcessContainer.top! + 55, 0));
-    addRectangle(
-      mainProcessContainer.left!,
+    let rect1 = addRectangle(
+      18,
       mainProcessContainer.top! + 20,
       170,
       130,
       1
     );
-    addRectangle(305, mainProcessContainer.top! + 20, 170, 130, 2);
-    addText(mainProcessContainer.left! + 4, mainProcessContainer.top! + 22, 1);
-    addText(309, mainProcessContainer.top! + 22, 2);
+    let arrow1 = canvas?.add(addArrow(225, mainProcessContainer.top! + 55, 0));
+    let rect2 = addRectangle(310, mainProcessContainer.top! + 20, 170, 130, 2);
+    addText(rect1.left! + 4, mainProcessContainer.top! + 22, 1);
+    addText(rect2.left! + 4, mainProcessContainer.top! + 22, 2);
     canvas?.renderAll();
     dispatch(updateProcessId());
   }
