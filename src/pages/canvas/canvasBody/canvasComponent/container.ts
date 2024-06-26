@@ -97,9 +97,9 @@ export const useCanvasComponent = () => {
     height: 0,
   });
   const dispatch = useAppDispatch();
-  const { canvasJS, canvasList, isVariantSelected } = useAppSelector(state => state.canvas);
+  const { canvasJS, canvasList, isVariantSelected, activeSlideID } = useAppSelector(state => state.canvas);
   const { presentationId } = useAppSelector(state => state.thunk);
-  const slideId = searchParams.get('slide');
+  // const slideId = searchParams.get('slide');
 
 
   const updateSlideJSONOnDB = useDebounce((pptId : number, slideJSON: any, slideId : number) => {
@@ -174,8 +174,8 @@ export const useCanvasComponent = () => {
       (obj: any) => obj.name === 'VariantImage'
     );
     console.log({regenerateMode:!regenerateMode})
-    
-    if(presentationId && !hasVariants && !regenerateMode && slideId ) {
+    const slideId = canvasList.find((slide: any) => slide.id === id)?.slideId || 1;
+    if(presentationId && !hasVariants && !regenerateMode && +slideId > 100 ) {
       console.log('Updating slide JSON on Db', {updatedCanvas})
       updateSlideJSONOnDB(presentationId, updatedCanvas, +slideId);
     }

@@ -229,7 +229,7 @@ const Dashboard = ({ onFileSelect }: any) => {
               </NewPPTCard>
             );
           })}
-          <CardLink>
+          {/* <CardLink>
             <PreviewCard>
               <CardBox
                 style={{
@@ -322,8 +322,8 @@ const Dashboard = ({ onFileSelect }: any) => {
                 )}
               </span>
             </span>
-          </CardLink>
-          {presetList.length > 0 && (
+          </CardLink> */}
+          {/* {presetList.length > 0 && (
             <>
               {presetList.map((preset, index) => {
                 return (
@@ -345,7 +345,7 @@ const Dashboard = ({ onFileSelect }: any) => {
                 );
               })}
             </>
-          )}
+          )} */}
         </CardContainer>
         <br />
         <Divider />
@@ -367,11 +367,10 @@ const Dashboard = ({ onFileSelect }: any) => {
           aria-describedby="alert-dialog-description"
         >
           <DialogTitle id="alert-dialog-title">
-            <b>Delete Presentation ? </b>
+            <b>Would you like to permanently delete this presentation?</b>
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Would you like to permanently delete this presentation?
               Once deleted, this presentation will no longer be accessible
             </DialogContentText>
           </DialogContent>

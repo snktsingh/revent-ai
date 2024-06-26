@@ -144,9 +144,9 @@ export const useHubAndSpoke = () => {
     const textRectWidth = 250;
 
     const mainContainer = new fabric.Rect({
-      left: 23,
+      left: -5,
       top: 80,
-      width: titleRectWidth * 3 + 80,
+      width: titleRectWidth * 3 + 150,
       height: 420,
       fill: 'transparent',
       strokeWidth: 1,

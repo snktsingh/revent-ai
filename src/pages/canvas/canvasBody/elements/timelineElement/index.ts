@@ -12,6 +12,8 @@ export function useTimelineElement(){
         let lastCircle: any;
         let mainContainer: any;
         let circleCount = 0;
+        let firstLine : any;
+        let lineFound : boolean = true;
     
         canvas.forEachObject(obj => {
           if (obj.name == `${TIMELINE_CIRCLE}_${currentID}`) {
@@ -20,6 +22,13 @@ export function useTimelineElement(){
           }
           if (obj.name == `${TIMELINE}_${currentID}`) {
             mainContainer = obj;
+          }
+          if( obj.name == `${TIMELINE_DIRECTION}_${currentID}` ){
+            if(lineFound) {
+              firstLine = obj;
+            }
+            lineFound = false;
+
           }
         });
 
@@ -68,10 +77,10 @@ export function useTimelineElement(){
         }
 
         if(circleCount === 4) {
-          line.left = mainContainer.left! + 8;
+          line.left = firstLine.left! ;
           line.top = mainContainer.top! + 220;
 
-          circle.left = mainContainer.left! + 108;
+          circle.left = firstLine.left! + 102;
           circle.top = mainContainer.top! + 201;
 
           addText(
@@ -172,9 +181,9 @@ export function useTimelineElement(){
         }
     
         const mainTimelineContainer = new fabric.Rect({
-          left: 20,
+          left: -5,
           top: 120,
-          width: 820,
+          width: 860,
           height: 380,
           fill: 'transparent',
           strokeWidth: 1,
