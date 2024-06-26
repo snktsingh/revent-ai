@@ -367,11 +367,10 @@ const Dashboard = ({ onFileSelect }: any) => {
           aria-describedby="alert-dialog-description"
         >
           <DialogTitle id="alert-dialog-title">
-            <b>Delete Presentation ? </b>
+            <b>Would you like to permanently delete this presentation?</b>
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Would you like to permanently delete this presentation?
               Once deleted, this presentation will no longer be accessible
             </DialogContentText>
           </DialogContent>
