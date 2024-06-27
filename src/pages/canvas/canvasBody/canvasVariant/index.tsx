@@ -34,6 +34,8 @@ import {
   updateCurrentCanvas,
 } from '@/redux/reducers/canvas';
 
+
+
 export const CanvasVariant = () => {
   const [canvasIndex, setCanvasIndex] = useState<number>(0);
   const dispatch = useAppDispatch();
@@ -67,11 +69,18 @@ export const CanvasVariant = () => {
     const index = canvasList.findIndex(el => el.id === canvasJS.id);
     setCanvasIndex(index);
     if (canvasList[index].variants.length === 0) {
+      const activeVariant = canvasList[index].variants.find((variant : any) => variant.active);
+      if (activeVariant) {
+        console.log({activeVariant})
+        // setActiveVariant(activeVariant);
+      }
       dispatch(toggleVariantSlide(false));
     } else {
       dispatch(toggleVariantSlide(true));
     }
   }, [canvasJS.variants.length > 0]);
+
+  
 
   const slideId = searchParams.get('slide');
   const pptId = params.id?.split('-')[0];

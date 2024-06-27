@@ -35,6 +35,7 @@ export const ENDPOINT = {
     ADD_SLIDE : '/ppt/create-slide',
     DELETE_SLIDE : '/ppt/delete-slide',
     GET_ALL_JSON : '/canvas-data',
+    REFRESH_PPT : '/ppt/refresh-ppt',
   },
   DASHBOARD: {
     FETCH_PPT_LIST: 'ppt/get-all-presentation',

@@ -5,6 +5,7 @@ import {
   toggleSelectedOriginalCanvas,
   toggleVariantMode,
   updateCanvasInList,
+  updateCanvasList,
   updateLastVariant,
 } from '@/redux/reducers/canvas';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
@@ -16,6 +17,16 @@ import { toggleVariantSlide } from '@/redux/reducers/elements';
 import { refreshVariants, updateActiveVariantApi } from '@/redux/thunk/thunk';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useParams } from 'react-router-dom';
+import { VariantsType } from '@/interface/storeTypes';
+import { refreshPPTApi } from '@/redux/thunk/slidesThunk';
+
+interface VariantData {
+  slideVariantId: number;
+  thumbnailUrl: string;
+  active: boolean;
+  enhancedWithAI: boolean;
+  style: string;
+}
 
 const useVariants = () => {
   const { updateCanvasDimensions } = useCanvasComponent();
@@ -38,7 +49,9 @@ const useVariants = () => {
   const { requestData } = useAppSelector(state => state.apiData);
   const [prevVariant, setPrevVariant] = useState<string>('');
   const array: number[] = [1, 2, 3];
+  const [activeVariant, setActiveVariant] = useState<number>(1);
 
+  
   const handleVariants = (
     CanvasURL: string,
     variantId: number,
@@ -57,7 +70,10 @@ const useVariants = () => {
   const updateActiveVariant = useDebounce(
     (slideId: number, variantId: number) => {
       const pptId = Number(params.id?.split('-')[0]);
-      dispatch(updateActiveVariantApi({ pptId, slideId, variantId }))
+      dispatch(updateActiveVariantApi({ pptId, slideId, variantId })).then((res : any) => {
+        if (res.status > 200) {
+          setActiveVariant(variantId);
+        }})
     },
     1000
   );
@@ -114,13 +130,32 @@ const useVariants = () => {
     const currentSlideIndex = canvasList.findIndex(
       slide => slide.id === activeSlideID
     );
+
+    const activeVariant = canvasList[currentSlideIndex].variants.find((variants : VariantsType) => variants.activeSlide);
     
     try {
       getElementsData(
         (canvasList[currentSlideIndex].originalSlideData as any)?.objects,
         themeId
       ).then(req => {
-        dispatch(refreshVariants(req)).then(res => {
+        let request = {req, varId: activeVariant?.slideVariantId!}
+        dispatch(refreshPPTApi(request)).then((res : any) => {
+          let updatedPresentation = canvasList.map(slide => {
+            if (
+              slide.id === activeSlideID &&
+              res &&
+              res.payload &&
+              res.payload.data
+            ) {
+              return {
+                ...slide,
+                variants: res.payload.data.variants,
+              };
+            }
+            return slide;
+          });
+          dispatch(updateCanvasList(updatedPresentation));
+          dispatch(setCanvas(updatedPresentation[currentSlideIndex]));
           SetIsLoading(false);
         });
       });
