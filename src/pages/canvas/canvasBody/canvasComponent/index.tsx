@@ -75,7 +75,6 @@ const CanvasComponent: React.FC<CanvasComponentProps> = ({ fabricRef }) => {
 
 
   useEffect(() => {
-    console.log({canvasList, activeSlideID})
     setShowOptions(false);
     const canvasElement = document.getElementById('canvas');
     if (!canvasElement) {
@@ -167,10 +166,6 @@ const CanvasComponent: React.FC<CanvasComponentProps> = ({ fabricRef }) => {
         );
         canvas.on('mouse:down', options => {
           onMouseDownEvent(options, canvas)
-          if (!options.target) {
-          
-            console.log('Clicked on empty canvas');
-          }
         });
 
         canvas.renderAll();

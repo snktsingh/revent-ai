@@ -50,15 +50,15 @@ export const deleteSlideApi = createAsyncThunk(
 //Refresh PPT 
 export const refreshPPTApi = createAsyncThunk(
     'slide-refreshPPT',
-    async ({req, varId} : {req : any, varId : number}) => {
+    async (req :any) => {
         try {
-            const res = await FetchUtils.postRequest(`${ENDPOINT.PPT.REFRESH_PPT}?slideVariantId=${varId}`, req);
+            const res = await FetchUtils.postRequest(`${ENDPOINT.PPT.REFRESH_PPT}`, req);
             return res;
         } catch (error) {
             return error;
         }
     }
-)
+);
 
 const slidesThunk = createSlice({
     name: 'user-management',

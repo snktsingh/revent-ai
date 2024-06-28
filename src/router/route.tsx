@@ -4,6 +4,7 @@ import { authRoutes } from '.';
 import { useEffect } from 'react';
 import { useAppDispatch } from '@/redux/store';
 import { getUserCredit, getUserDetails, getUserPreferences } from '@/redux/thunk/user';
+import { getAllThemes } from '@/redux/thunk/thunk';
 
 export default function AppRoutes() {
 
@@ -14,7 +15,8 @@ export default function AppRoutes() {
     dispatch(getUserDetails()).then(() => {
        dispatch(getUserPreferences())
     });
-    dispatch(getUserCredit())
+    dispatch(getUserCredit());
+    dispatch(getAllThemes());
   }, [])
 
 

@@ -75,9 +75,9 @@ const useStartTheme = () => {
     }
   };
 
-  useEffect(() => {
-    dispatch(getAllThemes());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(getAllThemes());
+  // }, []);
 
   return {
     thunk,

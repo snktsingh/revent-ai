@@ -173,7 +173,6 @@ export const useCanvasComponent = () => {
     const hasVariants = (updatedCanvas as any).objects.some(
       (obj: any) => obj.name === 'VariantImage'
     );
-    console.log({regenerateMode:!regenerateMode})
     const slideId = canvasList.find((slide: any) => slide.id === id)?.slideId || 1;
     if(presentationId && !hasVariants && !regenerateMode && +slideId > 100 ) {
       console.log('Updating slide JSON on Db', {updatedCanvas})

@@ -1,4 +1,5 @@
 import {
+  setActiveVariantInSlide,
   setCanvas,
   setVariantImageAsMain,
   toggleIsVariantSelected,
@@ -51,6 +52,14 @@ const useVariants = () => {
   const array: number[] = [1, 2, 3];
   const [activeVariant, setActiveVariant] = useState<number>(1);
 
+  useEffect(() => {
+    const index = canvasList.findIndex(el => el.id === canvasJS.id);
+    const activeVariant = canvasList[index].variants.find((variant : VariantsType) => variant.activeSlide);
+      if (activeVariant) {
+        setActiveVariant(activeVariant.slideVariantId);
+      }
+  }, [canvasJS])
+
   
   const handleVariants = (
     CanvasURL: string,
@@ -71,8 +80,9 @@ const useVariants = () => {
     (slideId: number, variantId: number) => {
       const pptId = Number(params.id?.split('-')[0]);
       dispatch(updateActiveVariantApi({ pptId, slideId, variantId })).then((res : any) => {
-        if (res.status > 200) {
+        if (res.payload.status >= 200) {
           setActiveVariant(variantId);
+          dispatch(setActiveVariantInSlide({slideId, variantId}))
         }})
     },
     1000
@@ -91,7 +101,6 @@ const useVariants = () => {
     );
     let canvas = { ...canvasJS, canvas: canvasJS.originalSlideData };
     dispatch(setCanvas(canvas));
-    console.log({ variantImage });
   };
 
   const getImg = async (canvasJson: Object) => {
@@ -124,21 +133,21 @@ const useVariants = () => {
     setOriginalImageUrl(url);
   };
 
+  //HANDLE REFRESH
+
   const handleRefreshVariants = () => {
     SetIsLoading(true);
     
     const currentSlideIndex = canvasList.findIndex(
       slide => slide.id === activeSlideID
     );
-
-    const activeVariant = canvasList[currentSlideIndex].variants.find((variants : VariantsType) => variants.activeSlide);
     
     try {
       getElementsData(
         (canvasList[currentSlideIndex].originalSlideData as any)?.objects,
         themeId
       ).then(req => {
-        let request = {req, varId: activeVariant?.slideVariantId!}
+        let request = {...req, activeSlideVariantId: activeVariant}
         dispatch(refreshPPTApi(request)).then((res : any) => {
           let updatedPresentation = canvasList.map(slide => {
             if (
@@ -154,6 +163,7 @@ const useVariants = () => {
             }
             return slide;
           });
+
           dispatch(updateCanvasList(updatedPresentation));
           dispatch(setCanvas(updatedPresentation[currentSlideIndex]));
           SetIsLoading(false);

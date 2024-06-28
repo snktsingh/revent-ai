@@ -381,7 +381,7 @@ const Dashboard = ({ onFileSelect }: any) => {
                   control={
                     <Checkbox size="small" onChange={handlePptDelCheckBox} />
                   }
-                  label="Don't show this again"
+                  label="Don't show this again"
                 />
               </Stack>
               <Stack direction="row">

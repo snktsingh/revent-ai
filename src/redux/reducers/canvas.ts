@@ -136,8 +136,6 @@ export const CanvasReducer = createSlice({
         })
       );
 
-      console.log({ canv: updatedCanvasListWithIDs[activeSlideIndex + 1] });
-
       state.activeSlideID = updatedCanvasListWithIDs[activeSlideIndex + 1].id;
       state.canvasList = updatedCanvasListWithIDs;
       state.canvasJS = updatedCanvasListWithIDs[activeSlideIndex + 1];
@@ -334,7 +332,19 @@ export const CanvasReducer = createSlice({
         state.canvasList[canvasIndex].slideShape = action.payload.shape;
       }
       state.canvasJS = state.canvasList[canvasIndex];
-    }
+    },
+    setActiveVariantInSlide(state, action: PayloadAction<{slideId: number; variantId: number;}>) {
+      const { slideId, variantId } = action.payload;
+      const slide = state.canvasList.find(s => s.slideId === slideId);
+      
+      if (slide) {
+        slide.variants = slide.variants.map(variant => ({
+          ...variant,
+          activeSlide: variant.slideVariantId === variantId
+        }));
+        state.canvasJS = slide;
+      }
+    },  
   },
 });
 
@@ -370,7 +380,8 @@ export const {
   updateSelectedOriginalCanvas,
   updateSlideIdInList,
   toggleVariantMode,
-  setSlideShape
+  setSlideShape,
+  setActiveVariantInSlide
 } = CanvasReducer.actions;
 
 export default CanvasReducer.reducer;

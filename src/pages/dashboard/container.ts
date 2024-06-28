@@ -10,6 +10,7 @@ import { setSelectedTheme } from '@/redux/reducers/theme';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import {
   deletePresentation,
+  deletePresentationInPPtList,
   fetchPPTList,
   fetchPresetsById,
   togglePresetOpened,
@@ -43,16 +44,20 @@ const useDashboard = () => {
   };
 
   const removePresentation = async (presentationId: number) => {
-    const res = await dispatch(deletePresentation(presentationId));
-    dispatch(fetchPPTList(0));
+    const res = await dispatch(deletePresentation(presentationId)).then(
+      (res: any) => {
+        if (res.payload.status >= 200) {
+          dispatch(deletePresentationInPPtList(presentationId));
+        }
+      }
+    );
   };
 
   const fetchPreset = async (presetId: number) => {
     const res = await dispatch(fetchPresetsById(presetId));
     const presetList = res.payload;
-     dispatch(updateCanvasList(presetList));
+    dispatch(updateCanvasList(presetList));
     dispatch(setCanvas(presetList[0]));
-
   };
 
   function getFirstLettersForAvatar(name: string): string {
