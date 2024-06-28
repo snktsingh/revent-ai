@@ -134,6 +134,7 @@ export function useTimelineElement(){
       };
     // new timeline
       const addTimeline = (canvas: fabric.Canvas | null) => {
+        if(!canvas) return;
         function addText(
           left: number,
           top: number,
@@ -183,7 +184,7 @@ export function useTimelineElement(){
         const mainTimelineContainer = new fabric.Rect({
           left: -5,
           top: 120,
-          width: 860,
+          width: canvas?.getWidth() < 850 ? 900 : canvas?.getWidth()+ 10,
           height: 380,
           fill: 'transparent',
           strokeWidth: 1,

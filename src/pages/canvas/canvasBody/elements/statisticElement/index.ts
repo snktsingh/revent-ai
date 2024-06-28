@@ -85,7 +85,7 @@ export const useStatisticsElement = () => {
     const mainContainer = new fabric.Rect({
       left: 23,
       top: 82,
-      width: rectWidth * 3 + 80,
+      width: canvas?.getWidth() < 850 ? 900 : canvas?.getWidth()+ 10,
       height: 370,
       fill: 'transparent',
       strokeWidth: 1,

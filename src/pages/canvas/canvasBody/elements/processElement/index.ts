@@ -111,6 +111,9 @@ export const useProcessElement = () => {
   // new process
 
   function addProcess(canvas: fabric.Canvas | null) {
+    if(!canvas){
+      return;
+    }
     function addRectangle(
       left: number,
       top: number,
@@ -181,7 +184,7 @@ export const useProcessElement = () => {
     const mainProcessContainer = new fabric.Rect({
       left: -5,
       top: 104,
-      width: 870,
+      width: canvas?.getWidth() < 850 ? 900 : canvas?.getWidth()+ 10,
       height: 380,
       fill: 'transparent',
       strokeWidth: 1,

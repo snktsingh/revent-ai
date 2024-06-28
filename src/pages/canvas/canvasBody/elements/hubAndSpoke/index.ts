@@ -144,11 +144,10 @@ export const useHubAndSpoke = () => {
     const titleRectWidth = 250;
     const titleRectHeight = 30;
     const textRectWidth = 250;
-
     const mainContainer = new fabric.Rect({
       left: -5,
       top: 80,
-      width: titleRectWidth * 3 + 150,
+      width: canvas.getWidth() < 850 ? 900 : canvas.getWidth()+ 10,
       height: 420,
       fill: 'transparent',
       strokeWidth: 1,
