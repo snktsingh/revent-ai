@@ -19,6 +19,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { postFeedbackApi } from '@/redux/thunk/user';
 import EmailIcon from '@mui/icons-material/Email';
 import { customStyles } from '@/constants/theme';
+import { toggleTutorialRedirectALert } from '@/redux/reducers/elements';
 
 const Feedback: React.FC<{ anchorEl: HTMLElement | null, handleClose: () => void }> = ({ anchorEl, handleClose }) => {
   const [feedback, setFeedback] = useState('');
@@ -96,7 +97,10 @@ const Feedback: React.FC<{ anchorEl: HTMLElement | null, handleClose: () => void
               <Tooltip title="Tutorials">
                 <IconButton
                   color="primary"
-                  onClick={() => navigate(ROUTES.TUTORIALS)}
+                  onClick={() => {
+                    handleClose();
+                    dispatch(toggleTutorialRedirectALert(true));
+                  }}
                   sx={{ width: '1rem', height: '1rem' }}
                 >
                   <HelpOutlineIcon fontSize="small" />

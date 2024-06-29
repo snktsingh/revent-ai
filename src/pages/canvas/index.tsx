@@ -28,6 +28,7 @@ import { updatePresentationLoading } from '@/redux/reducers/elements';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { setThemeId } from '@/redux/reducers/theme';
 import { Backdrop, CircularProgress, Stack } from '@mui/material';
+import { TutorialRedirectAlert } from '@/constants/alerts/TutorialRedirectAlert';
 
 const MainCanvas = () => {
   const dispatch = useAppDispatch();
@@ -156,6 +157,7 @@ const MainCanvas = () => {
             <CanvasBody />
             <CanvasVariant />
             <CanvasThemes />
+            <TutorialRedirectAlert />
           </div>
         )}
       </>

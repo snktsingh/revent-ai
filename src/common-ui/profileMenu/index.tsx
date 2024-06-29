@@ -1,5 +1,5 @@
 import useCanvasHeader from '@/pages/canvas/canvasHeader/container';
-import { useAppSelector } from '@/redux/store';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
 import HomeIcon from '@mui/icons-material/Home';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -7,7 +7,7 @@ import HelpIcon from '@mui/icons-material/Help';
 import { ListItemIcon, Typography } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   AccountIcon,
   AccountInfo,
@@ -19,6 +19,7 @@ import {
 } from './style';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import { ROUTES } from '@/constants/endpoint';
+import { toggleTutorialRedirectALert } from '@/redux/reducers/elements';
 interface ProfileMenuProps {
   anchorElForProfileMenu: null | HTMLElement;
   handleCloseProfileMenu: Function;
@@ -34,6 +35,9 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
   const navigate = useNavigate();
   const open = Boolean(anchorElForProfileMenu);
   const { userDetails } = useAppSelector(state => state.manageUser);
+  const location = useLocation();
+  const dispatch = useAppDispatch();
+
 
   const handleClose = () => {
     handleCloseProfileMenu();
@@ -50,15 +54,19 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
   const handleNavigateSettings = () => {
     handleClose();
     navigate(ROUTES.SETTINGS, { state: { prevPath: location.pathname }, replace: true });
-    
+
   };
 
   const handleTutorials = () => {
     handleClose();
-    navigate(ROUTES.TUTORIALS, { replace: true });
-  };
+    const presentationPage = location.pathname.split("/");
 
-  
+    if (presentationPage.includes("presentation")) {
+      dispatch(toggleTutorialRedirectALert(true));
+    } else {
+      navigate(ROUTES.TUTORIALS, { replace: true });
+    }
+  };
 
   return (
     <StyledMenu

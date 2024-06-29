@@ -11,6 +11,7 @@ export interface TestState {
   isPresentationLoading : boolean;
   isDeleteAlertShow : boolean;
   isDeletePptAlertOpen : boolean;
+  openTutorialRedirectAlert : boolean;
 }
 
 const initialState: TestState = {
@@ -41,6 +42,7 @@ const initialState: TestState = {
     'Section Slide',
     'Conclusion Slide',
   ],
+  openTutorialRedirectAlert : false,
 };
 
 export const ElementReducer = createSlice({
@@ -77,6 +79,9 @@ export const ElementReducer = createSlice({
     togglePptAlertOpen(state, action : PayloadAction<boolean>){
       state.isDeletePptAlertOpen = action.payload;
     },
+    toggleTutorialRedirectALert(state, action : PayloadAction<boolean>){
+      state.openTutorialRedirectAlert = action.payload;
+    }
   },
 });
 
@@ -91,7 +96,8 @@ export const {
   setEnabledElements,
   updatePresentationLoading,
   updateDeleteAlertShow,
-  togglePptAlertOpen
+  togglePptAlertOpen,
+  toggleTutorialRedirectALert
 } = ElementReducer.actions;
 
 export default ElementReducer.reducer;
