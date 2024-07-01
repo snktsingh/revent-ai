@@ -54,6 +54,7 @@ export function useSWOTElement() {
         hasBorders: false,
         splitByGrapheme: true,
         level: `${SWOT_TEXT}_${swotID}_${level}`,
+        fontFamily : customStyles.fonts.robotoSansSerif,
       });
       return canvas?.add(text);
     }

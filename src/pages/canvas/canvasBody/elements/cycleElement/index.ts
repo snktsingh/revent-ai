@@ -55,7 +55,7 @@ export function useCycleElement() {
     const text = new AutoResizingTextbox('Add Text', {
       width: 80,
       fontSize: 16,
-      fontFamily: 'Arial',
+      fontFamily: customStyles.fonts.robotoSansSerif,
       fill: theme.colorSchemes.light.palette.common.white,
       top,
       left,
@@ -276,7 +276,7 @@ export function useCycleElement() {
         left: left + 15,
         top: top + 20,
         fontSize: 16,
-        fontFamily: 'Arial',
+        fontFamily: customStyles.fonts.robotoSansSerif,
         editable: true,
         width: 80,
         fill: theme.colorSchemes.light.palette.common.white,

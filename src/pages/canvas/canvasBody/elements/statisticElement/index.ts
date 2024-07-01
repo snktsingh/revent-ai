@@ -4,6 +4,7 @@ import {
   STATISTICS_TITLE_TEXT,
   STATISTICS,
 } from '@/constants/elementNames';
+import { customStyles } from '@/constants/theme';
 import { updateStatisticsId } from '@/redux/reducers/fabricElements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import AutoResizingTextbox from '@/utils/fabric-utils/AutoResizingTextbox';
@@ -47,7 +48,7 @@ export const useStatisticsElement = () => {
       hasBorders: false,
       splitByGrapheme: true,
       fontWeight: 'bold',
-      fontFamily: 'Red Hat Display, sans-serif',
+      fontFamily : customStyles.fonts.robotoSansSerif,
       textAlign :'center'
     });
     return textBox;
@@ -70,7 +71,7 @@ export const useStatisticsElement = () => {
         lockMovementY: true,
         hasBorders: false,
         splitByGrapheme: true,
-        fontFamily: 'Red Hat Display, sans-serif',
+        fontFamily : customStyles.fonts.robotoSansSerif,
         textAlign :'center'
       }
     );

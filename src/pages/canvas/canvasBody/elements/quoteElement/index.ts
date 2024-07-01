@@ -6,7 +6,7 @@ import {
   QUOTE_IMG_CONTAINER,
   QUOTE_TEXT,
 } from '@/constants/elementNames';
-import { theme } from '@/constants/theme';
+import { customStyles, theme } from '@/constants/theme';
 import { QuoteImages, addOrReplaceQuoteImage } from '@/data/data';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { fabric } from 'fabric';
@@ -30,7 +30,8 @@ export const useQuoteElement = () => {
       selectable: true,
       name: QUOTE_TEXT,
       cursorColor: theme.colorSchemes.light.palette.primary.main,
-      splitByGrapheme : true
+      splitByGrapheme : true,
+      fontFamily : customStyles.fonts.robotoSansSerif,
     });
 
     let authorText = new fabric.Textbox('- Author Name', {
@@ -41,6 +42,7 @@ export const useQuoteElement = () => {
       fill: 'black',
       fontSize: 18,
       name: QUOTE_AUTHOR,
+      fontFamily : customStyles.fonts.robotoSansSerif,
     });
 
     const mainListContainer = new fabric.Rect({
@@ -62,6 +64,7 @@ export const useQuoteElement = () => {
       selectable: false,
       hoverCursor: 'pointer',
       name: QUOTE_ADD_IMG_TEXT,
+      fontFamily : customStyles.fonts.robotoSansSerif,
     });
     let group = new fabric.Group([mainListContainer, addImage], {
       left: 110,

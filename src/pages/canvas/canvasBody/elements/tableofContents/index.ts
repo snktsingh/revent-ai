@@ -1,4 +1,5 @@
 import { TABLE_OF_CONTENTS_HEADING, TABLE_OF_CONTENTS_TEXT, TITLE } from "@/constants/elementNames";
+import { customStyles } from "@/constants/theme";
 import { IExtendedTextBoxOptions } from "@/interface/fabricTypes";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { renderBulletOrNumTextLine } from "@/utils/fabric-utils/renderBullet";
@@ -15,7 +16,7 @@ export const useTableOfContents = () => {
             fontSize: 30,
             width: 400,
             fontWeight: 'bold',
-            fontFamily: 'Red Hat Display, sans-serif',
+            fontFamily : customStyles.fonts.robotoSansSerif,
             name: TITLE,
             fill: '#404040',
             charSpacing: 2,
@@ -26,7 +27,7 @@ export const useTableOfContents = () => {
           });
 
           const BulletText = new fabric.Textbox('Click to add Sections', {
-            fontFamily: 'sans-serif',
+            fontFamily : customStyles.fonts.robotoSansSerif,
             lineHeight: 1.4,
             left: 100,
             top: 75,

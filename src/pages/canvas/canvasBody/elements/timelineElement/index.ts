@@ -72,6 +72,7 @@ export function useTimelineElement(){
             name: timelineName,
             hasControls :false,
             splitByGrapheme: true,
+            fontFamily : customStyles.fonts.robotoSansSerif,
           });
           return canvas?.add(text);
         }
@@ -154,6 +155,7 @@ export function useTimelineElement(){
             name: timelineName,
             hasControls :false,
             splitByGrapheme: true,
+            fontFamily : customStyles.fonts.robotoSansSerif,
           });
           return canvas?.add(text);
         }

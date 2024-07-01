@@ -4,6 +4,7 @@ import {
   LIST_IMG,
   LIST_TEXT,
 } from '@/constants/elementNames';
+import { customStyles } from '@/constants/theme';
 import { addOrReplaceTeamListImage, listImages } from '@/data/data';
 import { CanvasItem, listObjType } from '@/interface/storeTypes';
 import {
@@ -46,6 +47,7 @@ export function useListElement() {
       selectable: false,
       hoverCursor: 'pointer',
       name: 'ListAddImageText',
+      fontFamily : customStyles.fonts.robotoSansSerif,
     });
     let group = new fabric.Group([mainListContainer, addImage], {
       left,
@@ -66,6 +68,7 @@ export function useListElement() {
       textAlign: 'center',
       name: `${LIST_TEXT}_${listID}`,
       hasControls: false,
+      fontFamily : customStyles.fonts.robotoSansSerif,
     });
     dispatch(updateListId());
     // canvas?.add(mainListContainer);

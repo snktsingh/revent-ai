@@ -8,6 +8,7 @@ import {
   HUB_AND_SPOKE_MAIN_TEXT,
   HUB_AND_SPOKE_TEXT_BOX,
 } from '@/constants/elementNames';
+import { customStyles } from '@/constants/theme';
 import { IExtendedRectOptions } from '@/interface/fabricTypes';
 import { updateHubAndSpokeId } from '@/redux/reducers/fabricElements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
@@ -94,6 +95,7 @@ export const useHubAndSpoke = () => {
       hasBorders: false,
       splitByGrapheme: true,
       textAlign: 'center',
+      fontFamily : customStyles.fonts.robotoSansSerif,
     });
     return textBox;
   };
@@ -115,6 +117,7 @@ export const useHubAndSpoke = () => {
       hasBorders: false,
       splitByGrapheme: true,
       textAlign: 'center',
+      fontFamily : customStyles.fonts.robotoSansSerif,
     });
     return textBox;
   };
@@ -135,6 +138,7 @@ export const useHubAndSpoke = () => {
       hasBorders: false,
       splitByGrapheme: true,
       textAlign: 'center',
+      fontFamily : customStyles.fonts.robotoSansSerif,
     });
     return textBox;
   };
