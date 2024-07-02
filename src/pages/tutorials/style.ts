@@ -5,7 +5,7 @@ import styled from 'styled-components';
 export const TutorialContainer = styled.div`
   width: 100%;
   height: 85vh;
-  padding-top: 8vh;
+  padding-top: 4vh;
   font-family: ${customStyles.fonts.robotoSansSerif};
 `;
 
@@ -19,7 +19,7 @@ export const TutorialHeading = styled.p`
 export const FlexContainer = styled.div`
   display: flex;
   justify-content: space-around;
-  width: 90%;
+  width: 100%;
   height: 100%;
   margin: auto;
 `;

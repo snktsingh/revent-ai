@@ -29,7 +29,7 @@ export const ProfileContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
-  margin-left: 7%;
+  margin-left: 2%;
   justify-content: center;
   align-items: center;
 `;
@@ -216,8 +216,8 @@ export const Label = styled.div`
 export const StyledInput = styled(TextField)`
   & .MuiInputBase-input {
     /* padding-top: 12px; */
-    width: 250px;
-    font-size: 12px;
+    width: 400px;
+    font-size: 13px;
     height: 10px;
   }
   && {
@@ -240,7 +240,7 @@ export const SectionTitleContainer = styled.div`
   width: 100%;
   color: ${theme.colorSchemes.light.palette.primary.main};
   height: 30px;
-  margin: 1.5% 0;
+  margin: 3% 0 1% 0%;
   position: relative;
   &::before {
     content: '';
@@ -256,10 +256,10 @@ export const SectionTitleContainer = styled.div`
 
 export const SectionTitle = styled(Typography)`
   && {
-    font-size: 0.8rem;
-    font-weight: 550;
+    font-size: 0.9rem;
+    font-weight: 600;
     font-family: ${customStyles.fonts.robotoSansSerif};
-    margin: 0 0 0 2.5%;
+    margin: 0 0 0 2%;
     text-transform: uppercase;
     padding: 0.6% 0;
   }
@@ -267,9 +267,9 @@ export const SectionTitle = styled(Typography)`
 
 export const ButtonContainer = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  margin-top: 3%;
+  margin: 3% 1%;
 `;
 
 export const IconButton = styled(Button)`

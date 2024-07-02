@@ -38,7 +38,7 @@ export const fetchPPTList = createAsyncThunk(
   'dashboard/pptList',
   async (pageNo: number) => {
     const res = await FetchUtils.getRequest(
-      `${ENDPOINT.DASHBOARD.FETCH_PPT_LIST}?size=100&page=${pageNo}`
+      `${ENDPOINT.DASHBOARD.FETCH_PPT_LIST}?size=1000&page=${pageNo}`
     );
     return res.data;
   }

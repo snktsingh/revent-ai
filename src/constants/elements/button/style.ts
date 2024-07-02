@@ -6,7 +6,7 @@ export const ButtonName = styled.p`
   color: ${theme.colorSchemes.light.palette.common.white};
   display: flex;
   align-items: center;
-  font-size: 2vh;
+  font-size: 1.8vh;
 `;
 export const MainIconButton = styled(Button)`
   background-color: transparent !important;
