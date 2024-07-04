@@ -34,7 +34,7 @@ import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import ColorLensOutlinedIcon from '@mui/icons-material/ColorLensOutlined';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { addSlide } from '@/redux/reducers/slide';
+import { addSlide, setTourStepIndex, toggleTourStarted } from '@/redux/reducers/slide';
 import { toggleTemplateVisibility } from '@/redux/reducers/elements';
 import { ToolOutlinedButton, ToolOutlinedSelect } from '../style';
 import {
@@ -71,6 +71,8 @@ import EmailIcon from '@mui/icons-material/Email';
 import { Link, useSearchParams } from 'react-router-dom';
 import { addNewSlideApi, reorderSlidesApi } from '@/redux/thunk/slidesThunk';
 import Feedback from '@/common-ui/feedback';
+import TourIcon from '@mui/icons-material/Tour';
+import CustomTourTooltip from '@/components/tourSteps/customTooltip';
 
 interface FontItem {
   family: string;
@@ -115,7 +117,7 @@ const CanvasTools = ({ pId }: any) => {
   const handleClose = () => {
     setAnchorShapesEl(null);
   };
-  const [ searchParams, setSearchParams ] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [anchorFeedbackEl, setAnchorFeedbackEl] = useState<HTMLElement | null>(null);
 
   const handleFeedbackClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -235,14 +237,14 @@ const CanvasTools = ({ pId }: any) => {
 
   const handleAddNewSlide = () => {
     const greatestIdObject = canvasList.reduce((max, obj) => (obj.id > max.id ? obj : max), canvasList[0]);
-  
+
     dispatch(addNewSlideApi({ pId, slideNo: greatestIdObject.id + 1 })).then((res: any) => {
-      if (res.payload.status >= 200 && res.payload.status < 300) {   
+      if (res.payload.status >= 200 && res.payload.status < 300) {
         dispatch(addCanvasSlide({ slideId: res.payload.data.slideId, slideNo: res.payload.data.slideNumber }));
         dispatch(addSlide(obj));
         dispatch(toggleIsVariantSelected(false));
         console.log(canvasList[canvasList.length - 1].id !== activeSlideID)
-        if(canvasList[canvasList.length - 1].id !== activeSlideID) {
+        if (canvasList[canvasList.length - 1].id !== activeSlideID) {
           const reorderedSlides = canvasList.map((slide, i) => {
             return {
               slideId: slide.slideId,
@@ -255,7 +257,7 @@ const CanvasTools = ({ pId }: any) => {
           }
 
           dispatch(reorderSlidesApi(req)).then((res) => {
-             console.log(res);
+            console.log(res);
           });
         }
       }
@@ -282,6 +284,7 @@ const CanvasTools = ({ pId }: any) => {
         spacing={1}
         style={{ display: 'flex', alignItems: 'center' }}
       >
+        <CustomTourTooltip tourVisible={newKey.tourVisible} tooltipContent={'changeTheme'} >
         <ToolOutlinedButton
           onClick={() => {
             dispatch(toggleTemplateVisibility());
@@ -293,9 +296,11 @@ const CanvasTools = ({ pId }: any) => {
             <p>Change Theme</p>
           </Stack>
         </ToolOutlinedButton>
+        </CustomTourTooltip>
         <ToolOutlinedButton
           onClick={handleAddNewSlide}
           disabled={isLoading}
+          className='eighth-step'
         >
           <Stack direction="row" spacing={1}>
             <img src={Add} />
@@ -712,6 +717,14 @@ const CanvasTools = ({ pId }: any) => {
             <Stack direction="row" spacing={1} alignItems={'center'} height={'4.5vh'} justifyContent={'space-around'}>
               <EmailIcon fontSize='small' sx={{ color: '#2f2f2f' }} />
               <p>Send Feedback</p>
+            </Stack>
+          </ToolOutlinedButton>
+        </>
+        <>
+          <ToolOutlinedButton onClick={() => dispatch(toggleTourStarted(true))} >
+            <Stack direction="row" spacing={1} alignItems={'center'} height={'4.5vh'} justifyContent={'space-around'}>
+              <TourIcon fontSize='small' sx={{ color: '#2f2f2f' }} />
+              <p>Start Tour</p>
             </Stack>
           </ToolOutlinedButton>
         </>

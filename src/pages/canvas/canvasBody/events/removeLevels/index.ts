@@ -152,18 +152,19 @@ export const useRemoveLevels = () => {
             left: activeObject.left!,
             top: activeObject.top!,
             name: `${PROCESS}_${id}`,
-            width:
-              rectCount <= 3 ? activeObject.width! - 245 : activeObject.width,
-            height:
-              rectCount === 4
-                ? activeObject.height! - 170
-                : activeObject.height,
+            // width:
+            //   rectCount <= 3 ? activeObject.width! - 245 : activeObject.width,
+            // height:
+            //   rectCount === 4
+            //     ? activeObject.height! - 170
+            //     : activeObject.height,
+
             fill: 'transparent',
             strokeWidth: 1,
             stroke: 'transparent',
           });
-          canvas.add(mainContainer);
-          canvas.remove(activeObject);
+          // canvas.add(mainContainer);
+          // canvas.remove(activeObject);
           canvas.remove(lastLevel);
           canvas.remove(lastTextBox);
           canvas.remove(lastArrow);

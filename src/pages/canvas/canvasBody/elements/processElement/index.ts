@@ -106,7 +106,7 @@ export const useProcessElement = () => {
     canvas.add(rect);
     rectCount !== 3 && canvas.add(Arrow);
     canvas.add(text);
-    canvas.discardActiveObject();
+    // canvas.discardActiveObject();
     canvas.renderAll();
   };
   // new process
@@ -206,8 +206,11 @@ export const useProcessElement = () => {
     );
     let arrow1 = canvas?.add(addArrow(225, mainProcessContainer.top! + 55, 0));
     let rect2 = addRectangle(310, mainProcessContainer.top! + 20, 170, 130, 2);
+    let rect3 = addRectangle(602, mainProcessContainer.top! + 20, 170, 130, 3);
+    let arrow2 = canvas?.add(addArrow(rect2?.left! + 205, mainProcessContainer.top! + 55, 0));
     addText(rect1.left! + 4, mainProcessContainer.top! + 22, 1);
     addText(rect2.left! + 4, mainProcessContainer.top! + 22, 2);
+    addText(rect3.left! + 4, mainProcessContainer.top! + 22, 3);
     canvas?.renderAll();
     dispatch(updateProcessId());
   }

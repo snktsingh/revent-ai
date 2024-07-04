@@ -239,14 +239,14 @@ const CanvasComponent: React.FC<CanvasComponentProps> = ({ fabricRef }) => {
   useEffect(() => {}, [selectedElementPosition, showOptions]);
 
   return (
-    <CanvasContainer onContextMenu={e => e.preventDefault()}>
+    <CanvasContainer onContextMenu={e => e.preventDefault()} >
       <div
       
         style={{ position: 'relative' }}
         ref={ContainerRef}
         onClick={canvasClickEvent}
       >
-        <canvas id="canvas" ></canvas>
+        <canvas id="canvas" className='third-step' ></canvas>
         {showOptions && (
           <ElementEditBar
             left={selectedElementPosition.left}

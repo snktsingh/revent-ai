@@ -33,10 +33,11 @@ import {
   toggleIsVariantSelected,
   updateCurrentCanvas,
 } from '@/redux/reducers/canvas';
+import { StoreHelpers } from 'react-joyride';
 
 
 
-export const CanvasVariant = () => {
+export const CanvasVariant = ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers | null> }) => {
   const [canvasIndex, setCanvasIndex] = useState<number>(0);
   const dispatch = useAppDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -61,7 +62,7 @@ export const CanvasVariant = () => {
     isLoading,
     themeId,
     getElementsData,
-  } = useVariants();
+  } = useVariants({joyrideRef});
 
   const [canvasJSONdata, setCanvasJson] = useState<string>('');
 
@@ -163,7 +164,7 @@ export const CanvasVariant = () => {
           >
             <DrawerVariantButton>Variants</DrawerVariantButton>
           </DrawerBtnContainer>
-          <DrawerVariant>
+          <DrawerVariant >
             {originalImageUrl && (
               <>
                 <Text>Original Slide</Text>
@@ -175,7 +176,7 @@ export const CanvasVariant = () => {
                 </OriginalSlideCard>
               </>
             )}
-
+            <div className='fifth-step'>
             <ButtonContainer>
               <p>Variants</p>
 
@@ -183,6 +184,7 @@ export const CanvasVariant = () => {
                 variant="contained"
                 size="small"
                 onClick={handleRefreshVariants}
+                className='sixth-step'
               >
                 Refresh
               </RefreshBtn>
@@ -202,7 +204,7 @@ export const CanvasVariant = () => {
                 })}
               </LoaderContainer>
             ) : (
-              <>
+              <div >
                 {(canvasJS.variants && canvasJS.variants.length) > 0 ? (
                   canvasJS.variants.map((el: VariantsType, i: number) => {
                     return (
@@ -242,8 +244,9 @@ export const CanvasVariant = () => {
                 ) : (
                   <></>
                 )}
-              </>
+              </div>
             )}
+            </div>
             <LogoContainer>
               <div>
                 <span>Powered by</span>

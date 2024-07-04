@@ -20,6 +20,7 @@ import { useDebounce } from '@/hooks/useDebounce';
 import { useParams } from 'react-router-dom';
 import { VariantsType } from '@/interface/storeTypes';
 import { refreshPPTApi } from '@/redux/thunk/slidesThunk';
+import { StoreHelpers } from 'react-joyride';
 
 interface VariantData {
   slideVariantId: number;
@@ -29,7 +30,7 @@ interface VariantData {
   style: string;
 }
 
-const useVariants = () => {
+const useVariants = ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers | null> }) => {
   const { updateCanvasDimensions } = useCanvasComponent();
   const { getElementsData } = useCanvasData();
   const dispatch = useAppDispatch();
@@ -74,6 +75,7 @@ const useVariants = () => {
     dispatch(
       updateLastVariant({ slideId: activeSlideID, lastVariant: CanvasURL })
     );
+    joyrideRef.current?.next();
   };
 
   const updateActiveVariant = useDebounce(
@@ -167,6 +169,7 @@ const useVariants = () => {
           dispatch(updateCanvasList(updatedPresentation));
           dispatch(setCanvas(updatedPresentation[currentSlideIndex]));
           SetIsLoading(false);
+          joyrideRef.current?.next();
         });
       });
     } catch (error) {

@@ -12,7 +12,7 @@ import {
   updateSlideIdInList,
 } from '@/redux/reducers/canvas';
 import { openModal, setMenuItemKey } from '@/redux/reducers/elements';
-import { searchElement, toggleRegenerateButton } from '@/redux/reducers/slide';
+import { searchElement, setTourStepIndex, toggleRegenerateButton } from '@/redux/reducers/slide';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { fetchSlideImg, toggleIsRegenerating } from '@/redux/thunk/thunk';
 import {
@@ -52,8 +52,10 @@ import Templates from './themes';
 import AddIcon from '@mui/icons-material/Add';
 import TableGenerator from '@/components/TableInput';
 import { APIRequest } from '@/interface/storeTypes';
+import { StoreHelpers } from 'react-joyride';
+import CustomTourTooltip from '@/components/tourSteps/customTooltip';
 
-const CanvasBody = () => {
+const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers | null> }) => {
   const slide = useAppSelector(state => state.slide);
   const [redirectAlert, setRedirectAlert] = useState<boolean>(false);
   const [modificationAlert, setModificationAlert] = useState<boolean>(false);
@@ -77,7 +79,7 @@ const CanvasBody = () => {
     variantImage,
     isVariantSelected,
   } = useAppSelector(state => state.canvas);
-  const { isRegenerateDisabled } = useAppSelector(state => state.slide);
+  const { isRegenerateDisabled, tourStepIndex, tourStarted, tourVisible } = useAppSelector(state => state.slide);
   const { isLoading } = useAppSelector(state => state.thunk);
   const { requestData } = useAppSelector(state => state.apiData);
   const { creditAmount } = useAppSelector(state => state.manageUser);
@@ -93,7 +95,7 @@ const CanvasBody = () => {
   const [isEditBtnShow, setIsEditBtnShow] = useState<boolean>(false);
   const [isReturnBtnShow, setIsReturnBtnShow] = useState<boolean>(false);
   const [canvasIndex, setCanvasIndex] = useState<number>(0);
-  const { handleApplyOriginalAsMain } = useVariants();
+  const { handleApplyOriginalAsMain } = useVariants({joyrideRef});
   const [searchParams, setSearchParams] = useSearchParams();
   const handleLike = () => {
     setActiveLike(!activeLike);
@@ -107,6 +109,9 @@ const CanvasBody = () => {
   const params = useParams<{ id: string }>();
 
   const handleAddElementsToCanvas = (item: any) => {
+    if (tourStepIndex === 2 && tourStarted) {
+      dispatch(setTourStepIndex(3));
+    }
     const hasVariants = (canvasJS.canvas as any).objects.some(
       (obj: any) => obj.name === 'VariantImage'
     );
@@ -130,9 +135,7 @@ const CanvasBody = () => {
   const open = Boolean(anchorEl);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    {
-      setAnchorEl(event.currentTarget);
-    }
+    setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -172,8 +175,8 @@ const CanvasBody = () => {
     };
     dispatch(updateCurrentCanvas(currentCanvas));
     const slideJSON = canvasList[canvasJS.id - 1].canvas || canvasJS.canvas;
-    const notes : string = canvasList[canvasJS.id - 1].notes? canvasList[canvasJS.id - 1].notes! : '';
-    const pptId : number = +params.id?.split('-')[0]!;
+    const notes: string = canvasList[canvasJS.id - 1].notes ? canvasList[canvasJS.id - 1].notes! : '';
+    const pptId: number = +params.id?.split('-')[0]!;
 
     const isListImagesPresent = requestData?.elements.some(
       canvas => canvas.shape === 'ImageSubtitle'
@@ -190,7 +193,7 @@ const CanvasBody = () => {
 
     if (isListImagesPresent && requestData) {
 
-      let requestListData : APIRequest = requestData;
+      let requestListData: APIRequest = requestData;
       const listData = requestData?.elements?.find((el) => el.shape === 'ImageSubtitle');
       const isTextEmpty = listData?.data?.every(obj => obj.text === "");
 
@@ -198,12 +201,12 @@ const CanvasBody = () => {
       if (isTextEmpty) {
         requestListData = {
           ...requestListData,
-          elements: requestListData.elements.map(element => 
-              element.shape === 'ImageSubtitle' 
-              ? { ...element, shape: 'Images' } 
+          elements: requestListData.elements.map(element =>
+            element.shape === 'ImageSubtitle'
+              ? { ...element, shape: 'Images' }
               : element
           )
-      };
+        };
       }
 
       let blob = new Blob([JSON.stringify(requestListData)], {
@@ -336,6 +339,7 @@ const CanvasBody = () => {
             })
           );
         }
+        joyrideRef.current?.next();
       }
     );
     dispatch(toggleSelectedOriginalCanvas(false));
@@ -493,7 +497,7 @@ const CanvasBody = () => {
             event.preventDefault();
           }}
         >
-          <SlideList notesRef={NotesInputRef}/>
+          <SlideList notesRef={NotesInputRef} />
         </Grid>
         <Grid item xs={8}>
           <EditSlideContainer>
@@ -516,7 +520,7 @@ const CanvasBody = () => {
                   <img src={Copy} />
                 </IconButton>
                 </Tooltip> */}
-                <Button variant="contained" size="medium" onClick={handleClick}>
+                <Button variant="contained" size="medium" onClick={handleClick} className='first-step'>
                   <Stack direction="row" spacing={1}>
                     <img
                       src="data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 9 9' fill='%23fff' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.96325 5.03632H0.516602V3.96358H3.96325V0.509277H5.036V3.96358H8.4903V5.03632H5.036V8.48298H3.96325V5.03632Z' fill='%23fff'/%3E%3C/svg%3E"
@@ -549,13 +553,16 @@ const CanvasBody = () => {
                 </IconButton>{' '} */}
                 &nbsp;
                 {!isVariantsEmpty && isEditBtnShow && (
+                  <CustomTourTooltip tourVisible={tourVisible} tooltipContent={'edit'} >
                   <Button
                     variant="contained"
                     size="medium"
                     onClick={() => handleApplyOriginalAsMain()}
+                    className='seventh-step'
                   >
                     Edit
                   </Button>
+                  </CustomTourTooltip>
                 )}
                 {!isVariantsEmpty && isReturnBtnShow && (
                   <Button
@@ -589,6 +596,7 @@ const CanvasBody = () => {
                       size="medium"
                       onClick={() => handleRequest()}
                       disabled={creditAmount === 0 || isRegenerateDisabled}
+                      className='fourth-step'
                     >
                       <Stack direction="row" spacing={1}>
                         <img src={Wand} />
@@ -654,6 +662,11 @@ const CanvasBody = () => {
                         style={{ display: 'flex', flexDirection: 'column' }}
                         key={index}
                         disabled={disabled}
+                        className={
+                          item.title === "Process"
+                            ? "second-step"
+                            : ""
+                        }
                       >
                         <Stack direction="row" width={'100%'} spacing={2}>
                           <img src={item.icon} width="30vh" />

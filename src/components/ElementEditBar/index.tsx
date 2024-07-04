@@ -121,23 +121,24 @@ const ElementEditBar: React.FC<ElementEditBarProps> = ({ left, top, canvas }) =>
         }
 
 
-    }, [canvas?.getActiveObject(), left, top, editBarRef.current?.offsetWidth]);
+    }, [canvas?.getActiveObject(), left, top, editBarRef.current?.offsetWidth, canvas?.getObjects().length]);
 
-    useEffect(() => { }, [plusIcon]);
+    useEffect(() => {
+     }, [plusIcon]);
 
 
     return (
-        <EditBarContainer ref={editBarRef} left={position.l} top={position.t}>
+        <EditBarContainer ref={editBarRef} left={position.l} top={position.t} className='add-level-step'>
             {(!tableIcons && !levelIcons) && <Tooltip title="Add Level" placement="top">
                 <span>
-                    <IconButton onClick={handleAdd} disabled={!plusIcon} style={{ color: plusIcon ? '' : '#e0e0e0' }}>
+                    <IconButton  onClick={handleAdd} disabled={!plusIcon} style={{ color: plusIcon ? '' : '#e0e0e0' }}>
                         <AddOutlinedIcon />
                     </IconButton>
                 </span>
             </Tooltip>}
-            {(!tableIcons && !levelIcons && minusIcon) && <Tooltip title="Undo Last Level" placement="top">
+            {(!tableIcons && !levelIcons && minusIcon) && <Tooltip title="Remove Level" placement="top">
                 <span>
-                    <IconButton onClick={() => handleRemovingLastLevel(canvas!)} disabled={!minusIcon} style={{ color: minusIcon ? '' : '#e0e0e0' }}>
+                    <IconButton  onClick={() => handleRemovingLastLevel(canvas!)} disabled={!minusIcon} style={{ color: minusIcon ? '' : '#e0e0e0' }}>
                         <RemoveIcon />
                     </IconButton>
                 </span>

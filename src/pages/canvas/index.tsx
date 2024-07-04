@@ -5,7 +5,7 @@ import MainCanvasHeader from './canvasHeader';
 import CanvasTools from './canvasTools';
 import ReventingLoader from '@/common-ui/loader';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import {
   fetchPptDetails,
   getAllSlidesJSONApi,
@@ -29,6 +29,8 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import { setThemeId } from '@/redux/reducers/theme';
 import { Backdrop, CircularProgress, Stack } from '@mui/material';
 import { TutorialRedirectAlert } from '@/constants/alerts/TutorialRedirectAlert';
+import { ReactTourComponent } from '@/components/tourSteps';
+import { StoreHelpers } from 'react-joyride';
 
 const MainCanvas = () => {
   const dispatch = useAppDispatch();
@@ -131,6 +133,8 @@ const MainCanvas = () => {
     
   };
 
+  const joyrideHelpers = useRef<StoreHelpers | null>(null);
+
   if (isAuthenticating) {
     return <ReventingLoader />;
   } else {
@@ -154,14 +158,41 @@ const MainCanvas = () => {
             </Backdrop>
             <MainCanvasHeader pId={pptId} />
             <CanvasTools pId={pptId}/>
-            <CanvasBody />
-            <CanvasVariant />
+            <CanvasBody joyrideRef={joyrideHelpers} />
+            <CanvasVariant joyrideRef={joyrideHelpers}/>
             <CanvasThemes />
             <TutorialRedirectAlert />
+            <ReactTourComponent joyrideRef={joyrideHelpers} />
           </div>
         )}
       </>
     );
   }
+
+  // return (
+  //   <>
+  //       <div>
+  //         <Backdrop
+  //           sx={{
+  //             color: '#fff',
+  //             zIndex: theme => theme.zIndex.drawer + 1,
+  //             display: 'flex',
+  //             flexDirection: 'column',
+  //           }}
+  //           open={themePreviewLoader}
+  //         >
+  //           <CircularProgress color="inherit" />
+  //           <p>Changing Presentation theme please wait...</p>
+  //         </Backdrop>
+  //         <MainCanvasHeader pId={pptId} />
+  //         <CanvasTools pId={pptId}/>
+  //         <CanvasBody />
+  //         <CanvasVariant />
+  //         <CanvasThemes />
+  //         <TutorialRedirectAlert />
+  //         <ReactTourComponent/>
+  //       </div>
+  //   </>
+  // );
 };
 export default MainCanvas;

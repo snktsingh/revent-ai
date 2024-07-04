@@ -31,6 +31,7 @@ import { HeaderContainer, ShareMenu, UserAvatar } from './style';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { downloadPresentation, setPresentationName } from '@/redux/thunk/thunk';
 import { toast } from 'react-toastify';
+import CustomTourTooltip from '@/components/tourSteps/customTooltip';
 import { Link } from 'react-router-dom';
 
 const MainCanvasHeader = ({ pId }: any) => {
@@ -61,6 +62,7 @@ const MainCanvasHeader = ({ pId }: any) => {
 
   const { presentationId, presentationName, pptDetails, isLoading } =
     useAppSelector(state => state.thunk);
+  const { tourVisible } = useAppSelector(state => state.slide);
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
@@ -162,12 +164,14 @@ const MainCanvasHeader = ({ pId }: any) => {
         </Stack>
         <VerticalDivider />
 
-        <Button size="small" variant="contained" onClick={handleShareClick}>
+        <CustomTourTooltip tourVisible={tourVisible} tooltipContent={'share'} >
+        <Button size="large" variant="contained" onClick={handleShareClick}>
           <Stack direction="row" spacing={1}>
             <img src={Share} style={{ paddingRight: '8px' }} />
             <>Share</>
           </Stack>
         </Button>
+        </CustomTourTooltip>
 
         {/* Share menu */}
         <ShareMenu

@@ -4,7 +4,7 @@ import {
   FUNNEL_LEVEL,
   FUNNEL_TEXT,
 } from '@/constants/elementNames';
-import { customStyles } from '@/constants/theme';
+import { customStyles, theme } from '@/constants/theme';
 import { IExtendedPolygonOptions } from '@/interface/fabricTypes';
 import { updateFunnelId } from '@/redux/reducers/fabricElements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
@@ -70,6 +70,7 @@ export function useFunnelElement() {
       splitByGrapheme: true,
       level: `${FUNNEL_TEXT}_${currentID}_${levels + 1}`,
       fontFamily : customStyles.fonts.robotoSansSerif,
+      fill: theme.colorSchemes.light.palette.common.white,
     });
 
     // let container = new fabric.Rect({
@@ -184,6 +185,7 @@ export function useFunnelElement() {
         splitByGrapheme: true,
         level: `${FUNNEL_TEXT}_${funnelId}_${level}`,
         fontFamily : customStyles.fonts.robotoSansSerif,
+        fill: theme.colorSchemes.light.palette.common.white,
       });
       return canvas?.add(text);
     }

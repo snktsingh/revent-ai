@@ -74,6 +74,7 @@ export const useEditBar = () => {
     useTableElement();
   const { deleteObject, handleCopyClick } = useDelAndCopy();
   const { canvasJS } = useAppSelector(state => state.canvas);
+  
 
    const adjustControlsVisibility = (canvas: fabric.Canvas): void => {
     const selectedObject = canvas.getActiveObject();

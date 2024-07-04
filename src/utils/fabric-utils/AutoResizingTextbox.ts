@@ -35,7 +35,7 @@ class AutoResizingTextbox extends fabric.Textbox {
         } else {
           this.set('fontSize', currentFontSize + 1);
           this.canvas?.renderAll();
-          // this.adjustFontSize(originalFontSize);
+          this.adjustFontSize(originalFontSize);
           return;
         }
       }
