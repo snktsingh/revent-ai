@@ -9,6 +9,7 @@ export const HeaderContainer = styled.div`
   padding: 0% 1%;
   align-items: center;
   justify-content: space-between;
+  border-bottom: .2px solid ${theme.colorSchemes.light.palette.common.border};
 `;
 export const Extension = styled.p`
   color: ${theme.colorSchemes.light.palette.common.white};

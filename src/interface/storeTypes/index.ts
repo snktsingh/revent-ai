@@ -115,6 +115,7 @@ export interface APIRequest {
   slideNumber: number;
   presentationId: number | null;
   presentationName?: string;
+  useAI : boolean;
 }
 
 

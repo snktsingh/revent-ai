@@ -102,8 +102,8 @@ const MainCanvasHeader = ({ pId }: any) => {
           presentationName
             ? presentationName
             : format === 'pdf'
-            ? 'untitled-presentation.pdf'
-            : 'untitled-presentation.pptx'
+              ? 'untitled-presentation.pdf'
+              : 'untitled-presentation.pptx'
         );
         document.body.appendChild(link);
         link.click();
@@ -165,12 +165,12 @@ const MainCanvasHeader = ({ pId }: any) => {
         <VerticalDivider />
 
         <CustomTourTooltip tourVisible={tourVisible} tooltipContent={'share'} >
-        <Button size="large" variant="contained" onClick={handleShareClick}>
           <Stack direction="row" spacing={1}>
-            <img src={Share} style={{ paddingRight: '8px' }} />
-            <>Share</>
+            <Button size="small" variant="contained" onClick={handleShareClick}>
+              <img src={Share} style={{ paddingRight: '8px' }} />
+              <>Share</>
+            </Button>
           </Stack>
-        </Button>
         </CustomTourTooltip>
 
         {/* Share menu */}
@@ -204,7 +204,7 @@ const MainCanvasHeader = ({ pId }: any) => {
               )}
             </UserAvatar>
           </Stack>
-        </Button> 
+        </Button>
         <ProfileMenu
           anchorElForProfileMenu={openProfileMenu}
           handleCloseProfileMenu={handleCloseProfileMenu}

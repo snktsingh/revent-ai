@@ -43,7 +43,6 @@ export const ReactTourComponent = ({ joyrideRef }: { joyrideRef: React.MutableRe
 
     const handleHelpers = (storeHelper: StoreHelpers) => {
         joyrideRef.current = storeHelper;
-        console.log({ storeHelper })
     };
 
     useEffect(() => {

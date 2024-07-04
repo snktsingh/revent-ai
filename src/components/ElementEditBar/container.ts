@@ -50,6 +50,7 @@ import {
 import { useClientListElement } from '@/pages/canvas/canvasBody/elements/clientListElement';
 import { useHubAndSpoke } from '@/pages/canvas/canvasBody/elements/hubAndSpoke';
 import { useStatisticsElement } from '@/pages/canvas/canvasBody/elements/statisticElement';
+import { setRequestData } from '@/redux/reducers/canvas';
 
 export const useEditBar = () => {
   const [plusIcon, setPlusIcon] = useState<boolean>(false);
@@ -74,8 +75,8 @@ export const useEditBar = () => {
     useTableElement();
   const { deleteObject, handleCopyClick } = useDelAndCopy();
   const { canvasJS } = useAppSelector(state => state.canvas);
+  const { requestData, enhancementWithAI } = useAppSelector(state => state.apiData);
   
-
    const adjustControlsVisibility = (canvas: fabric.Canvas): void => {
     const selectedObject = canvas.getActiveObject();
 
@@ -315,7 +316,9 @@ export const useEditBar = () => {
   }
 
   const handleAICheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // dispatch(setRequestData({...requestData, useAi: e.target.checked}));
     dispatch(updateCheckboxForAI(e.target.checked));
+
   };
   //client list
   function addClientList(

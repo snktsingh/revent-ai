@@ -13,6 +13,7 @@ import { CanvasContainer } from './style';
 import { Canvas } from 'fabric/fabric-impl';
 import { toggleIsRegenerating } from '@/redux/thunk/thunk';
 import { setRegenerateMode } from '@/data/data';
+import { updateCheckboxForAI } from '@/redux/reducers/apiData';
 
 interface CanvasComponentProps {
    fabricRef : React.MutableRefObject<Canvas | null>;
@@ -89,6 +90,7 @@ const CanvasComponent: React.FC<CanvasComponentProps> = ({ fabricRef }) => {
       console.error('Failed to initialize Fabric canvas');
       return;
     }
+    dispatch(updateCheckboxForAI(false));
     updateCanvasDimensions(canvas);
     canvas.clear();
     updateCanvasStyle(canvas);

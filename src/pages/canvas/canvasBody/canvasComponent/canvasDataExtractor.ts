@@ -64,6 +64,7 @@ const useCanvasData = () => {
   const { canvasJS } = useAppSelector(state => state.canvas);
   const { enabledElements } = useAppSelector(state => state.element);
   const { presentationId } = useAppSelector(state => state.thunk);
+  const { enhancementWithAI } = useAppSelector(state => state.apiData);
 
   const getOrCreateElement = (
     shape: string,
@@ -104,6 +105,7 @@ const useCanvasData = () => {
       elements: [],
       presentationId: presentationId,
       // presentationName: 'Presentation-1',
+      useAI : false,
     };
     let timelineData: TimelineDataType[] = [];
     let hubAndSpokeData: HunNSpokeDataType[] = [];

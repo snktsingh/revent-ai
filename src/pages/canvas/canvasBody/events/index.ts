@@ -110,7 +110,6 @@ const useCanvasEvents = () => {
   };
 
   const onObjectRemovedEvent = (event: IEvent, canvas: fabric.Canvas) => {
-    console.log({isRegenerating})
     updateCanvasSlideData(canvas, canvasJS.id);
     getElementsData(
       canvas.toObject(customFabricProperties)?.objects,

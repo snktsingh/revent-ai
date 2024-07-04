@@ -40,7 +40,7 @@ const CustomTourTooltip: React.FC<CustomTooltipProps> = ({ tourVisible, tooltipC
       placement={tooltipContent === 'edit' ? 'left' : 'bottom'}
       {...restProps}
     >
-      <span>{children}</span>
+      <>{children}</>
     </CustomStyledTooltip>
   );
 };

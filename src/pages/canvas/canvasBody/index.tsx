@@ -81,7 +81,7 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
   } = useAppSelector(state => state.canvas);
   const { isRegenerateDisabled, tourStepIndex, tourStarted, tourVisible } = useAppSelector(state => state.slide);
   const { isLoading } = useAppSelector(state => state.thunk);
-  const { requestData } = useAppSelector(state => state.apiData);
+  const { requestData, enhancementWithAI } = useAppSelector(state => state.apiData);
   const { creditAmount } = useAppSelector(state => state.manageUser);
   const { enabledElements, isDeleteAlertShow } = useAppSelector(
     state => state.element
@@ -323,7 +323,7 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
 
 
 
-    let reqData = { ...requestData };
+    let reqData = { ...requestData, useAI: enhancementWithAI };
     if (params.id?.split('-')[0] && reqData) {
       const ptId = Number(params.id?.split('-')[0]);
       reqData.presentationId = ptId;
