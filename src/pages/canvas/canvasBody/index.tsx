@@ -694,13 +694,11 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {'Changes Detected !'}
+          {'Adding Elements'}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Changes cannot be applied on the current design. If you want to make
-            modifications Please visit the original slide from variants section
-            or Click Below.
+          More elements cannot be added on this slide. If you want to edit data, visit the original slide or download as editable ppt.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
