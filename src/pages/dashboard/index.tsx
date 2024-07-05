@@ -417,9 +417,9 @@ const Dashboard = ({ onFileSelect }: any) => {
           <img src={Think} width="2%" />
         </Box>
         <Box>
-          <p style={{ margin: '4px', fontSize: '16px', textAlign:"center" }}>
-            Transform with AI, start with a blank presenation or import an
-            existing PowerPoint.
+          <p style={{ margin: '4px', fontSize: '16px', textAlign: 'center' }}>
+            Re(in)venting the way you present Create Stunning
+            Presentations in Seconds
           </p>
         </Box>
         {pathName === 'my-presentations' && <HomeContent />}
