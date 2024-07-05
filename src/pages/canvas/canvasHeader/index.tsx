@@ -102,8 +102,8 @@ const MainCanvasHeader = ({ pId }: any) => {
           presentationName
             ? presentationName
             : format === 'pdf'
-              ? 'untitled-presentation.pdf'
-              : 'untitled-presentation.pptx'
+            ? 'untitled-presentation.pdf'
+            : 'untitled-presentation.pptx'
         );
         document.body.appendChild(link);
         link.click();
@@ -122,11 +122,8 @@ const MainCanvasHeader = ({ pId }: any) => {
       <Link to="/">
         <img
           src={Logo}
-          width="76%"
+          width="70%"
           style={{
-            background: 'white',
-            padding: '0px 0px',
-            borderRadius: '10px',
             cursor: 'pointer',
           }}
         />
@@ -164,7 +161,7 @@ const MainCanvasHeader = ({ pId }: any) => {
         </Stack>
         <VerticalDivider />
 
-        <CustomTourTooltip tourVisible={tourVisible} tooltipContent={'share'} >
+        <CustomTourTooltip tourVisible={tourVisible} tooltipContent={'share'}>
           <Stack direction="row" spacing={1}>
             <Button size="small" variant="contained" onClick={handleShareClick}>
               <img src={Share} style={{ paddingRight: '8px' }} />
@@ -195,7 +192,7 @@ const MainCanvasHeader = ({ pId }: any) => {
             </Stack>
           </MenuItem>
         </ShareMenu>
-        <Button size='small' variant='contained' onClick={handleClick}>
+        <Button size="small" variant="contained" onClick={handleClick}>
           <Stack direction="row" spacing={1}>
             <ButtonName>{`${userDetails?.firstName} ${userDetails?.lastName}`}</ButtonName>
             <UserAvatar>
