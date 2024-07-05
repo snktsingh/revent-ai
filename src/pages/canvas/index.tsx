@@ -157,7 +157,7 @@ const MainCanvas = () => {
               <p>Changing Presentation theme please wait...</p>
             </Backdrop>
             <MainCanvasHeader pId={pptId} />
-            <CanvasTools pId={pptId}/>
+            <CanvasTools pId={pptId} joyrideRef={joyrideHelpers}/>
             <CanvasBody joyrideRef={joyrideHelpers} />
             <CanvasVariant joyrideRef={joyrideHelpers}/>
             <CanvasThemes />

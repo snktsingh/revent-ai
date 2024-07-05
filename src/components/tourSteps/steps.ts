@@ -16,8 +16,19 @@ export const steps: CustomStep[] = [
     placement: 'center'
   },
   {
+    target: '.add-slide-step',
+    content: 'Let’s start by adding a new slide to the presentation by clicking on "New Slide"',    
+    id: 'addSlide',
+    disableBeacon: true,
+    styles : {
+      options: {
+        width:'50px',
+      },
+    }
+  },
+  {
     target: '.first-step',
-    content: 'Let’s start by clicking on ‘Add Elements’',
+    content: 'Click "Add Elements" to get list of elements',    
     id: 'addElement',
     disableBeacon: true,
     styles : {

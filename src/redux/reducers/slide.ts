@@ -55,6 +55,7 @@ export const slideReducer = createSlice({
     },
     toggleTourStarted(state, action: PayloadAction<boolean>) {
       state.tourStarted = action.payload;
+      state.tourVisible = false;
 
       if(!action.payload) {
         state.tourStepIndex = 0;

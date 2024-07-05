@@ -397,6 +397,6 @@ export const useEditBar = () => {
     handleChangeImageElement,
     addClientListImage,
     minusIcon,
-    updateDeletedObject
+    updateDeletedObject,
   };
 };

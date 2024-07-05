@@ -19,9 +19,13 @@ export const useQuoteElement = () => {
   const { QuoteImageId } = useAppSelector(state => state.elementsIds);
   const dispatch = useAppDispatch();
   const addQuotes = (canvas: fabric.Canvas | null) => {
+
+    let mainLeft : number = 110;
+    let mainTop : number = 120;
+
     let text = new fabric.Textbox('❝Click to add a quote❞', {
-      left: 290,
-      top: 170,
+      left: mainLeft + 100,
+      top: mainTop + 30,
       width: 300,
       height: 40,
       fill: 'black',
@@ -67,8 +71,8 @@ export const useQuoteElement = () => {
       fontFamily : customStyles.fonts.robotoSansSerif,
     });
     let group = new fabric.Group([mainListContainer, addImage], {
-      left: 110,
-      top: 120,
+      left: mainLeft,
+      top: mainTop,
       name: `${QUOTE_IMG}_${QuoteImageId}`,
     });
 

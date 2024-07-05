@@ -109,8 +109,8 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
   const params = useParams<{ id: string }>();
 
   const handleAddElementsToCanvas = (item: any) => {
-    if (tourStepIndex === 2 && tourStarted) {
-      dispatch(setTourStepIndex(3));
+    if (tourStepIndex === 3 && tourStarted) {
+      dispatch(setTourStepIndex(4));
     }
     const hasVariants = (canvasJS.canvas as any).objects.some(
       (obj: any) => obj.name === 'VariantImage'

@@ -12,12 +12,12 @@ const CustomStyledTooltip = styled(({ className, ...props }: TooltipProps) => (
     maxWidth: 'none',
     padding: '1px 2px',
     boxShadow: 'rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px'
-},
-[`& .${tooltipClasses.arrow}`]: {
+  },
+  [`& .${tooltipClasses.arrow}`]: {
     color: '#ffffff',
     '&::before': {
-        border: '1px solid #ccc', 
-        boxShadow: 'rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px'
+      border: '1px solid #ccc',
+      boxShadow: 'rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px'
     },
   },
 });
@@ -36,11 +36,11 @@ const CustomTourTooltip: React.FC<CustomTooltipProps> = ({ tourVisible, tooltipC
       }}
       arrow
       title={<CustomTooltipContent ChildName={tooltipContent} />}
-      open={tourVisible} 
+      open={tourVisible}
       placement={tooltipContent === 'edit' ? 'left' : 'bottom'}
       {...restProps}
     >
-      <>{children}</>
+      {children}
     </CustomStyledTooltip>
   );
 };
