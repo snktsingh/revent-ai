@@ -164,10 +164,14 @@ export function useDelAndCopy() {
           objectsToDelete.push(TABLE);
           break;
         case `${QUOTE}_${currentElID}`:
-          objectsToDelete.push(`${QUOTE_IMG}_${currentElID}`, QUOTE_AUTHOR, QUOTE_TEXT);
+          objectsToDelete.push(
+            `${QUOTE_IMG}_${currentElID}`, 
+            `${QUOTE_AUTHOR}_${currentElID}`, 
+            `${QUOTE_TEXT}_${currentElID}`
+          );
           break;
         case QUOTE_AUTHOR:
-          objectsToDelete.push(QUOTE_IMG, QUOTE);
+          objectsToDelete.push(`${QUOTE_IMG}_${currentElID}`, `${QUOTE}_${currentElID}`);
           break;
         case `${PYRAMID_LEVEL}_${currentElID}`:
           const [_, id, level] =

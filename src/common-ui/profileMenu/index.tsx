@@ -45,7 +45,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
   };
   const handleNavigateHome = () => {
     handleClose();
-    navigate(ROUTES.APP_ROOT, { replace: true });
+    navigate(ROUTES.DASHBOARD, { replace: true });
   };
   const handleNavigateDashboard = () => {
     handleClose();

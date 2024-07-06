@@ -78,6 +78,7 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
     selectedOriginalCanvas,
     variantImage,
     isVariantSelected,
+    activeSlideID
   } = useAppSelector(state => state.canvas);
   const { isRegenerateDisabled, tourStepIndex, tourStarted, tourVisible } = useAppSelector(state => state.slide);
   const { isLoading } = useAppSelector(state => state.thunk);
@@ -166,16 +167,19 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
   };
 
   const handleRequest = () => {
+    const slideIndex = canvasList.findIndex(
+      canvas => canvas.id === activeSlideID
+    );
     dispatch(toggleIsRegenerating(true));
     setRegenerateMode(true);
     setModificationAlert(false);
     const currentCanvas = {
       ...canvasJS,
-      originalSlideData: canvasList[canvasJS.id - 1].canvas || canvasJS.canvas,
+      originalSlideData: canvasList[slideIndex].canvas || canvasJS.canvas,
     };
     dispatch(updateCurrentCanvas(currentCanvas));
-    const slideJSON = canvasList[canvasJS.id - 1].canvas || canvasJS.canvas;
-    const notes: string = canvasList[canvasJS.id - 1].notes ? canvasList[canvasJS.id - 1].notes! : '';
+    const slideJSON = canvasList[slideIndex].canvas || canvasJS.canvas;
+    const notes: string = canvasList[slideIndex].notes ? canvasList[slideIndex].notes! : '';
     const pptId: number = +params.id?.split('-')[0]!;
 
     const isListImagesPresent = requestData?.elements.some(
@@ -190,7 +194,7 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
     const isClientListImagesPresent = requestData?.elements.some(
       canvas => canvas.shape === 'ClientList'
     );
-
+    
     if (isListImagesPresent && requestData) {
 
       let requestListData: APIRequest = requestData;
@@ -266,8 +270,9 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
 
       if (QuoteImagesArray && QuoteImagesArray.images) {
         if (QuoteImagesArray.images.length !== 0) {
-          for (let i = 0; i < QuoteImagesArray.images.length; i++) {
-            formData.append('images', QuoteImagesArray.images[i].imageFile);
+          let images = QuoteImagesArray.images.sort((a, b) => a.id - b.id);
+          for (let i = 0; i < images.length; i++) {
+            formData.append('images', images[i].imageFile);
           }
           dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes })).then((res) => {
             if (res && res.payload.slideId) {

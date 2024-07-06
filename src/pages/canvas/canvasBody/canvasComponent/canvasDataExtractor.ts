@@ -105,7 +105,7 @@ const useCanvasData = () => {
       elements: [],
       presentationId: presentationId,
       // presentationName: 'Presentation-1',
-      useAI : false,
+      useAI: false,
     };
     let timelineData: TimelineDataType[] = [];
     let hubAndSpokeData: HunNSpokeDataType[] = [];
@@ -239,14 +239,15 @@ const useCanvasData = () => {
             outputFormat
           );
           ListImage.data?.push({
-            name: canvasObject.text === "Add Text" ? "" : canvasObject.text,
-            label: canvasObject.text === "Add Text" ? "" : canvasObject.text,
+            name: canvasObject.text === 'Add Text' ? '' : canvasObject.text,
+            label: canvasObject.text === 'Add Text' ? '' : canvasObject.text,
             subHeading: '',
-            text: canvasObject.text === "Add Text" ? "" : canvasObject.text,
+            text: canvasObject.text === 'Add Text' ? '' : canvasObject.text,
           });
         } else if (canvasObject.name.startsWith(IMAGE)) {
           const Image = getOrCreateElement('Images', '1', outputFormat);
         } else if (canvasObject.name.startsWith(QUOTE_TEXT)) {
+          const [_, id] = canvasObject.name.split('_');
           const Quote = getOrCreateElement('Quote', '1', outputFormat);
 
           let newText = canvasObject.text.trim();
@@ -257,14 +258,27 @@ const useCanvasData = () => {
           ) {
             newText = newText.slice(1, -1);
           }
-          Quote.data?.push({
-            text: newText,
-          });
+          const quoteData = Quote.data || [];
+          const existingQuote = quoteData.find(item => item.id === id);
+          if (existingQuote) {
+            existingQuote.text = newText;
+          } else {
+            quoteData.push({ id, text: newText });
+          }
+          Quote.data = quoteData;
         } else if (canvasObject.name.startsWith(QUOTE_AUTHOR)) {
+          const [_, id] = canvasObject.name.split('_');
           const Quote = getOrCreateElement('Quote', '1', outputFormat);
           let newText = canvasObject.text.trim();
           if (Quote.data && Quote.data[0]) {
-            Quote.data[0].label = canvasObject.text.slice(1).trimStart();
+            const quoteData = Quote.data || [];
+            const existingQuote = quoteData.find(item => item.id === id);
+            if (existingQuote) {
+              existingQuote.label = canvasObject.text.slice(1).trimStart();
+            } else {
+              quoteData.push({ id, label: canvasObject.text.slice(1).trimStart() });
+            }
+            Quote.data = quoteData;
           }
         } else if (canvasObject?.name === TABLE_OF_CONTENTS_TEXT) {
           const { mainBulletPoints, nestedBulletPoints } =
@@ -272,11 +286,7 @@ const useCanvasData = () => {
           const contentsData = mainBulletPoints.map((text, index) => {
             return { heading: text, text };
           });
-          const Bullets = getOrCreateElement(
-            'Toc',
-            '1',
-            outputFormat
-          );
+          const Bullets = getOrCreateElement('Toc', '1', outputFormat);
           Bullets.data = contentsData;
         } else if (
           canvasObject.name.startsWith(HUB_AND_SPOKE_BOX_HEADING) ||
@@ -295,10 +305,8 @@ const useCanvasData = () => {
           statisticsData.push({ content: canvasObject.text, id: id });
         }
       }
-      if (
-        canvasObject.name.startsWith(CLIENT_LIST_MAIN) 
-      ) {
-          const clientList = getOrCreateElement('ClientList', '1', outputFormat);
+      if (canvasObject.name.startsWith(CLIENT_LIST_MAIN)) {
+        const clientList = getOrCreateElement('ClientList', '1', outputFormat);
       }
     });
 
@@ -457,18 +465,21 @@ const useCanvasData = () => {
         if ('shape' in element && element.shape === 'Funnel' && element.data) {
           return {
             ...element,
-            data: [...element.data].reverse()
+            data: [...element.data].reverse(),
           };
-        }else if ('shape' in element && element.shape === 'Hub' && element.data) {
+        } else if (
+          'shape' in element &&
+          element.shape === 'Hub' &&
+          element.data
+        ) {
           return {
             ...element,
-            heading : hubAndSpokeMainText
-          }
+            heading: hubAndSpokeMainText,
+          };
         }
         return element;
-      })
+      }),
     };
-    
     console.log({ outputFormat });
     dispatch(setRequestData(outputFormat));
     return new Promise<any>((resolve, reject) => {
@@ -592,7 +603,7 @@ const useCanvasData = () => {
           CLIENT_LIST_MAIN,
           HUB_AND_SPOKE,
           TABLE_OF_CONTENTS_TEXT,
-          STATISTICS
+          STATISTICS,
         ].some(elName => obj.name.startsWith(elName));
       }
     });
@@ -605,8 +616,7 @@ const useCanvasData = () => {
       enabledEl.push('Image');
     } else if (isTitleAdded && isSubtitleAdded && isImageAdded) {
       enabledEl.push('Image');
-    }
-    else if (isShapeAdded && isTitleAdded) {
+    } else if (isShapeAdded && isTitleAdded) {
       enabledEl.push('Subtitle');
     } else if (isShapeAdded && isSubtitleAdded) {
       enabledEl.push('Title');

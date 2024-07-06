@@ -33,6 +33,7 @@ import { downloadPresentation, setPresentationName } from '@/redux/thunk/thunk';
 import { toast } from 'react-toastify';
 import CustomTourTooltip from '@/components/tourSteps/customTooltip';
 import { Link } from 'react-router-dom';
+import { ROUTES } from '@/constants/endpoint';
 
 const MainCanvasHeader = ({ pId }: any) => {
   const dispatch = useAppDispatch();
@@ -119,7 +120,7 @@ const MainCanvasHeader = ({ pId }: any) => {
 
   return (
     <HeaderContainer>
-      <Link to="/">
+      <Link to={ROUTES.DASHBOARD}>
         <img
           src={Logo}
           width="70%"

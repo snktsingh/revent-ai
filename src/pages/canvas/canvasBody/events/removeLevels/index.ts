@@ -18,6 +18,10 @@ import {
   PYRAMID,
   PYRAMID_LEVEL,
   PYRAMID_TEXT,
+  QUOTE,
+  QUOTE_AUTHOR,
+  QUOTE_IMG,
+  QUOTE_TEXT,
   STATISTICS,
   STATISTICS_BOX,
   STATISTICS_TEXT,
@@ -50,18 +54,18 @@ export const useRemoveLevels = () => {
           }
         });
         if (lastLevel && lastTextBox) {
-          const mainContainer = new fabric.Rect({
-            left: activeObject.left! + 40,
-            top: activeObject.top!,
-            name: `${PYRAMID}_${id}`,
-            width: activeObject.width! - 80,
-            height: activeObject?.height! - 60,
-            fill: 'transparent',
-            strokeWidth: 1,
-            stroke: 'transparent',
-          });
-          canvas.add(mainContainer);
-          canvas.remove(activeObject);
+          // const mainContainer = new fabric.Rect({
+          //   left: activeObject.left! + 40,
+          //   top: activeObject.top!,
+          //   name: `${PYRAMID}_${id}`,
+          //   width: activeObject.width! - 80,
+          //   height: activeObject?.height! - 60,
+          //   fill: 'transparent',
+          //   strokeWidth: 1,
+          //   stroke: 'transparent',
+          // });
+          // canvas.add(mainContainer);
+          // canvas.remove(activeObject);
           canvas.remove(lastLevel);
           canvas.remove(lastTextBox);
         }
@@ -76,18 +80,18 @@ export const useRemoveLevels = () => {
           }
         });
         if (lastLevel && lastTextBox) {
-          const mainContainer = new fabric.Rect({
-            left: activeObject.left! + 15,
-            top: activeObject.top! + 40,
-            name: `${FUNNEL}_${id}`,
-            width: activeObject.width! - 20,
-            height: activeObject?.height! - 40,
-            fill: 'transparent',
-            strokeWidth: 1,
-            stroke: 'transparent',
-          });
-          canvas.add(mainContainer);
-          canvas.remove(activeObject);
+          // const mainContainer = new fabric.Rect({
+          //   left: activeObject.left! + 15,
+          //   top: activeObject.top! + 40,
+          //   name: `${FUNNEL}_${id}`,
+          //   width: activeObject.width! - 20,
+          //   height: activeObject?.height! - 40,
+          //   fill: 'transparent',
+          //   strokeWidth: 1,
+          //   stroke: 'transparent',
+          // });
+          // canvas.add(mainContainer);
+          // canvas.remove(activeObject);
           canvas.remove(lastLevel);
           canvas.remove(lastTextBox);
         }
@@ -111,22 +115,22 @@ export const useRemoveLevels = () => {
           console.log({ lastLevel, lastTextBox });
         });
         if (lastLevel && lastTextBox && lastTimelineTextBox && lastLine) {
-          const mainContainer = new fabric.Rect({
-            left: activeObject.left,
-            top: activeObject.top,
-            name: `${TIMELINE}_${id}`,
-            width:
-              circleCount <= 4 ? activeObject.width! - 170 : activeObject.width,
-            height:
-              circleCount === 5
-                ? activeObject.height! - 160
-                : activeObject.height!,
-            fill: 'transparent',
-            strokeWidth: 1,
-            stroke: 'transparent',
-          });
-          canvas.add(mainContainer);
-          canvas.remove(activeObject);
+          // const mainContainer = new fabric.Rect({
+          //   left: activeObject.left,
+          //   top: activeObject.top,
+          //   name: `${TIMELINE}_${id}`,
+          //   width:
+          //     circleCount <= 4 ? activeObject.width! - 170 : activeObject.width,
+          //   height:
+          //     circleCount === 5
+          //       ? activeObject.height! - 160
+          //       : activeObject.height!,
+          //   fill: 'transparent',
+          //   strokeWidth: 1,
+          //   stroke: 'transparent',
+          // });
+          // canvas.add(mainContainer);
+          // canvas.remove(activeObject);
           canvas.remove(lastLevel);
           canvas.remove(lastTextBox);
           canvas.remove(lastTimelineTextBox);
@@ -417,6 +421,19 @@ export const useRemoveLevels = () => {
           canvas.remove(lastHeadingText);
           canvas.remove(lastLevelTextRect);
         }
+      } else if(activeObject?.name.startsWith(QUOTE)) {
+        canvas.discardActiveObject();
+        canvas.forEachObject(obj => {
+          if(obj.name === `${QUOTE_TEXT}_${id}`) {
+            canvas.remove(obj);
+          } else if(obj.name === `${QUOTE_AUTHOR}_${id}`) {
+            canvas.remove(obj);
+          } else if(obj.name === `${QUOTE}_${id}`) {
+            canvas.remove(obj);
+          } else if(obj.name === `${QUOTE_IMG}_${id}`) {
+            canvas.remove(obj);
+          }
+        })
       }
     }
 
