@@ -23,7 +23,7 @@ export const useTableOfContents = () => {
             cursorDelay: 1,
             hoverCursor: 'text',
             padding: 5,
-            splitByGrapheme: true,
+            splitByGrapheme: false,
           });
 
           const BulletText = new fabric.Textbox('Click to add Sections', {

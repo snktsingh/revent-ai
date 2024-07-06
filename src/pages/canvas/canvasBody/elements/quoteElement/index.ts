@@ -38,7 +38,7 @@ export const useQuoteElement = () => {
       selectable: true,
       name: `${QUOTE_TEXT}_${QuoteImageId}`,
       cursorColor: theme.colorSchemes.light.palette.primary.main,
-      splitByGrapheme: true,
+      splitByGrapheme: false,
       fontFamily: customStyles.fonts.robotoSansSerif,
     });
 

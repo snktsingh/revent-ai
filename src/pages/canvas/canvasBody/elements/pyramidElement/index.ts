@@ -67,7 +67,7 @@ export function usePyramidElement() {
         name: `${PYRAMID_TEXT}_${currentID}`,
         fill: 'white',
         hasBorders: false,
-        splitByGrapheme: true,
+        splitByGrapheme: false,
         level: `${PYRAMID_TEXT}_${currentID}_${levelsCount + 1}`,
         hasControls: false,
         lockMovementX: true,
@@ -149,7 +149,7 @@ export function usePyramidElement() {
         lockMovementY: true,
         fill: 'white',
         hasBorders: false,
-        splitByGrapheme: true,
+        splitByGrapheme: false,
         level: `${PYRAMID_TEXT}_${pyramidId}_1`,
         fontFamily : customStyles.fonts.robotoSansSerif,
       });
@@ -194,7 +194,7 @@ export function usePyramidElement() {
           hasBorders: false,
           level: `${PYRAMID_TEXT}_${pyramidId}_2`,
           textAlign: 'center',
-          splitByGrapheme: true,
+          splitByGrapheme: false,
           fontFamily : customStyles.fonts.robotoSansSerif,
         });
 
