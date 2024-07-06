@@ -3,12 +3,13 @@ import { fabric } from 'fabric';
 export interface AutoResizingTextboxOptions extends fabric.ITextboxOptions {
   fixedWidth?: number;
   fixedHeight?: number;
-  level? : string;
+  level?: string;
 }
 
 class AutoResizingTextbox extends fabric.Textbox {
   fixedWidth?: number;
   fixedHeight?: number;
+  private originalFontSize?: number;
 
   constructor(text: string, options: AutoResizingTextboxOptions) {
     super(text, options);
@@ -16,31 +17,36 @@ class AutoResizingTextbox extends fabric.Textbox {
 
     this.fixedWidth = options.fixedWidth;
     this.fixedHeight = options.fixedHeight;
-    let originalFontSize = this?.fontSize;
+    this.originalFontSize = this.fontSize;
 
-    this.on('changed', this.adjustFontSize.bind(this, originalFontSize));
+    this.on('changed', this.handleTextChanged.bind(this));
   }
 
-  adjustFontSize(originalFontSize: any) : void {
-    let currentFontSize = this.fontSize;
-    if (this.fixedHeight && this.height && this.height > this.fixedHeight) {
-      this.set('fontSize', currentFontSize! - 1);
-      this.adjustFontSize(originalFontSize);
-      return;
-    } else {
-      if (currentFontSize && this.fontSize && currentFontSize < originalFontSize) {
-        // console.log(this.fixedHeight - this.height < currentFontSize * this.lineHeight * 1.5)
-        if (this.fixedHeight && this.height && this.lineHeight && this.fixedHeight - this.height < (currentFontSize * this.lineHeight) * 1.5) {
-          return;
-        } else {
-          this.set('fontSize', currentFontSize + 1);
-          this.canvas?.renderAll();
-          this.adjustFontSize(originalFontSize);
-          return;
-        }
-      }
-      return;
+  handleTextChanged(): void {
+    if (this.originalFontSize) {
+      this.adjustFontSize(1, this.originalFontSize);
     }
+  }
+
+  adjustFontSize(minFontSize: number, maxFontSize: number): void {
+    if (!this.fixedHeight || !this.originalFontSize) return;
+
+    let newFontSize = minFontSize;
+
+    while (minFontSize <= maxFontSize) {
+      newFontSize = Math.floor((minFontSize + maxFontSize) / 2);
+      this.set('fontSize', newFontSize);
+      this.canvas?.renderAll();
+
+      if (this.height && this.height <= this.fixedHeight) {
+        minFontSize = newFontSize + 1;
+      } else {
+        maxFontSize = newFontSize - 1;
+      }
+    }
+
+    this.set('fontSize', newFontSize);
+    this.canvas?.renderAll();
   }
 }
 
