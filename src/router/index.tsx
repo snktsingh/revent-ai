@@ -27,6 +27,7 @@ export const authRoutes: RouteObject[] = [
   { path: ROUTES.TERMS, element: <Terms /> },
   { path: ROUTES.TUTORIALS, element: <Dashboard /> },
   { path: ROUTES.LIBRARY, element: <Dashboard /> },
+  { path: ROUTES.TEMPLATES, element: <Dashboard /> },
 
   // { path: ROUTES.FORGOT_PASSWORD, element: <ForgotPasswordPage /> },
   // { path: ROUTES.RESET_PASSWORD, element: <ResetPasswordPage /> },
@@ -50,6 +51,7 @@ export const defaultRoutes: RouteObject[] = [
   { path: ROUTES.TERMS, element: <Terms /> },
   { path: ROUTES.TUTORIALS, element: <Tutorials /> },
   { path: ROUTES.LIBRARY, element: <Protected /> },
+  { path: ROUTES.TEMPLATES, element: <Protected /> },
 
   {
     path: '/*',

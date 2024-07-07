@@ -119,7 +119,7 @@ const MainCanvasHeader = ({ pId }: any) => {
 
   return (
     <HeaderContainer>
-      <Link to="/">
+      <Link to="/my-library">
         <img
           src={Logo}
           width="70%"

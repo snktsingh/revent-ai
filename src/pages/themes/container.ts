@@ -53,7 +53,7 @@ const useStartTheme = () => {
           );
           dispatch(setSelectedDocFile(null));
           setTimeout(() => {
-            navigate('/my-presentations');
+            navigate('/dashboard');
           }, 1000);
         } catch (error: any) {
           toast.error(error.message);

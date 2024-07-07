@@ -36,6 +36,7 @@ import React, { HtmlHTMLAttributes, useEffect, useRef, useState } from 'react';
 import { MagnifyingGlass } from 'react-loader-spinner';
 import AddToQueueIcon from '@mui/icons-material/AddToQueue';
 import '../../../index.css';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { theme } from '@/constants/theme';
 import {
   IPresentation,
@@ -105,6 +106,11 @@ import Tutorials from '../tutorials';
 import UserSettings from '../userSettings';
 import { ROUTES } from '@/constants/endpoint';
 import MyLibrary from './library';
+import useCanvasHeader from '../canvas/canvasHeader/container';
+import { EllipsisTypography } from '@/common-ui/profileMenu/style';
+import { UserAvatar } from '../canvas/canvasHeader/style';
+import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
+import AdminTemplates from './templates';
 interface FileUploadProps {
   onFileSelect: (file: File) => void;
 }
@@ -112,22 +118,8 @@ interface FileUploadProps {
 const Dashboard = ({ onFileSelect }: any) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const {
-    isDeletePptAlertOpen,
-    openProfileMenu,
-    handleCloseProfileMenu,
-    handleOpenProfile,
-    handleDeletePpt,
-    handleClose,
-    setPptId,
-    pptId,
-    removePresentation,
-    getFirstLettersForAvatar,
-    setOpenProfileMenu,
-    handlePptDelCheckBox,
-    fetchPreset,
-  } = useDashboard();
-
+  const { getFirstLettersForAvatar } = useDashboard();
+  const { userLogout } = useCanvasHeader();
   const { userDetails } = useAppSelector(state => state.manageUser);
   const { loadingUserDetails, pptList, presetList } = useAppSelector(
     state => state.manageDashboard
@@ -261,16 +253,52 @@ const Dashboard = ({ onFileSelect }: any) => {
     } else if (value === 1) {
       navigate(`${ROUTES.LIBRARY}`);
     } else if (value === 2) {
-      navigate(`${ROUTES.TUTORIALS}`);
+      navigate(`${ROUTES.TEMPLATES}`);
     } else if (value === 3) {
+      navigate(`${ROUTES.TUTORIALS}`);
+    } else if (value === 4) {
       navigate(`${ROUTES.SETTINGS}`);
+    } else if (value === 5) {
+      userLogout();
     }
   };
+
+  const menuItems = [
+    {
+      text: 'Dashboard',
+      icon: <DashboardCustomizeIcon fontSize="small" sx={{ color: 'white' }} />,
+    },
+    {
+      text: 'My Library',
+      icon: <AddHomeIcon fontSize="small" sx={{ color: 'white' }} />,
+    },
+    {
+      text: 'Tutorials',
+      icon: <CollectionsBookmark fontSize="small" sx={{ color: 'white' }} />,
+    },
+    {
+      text: 'Account Settings',
+      icon: <AdminPanelSettings fontSize="small" sx={{ color: 'white' }} />,
+    },
+    {
+      text: 'Logout',
+      icon: <ExitToAppIcon fontSize="small" sx={{ color: 'white' }} />,
+    },
+  ];
+
+  if (userDetails?.authorities[0] === 'ROLE_ADMIN') {
+    menuItems.splice(2, 0, {
+      text: 'My Templates',
+      icon: <PhotoLibraryIcon fontSize="small" sx={{ color: 'white' }} />,
+    });
+  }
+
   return (
     <Box
       sx={{
         display: 'flex',
         height: '100vh',
+        overflow: 'hidden',
       }}
     >
       <CssBaseline />
@@ -293,108 +321,92 @@ const Dashboard = ({ onFileSelect }: any) => {
             }}
           >
             {open && (
-              <img
-                src={Logo}
-                width="50%"
-                style={{
-                  background: 'white',
-                  padding: '0px 10px',
-                  borderRadius: '10px',
-                }}
-              />
+              <Box sx={{ color: 'white' }}>
+                <Typography variant="subtitle1" fontWeight={600}>
+                  {userDetails?.firstName} {userDetails?.lastName}
+                </Typography>
+                <EllipsisTypography variant="body2" color="white">
+                  {userDetails?.email}
+                </EllipsisTypography>
+              </Box>
             )}
             {open && (
               <IconButton onClick={handleDrawerClose}>
                 {theme.direction !== 'rtl' ? (
                   <ChevronLeftIcon sx={{ color: 'white' }} />
                 ) : (
-                  <ChevronLeftIcon />
+                  <UserAvatar>
+                    {getFirstLettersForAvatar(
+                      `${userDetails?.firstName} ${userDetails?.lastName}`
+                    )}
+                  </UserAvatar>
                 )}
               </IconButton>
             )}
             {!open && (
               <span
                 style={{
-                  padding: '12px 16px 10px',
+                  padding: '12px 10px 10px',
                   cursor: 'pointer',
                   borderRadius: '8px',
-                  background: `${theme.palette.common.background}`,
                 }}
                 onClick={handleDrawerOpen}
               >
-                <img src={Favicon} />
+                <UserAvatar>
+                  {getFirstLettersForAvatar(
+                    `${userDetails?.firstName} ${userDetails?.lastName}`
+                  )}
+                </UserAvatar>{' '}
               </span>
             )}{' '}
           </Box>
         </DrawerHeader>
         <List>
-          {['Home', 'My Library', 'Tutorials', 'Account Settings'].map(
-            (text, index) => (
-              <ListItem
-                key={text}
+          {menuItems.map(({ text, icon }, index) => (
+            <ListItem
+              key={text}
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                padding: '4px 12px',
+                '&:hover .MuiListItemText-root': {
+                  background:
+                    'linear-gradient(55.96deg, #004FBA 13.4%, #002454 89.54%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  textShadow: 'none',
+                },
+                border: 'none',
+              }}
+            >
+              <ListItemButton
                 sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  padding: '4px 12px',
-                  '&:hover .MuiListItemText-root': {
-                    background:
-                      'linear-gradient(55.96deg, #004FBA 13.4%, #002454 89.54%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    textShadow: 'none',
-                  },
-                  border: 'none',
+                  minHeight: 2,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5,
                 }}
+                onClick={() => handleNavigation(index)}
               >
-                <ListItemButton
+                <ListItemIcon
                   sx={{
-                    minHeight: 2,
-                    justifyContent: open ? 'initial' : 'center',
-                    px: 2.5,
+                    minWidth: 0,
+                    mr: open ? 3 : 'auto',
+                    justifyContent: 'center',
                   }}
-                  onClick={() => handleNavigation(index)}
                 >
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : 'auto',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    {index === 0 && (
-                      <DashboardCustomizeIcon
-                        fontSize="small"
-                        sx={{ color: 'white' }}
-                      />
-                    )}
-                    {index === 1 && (
-                      <AddHomeIcon fontSize="small" sx={{ color: 'white' }} />
-                    )}
-                    {index === 2 && (
-                      <CollectionsBookmark
-                        fontSize="small"
-                        sx={{ color: 'white' }}
-                      />
-                    )}
-                    {index === 3 && (
-                      <AdminPanelSettings
-                        fontSize="small"
-                        sx={{ color: 'white' }}
-                      />
-                    )}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={text}
-                    sx={{
-                      opacity: open ? 1 : 0,
-                      color: '#d9d9d9',
-                      transition: 'color 0.3s ease',
-                    }}
-                  />
-                </ListItemButton>
-              </ListItem>
-            )
-          )}
+                  {icon}
+                </ListItemIcon>
+                <ListItemText
+                  primary={text}
+                  sx={{
+                    opacity: open ? 1 : 0,
+                    color: '#d9d9d9',
+                    transition: 'color 0.3s ease',
+                  }}
+                />
+              </ListItemButton>
+            </ListItem>
+          ))}
         </List>
       </Drawer>
       <Box
@@ -413,19 +425,19 @@ const Dashboard = ({ onFileSelect }: any) => {
       >
         <Box sx={{ display: 'flex', gap: '6px', justifyContent: 'center' }}>
           <img src={Logo} width="10%" />
-          <h3> | Your Personal AI WorkSpace</h3>
+          <h3> | Re(in)venting The Way You Present</h3>
           <img src={Think} width="2%" />
         </Box>
         <Box>
           <p style={{ margin: '4px', fontSize: '16px', textAlign: 'center' }}>
-            Re(in)venting the way you present Create Stunning
-            Presentations in Seconds
+            Create Stunning Presentations in Seconds
           </p>
         </Box>
-        {pathName === 'my-presentations' && <HomeContent />}
+        {pathName === 'dashboard' && <HomeContent />}
         {pathName === 'my-library' && <MyLibrary />}
         {pathName === 'tutorials' && <Tutorials />}
         {pathName === 'settings' && <UserSettings />}
+        {pathName === 'my-templates' && <AdminTemplates />}
       </Box>
     </Box>
   );

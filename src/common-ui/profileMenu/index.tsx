@@ -38,30 +38,31 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
   const location = useLocation();
   const dispatch = useAppDispatch();
 
-
   const handleClose = () => {
     handleCloseProfileMenu();
     setAnchorElForProfileMenu(null);
   };
   const handleNavigateHome = () => {
     handleClose();
-    navigate(ROUTES.APP_ROOT, { replace: true });
+    navigate(ROUTES.DASHBOARD, { replace: true });
   };
   const handleNavigateDashboard = () => {
     handleClose();
-    navigate(ROUTES.DASHBOARD, { replace: true });
+    navigate(ROUTES.LIBRARY, { replace: true });
   };
   const handleNavigateSettings = () => {
     handleClose();
-    navigate(ROUTES.SETTINGS, { state: { prevPath: location.pathname }, replace: true });
-
+    navigate(ROUTES.SETTINGS, {
+      state: { prevPath: location.pathname },
+      replace: true,
+    });
   };
 
   const handleTutorials = () => {
     handleClose();
-    const presentationPage = location.pathname.split("/");
+    const presentationPage = location.pathname.split('/');
 
-    if (presentationPage.includes("presentation")) {
+    if (presentationPage.includes('presentation')) {
       dispatch(toggleTutorialRedirectALert(true));
     } else {
       navigate(ROUTES.TUTORIALS, { replace: true });
@@ -94,13 +95,13 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
         <ListItemIcon>
           <HomeIcon />
         </ListItemIcon>
-        Home
+        Dashboard
       </StyledMenuItem>
       <StyledMenuItem onClick={handleNavigateDashboard}>
         <ListItemIcon>
           <DashboardIcon />
         </ListItemIcon>
-        My Presentations
+        My Library
       </StyledMenuItem>
       <StyledMenuItem onClick={handleTutorials}>
         <ListItemIcon>

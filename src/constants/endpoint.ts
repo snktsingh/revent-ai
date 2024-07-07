@@ -47,7 +47,7 @@ export const ROUTES = {
   APP_ROOT: '/',
   SIGNUP: '/signup',
   LOGIN: '/login',
-  DASHBOARD: '/my-presentations',
+  DASHBOARD: '/dashboard',
   THEMES: '/themes',
   CANVAS: '/presentation/:id',
   SETTINGS: '/settings',
@@ -58,6 +58,7 @@ export const ROUTES = {
   PRIVACY: '/privacy-policy',
   TUTORIALS: '/tutorials',
   LIBRARY: '/my-library',
+  TEMPLATES:"/my-templates"
 } as const;
 
 export default ENDPOINT;

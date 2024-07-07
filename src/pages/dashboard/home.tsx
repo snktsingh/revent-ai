@@ -10,12 +10,31 @@ import {
 } from '@/constants/media';
 import { setSelectedDocFile } from '@/redux/reducers/theme';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { Box, Card } from '@mui/material';
-import React, { useRef, useState } from 'react';
+import { Box, Card, IconButton, Stack } from '@mui/material';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useDashboard from './container';
-import { CardLink, CardTitle, PreviewCard } from './style';
+import {
+  BlankImageCard,
+  CardLink,
+  CardTitle,
+  Loader,
+  LoaderText,
+  PPTCard,
+  PPTTitle,
+  PreviewCard,
+  ThumbnailCard,
+  TitleCard,
+} from './style';
 import { togglePresetOpened } from '@/redux/thunk/dashboard';
+import { MagnifyingGlass } from 'react-loader-spinner';
+import { theme } from '@/constants/theme';
+import { MoreVert } from '@mui/icons-material';
+import { faker } from '@faker-js/faker';
+import moment from 'moment';
+import { FetchUtils } from '@/utils/fetch-utils';
+import ENDPOINT from '@/constants/endpoint';
+import PresentationCardContextMenu from '@/common-ui/presentationContextMenu';
 
 const HomeContent = ({ onFileSelect }: any) => {
   const inputRef = React.createRef<HTMLInputElement>();
@@ -92,6 +111,23 @@ const HomeContent = ({ onFileSelect }: any) => {
   const handleDocsPPt = async () => {
     navigate('/themes');
   };
+
+  const { loadingUserDetails } = useAppSelector(state => state.manageDashboard);
+
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [pptList, setPptList] = useState<[]>([]);
+
+  const fetchPPTList = async () => {
+    const res = await FetchUtils.getRequest(
+      `${ENDPOINT.DASHBOARD.FETCH_PPT_LIST}?size=16`
+    );
+    setPptList(res.data);
+  };
+
+  useEffect(() => {
+    fetchPPTList();
+    setIsLoading(false);
+  }, []);
 
   return (
     <div>
@@ -260,39 +296,118 @@ const HomeContent = ({ onFileSelect }: any) => {
         </Card>
       </Box>
       <Box sx={{ marginTop: '30px' }}>
-        <p style={{ fontSize: '14px', fontWeight: '600' }}>Templates</p>
-        {presetList.length > 0 && (
-          <>
-            {presetList.map((preset, index) => {
-              return (
-                <CardTitle
-                  key={preset.presetName + index}
-                  onClick={() => {
-                    navigate('/themes');
-                    fetchPreset(preset.id);
-                    dispatch(togglePresetOpened(true));
-                  }}
-                >
-                  <Card
-                    style={{
-                      width: '100%',
-                      padding: '14px',
-                      borderRadius: '10px',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      cursor: 'pointer',
-                      justifyContent: 'space-between',
-                      boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px',
-                    }}
-                  >
-                    <img src={PresetIcon} width="100%" height="100%" />
-                    <span title={preset.presetName}>{preset.presetName}</span>
-                  </Card>
-                </CardTitle>
-              );
-            })}
-          </>
+        <p style={{ fontSize: '14px', fontWeight: '600' }}>
+          Recent Presentations
+        </p>
+        {isLoading === false ? (
+          <Box onContextMenu={e => e.preventDefault()} sx={{ marginTop: '3%' }}>
+            <Box height="78vh" overflow="auto">
+              <CardTitle>
+                {pptList.map((ppt: any, index) => {
+                  return (
+                    <PPTCard
+                      key={ppt.presentationId}
+                      onContextMenu={e => handleContextMenu(e, ppt)}
+                    >
+                      <ThumbnailCard>
+                        {ppt.thumbnailUrl !== '' ? (
+                          <img
+                            src={ppt.thumbnailUrl}
+                            alt={ppt.name}
+                            width={'100%'}
+                            height={'80%'}
+                            style={{
+                              borderRadius: '6px',
+                              cursor: 'pointer',
+                              marginBottom: '10px',
+                            }}
+                            onClick={() => {
+                              navigate(
+                                `/presentation/${
+                                  ppt.presentationId
+                                }-${faker.string.uuid()}`
+                              );
+                            }}
+                          />
+                        ) : (
+                          <BlankImageCard>
+                            <img
+                              src={Blank}
+                              style={{ cursor: 'pointer' }}
+                              onClick={() => {
+                                navigate(
+                                  `/presentation/${
+                                    ppt.presentationId
+                                  }-${faker.string.uuid()}`
+                                );
+                              }}
+                            />
+                          </BlankImageCard>
+                        )}
+                        <TitleCard>
+                          <Stack direction="column" spacing={0.5}>
+                            <PPTTitle title={ppt.name}>
+                              {ppt.name == undefined
+                                ? 'Untitled-presentation'
+                                : ppt.name}
+                            </PPTTitle>
+                            <div
+                              style={{
+                                width: '100%',
+                                padding: '0px 0px 0px 0px',
+                                fontSize: '11px',
+                                color: 'grey',
+                                fontWeight: '200',
+                              }}
+                            >
+                              Opened -{' '}
+                              {moment(ppt.lastModifiedDate).format(
+                                'DD/MM/YYYY'
+                              )}
+                            </div>
+                          </Stack>
+                          <IconButton
+                            onClick={event => {
+                              handleContextMenu(event, ppt);
+                              setPptId(ppt.presentationId);
+                            }}
+                            id="more_menu"
+                          >
+                            <MoreVert id="more_menu" fontSize="small" />
+                          </IconButton>
+                        </TitleCard>
+                      </ThumbnailCard>
+                    </PPTCard>
+                  );
+                })}
+              </CardTitle>{' '}
+            </Box>
+          </Box>
+        ) : (
+          <Loader>
+            <MagnifyingGlass
+              visible={true}
+              height="30"
+              width="30"
+              ariaLabel="magnifying-glass-loading"
+              wrapperStyle={{}}
+              wrapperClass="loader"
+              glassColor="#c0efff"
+              color={`${theme.colorSchemes.light.palette.primary.main}`}
+            />
+            <br />
+            <LoaderText>
+              Gathering your Spectacular Presentations. Please hold tight...
+            </LoaderText>
+          </Loader>
         )}
+        <PresentationCardContextMenu
+          anchorPoint={contextMenu || { x: 0, y: 0 }}
+          isOpen={contextMenu !== null}
+          onClose={handleCloseContextMenu}
+          presentation={currentPresentation}
+          contextMenuRef={contextMenuRef}
+        />
       </Box>
     </div>
   );
