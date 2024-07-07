@@ -52,7 +52,7 @@ export function useSWOTElement() {
         lockMovementX: true,
         lockMovementY: true,
         hasBorders: false,
-        splitByGrapheme: true,
+        splitByGrapheme: false,
         level: `${SWOT_TEXT}_${swotID}_${level}`,
         fontFamily : customStyles.fonts.robotoSansSerif,
       });

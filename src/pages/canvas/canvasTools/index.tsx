@@ -73,6 +73,7 @@ import { addNewSlideApi, reorderSlidesApi } from '@/redux/thunk/slidesThunk';
 import Feedback from '@/common-ui/feedback';
 import TourIcon from '@mui/icons-material/Tour';
 import CustomTourTooltip from '@/components/tourSteps/customTooltip';
+import { StoreHelpers } from 'react-joyride';
 
 interface FontItem {
   family: string;
@@ -87,8 +88,7 @@ interface FontItem {
 }
 
 
-const CanvasTools = ({ pId }: any) => {
-  const dispatch = useAppDispatch();
+const CanvasTools = ({ pId, joyrideRef }: { pId: number, joyrideRef: React.RefObject<StoreHelpers | null> }) => {  const dispatch = useAppDispatch();
   const newKey = useAppSelector(state => state.slide);
   const { color, textColor, borderColor, canvasList, size, activeSlideID } = useAppSelector(
     state => state.canvas
@@ -255,13 +255,13 @@ const CanvasTools = ({ pId }: any) => {
             presentationId: canvasList[0].presentationId,
             slides: reorderedSlides
           }
-
           dispatch(reorderSlidesApi(req)).then((res) => {
             console.log(res);
           });
         }
       }
     })
+    joyrideRef.current?.next();
   };
   const handleScroll = () => {
     if (
@@ -300,7 +300,7 @@ const CanvasTools = ({ pId }: any) => {
         <ToolOutlinedButton
           onClick={handleAddNewSlide}
           disabled={isLoading}
-          className='eighth-step'
+          className='add-slide-step'
         >
           <Stack direction="row" spacing={1}>
             <img src={Add} />

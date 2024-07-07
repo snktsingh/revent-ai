@@ -65,7 +65,7 @@ export function useCycleElement() {
       lockMovementX: true,
       lockMovementY: true,
       hasBorders: false,
-      splitByGrapheme: true,
+      splitByGrapheme: false,
       level: `${CYCLE_TEXT}_${currentID}_${level}`,
     });
     return canvas.add(text);
@@ -286,7 +286,7 @@ export function useCycleElement() {
         lockMovementX: true,
         lockMovementY: true,
         hasBorders: false,
-        splitByGrapheme: true,
+        splitByGrapheme: false,
         level: `${CYCLE_TEXT}_${cycleId}_${level}`,
       });
 

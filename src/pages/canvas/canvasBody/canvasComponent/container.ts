@@ -175,7 +175,6 @@ export const useCanvasComponent = () => {
     );
     const slideId = canvasList.find((slide: any) => slide.id === id)?.slideId || 1;
     if(presentationId && !hasVariants && !regenerateMode && +slideId > 100 ) {
-      console.log('Updating slide JSON on Db', {updatedCanvas})
       updateSlideJSONOnDB(presentationId, updatedCanvas, +slideId);
     }
   };

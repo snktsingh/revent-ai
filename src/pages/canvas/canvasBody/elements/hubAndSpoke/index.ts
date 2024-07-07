@@ -93,7 +93,7 @@ export const useHubAndSpoke = () => {
       lockMovementX: true,
       lockMovementY: true,
       hasBorders: false,
-      splitByGrapheme: true,
+      splitByGrapheme: false,
       textAlign: 'center',
       fontFamily : customStyles.fonts.robotoSansSerif,
     });
@@ -115,7 +115,7 @@ export const useHubAndSpoke = () => {
       lockMovementX: true,
       lockMovementY: true,
       hasBorders: false,
-      splitByGrapheme: true,
+      splitByGrapheme: false,
       textAlign: 'center',
       fontFamily : customStyles.fonts.robotoSansSerif,
     });
@@ -136,7 +136,7 @@ export const useHubAndSpoke = () => {
       lockMovementX: true,
       lockMovementY: true,
       hasBorders: false,
-      splitByGrapheme: true,
+      splitByGrapheme: false,
       textAlign: 'center',
       fontFamily : customStyles.fonts.robotoSansSerif,
     });

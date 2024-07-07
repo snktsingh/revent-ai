@@ -10,6 +10,7 @@ import { updateProcessId } from '@/redux/reducers/fabricElements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import AutoResizingTextbox from '@/utils/fabric-utils/AutoResizingTextbox';
 import { fabric } from 'fabric';
+
 export const useProcessElement = () => {
   const dispatch = useAppDispatch();
   const { processId } = useAppSelector(state => state.elementsIds);
@@ -81,7 +82,7 @@ export const useProcessElement = () => {
       lockMovementX: true,
       lockMovementY: true,
       hasBorders: false,
-      splitByGrapheme: true,
+      splitByGrapheme: false,
       level: `${PROCESS_TEXT}_${currentID}_${rectCount + 1}`,
       textAlign: 'center',
       fontFamily : customStyles.fonts.robotoSansSerif,
@@ -150,7 +151,7 @@ export const useProcessElement = () => {
         lockMovementX: true,
         lockMovementY: true,
         hasBorders: false,
-        splitByGrapheme: true,
+        splitByGrapheme: false,
         level: `${PROCESS_TEXT}_${processId}_${level}`,
         textAlign: 'center',
         fontFamily : customStyles.fonts.robotoSansSerif,

@@ -89,6 +89,7 @@ export interface DataRequestType {
   label?: string;
   subHeading?: string;
   text?: string;
+  id? : number;
 }
 
 export interface ElementBaseType {

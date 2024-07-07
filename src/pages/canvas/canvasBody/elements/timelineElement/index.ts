@@ -71,7 +71,7 @@ export function useTimelineElement(){
             fill: theme.colorSchemes.light.palette.common.black,
             name: timelineName,
             hasControls :false,
-            splitByGrapheme: true,
+            splitByGrapheme: false,
             fontFamily : customStyles.fonts.robotoSansSerif,
           });
           return canvas?.add(text);
@@ -154,7 +154,7 @@ export function useTimelineElement(){
             fill: theme.colorSchemes.light.palette.common.black,
             name: timelineName,
             hasControls :false,
-            splitByGrapheme: true,
+            splitByGrapheme: false,
             fontFamily : customStyles.fonts.robotoSansSerif,
           });
           return canvas?.add(text);
@@ -200,8 +200,10 @@ export function useTimelineElement(){
         let mTop: number = mainTimelineContainer.top!;
         addLine(29, mTop + 20 + 45, 150);
         addLine(170, mTop + 20 + 45, 200);
+        // addLine(311, mTop + 20 + 45, 200);
         addCircle(130, mTop + 20 + 26);
         addCircle(321, mTop + 20 + 26);
+        // addCircle(412, mTop + 20 + 26);
         addText(102, mTop + 20, 100, 14, 'Add Timeline', `${TIMELINE_HEADING}_${timelineId}`);
         addText(111, mTop + 20 + 79, 150, 16, 'Add Text', `${TIMELINE_TEXT}_${timelineId}`);
         addText(301, mTop + 20, 100, 14, 'Add Timeline', `${TIMELINE_HEADING}_${timelineId}`);

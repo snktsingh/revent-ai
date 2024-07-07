@@ -17,7 +17,7 @@ export default function useAllElements() {
     cursorDelay: 1,
     hoverCursor: 'text',
     padding: 5,
-    splitByGrapheme: true,
+    splitByGrapheme: false,
   });
 
   const subtitle = new fabric.Textbox('Click to add a subtitle', {
@@ -28,7 +28,7 @@ export default function useAllElements() {
     fontFamily: customStyles.fonts.robotoSansSerif,
     name: SUBTITLE,
     fill: '#404040',
-    splitByGrapheme: true,
+    splitByGrapheme: false,
   });
 
   const heading = new fabric.Textbox('Click to add a heading', {
@@ -40,7 +40,7 @@ export default function useAllElements() {
     fontWeight: 'bold',
     name: 'headingbox',
     fill: '#404040',
-    splitByGrapheme: true,
+    splitByGrapheme: false,
   });
 
   const paragraph = new fabric.Textbox('Click to add a paragraph', {
@@ -52,7 +52,7 @@ export default function useAllElements() {
     fontFamily: customStyles.fonts.robotoSansSerif,
     name: PARAGRAPH,
     fill: '#404040',
-    splitByGrapheme: true,
+    splitByGrapheme: false,
   });
 
   paragraph.setControlsVisibility({
@@ -171,7 +171,7 @@ export default function useAllElements() {
       textAlign: 'center',
       padding: 5,
       height: 200,
-      splitByGrapheme: true,
+      splitByGrapheme: false,
       originX: 'center',
       originY: 'center',
     });
@@ -187,7 +187,7 @@ export default function useAllElements() {
       name: subtitleName,
       padding: 2,
       height: 300,
-      splitByGrapheme: true,
+      splitByGrapheme: false,
       originX: 'center',
       originY: 'center',
     });

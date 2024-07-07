@@ -6,9 +6,10 @@ import styled from 'styled-components';
 import { useEditBar } from './container';
 import { useTableElement } from '@/pages/canvas/canvasBody/elements/tableElement';
 import { IMAGE, LIST_MAIN, QUOTE_IMG, QUOTE_IMG_CONTAINER, TABLE_HEADER } from '@/constants/elementNames';
-import { useAppSelector } from '@/redux/store';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { useRemoveLevels } from '@/pages/canvas/canvasBody/events/removeLevels';
+import { setTourStepIndex } from '@/redux/reducers/slide';
 
 interface ElementEditBarProps {
     left: number;
@@ -18,9 +19,10 @@ interface ElementEditBarProps {
 
 
 const ElementEditBar: React.FC<ElementEditBarProps> = ({ left, top, canvas }) => {
-
+    const dispatch = useAppDispatch();
     const [position, setPosition] = useState({ l: left, t: top });
     const { enhancementWithAI } = useAppSelector(state => state.apiData);
+    const { tourStepIndex, tourStarted } = useAppSelector(state => state.slide);
     const { addTableColumn, addTableRow, removeTableColumn, removeTableRow, removeTableHeader, addTableHeader } = useTableElement();
     const editBarRef = useRef<HTMLDivElement>(null);
     const {
@@ -56,6 +58,9 @@ const ElementEditBar: React.FC<ElementEditBarProps> = ({ left, top, canvas }) =>
     };
     const handleAdd = () => {
         checkElementForAddLevel(canvas!);
+        if (tourStepIndex === 3 && tourStarted) {
+            dispatch(setTourStepIndex(4));
+          }
     };
 
     const handleAddTableCol = () => {
@@ -136,9 +141,14 @@ const ElementEditBar: React.FC<ElementEditBarProps> = ({ left, top, canvas }) =>
                     </IconButton>
                 </span>
             </Tooltip>}
-            {(!tableIcons && !levelIcons && minusIcon) && <Tooltip title="Remove Level" placement="top">
+            {(!tableIcons && !levelIcons ) && <Tooltip title="Remove Level" placement="top">
                 <span>
-                    <IconButton  onClick={() => handleRemovingLastLevel(canvas!)} disabled={!minusIcon} style={{ color: minusIcon ? '' : '#e0e0e0' }}>
+                    <IconButton  onClick={() => {
+                        handleRemovingLastLevel(canvas!)
+                        if (tourStepIndex === 3 && tourStarted) {
+                            dispatch(setTourStepIndex(4));
+                          }
+                        }} disabled={!minusIcon} style={{ color: minusIcon ? '' : '#e0e0e0' }}>
                         <RemoveIcon />
                     </IconButton>
                 </span>

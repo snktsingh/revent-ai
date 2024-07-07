@@ -46,7 +46,7 @@ export const useStatisticsElement = () => {
       lockMovementX: true,
       lockMovementY: true,
       hasBorders: false,
-      splitByGrapheme: true,
+      splitByGrapheme: false,
       fontWeight: 'bold',
       fontFamily : customStyles.fonts.robotoSansSerif,
       textAlign :'center'
@@ -70,7 +70,7 @@ export const useStatisticsElement = () => {
         lockMovementX: true,
         lockMovementY: true,
         hasBorders: false,
-        splitByGrapheme: true,
+        splitByGrapheme: false,
         fontFamily : customStyles.fonts.robotoSansSerif,
         textAlign :'center'
       }

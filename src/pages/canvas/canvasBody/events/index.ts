@@ -142,12 +142,12 @@ const useCanvasEvents = () => {
       textExitedEvent(canvas, event.deselected[0]);
     }
     // updateCanvasSlideData(canvas, canvasJS.id);
-    getElementsData(
-      canvas.toObject(customFabricProperties)?.objects,
-      themeId
-    ).catch(error => {
-      console.error('An error occurred:', error);
-    });
+    // getElementsData(
+    //   canvas.toObject(customFabricProperties)?.objects,
+    //   themeId
+    // ).catch(error => {
+    //   console.error('An error occurred:', error);
+    // });
   };
 
   const onObjectMovingEvent = (

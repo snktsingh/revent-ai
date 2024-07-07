@@ -78,6 +78,7 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
     selectedOriginalCanvas,
     variantImage,
     isVariantSelected,
+    activeSlideID
   } = useAppSelector(state => state.canvas);
   const { isRegenerateDisabled, tourStepIndex, tourStarted, tourVisible } = useAppSelector(state => state.slide);
   const { isLoading } = useAppSelector(state => state.thunk);
@@ -109,8 +110,8 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
   const params = useParams<{ id: string }>();
 
   const handleAddElementsToCanvas = (item: any) => {
-    if (tourStepIndex === 2 && tourStarted) {
-      dispatch(setTourStepIndex(3));
+    if (tourStepIndex === 3 && tourStarted) {
+      dispatch(setTourStepIndex(4));
     }
     const hasVariants = (canvasJS.canvas as any).objects.some(
       (obj: any) => obj.name === 'VariantImage'
@@ -166,16 +167,19 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
   };
 
   const handleRequest = () => {
+    const slideIndex = canvasList.findIndex(
+      canvas => canvas.id === activeSlideID
+    );
     dispatch(toggleIsRegenerating(true));
     setRegenerateMode(true);
     setModificationAlert(false);
     const currentCanvas = {
       ...canvasJS,
-      originalSlideData: canvasList[canvasJS.id - 1].canvas || canvasJS.canvas,
+      originalSlideData: canvasList[slideIndex].canvas || canvasJS.canvas,
     };
     dispatch(updateCurrentCanvas(currentCanvas));
-    const slideJSON = canvasList[canvasJS.id - 1].canvas || canvasJS.canvas;
-    const notes: string = canvasList[canvasJS.id - 1].notes ? canvasList[canvasJS.id - 1].notes! : '';
+    const slideJSON = canvasList[slideIndex].canvas || canvasJS.canvas;
+    const notes: string = canvasList[slideIndex].notes ? canvasList[slideIndex].notes! : '';
     const pptId: number = +params.id?.split('-')[0]!;
 
     const isListImagesPresent = requestData?.elements.some(
@@ -190,7 +194,7 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
     const isClientListImagesPresent = requestData?.elements.some(
       canvas => canvas.shape === 'ClientList'
     );
-
+    
     if (isListImagesPresent && requestData) {
 
       let requestListData: APIRequest = requestData;
@@ -266,8 +270,9 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
 
       if (QuoteImagesArray && QuoteImagesArray.images) {
         if (QuoteImagesArray.images.length !== 0) {
-          for (let i = 0; i < QuoteImagesArray.images.length; i++) {
-            formData.append('images', QuoteImagesArray.images[i].imageFile);
+          let images = QuoteImagesArray.images.sort((a, b) => a.id - b.id);
+          for (let i = 0; i < images.length; i++) {
+            formData.append('images', images[i].imageFile);
           }
           dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes })).then((res) => {
             if (res && res.payload.slideId) {
@@ -694,13 +699,11 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {'Changes Detected !'}
+          {'Adding Elements'}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Changes cannot be applied on the current design. If you want to make
-            modifications Please visit the original slide from variants section
-            or Click Below.
+          More elements cannot be added on this slide. If you want to edit data, visit the original slide or download as editable ppt.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
