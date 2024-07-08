@@ -289,6 +289,7 @@ const CanvasTools = ({ pId, joyrideRef }: { pId: number, joyrideRef: React.RefOb
           onClick={() => {
             dispatch(toggleTemplateVisibility());
           }}
+          className='change-theme-btn'
           disabled={isLoading}
         >
           <Stack direction="row" spacing={1}>

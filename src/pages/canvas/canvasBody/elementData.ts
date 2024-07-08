@@ -203,6 +203,9 @@ export const elementData: IElementData[] = [
   },
 ];
 
+export const tourListElementData = [...elementData];
+[tourListElementData[4], tourListElementData[12]] = [tourListElementData[12], tourListElementData[4]];
+
 export interface Shapes {
   id: number;
   name: string;

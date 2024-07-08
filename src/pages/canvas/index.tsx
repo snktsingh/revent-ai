@@ -32,6 +32,7 @@ import { TutorialRedirectAlert } from '@/constants/alerts/TutorialRedirectAlert'
 import { ReactTourComponent } from '@/components/tourSteps';
 import { StoreHelpers } from 'react-joyride';
 import { parse } from 'path';
+import TourBackDrop from '@/components/tourSteps/tourBackdrop';
 
 const MainCanvas = () => {
   const dispatch = useAppDispatch();
@@ -42,6 +43,7 @@ const MainCanvas = () => {
   const { isPresentationLoading } = useAppSelector(state => state.element);
   const { themeId } = useAppSelector(state => state.slideTheme);
   const { preset, isPresetOpened } = useAppSelector(state => state.manageDashboard);
+  const { tourVisible } = useAppSelector(state => state.slide);
   const [searchParams, setSearchParams] = useSearchParams();
   const params = useParams<{ id: string }>(); 
 
@@ -165,6 +167,7 @@ const MainCanvas = () => {
             <CanvasThemes />
             <TutorialRedirectAlert />
             <ReactTourComponent joyrideRef={joyrideHelpers} />
+            { tourVisible && <TourBackDrop/>}
           </div>
         )}
       </>

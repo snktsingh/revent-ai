@@ -80,6 +80,7 @@ export const steps: CustomStep[] = [
     styles: {
       options: {
         width: 300,
+        zIndex : 1201
       },
     },
     locale: {

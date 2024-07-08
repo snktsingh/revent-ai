@@ -29,11 +29,14 @@ const PresentationCardContextMenu: React.FC<PresentationCardContextMenuProps> = 
     };
     
     const handleDeletePresentation = () => {
-        if(!userPreferences.isPresentationDeleteAlert){
-            dispatch(togglePptAlertOpen(true))
-        } else {
-            removePresentation(presentation.presentationId );
-        }
+        // if(!userPreferences.isPresentationDeleteAlert){
+        //     dispatch(togglePptAlertOpen(true))
+        //     onClose();
+        //     return
+        // } else {
+        //     removePresentation(presentation.presentationId );
+        // }
+        removePresentation(presentation.presentationId );
         onClose();
     };
 

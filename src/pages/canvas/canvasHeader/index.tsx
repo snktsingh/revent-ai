@@ -162,9 +162,9 @@ const MainCanvasHeader = ({ pId }: any) => {
         </Stack>
         <VerticalDivider />
 
-        <CustomTourTooltip tourVisible={tourVisible} tooltipContent={'share'}>
-          <Stack direction="row" spacing={1}>
-            <Button size="small" variant="contained" onClick={handleShareClick}>
+        <CustomTourTooltip tourVisible={tourVisible} tooltipContent={'share'} >
+          <Stack direction="row" spacing={1} >
+            <Button size="small" variant="contained" className='share-menu' onClick={handleShareClick}>
               <img src={Share} style={{ paddingRight: '8px' }} />
               <>Share</>
             </Button>

@@ -38,7 +38,7 @@ import CanvasComponent from './canvasComponent';
 import useCanvasData from './canvasComponent/canvasDataExtractor';
 import { CanvasNotes } from './canvasNotes';
 import useVariants from './canvasVariant/container';
-import { elementData } from './elementData';
+import { elementData, tourListElementData } from './elementData';
 import SlideList from './slideList';
 import {
   BodyContainer,
@@ -563,7 +563,7 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
                     variant="contained"
                     size="medium"
                     onClick={() => handleApplyOriginalAsMain()}
-                    className='seventh-step'
+                    className='edit-btn'
                   >
                     Edit
                   </Button>
@@ -627,7 +627,7 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
                 value={slide.listSearch}
                 onChange={handleElementSearch}
               />
-              {filteredList.map((item, index) => {
+              {(tourStarted ? tourListElementData : filteredList ).map((item, index) => {
                 let disabled = isDisabled(item.title);
                 return (
                   <div key={item.title}>

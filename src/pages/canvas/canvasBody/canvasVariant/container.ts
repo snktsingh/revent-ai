@@ -59,7 +59,7 @@ const useVariants = ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
       if (activeVariant) {
         setActiveVariant(activeVariant.slideVariantId);
       }
-  }, [canvasJS])
+  }, [canvasJS.canvas])
 
   
   const handleVariants = (
@@ -71,10 +71,10 @@ const useVariants = ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
     dispatch(toggleVariantMode(true));
     dispatch(toggleSelectedOriginalCanvas(false));
     dispatch(setVariantImageAsMain(CanvasURL));
-    updateActiveVariant(slideId, variantId);
     dispatch(
       updateLastVariant({ slideId: activeSlideID, lastVariant: CanvasURL })
     );
+    updateActiveVariant(slideId, variantId);
     joyrideRef.current?.next();
   };
 
