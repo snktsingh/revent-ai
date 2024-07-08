@@ -31,6 +31,7 @@ import { Backdrop, CircularProgress, Stack } from '@mui/material';
 import { TutorialRedirectAlert } from '@/constants/alerts/TutorialRedirectAlert';
 import { ReactTourComponent } from '@/components/tourSteps';
 import { StoreHelpers } from 'react-joyride';
+import { parse } from 'path';
 
 const MainCanvas = () => {
   const dispatch = useAppDispatch();
@@ -103,9 +104,10 @@ const MainCanvas = () => {
               const parsedJson = JSON.parse(matchingItem.canvasData);
               return { 
                 ...item2,
-                originalSlideData : parsedJson.slideJSON,
+                originalSlideData : parsedJson.slideJSON || parsedJson,
                 notes : parsedJson.notes,
                 canvas : item2.variants.length === 0 && matchingItem.canvasData ? parsedJson.slideJSON : item2.canvas,
+                useAI : parsedJson.useAI || false,
               };
             }
             return item2;

@@ -14,6 +14,7 @@ import { useParams, useSearchParams } from 'react-router-dom';
 export const CanvasNotes : React.FC<{notesRef:  React.MutableRefObject<HTMLTextAreaElement | null>}> = ({notesRef}) => {
   const dispatch = useAppDispatch();
   const { openNotes } = useAppSelector(store => store.element);
+  const { enhancementWithAI } = useAppSelector(store => store.apiData);
   const { canvasJS, canvasList } = useAppSelector((state) => state.canvas);
   const [searchParams, setSearchParams] = useSearchParams();
   const params = useParams<{ id: string }>();
@@ -37,6 +38,7 @@ export const CanvasNotes : React.FC<{notesRef:  React.MutableRefObject<HTMLTextA
       slideJSON: canvasList[slideIndex].originalSlideData,
       notes: e.target.value,
       slideId : slideId? +slideId : canvasList[slideIndex].slideId,
+      useAI : enhancementWithAI
     };
 
     dispatch(updateSlideJSONData(updatedSlideNotes))

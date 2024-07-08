@@ -149,7 +149,7 @@ const useVariants = ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
         (canvasList[currentSlideIndex].originalSlideData as any)?.objects,
         themeId
       ).then(req => {
-        let request = {...req, activeSlideVariantId: activeVariant}
+        let request = {...req, activeSlideVariantId: activeVariant, useAI : canvasList[currentSlideIndex].useAI}
         dispatch(refreshPPTApi(request)).then((res : any) => {
           let updatedPresentation = canvasList.map(slide => {
             if (

@@ -55,7 +55,7 @@ import useCanvasData from './canvasDataExtractor';
 import { SWOTIcon } from '@/constants/media';
 import { CustomTextbox } from '@/utils/fabric-utils/renderBullet';
 import { useDebounce } from '@/hooks/useDebounce';
-import { createSlideJSONData } from '@/redux/thunk/thunk';
+import { updateSlideJSONData } from '@/redux/thunk/thunk';
 import { regenerateMode } from '@/data/data';
 import { useSearchParams } from 'react-router-dom';
 
@@ -83,6 +83,9 @@ export const useCanvasComponent = () => {
   const { isRegenerating } = useAppSelector(
     state => state.thunk
   );
+  const { enhancementWithAI } = useAppSelector(
+    state => state.apiData
+  );
 
   const customFabricProperties = [
     'listType',
@@ -108,7 +111,7 @@ export const useCanvasComponent = () => {
     }
     if(pptId && slideJSON && slideId > 100) {
       dispatch(
-        createSlideJSONData({ pptId, slideId, slideJSON, notes: canvasJS.notes!})
+        updateSlideJSONData({ pptId, slideId, slideJSON, notes: canvasJS.notes!, useAI : enhancementWithAI})
       ).then((res) => {
         console.log('Slide JSON updated successfully',res.payload);
       });

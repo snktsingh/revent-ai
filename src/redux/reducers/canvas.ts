@@ -43,6 +43,7 @@ const newSlide : CanvasItem = {
   lastVariant: '',
   selectedOriginalCanvas: false,
   slideShape: '',
+  useAI: false,
 }
 
 export const initialState: CanvasSate = {

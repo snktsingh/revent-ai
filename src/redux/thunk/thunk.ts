@@ -58,6 +58,7 @@ export const fetchSlideImg = createAsyncThunk(
     }
     const currentSlideId = (getState() as RootState).canvas.activeSlideID;
     const { canvasList } = (getState() as RootState).canvas;
+    const { enhancementWithAI } = (getState() as RootState).apiData;
     const currentSlide = canvasList.findIndex(
       slide => slide.id == currentSlideId
     );
@@ -71,11 +72,11 @@ export const fetchSlideImg = createAsyncThunk(
 
     if (canvasList[currentSlide].variants.length === 0) {
       dispatch(
-        createSlideJSONData({ pptId, slideJSON, slideId: res.data.slideId, notes })
+        createSlideJSONData({ pptId, slideJSON, slideId: res.data.slideId, notes, useAI : enhancementWithAI })
       );
     } else {
       dispatch(
-        updateSlideJSONData({ pptId, slideJSON, slideId: res.data.slideId, notes })
+        updateSlideJSONData({ pptId, slideJSON, slideId: res.data.slideId, notes, useAI : enhancementWithAI })
       );
     }
 
@@ -130,13 +131,22 @@ export const fetchPptDetails = createAsyncThunk(
   }
 );
 
+interface ICreateSlideJSON {
+  pptId: number;
+  slideId: number;
+  slideJSON: object;
+  notes: string;
+  useAI : boolean;
+}
+
+
 // Create Slide JSON Data
 export const createSlideJSONData = createAsyncThunk(
   'slide/update-json',
-  async ({ pptId, slideId, slideJSON, notes }: {pptId : number, slideId: number, slideJSON: any, notes: string}) => {
+  async ({ pptId, slideId, slideJSON, notes, useAI } : ICreateSlideJSON) => {
     const res = await FetchUtils.postRequest(
       `${ENDPOINT.PPT.CANVAS_JSON}/${pptId}/${slideId}`,
-      {slideJSON,notes}
+      {slideJSON, notes, useAI}
     );
     console.log({ json: res.data });
     return res;
@@ -146,10 +156,10 @@ export const createSlideJSONData = createAsyncThunk(
 // update Slide JSON Data
 export const updateSlideJSONData = createAsyncThunk(
   'slide/update-json',
-  async ({ pptId, slideId, slideJSON, notes }: {pptId : number, slideId: number, slideJSON: any, notes: string}) => {
+  async ({ pptId, slideId, slideJSON, notes, useAI }: ICreateSlideJSON) => {
     const res = await FetchUtils.putRequest(
       `${ENDPOINT.PPT.CANVAS_JSON}/${pptId}/${slideId}`,
-      {slideJSON, notes}
+      {slideJSON, notes, useAI}
     );
     console.log({ json: res.data });
     return res.data;
