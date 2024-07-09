@@ -171,7 +171,7 @@ export const useRemoveLevels = () => {
           // canvas.remove(activeObject);
           canvas.remove(lastLevel);
           canvas.remove(lastTextBox);
-          canvas.remove(lastArrow);
+          if(rectCount !== 4) canvas.remove(lastArrow);
         }
       } else if (activeObject?.name.startsWith(CYCLE)) {
         let circleCount: number = 0;

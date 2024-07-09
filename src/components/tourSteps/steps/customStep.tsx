@@ -1,9 +1,10 @@
 import React from 'react';
+import { StyledText } from '../style';
 
 const CustomStep: React.FC<{firstContent: React.ReactNode, secondContent: string}> = ({firstContent, secondContent}) => (
   <div>
-    <p>{firstContent}</p>
-    <p>{secondContent}</p>
+    <StyledText>{firstContent}</StyledText>
+    <StyledText>{secondContent}</StyledText>
   </div>
 );
 

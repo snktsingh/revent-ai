@@ -1,9 +1,10 @@
 import React from 'react'
+import { StyledText } from '../style';
 
 const ConclusionStep = () => {
   return (
     <>
-      <p>Thank you for spending a few minutes learning how to use Revent Press!</p>
+      <StyledText>Thank you for spending a few minutes learning how to use Revent Press!</StyledText>
       <strong>Let’s keep going!</strong>
     </>
   )

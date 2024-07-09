@@ -1,5 +1,6 @@
 import { customStyles, theme } from '@/constants/theme'
 import React from 'react'
+import { StyledText } from '../style'
 
 const CustomTooltipContent : React.FC<{ChildName: string}> = ({ChildName}) => {
     return (
@@ -17,17 +18,17 @@ const CustomTooltipContent : React.FC<{ChildName: string}> = ({ChildName}) => {
                 {
                     ChildName === 'changeTheme' ? 
                     <>
-                     <p>Change the look and feel </p>
-                     <p>of your presentation!</p>
+                     <StyledText>Change the look and feel </StyledText>
+                     <StyledText>of your presentation!</StyledText>
                     </>
                     : ChildName === 'share' ? 
                     <>
-                     <p>Export your presentation</p>
-                     <p>as a PDF or PPT</p>
+                     <StyledText>Export your presentation</StyledText>
+                     <StyledText>as a PDF or PPT</StyledText>
                     </>
                     : ChildName === 'edit' ? 
                     <>
-                     <p>Edit data with ease</p>
+                     <StyledText>Edit data with ease</StyledText>
                     </> : ''
                 }
             </div>
