@@ -38,7 +38,7 @@ export const fetchPPTList = createAsyncThunk(
   'dashboard/pptList',
   async (pageNo: number) => {
     const res = await FetchUtils.getRequest(
-      `${ENDPOINT.DASHBOARD.FETCH_PPT_LIST}?size=100&page=${pageNo}`
+      `${ENDPOINT.DASHBOARD.FETCH_PPT_LIST}?size=1000&page=${pageNo}`
     );
     return res.data;
   }
@@ -50,7 +50,7 @@ export const deletePresentation = createAsyncThunk(
     const res = await FetchUtils.deleteRequest(
       `${ENDPOINT.PPT.DELETE_PPT}?presentationId=${presentationId}`
     );
-    return res.data;
+    return res;
   }
 );
 
@@ -80,6 +80,11 @@ const dashboardSlice = createSlice({
   reducers: {
     togglePresetOpened : (state, action : PayloadAction<boolean>) => {
        state.isPresetOpened = action.payload;
+    },
+    deletePresentationInPPtList: (state, action: PayloadAction<number>) => {
+      state.pptList = state.pptList.filter(
+        (ppt: IPresentation) => ppt.presentationId!== action.payload
+      );
     }
   },
   extraReducers: builder => {
@@ -120,7 +125,8 @@ const dashboardSlice = createSlice({
   },
 });
 export const {
-  togglePresetOpened
+  togglePresetOpened,
+  deletePresentationInPPtList
 } = dashboardSlice.actions;
 
 export default dashboardSlice.reducer;

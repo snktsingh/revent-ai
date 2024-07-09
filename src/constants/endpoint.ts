@@ -31,14 +31,15 @@ export const ENDPOINT = {
     DOWNLOAD_PRESENTATION: '/ppt/download-presentation',
     UPDATE_ACTIVE_VARIANT: '/ppt/update-active-slide',
     CREATE_DOC_PPT: '/ppt/transform',
-    REORDER_SLIDES : '/ppt/update-slide-number',
-    ADD_SLIDE : '/ppt/create-slide',
-    DELETE_SLIDE : '/ppt/delete-slide',
-    GET_ALL_JSON : '/canvas-data',
+    REORDER_SLIDES: '/ppt/update-slide-number',
+    ADD_SLIDE: '/ppt/create-slide',
+    DELETE_SLIDE: '/ppt/delete-slide',
+    GET_ALL_JSON: '/canvas-data',
+    REFRESH_PPT: '/ppt/refresh-ppt',
   },
   DASHBOARD: {
     FETCH_PPT_LIST: 'ppt/get-all-presentation',
-    FETCH_PRESETS:"/presets"
+    FETCH_PRESETS: '/presets',
   },
 } as const;
 
@@ -46,7 +47,7 @@ export const ROUTES = {
   APP_ROOT: '/',
   SIGNUP: '/signup',
   LOGIN: '/login',
-  DASHBOARD: '/my-presentations',
+  DASHBOARD: '/dashboard',
   THEMES: '/themes',
   CANVAS: '/presentation/:id',
   SETTINGS: '/settings',
@@ -56,6 +57,8 @@ export const ROUTES = {
   TERMS: '/terms-of-use',
   PRIVACY: '/privacy-policy',
   TUTORIALS: '/tutorials',
+  LIBRARY: '/my-library',
+  TEMPLATES:"/my-templates"
 } as const;
 
 export default ENDPOINT;

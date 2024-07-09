@@ -50,6 +50,7 @@ import {
 import { useClientListElement } from '@/pages/canvas/canvasBody/elements/clientListElement';
 import { useHubAndSpoke } from '@/pages/canvas/canvasBody/elements/hubAndSpoke';
 import { useStatisticsElement } from '@/pages/canvas/canvasBody/elements/statisticElement';
+import { setRequestData } from '@/redux/reducers/canvas';
 
 export const useEditBar = () => {
   const [plusIcon, setPlusIcon] = useState<boolean>(false);
@@ -72,9 +73,11 @@ export const useEditBar = () => {
   const { addStatisticsLevels } = useStatisticsElement();
   const { addTableRow, addTableColumn, removeTableColumn, removeTableRow } =
     useTableElement();
+  const { addQuoteLevel } = useQuoteElement();
   const { deleteObject, handleCopyClick } = useDelAndCopy();
   const { canvasJS } = useAppSelector(state => state.canvas);
-
+  const { requestData, enhancementWithAI } = useAppSelector(state => state.apiData);
+  
    const adjustControlsVisibility = (canvas: fabric.Canvas): void => {
     const selectedObject = canvas.getActiveObject();
 
@@ -96,6 +99,7 @@ export const useEditBar = () => {
     let clientListCount = countObjects(canvas, CLIENT_LIST_MAIN);
     let hubAndSpokeCount = countObjects(canvas, HUB_AND_SPOKE_BOX);
     let statisticElCount = countObjects(canvas, STATISTICS_BOX);
+    let quoteCount = countObjects(canvas, `${QUOTE}_`);
 
     let showPlusIcon = false;
     let showTableIcons = false;
@@ -115,7 +119,8 @@ export const useEditBar = () => {
         (objectName[0] === CLIENT_LIST_MAIN && clientListCount < 11) ||
         (objectName[0] === HUB_AND_SPOKE && hubAndSpokeCount < 6) ||
         (objectName[0] === STATISTICS && statisticElCount < 9) ||
-        (objectName[0] === IMAGE)
+        (objectName[0] === IMAGE) ||
+        (objectName[0] === QUOTE && quoteCount < 4)
       ) {
         showPlusIcon = true;
         showDelForLevelIcon = false;
@@ -129,7 +134,8 @@ export const useEditBar = () => {
         (objectName[0] === FUNNEL && fLevels > 2) ||
         (objectName[0] === CYCLE && cycleSteps > 3) ||
         (objectName[0] === HUB_AND_SPOKE && hubAndSpokeCount > 3) ||
-        (objectName[0] === STATISTICS && statisticElCount > 1)
+        (objectName[0] === STATISTICS && statisticElCount > 1) ||
+        (objectName[0] === QUOTE && quoteCount > 1)
       ) {
           showMinusIcon = true;
       }
@@ -260,6 +266,12 @@ export const useEditBar = () => {
         case IMAGE:
           imageUploader(canvas);
           break;
+        case QUOTE:
+          const lastQuote = canvas
+          ?.getObjects()
+          .reverse()
+          .find(obj => obj.name?.startsWith(QUOTE));
+          if(lastQuote)addQuoteLevel(canvas, lastQuote); 
         default:
           break;
       }
@@ -314,7 +326,9 @@ export const useEditBar = () => {
   }
 
   const handleAICheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // dispatch(setRequestData({...requestData, useAi: e.target.checked}));
     dispatch(updateCheckboxForAI(e.target.checked));
+
   };
   //client list
   function addClientList(
@@ -377,6 +391,9 @@ export const useEditBar = () => {
     }
   };
 
+
+
+
   return {
     adjustControlsVisibility,
     handleCopyClick,
@@ -393,6 +410,6 @@ export const useEditBar = () => {
     handleChangeImageElement,
     addClientListImage,
     minusIcon,
-    updateDeletedObject
+    updateDeletedObject,
   };
 };

@@ -2,7 +2,7 @@
   "rewrites": [
     { "source": "/login", "destination": "/" },
     { "source": "/signup", "destination": "/" },
-    { "source": "/my-presentations", "destination": "/" },
+    { "source": "/dashboard", "destination": "/" },
     { "source": "/themes", "destination": "/" },
     { "source": "/presentation", "destination": "/" },
     { "source": "/settings", "destination": "/" },

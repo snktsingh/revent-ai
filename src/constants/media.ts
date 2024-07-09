@@ -77,7 +77,13 @@ import iconTableOfContents from '../assets/elements/tableOfContents.svg';
 import iconStatistics from '../assets/elements/statisticsicon.svg';
 import DeleteFile from '../assets/deleteFile.svg';
 import Proceed from '../assets/proceed.svg';
-
+import Favicon from '../assets/dashboard/favicon.svg';
+import Think from '../assets/dashboard/think.svg';
+import Empty from '../assets/dashboard/empty.svg';
+import Create from '../assets/dashboard/create.svg';
+import DocUpload from '../assets/dashboard/docUpload.svg';
+import LibraryIcon from '../assets/dashboard/libraryIcon.svg';
+import PresetIcon from '../assets/dashboard/preset.svg';
 export {
   Back,
   Wand,
@@ -158,4 +164,11 @@ export {
   iconTableOfContents,
   iconStatistics,
   DeleteFile,
+  Favicon,
+  Think,
+  Empty,
+  Create,
+  DocUpload,
+  LibraryIcon,
+  PresetIcon,
 };

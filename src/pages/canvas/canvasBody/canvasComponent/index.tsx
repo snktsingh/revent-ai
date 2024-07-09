@@ -13,6 +13,7 @@ import { CanvasContainer } from './style';
 import { Canvas } from 'fabric/fabric-impl';
 import { toggleIsRegenerating } from '@/redux/thunk/thunk';
 import { setRegenerateMode } from '@/data/data';
+import { updateCheckboxForAI } from '@/redux/reducers/apiData';
 
 interface CanvasComponentProps {
    fabricRef : React.MutableRefObject<Canvas | null>;
@@ -75,7 +76,6 @@ const CanvasComponent: React.FC<CanvasComponentProps> = ({ fabricRef }) => {
 
 
   useEffect(() => {
-    console.log({canvasList, activeSlideID})
     setShowOptions(false);
     const canvasElement = document.getElementById('canvas');
     if (!canvasElement) {
@@ -90,6 +90,7 @@ const CanvasComponent: React.FC<CanvasComponentProps> = ({ fabricRef }) => {
       console.error('Failed to initialize Fabric canvas');
       return;
     }
+    dispatch(updateCheckboxForAI(false));
     updateCanvasDimensions(canvas);
     canvas.clear();
     updateCanvasStyle(canvas);
@@ -167,10 +168,6 @@ const CanvasComponent: React.FC<CanvasComponentProps> = ({ fabricRef }) => {
         );
         canvas.on('mouse:down', options => {
           onMouseDownEvent(options, canvas)
-          if (!options.target) {
-          
-            console.log('Clicked on empty canvas');
-          }
         });
 
         canvas.renderAll();
@@ -244,14 +241,14 @@ const CanvasComponent: React.FC<CanvasComponentProps> = ({ fabricRef }) => {
   useEffect(() => {}, [selectedElementPosition, showOptions]);
 
   return (
-    <CanvasContainer onContextMenu={e => e.preventDefault()}>
+    <CanvasContainer onContextMenu={e => e.preventDefault()} >
       <div
       
         style={{ position: 'relative' }}
         ref={ContainerRef}
         onClick={canvasClickEvent}
       >
-        <canvas id="canvas" ></canvas>
+        <canvas id="canvas" className='third-step' ></canvas>
         {showOptions && (
           <ElementEditBar
             left={selectedElementPosition.left}

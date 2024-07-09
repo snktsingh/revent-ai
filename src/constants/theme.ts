@@ -74,6 +74,6 @@ export const customStyles: customStylesType = {
     cloudyBlue: '#B0BCDE',
   },
   fonts : {
-    robotoSansSerif : "'Roboto', sans-serif",
+    robotoSansSerif : 'Red Hat Display, sans-serif',
   }
 };

@@ -1,5 +1,6 @@
 import {
   Autocomplete,
+  Box,
   Button,
   Divider,
   IconButton,
@@ -33,7 +34,7 @@ import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import ColorLensOutlinedIcon from '@mui/icons-material/ColorLensOutlined';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { addSlide } from '@/redux/reducers/slide';
+import { addSlide, setTourStepIndex, toggleTourStarted } from '@/redux/reducers/slide';
 import { toggleTemplateVisibility } from '@/redux/reducers/elements';
 import { ToolOutlinedButton, ToolOutlinedSelect } from '../style';
 import {
@@ -69,6 +70,10 @@ import CreditsComponent from '@/components/CreditsComponent';
 import EmailIcon from '@mui/icons-material/Email';
 import { Link, useSearchParams } from 'react-router-dom';
 import { addNewSlideApi, reorderSlidesApi } from '@/redux/thunk/slidesThunk';
+import Feedback from '@/common-ui/feedback';
+import TourIcon from '@mui/icons-material/Tour';
+import CustomTourTooltip from '@/components/tourSteps/customTooltip';
+import { StoreHelpers } from 'react-joyride';
 
 interface FontItem {
   family: string;
@@ -83,8 +88,7 @@ interface FontItem {
 }
 
 
-const CanvasTools = ({ pId }: any) => {
-  const dispatch = useAppDispatch();
+const CanvasTools = ({ pId, joyrideRef }: { pId: number, joyrideRef: React.RefObject<StoreHelpers | null> }) => {  const dispatch = useAppDispatch();
   const newKey = useAppSelector(state => state.slide);
   const { color, textColor, borderColor, canvasList, size, activeSlideID } = useAppSelector(
     state => state.canvas
@@ -113,7 +117,16 @@ const CanvasTools = ({ pId }: any) => {
   const handleClose = () => {
     setAnchorShapesEl(null);
   };
-  const [ searchParams, setSearchParams ] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [anchorFeedbackEl, setAnchorFeedbackEl] = useState<HTMLElement | null>(null);
+
+  const handleFeedbackClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorFeedbackEl(event.currentTarget);
+  };
+
+  const handleFeedbackClose = () => {
+    setAnchorFeedbackEl(null);
+  };
 
   const [anchorColorEl, setAnchorColorEl] = useState<null | HTMLElement>(null);
   const openColor = Boolean(anchorColorEl);
@@ -224,14 +237,14 @@ const CanvasTools = ({ pId }: any) => {
 
   const handleAddNewSlide = () => {
     const greatestIdObject = canvasList.reduce((max, obj) => (obj.id > max.id ? obj : max), canvasList[0]);
-  
+
     dispatch(addNewSlideApi({ pId, slideNo: greatestIdObject.id + 1 })).then((res: any) => {
-      if (res.payload.status >= 200 && res.payload.status < 300) {   
+      if (res.payload.status >= 200 && res.payload.status < 300) {
         dispatch(addCanvasSlide({ slideId: res.payload.data.slideId, slideNo: res.payload.data.slideNumber }));
         dispatch(addSlide(obj));
         dispatch(toggleIsVariantSelected(false));
         console.log(canvasList[canvasList.length - 1].id !== activeSlideID)
-        if(canvasList[canvasList.length - 1].id !== activeSlideID) {
+        if (canvasList[canvasList.length - 1].id !== activeSlideID) {
           const reorderedSlides = canvasList.map((slide, i) => {
             return {
               slideId: slide.slideId,
@@ -242,13 +255,13 @@ const CanvasTools = ({ pId }: any) => {
             presentationId: canvasList[0].presentationId,
             slides: reorderedSlides
           }
-
           dispatch(reorderSlidesApi(req)).then((res) => {
-             console.log(res);
+            console.log(res);
           });
         }
       }
     })
+    joyrideRef.current?.next();
   };
   const handleScroll = () => {
     if (
@@ -271,10 +284,12 @@ const CanvasTools = ({ pId }: any) => {
         spacing={1}
         style={{ display: 'flex', alignItems: 'center' }}
       >
+        <CustomTourTooltip tourVisible={newKey.tourVisible} tooltipContent={'changeTheme'} >
         <ToolOutlinedButton
           onClick={() => {
             dispatch(toggleTemplateVisibility());
           }}
+          className='change-theme-btn'
           disabled={isLoading}
         >
           <Stack direction="row" spacing={1}>
@@ -282,9 +297,11 @@ const CanvasTools = ({ pId }: any) => {
             <p>Change Theme</p>
           </Stack>
         </ToolOutlinedButton>
+        </CustomTourTooltip>
         <ToolOutlinedButton
           onClick={handleAddNewSlide}
           disabled={isLoading}
+          className='add-slide-step'
         >
           <Stack direction="row" spacing={1}>
             <img src={Add} />
@@ -696,14 +713,23 @@ const CanvasTools = ({ pId }: any) => {
       </ShapesCard> */}
       <Stack direction={'row'} alignItems={'center'} spacing={1}>
         <CreditsComponent />
-        {/* <Link to="https://forms.gle/QGrKm1JdjFtKu5iX8" target="_blank" rel="noopener noreferrer">
-          <ToolOutlinedButton>
+        <>
+          <ToolOutlinedButton onClick={handleFeedbackClick}>
             <Stack direction="row" spacing={1} alignItems={'center'} height={'4.5vh'} justifyContent={'space-around'}>
               <EmailIcon fontSize='small' sx={{ color: '#2f2f2f' }} />
               <p>Send Feedback</p>
             </Stack>
           </ToolOutlinedButton>
-        </Link> */}
+        </>
+        <>
+          <ToolOutlinedButton onClick={() => dispatch(toggleTourStarted(true))} >
+            <Stack direction="row" spacing={1} alignItems={'center'} height={'4.5vh'} justifyContent={'space-around'}>
+              <TourIcon fontSize='small' sx={{ color: '#2f2f2f' }} />
+              <p>Start Tour</p>
+            </Stack>
+          </ToolOutlinedButton>
+        </>
+        <Feedback anchorEl={anchorFeedbackEl} handleClose={handleFeedbackClose} />
       </Stack>
 
       <Menu

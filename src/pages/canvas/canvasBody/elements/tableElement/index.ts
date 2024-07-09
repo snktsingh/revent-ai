@@ -4,7 +4,7 @@ import {
   TABLE_HEADER,
   TABLE_TEXT,
 } from '@/constants/elementNames';
-import { theme } from '@/constants/theme';
+import { customStyles, theme } from '@/constants/theme';
 import AutoResizingTextbox from '@/utils/fabric-utils/AutoResizingTextbox';
 import { fabric } from 'fabric';
 
@@ -54,7 +54,7 @@ export const useTableElement = () => {
             borderColor: 'transparent',
             transparentCorners: true,
             fontWeight: i === 0 ? 'bold' : 'normal',
-            fontFamily: theme.typography.fontFamily,
+            fontFamily : customStyles.fonts.robotoSansSerif,
             fill:
               i === 0 ? theme.colorSchemes.light.palette.common.white : 'black',
           });

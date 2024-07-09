@@ -286,9 +286,9 @@ export function useObjectMovingEvent() {
 
         canvas.forEachObject(function (obj) {
           if (
-            obj.name?.startsWith(QUOTE_AUTHOR) ||
-            obj.name?.startsWith(QUOTE_TEXT) ||
-            obj.name?.startsWith(QUOTE_IMG)
+            obj.name?.startsWith(`${QUOTE_AUTHOR}_${objectID}`) ||
+            obj.name?.startsWith(`${QUOTE_TEXT}_${objectID}`) ||
+            obj.name?.startsWith(`${QUOTE_IMG}_${objectID}`)
           ) {
             obj
               .set({

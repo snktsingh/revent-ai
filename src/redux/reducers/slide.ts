@@ -1,14 +1,16 @@
 import { IListofSlides } from '@/interface/storeTypes';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-
 export interface TestState {
   listOfSlides: IListofSlides[];
   slideKey: number;
   nextKey: number;
   listSearch: string;
-  isRegenerateDisabled : boolean;
-  isSlideSelected : boolean;
+  isRegenerateDisabled: boolean;
+  isSlideSelected: boolean;
+  tourStarted: boolean;
+  tourStepIndex : number;
+  tourVisible: boolean;
 }
 
 const initialState: TestState = {
@@ -22,7 +24,10 @@ const initialState: TestState = {
   nextKey: 2,
   listSearch: '',
   isRegenerateDisabled: true,
-  isSlideSelected : false
+  isSlideSelected: false,
+  tourStarted: false,
+  tourStepIndex: 0,
+  tourVisible: false,
 };
 
 export const slideReducer = createSlice({
@@ -42,17 +47,40 @@ export const slideReducer = createSlice({
     searchElement: (state, action) => {
       state.listSearch = action.payload;
     },
-    toggleRegenerateButton(state,action : PayloadAction<boolean>){
-      state.isRegenerateDisabled = action.payload
+    toggleRegenerateButton(state, action: PayloadAction<boolean>) {
+      state.isRegenerateDisabled = action.payload;
     },
-    toggleSelectingSlide(state,action : PayloadAction<boolean>){
-      state.isSlideSelected = action.payload
+    toggleSelectingSlide(state, action: PayloadAction<boolean>) {
+      state.isSlideSelected = action.payload;
+    },
+    toggleTourStarted(state, action: PayloadAction<boolean>) {
+      state.tourStarted = action.payload;
+      state.tourVisible = false;
+
+      if(!action.payload) {
+        state.tourStepIndex = 0;
+      }
+    },
+    setTourStepIndex(state, action: PayloadAction<number>) {
+      state.tourStepIndex = action.payload;
+    },
+    toggleTourVisible(state, action: PayloadAction<boolean>) {
+      state.tourVisible = action.payload;
     }
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { addSlide, deleteSlide, getSlidekey, searchElement, toggleRegenerateButton, toggleSelectingSlide } =
-  slideReducer.actions;
+export const {
+  addSlide,
+  deleteSlide,
+  getSlidekey,
+  searchElement,
+  toggleRegenerateButton,
+  toggleSelectingSlide,
+  toggleTourStarted,
+  setTourStepIndex,
+  toggleTourVisible
+} = slideReducer.actions;
 
 export default slideReducer.reducer;

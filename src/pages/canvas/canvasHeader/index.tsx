@@ -2,7 +2,15 @@ import ProfileMenu from '@/common-ui/profileMenu';
 import { CanvasHeaderInput } from '@/constants/elements/Input/style';
 import { ButtonName, MainIconButton } from '@/constants/elements/button/style';
 import VerticalDivider from '@/constants/elements/divider';
-import { Blank, CanvasBack, PDF, PPT, Present, Share } from '@/constants/media';
+import {
+  Blank,
+  CanvasBack,
+  Logo,
+  PDF,
+  PPT,
+  Present,
+  Share,
+} from '@/constants/media';
 import {
   Box,
   Button,
@@ -23,6 +31,9 @@ import { HeaderContainer, ShareMenu, UserAvatar } from './style';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { downloadPresentation, setPresentationName } from '@/redux/thunk/thunk';
 import { toast } from 'react-toastify';
+import CustomTourTooltip from '@/components/tourSteps/customTooltip';
+import { Link } from 'react-router-dom';
+import { ROUTES } from '@/constants/endpoint';
 
 const MainCanvasHeader = ({ pId }: any) => {
   const dispatch = useAppDispatch();
@@ -52,6 +63,7 @@ const MainCanvasHeader = ({ pId }: any) => {
 
   const { presentationId, presentationName, pptDetails, isLoading } =
     useAppSelector(state => state.thunk);
+  const { tourVisible } = useAppSelector(state => state.slide);
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
@@ -108,12 +120,15 @@ const MainCanvasHeader = ({ pId }: any) => {
 
   return (
     <HeaderContainer>
-      <MainIconButton onClick={handleGoBack}>
-        <Stack direction="row" spacing={2}>
-          <img src={CanvasBack} />
-          <ButtonName>My Presentations</ButtonName>
-        </Stack>
-      </MainIconButton>
+      <Link to="/my-library">
+        <img
+          src={Logo}
+          width="70%"
+          style={{
+            cursor: 'pointer',
+          }}
+        />
+      </Link>
       <Stack direction="row" spacing={1}></Stack>
       <Box display="flex" gap={2}>
         <CanvasHeaderInput
@@ -135,22 +150,26 @@ const MainCanvasHeader = ({ pId }: any) => {
         )}
       </Box>
       <Stack direction="row" spacing={1}>
-        <MainIconButton>
-          <Stack direction="row" spacing={1}>
-            <img src={Present} />
-            <ButtonName onClick={() => ContentElements.openFullScreen()}>
-              Present
-            </ButtonName>
-          </Stack>
-        </MainIconButton>
+        <Stack direction="row" spacing={1}>
+          <Button
+            variant="contained"
+            size="small"
+            onClick={() => ContentElements.openFullScreen()}
+          >
+            <img src={Present} style={{ paddingRight: '8px' }} />
+            <>Present</>
+          </Button>
+        </Stack>
         <VerticalDivider />
 
-        <MainIconButton onClick={handleShareClick}>
-          <Stack direction="row" spacing={1}>
-            <img src={Share} />
-            <ButtonName>Share</ButtonName>
+        <CustomTourTooltip tourVisible={tourVisible} tooltipContent={'share'} >
+          <Stack direction="row" spacing={1} >
+            <Button size="small" variant="contained" className='share-menu' onClick={handleShareClick}>
+              <img src={Share} style={{ paddingRight: '8px' }} />
+              <>Share</>
+            </Button>
           </Stack>
-        </MainIconButton>
+        </CustomTourTooltip>
 
         {/* Share menu */}
         <ShareMenu
@@ -174,7 +193,7 @@ const MainCanvasHeader = ({ pId }: any) => {
             </Stack>
           </MenuItem>
         </ShareMenu>
-        <MainIconButton onClick={handleClick}>
+        <Button size="small" variant="contained" onClick={handleClick}>
           <Stack direction="row" spacing={1}>
             <ButtonName>{`${userDetails?.firstName} ${userDetails?.lastName}`}</ButtonName>
             <UserAvatar>
@@ -183,7 +202,7 @@ const MainCanvasHeader = ({ pId }: any) => {
               )}
             </UserAvatar>
           </Stack>
-        </MainIconButton>
+        </Button>
         <ProfileMenu
           anchorElForProfileMenu={openProfileMenu}
           handleCloseProfileMenu={handleCloseProfileMenu}

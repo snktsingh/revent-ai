@@ -1,4 +1,5 @@
 import { PYRAMID, PYRAMID_LEVEL, PYRAMID_TEXT } from '@/constants/elementNames';
+import { customStyles } from '@/constants/theme';
 import {
   IExtendedPolygonOptions,
   IExtendedTriangleOptions,
@@ -66,11 +67,12 @@ export function usePyramidElement() {
         name: `${PYRAMID_TEXT}_${currentID}`,
         fill: 'white',
         hasBorders: false,
-        splitByGrapheme: true,
+        splitByGrapheme: false,
         level: `${PYRAMID_TEXT}_${currentID}_${levelsCount + 1}`,
         hasControls: false,
         lockMovementX: true,
         lockMovementY: true,
+        fontFamily : customStyles.fonts.robotoSansSerif,
       });
       canvas.add(trapezoid);
 
@@ -147,8 +149,9 @@ export function usePyramidElement() {
         lockMovementY: true,
         fill: 'white',
         hasBorders: false,
-        splitByGrapheme: true,
+        splitByGrapheme: false,
         level: `${PYRAMID_TEXT}_${pyramidId}_1`,
+        fontFamily : customStyles.fonts.robotoSansSerif,
       });
 
       textsList.push(text);
@@ -191,7 +194,8 @@ export function usePyramidElement() {
           hasBorders: false,
           level: `${PYRAMID_TEXT}_${pyramidId}_2`,
           textAlign: 'center',
-          splitByGrapheme: true,
+          splitByGrapheme: false,
+          fontFamily : customStyles.fonts.robotoSansSerif,
         });
 
         trapTop = trapTop + 60;

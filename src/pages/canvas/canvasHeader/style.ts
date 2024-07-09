@@ -4,12 +4,12 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 export const HeaderContainer = styled.div`
-  background-color: ${theme.colorSchemes.light.palette.primary.main};
   height: 7vh;
   display: flex;
   padding: 0% 1%;
   align-items: center;
   justify-content: space-between;
+  border-bottom: .2px solid ${theme.colorSchemes.light.palette.common.border};
 `;
 export const Extension = styled.p`
   color: ${theme.colorSchemes.light.palette.common.white};
@@ -53,9 +53,9 @@ export const StyledMenuItem = styled(MenuItem)`
 `;
 
 export const ShareMenu = styled(Menu)`
- && {
+  && {
     .MuiPaper-root {
-       width: 15%;
+      width: 15%;
     }
   }
 `;

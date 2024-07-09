@@ -12,7 +12,7 @@ import {
   updateSlideIdInList,
 } from '@/redux/reducers/canvas';
 import { openModal, setMenuItemKey } from '@/redux/reducers/elements';
-import { searchElement, toggleRegenerateButton } from '@/redux/reducers/slide';
+import { searchElement, setTourStepIndex, toggleRegenerateButton } from '@/redux/reducers/slide';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { fetchSlideImg, toggleIsRegenerating } from '@/redux/thunk/thunk';
 import {
@@ -38,7 +38,7 @@ import CanvasComponent from './canvasComponent';
 import useCanvasData from './canvasComponent/canvasDataExtractor';
 import { CanvasNotes } from './canvasNotes';
 import useVariants from './canvasVariant/container';
-import { elementData } from './elementData';
+import { elementData, tourListElementData } from './elementData';
 import SlideList from './slideList';
 import {
   BodyContainer,
@@ -52,8 +52,10 @@ import Templates from './themes';
 import AddIcon from '@mui/icons-material/Add';
 import TableGenerator from '@/components/TableInput';
 import { APIRequest } from '@/interface/storeTypes';
+import { StoreHelpers } from 'react-joyride';
+import CustomTourTooltip from '@/components/tourSteps/customTooltip';
 
-const CanvasBody = () => {
+const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers | null> }) => {
   const slide = useAppSelector(state => state.slide);
   const [redirectAlert, setRedirectAlert] = useState<boolean>(false);
   const [modificationAlert, setModificationAlert] = useState<boolean>(false);
@@ -76,10 +78,11 @@ const CanvasBody = () => {
     selectedOriginalCanvas,
     variantImage,
     isVariantSelected,
+    activeSlideID
   } = useAppSelector(state => state.canvas);
-  const { isRegenerateDisabled } = useAppSelector(state => state.slide);
+  const { isRegenerateDisabled, tourStepIndex, tourStarted, tourVisible } = useAppSelector(state => state.slide);
   const { isLoading } = useAppSelector(state => state.thunk);
-  const { requestData } = useAppSelector(state => state.apiData);
+  const { requestData, enhancementWithAI } = useAppSelector(state => state.apiData);
   const { creditAmount } = useAppSelector(state => state.manageUser);
   const { enabledElements, isDeleteAlertShow } = useAppSelector(
     state => state.element
@@ -93,7 +96,7 @@ const CanvasBody = () => {
   const [isEditBtnShow, setIsEditBtnShow] = useState<boolean>(false);
   const [isReturnBtnShow, setIsReturnBtnShow] = useState<boolean>(false);
   const [canvasIndex, setCanvasIndex] = useState<number>(0);
-  const { handleApplyOriginalAsMain } = useVariants();
+  const { handleApplyOriginalAsMain } = useVariants({joyrideRef});
   const [searchParams, setSearchParams] = useSearchParams();
   const handleLike = () => {
     setActiveLike(!activeLike);
@@ -107,6 +110,9 @@ const CanvasBody = () => {
   const params = useParams<{ id: string }>();
 
   const handleAddElementsToCanvas = (item: any) => {
+    if (tourStepIndex === 3 && tourStarted) {
+      dispatch(setTourStepIndex(4));
+    }
     const hasVariants = (canvasJS.canvas as any).objects.some(
       (obj: any) => obj.name === 'VariantImage'
     );
@@ -130,9 +136,7 @@ const CanvasBody = () => {
   const open = Boolean(anchorEl);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    {
-      setAnchorEl(event.currentTarget);
-    }
+    setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -163,17 +167,20 @@ const CanvasBody = () => {
   };
 
   const handleRequest = () => {
+    const slideIndex = canvasList.findIndex(
+      canvas => canvas.id === activeSlideID
+    );
     dispatch(toggleIsRegenerating(true));
     setRegenerateMode(true);
     setModificationAlert(false);
     const currentCanvas = {
       ...canvasJS,
-      originalSlideData: canvasList[canvasJS.id - 1].canvas || canvasJS.canvas,
+      originalSlideData: canvasList[slideIndex].canvas || canvasJS.canvas,
     };
     dispatch(updateCurrentCanvas(currentCanvas));
-    const slideJSON = canvasList[canvasJS.id - 1].canvas || canvasJS.canvas;
-    const notes : string = canvasList[canvasJS.id - 1].notes? canvasList[canvasJS.id - 1].notes! : '';
-    const pptId : number = +params.id?.split('-')[0]!;
+    const slideJSON = canvasList[slideIndex].canvas || canvasJS.canvas;
+    const notes: string = canvasList[slideIndex].notes ? canvasList[slideIndex].notes! : '';
+    const pptId: number = +params.id?.split('-')[0]!;
 
     const isListImagesPresent = requestData?.elements.some(
       canvas => canvas.shape === 'ImageSubtitle'
@@ -187,10 +194,10 @@ const CanvasBody = () => {
     const isClientListImagesPresent = requestData?.elements.some(
       canvas => canvas.shape === 'ClientList'
     );
-
+    
     if (isListImagesPresent && requestData) {
 
-      let requestListData : APIRequest = requestData;
+      let requestListData: APIRequest = requestData;
       const listData = requestData?.elements?.find((el) => el.shape === 'ImageSubtitle');
       const isTextEmpty = listData?.data?.every(obj => obj.text === "");
 
@@ -198,12 +205,12 @@ const CanvasBody = () => {
       if (isTextEmpty) {
         requestListData = {
           ...requestListData,
-          elements: requestListData.elements.map(element => 
-              element.shape === 'ImageSubtitle' 
-              ? { ...element, shape: 'Images' } 
+          elements: requestListData.elements.map(element =>
+            element.shape === 'ImageSubtitle'
+              ? { ...element, shape: 'Images' }
               : element
           )
-      };
+        };
       }
 
       let blob = new Blob([JSON.stringify(requestListData)], {
@@ -263,8 +270,9 @@ const CanvasBody = () => {
 
       if (QuoteImagesArray && QuoteImagesArray.images) {
         if (QuoteImagesArray.images.length !== 0) {
-          for (let i = 0; i < QuoteImagesArray.images.length; i++) {
-            formData.append('images', QuoteImagesArray.images[i].imageFile);
+          let images = QuoteImagesArray.images.sort((a, b) => a.id - b.id);
+          for (let i = 0; i < images.length; i++) {
+            formData.append('images', images[i].imageFile);
           }
           dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes })).then((res) => {
             if (res && res.payload.slideId) {
@@ -320,7 +328,7 @@ const CanvasBody = () => {
 
 
 
-    let reqData = { ...requestData };
+    let reqData = { ...requestData, useAI: enhancementWithAI };
     if (params.id?.split('-')[0] && reqData) {
       const ptId = Number(params.id?.split('-')[0]);
       reqData.presentationId = ptId;
@@ -336,6 +344,7 @@ const CanvasBody = () => {
             })
           );
         }
+        joyrideRef.current?.next();
       }
     );
     dispatch(toggleSelectedOriginalCanvas(false));
@@ -493,7 +502,7 @@ const CanvasBody = () => {
             event.preventDefault();
           }}
         >
-          <SlideList notesRef={NotesInputRef}/>
+          <SlideList notesRef={NotesInputRef} />
         </Grid>
         <Grid item xs={8}>
           <EditSlideContainer>
@@ -516,7 +525,7 @@ const CanvasBody = () => {
                   <img src={Copy} />
                 </IconButton>
                 </Tooltip> */}
-                <Button variant="contained" size="medium" onClick={handleClick}>
+                <Button variant="contained" size="medium" onClick={handleClick} className='first-step'>
                   <Stack direction="row" spacing={1}>
                     <img
                       src="data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 9 9' fill='%23fff' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.96325 5.03632H0.516602V3.96358H3.96325V0.509277H5.036V3.96358H8.4903V5.03632H5.036V8.48298H3.96325V5.03632Z' fill='%23fff'/%3E%3C/svg%3E"
@@ -549,13 +558,16 @@ const CanvasBody = () => {
                 </IconButton>{' '} */}
                 &nbsp;
                 {!isVariantsEmpty && isEditBtnShow && (
+                  <CustomTourTooltip tourVisible={tourVisible} tooltipContent={'edit'} >
                   <Button
                     variant="contained"
                     size="medium"
                     onClick={() => handleApplyOriginalAsMain()}
+                    className='edit-btn'
                   >
                     Edit
                   </Button>
+                  </CustomTourTooltip>
                 )}
                 {!isVariantsEmpty && isReturnBtnShow && (
                   <Button
@@ -589,6 +601,7 @@ const CanvasBody = () => {
                       size="medium"
                       onClick={() => handleRequest()}
                       disabled={creditAmount === 0 || isRegenerateDisabled}
+                      className='fourth-step'
                     >
                       <Stack direction="row" spacing={1}>
                         <img src={Wand} />
@@ -614,7 +627,7 @@ const CanvasBody = () => {
                 value={slide.listSearch}
                 onChange={handleElementSearch}
               />
-              {filteredList.map((item, index) => {
+              {(tourStarted ? tourListElementData : filteredList ).map((item, index) => {
                 let disabled = isDisabled(item.title);
                 return (
                   <div key={item.title}>
@@ -654,6 +667,11 @@ const CanvasBody = () => {
                         style={{ display: 'flex', flexDirection: 'column' }}
                         key={index}
                         disabled={disabled}
+                        className={
+                          item.title === "Process"
+                            ? "second-step"
+                            : ""
+                        }
                       >
                         <Stack direction="row" width={'100%'} spacing={2}>
                           <img src={item.icon} width="30vh" />
@@ -681,13 +699,11 @@ const CanvasBody = () => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {'Changes Detected !'}
+          {'Adding Elements'}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Changes cannot be applied on the current design. If you want to make
-            modifications Please visit the original slide from variants section
-            or Click Below.
+          More elements cannot be added on this slide. If you want to edit data, visit the original slide or download as editable ppt.
           </DialogContentText>
         </DialogContent>
         <DialogActions>

@@ -1,4 +1,5 @@
 import { PARAGRAPH, SUBTITLE, TITLE } from '@/constants/elementNames';
+import { customStyles } from '@/constants/theme';
 import { fabric } from 'fabric';
 
 export default function useAllElements() {
@@ -9,14 +10,14 @@ export default function useAllElements() {
     fontSize: 30,
     width: 400,
     fontWeight: 'bold',
-    fontFamily: 'Red Hat Display, sans-serif',
+    fontFamily: customStyles.fonts.robotoSansSerif,
     name: TITLE,
     fill: '#404040',
     charSpacing: 2,
     cursorDelay: 1,
     hoverCursor: 'text',
     padding: 5,
-    splitByGrapheme: true,
+    splitByGrapheme: false,
   });
 
   const subtitle = new fabric.Textbox('Click to add a subtitle', {
@@ -24,10 +25,10 @@ export default function useAllElements() {
     top: 60,
     width: 200,
     fontSize: 20,
-    fontFamily: 'Arial',
+    fontFamily: customStyles.fonts.robotoSansSerif,
     name: SUBTITLE,
     fill: '#404040',
-    splitByGrapheme: true,
+    splitByGrapheme: false,
   });
 
   const heading = new fabric.Textbox('Click to add a heading', {
@@ -35,11 +36,11 @@ export default function useAllElements() {
     top: 50,
     width: 300,
     fontSize: 30,
-    fontFamily: 'Arial',
+    fontFamily: customStyles.fonts.robotoSansSerif,
     fontWeight: 'bold',
     name: 'headingbox',
     fill: '#404040',
-    splitByGrapheme: true,
+    splitByGrapheme: false,
   });
 
   const paragraph = new fabric.Textbox('Click to add a paragraph', {
@@ -48,10 +49,10 @@ export default function useAllElements() {
     width: 600,
     lineHeight: 1.5,
     fontSize: 16,
-    fontFamily: 'Arial',
+    fontFamily: customStyles.fonts.robotoSansSerif,
     name: PARAGRAPH,
     fill: '#404040',
-    splitByGrapheme: true,
+    splitByGrapheme: false,
   });
 
   paragraph.setControlsVisibility({
@@ -157,11 +158,11 @@ export default function useAllElements() {
     const center = canvas?.getCenter();
     const title = new fabric.Textbox('Click to add a title', {
       width: 600,
-      left : center?.left,
-      top : center?.top! - 25,
+      left: center?.left,
+      top: center?.top! - 25,
       fontSize: 42,
       fontWeight: 'bold',
-      fontFamily: 'sans-serif',
+      fontFamily: customStyles.fonts.robotoSansSerif,
       name: titleName,
       fill: '#404040',
       charSpacing: 2,
@@ -170,7 +171,7 @@ export default function useAllElements() {
       textAlign: 'center',
       padding: 5,
       height: 200,
-      splitByGrapheme: true,
+      splitByGrapheme: false,
       originX: 'center',
       originY: 'center',
     });
@@ -180,13 +181,13 @@ export default function useAllElements() {
       left: center?.left,
       top: center?.top! + 25,
       fontSize: 28,
-      fontFamily: 'Arial',
+      fontFamily: customStyles.fonts.robotoSansSerif,
       hoverCursor: 'text',
       textAlign: 'center',
       name: subtitleName,
       padding: 2,
       height: 300,
-      splitByGrapheme: true,
+      splitByGrapheme: false,
       originX: 'center',
       originY: 'center',
     });

@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 
 export const MainContainer = styled.div`
-  background-color: #f3f8ff;
+  background-color: #000;
   height: 100vh;
   width: 100vw;
   padding: 4% 2% 4% 4%;
@@ -67,7 +67,7 @@ export const Loader = styled.div`
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  padding-top: 8%;
+  padding-top: 18%;
 `;
 export const LoaderText = styled.p`
   font-size: 16px;
@@ -90,35 +90,39 @@ export const PPTCard = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
 `;
 
 export const ThumbnailCard = styled(Card)`
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  border-radius: 0.2rem;
-  /* box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px; */
+  justify-content: center;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
 `;
 
 export const TitleCard = styled.div`
   width: 100%;
-  padding-left: 2px;
+  margin: 0px;
+  display: flex;
+  justify-content: space-between;
 `;
 
 export const PPTTitle = styled.p`
-  max-width: 160px;
+  width: 145px;
+  margin: 0px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: ${theme.colorSchemes.light.palette.primary.main};
+  color: ${theme.colorSchemes.light.palette.common.black};
 `;
 
 export const NewPPTCard = styled.div`
   display: flex;
   flex-direction: column;
-  
 `;
 
 export const CardSpan = styled.span`
@@ -139,9 +143,9 @@ export const CardSpan = styled.span`
     height: 20px;
     background-image: linear-gradient(
       45deg,
-      #004FBA 0%,
+      #004fba 0%,
       #1a79ff 51%,
-      #004FBA 100%
+      #004fba 100%
     );
     transform: rotate(-45deg) translateY(-20px);
     display: flex;
@@ -151,7 +155,7 @@ export const CardSpan = styled.span`
     font-weight: 400;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    font-size: .4rem;
+    font-size: 0.4rem;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.23);
   }
 
@@ -166,9 +170,9 @@ export const CardSpan = styled.span`
     box-shadow: 140px -140px #0060e6;
     background-image: linear-gradient(
       45deg,
-      #004FBA 0%,
+      #004fba 0%,
       #1a79ff 51%,
-      #004FBA 100%
+      #004fba 100%
     );
   }
 `;

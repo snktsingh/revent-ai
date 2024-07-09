@@ -108,7 +108,7 @@ const useCanvasHeader = () => {
 
   const handleGoBack = () => {
     dispatch(updateStateLoading(false));
-    navigate(ROUTES.DASHBOARD, { replace: true });
+    navigate(ROUTES.LIBRARY, { replace: true });
     let canvas: CanvasItem[] = [
       {
         id: 1,

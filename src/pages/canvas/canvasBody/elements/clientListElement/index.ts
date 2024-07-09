@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { fabric } from 'fabric';
 import { toast } from 'react-toastify';
 import imageCompression from 'browser-image-compression';
+import { customStyles } from '@/constants/theme';
 
 export function useClientListElement() {
   const dispatch = useAppDispatch();
@@ -40,6 +41,7 @@ export function useClientListElement() {
       selectable: false,
       hoverCursor: 'pointer',
       name: 'ListAddImageText',
+      fontFamily : customStyles.fonts.robotoSansSerif,
     });
     let group = new fabric.Group([mainListContainer, addImage], {
       left,

@@ -95,9 +95,9 @@ export default function Templates() {
     dispatch(setThemeCode(''));
   };
 
-  useEffect(() => {
-    dispatch(getAllThemes());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(getAllThemes());
+  // }, []);
 
   useEffect(() => {
     const hasVariants = canvasList.some(item => item.variants.length > 0);

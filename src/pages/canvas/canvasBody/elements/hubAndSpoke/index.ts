@@ -8,6 +8,7 @@ import {
   HUB_AND_SPOKE_MAIN_TEXT,
   HUB_AND_SPOKE_TEXT_BOX,
 } from '@/constants/elementNames';
+import { customStyles } from '@/constants/theme';
 import { IExtendedRectOptions } from '@/interface/fabricTypes';
 import { updateHubAndSpokeId } from '@/redux/reducers/fabricElements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
@@ -92,7 +93,9 @@ export const useHubAndSpoke = () => {
       lockMovementX: true,
       lockMovementY: true,
       hasBorders: false,
-      splitByGrapheme: true,
+      splitByGrapheme: false,
+      textAlign: 'center',
+      fontFamily : customStyles.fonts.robotoSansSerif,
     });
     return textBox;
   };
@@ -112,7 +115,9 @@ export const useHubAndSpoke = () => {
       lockMovementX: true,
       lockMovementY: true,
       hasBorders: false,
-      splitByGrapheme: true,
+      splitByGrapheme: false,
+      textAlign: 'center',
+      fontFamily : customStyles.fonts.robotoSansSerif,
     });
     return textBox;
   };
@@ -131,8 +136,9 @@ export const useHubAndSpoke = () => {
       lockMovementX: true,
       lockMovementY: true,
       hasBorders: false,
-      splitByGrapheme: true,
+      splitByGrapheme: false,
       textAlign: 'center',
+      fontFamily : customStyles.fonts.robotoSansSerif,
     });
     return textBox;
   };
@@ -142,11 +148,10 @@ export const useHubAndSpoke = () => {
     const titleRectWidth = 250;
     const titleRectHeight = 30;
     const textRectWidth = 250;
-
     const mainContainer = new fabric.Rect({
       left: -5,
       top: 80,
-      width: titleRectWidth * 3 + 150,
+      width: canvas.getWidth() < 850 ? 900 : canvas.getWidth()+ 10,
       height: 420,
       fill: 'transparent',
       strokeWidth: 1,

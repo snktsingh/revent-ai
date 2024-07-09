@@ -1,4 +1,5 @@
 import { BULLET_POINTS } from '@/constants/elementNames';
+import { customStyles } from '@/constants/theme';
 import { IExtendedTextBoxOptions } from '@/interface/fabricTypes';
 import { renderBulletOrNumTextLine } from '@/utils/fabric-utils/renderBullet';
 import { fabric } from 'fabric';
@@ -24,7 +25,7 @@ export const useBulletOrNumberedText = () => {
   }
 
   const BulletText = new CustomTextbox(text, {
-    fontFamily: 'sans-serif',
+    fontFamily: customStyles.fonts.robotoSansSerif,
     lineHeight: 1.4,
     left: 100,
     top: 150,

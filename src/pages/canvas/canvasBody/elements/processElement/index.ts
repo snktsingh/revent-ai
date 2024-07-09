@@ -10,6 +10,7 @@ import { updateProcessId } from '@/redux/reducers/fabricElements';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import AutoResizingTextbox from '@/utils/fabric-utils/AutoResizingTextbox';
 import { fabric } from 'fabric';
+
 export const useProcessElement = () => {
   const dispatch = useAppDispatch();
   const { processId } = useAppSelector(state => state.elementsIds);
@@ -81,8 +82,10 @@ export const useProcessElement = () => {
       lockMovementX: true,
       lockMovementY: true,
       hasBorders: false,
-      splitByGrapheme: true,
+      splitByGrapheme: false,
       level: `${PROCESS_TEXT}_${currentID}_${rectCount + 1}`,
+      textAlign: 'center',
+      fontFamily : customStyles.fonts.robotoSansSerif,
     });
 
     if (rectCount === 3) {
@@ -104,12 +107,15 @@ export const useProcessElement = () => {
     canvas.add(rect);
     rectCount !== 3 && canvas.add(Arrow);
     canvas.add(text);
-    canvas.discardActiveObject();
+    // canvas.discardActiveObject();
     canvas.renderAll();
   };
   // new process
 
   function addProcess(canvas: fabric.Canvas | null) {
+    if(!canvas){
+      return;
+    }
     function addRectangle(
       left: number,
       top: number,
@@ -145,8 +151,10 @@ export const useProcessElement = () => {
         lockMovementX: true,
         lockMovementY: true,
         hasBorders: false,
-        splitByGrapheme: true,
+        splitByGrapheme: false,
         level: `${PROCESS_TEXT}_${processId}_${level}`,
+        textAlign: 'center',
+        fontFamily : customStyles.fonts.robotoSansSerif,
       });
       return canvas?.add(text);
     }
@@ -179,7 +187,7 @@ export const useProcessElement = () => {
     const mainProcessContainer = new fabric.Rect({
       left: -5,
       top: 104,
-      width: 870,
+      width: canvas?.getWidth() < 850 ? 900 : canvas?.getWidth()+ 10,
       height: 380,
       fill: 'transparent',
       strokeWidth: 1,
@@ -199,8 +207,11 @@ export const useProcessElement = () => {
     );
     let arrow1 = canvas?.add(addArrow(225, mainProcessContainer.top! + 55, 0));
     let rect2 = addRectangle(310, mainProcessContainer.top! + 20, 170, 130, 2);
+    let rect3 = addRectangle(602, mainProcessContainer.top! + 20, 170, 130, 3);
+    let arrow2 = canvas?.add(addArrow(rect2?.left! + 205, mainProcessContainer.top! + 55, 0));
     addText(rect1.left! + 4, mainProcessContainer.top! + 22, 1);
     addText(rect2.left! + 4, mainProcessContainer.top! + 22, 2);
+    addText(rect3.left! + 4, mainProcessContainer.top! + 22, 3);
     canvas?.renderAll();
     dispatch(updateProcessId());
   }

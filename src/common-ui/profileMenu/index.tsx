@@ -1,5 +1,5 @@
 import useCanvasHeader from '@/pages/canvas/canvasHeader/container';
-import { useAppSelector } from '@/redux/store';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
 import HomeIcon from '@mui/icons-material/Home';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -7,7 +7,7 @@ import HelpIcon from '@mui/icons-material/Help';
 import { ListItemIcon, Typography } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   AccountIcon,
   AccountInfo,
@@ -19,6 +19,7 @@ import {
 } from './style';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import { ROUTES } from '@/constants/endpoint';
+import { toggleTutorialRedirectALert } from '@/redux/reducers/elements';
 interface ProfileMenuProps {
   anchorElForProfileMenu: null | HTMLElement;
   handleCloseProfileMenu: Function;
@@ -34,6 +35,8 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
   const navigate = useNavigate();
   const open = Boolean(anchorElForProfileMenu);
   const { userDetails } = useAppSelector(state => state.manageUser);
+  const location = useLocation();
+  const dispatch = useAppDispatch();
 
   const handleClose = () => {
     handleCloseProfileMenu();
@@ -41,24 +44,30 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
   };
   const handleNavigateHome = () => {
     handleClose();
-    navigate(ROUTES.APP_ROOT, { replace: true });
+    navigate(ROUTES.DASHBOARD, { replace: true });
   };
   const handleNavigateDashboard = () => {
     handleClose();
-    navigate(ROUTES.DASHBOARD, { replace: true });
+    navigate(ROUTES.LIBRARY, { replace: true });
   };
   const handleNavigateSettings = () => {
     handleClose();
-    navigate(ROUTES.SETTINGS, { state: { prevPath: location.pathname }, replace: true });
-    
+    navigate(ROUTES.SETTINGS, {
+      state: { prevPath: location.pathname },
+      replace: true,
+    });
   };
 
   const handleTutorials = () => {
     handleClose();
-    navigate(ROUTES.TUTORIALS, { replace: true });
-  };
+    const presentationPage = location.pathname.split('/');
 
-  
+    if (presentationPage.includes('presentation')) {
+      dispatch(toggleTutorialRedirectALert(true));
+    } else {
+      navigate(ROUTES.TUTORIALS, { replace: true });
+    }
+  };
 
   return (
     <StyledMenu
@@ -86,13 +95,13 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
         <ListItemIcon>
           <HomeIcon />
         </ListItemIcon>
-        Home
+        Dashboard
       </StyledMenuItem>
       <StyledMenuItem onClick={handleNavigateDashboard}>
         <ListItemIcon>
           <DashboardIcon />
         </ListItemIcon>
-        My Presentations
+        My Library
       </StyledMenuItem>
       <StyledMenuItem onClick={handleTutorials}>
         <ListItemIcon>

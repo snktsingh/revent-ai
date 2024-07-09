@@ -1,10 +1,12 @@
 import {
+  setActiveVariantInSlide,
   setCanvas,
   setVariantImageAsMain,
   toggleIsVariantSelected,
   toggleSelectedOriginalCanvas,
   toggleVariantMode,
   updateCanvasInList,
+  updateCanvasList,
   updateLastVariant,
 } from '@/redux/reducers/canvas';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
@@ -16,8 +18,19 @@ import { toggleVariantSlide } from '@/redux/reducers/elements';
 import { refreshVariants, updateActiveVariantApi } from '@/redux/thunk/thunk';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useParams } from 'react-router-dom';
+import { VariantsType } from '@/interface/storeTypes';
+import { refreshPPTApi } from '@/redux/thunk/slidesThunk';
+import { StoreHelpers } from 'react-joyride';
 
-const useVariants = () => {
+interface VariantData {
+  slideVariantId: number;
+  thumbnailUrl: string;
+  active: boolean;
+  enhancedWithAI: boolean;
+  style: string;
+}
+
+const useVariants = ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers | null> }) => {
   const { updateCanvasDimensions } = useCanvasComponent();
   const { getElementsData } = useCanvasData();
   const dispatch = useAppDispatch();
@@ -38,7 +51,17 @@ const useVariants = () => {
   const { requestData } = useAppSelector(state => state.apiData);
   const [prevVariant, setPrevVariant] = useState<string>('');
   const array: number[] = [1, 2, 3];
+  const [activeVariant, setActiveVariant] = useState<number>(1);
 
+  useEffect(() => {
+    const index = canvasList.findIndex(el => el.id === canvasJS.id);
+    const activeVariant = canvasList[index].variants.find((variant : VariantsType) => variant.activeSlide);
+      if (activeVariant) {
+        setActiveVariant(activeVariant.slideVariantId);
+      }
+  }, [canvasJS.canvas])
+
+  
   const handleVariants = (
     CanvasURL: string,
     variantId: number,
@@ -48,16 +71,21 @@ const useVariants = () => {
     dispatch(toggleVariantMode(true));
     dispatch(toggleSelectedOriginalCanvas(false));
     dispatch(setVariantImageAsMain(CanvasURL));
-    updateActiveVariant(slideId, variantId);
     dispatch(
       updateLastVariant({ slideId: activeSlideID, lastVariant: CanvasURL })
     );
+    updateActiveVariant(slideId, variantId);
+    joyrideRef.current?.next();
   };
 
   const updateActiveVariant = useDebounce(
     (slideId: number, variantId: number) => {
       const pptId = Number(params.id?.split('-')[0]);
-      dispatch(updateActiveVariantApi({ pptId, slideId, variantId }))
+      dispatch(updateActiveVariantApi({ pptId, slideId, variantId })).then((res : any) => {
+        if (res.payload.status >= 200) {
+          setActiveVariant(variantId);
+          dispatch(setActiveVariantInSlide({slideId, variantId}))
+        }})
     },
     1000
   );
@@ -75,7 +103,6 @@ const useVariants = () => {
     );
     let canvas = { ...canvasJS, canvas: canvasJS.originalSlideData };
     dispatch(setCanvas(canvas));
-    console.log({ variantImage });
   };
 
   const getImg = async (canvasJson: Object) => {
@@ -108,6 +135,8 @@ const useVariants = () => {
     setOriginalImageUrl(url);
   };
 
+  //HANDLE REFRESH
+
   const handleRefreshVariants = () => {
     SetIsLoading(true);
     
@@ -120,8 +149,27 @@ const useVariants = () => {
         (canvasList[currentSlideIndex].originalSlideData as any)?.objects,
         themeId
       ).then(req => {
-        dispatch(refreshVariants(req)).then(res => {
+        let request = {...req, activeSlideVariantId: activeVariant, useAI : canvasList[currentSlideIndex].useAI}
+        dispatch(refreshPPTApi(request)).then((res : any) => {
+          let updatedPresentation = canvasList.map(slide => {
+            if (
+              slide.id === activeSlideID &&
+              res &&
+              res.payload &&
+              res.payload.data
+            ) {
+              return {
+                ...slide,
+                variants: res.payload.data.variants,
+              };
+            }
+            return slide;
+          });
+
+          dispatch(updateCanvasList(updatedPresentation));
+          dispatch(setCanvas(updatedPresentation[currentSlideIndex]));
           SetIsLoading(false);
+          joyrideRef.current?.next();
         });
       });
     } catch (error) {

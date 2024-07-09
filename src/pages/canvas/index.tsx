@@ -5,7 +5,7 @@ import MainCanvasHeader from './canvasHeader';
 import CanvasTools from './canvasTools';
 import ReventingLoader from '@/common-ui/loader';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import {
   fetchPptDetails,
   getAllSlidesJSONApi,
@@ -28,6 +28,11 @@ import { updatePresentationLoading } from '@/redux/reducers/elements';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { setThemeId } from '@/redux/reducers/theme';
 import { Backdrop, CircularProgress, Stack } from '@mui/material';
+import { TutorialRedirectAlert } from '@/constants/alerts/TutorialRedirectAlert';
+import { ReactTourComponent } from '@/components/tourSteps';
+import { StoreHelpers } from 'react-joyride';
+import { parse } from 'path';
+import TourBackDrop from '@/components/tourSteps/tourBackdrop';
 
 const MainCanvas = () => {
   const dispatch = useAppDispatch();
@@ -38,6 +43,7 @@ const MainCanvas = () => {
   const { isPresentationLoading } = useAppSelector(state => state.element);
   const { themeId } = useAppSelector(state => state.slideTheme);
   const { preset, isPresetOpened } = useAppSelector(state => state.manageDashboard);
+  const { tourVisible } = useAppSelector(state => state.slide);
   const [searchParams, setSearchParams] = useSearchParams();
   const params = useParams<{ id: string }>(); 
 
@@ -100,9 +106,10 @@ const MainCanvas = () => {
               const parsedJson = JSON.parse(matchingItem.canvasData);
               return { 
                 ...item2,
-                originalSlideData : parsedJson.slideJSON,
+                originalSlideData : parsedJson.slideJSON || parsedJson,
                 notes : parsedJson.notes,
                 canvas : item2.variants.length === 0 && matchingItem.canvasData ? parsedJson.slideJSON : item2.canvas,
+                useAI : parsedJson.useAI || false,
               };
             }
             return item2;
@@ -130,6 +137,8 @@ const MainCanvas = () => {
     
   };
 
+  const joyrideHelpers = useRef<StoreHelpers | null>(null);
+
   if (isAuthenticating) {
     return <ReventingLoader />;
   } else {
@@ -152,14 +161,43 @@ const MainCanvas = () => {
               <p>Changing Presentation theme please wait...</p>
             </Backdrop>
             <MainCanvasHeader pId={pptId} />
-            <CanvasTools pId={pptId}/>
-            <CanvasBody />
-            <CanvasVariant />
+            <CanvasTools pId={pptId} joyrideRef={joyrideHelpers}/>
+            <CanvasBody joyrideRef={joyrideHelpers} />
+            <CanvasVariant joyrideRef={joyrideHelpers}/>
             <CanvasThemes />
+            <TutorialRedirectAlert />
+            <ReactTourComponent joyrideRef={joyrideHelpers} />
+            { tourVisible && <TourBackDrop/>}
           </div>
         )}
       </>
     );
   }
+
+  // return (
+  //   <>
+  //       <div>
+  //         <Backdrop
+  //           sx={{
+  //             color: '#fff',
+  //             zIndex: theme => theme.zIndex.drawer + 1,
+  //             display: 'flex',
+  //             flexDirection: 'column',
+  //           }}
+  //           open={themePreviewLoader}
+  //         >
+  //           <CircularProgress color="inherit" />
+  //           <p>Changing Presentation theme please wait...</p>
+  //         </Backdrop>
+  //         <MainCanvasHeader pId={pptId} />
+  //         <CanvasTools pId={pptId}/>
+  //         <CanvasBody />
+  //         <CanvasVariant />
+  //         <CanvasThemes />
+  //         <TutorialRedirectAlert />
+  //         <ReactTourComponent/>
+  //       </div>
+  //   </>
+  // );
 };
 export default MainCanvas;

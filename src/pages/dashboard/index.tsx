@@ -1,6 +1,6 @@
 import {
+  AppBar,
   Avatar,
-  Box,
   Button,
   Card,
   Checkbox,
@@ -9,9 +9,6 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Divider,
-  FormControlLabel,
-  IconButton,
   Stack,
   TextField,
 } from '@mui/material';
@@ -33,12 +30,13 @@ import {
   TitleCard,
 } from './style';
 import slideData from './data.json';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import React, { HtmlHTMLAttributes, useEffect, useRef, useState } from 'react';
 import { MagnifyingGlass } from 'react-loader-spinner';
 import AddToQueueIcon from '@mui/icons-material/AddToQueue';
 import '../../../index.css';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { theme } from '@/constants/theme';
 import {
   IPresentation,
@@ -51,12 +49,19 @@ import useDashboard from './container';
 import ProfileMenu from '@/common-ui/profileMenu';
 import ThumbnailPreview from '@/common-ui/thumbnailPreview';
 import { faker } from '@faker-js/faker';
+import CancelIcon from '@mui/icons-material/Cancel';
 import {
   Blank,
   CancelUpload,
+  Create,
   DeleteFile,
+  DocUpload,
+  Empty,
+  Favicon,
   Folder,
+  Logo,
   Proceed,
+  Think,
   UploadTick,
 } from '@/constants/media';
 import NavBar from '@/common-ui/NavBar';
@@ -64,7 +69,48 @@ import PresentationCardContextMenu from '@/common-ui/presentationContextMenu';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { CardBox, UploadSubtitle } from '../homepage/style';
 import { setSelectedDocFile } from '@/redux/reducers/theme';
-
+import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Drawer from '@mui/material/Drawer';
+import CssBaseline from '@mui/material/CssBaseline';
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import List from '@mui/material/List';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import MailIcon from '@mui/icons-material/Mail';
+import MuiDrawer from '@mui/material/Drawer';
+import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
+import AddHomeIcon from '@mui/icons-material/AddHome';
+import {
+  AddHomeOutlined,
+  AdminPanelSettings,
+  AutoStories,
+  AutoStoriesOutlined,
+  CollectionsBookmark,
+  DashboardCustomizeOutlined,
+  ManageAccounts,
+  ManageAccountsOutlined,
+} from '@mui/icons-material';
+import HomeContent from './home';
+import Tutorials from '../tutorials';
+import UserSettings from '../userSettings';
+import { ROUTES } from '@/constants/endpoint';
+import MyLibrary from './library';
+import useCanvasHeader from '../canvas/canvasHeader/container';
+import { EllipsisTypography } from '@/common-ui/profileMenu/style';
+import { UserAvatar } from '../canvas/canvasHeader/style';
+import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
+import AdminTemplates from './templates';
 interface FileUploadProps {
   onFileSelect: (file: File) => void;
 }
@@ -72,22 +118,8 @@ interface FileUploadProps {
 const Dashboard = ({ onFileSelect }: any) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const {
-    isDeletePptAlertOpen,
-    openProfileMenu,
-    handleCloseProfileMenu,
-    handleOpenProfile,
-    handleDeletePpt,
-    handleClose,
-    setPptId,
-    pptId,
-    removePresentation,
-    getFirstLettersForAvatar,
-    setOpenProfileMenu,
-    handlePptDelCheckBox,
-    fetchPreset,
-  } = useDashboard();
-
+  const { getFirstLettersForAvatar } = useDashboard();
+  const { userLogout } = useCanvasHeader();
   const { userDetails } = useAppSelector(state => state.manageUser);
   const { loadingUserDetails, pptList, presetList } = useAppSelector(
     state => state.manageDashboard
@@ -123,36 +155,12 @@ const Dashboard = ({ onFileSelect }: any) => {
     await dispatch(fetchPPTList(1));
   };
 
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const [filteredPptList, setFilteredPptList] = useState<IPresentation[]>([]);
   // const filteredPptList =
   //   searchTerm.length > 0
   //     ? pptList.filter((ppt: IPresentation) =>
   //         ppt.name.toLowerCase().includes(searchTerm.toLowerCase())
   //       )
   //     : pptList;
-
-  useEffect(() => {
-    const filteredList =
-      searchTerm.length > 0
-        ? pptList.filter((ppt: IPresentation) =>
-          ppt.name.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-        : pptList;
-
-    setFilteredPptList(filteredList);
-  }, [pptList, searchTerm]);
-
-  const handleContextMenu = (event: React.MouseEvent, presentation: any) => {
-    event.preventDefault();
-    setCurrentPresentation(presentation);
-    setContextMenu({ x: event.clientX, y: event.clientY });
-    // setContextMenu(contextMenu === null ? { x: event.clientX, y: event.clientY } : null);
-  };
-
-  const handleCloseContextMenu = () => {
-    setContextMenu(null);
-  };
 
   const inputRef = React.createRef<HTMLInputElement>();
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
@@ -168,341 +176,270 @@ const Dashboard = ({ onFileSelect }: any) => {
     }
   };
 
-  const handleContainerClick = () => {
-    if (inputRef.current) {
-      inputRef.current.click();
-    }
-  };
-
-  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-  };
-
-  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-
-    const files = event.dataTransfer.files;
-
-    if (files && files.length > 0) {
-      const droppedFile = files[0];
-      setSelectedFile(droppedFile);
-      dispatch(setSelectedDocFile(droppedFile));
-      onFileSelect(droppedFile);
-    }
-  };
-
   const handleDocsPPt = async () => {
     navigate('/themes');
   };
 
+  const theme = useTheme();
+  const [open, setOpen] = React.useState(true);
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+  const drawerWidth = 240;
+
+  const openedMixin = (theme: Theme): CSSObject => ({
+    width: drawerWidth,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    overflowX: 'hidden',
+  });
+
+  const closedMixin = (theme: Theme): CSSObject => ({
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    overflowX: 'hidden',
+    width: `calc(${theme.spacing(7)} + 1px)`,
+    [theme.breakpoints.up('sm')]: {
+      width: `calc(${theme.spacing(8)} + 1px)`,
+    },
+  });
+
+  const DrawerHeader = styled('div')(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+  }));
+
+  const Drawer = styled(MuiDrawer, {
+    shouldForwardProp: prop => prop !== 'open',
+  })(({ theme, open }) => ({
+    width: drawerWidth,
+    flexShrink: 0,
+    whiteSpace: 'nowrap',
+    boxSizing: 'border-box',
+    ...(open && {
+      ...openedMixin(theme),
+      '& .MuiDrawer-paper': openedMixin(theme),
+    }),
+    ...(!open && {
+      ...closedMixin(theme),
+      '& .MuiDrawer-paper': closedMixin(theme),
+    }),
+  }));
+
+  const router = useLocation();
+
+  const [pathName, setPathName] = useState<string>('');
+
+  useEffect(() => {
+    setPathName(router.pathname.slice(1));
+  }, [router]);
+
+  const handleNavigation = (value: number) => {
+    if (value === 0) {
+      navigate(`${ROUTES.DASHBOARD}`);
+    } else if (value === 1) {
+      navigate(`${ROUTES.LIBRARY}`);
+    } else if (value === 2) {
+      navigate(`${ROUTES.TEMPLATES}`);
+    } else if (value === 3) {
+      navigate(`${ROUTES.TUTORIALS}`);
+    } else if (value === 4) {
+      navigate(`${ROUTES.SETTINGS}`);
+    } else if (value === 5) {
+      userLogout();
+    }
+  };
+
+  const menuItems = [
+    {
+      text: 'Dashboard',
+      icon: <DashboardCustomizeIcon fontSize="small" sx={{ color: 'white' }} />,
+    },
+    {
+      text: 'My Library',
+      icon: <AddHomeIcon fontSize="small" sx={{ color: 'white' }} />,
+    },
+    {
+      text: 'Tutorials',
+      icon: <CollectionsBookmark fontSize="small" sx={{ color: 'white' }} />,
+    },
+    {
+      text: 'Account Settings',
+      icon: <AdminPanelSettings fontSize="small" sx={{ color: 'white' }} />,
+    },
+    {
+      text: 'Logout',
+      icon: <ExitToAppIcon fontSize="small" sx={{ color: 'white' }} />,
+    },
+  ];
+
+  if (userDetails?.authorities[0] === 'ROLE_ADMIN') {
+    menuItems.splice(2, 0, {
+      text: 'My Templates',
+      icon: <PhotoLibraryIcon fontSize="small" sx={{ color: 'white' }} />,
+    });
+  }
+
   return (
-    <>
-      <NavBar />
-      <MainContainer>
-        <ProfileMenu
-          anchorElForProfileMenu={openProfileMenu}
-          handleCloseProfileMenu={handleCloseProfileMenu}
-          setAnchorElForProfileMenu={setOpenProfileMenu}
-        />
-        <span style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Title>Create a Presentation</Title>
-        </span>
-        <br />
-        <CardContainer>
-          {slideData.templates.map((slide, index) => {
-            return (
-              <NewPPTCard
-                key={slide.title + index}
-                onClick={() => navigate('/themes')}
-              >
-                <CardLink>
-                  <PreviewCard>
-                    <AddToQueueIcon
-                      sx={{
-                        fontSize: '3rem',
-                        color: `${theme.colorSchemes.light.palette.primary.main}`,
-                      }}
-                    />
-                  </PreviewCard>
-                  <span title={slide.title}>{slide.title}</span>
-                </CardLink>
-              </NewPPTCard>
-            );
-          })}
-          {/* <CardLink>
-            <PreviewCard>
-              <CardBox
+    <Box
+      sx={{
+        display: 'flex',
+        height: '100vh',
+        overflow: 'hidden',
+      }}
+    >
+      <CssBaseline />
+      <Drawer
+        variant="permanent"
+        open={open}
+        sx={{
+          '& .MuiDrawer-paper': {
+            border: 'none',
+            background: '#1a1a1a',
+          },
+        }}
+      >
+        <DrawerHeader>
+          <Box
+            sx={{
+              marginTop: '10px',
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}
+          >
+            {open && (
+              <Box sx={{ color: 'white' }}>
+                <Typography variant="subtitle1" fontWeight={600}>
+                  {userDetails?.firstName} {userDetails?.lastName}
+                </Typography>
+                <EllipsisTypography variant="body2" color="white">
+                  {userDetails?.email}
+                </EllipsisTypography>
+              </Box>
+            )}
+            {open && (
+              <IconButton onClick={handleDrawerClose}>
+                {theme.direction !== 'rtl' ? (
+                  <ChevronLeftIcon sx={{ color: 'white' }} />
+                ) : (
+                  <UserAvatar>
+                    {getFirstLettersForAvatar(
+                      `${userDetails?.firstName} ${userDetails?.lastName}`
+                    )}
+                  </UserAvatar>
+                )}
+              </IconButton>
+            )}
+            {!open && (
+              <span
                 style={{
-                  border: 'none',
+                  padding: '12px 10px 10px',
+                  cursor: 'pointer',
+                  borderRadius: '8px',
                 }}
+                onClick={handleDrawerOpen}
               >
-                <CardSpan></CardSpan>
-                <div
-                  style={{
-                    cursor: 'pointer',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                  }}
-                  onClick={handleContainerClick}
-                  onDragOver={handleDragOver}
-                  onDrop={handleDrop}
-                >
-                  <input
-                    type="file"
-                    accept=".docx,.doc"
-                    onChange={handleFileChange}
-                    ref={inputRef}
-                    style={{ display: 'none' }}
-                  />
-                  {selectedFile !== null ? (
-                    <span
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <br />
-                      <img src={UploadTick} width="30px" />
-                      <p
-                        style={{
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'inherit',
-                          textAlign: 'center',
-                          width: '140px',
-                          height: '16px',
-                        }}
-                      >
-                        {selectedFile.name}
-                      </p>
-                    </span>
-                  ) : (
-                    <div style={{ textAlign: 'center' }}>
-                      <img src={Folder} width="30px" />
-                      <br /> <br />
-                      <span>
-                        <b>Browse Files</b>
-                        <br />
-                      </span>
-                    </div>
+                <UserAvatar>
+                  {getFirstLettersForAvatar(
+                    `${userDetails?.firstName} ${userDetails?.lastName}`
                   )}
-                </div>
-              </CardBox>
-            </PreviewCard>{' '}
-            <span
-              style={{
+                </UserAvatar>{' '}
+              </span>
+            )}{' '}
+          </Box>
+        </DrawerHeader>
+        <List>
+          {menuItems.map(({ text, icon }, index) => (
+            <ListItem
+              key={text}
+              sx={{
                 display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                gap: '6px',
+                justifyContent: 'center',
+                padding: '4px 12px',
+                '&:hover .MuiListItemText-root': {
+                  background:
+                    'linear-gradient(55.96deg, #004FBA 13.4%, #002454 89.54%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  textShadow: 'none',
+                },
+                border: 'none',
               }}
             >
-              <span>Transform Document</span>
-              <span>
-                {selectedFile && (
-                  <img
-                    title="Delete File"
-                    src={DeleteFile}
-                    width="25px"
-                    style={{ cursor: 'pointer', marginRight: '10px' }}
-                    onClick={() => setSelectedFile(null)}
-                  />
-                )}
-                {selectedFile && (
-                  <img
-                    title="Proceed for Transformation"
-                    src={Proceed}
-                    width="25px"
-                    style={{ cursor: 'pointer' }}
-                    onClick={handleDocsPPt}
-                  />
-                )}
-              </span>
-            </span>
-          </CardLink> */}
-          {/* {presetList.length > 0 && (
-            <>
-              {presetList.map((preset, index) => {
-                return (
-                  <CardTitle
-                    key={preset.presetName + index}
-                    onClick={() => {
-                      navigate('/themes');
-                      fetchPreset(preset.id);
-                      dispatch(togglePresetOpened(true));
-                    }}
-                  >
-                    <CardLink>
-                      <PreviewCard>
-                        <img src={Blank} width="100%" height="30%" />
-                      </PreviewCard>
-                      <span title={preset.presetName}>{preset.presetName}</span>
-                    </CardLink>
-                  </CardTitle>
-                );
-              })}
-            </>
-          )} */}
-        </CardContainer>
-        <br />
-        <Divider />
-        <br />
-        <Stack direction="row" display="flex" justifyContent="space-between">
-          <Title>Recent Presentations</Title>
-          <TextField
-            id="outlined-basic"
-            label="Search presentation"
-            variant="outlined"
-            size="small"
-            onChange={e => setSearchTerm(e.target.value)}
-          />
-        </Stack>
-        <Dialog
-          open={isDeletePptAlertOpen}
-          onClose={handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">
-            <b>Would you like to permanently delete this presentation?</b>
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              Once deleted, this presentation will no longer be accessible
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions sx={{ mt: '-5px' }}>
-            <Stack sx={{ width: '96%', m: 'auto' }} direction="row" justifyContent={'space-between'} alignContent={'center'}>
-              <Stack>
-                <FormControlLabel
-                  control={
-                    <Checkbox size="small" onChange={handlePptDelCheckBox} />
-                  }
-                  label="Don't show this again"
-                />
-              </Stack>
-              <Stack direction="row">
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button
-                  color="error"
-                  onClick={() => {
-                    removePresentation(currentPresentation.presentationId);
-                    handleClose();
+              <ListItemButton
+                sx={{
+                  minHeight: 2,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5,
+                }}
+                onClick={() => handleNavigation(index)}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : 'auto',
+                    justifyContent: 'center',
                   }}
-                  autoFocus
                 >
-                  Permanently delete
-                </Button>
-              </Stack>
-            </Stack>
-          </DialogActions>
-        </Dialog>
-        {loadingUserDetails === false ? (
-          <Box onContextMenu={e => e.preventDefault()}>
-            <Box height="40vh" overflow="auto">
-              <CardTitle>
-                {filteredPptList.map((ppt: any, index) => {
-                  return (
-                    <PPTCard
-                      key={ppt.presentationId}
-                      onContextMenu={e => handleContextMenu(e, ppt)}
-                    >
-                      <ThumbnailCard
-                        onClick={() => {
-                          navigate(
-                            `/presentation/${ppt.presentationId
-                            }-${ppt.uuid}`
-                          );
-                        }}
-                      >
-                        {ppt.thumbnailUrl !== '' ? (
-                          <img
-                            src={ppt.thumbnailUrl}
-                            alt={ppt.name}
-                            width={'100%'}
-                            style={{ borderRadius: 'inherit' }}
-                          />
-                        ) : (
-                          <BlankImageCard>
-                            <img src={Blank} />
-                          </BlankImageCard>
-                        )}
-                      </ThumbnailCard>
-                      <TitleCard>
-                        <Stack
-                          direction="row"
-                          justifyContent="space-between"
-                          display="flex"
-                          alignItems="center"
-                        >
-                          <PPTTitle
-                            title={ppt.name}
-                            onClick={() => {
-                              navigate(
-                                `/presentation/${ppt.presentationId
-                                }-${ppt.uuid}`
-                              );
-                            }}
-                          >
-                            {ppt.name == undefined
-                              ? 'Untitled-presentation'
-                              : ppt.name}
-                          </PPTTitle>
-                          <IconButton
-                            onClick={event => {
-                              handleContextMenu(event, ppt);
-                              setPptId(ppt.presentationId);
-                            }}
-                            id="more_menu"
-                          >
-                            <MoreVertIcon id="more_menu" fontSize="small" />
-                          </IconButton>
-                        </Stack>
-                      </TitleCard>
-                    </PPTCard>
-                  );
-                })}
-              </CardTitle>{' '}
-            </Box>
-            {/* <Button
-              variant="outlined"
-              sx={{ marginTop: '10px' }}
-              onClick={handleMore}
-              disabled={!hasMore} // Disable the button if no more presentations
-            >
-              Load more
-            </Button> */}
-          </Box>
-        ) : (
-          <Loader>
-            <MagnifyingGlass
-              visible={true}
-              height="80"
-              width="80"
-              ariaLabel="magnifying-glass-loading"
-              wrapperStyle={{}}
-              wrapperClass="loader"
-              glassColor="#c0efff"
-              color={`${theme.colorSchemes.light.palette.primary.main}`}
-            />
-            <br />
-            <LoaderText>
-              Gathering your Spectacular Presentations. Please hold tight...
-            </LoaderText>
-          </Loader>
-        )}
-        <PresentationCardContextMenu
-          anchorPoint={contextMenu || { x: 0, y: 0 }}
-          isOpen={contextMenu !== null}
-          onClose={handleCloseContextMenu}
-          presentation={currentPresentation}
-          contextMenuRef={contextMenuRef}
-        />
-      </MainContainer>
-    </>
+                  {icon}
+                </ListItemIcon>
+                <ListItemText
+                  primary={text}
+                  sx={{
+                    opacity: open ? 1 : 0,
+                    color: '#d9d9d9',
+                    transition: 'color 0.3s ease',
+                  }}
+                />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          m: 2,
+          background: 'white',
+          borderRadius: '20px',
+          boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
+          display: 'flex',
+          flexDirection: 'column',
+          width: '100vh',
+        }}
+      >
+        <Box sx={{ display: 'flex', gap: '6px', justifyContent: 'center' }}>
+          <img src={Logo} width="10%" />
+          <h3> | Re(in)venting The Way You Present</h3>
+          <img src={Think} width="2%" />
+        </Box>
+        <Box>
+          <p style={{ margin: '4px', fontSize: '16px', textAlign: 'center' }}>
+            Create Stunning Presentations in Seconds
+          </p>
+        </Box>
+        {pathName === 'dashboard' && <HomeContent />}
+        {pathName === 'my-library' && <MyLibrary />}
+        {pathName === 'tutorials' && <Tutorials />}
+        {pathName === 'settings' && <UserSettings />}
+        {pathName === 'my-templates' && <AdminTemplates />}
+      </Box>
+    </Box>
   );
 };
 

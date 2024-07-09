@@ -110,7 +110,6 @@ const useCanvasEvents = () => {
   };
 
   const onObjectRemovedEvent = (event: IEvent, canvas: fabric.Canvas) => {
-    console.log({isRegenerating})
     updateCanvasSlideData(canvas, canvasJS.id);
     getElementsData(
       canvas.toObject(customFabricProperties)?.objects,
@@ -143,12 +142,12 @@ const useCanvasEvents = () => {
       textExitedEvent(canvas, event.deselected[0]);
     }
     // updateCanvasSlideData(canvas, canvasJS.id);
-    getElementsData(
-      canvas.toObject(customFabricProperties)?.objects,
-      themeId
-    ).catch(error => {
-      console.error('An error occurred:', error);
-    });
+    // getElementsData(
+    //   canvas.toObject(customFabricProperties)?.objects,
+    //   themeId
+    // ).catch(error => {
+    //   console.error('An error occurred:', error);
+    // });
   };
 
   const onObjectMovingEvent = (

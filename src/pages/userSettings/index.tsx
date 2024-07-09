@@ -131,7 +131,7 @@ const UserSettings: React.FC = () => {
   }
 
   useEffect(() => {
-    if(userDetailsFrmStore.userDetails){
+    if (userDetailsFrmStore.userDetails) {
       setUserDetails(userDetailsFrmStore.userDetails);
       setUserAccount(userDetailsFrmStore.userDetails);
     }
@@ -191,79 +191,43 @@ const UserSettings: React.FC = () => {
 
   return (
     <>
-      <NavBar />
-      {/* main settings */}
-      <MainSettingsContainer>
-        <BreadCrumb />
-        <SettingsContainer>
-          <SideBar>
-            <ProfileImgContainer>
-              {!isImageBroken ? (
-                <ProfileImage
-                  src="https//img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg"
-                  alt="Rashesh Majithia"
-                  onError={handleImageError}
-                />
-              ) : (
-                <ProfileAvatarText>
-                  {(userDetails?.firstName || '').slice(0, 1)}
-                  {(userDetails?.lastName || '').slice(0, 1)}
-                </ProfileAvatarText>
-              )}
-              <ProfileTitle>
-                {userDetails?.firstName} {userDetails?.lastName}
-              </ProfileTitle>
-            </ProfileImgContainer>
+      <div>
+        {/* <BreadCrumb /> */}
+        <SectionTitleContainer>
+          <SectionTitle>Personal Details</SectionTitle>
+        </SectionTitleContainer>
+        <ProfileSettings
+          handleChange={handleChange}
+          userDetails={userDetails}
+          editMode={editMode}
+        />
+        <SectionTitleContainer>
+          <SectionTitle>Company Details</SectionTitle>
+        </SectionTitleContainer>
+        <CompanyDetails
+          handleChange={handleChange}
+          userDetails={userDetails}
+          editMode={editMode}
+        />
 
-            <StyledTabs>
-              <StyledTab
-                isactive={tab === 1}
-                onClick={() => setTab(1)}
-                endIcon={<ChevronIcon />}
-              >
-                General Settings
-              </StyledTab>
-            </StyledTabs>
-          </SideBar>
-
-          <RightSideContainer>
-            <SectionTitleContainer>
-              <SectionTitle>Personal Details</SectionTitle>
-            </SectionTitleContainer>
-            <ProfileSettings
-              handleChange={handleChange}
-              userDetails={userDetails}
-              editMode={editMode}
-            />
-            <SectionTitleContainer>
-              <SectionTitle>Company Details</SectionTitle>
-            </SectionTitleContainer>
-            <CompanyDetails
-              handleChange={handleChange}
-              userDetails={userDetails}
-              editMode={editMode}
-            />
-
-            <ButtonContainer>
-              <IconButton
-                variant="contained"
-                startIcon={<SaveIcon />}
-                onClick={handleUpdateUserDetails}
-                disabled={editMode}
-              >
-                Save
-              </IconButton>
-              <IconButton
-                variant="contained"
-                startIcon={editMode ? <EditIcon /> : <CancelIcon />}
-                onClick={toggleEditMode}
-              >
-                {editMode ? 'Edit' : 'Cancel'}
-              </IconButton>
-            </ButtonContainer>
-          </RightSideContainer>
-        </SettingsContainer>
-      </MainSettingsContainer>
+        <ButtonContainer>
+          <IconButton
+            variant="contained"
+            startIcon={editMode ? <EditIcon /> : <CancelIcon />}
+            onClick={toggleEditMode}
+          >
+            {editMode ? 'Edit' : 'Cancel'}
+          </IconButton>
+          <IconButton
+            variant="contained"
+            startIcon={<SaveIcon />}
+            onClick={handleUpdateUserDetails}
+            disabled={editMode}
+          >
+            Save
+          </IconButton>
+        </ButtonContainer>
+      </div>
     </>
   );
 };
