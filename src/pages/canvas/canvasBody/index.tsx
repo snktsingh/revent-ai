@@ -167,6 +167,12 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
     setOpenDialog(true);
   };
 
+  const urlToFile = async (url: string, filename: string, mimeType: string): Promise<File> => {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    return new File([blob], filename, { type: mimeType });
+  };
+
   const handleRequest = async () => {
     const slideIndex = canvasList.findIndex(
       canvas => canvas.id === activeSlideID
@@ -182,6 +188,8 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
     const slideJSON = canvasList[slideIndex].canvas || canvasJS.canvas;
     const notes: string = canvasList[slideIndex].notes ? canvasList[slideIndex].notes! : '';
     const pptId: number = +params.id?.split('-')[0]!;
+
+    const placeholderImageFile = await urlToFile(placeholderImage, 'PlaceholderProfile.jpg', 'image/jpeg');
 
     const isListImagesPresent = requestData?.elements.some(
       canvas => canvas.shape === 'ImageSubtitle'
@@ -221,8 +229,17 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
       formData.append('data', blob);
       const listImagesArray = listImages.find(el => el.canvasId == canvasJS.id);
       if (listImagesArray && listImagesArray.images) {
-        for (let i = 0; i < listImagesArray.images.length; i++) {
-          formData.append('images', listImagesArray.images[i].imageFile);
+        let imagesText : any = requestData?.elements[0]?.data;
+        for (let i = 0; i < imagesText.length; i++) {
+          if(imagesText[i] && imagesText[i].id) {
+          const imageForText = listImagesArray.images.find(img => img.id === +imagesText[i].id);
+          console.log({imageForText})
+          if (imageForText) {
+            formData.append('images', imageForText.imageFile);
+          } else {
+            formData.append('images', placeholderImageFile);
+          }
+        }
         }
 
         dispatch(
@@ -269,17 +286,11 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
         el => el.canvasId == canvasJS.id
       );
 
-      const urlToFile = async (url: string, filename: string, mimeType: string): Promise<File> => {
-        const response = await fetch(url);
-        const blob = await response.blob();
-        return new File([blob], filename, { type: mimeType });
-      };
+      
 
       if (QuoteImagesArray && QuoteImagesArray.images && requestData?.elements[0]?.data) {
         let imagesText : any = requestData?.elements[0]?.data;
-        const placeholderImageFile = await urlToFile(placeholderImage, 'PlaceholderProfile.jpg', 'image/jpeg');
   
-        console.log(placeholderImageFile)
         if (QuoteImagesArray.images.length !== 0) {
           let images = QuoteImagesArray.images.sort((a, b) => a.id - b.id);
           for (let i = 0; i < imagesText.length; i++) {
