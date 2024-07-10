@@ -51,9 +51,10 @@ import {
 import Templates from './themes';
 import AddIcon from '@mui/icons-material/Add';
 import TableGenerator from '@/components/TableInput';
-import { APIRequest } from '@/interface/storeTypes';
+import { APIRequest, DataRequestType } from '@/interface/storeTypes';
 import { StoreHelpers } from 'react-joyride';
 import CustomTourTooltip from '@/components/tourSteps/customTooltip';
+import placeholderImage from '../../../assets/PlaceholderProfile.jpg';
 
 const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers | null> }) => {
   const slide = useAppSelector(state => state.slide);
@@ -166,7 +167,7 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
     setOpenDialog(true);
   };
 
-  const handleRequest = () => {
+  const handleRequest = async () => {
     const slideIndex = canvasList.findIndex(
       canvas => canvas.id === activeSlideID
     );
@@ -268,11 +269,28 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
         el => el.canvasId == canvasJS.id
       );
 
-      if (QuoteImagesArray && QuoteImagesArray.images) {
+      const urlToFile = async (url: string, filename: string, mimeType: string): Promise<File> => {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        return new File([blob], filename, { type: mimeType });
+      };
+
+      if (QuoteImagesArray && QuoteImagesArray.images && requestData?.elements[0]?.data) {
+        let imagesText : any = requestData?.elements[0]?.data;
+        const placeholderImageFile = await urlToFile(placeholderImage, 'PlaceholderProfile.jpg', 'image/jpeg');
+  
+        console.log(placeholderImageFile)
         if (QuoteImagesArray.images.length !== 0) {
           let images = QuoteImagesArray.images.sort((a, b) => a.id - b.id);
-          for (let i = 0; i < images.length; i++) {
-            formData.append('images', images[i].imageFile);
+          for (let i = 0; i < imagesText.length; i++) {
+            if(imagesText[i] && imagesText[i].id) {
+            const imageForText = images.find(img => img.id === +imagesText[i].id);
+            if (imageForText) {
+              formData.append('images', imageForText.imageFile);
+            } else {
+              formData.append('images', placeholderImageFile);
+            }
+          }
           }
           dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes })).then((res) => {
             if (res && res.payload.slideId) {
@@ -282,7 +300,8 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
           dispatch(toggleSelectedOriginalCanvas(false));
           return;
         }
-      }
+
+     }
       dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes })).then((res) => {
         if (res && res.payload.slideId) {
           setSearchParams({ slide: res.payload.slideId });

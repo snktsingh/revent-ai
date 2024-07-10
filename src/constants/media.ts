@@ -84,6 +84,7 @@ import Create from '../assets/dashboard/create.svg';
 import DocUpload from '../assets/dashboard/docUpload.svg';
 import LibraryIcon from '../assets/dashboard/libraryIcon.svg';
 import PresetIcon from '../assets/dashboard/preset.svg';
+import placeholderImage from '../assets/PlaceholderProfile.jpg';
 export {
   Back,
   Wand,
@@ -171,4 +172,5 @@ export {
   DocUpload,
   LibraryIcon,
   PresetIcon,
+  placeholderImage
 };
