@@ -101,7 +101,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
         <ListItemIcon>
           <DashboardIcon />
         </ListItemIcon>
-        My Presentations
+        My Library
       </StyledMenuItem>
       <StyledMenuItem onClick={handleTutorials}>
         <ListItemIcon>
