@@ -50,7 +50,7 @@ import {
 import { useClientListElement } from '@/pages/canvas/canvasBody/elements/clientListElement';
 import { useHubAndSpoke } from '@/pages/canvas/canvasBody/elements/hubAndSpoke';
 import { useStatisticsElement } from '@/pages/canvas/canvasBody/elements/statisticElement';
-import { setRequestData } from '@/redux/reducers/canvas';
+import { setRequestData, setUseAiForSlides } from '@/redux/reducers/canvas';
 
 export const useEditBar = () => {
   const [plusIcon, setPlusIcon] = useState<boolean>(false);
@@ -75,7 +75,7 @@ export const useEditBar = () => {
     useTableElement();
   const { addQuoteLevel } = useQuoteElement();
   const { deleteObject, handleCopyClick } = useDelAndCopy();
-  const { canvasJS } = useAppSelector(state => state.canvas);
+  const { canvasJS, activeSlideID } = useAppSelector(state => state.canvas);
   const { requestData, enhancementWithAI } = useAppSelector(state => state.apiData);
   
    const adjustControlsVisibility = (canvas: fabric.Canvas): void => {
@@ -328,6 +328,7 @@ export const useEditBar = () => {
   const handleAICheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
     // dispatch(setRequestData({...requestData, useAi: e.target.checked}));
     dispatch(updateCheckboxForAI(e.target.checked));
+    dispatch(setUseAiForSlides({slideId : activeSlideID, useAI: e.target.checked}));
 
   };
   //client list

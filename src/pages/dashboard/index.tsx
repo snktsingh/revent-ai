@@ -269,7 +269,7 @@ const Dashboard = ({ onFileSelect }: any) => {
       icon: <DashboardCustomizeIcon fontSize="small" sx={{ color: 'white' }} />,
     },
     {
-      text: 'My Library',
+      text: 'My Presentations',
       icon: <AddHomeIcon fontSize="small" sx={{ color: 'white' }} />,
     },
     {
@@ -434,7 +434,7 @@ const Dashboard = ({ onFileSelect }: any) => {
           </p>
         </Box>
         {pathName === 'dashboard' && <HomeContent />}
-        {pathName === 'my-library' && <MyLibrary />}
+        {pathName === 'my-presentations' && <MyLibrary />}
         {pathName === 'tutorials' && <Tutorials />}
         {pathName === 'settings' && <UserSettings />}
         {pathName === 'my-templates' && <AdminTemplates />}

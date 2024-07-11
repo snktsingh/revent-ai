@@ -90,8 +90,8 @@ const Footer : React.FC<FooterProps> = ({ handlers }) => {
               <PrimaryLink href="#services" onClick={handleServices}>
                 <b>Our Services</b>
               </PrimaryLink>
-              <p onClick={handleGetStarted} style={{cursor:'pointer'}}>Presentation Automation</p>
-              <p onClick={handleGetStarted} style={{cursor:'pointer'}}>Presentation Design</p>
+              <p onClick={handleServices} style={{cursor:'pointer'}}>Presentation Automation</p>
+              <p onClick={handleServices} style={{cursor:'pointer'}}>Presentation Design</p>
             </GridLeft>
             <GridLeft xs={2}>
               <PrimaryLink href="#product">
@@ -122,7 +122,7 @@ const Footer : React.FC<FooterProps> = ({ handlers }) => {
           <br />
           <br />
           <br />
-          <CopyRight>2023 © Revent.ai | All Rights Reserved</CopyRight>
+          <CopyRight>2024 © Revent.ai | All Rights Reserved</CopyRight>
         </FooterContainer>
       </DesktopContainer>
       <MobileContainer>
@@ -140,8 +140,10 @@ const Footer : React.FC<FooterProps> = ({ handlers }) => {
           <PrimaryLink href="#about" onClick={handleMServices}>
             <b>Our Services</b>
           </PrimaryLink>
-          <p>Presentation Automation</p>
-          <p>Presentation Design</p>
+          <p onClick={() => {
+            console.log('thinnava')
+          }} style={{cursor : 'pointer'}}>Presentation Automation</p>
+          <p onClick={() => handleMServices()} style={{cursor : 'pointer'}}>Presentation Design</p>
           <br />
           <PrimaryLink href="#about">
             <b>Product</b>
