@@ -57,13 +57,13 @@ const Footer : React.FC<FooterProps> = ({ handlers }) => {
       case 'Facebook':
         window.open('https://www.linkedin.com/company/reventai/', '_blank');
         break;
-      case 'Linkedin':
+      case 'LinkedIn':
         window.open('https://www.linkedin.com/company/reventai/', '_blank');
         break;
       case 'Youtube':
         window.open('https://www.youtube.com/channel/UCbA7uPC7VU3Jdbdr87yeW_g', '_blank');
         break;
-
+        
       default:
         break;
     }
@@ -115,7 +115,7 @@ const Footer : React.FC<FooterProps> = ({ handlers }) => {
                 <img src={Instagram} style={{ cursor: 'pointer' }} onClick={() => handleSocialLinks('Instagram')} />
                 {/* <img src={Facebook} style={{ cursor: 'pointer' }} onClick={() => handleSocialLinks('Facebook')} /> */}
                 <img src={Youtube} style={{ cursor: 'pointer' }} onClick={() => handleSocialLinks('Youtube')} />
-                <img src={Linkedin} style={{ cursor: 'pointer' }} onClick={() => handleSocialLinks('Linkedin')} />
+                <img src={Linkedin} style={{ cursor: 'pointer' }} onClick={() => handleSocialLinks('LinkedIn')} />
               </Stack>
             </GridLeft>
           </GridRowCenter>
@@ -172,7 +172,7 @@ const Footer : React.FC<FooterProps> = ({ handlers }) => {
             <img src={Instagram} style={{ cursor: 'pointer' }} onClick={() => handleSocialLinks('Instagram')} />
             {/* <img src={Facebook} style={{ cursor: 'pointer' }} onClick={() => handleSocialLinks('Facebook')} /> */}
             <img src={Youtube} style={{ cursor: 'pointer' }} onClick={() => handleSocialLinks('Youtube')} />
-            <img src={Linkedin} style={{ cursor: 'pointer' }} onClick={() => handleSocialLinks('Linkedin')} />
+            <img src={Linkedin} style={{ cursor: 'pointer' }} onClick={() => handleSocialLinks('LinkedIn')} />
           </Stack>
         </FooterContainer>
       </MobileContainer>
