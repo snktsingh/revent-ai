@@ -25,6 +25,7 @@ import {
   PreviewCard,
   ThumbnailCard,
   TitleCard,
+  TransformCard,
 } from './style';
 import { togglePresetOpened } from '@/redux/thunk/dashboard';
 import { MagnifyingGlass } from 'react-loader-spinner';
@@ -194,6 +195,7 @@ const HomeContent = ({ onFileSelect }: any) => {
             boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px',
           }}
         >
+          {/* <TransformCard/> */}
           <div
             style={{
               cursor: 'pointer',
@@ -205,6 +207,7 @@ const HomeContent = ({ onFileSelect }: any) => {
             onDragOver={handleDragOver}
             onDrop={handleDrop}
           >
+            
             <input
               type="file"
               accept=".docx,.doc"

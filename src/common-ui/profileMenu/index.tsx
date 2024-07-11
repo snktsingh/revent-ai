@@ -8,6 +8,8 @@ import { ListItemIcon, Typography } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import AddHomeIcon from '@mui/icons-material/AddHome';
+
 import {
   AccountIcon,
   AccountInfo,
@@ -99,9 +101,9 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
       </StyledMenuItem>
       <StyledMenuItem onClick={handleNavigateDashboard}>
         <ListItemIcon>
-          <DashboardIcon />
+        <AddHomeIcon />
         </ListItemIcon>
-        My Library
+        My Presentations
       </StyledMenuItem>
       <StyledMenuItem onClick={handleTutorials}>
         <ListItemIcon>
