@@ -239,6 +239,7 @@ const useCanvasData = () => {
             outputFormat
           );
           ListImage.data?.push({
+            id: elementID,
             name: canvasObject.text === 'Add Text' ? '' : canvasObject.text,
             label: canvasObject.text === 'Add Text' ? '' : canvasObject.text,
             subHeading: '',

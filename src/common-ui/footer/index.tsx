@@ -57,13 +57,13 @@ const Footer : React.FC<FooterProps> = ({ handlers }) => {
       case 'Facebook':
         window.open('https://www.linkedin.com/company/reventai/', '_blank');
         break;
-      case 'Linkedin':
+      case 'LinkedIn':
         window.open('https://www.linkedin.com/company/reventai/', '_blank');
         break;
       case 'Youtube':
         window.open('https://www.youtube.com/channel/UCbA7uPC7VU3Jdbdr87yeW_g', '_blank');
         break;
-
+        
       default:
         break;
     }
@@ -90,8 +90,8 @@ const Footer : React.FC<FooterProps> = ({ handlers }) => {
               <PrimaryLink href="#services" onClick={handleServices}>
                 <b>Our Services</b>
               </PrimaryLink>
-              <p onClick={handleGetStarted} style={{cursor:'pointer'}}>Presentation Automation</p>
-              <p onClick={handleGetStarted} style={{cursor:'pointer'}}>Presentation Design</p>
+              <p onClick={handleServices} style={{cursor:'pointer'}}>Presentation Automation</p>
+              <p onClick={handleServices} style={{cursor:'pointer'}}>Presentation Design</p>
             </GridLeft>
             <GridLeft xs={2}>
               <PrimaryLink href="#product">
@@ -115,14 +115,14 @@ const Footer : React.FC<FooterProps> = ({ handlers }) => {
                 <img src={Instagram} style={{ cursor: 'pointer' }} onClick={() => handleSocialLinks('Instagram')} />
                 {/* <img src={Facebook} style={{ cursor: 'pointer' }} onClick={() => handleSocialLinks('Facebook')} /> */}
                 <img src={Youtube} style={{ cursor: 'pointer' }} onClick={() => handleSocialLinks('Youtube')} />
-                <img src={Linkedin} style={{ cursor: 'pointer' }} onClick={() => handleSocialLinks('Linkedin')} />
+                <img src={Linkedin} style={{ cursor: 'pointer' }} onClick={() => handleSocialLinks('LinkedIn')} />
               </Stack>
             </GridLeft>
           </GridRowCenter>
           <br />
           <br />
           <br />
-          <CopyRight>2023 © Revent.ai | All Rights Reserved</CopyRight>
+          <CopyRight>2024 © Revent.ai | All Rights Reserved</CopyRight>
         </FooterContainer>
       </DesktopContainer>
       <MobileContainer>
@@ -140,8 +140,10 @@ const Footer : React.FC<FooterProps> = ({ handlers }) => {
           <PrimaryLink href="#about" onClick={handleMServices}>
             <b>Our Services</b>
           </PrimaryLink>
-          <p>Presentation Automation</p>
-          <p>Presentation Design</p>
+          <p onClick={() => {
+            console.log('thinnava')
+          }} style={{cursor : 'pointer'}}>Presentation Automation</p>
+          <p onClick={() => handleMServices()} style={{cursor : 'pointer'}}>Presentation Design</p>
           <br />
           <PrimaryLink href="#about">
             <b>Product</b>
@@ -170,7 +172,7 @@ const Footer : React.FC<FooterProps> = ({ handlers }) => {
             <img src={Instagram} style={{ cursor: 'pointer' }} onClick={() => handleSocialLinks('Instagram')} />
             {/* <img src={Facebook} style={{ cursor: 'pointer' }} onClick={() => handleSocialLinks('Facebook')} /> */}
             <img src={Youtube} style={{ cursor: 'pointer' }} onClick={() => handleSocialLinks('Youtube')} />
-            <img src={Linkedin} style={{ cursor: 'pointer' }} onClick={() => handleSocialLinks('Linkedin')} />
+            <img src={Linkedin} style={{ cursor: 'pointer' }} onClick={() => handleSocialLinks('LinkedIn')} />
           </Stack>
         </FooterContainer>
       </MobileContainer>

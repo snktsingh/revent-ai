@@ -346,6 +346,14 @@ export const CanvasReducer = createSlice({
         state.canvasJS = slide;
       }
     },  
+    setUseAiForSlides(state, action : PayloadAction<{slideId : number; useAI : boolean}>) {
+      const { slideId, useAI } = action.payload;
+      const slide = state.canvasList.find(s => s.slideId === slideId);
+      if (slide) {
+        slide.useAI = useAI;
+        state.canvasJS = slide;
+      }
+    }
   },
 });
 
@@ -382,7 +390,8 @@ export const {
   updateSlideIdInList,
   toggleVariantMode,
   setSlideShape,
-  setActiveVariantInSlide
+  setActiveVariantInSlide,
+  setUseAiForSlides
 } = CanvasReducer.actions;
 
 export default CanvasReducer.reducer;

@@ -57,7 +57,7 @@ export const ROUTES = {
   TERMS: '/terms-of-use',
   PRIVACY: '/privacy-policy',
   TUTORIALS: '/tutorials',
-  LIBRARY: '/my-library',
+  LIBRARY: '/my-presentations',
   TEMPLATES:"/my-templates"
 } as const;
 

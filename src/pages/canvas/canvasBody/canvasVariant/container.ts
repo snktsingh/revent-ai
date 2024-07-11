@@ -150,6 +150,7 @@ const useVariants = ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
         themeId
       ).then(req => {
         let request = {...req, activeSlideVariantId: activeVariant, useAI : canvasList[currentSlideIndex].useAI}
+        console.log({request, canvasUseAI : canvasList[currentSlideIndex]})
         dispatch(refreshPPTApi(request)).then((res : any) => {
           let updatedPresentation = canvasList.map(slide => {
             if (

@@ -118,6 +118,7 @@ export const useQuoteElement = () => {
     let reader = new FileReader();
     fileInput.addEventListener('change', async (e): Promise<void> => {
       file = (e.target as HTMLInputElement)?.files?.[0];
+      console.log(file);
       if (file) {
         const [_, id] = object.name?.split('_') ?? [];
 

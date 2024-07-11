@@ -50,7 +50,7 @@ const BreadCrumb = () => {
         {endPoint === 'presentation' ? (
           <Breadcrumbs>
             <Chip
-              label="My Library"
+              label="My Presentations"
               sx={ChipStyle}
               onClick={handleNavigateDashboard}
             />
@@ -63,7 +63,7 @@ const BreadCrumb = () => {
         ) : endPoint === 'themes' ? (
           <Breadcrumbs>
             <Chip
-              label="My Library"
+              label="My Presentations"
               sx={ChipStyle}
               onClick={handleNavigateDashboard}
             />
@@ -76,7 +76,7 @@ const BreadCrumb = () => {
         ) : (
           endPoint === 'dashboard' && (
             <Chip
-              label="My Library"
+              label="My Presentations"
               sx={ChipStyle}
               onClick={handleNavigateDashboard}
             />
