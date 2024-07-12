@@ -86,6 +86,7 @@ import DocUpload from '../assets/dashboard/docUpload.svg';
 import LibraryIcon from '../assets/dashboard/libraryIcon.svg';
 import PresetIcon from '../assets/dashboard/preset.svg';
 import placeholderImage from '../assets/PlaceholderProfile.jpg';
+import DashboardWand from '../assets/dashboard/wand.svg';
 export {
   Back,
   Wand,

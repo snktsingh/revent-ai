@@ -1,35 +1,3 @@
-import {
-  AppBar,
-  Avatar,
-  Button,
-  Card,
-  Checkbox,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Stack,
-  TextField,
-} from '@mui/material';
-import {
-  BlankImageCard,
-  CardContainer,
-  CardLink,
-  CardSpan,
-  CardTitle,
-  Loader,
-  LoaderText,
-  MainContainer,
-  NewPPTCard,
-  PPTCard,
-  PPTTitle,
-  PreviewCard,
-  ThumbnailCard,
-  Title,
-  TitleCard,
-} from './style';
-import slideData from './data.json';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import React, { HtmlHTMLAttributes, useEffect, useRef, useState } from 'react';
@@ -50,22 +18,7 @@ import ProfileMenu from '@/common-ui/profileMenu';
 import ThumbnailPreview from '@/common-ui/thumbnailPreview';
 import { faker } from '@faker-js/faker';
 import CancelIcon from '@mui/icons-material/Cancel';
-import {
-  Blank,
-  CancelUpload,
-  Create,
-  DeleteFile,
-  DocUpload,
-  Empty,
-  Favicon,
-  Folder,
-  Logo,
-  Proceed,
-  Think,
-  UploadTick,
-  Wand,
-  WandDashboard,
-} from '@/constants/media';
+import { Logo, WandDashboard } from '@/constants/media';
 import NavBar from '@/common-ui/NavBar';
 import PresentationCardContextMenu from '@/common-ui/presentationContextMenu';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -249,18 +202,19 @@ const Dashboard = ({ onFileSelect }: any) => {
     setPathName(router.pathname.slice(1));
   }, [router]);
 
-  const handleNavigation = (value: number) => {
-    if (value === 0) {
+  const handleNavigation = (value: string) => {
+    console.log(value);
+    if (value === 'Dashboard') {
       navigate(`${ROUTES.DASHBOARD}`);
-    } else if (value === 1) {
+    } else if (value === 'My Presentations') {
       navigate(`${ROUTES.LIBRARY}`);
-    } else if (value === 2) {
+    } else if (value === 'My Templates') {
       navigate(`${ROUTES.TEMPLATES}`);
-    } else if (value === 3) {
+    } else if (value === 'Tutorials') {
       navigate(`${ROUTES.TUTORIALS}`);
-    } else if (value === 4) {
+    } else if (value === 'Account Settings') {
       navigate(`${ROUTES.SETTINGS}`);
-    } else if (value === 5) {
+    } else if (value === 'Logout') {
       userLogout();
     }
   };
@@ -387,7 +341,7 @@ const Dashboard = ({ onFileSelect }: any) => {
                   justifyContent: open ? 'initial' : 'center',
                   px: 2.5,
                 }}
-                onClick={() => handleNavigation(index)}
+                onClick={() => handleNavigation(text)}
               >
                 <ListItemIcon
                   sx={{
