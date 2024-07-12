@@ -175,6 +175,5 @@ export {
   LibraryIcon,
   PresetIcon,
   placeholderImage,
-  WandDashboard,
-  DashboardWand,
+  WandDashboard
 };
