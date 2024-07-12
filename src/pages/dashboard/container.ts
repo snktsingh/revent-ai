@@ -86,6 +86,7 @@ const useDashboard = () => {
         lastVariant: '',
         selectedOriginalCanvas: false,
         slideShape: '',
+        useAI: false
       },
     ];
     dispatch(setCanvas(canvas[0]));

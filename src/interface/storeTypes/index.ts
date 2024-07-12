@@ -24,7 +24,7 @@ export interface CanvasItem {
   lastVariant : string;
   selectedOriginalCanvas: boolean;
   slideShape?: string;
-  useAI? : boolean;
+  useAI : boolean;
 }
 
 export interface IPresentationDetails {

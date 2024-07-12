@@ -126,6 +126,7 @@ const useCanvasHeader = () => {
         lastVariant : '',
         selectedOriginalCanvas: false,
         slideShape: '',
+        useAI : false
       },
     ];
     dispatch(updateCanvasList(canvas));

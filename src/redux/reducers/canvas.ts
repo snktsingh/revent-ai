@@ -126,6 +126,7 @@ export const CanvasReducer = createSlice({
           presentationId: state.canvasList[0].presentationId || 1,
           lastVariant: '',
           selectedOriginalCanvas: false,
+          useAI : false
         },
         ...state.canvasList.slice(activeSlideIndex + 1),
       ];
@@ -346,13 +347,15 @@ export const CanvasReducer = createSlice({
         state.canvasJS = slide;
       }
     },  
-    setUseAiForSlides(state, action : PayloadAction<{slideId : number; useAI : boolean}>) {
+    setUseAiForSlides(state, action: PayloadAction<{slideId: number; useAI: boolean}>) {
       const { slideId, useAI } = action.payload;
-      const slide = state.canvasList.find(s => s.slideId === slideId);
-      if (slide) {
-        slide.useAI = useAI;
-        state.canvasJS = slide;
+      const slideIndex = state.canvasList.findIndex(s => s.id === slideId);
+      if (slideIndex !== -1) {
+        state.canvasList[slideIndex].useAI = useAI;
+        state.canvasJS = { ...state.canvasList[slideIndex], useAI };
       }
+
+      console.log(state.canvasList[slideIndex])
     }
   },
 });
