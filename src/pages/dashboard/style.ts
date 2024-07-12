@@ -125,13 +125,15 @@ export const NewPPTCard = styled.div`
   flex-direction: column;
 `;
 
-export const CardSpan = styled.span`
+export const TransformCard = styled.span`
+  padding : 14px;
+`;
+
+export const TagCard = styled.span`
   position: absolute;
   overflow: hidden;
-  width: 150px;
-  height: 150px;
-  top: -10px;
-  left: -10px;
+  width: 100px;
+  height: 90px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -140,7 +142,7 @@ export const CardSpan = styled.span`
     content: 'BETA';
     position: absolute;
     width: 150%;
-    height: 40px;
+    height: 30px;
     background-image: linear-gradient(
       45deg,
       #004FBA 0%,
@@ -155,7 +157,7 @@ export const CardSpan = styled.span`
     font-weight: 600;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.23);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.23);
   }
 
   &::after {
@@ -172,54 +174,6 @@ export const CardSpan = styled.span`
       #004FBA 0%,
       #1a79ff 51%,
       #004FBA 100%
-    );
-  }
-`;
-
-export const TransformCard = styled(Card)`
-  position: relative;
-  overflow: hidden;
-  width: 200px;
-  height: 200px;
-  top: 20px;
-  
-
-  &::before {
-    content: 'BETA';
-    position: absolute;
-    width: 120%;
-    height: 40px;
-    background-image: linear-gradient(
-      45deg,
-      #004fba 0%,
-      #1a79ff 51%,
-      #004fba 100%
-    );
-    transform: rotate(-45deg) translateY(-20px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.23);
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    width: 10px;
-    bottom: 0;
-    left: 0;
-    height: 10px;
-    z-index: -1;
-    box-shadow: 140px -140px #0060e6;
-    background-image: linear-gradient(
-      45deg,
-      #004fba 0%,
-      #1a79ff 51%,
-      #004fba 100%
     );
   }
 `;
