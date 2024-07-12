@@ -18,23 +18,7 @@ import ProfileMenu from '@/common-ui/profileMenu';
 import ThumbnailPreview from '@/common-ui/thumbnailPreview';
 import { faker } from '@faker-js/faker';
 import CancelIcon from '@mui/icons-material/Cancel';
-import {
-  Blank,
-  CancelUpload,
-  Create,
-  DashboardWand,
-  DeleteFile,
-  DocUpload,
-  Empty,
-  Favicon,
-  Folder,
-  Logo,
-  Proceed,
-  Think,
-  UploadTick,
-  Wand,
-  WandDashboard,
-} from '@/constants/media';
+import { Logo, WandDashboard } from '@/constants/media';
 import NavBar from '@/common-ui/NavBar';
 import PresentationCardContextMenu from '@/common-ui/presentationContextMenu';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
