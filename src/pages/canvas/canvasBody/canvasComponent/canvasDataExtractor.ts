@@ -275,7 +275,7 @@ const useCanvasData = () => {
             const quoteData = Quote.data || [];
             const existingQuote = quoteData.find(item => item.id === id);
             if (existingQuote) {
-              existingQuote.label = canvasObject.text.slice(1).trimStart();
+              existingQuote.label = canvasObject.text.startsWith('-') || canvasObject.text.startsWith(' ') ? canvasObject.text.slice(1).trimStart() : canvasObject.text;            
             } else {
               quoteData.push({ id, label: canvasObject.text.slice(1).trimStart() });
             }

@@ -63,6 +63,8 @@ import {
   Proceed,
   Think,
   UploadTick,
+  Wand,
+  WandDashboard,
 } from '@/constants/media';
 import NavBar from '@/common-ui/NavBar';
 import PresentationCardContextMenu from '@/common-ui/presentationContextMenu';
@@ -426,7 +428,7 @@ const Dashboard = ({ onFileSelect }: any) => {
         <Box sx={{ display: 'flex', gap: '6px', justifyContent: 'center' }}>
           <img src={Logo} width="10%" />
           <h3> | Re(in)venting The Way You Present</h3>
-          <img src={Think} width="2%" />
+          <img src={WandDashboard} width="2%" />
         </Box>
         <Box>
           <p style={{ margin: '4px', fontSize: '16px', textAlign: 'center' }}>

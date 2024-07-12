@@ -23,8 +23,10 @@ import {
   PPTCard,
   PPTTitle,
   PreviewCard,
+  TagCard,
   ThumbnailCard,
   TitleCard,
+  TransformCard,
 } from './style';
 import { togglePresetOpened } from '@/redux/thunk/dashboard';
 import { MagnifyingGlass } from 'react-loader-spinner';
@@ -185,7 +187,7 @@ const HomeContent = ({ onFileSelect }: any) => {
         <Card
           style={{
             width: '28%',
-            padding: '14px',
+            // padding: '14px',
             borderRadius: '10px',
             display: 'flex',
             flexDirection: 'column',
@@ -193,7 +195,10 @@ const HomeContent = ({ onFileSelect }: any) => {
             justifyContent: 'space-between',
             boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px',
           }}
-        >
+          >
+          <TagCard></TagCard>
+          <TransformCard>
+          
           <div
             style={{
               cursor: 'pointer',
@@ -205,6 +210,7 @@ const HomeContent = ({ onFileSelect }: any) => {
             onDragOver={handleDragOver}
             onDrop={handleDrop}
           >
+            
             <input
               type="file"
               accept=".docx,.doc"
@@ -293,6 +299,7 @@ const HomeContent = ({ onFileSelect }: any) => {
               )}
             </span>
           </span>
+          </TransformCard>
         </Card>
       </Box>
       <Box sx={{ marginTop: '30px' }}>
