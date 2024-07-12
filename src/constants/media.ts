@@ -1,5 +1,6 @@
 import Back from '../assets/routing/back.svg';
 import Wand from '../assets/wand.svg';
+import WandDashboard from '../assets/wandDash.svg';
 import Add from '../assets/add.svg';
 import Loader from '../assets/loader.gif';
 import CanvasBack from '../assets/routing/canvasBack.svg';
@@ -172,5 +173,6 @@ export {
   DocUpload,
   LibraryIcon,
   PresetIcon,
-  placeholderImage
+  placeholderImage,
+  WandDashboard
 };

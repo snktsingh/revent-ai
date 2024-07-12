@@ -59,7 +59,7 @@ const useVariants = ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
       if (activeVariant) {
         setActiveVariant(activeVariant.slideVariantId);
       }
-  }, [canvasJS.canvas])
+  }, [canvasJS])
 
   
   const handleVariants = (
