@@ -743,11 +743,7 @@ const Home = ({ onFileSelect }: any) => {
           <br />
           <img src={Banner} width="60%" />
           <br />
-          <Description>
-            Elevating your presentation
-            <br />
-            with seamless design, powered by AI.
-          </Description>
+          <Description>{homePageData[0].bannerContent.SubTitle}</Description>
           <br />
           <GridRowCenter>
             <Stack direction="row" spacing={3}>
@@ -810,7 +806,7 @@ const Home = ({ onFileSelect }: any) => {
           </div>
         </MobileCardContainer>
         <CustomDivider>
-          <DividerText>Our Mission</DividerText>
+          <DividerText ref={ourMissionRef}>Our Mission</DividerText>
         </CustomDivider>
         <br />
         <MissionContainer>
