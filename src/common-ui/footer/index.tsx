@@ -135,21 +135,19 @@ const Footer : React.FC<FooterProps> = ({ handlers }) => {
           <PrimaryLink href="#about" onClick={handleMAbout}>
             <b>About Us</b>
           </PrimaryLink>
-          <p onClick={handleOurMission}>Our Mission</p>
+          <p style={{cursor : 'pointer'}} onClick={handleOurMission}>Our Mission</p>
           <br />
           <PrimaryLink href="#about" onClick={handleMServices}>
             <b>Our Services</b>
           </PrimaryLink>
-          <p onClick={() => {
-            console.log('thinnava')
-          }} style={{cursor : 'pointer'}}>Presentation Automation</p>
+          <p onClick={() => handleMServices()} style={{cursor : 'pointer'}}>Presentation Automation</p>
           <p onClick={() => handleMServices()} style={{cursor : 'pointer'}}>Presentation Design</p>
           <br />
           <PrimaryLink href="#about">
             <b>Product</b>
           </PrimaryLink>
-          <p onClick={handleTry}>Try Now</p>
-          <p>See How It Works</p>
+          {/* <p onClick={handleTry}>Try Now</p> */}
+          <p style={{cursor : 'pointer'}} onClick={handleTry}>See How It Works</p>
           <br />
           <PrimaryLink href="#about" onClick={handleMContact}>
             <b>Contact Us</b>
