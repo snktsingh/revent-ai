@@ -556,7 +556,7 @@ const Home = ({ onFileSelect }: any) => {
               </div>
               <br />
               <CustomDivider>
-                <DividerText ref={ourMissionRef}>Our Mission</DividerText>
+                <DividerText ref={ourMissionRef}>Our Vision</DividerText>
               </CustomDivider>
               <br />
               <br />
@@ -806,7 +806,7 @@ const Home = ({ onFileSelect }: any) => {
           </div>
         </MobileCardContainer>
         <CustomDivider>
-          <DividerText ref={ourMissionRef}>Our Mission</DividerText>
+          <DividerText ref={ourMissionRef}>Our Vision</DividerText>
         </CustomDivider>
         <br />
         <MissionContainer>

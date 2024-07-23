@@ -84,7 +84,7 @@ const Footer : React.FC<FooterProps> = ({ handlers }) => {
               <PrimaryLink href="#about" onClick={handleAbout}>
                 <b>About Us</b>
               </PrimaryLink>
-              <p onClick={handleOurMission} style={{cursor : 'pointer'}}>Our Mission</p>
+              <p onClick={handleOurMission} style={{cursor : 'pointer'}}>Our Vision</p>
             </Grid>
             <GridLeft xs={2}>
               <PrimaryLink href="#services" onClick={handleServices}>
@@ -135,7 +135,7 @@ const Footer : React.FC<FooterProps> = ({ handlers }) => {
           <PrimaryLink href="#about" onClick={handleMAbout}>
             <b>About Us</b>
           </PrimaryLink>
-          <p style={{cursor : 'pointer'}} onClick={handleOurMission}>Our Mission</p>
+          <p style={{cursor : 'pointer'}} onClick={handleOurMission}>Our Vision</p>
           <br />
           <PrimaryLink href="#about" onClick={handleMServices}>
             <b>Our Services</b>
