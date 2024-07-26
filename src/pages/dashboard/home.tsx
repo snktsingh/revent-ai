@@ -37,6 +37,7 @@ import moment from 'moment';
 import { FetchUtils } from '@/utils/fetch-utils';
 import ENDPOINT from '@/constants/endpoint';
 import PresentationCardContextMenu from '@/common-ui/presentationContextMenu';
+import { Token } from '@/utils/localStorage/data';
 
 const HomeContent = ({ onFileSelect }: any) => {
   const inputRef = React.createRef<HTMLInputElement>();
@@ -195,110 +196,108 @@ const HomeContent = ({ onFileSelect }: any) => {
             justifyContent: 'space-between',
             boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px',
           }}
-          >
+        >
           <TagCard></TagCard>
           <TransformCard>
-          
-          <div
-            style={{
-              cursor: 'pointer',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-            onClick={handleContainerClick}
-            onDragOver={handleDragOver}
-            onDrop={handleDrop}
-          >
-            
-            <input
-              type="file"
-              accept=".docx,.doc"
-              onChange={handleFileChange}
-              ref={inputRef}
-              style={{ display: 'none' }}
-            />
-            {selectedFile !== null ? (
-              <span
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginTop: '10px',
-                }}
-              >
-                <br />
-                <img src={UploadTick} width="30px" />
-                <p
-                  style={{
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'inherit',
-                    textAlign: 'center',
-                  }}
-                >
-                  {selectedFile.name}
-                </p>
-              </span>
-            ) : (
-              <img src={DocUpload} width="100%" />
-            )}
-          </div>
-          <span
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
-          >
-            <span
+            <div
               style={{
-                marginTop: '18px',
+                cursor: 'pointer',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '2px',
+                alignItems: 'center',
+              }}
+              onClick={handleContainerClick}
+              onDragOver={handleDragOver}
+              onDrop={handleDrop}
+            >
+              <input
+                type="file"
+                accept=".docx,.doc"
+                onChange={handleFileChange}
+                ref={inputRef}
+                style={{ display: 'none' }}
+              />
+              {selectedFile !== null ? (
+                <span
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginTop: '10px',
+                  }}
+                >
+                  <br />
+                  <img src={UploadTick} width="30px" />
+                  <p
+                    style={{
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'inherit',
+                      textAlign: 'center',
+                    }}
+                  >
+                    {selectedFile.name}
+                  </p>
+                </span>
+              ) : (
+                <img src={DocUpload} width="100%" />
+              )}
+            </div>
+            <span
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
               }}
             >
               <span
                 style={{
-                  fontSize: '14px',
-                  fontWeight: '600',
+                  marginTop: '18px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '2px',
                 }}
               >
-                Transform Documents to PPT
+                <span
+                  style={{
+                    fontSize: '14px',
+                    fontWeight: '600',
+                  }}
+                >
+                  Transform Documents to PPT
+                </span>
+                <span
+                  style={{
+                    fontSize: '12px',
+                    fontWeight: '400',
+                    color: 'grey',
+                  }}
+                >
+                  Transform Docx / Doc to ppt
+                </span>
               </span>
-              <span
-                style={{
-                  fontSize: '12px',
-                  fontWeight: '400',
-                  color: 'grey',
-                }}
-              >
-                Transform Docx / Doc to ppt
+              <span style={{ marginTop: '14px' }}>
+                {selectedFile && (
+                  <img
+                    title="Delete File"
+                    src={DeleteFile}
+                    width="25px"
+                    style={{ cursor: 'pointer', marginRight: '10px' }}
+                    onClick={() => setSelectedFile(null)}
+                  />
+                )}
+                {selectedFile && (
+                  <img
+                    title="Proceed for Transformation"
+                    src={Proceed}
+                    width="25px"
+                    style={{ cursor: 'pointer' }}
+                    onClick={handleDocsPPt}
+                  />
+                )}
               </span>
             </span>
-            <span style={{ marginTop: '14px' }}>
-              {selectedFile && (
-                <img
-                  title="Delete File"
-                  src={DeleteFile}
-                  width="25px"
-                  style={{ cursor: 'pointer', marginRight: '10px' }}
-                  onClick={() => setSelectedFile(null)}
-                />
-              )}
-              {selectedFile && (
-                <img
-                  title="Proceed for Transformation"
-                  src={Proceed}
-                  width="25px"
-                  style={{ cursor: 'pointer' }}
-                  onClick={handleDocsPPt}
-                />
-              )}
-            </span>
-          </span>
           </TransformCard>
         </Card>
       </Box>
@@ -329,10 +328,10 @@ const HomeContent = ({ onFileSelect }: any) => {
                               marginBottom: '10px',
                             }}
                             onClick={() => {
-                              navigate(
-                                `/presentation/${
-                                  ppt.presentationId
-                                }-${faker.string.uuid()}`
+                              window.open(
+                                `https://canvas.revent.ai/${ppt.presentationId}-${Token}`,
+                                '_blank',
+                                'noopener,noreferrer'
                               );
                             }}
                           />
@@ -342,10 +341,10 @@ const HomeContent = ({ onFileSelect }: any) => {
                               src={Blank}
                               style={{ cursor: 'pointer' }}
                               onClick={() => {
-                                navigate(
-                                  `/presentation/${
-                                    ppt.presentationId
-                                  }-${faker.string.uuid()}`
+                                window.open(
+                                  `https://canvas.revent.ai/${ppt.presentationId}-${Token}`,
+                                  '_blank',
+                                  'noopener,noreferrer'
                                 );
                               }}
                             />

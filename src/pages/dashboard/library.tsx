@@ -117,7 +117,7 @@ const MyLibrary = () => {
                           }}
                           onClick={() => {
                             window.open(
-                              `https://canvas.revent.ai/presentation/${
+                              `https://canvas.revent.ai/${
                                 ppt.presentationId
                               }-${Token}`,
                               '_blank',
@@ -132,7 +132,7 @@ const MyLibrary = () => {
                             style={{ cursor: 'pointer' }}
                             onClick={() => {
                               window.open(
-                                `https://canvas.revent.ai/presentation/${
+                                `https://canvas.revent.ai/${
                                   ppt.presentationId
                                 }-${Token}`,
                                 '_blank',
