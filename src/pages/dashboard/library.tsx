@@ -115,10 +115,12 @@ const MyLibrary = () => {
                             marginBottom: '10px',
                           }}
                           onClick={() => {
-                            navigate(
-                              `/presentation/${
+                            window.open(
+                              `https://canvas.revent.ai/presentation/${
                                 ppt.presentationId
-                              }-${faker.string.uuid()}`
+                              }-${faker.string.uuid()}`,
+                              '_blank',
+                              'noopener,noreferrer'
                             );
                           }}
                         />
@@ -128,10 +130,12 @@ const MyLibrary = () => {
                             src={Blank}
                             style={{ cursor: 'pointer' }}
                             onClick={() => {
-                              navigate(
-                                `/presentation/${
+                              window.open(
+                                `https://canvas.revent.ai/presentation/${
                                   ppt.presentationId
-                                }-${faker.string.uuid()}`
+                                }-${faker.string.uuid()}`,
+                                '_blank',
+                                'noopener,noreferrer'
                               );
                             }}
                           />
