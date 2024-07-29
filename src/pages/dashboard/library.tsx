@@ -25,7 +25,6 @@ import { MoreVert } from '@mui/icons-material';
 import useDashboard from './container';
 import PresentationCardContextMenu from '@/common-ui/presentationContextMenu';
 import moment from 'moment';
-import { Token } from '@/utils/localStorage/data';
 
 const MyLibrary = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -116,12 +115,10 @@ const MyLibrary = () => {
                             marginBottom: '10px',
                           }}
                           onClick={() => {
-                            window.open(
-                              `https://canvas.revent.ai/${
+                            navigate(
+                              `/presentation/${
                                 ppt.presentationId
-                              }-${Token}`,
-                              '_blank',
-                              'noopener,noreferrer'
+                              }-${faker.string.uuid()}`
                             );
                           }}
                         />
@@ -131,12 +128,10 @@ const MyLibrary = () => {
                             src={Blank}
                             style={{ cursor: 'pointer' }}
                             onClick={() => {
-                              window.open(
-                                `https://canvas.revent.ai/${
+                              navigate(
+                                `/presentation/${
                                   ppt.presentationId
-                                }-${Token}`,
-                                '_blank',
-                                'noopener,noreferrer'
+                                }-${faker.string.uuid()}`
                               );
                             }}
                           />
