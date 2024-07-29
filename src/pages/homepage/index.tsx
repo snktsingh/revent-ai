@@ -8,6 +8,7 @@ import {
   CardSpan,
   ChildContainer,
   ComingSoonContainer,
+  ComingSpan,
   ContactContainer,
   ContactGrid,
   ContainerDescription,
@@ -137,16 +138,16 @@ const Home = ({ onFileSelect }: any) => {
 
   const toggleDrawer =
     (anchor: Anchor, open: boolean) =>
-      (event: React.KeyboardEvent | React.MouseEvent) => {
-        if (
-          event.type === 'keyRight' &&
-          ((event as React.KeyboardEvent).key === '' ||
-            (event as React.KeyboardEvent).key === '')
-        ) {
-          return;
-        }
-        setState({ ...state, [anchor]: open });
-      };
+    (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (
+        event.type === 'keyRight' &&
+        ((event as React.KeyboardEvent).key === '' ||
+          (event as React.KeyboardEvent).key === '')
+      ) {
+        return;
+      }
+      setState({ ...state, [anchor]: open });
+    };
   const workingRef = useRef<HTMLDivElement>(null);
   const handleWorking = () => {
     if (workingRef.current) {
@@ -244,7 +245,7 @@ const Home = ({ onFileSelect }: any) => {
   const inputRef = React.createRef<HTMLInputElement>();
 
   const handleDocsPPt = async () => {
-    navigate("/themes")
+    navigate('/themes');
     // if (isAuth && Token) {
     //   try {
     //     const docData = new FormData();
@@ -358,6 +359,77 @@ const Home = ({ onFileSelect }: any) => {
                 <Stack direction="row" width="80vw" spacing={13}>
                   <ComingSoonContainer>
                     <CardBox>
+                      <ComingSpan></ComingSpan>
+                      <>
+                        <UploadSubtitle>Transform</UploadSubtitle>
+                        <p>an exisiting document</p>
+                      </>
+                      <div
+                        style={{
+                          cursor: 'pointer',
+                        }}
+                        // onClick={handleContainerClick}
+                        // onDragOver={handleDragOver}
+                        // onDrop={handleDrop}
+                      >
+                        <input
+                          type="file"
+                          accept=".pdf,.docx,.doc"
+                          onChange={handleFileChange}
+                          ref={inputRef}
+                          style={{ display: 'none' }}
+                        />
+                        {selectedFile ? (
+                          <></>
+                        ) : (
+                          <>
+                            <br />
+                            <br />
+                            <img src={Folder} width="30px" />
+                            <br />
+                            <br />
+                            <span>
+                              <b>Drag and Drop</b>
+                              <br />
+                              <span>
+                                your document here <br />
+                                or click to Browse
+                              </span>
+                            </span>
+                            <br />
+                            <br />
+                            <br />
+                            <>File should be .pdf, .doc or .docx</>
+                          </>
+                        )}
+                      </div>
+                      {selectedFile === null ? (
+                        <></>
+                      ) : (
+                        <span
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}
+                        >
+                          <br />
+                          <img src={UploadTick} width="40px" />
+                          <br />
+                          <b>File Uploaded</b>
+                          <p>{selectedFile.name}</p>
+                          <br />
+                          <img
+                            src={CancelUpload}
+                            width="40px"
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => setSelectedFile(null)}
+                          />
+                        </span>
+                      )}
+                    </CardBox>
+                    {/* <CardBox>
                       <CardSpan></CardSpan>
                       <>
                         <UploadSubtitle>Transform</UploadSubtitle>
@@ -427,7 +499,7 @@ const Home = ({ onFileSelect }: any) => {
                           />
                         </span>
                       )}
-                    </CardBox>
+                    </CardBox> */}
                   </ComingSoonContainer>
                   <UploadContainer
                     onClick={handleTry}
@@ -565,7 +637,9 @@ const Home = ({ onFileSelect }: any) => {
                   <MissionContainer>
                     <img src={Quote} style={{ marginTop: '-100px' }} />
                     <MissionQuote>
-                      To serve as a reminder that technology should adapt to people, not the other way around. At Revent, by prioritizing people, quality and value will always follow.
+                      To serve as a reminder that technology should adapt to
+                      people, not the other way around. At Revent, by
+                      prioritizing people, quality and value will always follow.
                       <a
                         style={{
                           color: `${theme.colorSchemes.light.palette.primary.main}`,
@@ -587,11 +661,10 @@ const Home = ({ onFileSelect }: any) => {
                 </CardContainer>
                 <LaunchContainer>
                   <LaunchChild>
-                    <LaunchHeading>
-                      Join our newsletter!
-                    </LaunchHeading>
+                    <LaunchHeading>Join our newsletter!</LaunchHeading>
                     <LaunchDescription>
-                      Join our growing community of early adopters and get insights on how to make presentations super fast!
+                      Join our growing community of early adopters and get
+                      insights on how to make presentations super fast!
                     </LaunchDescription>
                     <br />
 

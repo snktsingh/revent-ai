@@ -295,3 +295,54 @@ export const CardSpan = styled.span`
     );
   }
 `;
+
+export const ComingSpan = styled.span`
+  position: absolute;
+  overflow: hidden;
+  width: 150px;
+  height: 150px;
+  top: -10px;
+  left: -10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &::before {
+    content: 'BETA';
+    position: absolute;
+    width: 150%;
+    height: 40px;
+    background-image: linear-gradient(
+      45deg,
+      #004fba 0%,
+      #1a79ff 51%,
+      #004fba 100%
+    );
+    transform: rotate(-45deg) translateY(-20px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.23);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    bottom: 0;
+    left: 0;
+    height: 10px;
+    z-index: -1;
+    box-shadow: 140px -140px #0060e6;
+    background-image: linear-gradient(
+      45deg,
+      #004fba 0%,
+      #1a79ff 51%,
+      #004fba 100%
+    );
+  }
+`;

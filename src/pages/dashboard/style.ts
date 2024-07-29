@@ -126,7 +126,7 @@ export const NewPPTCard = styled.div`
 `;
 
 export const TransformCard = styled.span`
-  padding : 14px;
+  padding: 14px;
 `;
 
 export const TagCard = styled.span`
@@ -145,9 +145,9 @@ export const TagCard = styled.span`
     height: 30px;
     background-image: linear-gradient(
       45deg,
-      #004FBA 0%,
+      #004fba 0%,
       #1a79ff 51%,
-      #004FBA 100%
+      #004fba 100%
     );
     transform: rotate(-45deg) translateY(-20px);
     display: flex;
@@ -171,9 +171,59 @@ export const TagCard = styled.span`
     box-shadow: 140px -140px #0060e6;
     background-image: linear-gradient(
       45deg,
-      #004FBA 0%,
+      #004fba 0%,
       #1a79ff 51%,
-      #004FBA 100%
+      #004fba 100%
+    );
+  }
+`;
+
+export const ComingTag = styled.span`
+  position: absolute;
+  overflow: hidden;
+  width: 100px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &::before {
+    content: 'COMING SOON';
+    position: absolute;
+    width: 150%;
+    height: 30px;
+    font-size: 9px;
+    background-image: linear-gradient(
+      45deg,
+      #004fba 0%,
+      #1a79ff 51%,
+      #004fba 100%
+    );
+    transform: rotate(-45deg) translateY(-20px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.23);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    bottom: 0;
+    left: 0;
+    height: 10px;
+    z-index: -1;
+    box-shadow: 140px -140px #0060e6;
+    background-image: linear-gradient(
+      45deg,
+      #004fba 0%,
+      #1a79ff 51%,
+      #004fba 100%
     );
   }
 `;
