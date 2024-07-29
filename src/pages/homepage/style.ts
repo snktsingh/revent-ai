@@ -28,6 +28,7 @@ export const Description = styled.p`
   font-size: 16px;
   width: 75% !important;
   line-height: 1.9;
+  text-align: center;
 `;
 export const ChildContainer = styled.div`
   margin: 0% 4% 5% 4%;
@@ -77,6 +78,7 @@ export const ContainerTitle = styled.p`
     margin: 5% 8%;
     font-size: 20px;
     line-height: 1.8;
+    text-align: center;
   }
 `;
 export const ContainerDescription = styled.p`
@@ -86,6 +88,7 @@ export const ContainerDescription = styled.p`
   @media only screen and (max-width: 768px) {
     font-size: 16px;
     margin: 0% 10%;
+    text-align: start;
   }
 `;
 export const MissionContainer = styled.span`
@@ -112,6 +115,7 @@ export const LaunchHeading = styled.h1`
   font-weight: 500;
   @media only screen and (max-width: 768px) {
     font-size: 30px;
+    text-align: center;
   }
 `;
 export const LaunchDescription = styled.p`
@@ -119,6 +123,7 @@ export const LaunchDescription = styled.p`
   color: #2f2f2f;
   width: 70%;
   line-height: 1.5;
+  text-align: center;
 `;
 export const ContactContainer = styled.div`
   margin: 0% 4% 5% 4%;
@@ -174,6 +179,7 @@ export const DividerText = styled.p`
   @media only screen and (max-width: 768px) {
     font-size: 2rem;
     font-weight: 500;
+    text-align: center;
   }
 `;
 export const MissionQuote = styled.span`
@@ -257,9 +263,9 @@ export const CardSpan = styled.span`
     height: 40px;
     background-image: linear-gradient(
       45deg,
-      #004FBA 0%,
+      #004fba 0%,
       #1a79ff 51%,
-      #004FBA 100%
+      #004fba 100%
     );
     transform: rotate(-45deg) translateY(-20px);
     display: flex;
@@ -283,9 +289,9 @@ export const CardSpan = styled.span`
     box-shadow: 140px -140px #0060e6;
     background-image: linear-gradient(
       45deg,
-      #004FBA 0%,
+      #004fba 0%,
       #1a79ff 51%,
-      #004FBA 100%
+      #004fba 100%
     );
   }
 `;

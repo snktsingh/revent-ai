@@ -15,6 +15,9 @@ import ForgotPasswordPage from '@/common-ui/forgotPassword';
 import ResetPasswordPage from '@/common-ui/resetPassword';
 import Terms from '@/pages/termsofuse';
 import Tutorials from '@/pages/tutorials';
+import { isMobile } from 'react-device-detect';
+
+console.log({isMobile})
 
 export const authRoutes: RouteObject[] = [
   { path: ROUTES.APP_ROOT, element: <Home /> },
@@ -39,19 +42,19 @@ export const authRoutes: RouteObject[] = [
 
 export const defaultRoutes: RouteObject[] = [
   { path: ROUTES.APP_ROOT, element: <Home /> },
-  { path: ROUTES.LOGIN, element: <Login /> },
-  { path: ROUTES.SIGNUP, element: <SignUp /> },
-  { path: ROUTES.DASHBOARD, element: <Protected /> },
-  { path: ROUTES.THEMES, element: <Protected /> },
-  { path: ROUTES.CANVAS, element: <Protected /> },
-  { path: ROUTES.SETTINGS, element: <UserSettings /> },
-  { path: ROUTES.ACTIVATION, element: <ActivateAccount /> },
-  { path: ROUTES.FORGOT_PASSWORD, element: <ForgotPasswordPage /> },
-  { path: ROUTES.RESET_PASSWORD, element: <ResetPasswordPage /> },
+  { path: ROUTES.LOGIN, element: !isMobile ? <Login /> : <Navigate to={ROUTES.APP_ROOT} /> },
+  { path: ROUTES.SIGNUP, element: !isMobile ? <SignUp /> : <Navigate to={ROUTES.APP_ROOT} /> },
+  { path: ROUTES.DASHBOARD, element: !isMobile ? <Protected /> : <Navigate to={ROUTES.APP_ROOT} /> },
+  { path: ROUTES.THEMES, element: !isMobile ? <Protected /> : <Navigate to={ROUTES.APP_ROOT} /> },
+  { path: ROUTES.CANVAS, element: !isMobile ? <Protected /> : <Navigate to={ROUTES.APP_ROOT} /> },
+  { path: ROUTES.SETTINGS, element: !isMobile ? <UserSettings /> : <Navigate to={ROUTES.APP_ROOT} /> },
+  { path: ROUTES.ACTIVATION, element: !isMobile ? <ActivateAccount /> : <Navigate to={ROUTES.APP_ROOT} />},
+  { path: ROUTES.FORGOT_PASSWORD, element: !isMobile ? <ForgotPasswordPage /> : <Navigate to={ROUTES.APP_ROOT} /> },
+  { path: ROUTES.RESET_PASSWORD, element: !isMobile ? <ResetPasswordPage /> : <Navigate to={ROUTES.APP_ROOT} /> },
   { path: ROUTES.TERMS, element: <Terms /> },
   { path: ROUTES.TUTORIALS, element: <Tutorials /> },
-  { path: ROUTES.LIBRARY, element: <Protected /> },
-  { path: ROUTES.TEMPLATES, element: <Protected /> },
+  { path: ROUTES.LIBRARY, element: !isMobile ? <Protected /> : <Navigate to={ROUTES.APP_ROOT} /> },
+  { path: ROUTES.TEMPLATES, element: !isMobile ? <Protected /> : <Navigate to={ROUTES.APP_ROOT} /> },
 
   {
     path: '/*',

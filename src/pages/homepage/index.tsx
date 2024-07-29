@@ -367,17 +367,17 @@ const Home = ({ onFileSelect }: any) => {
                         style={{
                           cursor: 'pointer',
                         }}
-                      // onClick={handleContainerClick}
-                      // onDragOver={handleDragOver}
-                      // onDrop={handleDrop}
+                        onClick={handleContainerClick}
+                        onDragOver={handleDragOver}
+                        onDrop={handleDrop}
                       >
-                        {/* <input
-                        type="file"
-                        accept=".pdf,.docx,.doc"
-                        onChange={handleFileChange}
-                        ref={inputRef}
-                        style={{ display: 'none' }}
-                      /> */}
+                        <input
+                          type="file"
+                          accept=".pdf,.docx,.doc"
+                          onChange={handleFileChange}
+                          ref={inputRef}
+                          style={{ display: 'none' }}
+                        />
                         {selectedFile ? (
                           <></>
                         ) : (
@@ -556,7 +556,7 @@ const Home = ({ onFileSelect }: any) => {
               </div>
               <br />
               <CustomDivider>
-                <DividerText ref={ourMissionRef}>Our Mission</DividerText>
+                <DividerText ref={ourMissionRef}>Our Vision</DividerText>
               </CustomDivider>
               <br />
               <br />
@@ -565,9 +565,7 @@ const Home = ({ onFileSelect }: any) => {
                   <MissionContainer>
                     <img src={Quote} style={{ marginTop: '-100px' }} />
                     <MissionQuote>
-                      To serve as a reminder for technology to adapt to people
-                      and not the other way round. As long as people are
-                      prioritized, quality and value will always follow.
+                      To serve as a reminder that technology should adapt to people, not the other way around. At Revent, by prioritizing people, quality and value will always follow.
                       <a
                         style={{
                           color: `${theme.colorSchemes.light.palette.primary.main}`,
@@ -743,11 +741,7 @@ const Home = ({ onFileSelect }: any) => {
           <br />
           <img src={Banner} width="60%" />
           <br />
-          <Description>
-            Elevating your presentation
-            <br />
-            with seamless design, powered by AI.
-          </Description>
+          <Description>{homePageData[0].bannerContent.SubTitle}</Description>
           <br />
           <GridRowCenter>
             <Stack direction="row" spacing={3}>
@@ -810,7 +804,7 @@ const Home = ({ onFileSelect }: any) => {
           </div>
         </MobileCardContainer>
         <CustomDivider>
-          <DividerText>Our Mission</DividerText>
+          <DividerText ref={ourMissionRef}>Our Vision</DividerText>
         </CustomDivider>
         <br />
         <MissionContainer>

@@ -69,6 +69,7 @@ export const processSlides = (
       presentationId,
       lastVariant: '',
       selectedOriginalCanvas: false,
+      useAI : false
     };
 
     slideData.variants.forEach((element: any) => {

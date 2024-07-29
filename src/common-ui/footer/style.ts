@@ -9,6 +9,7 @@ export const FooterContainer = styled.div`
     display: flex;
     justify-content: flex-start;
     flex-direction: column;
+    text-align: center;
   }
 `;
 export const GridLeft = styled(Grid)`
