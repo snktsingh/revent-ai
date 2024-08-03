@@ -4,8 +4,8 @@ import { StyledText } from '../style';
 const ConclusionStep = () => {
   return (
     <>
-      <StyledText>Thank you for spending a few minutes learning how to use Revent Press!</StyledText>
-      <strong>Let’s keep going!</strong>
+      <strong>Ready to Go!</strong>
+      <StyledText>Thanks for exploring Revent Press. Start creating your presentation now!</StyledText>
     </>
   )
 }

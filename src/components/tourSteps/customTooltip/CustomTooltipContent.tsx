@@ -18,17 +18,17 @@ const CustomTooltipContent : React.FC<{ChildName: string}> = ({ChildName}) => {
                 {
                     ChildName === 'changeTheme' ? 
                     <>
-                     <StyledText>Change the look and feel </StyledText>
-                     <StyledText>of your presentation!</StyledText>
+                     <StyledText>Select from a variety of themes to customize your look.</StyledText>
+                     {/* <StyledText>of your presentation!</StyledText> */}
                     </>
                     : ChildName === 'share' ? 
                     <>
-                     <StyledText>Export your presentation</StyledText>
-                     <StyledText>as a PDF or PPT</StyledText>
+                     <StyledText>Export your presentation as PDF or PPT.</StyledText>
+                     {/* <StyledText>as a PDF or PPT</StyledText> */}
                     </>
                     : ChildName === 'edit' ? 
                     <>
-                     <StyledText>Edit data with ease</StyledText>
+                     <StyledText>Easily edit your data.</StyledText>
                     </> : ''
                 }
             </div>

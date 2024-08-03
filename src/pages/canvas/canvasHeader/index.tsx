@@ -166,7 +166,7 @@ const MainCanvasHeader = ({ pId }: any) => {
           <Stack direction="row" spacing={1} >
             <Button size="small" variant="contained" className='share-menu' onClick={handleShareClick}>
               <img src={Share} style={{ paddingRight: '8px' }} />
-              <>Share</>
+              <>Export</>
             </Button>
           </Stack>
         </CustomTourTooltip>

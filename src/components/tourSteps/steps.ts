@@ -10,14 +10,15 @@ export const steps: CustomStep[] = [
   {
     target : 'body',
     content : 'Designing Presentations does not need to be time consuming,let’s save time using Revent Press.Take this tutorial and learn how to make professional slides within seconds using Revent Press',
-    title : 'Experience Revent.ai',
+    title : 'Save time with Revent Press',
     disableBeacon : true,
     id:'intro',
     placement: 'center'
   },
   {
     target: '.add-slide-step',
-    content: 'Let’s start by adding a new slide to the presentation by clicking on "New Slide"',    
+    content: `Let's start`,  
+    secondContent: `Add a new slide by clicking "New Slide"`,  
     id: 'addSlide',
     disableBeacon: true,
     styles : {
@@ -45,8 +46,8 @@ export const steps: CustomStep[] = [
   },
   {
     target: '.add-level-step',
-    content:'Elements are customizable!',
-    secondContent : 'Add or Remove Levels by clicking ‘+’ or ‘-’',
+    content:'All elements are customizable to your preference',
+    secondContent : 'Add or remove a box by clicking ‘+’ or ‘-’',
     disableBeacon: true,
     locale: {
       back: 'Exit',
@@ -55,8 +56,7 @@ export const steps: CustomStep[] = [
   },
   {
     target: '.fourth-step',
-    content: 'Let Revent Press help you out!',
-    secondContent : 'Click ‘Regenerate’ to automate the slide design',
+    content: 'Click on ‘Regenerate’ to design your slide.',
     disableBeacon: true,
     locale: {
       back: 'Exit',
@@ -65,8 +65,8 @@ export const steps: CustomStep[] = [
   },
   {
     target: '.fifth-step',
-    content:'Choose from countless variants!',
-    secondContent : 'Hit ‘Refresh’ to browse through more options',
+    content:'Countless Variants',
+    secondContent : 'Hit ‘Refresh’ to explore more options.',
     disableBeacon: true,
     locale: {
       back: 'Exit',
@@ -85,6 +85,7 @@ export const steps: CustomStep[] = [
     },
     locale: {
       back: 'Exit',
+      close : 'Proceed'
     },
     id: 'conclusionStep',
   },

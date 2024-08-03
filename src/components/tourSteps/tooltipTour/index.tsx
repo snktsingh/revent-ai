@@ -54,7 +54,7 @@ export const CustomTooltip: React.FC<CustomTooltipProps> = ({
             <Button variant="contained" color="primary" onClick={() => joyrideRef.current?.next()}>Next</Button>
           )}
           {
-            step.id === 'intro' && <Button variant="contained" color="primary" onClick={() => joyrideRef.current?.next()} >START THE TOUR!</Button>
+            step.id === 'intro' && <Button variant="contained" color="primary" onClick={() => joyrideRef.current?.next()} >Start the tutorial now</Button>
           }
         </div>
       </div>

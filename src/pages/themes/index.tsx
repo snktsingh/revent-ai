@@ -55,7 +55,7 @@ const AppThemes = () => {
       <span>
         <TemplateTitle>
           <img src={Back} onClick={() => navigate(ROUTES.DASHBOARD)} />
-          <Title>Create your Presentations</Title>
+          <Title>Step 1 - Begin by selecting a theme for your presentation</Title>
         </TemplateTitle>
         <br />
         <br />

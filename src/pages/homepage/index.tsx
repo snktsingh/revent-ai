@@ -906,7 +906,7 @@ const Home = ({ onFileSelect }: any) => {
           </CardContainer>
           <LaunchChild>
             <br />
-            <LaunchHeading>Be the first to know when we launch!</LaunchHeading>
+            <LaunchHeading> Join our newsletter!</LaunchHeading>
             <LaunchDescription>
               Join our growing community of early adopters and let us know
               you’re interested to get access.

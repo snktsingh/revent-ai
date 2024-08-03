@@ -48,7 +48,7 @@ export const defaultRoutes: RouteObject[] = [
   { path: ROUTES.THEMES, element: !isMobile ? <Protected /> : <Navigate to={ROUTES.APP_ROOT} /> },
   { path: ROUTES.CANVAS, element: !isMobile ? <Protected /> : <Navigate to={ROUTES.APP_ROOT} /> },
   { path: ROUTES.SETTINGS, element: !isMobile ? <UserSettings /> : <Navigate to={ROUTES.APP_ROOT} /> },
-  { path: ROUTES.ACTIVATION, element: !isMobile ? <ActivateAccount /> : <Navigate to={ROUTES.APP_ROOT} />},
+  { path: ROUTES.ACTIVATION, element: <ActivateAccount /> },
   { path: ROUTES.FORGOT_PASSWORD, element: !isMobile ? <ForgotPasswordPage /> : <Navigate to={ROUTES.APP_ROOT} /> },
   { path: ROUTES.RESET_PASSWORD, element: !isMobile ? <ResetPasswordPage /> : <Navigate to={ROUTES.APP_ROOT} /> },
   { path: ROUTES.TERMS, element: <Terms /> },
