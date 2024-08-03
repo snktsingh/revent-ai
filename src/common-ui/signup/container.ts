@@ -69,14 +69,14 @@ const useSignup = () => {
         return;
       }
     }
-    if(!validateEmail(values.email)){
+    if (!validateEmail(values.email)) {
       toast.warning('Please enter a valid email address');
-    }else if (confirmPassword === '') {
+    } else if (confirmPassword === '') {
       toast.warning('Please confirm your password');
     } else if (values.password !== confirmPassword) {
-      toast.warning('Please match the passwords');
-    } else if(!validatePassword(values.password)){
-      toast.warning('Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, and one number.');
+      toast.warning('Passwords do not match. Please try again.');
+    } else if (!validatePassword(values.password)) {
+      toast.warning('Your password should be at least 8 characters long and include a mix of uppercase and lowercase letters, numbers, and special characters for better security.');
     }
      else {
       handleRegister();

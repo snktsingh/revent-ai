@@ -132,7 +132,7 @@ const SignUp = () => {
                   fullWidth
                   value={confirmPassword}
                   onChange={e => setConfirmPassword(e.target.value)}
-                  type={showPassword ? 'text' : 'password'}
+                  type={showConfirmPassword ? 'text' : 'password'}
                   InputProps={{
                     endAdornment: (
                       <IconButton
