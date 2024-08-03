@@ -93,7 +93,7 @@ const CanvasTools = ({ pId, joyrideRef }: { pId: number, joyrideRef: React.RefOb
   const { color, textColor, borderColor, canvasList, size, activeSlideID } = useAppSelector(
     state => state.canvas
   );
-  const { pptList } = useAppSelector(state => state.manageDashboard)
+  const { pptList, isPPtsFetched } = useAppSelector(state => state.manageDashboard)
   const tools = useAppSelector(state => state.thunk);
   const obj = { key: newKey.nextKey, name: `Slide ${newKey.nextKey}` };
   const ColorRef = useRef<HTMLInputElement | null>(null);
@@ -202,7 +202,7 @@ const CanvasTools = ({ pId, joyrideRef }: { pId: number, joyrideRef: React.RefOb
   };
 
   useEffect(() => {
-    if( pptList.length === 0) dispatch(toggleTourStarted(true));
+    if( pptList.length === 0 && isPPtsFetched) dispatch(toggleTourStarted(true));
     fetchFonts(0, 200);
   }, [])
 

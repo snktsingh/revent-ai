@@ -23,6 +23,7 @@ interface IDashboard {
   presetList: IPresets[];
   preset: any[];
   isPresetOpened : boolean;
+  isPPtsFetched: boolean;
 }
 
 const initialState: IDashboard = {
@@ -32,6 +33,7 @@ const initialState: IDashboard = {
   presetList: [],
   preset: [],
   isPresetOpened : false,
+  isPPtsFetched : false,
 };
 
 export const fetchPPTList = createAsyncThunk(
@@ -95,8 +97,10 @@ const dashboardSlice = createSlice({
       .addCase(fetchPPTList.fulfilled, (state, action) => {
         if (action.meta.arg === 0) {
           state.pptList = action.payload;
+          state.isPPtsFetched= true;
         } else {
           state.pptList = [...state.pptList, ...action.payload];
+          state.isPPtsFetched= true;
         }
         state.hasMore = action.payload.length === 12;
         state.loadingUserDetails = false;
