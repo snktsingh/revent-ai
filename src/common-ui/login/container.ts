@@ -10,14 +10,17 @@ import { FetchNonHeaderUtils, FetchUtils } from '@/utils/fetch-utils';
 
 const useLogin = () => {
   const dispatch = useAppDispatch();
+  const [loginError, setLoginError] = useState('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const emailPattern = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
   const passwordPattern = /^(?=.*[a-z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const userLogin = async (data: IUserLogin) => {
-    toast.promise(
-      async () => {
+    setIsLoading(true);
+      try{
         const res = await FetchNonHeaderUtils.postRequest(
           `${ENDPOINT.AUTH.LOGIN}`,
           data
@@ -31,21 +34,25 @@ const useLogin = () => {
         } else {
           throw new Error('Failed to log in');
         }
-      },
-      {
-        pending: 'Logging in please wait...',
+        setIsLoading(false);
+      } catch(error : any) {
+        if (error && error?.status) {
+           if (error.status === 401){
+              setLoginError('Entered email or password are incorrect. Please check and try again.')
+           }
+        }
+        setIsLoading(false);
       }
-    );
   };
 
   const handleLogin = () => {
     dispatch(setFormDisabled());
     if (email === '' || email === null) {
-      toast.warning('Email field is empty. Please provide your email address.');
+      setLoginError('Email field is empty. Please provide your email address.');
     } else if (password === '' || password === null) {
-      toast.warning('Password field is empty. Please enter your password.');
+      setLoginError('Password field is empty. Please enter your password.');
     } else if (!validateEmail(email)) {
-      toast.warning('Please enter a valid email address.');
+      setLoginError('Please enter a valid email address.');
     } else {
       userLogin({
         username: email,
@@ -67,6 +74,9 @@ const useLogin = () => {
     handleLogin,
     emailPattern,
     passwordPattern,
+    loginError,
+    setLoginError,
+    isLoading
   };
 };
 export default useLogin;
