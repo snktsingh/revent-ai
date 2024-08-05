@@ -55,12 +55,12 @@ const AppThemes = () => {
       <span>
         <TemplateTitle>
           <img src={Back} onClick={() => navigate(ROUTES.DASHBOARD)} />
-          <Title>Step 1 - Begin by selecting a theme for your presentation</Title>
+          <Title>Create your Presentations</Title>
         </TemplateTitle>
         <br />
         <br />
         <HeadingContainer>
-          <h2>Select a Base Theme</h2>
+          <h2>Step 1 - Begin by selecting a theme for your presentation</h2>
           <SearchBarGroup>
             <Icon />
             <StyledInput type="search" placeholder="Search" onChange={(e) => setSearchTerm(e.target.value)} />
