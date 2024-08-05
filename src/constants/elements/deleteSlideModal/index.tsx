@@ -47,6 +47,7 @@ const PopUpModal = () => {
       lastVariant: '',
       selectedOriginalCanvas: false,
       slideShape: '',
+      useAI: false
     }
     if (canvasList && canvasList.length == 1) {
       let lastCanvas = canvasJS;
@@ -75,9 +76,9 @@ const PopUpModal = () => {
     }
 
     if (canvasList && canvasList.length > 1) {
+      dispatch(deleteSlide(canvasJS.id));
       dispatch(deleteSlideApi({pId : pptId, slideID : canvasJS.slideId})).then((res: any) => {
         if (res.payload.status >= 200 && res.payload.status < 300) {
-          dispatch(deleteSlide(canvasJS.id));
         }
       })
     }

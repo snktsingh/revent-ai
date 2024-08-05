@@ -78,6 +78,7 @@ const SlidesContextMenu: React.FC<SlidesContextMenuProps> = ({ anchorPoint, isOp
         presentationId: 1,
         lastVariant: '',
         selectedOriginalCanvas: false,
+        useAI: false
       }
       if (canvasList && canvasList.length == 1) {
         dispatch(deleteSlideApi({pId : slide.presentationId,slideID : slide.slideId})).then((res: any) => {
@@ -101,9 +102,9 @@ const SlidesContextMenu: React.FC<SlidesContextMenuProps> = ({ anchorPoint, isOp
       }
 
       if (canvasList && canvasList.length > 1) {
+        dispatch(deleteSlide(slide.id));
         dispatch(deleteSlideApi({pId : pptId, slideID : slide.slideId})).then((res: any) => {
           if (res.payload.status >= 200 && res.payload.status < 300) {
-            dispatch(deleteSlide(slide.id));
           }
         })
       }

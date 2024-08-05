@@ -325,12 +325,13 @@ export const useEditBar = () => {
     canvas.renderAll();
   }
 
-  const handleAICheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAICheckbox = (val : boolean) => {
     // dispatch(setRequestData({...requestData, useAi: e.target.checked}));
-    dispatch(updateCheckboxForAI(e.target.checked));
-    dispatch(setUseAiForSlides({slideId : activeSlideID, useAI: e.target.checked}));
+    dispatch(updateCheckboxForAI(val));
+    dispatch(setUseAiForSlides({slideId : activeSlideID, useAI: val}));
 
   };
+
   //client list
   function addClientList(
     canvas: fabric.Canvas,
