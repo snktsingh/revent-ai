@@ -470,10 +470,10 @@ const HomeContent = ({ onFileSelect }: any) => {
                               src={Blank}
                               style={{ cursor: 'pointer' }}
                               onClick={() => {
-                                window.open(
-                                  `https://canvas.revent.ai/${ppt.presentationId}-${Token}`,
-                                  '_blank',
-                                  'noopener,noreferrer'
+                                navigate(
+                                  `/presentation/${
+                                    ppt.presentationId
+                                  }-${faker.string.uuid()}`
                                 );
                               }}
                             />

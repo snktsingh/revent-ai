@@ -18,3 +18,9 @@ export const CreditCoins = styled.p`
    color: ${theme.colorSchemes.light.palette.common.lightGrey} !important;
    margin-left: 5px;
 `;
+
+export const StyledText = styled.p`
+    text-align: center;
+    font-size: .8rem;
+    color: ${theme.colorSchemes.light.palette.common.lightGrey};
+`;

@@ -30,4 +30,5 @@ export interface IUserDetails {
   userDetails: IUserAccountDetails | null;
   creditAmount : number;
   userPreferences : UserPreferencesType;
+  isAdmin: boolean;
 }

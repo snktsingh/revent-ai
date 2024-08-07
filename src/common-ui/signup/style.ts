@@ -36,5 +36,5 @@ export const FormContainer = styled.span`
   gap: 15px;
 `;
 export const PassMessage = styled.span`
-  font-size: 10px;
+  font-size: .72rem;
 `;

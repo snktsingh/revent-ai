@@ -142,8 +142,8 @@ export const CheckboxContainer = styled.label`
     position: absolute;
     opacity: 0;
     cursor: pointer;
-    height: 0;
-    width: 0;
+    height: 100%;
+    width: 100%;
   }
 `;
 

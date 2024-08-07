@@ -3,9 +3,10 @@ import { StyledText } from '../style';
 
 const AddElementStep: React.FC = () => (
   <div>
-    <StyledText>Let’s start by clicking on
+    <StyledText>Begin Here
+    Click on
     </StyledText>
-    <strong>‘Add Elements’ </strong>
+    <strong>"Add Elements"</strong>
   </div>
 );
 

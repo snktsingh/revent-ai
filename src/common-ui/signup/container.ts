@@ -3,10 +3,14 @@ import { FetchNonHeaderUtils, FetchUtils } from '@/utils/fetch-utils';
 import { Password } from '@mui/icons-material';
 import { error } from 'console';
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 
 interface SignUpState {
   [key: string]: string;
+}
+
+interface ValidationState {
+  title: string;
+  message: string;
 }
 
 const useSignup = () => {
@@ -24,6 +28,9 @@ const useSignup = () => {
   const [isPreview, setIsPreview] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [validation, setValidation] = useState<ValidationState>({ title: '', message: '' });
+  const [loading, setLoading] = useState<boolean>(false);
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setValues({ ...values, [name]: value });
@@ -31,54 +38,51 @@ const useSignup = () => {
 
   const handleRegister = async () => {
     values.login = values.email;
-    toast.promise(
-      async () => {
-        try {
-          const res = await FetchNonHeaderUtils.postRequest(
-            `${ENDPOINT.AUTH.SIGNIN}`,
-            values
-          );
-          if (res.status === 201) {
-            setTimeout(() => {
-              setIsPreview(true);
-            }, 1000);
-            toast.success('Registered Successfully...');
-          } else {
-            throw new Error('Failed to log in');
-          }
-        } catch (error : any) {
-          if (error.message === "emailexists") {
-            toast.info('This account already exists. Please log in instead.');
-          } else {
-            console.error(error);
-            toast.error('An unexpected error occurred. Please try again later.');
-          }
-        }
-      },
-      {
-        pending: 'Registering please wait...',
+    setLoading(true);
+    try {
+      const res = await FetchNonHeaderUtils.postRequest(
+        `${ENDPOINT.AUTH.SIGNIN}`,
+        values
+      );
+      if (res.status === 201) {
+        setTimeout(() => {
+          setIsPreview(true);
+        }, 1000);
+        setValidation({ title: 'Success', message: 'Registered Successfully...' });
+      } else {
+        throw new Error('Failed to log in');
       }
-    );
+    } catch (error : any) {
+      console.log(error)
+      if (error.data.message === "emailexists") {
+        setValidation({ title: 'email', message: 'This account already exists. Please log in instead.' });
+      } else {
+        console.error(error);
+        setValidation({ title: 'Error', message: 'An unexpected error occurred. Please try again later.' });
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSubmit = () => {
     values.login = values.email;
     for (const key in values) {
       if (values[key] === '') {
-        toast.warning(`Please fill in ${key}`);
+        console.log({key})
+        setValidation({ title: key, message: `Please enter your ${key.toLowerCase()}` });        
         return;
       }
     }
-    if(!validateEmail(values.email)){
-      toast.warning('Please enter a valid email address');
-    }else if (confirmPassword === '') {
-      toast.warning('Please confirm your password');
+    if (!validateEmail(values.email)) {
+      setValidation({ title: 'email', message: 'Please enter a valid email address' });
+    } else if (confirmPassword === '') {
+      setValidation({ title: 'Confirm Password', message: 'Please confirm your password' });
     } else if (values.password !== confirmPassword) {
-      toast.warning('Please match the passwords');
-    } else if(!validatePassword(values.password)){
-      toast.warning('Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, and one number.');
-    }
-     else {
+      setValidation({ title: 'password', message: 'Passwords do not match. Please try again.' });
+    } else if (!validatePassword(values.password)) {
+      setValidation({ title: 'password', message: 'Password must be 8+ characters with uppercase, lowercase, numbers, and special characters.' });    
+    } else {
       handleRegister();
     }
   };
@@ -116,7 +120,9 @@ const useSignup = () => {
     handleMouseDownPassword,
     showPassword,
     showConfirmPassword,
-    handleClickShowConfirmPassword
+    handleClickShowConfirmPassword,
+    validation,
+    loading
   };
 };
 export default useSignup;

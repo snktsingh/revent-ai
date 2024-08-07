@@ -115,7 +115,13 @@ nonHeaderInstance.interceptors.response.use(
         break;
       }
       case 401: {
-        toast.error('User Unauthorized');
+        // toast.warn('Entered email or password are incorrect. Please check and try again.', { 
+        //   position: "top-center",
+        //   style: { 
+        //     width: '500px',
+        //     textAlign: 'center'
+        //   }
+        // });
         break;
       }
       case 500: {
@@ -127,8 +133,7 @@ nonHeaderInstance.interceptors.response.use(
       // }
     }
     if (error.response && error.response.data) {
-      console.log(error);
-      return Promise.reject(error.response.data);
+      return Promise.reject(error.response);
     }
     return Promise.reject(error.message);
   }

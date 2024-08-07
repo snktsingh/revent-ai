@@ -283,7 +283,8 @@ export const useCanvasComponent = () => {
   };
 
   const handleKeyDown = (e: KeyboardEvent, canvas: fabric.Canvas) => {
-    if (e.key === 'Delete' && canvas.getActiveObject()) {
+    const activeObject = canvas.getActiveObject();
+    if (e.key === 'Delete' && canvas.getActiveObject() && activeObject?.type !== "textbox") {
       canvas.remove(canvas.getActiveObject()!);
       const groupObjects = (
         canvas.getActiveObject() as fabric.Group

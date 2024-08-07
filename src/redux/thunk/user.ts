@@ -8,6 +8,7 @@ import { RootState } from '../store';
 const initialState: IUserDetails = {
   userDetails: null,
   creditAmount: 0,
+  isAdmin: false,
   userPreferences : {}
 };
 
@@ -109,6 +110,8 @@ const userSlice = createSlice({
       })
       .addCase(getUserDetails.fulfilled, (state, action) => {
         state.userDetails = action.payload;
+        const isAdmin = action.payload.authorities[0] === "ROLE_ADMIN"
+        state.isAdmin = isAdmin
       })
       .addCase(getUserDetails.rejected, (state, action) => {
         state.userDetails = null;

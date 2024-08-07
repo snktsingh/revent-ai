@@ -60,7 +60,7 @@ const AppThemes = () => {
         <br />
         <br />
         <HeadingContainer>
-          <h2>Select a Base Theme</h2>
+          <h2>Step 1 - Begin by selecting a theme for your presentation</h2>
           <SearchBarGroup>
             <Icon />
             <StyledInput type="search" placeholder="Search" onChange={(e) => setSearchTerm(e.target.value)} />

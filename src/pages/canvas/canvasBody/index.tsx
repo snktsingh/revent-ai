@@ -58,6 +58,7 @@ import placeholderImage from '../../../assets/PlaceholderProfile.jpg';
 
 const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers | null> }) => {
   const slide = useAppSelector(state => state.slide);
+  const { isAdmin } = useAppSelector(state => state.manageUser);
   const [redirectAlert, setRedirectAlert] = useState<boolean>(false);
   const [modificationAlert, setModificationAlert] = useState<boolean>(false);
   const canvasRef = useRef<fabric.Canvas | null>(null);
@@ -661,7 +662,7 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
                 let disabled = isDisabled(item.title);
                 return (
                   <div key={item.title}>
-                    {disabled ? (
+                    {!isAdmin && disabled ? (
                       <Tooltip
                         title="Sorry, this element can't be added because it conflicts with elements already on the canvas"
                         style={{ cursor: 'not-allowed' }}
@@ -696,7 +697,7 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
                         }}
                         style={{ display: 'flex', flexDirection: 'column' }}
                         key={index}
-                        disabled={disabled}
+                        disabled={!isAdmin && disabled}
                         className={
                           item.title === "Process"
                             ? "second-step"

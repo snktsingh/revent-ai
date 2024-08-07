@@ -3,8 +3,8 @@ import { StyledText } from '../style';
 
 const AddProcessStep: React.FC = () => (
   <div>
-    <StyledText>Click on an element to add it to your Canvas</StyledText>
-    <StyledText>Let’s add a Process slide!</StyledText>
+    <StyledText>For this tutorial</StyledText>
+    <StyledText style={{marginTop:'-7px'}}>Choose the "Process" element to continue.</StyledText>
   </div>
 );
 
