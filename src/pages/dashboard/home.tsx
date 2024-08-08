@@ -130,7 +130,7 @@ const HomeContent = ({ onFileSelect }: any) => {
 
   const fetchPPTList = async () => {
     const res = await FetchUtils.getRequest(
-      `${ENDPOINT.DASHBOARD.FETCH_PPT_LIST}?size=16`
+      `${ENDPOINT.DASHBOARD.FETCH_PPT_LIST}?size=5`
     );
     setPptList(res.data);
   };
@@ -437,12 +437,13 @@ const HomeContent = ({ onFileSelect }: any) => {
         {isLoading === false ? (
           <Box onContextMenu={e => e.preventDefault()} sx={{ marginTop: '3%' }}>
             <Box height="78vh" overflow="auto">
-              <CardTitle>
+              <div style={{ display: 'flex', gap: '20px' }}>
                 {pptList.map((ppt: any, index) => {
                   return (
                     <PPTCard
                       key={ppt.presentationId}
                       onContextMenu={e => handleContextMenu(e, ppt)}
+                      style={{ width: '18%' }}
                     >
                       <ThumbnailCard>
                         {ppt.thumbnailUrl !== '' ? (
@@ -515,7 +516,7 @@ const HomeContent = ({ onFileSelect }: any) => {
                     </PPTCard>
                   );
                 })}
-              </CardTitle>{' '}
+              </div>{' '}
             </Box>
           </Box>
         ) : (

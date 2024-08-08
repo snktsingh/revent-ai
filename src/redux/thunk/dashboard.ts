@@ -13,7 +13,7 @@ export interface IPresentation {
   name: string;
   thumbnailUrl: string;
   lastModifiedBy: string;
-  lastModifiedDate: string; 
+  lastModifiedDate: string;
 }
 
 interface IDashboard {
@@ -22,8 +22,9 @@ interface IDashboard {
   hasMore: boolean;
   presetList: IPresets[];
   preset: any[];
-  isPresetOpened : boolean;
+  isPresetOpened: boolean;
   isPPtsFetched: boolean;
+  listPageNumber: number;
 }
 
 const initialState: IDashboard = {
@@ -32,15 +33,16 @@ const initialState: IDashboard = {
   hasMore: true,
   presetList: [],
   preset: [],
-  isPresetOpened : false,
-  isPPtsFetched : false,
+  isPresetOpened: false,
+  isPPtsFetched: false,
+  listPageNumber: 1,
 };
 
 export const fetchPPTList = createAsyncThunk(
   'dashboard/pptList',
   async (pageNo: number) => {
     const res = await FetchUtils.getRequest(
-      `${ENDPOINT.DASHBOARD.FETCH_PPT_LIST}?size=1000&page=${pageNo}`
+      `${ENDPOINT.DASHBOARD.FETCH_PPT_LIST}?size=2000&page=${pageNo}`
     );
     return res.data;
   }
@@ -80,14 +82,17 @@ const dashboardSlice = createSlice({
   name: 'dashboard-Data',
   initialState,
   reducers: {
-    togglePresetOpened : (state, action : PayloadAction<boolean>) => {
-       state.isPresetOpened = action.payload;
+    togglePresetOpened: (state, action: PayloadAction<boolean>) => {
+      state.isPresetOpened = action.payload;
     },
     deletePresentationInPPtList: (state, action: PayloadAction<number>) => {
       state.pptList = state.pptList.filter(
-        (ppt: IPresentation) => ppt.presentationId!== action.payload
+        (ppt: IPresentation) => ppt.presentationId !== action.payload
       );
-    }
+    },
+    setListPageNumber: state => {
+      state.listPageNumber = state.listPageNumber + 1;
+    },
   },
   extraReducers: builder => {
     builder
@@ -97,10 +102,10 @@ const dashboardSlice = createSlice({
       .addCase(fetchPPTList.fulfilled, (state, action) => {
         if (action.meta.arg === 0) {
           state.pptList = action.payload;
-          state.isPPtsFetched= true;
+          state.isPPtsFetched = true;
         } else {
           state.pptList = [...state.pptList, ...action.payload];
-          state.isPPtsFetched= true;
+          state.isPPtsFetched = true;
         }
         state.hasMore = action.payload.length === 12;
         state.loadingUserDetails = false;
@@ -130,7 +135,8 @@ const dashboardSlice = createSlice({
 });
 export const {
   togglePresetOpened,
-  deletePresentationInPPtList
+  deletePresentationInPPtList,
+  setListPageNumber,
 } = dashboardSlice.actions;
 
 export default dashboardSlice.reducer;

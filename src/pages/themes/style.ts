@@ -23,23 +23,32 @@ export const ButtonContainer = styled.span`
   justify-content: flex-end;
 `;
 export const ThemeCard = styled(Card)`
-  /* width: 246px;
-  height: 140px; */
+  width: 80%;
   cursor: pointer;
-  overflow: hidden;
-  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  border-radius: 10px !important;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  transition: all 0.3s;
+  :hover {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  }
 `;
 export const ThemeCardTitle = styled.span`
-  margin-bottom: 40px;
   font-weight: 500;
-  margin-right: 20px;
+  width: 100%;
+  display: flex;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
 `;
 export const ThemeCardContainer = styled.div`
   width: 99.5%;
   height: fit-content;
   display: grid;
+  overflow-y: scroll;
+  height: 65vh;
   grid-template-columns: repeat(auto-fill, minmax(246px, 1fr));
-  gap: 16px; 
+  gap: 16px;
   justify-content: end;
 
   @media (max-width: 1200px) {
@@ -64,16 +73,16 @@ export const ThemeImage = styled.img`
   object-fit: cover;
 `;
 export const AddThemeCard = styled.div`
-   width: 100%;
-   height: 130px;
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   justify-content: center;
+  width: 100%;
+  height: 130px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const AddThemeText = styled.h3`
-  color: #1C274C;
+  color: #1c274c;
   font-family: ${customStyles.fonts.robotoSansSerif};
 `;
 
@@ -121,13 +130,13 @@ export const StyledInput = styled.input`
 
 export const Icon = styled(SearchIcon)`
   position: absolute;
-  left: .5rem;
+  left: 0.5rem;
   fill: #9e9ea7;
   width: 1rem;
   height: 1rem;
 `;
 
 export const ThemeTitle = styled.div`
- opacity: 0.8;
- margin: .5rem 0 0 .2rem;
+  opacity: 0.8;
+  margin: 0.5rem 0 0 0.2rem;
 `;

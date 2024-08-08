@@ -46,10 +46,9 @@ export const PreviewCard = styled(Card)`
 export const CardTitle = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-  /* grid-auto-rows: 5fr; */
   grid-auto-rows: auto;
   margin-bottom: 20px;
-  gap: 2%;
+  gap: 20px;
   padding-right: 10px;
   padding-left: 5px;
   padding-top: 2px;
@@ -84,7 +83,6 @@ export const BlankImageCard = styled.div`
 `;
 
 export const PPTCard = styled.div`
-  width: 100%;
   height: auto;
   display: flex;
   flex-direction: column;
