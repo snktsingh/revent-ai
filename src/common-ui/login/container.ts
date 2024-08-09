@@ -7,6 +7,7 @@ import { setFormDisabled } from '@/redux/reducers/apiData';
 import { setToLS } from '@/utils/localStorage';
 import { IUserLogin } from '@/interfaces/authInterface';
 import { FetchNonHeaderUtils, FetchUtils } from '@/utils/fetch-utils';
+import { useNavigate } from 'react-router-dom';
 
 const useLogin = () => {
   const dispatch = useAppDispatch();
@@ -16,7 +17,7 @@ const useLogin = () => {
   const emailPattern = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
   const passwordPattern = /^(?=.*[a-z])(?=.*\d)[a-zA-Z\d]{8,}$/;
   const [isLoading, setIsLoading] = useState(false);
-
+  const navigate = useNavigate()
 
   const userLogin = async (data: IUserLogin) => {
     setIsLoading(true);
@@ -29,7 +30,7 @@ const useLogin = () => {
           setToLS('token', res.data.accessToken);
           setToLS('isAuth', true);
           setTimeout(() => {
-            window.location.replace(`${ROUTES.APP_ROOT}`);
+            window.location.replace(`${ROUTES.DASHBOARD}`);
           }, 1000);
         } else {
           throw new Error('Failed to log in');
