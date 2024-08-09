@@ -336,11 +336,12 @@ const Dashboard = ({ onFileSelect }: any) => {
                 justifyContent: 'center',
                 padding: '4px 12px',
                 '&:hover .MuiListItemText-root': {
-                  background:
-                    'linear-gradient(55.96deg, #004FBA 13.4%, #002454 89.54%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  textShadow: 'none',
+                  // background:
+                  //   'linear-gradient(55.96deg, #004FBA 13.4%, #002454 89.54%)',
+                  // WebkitBackgroundClip: 'text',
+                  // WebkitTextFillColor: 'transparent',
+                  // textShadow: 'none',
+                  color:'#004fba'
                 },
                 border: 'none',
               }}
@@ -349,7 +350,7 @@ const Dashboard = ({ onFileSelect }: any) => {
                 sx={{
                   minHeight: 2,
                   justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
+                  px: 2.5,                  
                 }}
                 onClick={() => handleNavigation(text)}
               >
@@ -367,7 +368,7 @@ const Dashboard = ({ onFileSelect }: any) => {
                   sx={{
                     opacity: open ? 1 : 0,
                     color: '#d9d9d9',
-                    transition: 'color 0.3s ease',
+                    transition: 'color 0.3s ease',                
                   }}
                 />
               </ListItemButton>
