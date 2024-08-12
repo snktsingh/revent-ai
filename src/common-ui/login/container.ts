@@ -31,11 +31,12 @@ const useLogin = () => {
           setToLS('isAuth', true);
           setTimeout(() => {
             window.location.replace(`${ROUTES.DASHBOARD}`);
+            setIsLoading(false);
           }, 1000);
         } else {
           throw new Error('Failed to log in');
+          setIsLoading(false);
         }
-        setIsLoading(false);
       } catch(error : any) {
         if (error && error?.status) {
            if (error.status === 401){
