@@ -137,7 +137,7 @@ export const TagCard = styled.span`
   justify-content: center;
 
   &::before {
-    content: 'BETA';
+    content: 'Admin';
     position: absolute;
     width: 150%;
     height: 30px;

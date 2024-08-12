@@ -53,6 +53,7 @@ const HomeContent = ({ onFileSelect }: any) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { presetList } = useAppSelector(state => state.manageDashboard);
+  const { isAdmin } = useAppSelector(state => state.manageUser);
   const {
     isDeletePptAlertOpen,
     openProfileMenu,
@@ -199,7 +200,7 @@ const HomeContent = ({ onFileSelect }: any) => {
             </span>
           </span>
         </Card>
-        <Card
+        { !isAdmin ? <Card
           style={{
             width: '28%',
             // padding: '14px',
@@ -314,7 +315,8 @@ const HomeContent = ({ onFileSelect }: any) => {
             </span>
           </TransformCard>
         </Card>
-        {/* <Card
+        :
+        <Card
           style={{
             width: '28%',
             // padding: '14px',
@@ -428,7 +430,7 @@ const HomeContent = ({ onFileSelect }: any) => {
               </span>
             </span>
           </TransformCard>
-        </Card> */}
+        </Card>}
       </Box>
       <Box sx={{ marginTop: '30px' }}>
         <p style={{ fontSize: '14px', fontWeight: '600' }}>

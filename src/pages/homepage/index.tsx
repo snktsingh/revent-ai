@@ -95,7 +95,7 @@ interface FileUploadProps {
 const Home = ({ onFileSelect }: any) => {
   const [data, handleSubmit] = useForm('mbjvbjvd');
   const [data2, handleEmailSubmit] = useForm('xrgwdbzz');
-  const { userDetails } = useAppSelector(state => state.manageUser);
+  const { userDetails, isAdmin } = useAppSelector(state => state.manageUser);
   const { themeId, selectedDocFile } = useAppSelector(
     state => state.slideTheme
   );
@@ -358,7 +358,7 @@ const Home = ({ onFileSelect }: any) => {
                 <UploadTitle ref={productRef}>Get Started</UploadTitle>
                 <Stack direction="row" width="80vw" spacing={13}>
                   <ComingSoonContainer>
-                    <CardBox>
+                    {!isAdmin ? <CardBox>
                       <ComingSpan></ComingSpan>
                       <>
                         <UploadSubtitle>Transform</UploadSubtitle>
@@ -429,7 +429,8 @@ const Home = ({ onFileSelect }: any) => {
                         </span>
                       )}
                     </CardBox>
-                    {/* <CardBox>
+                    :
+                    <CardBox>
                       <CardSpan></CardSpan>
                       <>
                         <UploadSubtitle>Transform</UploadSubtitle>
@@ -499,7 +500,7 @@ const Home = ({ onFileSelect }: any) => {
                           />
                         </span>
                       )}
-                    </CardBox> */}
+                    </CardBox>}
                   </ComingSoonContainer>
                   <UploadContainer
                     onClick={handleTry}
