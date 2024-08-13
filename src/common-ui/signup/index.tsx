@@ -17,6 +17,7 @@ import EmailPreview from '../emailPreview';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { theme } from '@/constants/theme';
 import { countries } from './countries';
+import { Link as RouteLink} from 'react-router-dom';
 
 const SignUp = () => {
   const {
@@ -251,6 +252,11 @@ const SignUp = () => {
                 <LoginLink to="/login">
                   Already have an account ? Login
                 </LoginLink>
+                <Box sx={{ textAlign: 'center', mt: 1 }}>
+                <RouteLink to="/" style={{ textDecoration: 'none', color: '#004fba' }}>
+                  Return to Home
+                </RouteLink>
+              </Box>
               </div>
             </SignupRightContainer>
           </SignUpLeftContainer>
