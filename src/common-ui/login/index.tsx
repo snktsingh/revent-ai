@@ -152,6 +152,11 @@ const Login = () => {
                   Not registered ? Create a new account
                 </RedirectLink>
               </SignUp>
+              <Box sx={{ textAlign: 'center', mt: 1 }}>
+                <Link to="/" style={{ textDecoration: 'none', color: '#004fba' }}>
+                  Return to Home
+                </Link>
+              </Box>
             </Box>
           </RightContainer>
         </Grid>

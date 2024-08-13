@@ -7,7 +7,7 @@ import {
 } from './style';
 import Logo from '../../assets/logo.svg';
 import SignUpImage from '../../assets/signup.svg';
-import { Box, Button, Grid, IconButton, Link, CircularProgress } from '@mui/material';
+import { Box, Button, Grid, IconButton, Link, CircularProgress, MenuItem, Autocomplete, TextField } from '@mui/material';
 import { TextInput } from '../login/style';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
@@ -16,6 +16,8 @@ import { Slide, ToastContainer } from 'react-toastify';
 import EmailPreview from '../emailPreview';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { theme } from '@/constants/theme';
+import { countries } from './countries';
+import { Link as RouteLink} from 'react-router-dom';
 
 const SignUp = () => {
   const {
@@ -34,7 +36,8 @@ const SignUp = () => {
     showPassword,
     handleClickShowConfirmPassword,
     validation,
-    loading
+    loading,
+    handleCountryChange
   } = useSignup();
 
   if (isPreview) {
@@ -102,6 +105,49 @@ const SignUp = () => {
                     helperText={validation.title === 'lastName' ? validation.message : ''}
                   />
                 </FormContainer>
+
+                <Autocomplete
+                  id="country-select-demo"
+                  sx={{ width: '100%' }}
+                  options={countries}
+                  autoHighlight
+                  getOptionLabel={(option) => option.label}
+                  onChange={(event, value) => {
+                    if (value) handleCountryChange(value?.label)
+                  }}
+                  renderOption={(props, option) => (
+                    <Box
+                      component="li"
+                      sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
+                      {...props}
+                    >
+                      <img
+                        loading="lazy"
+                        width="20"
+                        srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
+                        src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
+                        alt=""
+                      />
+                      {option.label}
+                    </Box>
+                  )}
+                  renderInput={(params) => (
+                    <FormContainer>
+                      <TextField
+                        {...params}
+                        label="Choose a country"
+                        name='country'
+                        inputProps={{
+                          ...params.inputProps,
+                          autoComplete: 'new-password',
+                        }}
+                        error={validation.title === 'country'}
+                        helperText={validation.title === 'country' ? validation.message : ''}
+                        fullWidth
+                      />
+                    </FormContainer>
+                  )}
+                />
                 <TextInput
                   id="fullWidth"
                   name="password"
@@ -154,8 +200,8 @@ const SignUp = () => {
                   }}
                 />
                 {validation.title === 'Error' && (
-                <PassMessage style={{ color: '#d32f2f'}}>{validation.message}</PassMessage>
-              )}
+                  <PassMessage style={{ color: '#d32f2f' }}>{validation.message}</PassMessage>
+                )}
                 {/* <PassMessage>
                   *Passwords must be minimum 8 characters and contain 1 letter,
                   1 number 1 uppercase and 1 lowercase character.
@@ -206,6 +252,11 @@ const SignUp = () => {
                 <LoginLink to="/login">
                   Already have an account ? Login
                 </LoginLink>
+                <Box sx={{ textAlign: 'center', mt: 1 }}>
+                <RouteLink to="/" style={{ textDecoration: 'none', color: '#004fba' }}>
+                  Return to Home
+                </RouteLink>
+              </Box>
               </div>
             </SignupRightContainer>
           </SignUpLeftContainer>
