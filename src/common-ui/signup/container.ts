@@ -1,7 +1,7 @@
 import ENDPOINT, { ROUTES } from '@/constants/endpoint';
 import { FetchNonHeaderUtils, FetchUtils } from '@/utils/fetch-utils';
 import { Password } from '@mui/icons-material';
-import { error } from 'console';
+import { count, error } from 'console';
 import { useState } from 'react';
 
 interface SignUpState {
@@ -22,6 +22,7 @@ const useSignup = () => {
     imageUrl: 'http://placehold.it/50x50',
     langKey: 'en',
     login: '',
+    country: ''
   });
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
@@ -34,6 +35,10 @@ const useSignup = () => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setValues({ ...values, [name]: value });
+  };
+
+  const handleCountryChange = (country: string) => {
+    setValues({...values, country})
   };
 
   const handleRegister = async () => {
@@ -68,7 +73,7 @@ const useSignup = () => {
   const handleSubmit = () => {
     values.login = values.email;
     for (const key in values) {
-      if (values[key] === '') {
+      if (values[key] === '' && key !== 'country') {
         console.log({key})
         setValidation({ title: key, message: `Please enter your ${key.toLowerCase()}` });        
         return;
@@ -82,6 +87,8 @@ const useSignup = () => {
       setValidation({ title: 'password', message: 'Passwords do not match. Please try again.' });
     } else if (!validatePassword(values.password)) {
       setValidation({ title: 'password', message: 'Password must be 8+ characters with uppercase, lowercase, numbers, and special characters.' });    
+    } else if (values.country === '') {
+      setValidation({ title: 'country', message: 'Please select your country' });
     } else {
       handleRegister();
     }
@@ -122,7 +129,8 @@ const useSignup = () => {
     showConfirmPassword,
     handleClickShowConfirmPassword,
     validation,
-    loading
+    loading,
+    handleCountryChange
   };
 };
 export default useSignup;
