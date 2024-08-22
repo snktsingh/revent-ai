@@ -1,4 +1,4 @@
-import { Box, Grid, IconButton, InputAdornment } from '@mui/material';
+import { Box, Grid, IconButton, InputAdornment, CircularProgress } from '@mui/material';
 import {
   ChildContainer,
   Description,
@@ -23,7 +23,7 @@ import { ROUTES } from '@/constants/endpoint';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { email, setEmail, password, setPassword, handleLogin } = useLogin();
+  const { email, setEmail, password, setPassword, handleLogin, loginError, setLoginError, isLoading } = useLogin();
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(show => !show);
   const handleMouseDownPassword = (
@@ -35,7 +35,7 @@ const Login = () => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Enter') {
-        handleLogin();
+        handleLoginWithError();
       }
     };
 
@@ -46,6 +46,11 @@ const Login = () => {
   }, [email, password, handleLogin]);
 
   const { isDisabled } = useAppSelector(state => state.apiData);
+
+  const handleLoginWithError = async () => {
+    await handleLogin();
+  };
+
   return (
     <div>
       <ToastContainer
@@ -89,7 +94,12 @@ const Login = () => {
                 label="Enter your Email"
                 variant="outlined"
                 fullWidth
-                onChange={e => setEmail(e.target.value)}
+                onChange={e => {
+                  setEmail(e.target.value);
+                  if(loginError !== '') {
+                    setLoginError('')
+                  }
+                }}
               />
               <TextInput
                 id="fullWidth"
@@ -99,7 +109,12 @@ const Login = () => {
                 label="Enter your Password"
                 variant="outlined"
                 fullWidth
-                onChange={e => setPassword(e.target.value)}
+                onChange={e =>{ 
+                  setPassword(e.target.value)
+                  if(loginError !== '') {
+                    setLoginError('')
+                  }
+                }}
                 InputProps={{
                   endAdornment: (
                     <IconButton
@@ -113,20 +128,35 @@ const Login = () => {
                   ),
                 }}
               />
+              {loginError && (
+                <Box sx={{ color: 'red'}}>{loginError}</Box>
+              )}
               <CommonLink onClick={()=> navigate(ROUTES.FORGOT_PASSWORD)}>Forgot Password ?</CommonLink>
               <CustomButton
                 variant="contained"
                 size="large"
                 fullWidth
-                onClick={handleLogin}
+                onClick={() => !isLoading && handleLoginWithError()}
               >
-                Login
+                {isLoading ? 
+                  <>
+                    <CircularProgress size={18} color="inherit" sx={{mr: 2}} />
+                      Logging in...
+                  </>
+                 : 
+                  'Login'
+                }
               </CustomButton>
               <SignUp>
                 <RedirectLink to="/signup">
                   Not registered ? Create a new account
                 </RedirectLink>
               </SignUp>
+              <Box sx={{ textAlign: 'center', mt: 1 }}>
+                <Link to="/" style={{ textDecoration: 'none', color: '#004fba' }}>
+                  Return to Home
+                </Link>
+              </Box>
             </Box>
           </RightContainer>
         </Grid>

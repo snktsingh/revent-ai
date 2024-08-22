@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { ErrorPreviewCard, ErrorText } from './style';
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
 
@@ -6,40 +6,38 @@ interface ThumbnailPreviewProps {
   src: string;
   alt: string;
   style?: React.CSSProperties;
-  componentTitle : string;
+  componentTitle: string;
 }
 
 const ThumbnailPreview: React.FC<ThumbnailPreviewProps> = ({
   src,
   alt,
   style,
-  componentTitle
+  componentTitle,
 }) => {
-
   const [errorOccur, setImageErrorOccur] = useState<boolean>(false);
 
-  const handleError = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
+  const handleError = (
+    event: React.SyntheticEvent<HTMLImageElement, Event>
+  ) => {
     setImageErrorOccur(true);
-  }
-
+  };
 
   return (
-    <>
+    <div style={{ height: '100%' }}>
       {errorOccur ? (
-        <ErrorPreviewCard style={componentTitle === 'slideThemes'? {...style} : style}>
-          <ReportGmailerrorredIcon sx={{ fontSize: '3rem', color:'white' }} />
-          <ErrorText sx={{mt:'2%'}}>
-            Sorry :(
-          </ErrorText>
-          <ErrorText>
-            Preview failed to load!
-          </ErrorText>
+        <ErrorPreviewCard
+          style={componentTitle === 'slideThemes' ? { ...style } : style}
+        >
+          <ReportGmailerrorredIcon sx={{ fontSize: '3rem', color: 'white' }} />
+          <ErrorText sx={{ mt: '2%' }}>Sorry :(</ErrorText>)
+          <ErrorText>Preview failed to load!</ErrorText>
         </ErrorPreviewCard>
       ) : (
         <img src={src} alt={alt} style={style} onError={handleError} />
       )}
-    </>
+    </div>
   );
-}
+};
 
 export default ThumbnailPreview;

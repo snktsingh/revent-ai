@@ -41,6 +41,9 @@ export const ENDPOINT = {
     FETCH_PPT_LIST: 'ppt/get-all-presentation',
     FETCH_PRESETS: '/presets',
   },
+  THEME:{
+    SET_THEME_URL:"/template/check-website-hex-logo"
+  }
 } as const;
 
 export const ROUTES = {

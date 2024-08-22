@@ -46,6 +46,7 @@ import { FetchUtils } from '@/utils/fetch-utils';
 import ENDPOINT from '@/constants/endpoint';
 import PresentationCardContextMenu from '@/common-ui/presentationContextMenu';
 import { Token } from '@/utils/localStorage/data';
+import { V2_URL } from '@/constants/v2';
 
 const HomeContent = ({ onFileSelect }: any) => {
   const inputRef = React.createRef<HTMLInputElement>();
@@ -458,7 +459,7 @@ const HomeContent = ({ onFileSelect }: any) => {
                             }}
                             onClick={() => {
                               window.open(
-                                `https://canvas.revent.ai/${ppt.presentationId}-${Token}`,
+                                `${V2_URL}/${ppt.presentationId}-${ppt.themeId}-${Token}`,
                                 '_blank',
                                 'noopener,noreferrer'
                               );
@@ -471,7 +472,7 @@ const HomeContent = ({ onFileSelect }: any) => {
                               style={{ cursor: 'pointer' }}
                               onClick={() => {
                                 window.open(
-                                  `https://canvas.revent.ai/${ppt.presentationId}-${Token}`,
+                                  `${V2_URL}/${ppt.presentationId}-${ppt.themeId}-${Token}`,
                                   '_blank',
                                   'noopener,noreferrer'
                                 );

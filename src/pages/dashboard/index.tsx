@@ -66,11 +66,13 @@ import { EllipsisTypography } from '@/common-ui/profileMenu/style';
 import { UserAvatar } from '../canvas/canvasHeader/style';
 import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
 import AdminTemplates from './templates';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 interface FileUploadProps {
   onFileSelect: (file: File) => void;
 }
 
 const Dashboard = ({ onFileSelect }: any) => {
+  const [ logoutDialogOpen, setLogoutDialogOpen] = useState<boolean>(false)
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { getFirstLettersForAvatar } = useDashboard();
@@ -215,7 +217,7 @@ const Dashboard = ({ onFileSelect }: any) => {
     } else if (value === 'Account Settings') {
       navigate(`${ROUTES.SETTINGS}`);
     } else if (value === 'Logout') {
-      userLogout();
+      setLogoutDialogOpen(true);
     }
   };
 
@@ -247,6 +249,14 @@ const Dashboard = ({ onFileSelect }: any) => {
       text: 'My Templates',
       icon: <PhotoLibraryIcon fontSize="small" sx={{ color: 'white' }} />,
     });
+  }
+
+  const handleLogoutDialogClose = () => {
+    setLogoutDialogOpen(false)
+  }
+
+  const handleLogout = () => {
+    userLogout();
   }
 
   return (
@@ -326,11 +336,12 @@ const Dashboard = ({ onFileSelect }: any) => {
                 justifyContent: 'center',
                 padding: '4px 12px',
                 '&:hover .MuiListItemText-root': {
-                  background:
-                    'linear-gradient(55.96deg, #004FBA 13.4%, #002454 89.54%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  textShadow: 'none',
+                  // background:
+                  //   'linear-gradient(55.96deg, #004FBA 13.4%, #002454 89.54%)',
+                  // WebkitBackgroundClip: 'text',
+                  // WebkitTextFillColor: 'transparent',
+                  // textShadow: 'none',
+                  color:'#004fba'
                 },
                 border: 'none',
               }}
@@ -339,7 +350,7 @@ const Dashboard = ({ onFileSelect }: any) => {
                 sx={{
                   minHeight: 2,
                   justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
+                  px: 2.5,                  
                 }}
                 onClick={() => handleNavigation(text)}
               >
@@ -357,7 +368,7 @@ const Dashboard = ({ onFileSelect }: any) => {
                   sx={{
                     opacity: open ? 1 : 0,
                     color: '#d9d9d9',
-                    transition: 'color 0.3s ease',
+                    transition: 'color 0.3s ease',                
                   }}
                 />
               </ListItemButton>
@@ -395,6 +406,37 @@ const Dashboard = ({ onFileSelect }: any) => {
         {pathName === 'settings' && <UserSettings />}
         {pathName === 'my-templates' && <AdminTemplates />}
       </Box>
+        {/* logout confirmation box */}
+      <Dialog
+        open={logoutDialogOpen}
+        onClose={handleLogoutDialogClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        PaperProps={{
+          style: {
+            borderRadius: '9px',
+            padding: '10px 12px',
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+          },
+        }}
+      >
+        <DialogTitle id="alert-dialog-title" style={{ color: '#333', fontSize: '1.4rem', fontWeight: 'bold' }}>
+          {"Confirm Logout"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description" style={{ color: '#666', fontSize: '1rem' }}>
+            Are you sure you want to logout?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions style={{ padding: '16px 24px' }}>
+          <Button onClick={handleLogoutDialogClose} style={{ color: '#666', fontWeight: 'bold' }}>Cancel</Button>
+          <Button onClick={handleLogout} autoFocus style={{ backgroundColor: '#004fba', color: 'white', fontWeight: 'bold' }}>
+            Logout
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+
     </Box>
   );
 };

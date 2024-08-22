@@ -1,6 +1,7 @@
 import { customStyles, theme } from '@/constants/theme'
 import React from 'react'
-import { StyledText } from '../style'
+import { ConclusionText, StyledText } from '../style'
+import ConclusionStep from '../steps/conclusionStep'
 
 const CustomTooltipContent : React.FC<{ChildName: string}> = ({ChildName}) => {
     return (
@@ -10,25 +11,24 @@ const CustomTooltipContent : React.FC<{ChildName: string}> = ({ChildName}) => {
                 borderRadius: '5px',
                 fontFamily: `${customStyles.fonts.robotoSansSerif}`,
                 fontSize: '0.98rem',
-                minWidth: '250px',
                 padding: 0
             }}
         >
-            <div style={{ color: `${theme.colorSchemes.light.palette.common.black}`, maxWidth: '450px', textAlign: 'center' }}>
+            <div style={{ color: `${theme.colorSchemes.light.palette.common.black}` }}>
                 {
                     ChildName === 'changeTheme' ? 
                     <>
-                     <StyledText>Change the look and feel </StyledText>
-                     <StyledText>of your presentation!</StyledText>
+                     <ConclusionText>Select from a variety of themes to customize your look.</ConclusionText>
+                     {/* <StyledText>of your presentation!</StyledText> */}
                     </>
                     : ChildName === 'share' ? 
                     <>
-                     <StyledText>Export your presentation</StyledText>
-                     <StyledText>as a PDF or PPT</StyledText>
+                     <ConclusionText>Export your presentation as PDF or PPT.</ConclusionText>
+                     {/* <StyledText>as a PDF or PPT</StyledText> */}
                     </>
                     : ChildName === 'edit' ? 
                     <>
-                     <StyledText>Edit data with ease</StyledText>
+                     <ConclusionText>Easily edit your data.</ConclusionText>
                     </> : ''
                 }
             </div>

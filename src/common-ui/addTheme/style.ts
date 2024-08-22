@@ -12,11 +12,10 @@ export const ColorContainer = styled.span`
 export const ThemeContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-top: 5%;
 `;
 export const LogoContainer = styled.span`
-  width: 200px;
-  height: 150px;
+  width: 100%;
+  height: 100px;
   border: 2px dashed #ccc;
   border-radius: 10px;
   display: flex;
@@ -26,9 +25,10 @@ export const LogoContainer = styled.span`
 `;
 export const PreviewContainer = styled.span`
   display: flex;
-  flex-direction: column;
   gap: 10px;
+  width: 100%;
   align-items: center;
+  justify-content: space-between;
 `;
 
 export const FileUploadDiv = styled.div`
@@ -98,14 +98,15 @@ export const StyledText = styled.p`
 `;
 
 export const LoaderContainer = styled.div`
-  width: 350px;
+  width: 80%;
   height: 180px;
   border-radius: 10px;
   background: #fff;
+  gap: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: center;
   padding: 30px;
   margin: 1rem 4rem;
   /* box-shadow: 2px 2px 10px -5px lightgrey; */
@@ -187,6 +188,28 @@ export const Card = styled.div`
   }
 `;
 
+export const ThemeSelectCard = styled(Card)`
+  width: 100%;
+  max-width: 250px;
+  height: 60px;
+  border-radius: 10px;
+  display: flex;
+  padding: 10px;
+  background-color: white;
+  align-items: center;
+  justify-content: left;
+  backdrop-filter: blur(10px);
+  transition: 0.3s ease-in-out;
+  margin-top: 10px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  opacity: 0;
+  &:hover {
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 19px 0px;
+    cursor: pointer;
+    transform: scale(1.05);
+  }
+`;
+
 export const Img = styled.div`
   width: 50px;
   height: 50px;
@@ -206,7 +229,7 @@ export const TextBox = styled.div`
   width: calc(100% - 90px);
   margin-left: 10px;
   color: white;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins, SimHei, STHeiti, LiHei Pro Medium';
 `;
 
 export const H1 = styled.p`

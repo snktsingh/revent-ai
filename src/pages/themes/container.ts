@@ -14,8 +14,9 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { faker } from '@faker-js/faker';
 import { Token, isAuth } from '@/utils/localStorage/data';
-import ENDPOINT from '@/constants/endpoint';
+import ENDPOINT, { ROUTES } from '@/constants/endpoint';
 import { FetchUtils } from '@/utils/fetch-utils';
+import { V2_URL } from '@/constants/v2';
 
 const useStartTheme = () => {
   const thunk = useAppSelector(state => state.thunk);
@@ -25,11 +26,13 @@ const useStartTheme = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const handleCreatePPT = async () => {
+  const handleCreatePPT = async (themeId: number) => {
     const res = await dispatch(createPresentation());
     const data = res.payload;
     if (data.message === 'SUCCESS') {
-      navigate(`/presentation/${data.presentationId}-${faker.string.uuid()}`);
+      // navigate(`/presentation/${data.presentationId}-${faker.string.uuid()}`);
+      window.open(`${V2_URL}/${data.presentationId}-${themeId}-${Token}`,'_blank', 'noopener,noreferrer');
+      navigate(`${ROUTES.DASHBOARD}`)
     } else {
       toast.error('Failed to create presentation !');
     }
@@ -42,8 +45,7 @@ const useStartTheme = () => {
           const docData = new FormData();
           if (themeId && selectedDocFile) {
             docData.append('file', selectedDocFile);
-            docData.append('themeId', themeId);
-          }
+            docData.append('themeId', themeId.toString());          }
           const res = await FetchUtils.postRequest(
             `${ENDPOINT.PPT.CREATE_DOC_PPT}`,
             docData
@@ -70,7 +72,7 @@ const useStartTheme = () => {
       } else {
         dispatch(setSelectedTheme(themeId));
         dispatch(setThemeId(themeId));
-        handleCreatePPT();
+        handleCreatePPT(themeId);
       }
     }
   };

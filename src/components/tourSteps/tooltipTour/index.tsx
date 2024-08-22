@@ -47,14 +47,19 @@ export const CustomTooltip: React.FC<CustomTooltipProps> = ({
       >
         <span>{index + 1} / {size}</span>
         <div>
+          {step.id === 'conclusionStep' ?
+          <Button {...primaryProps}  color="primary">
+            Finish Tour
+          </Button>
+          :
           <Button {...primaryProps}  color="primary">
             {continuous ? 'Next' : 'Close'}
-          </Button>
+          </Button>}
           {(step.id === 'addRemoveLevel') && (
             <Button variant="contained" color="primary" onClick={() => joyrideRef.current?.next()}>Next</Button>
           )}
           {
-            step.id === 'intro' && <Button variant="contained" color="primary" onClick={() => joyrideRef.current?.next()} >START THE TOUR!</Button>
+            step.id === 'intro' && <Button variant="contained" color="primary" onClick={() => joyrideRef.current?.next()} >Start the tutorial now</Button>
           }
         </div>
       </div>

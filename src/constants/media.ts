@@ -87,6 +87,8 @@ import LibraryIcon from '../assets/dashboard/libraryIcon.svg';
 import PresetIcon from '../assets/dashboard/preset.svg';
 import placeholderImage from '../assets/PlaceholderProfile.jpg';
 import DashboardWand from '../assets/dashboard/wand.svg';
+import PptTheme from '../assets/themes/pptTheme.svg';
+import UrlTheme from '../assets/themes/urlTheme.svg';
 export {
   Back,
   Wand,
@@ -175,5 +177,7 @@ export {
   LibraryIcon,
   PresetIcon,
   placeholderImage,
-  WandDashboard
+  WandDashboard,
+  UrlTheme,
+  PptTheme,
 };

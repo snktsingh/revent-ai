@@ -26,6 +26,7 @@ import useDashboard from './container';
 import PresentationCardContextMenu from '@/common-ui/presentationContextMenu';
 import moment from 'moment';
 import { Token } from '@/utils/localStorage/data';
+import { V2_URL } from '@/constants/v2';
 
 const MyLibrary = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -117,9 +118,9 @@ const MyLibrary = () => {
                           }}
                           onClick={() => {
                             window.open(
-                              `https://canvas.revent.ai/${
+                              `${V2_URL}/${
                                 ppt.presentationId
-                              }-${Token}`,
+                              }-${ppt.themeId}-${Token}`,
                               '_blank',
                               'noopener,noreferrer'
                             );
@@ -132,9 +133,9 @@ const MyLibrary = () => {
                             style={{ cursor: 'pointer' }}
                             onClick={() => {
                               window.open(
-                                `https://canvas.revent.ai/${
+                                `${V2_URL}/${
                                   ppt.presentationId
-                                }-${Token}`,
+                                }-${ppt.themeId}-${Token}`,
                                 '_blank',
                                 'noopener,noreferrer'
                               );

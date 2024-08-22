@@ -7,7 +7,7 @@ import {
 } from './style';
 import Logo from '../../assets/logo.svg';
 import SignUpImage from '../../assets/signup.svg';
-import { Box, Button, Grid, IconButton, Link } from '@mui/material';
+import { Box, Button, Grid, IconButton, Link, CircularProgress, MenuItem, Autocomplete, TextField } from '@mui/material';
 import { TextInput } from '../login/style';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
@@ -16,6 +16,8 @@ import { Slide, ToastContainer } from 'react-toastify';
 import EmailPreview from '../emailPreview';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { theme } from '@/constants/theme';
+import { countries } from './countries';
+import { Link as RouteLink} from 'react-router-dom';
 
 const SignUp = () => {
   const {
@@ -33,6 +35,9 @@ const SignUp = () => {
     showConfirmPassword,
     showPassword,
     handleClickShowConfirmPassword,
+    validation,
+    loading,
+    handleCountryChange
   } = useSignup();
 
   if (isPreview) {
@@ -61,15 +66,6 @@ const SignUp = () => {
                 }}
               >
                 <FormContainer>
-                  {/* <TextInput
-                    id="fullWidth"
-                    name="login"
-                    label="Enter your User Name"
-                    variant="outlined"
-                    fullWidth
-                    value={values.login}
-                    onChange={handleChange}
-                  /> */}
                   <TextInput
                     id="fullWidth"
                     name="email"
@@ -79,6 +75,8 @@ const SignUp = () => {
                     fullWidth
                     value={values.email}
                     onChange={handleChange}
+                    error={validation.title === 'email'}
+                    helperText={validation.title === 'email' ? validation.message : ''}
                   />
                 </FormContainer>
                 <FormContainer>
@@ -91,6 +89,8 @@ const SignUp = () => {
                     fullWidth
                     value={values.firstName}
                     onChange={handleChange}
+                    error={validation.title === 'firstName'}
+                    helperText={validation.title === 'firstName' ? validation.message : ''}
                   />
                   <TextInput
                     id="fullWidth"
@@ -101,8 +101,53 @@ const SignUp = () => {
                     fullWidth
                     value={values.lastName}
                     onChange={handleChange}
+                    error={validation.title === 'lastName'}
+                    helperText={validation.title === 'lastName' ? validation.message : ''}
                   />
                 </FormContainer>
+
+                <Autocomplete
+                  id="country-select-demo"
+                  sx={{ width: '100%' }}
+                  options={countries}
+                  autoHighlight
+                  getOptionLabel={(option) => option.label}
+                  onChange={(event, value) => {
+                    if (value) handleCountryChange(value?.label)
+                  }}
+                  renderOption={(props, option) => (
+                    <Box
+                      component="li"
+                      sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
+                      {...props}
+                    >
+                      <img
+                        loading="lazy"
+                        width="20"
+                        srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
+                        src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
+                        alt=""
+                      />
+                      {option.label}
+                    </Box>
+                  )}
+                  renderInput={(params) => (
+                    <FormContainer>
+                      <TextField
+                        {...params}
+                        label="Choose a country"
+                        name='country'
+                        inputProps={{
+                          ...params.inputProps,
+                          autoComplete: 'new-password',
+                        }}
+                        error={validation.title === 'country'}
+                        helperText={validation.title === 'country' ? validation.message : ''}
+                        fullWidth
+                      />
+                    </FormContainer>
+                  )}
+                />
                 <TextInput
                   id="fullWidth"
                   name="password"
@@ -112,6 +157,8 @@ const SignUp = () => {
                   value={values.password}
                   onChange={handleChange}
                   type={showPassword ? 'text' : 'password'}
+                  error={validation.title === 'password'}
+                  // helperText={validation.title === 'Password' ? validation.message : ''}
                   InputProps={{
                     endAdornment: (
                       <IconButton
@@ -132,7 +179,9 @@ const SignUp = () => {
                   fullWidth
                   value={confirmPassword}
                   onChange={e => setConfirmPassword(e.target.value)}
-                  type={showPassword ? 'text' : 'password'}
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  error={(validation.title === 'password') || (validation.title === 'Confirm Password')}
+                  helperText={validation.title === 'password' || (validation.title === 'Confirm Password') ? validation.message : ''}
                   InputProps={{
                     endAdornment: (
                       <IconButton
@@ -150,10 +199,13 @@ const SignUp = () => {
                     ),
                   }}
                 />
-                <PassMessage>
+                {validation.title === 'Error' && (
+                  <PassMessage style={{ color: '#d32f2f' }}>{validation.message}</PassMessage>
+                )}
+                {/* <PassMessage>
                   *Passwords must be minimum 8 characters and contain 1 letter,
                   1 number 1 uppercase and 1 lowercase character.
-                </PassMessage>
+                </PassMessage> */}
               </Box>
               <div>
                 <FormControlLabel
@@ -193,13 +245,18 @@ const SignUp = () => {
                   size="large"
                   style={{ width: '100%', margin: '3% 0%' }}
                   onClick={handleSubmit}
-                  disabled={isDisabled}
+                  disabled={isDisabled || loading}
                 >
-                  Sign up
+                  {loading ? <CircularProgress size={18} color="inherit" /> : 'Sign up'}
                 </Button>
                 <LoginLink to="/login">
                   Already have an account ? Login
                 </LoginLink>
+                <Box sx={{ textAlign: 'center', mt: 1 }}>
+                <RouteLink to="/" style={{ textDecoration: 'none', color: '#004fba' }}>
+                  Return to Home
+                </RouteLink>
+              </Box>
               </div>
             </SignupRightContainer>
           </SignUpLeftContainer>
