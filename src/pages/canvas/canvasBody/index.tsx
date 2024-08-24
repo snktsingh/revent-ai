@@ -56,7 +56,7 @@ import { StoreHelpers } from 'react-joyride';
 import CustomTourTooltip from '@/components/tourSteps/customTooltip';
 import placeholderImage from '../../../assets/PlaceholderProfile.jpg';
 
-const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers | null> }) => {
+const CanvasBody = ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers | null> }) => {
   const slide = useAppSelector(state => state.slide);
   const { isAdmin } = useAppSelector(state => state.manageUser);
   const [redirectAlert, setRedirectAlert] = useState<boolean>(false);
@@ -98,7 +98,7 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
   const [isEditBtnShow, setIsEditBtnShow] = useState<boolean>(false);
   const [isReturnBtnShow, setIsReturnBtnShow] = useState<boolean>(false);
   const [canvasIndex, setCanvasIndex] = useState<number>(0);
-  const { handleApplyOriginalAsMain } = useVariants({joyrideRef});
+  const { handleApplyOriginalAsMain } = useVariants({ joyrideRef });
   const [searchParams, setSearchParams] = useSearchParams();
   const handleLike = () => {
     setActiveLike(!activeLike);
@@ -204,7 +204,7 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
     const isClientListImagesPresent = requestData?.elements.some(
       canvas => canvas.shape === 'ClientList'
     );
-    
+
     if (isListImagesPresent && requestData) {
 
       let requestListData: APIRequest = requestData;
@@ -230,17 +230,17 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
       formData.append('data', blob);
       const listImagesArray = listImages.find(el => el.canvasId == canvasJS.id);
       if (listImagesArray && listImagesArray.images) {
-        let imagesText : any = requestData?.elements[0]?.data;
+        let imagesText: any = requestData?.elements[0]?.data;
         for (let i = 0; i < imagesText.length; i++) {
-          if(imagesText[i] && imagesText[i].id) {
-          const imageForText = listImagesArray.images.find(img => img.id === +imagesText[i].id);
-          console.log({imageForText})
-          if (imageForText) {
-            formData.append('images', imageForText.imageFile);
-          } else {
-            formData.append('images', placeholderImageFile);
+          if (imagesText[i] && imagesText[i].id) {
+            const imageForText = listImagesArray.images.find(img => img.id === +imagesText[i].id);
+            console.log({ imageForText })
+            if (imageForText) {
+              formData.append('images', imageForText.imageFile);
+            } else {
+              formData.append('images', placeholderImageFile);
+            }
           }
-        }
         }
 
         dispatch(
@@ -256,7 +256,20 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
     }
 
     if (isImagesPresent) {
-      let blob = new Blob([JSON.stringify(requestData)], {
+      let modifiedRequest = { ...requestData }
+
+      if (modifiedRequest.elements) {
+        const hasParagraph = modifiedRequest.elements.some(el => el.shape === 'Paragraph')
+        const hasImage = modifiedRequest.elements.some(el => el.shape === 'Images')
+
+        if (hasParagraph && hasImage) {
+          modifiedRequest.elements = modifiedRequest.elements.filter(el => el.shape !== 'Images')
+          modifiedRequest.elements = modifiedRequest.elements.map(el =>
+            el.shape === 'Paragraph' ? { ...el, shape: 'ImagePara' } : el
+          )
+        }
+      }
+      let blob = new Blob([JSON.stringify(modifiedRequest)], {
         type: 'application/json',
       });
       let formData = new FormData();
@@ -287,22 +300,21 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
         el => el.canvasId == canvasJS.id
       );
 
-      
 
       if (QuoteImagesArray && QuoteImagesArray.images && requestData?.elements[0]?.data) {
-        let imagesText : any = requestData?.elements[0]?.data;
-  
+        let imagesText: any = requestData?.elements[0]?.data;
+
         if (QuoteImagesArray.images.length !== 0) {
           let images = QuoteImagesArray.images.sort((a, b) => a.id - b.id);
           for (let i = 0; i < imagesText.length; i++) {
-            if(imagesText[i] && imagesText[i].id) {
-            const imageForText = images.find(img => img.id === +imagesText[i].id);
-            if (imageForText) {
-              formData.append('images', imageForText.imageFile);
-            } else {
-              formData.append('images', placeholderImageFile);
+            if (imagesText[i] && imagesText[i].id) {
+              const imageForText = images.find(img => img.id === +imagesText[i].id);
+              if (imageForText) {
+                formData.append('images', imageForText.imageFile);
+              } else {
+                formData.append('images', placeholderImageFile);
+              }
             }
-          }
           }
           dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes })).then((res) => {
             if (res && res.payload.slideId) {
@@ -313,7 +325,7 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
           return;
         }
 
-     }
+      }
       dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes })).then((res) => {
         if (res && res.payload.slideId) {
           setSearchParams({ slide: res.payload.slideId });
@@ -590,14 +602,14 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
                 &nbsp;
                 {!isVariantsEmpty && isEditBtnShow && (
                   <CustomTourTooltip tourVisible={tourVisible} tooltipContent={'edit'} >
-                  <Button
-                    variant="contained"
-                    size="medium"
-                    onClick={() => handleApplyOriginalAsMain()}
-                    className='edit-btn'
-                  >
-                    Edit
-                  </Button>
+                    <Button
+                      variant="contained"
+                      size="medium"
+                      onClick={() => handleApplyOriginalAsMain()}
+                      className='edit-btn'
+                    >
+                      Edit
+                    </Button>
                   </CustomTourTooltip>
                 )}
                 {!isVariantsEmpty && isReturnBtnShow && (
@@ -658,7 +670,7 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
                 value={slide.listSearch}
                 onChange={handleElementSearch}
               />
-              {(tourStarted ? tourListElementData : filteredList ).map((item, index) => {
+              {(tourStarted ? tourListElementData : filteredList).map((item, index) => {
                 let disabled = isDisabled(item.title);
                 return (
                   <div key={item.title}>
@@ -734,7 +746,7 @@ const CanvasBody =  ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-          More elements cannot be added on this slide. If you want to edit data, visit the original slide or download as editable ppt.
+            More elements cannot be added on this slide. If you want to edit data, visit the original slide or download as editable ppt.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
