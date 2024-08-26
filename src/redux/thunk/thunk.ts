@@ -101,9 +101,10 @@ export const getAllThemes = createAsyncThunk('theme/getallThemes', async () => {
 });
 
 // Create a new presentation
-export const createPresentation = createAsyncThunk('ppt/create', async () => {
+export const createPresentation = createAsyncThunk('ppt/create', async (themeId: number) => {
   const res = await FetchUtils.postRequest(`${ENDPOINT.PPT.CREATE_PPT}`, {
-    presentationName: 'untitled-presentation',
+    name: 'untitled-presentation',
+    themeId,
   });
   return res.data;
 });

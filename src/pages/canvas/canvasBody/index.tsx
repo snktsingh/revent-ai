@@ -258,10 +258,10 @@ const CanvasBody = ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers |
     if (isImagesPresent) {
       let modifiedRequest = { ...requestData }
 
+      const hasParagraph = modifiedRequest.elements?.some(el => el.shape === 'Paragraph') ?? false
+      const hasBullets = modifiedRequest.elements?.some(el => el.shape === 'BulletTitle') ?? false
       if (modifiedRequest.elements) {
-        const hasParagraph = modifiedRequest.elements.some(el => el.shape === 'Paragraph')
         const hasImage = modifiedRequest.elements.some(el => el.shape === 'Images')
-        const hasBullets = modifiedRequest.elements.some(el => el.shape === 'BulletTitle')
 
         if (hasParagraph && hasImage) {
           modifiedRequest.elements = modifiedRequest.elements.filter(el => el.shape !== 'Images')
@@ -271,9 +271,16 @@ const CanvasBody = ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers |
         }
         if (hasBullets && hasImage) {
           modifiedRequest.elements = modifiedRequest.elements.filter(el => el.shape !== 'Images')
-          modifiedRequest.elements = modifiedRequest.elements.map(el =>
-            el.shape === 'BulletTitle' ? { ...el, shape: 'ImageBT' } : el
-          )
+          modifiedRequest.elements = modifiedRequest.elements.map(el => {
+            if (el.shape === 'BulletTitle' && el.data) {
+              return {
+                ...el,
+                shape: 'ImageBT',
+                data: el.data.slice(0, 5)
+              }
+            }
+            return el
+          })
         }
       }
       let blob = new Blob([JSON.stringify(modifiedRequest)], {
@@ -284,8 +291,13 @@ const CanvasBody = ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers |
 
       const ImagesArray = Images.find(el => el.canvasId == canvasJS.id);
       if (ImagesArray && ImagesArray.images) {
-        for (let i = 0; i < ImagesArray.images.length; i++) {
-          formData.append('images', ImagesArray.images[i].imageFile);
+        
+        const imagesToSend = hasParagraph || hasBullets ? 
+          ImagesArray.images.slice(0, 4) : 
+          ImagesArray.images.slice(0, 10);
+
+        for (let i = 0; i < imagesToSend.length; i++) {
+          formData.append('images', imagesToSend[i].imageFile);
         }
         dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes })).then((res) => {
           if (res && res.payload.slideId) {
@@ -294,7 +306,7 @@ const CanvasBody = ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers |
         });
         dispatch(toggleSelectedOriginalCanvas(false));
       }
-      return;
+      return;    
     }
     if (isQuoteImagesPresent) {
       console.log({ requestData });

@@ -105,7 +105,7 @@ export const Checkbox = styled.input.attrs({ type: 'checkbox' })`
   &:checked + ${Knobs}:before {
     content: "YES";
     right: 42px;
-    background-color: #03a9f4;
+    background-color: #004fba;
   }
 
   &:checked ~ ${Layer} {
