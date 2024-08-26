@@ -2,14 +2,15 @@ import ENDPOINT from '@/constants/endpoint';
 import { IUserAccountDetails } from '@/interfaces/authInterface';
 import { IUserDetails } from '@/interfaces/userInterface';
 import { FetchNonHeaderNonJSONUtils, FetchNonHeaderUtils, FetchUtils } from '@/utils/fetch-utils';
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
 const initialState: IUserDetails = {
   userDetails: null,
   creditAmount: 0,
   isAdmin: false,
-  userPreferences : {}
+  userPreferences : {},
+  isCheckAdmin: false
 };
 
 export const getUserDetails = createAsyncThunk(
@@ -102,7 +103,11 @@ export const postFeedbackApi = createAsyncThunk(
 const userSlice = createSlice({
   name: 'user-management',
   initialState,
-  reducers: {},
+  reducers: {
+    toggleIsAdmin(state, action: PayloadAction<boolean>) {
+      state.isAdmin = action.payload
+    }
+  },
   extraReducers: builder => {
     builder
       .addCase(getUserDetails.pending, (state, action) => {
@@ -112,6 +117,7 @@ const userSlice = createSlice({
         state.userDetails = action.payload;
         const isAdmin = action.payload.authorities[0] === "ROLE_ADMIN"
         state.isAdmin = isAdmin
+        state.isCheckAdmin = isAdmin
       })
       .addCase(getUserDetails.rejected, (state, action) => {
         state.userDetails = null;
@@ -136,6 +142,6 @@ const userSlice = createSlice({
       }) 
   },
 });
-export const {} = userSlice.actions;
+export const { toggleIsAdmin } = userSlice.actions;
 
 export default userSlice.reducer;

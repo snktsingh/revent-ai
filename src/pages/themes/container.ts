@@ -25,8 +25,8 @@ const useStartTheme = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const handleCreatePPT = async () => {
-    const res = await dispatch(createPresentation());
+  const handleCreatePPT = async (themeId: number) => {
+    const res = await dispatch(createPresentation(themeId));
     const data = res.payload;
     if (data.message === 'SUCCESS') {
       navigate(`/presentation/${data.presentationId}-${faker.string.uuid()}`);
@@ -42,7 +42,7 @@ const useStartTheme = () => {
           const docData = new FormData();
           if (themeId && selectedDocFile) {
             docData.append('file', selectedDocFile);
-            docData.append('themeId', themeId);
+            docData.append('themeId', themeId.toString());
           }
           const res = await FetchUtils.postRequest(
             `${ENDPOINT.PPT.CREATE_DOC_PPT}`,
@@ -70,7 +70,7 @@ const useStartTheme = () => {
       } else {
         dispatch(setSelectedTheme(themeId));
         dispatch(setThemeId(themeId));
-        handleCreatePPT();
+        handleCreatePPT(themeId);
       }
     }
   };
