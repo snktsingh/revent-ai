@@ -72,7 +72,6 @@ export const ReactTourComponent = ({ joyrideRef }: { joyrideRef: React.MutableRe
         };
 
         const handleFifthVariantsSelect = () => {
-            console.log('thinnava');
             joyrideRef.current?.next();
             // if (joyrideRef.current) {
             //     setTimeout(() => {
@@ -95,7 +94,6 @@ export const ReactTourComponent = ({ joyrideRef }: { joyrideRef: React.MutableRe
                     level++;
                 }
             });
-            console.log(level);
             if (joyrideRef.current) {
                 setTimeout(() => {
                     joyrideRef.current?.next();

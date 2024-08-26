@@ -68,7 +68,6 @@ export const fetchSlideImg = createAsyncThunk(
       req
     );
 
-    console.log({ pptId, slideJSON, slideId: res.data.slideId, notes })
 
     if (canvasList[currentSlide].variants.length === 0) {
       dispatch(
@@ -149,7 +148,6 @@ export const createSlideJSONData = createAsyncThunk(
       `${ENDPOINT.PPT.CANVAS_JSON}/${pptId}/${slideId}`,
       {slideJSON, notes, useAI}
     );
-    console.log({ json: res.data });
     return res;
   }
 );
@@ -162,7 +160,6 @@ export const updateSlideJSONData = createAsyncThunk(
       `${ENDPOINT.PPT.CANVAS_JSON}/${pptId}/${slideId}`,
       {slideJSON, notes, useAI}
     );
-    console.log({ json: res.data });
     return res.data;
   }
 );

@@ -12,7 +12,6 @@ export function useObjectScalingEvent(){
         // const scaleX = scaledObject.scaleX || 1;
         // const scaleY = scaledObject.scaleY || 1;
 
-            // console.log({scaleX, scaleY, scaledObject})
 
         //     const scaleY = scaledObject.scaleY || 1;
         // if (scaledObject && objectName[0] === PYRAMID) {
@@ -25,7 +24,6 @@ export function useObjectScalingEvent(){
         //             obj.name &&
         //             obj.name === `${PYRAMID_TEXT}_${objectID}`
         //         ) {
-        //             console.log(obj.name)
         //             obj.set({
         //                 scaleX: obj.scaleX * scaleX,
         //                 scaleY: obj.scaleY * scaleY,

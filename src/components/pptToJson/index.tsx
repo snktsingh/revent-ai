@@ -29,7 +29,6 @@ const ConversionToJson: React.FC = () => {
       reader.onload = async (e: ProgressEvent<FileReader>) => {
         try {
           const json = await parse(e.target?.result as ArrayBuffer, options);
-          console.log(json);
           dispatch(setPptData(json));
 
           resolve(json);

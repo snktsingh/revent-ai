@@ -17,7 +17,6 @@ import Terms from '@/pages/termsofuse';
 import Tutorials from '@/pages/tutorials';
 import { isMobile } from 'react-device-detect';
 
-console.log({isMobile})
 
 export const authRoutes: RouteObject[] = [
   { path: ROUTES.APP_ROOT, element: <Home /> },

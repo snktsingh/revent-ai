@@ -245,7 +245,6 @@ const CanvasTools = ({ pId, joyrideRef }: { pId: number, joyrideRef: React.RefOb
         dispatch(addCanvasSlide({ slideId: res.payload.data.slideId, slideNo: res.payload.data.slideNumber }));
         dispatch(addSlide(obj));
         dispatch(toggleIsVariantSelected(false));
-        console.log(canvasList[canvasList.length - 1].id !== activeSlideID)
         if (canvasList[canvasList.length - 1].id !== activeSlideID) {
           const reorderedSlides = canvasList.map((slide, i) => {
             return {
@@ -258,7 +257,6 @@ const CanvasTools = ({ pId, joyrideRef }: { pId: number, joyrideRef: React.RefOb
             slides: reorderedSlides
           }
           dispatch(reorderSlidesApi(req)).then((res) => {
-            console.log(res);
           });
         }
       }

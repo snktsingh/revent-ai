@@ -91,7 +91,6 @@ export function useListElement() {
       
       if (file && object) {
         const [_, id] = (object.name?.split('_') ?? []);
-        console.log({object,id})
         const fileSizeInMB = file.size / (1024 * 1024); 
         if (fileSizeInMB > 25) {
           toast.warn('The image size exceeds 25 MB. Please choose a smaller image.', {
@@ -115,7 +114,6 @@ export function useListElement() {
   
         try {
           const compressedFile = await imageCompression(file, options);
-          console.log({compressedFile})
           addOrReplaceTeamListImage(canvasJS.id, +id, compressedFile);
 
         reader.onload = () => {

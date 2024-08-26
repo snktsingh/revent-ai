@@ -112,7 +112,6 @@ export const useRemoveLevels = () => {
           } else if (obj.name === `${TIMELINE_DIRECTION}_${id}`) {
             lastLine = obj;
           }
-          console.log({ lastLevel, lastTextBox });
         });
         if (lastLevel && lastTextBox && lastTimelineTextBox && lastLine) {
           // const mainContainer = new fabric.Rect({
@@ -207,7 +206,6 @@ export const useRemoveLevels = () => {
               texts.push(obj);
             }
           });
-          console.log(circleCount);
           switch (circleCount - 1) {
             case 3:
               canvas.remove(activeObject!);

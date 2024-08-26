@@ -20,7 +20,6 @@ export function usePyramidElement() {
     let levelsCount: number = 0;
     canvas.forEachObject(obj => {
       if (obj.name == `${PYRAMID_LEVEL}_${currentID}`) {
-        console.log({ obj });
         levelsCount++;
         lastLevel = obj;
       }

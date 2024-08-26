@@ -74,7 +74,6 @@ const useSignup = () => {
     values.login = values.email;
     for (const key in values) {
       if (values[key] === '' && key !== 'country') {
-        console.log({key})
         setValidation({ title: key, message: `Please enter your ${key.toLowerCase()}` });        
         return;
       }

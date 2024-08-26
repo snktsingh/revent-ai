@@ -205,7 +205,6 @@ const Dashboard = ({ onFileSelect }: any) => {
   }, [router]);
 
   const handleNavigation = (value: string) => {
-    console.log(value);
     if (value === 'Dashboard') {
       navigate(`${ROUTES.DASHBOARD}`);
     } else if (value === 'My Presentations') {

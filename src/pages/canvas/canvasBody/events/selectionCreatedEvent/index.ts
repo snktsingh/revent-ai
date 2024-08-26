@@ -10,7 +10,6 @@ export function useSelectionCreatedEvent(){
         event: fabric.IEvent<MouseEvent>
       ) => {
         const activeObject = event.selected;
-        console.log({activeObject})
         if (activeObject && activeObject?.length === 1) {
           if (activeObject[0].type == 'text' || activeObject[0].type == 'textbox') {
             dispatch(handleInputSize((activeObject[0] as any)?.fontSize));

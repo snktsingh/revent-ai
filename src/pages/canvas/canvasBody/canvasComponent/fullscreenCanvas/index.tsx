@@ -18,7 +18,6 @@ const FullscreenCanvas = () => {
     const handleKeyDown = (event: KeyboardEvent) => {
         if (!document.fullscreenElement) return;
 
-        console.log({ currentCanvasIndex, length: canvasList })
         if ((event.keyCode === 37 || event.keyCode === 38)) {
             dispatch(setCanvas(canvasList[currentCanvasIndex]));
             dispatch(setActiveSlideId(canvasList[currentCanvasIndex].id));
@@ -62,7 +61,6 @@ const FullscreenCanvas = () => {
                 const allSlideSVGs: string[] = [];
                 for (let index = 0; index < canvasList.length; index++) {
                     const canvas = canvasList[index];
-                    console.log(canvas.canvas);
                     fullscreenCanvas.clear();
                     await fullscreenCanvas.loadFromJSON(canvas.canvas, () => {
                         fullscreenCanvas.enableRetinaScaling = true;
@@ -134,7 +132,6 @@ const FullscreenCanvas = () => {
                         generateSVGsFromCanvasList(canvasList, fullscreenCanvas)
                             .then(svgs => {
                                 setIsLoading(false);
-                                console.log(svgs);
                             })
                             .catch(error => {
                                 setIsLoading(false);

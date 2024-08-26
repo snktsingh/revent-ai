@@ -74,8 +74,6 @@ export default function Templates() {
   const handleClickOpen = (theme: any) => {
     setCurrentTheme(theme);
     dispatch(setThemeId(theme.themeId));
-    console.log(preset);
-    console.log(theme);
     if (hasVariantsInCanvasList) {
       setOpen(true);
     } else {
@@ -115,15 +113,12 @@ export default function Templates() {
     if (requestData?.elements && requestData?.elements.length == 0) {
       toast.warning('Canvas is empty');
     } else {
-      console.log({ changeTheme: canvasJS.originalSlideData });
-      console.log(themeId);
       dispatch(
         updatePresentationTheme({
           pptId: thunk.presentationId,
           themeId: themeId,
         })
       ).then((res: any) => {
-        console.log(res);
         if (res.payload.status == 200) {
           window.location.reload();
           toast.success('Theme Updated ');

@@ -16,7 +16,6 @@ export const useBulletOrNumberedText = () => {
 
     // onKeyDown(e: any): void {
     //   if (e.keyCode === 9) {
-    //     console.log('Tab pressed');
     //     this.tabPressed = true;
     //     e.preventDefault();
     //     this.canvas?.requestRenderAll();

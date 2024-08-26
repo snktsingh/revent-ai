@@ -39,7 +39,6 @@ export function useCanvasSingleClickEvent() {
     });
 
     let object = event.target as any;
-    console.log({object})
     if (object && object.name) {
       if (
         (object.name.startsWith(FUNNEL) ||
@@ -110,7 +109,6 @@ export function useCanvasSingleClickEvent() {
               obj.level === `${CYCLE_TEXT}_${id}_${level}` &&
               obj.type === 'textbox'
             ) {
-              // console.log(obj.level)
               if (obj.text === 'Add Text') {
                 obj.selectAll();
               }
@@ -124,7 +122,6 @@ export function useCanvasSingleClickEvent() {
               obj.level === `${PYRAMID_TEXT}_${id}_${level}` &&
               obj.type === 'textbox'
             ) {
-              // console.log(obj.level)
               if (obj.text === 'Add Text') {
                 obj.selectAll();
               }
@@ -141,7 +138,6 @@ export function useCanvasSingleClickEvent() {
               obj.level === `${FUNNEL_TEXT}_${id}_${level}` &&
               obj.type === 'textbox'
             ) {
-              // console.log(obj.level)
               if (obj.text === 'Add Text') {
                 obj.selectAll();
               }

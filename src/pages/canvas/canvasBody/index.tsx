@@ -234,7 +234,6 @@ const CanvasBody = ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers |
         for (let i = 0; i < imagesText.length; i++) {
           if (imagesText[i] && imagesText[i].id) {
             const imageForText = listImagesArray.images.find(img => img.id === +imagesText[i].id);
-            console.log({ imageForText })
             if (imageForText) {
               formData.append('images', imageForText.imageFile);
             } else {
@@ -309,7 +308,6 @@ const CanvasBody = ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers |
       return;    
     }
     if (isQuoteImagesPresent) {
-      console.log({ requestData });
       let blob = new Blob([JSON.stringify(requestData)], {
         type: 'application/json',
       });
@@ -355,7 +353,6 @@ const CanvasBody = ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers |
     }
 
     if (isClientListImagesPresent) {
-      console.log({ requestData });
       let blob = new Blob([JSON.stringify(requestData)], {
         type: 'application/json',
       });

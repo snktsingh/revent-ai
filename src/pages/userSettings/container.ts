@@ -47,7 +47,6 @@ const useSettings = () => {
 
   const handleUpdateUserDetails = () => {
     //  dispatch(updateUserDetails(userDetails))
-    console.log({userAccount})
   };
 
   return {

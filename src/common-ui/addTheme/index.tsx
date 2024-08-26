@@ -100,12 +100,10 @@ const CanvasThemes = () => {
   }, [toggleTheme.openAddTheme === false]);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.files);
     setIsUrlAdded(false);
     setIsLogoUploaded(false);
     event.preventDefault();
     const files = event.target.files;
-    console.log({ files });
     if (files && files[0]) {
       const reader = new FileReader();
       // reader.onload = () => {
@@ -126,9 +124,7 @@ const CanvasThemes = () => {
   useEffect(() => {}, []);
 
   const handleLogo = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.files);
     if (event.target.files) {
-      console.log('event');
       const reader = new FileReader();
       reader.onload = () => {
         setImagePreview(reader.result as string);
@@ -164,7 +160,6 @@ const CanvasThemes = () => {
       );
       setIsCreating(false);
       setIsFileUploaded(true);
-      console.log(res);
     } catch (Error) {
       console.log(Error);
     }
@@ -183,7 +178,6 @@ const CanvasThemes = () => {
         setIsCreating(true);
         dispatch(uploadCustomTheme(selectedFiles))
           .then(res => {
-            console.log({ res });
             if (res.payload === 'Files uploaded successfully') {
               setIsFileUploaded(true);
               setIsCreating(false);
@@ -220,7 +214,6 @@ const CanvasThemes = () => {
     preventDefaults(event);
     fileUploadLabelRef.current?.classList.remove('dragover');
     const files = event.dataTransfer.files;
-    console.log({ files });
     if (files && files[0]) {
       const reader = new FileReader();
       reader.onload = () => {

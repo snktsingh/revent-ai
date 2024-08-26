@@ -355,7 +355,6 @@ export const CanvasReducer = createSlice({
         state.canvasJS = { ...state.canvasList[slideIndex], useAI };
       }
 
-      console.log(state.canvasList[slideIndex])
     }
   },
 });

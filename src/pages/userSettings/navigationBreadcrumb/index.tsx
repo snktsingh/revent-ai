@@ -23,7 +23,6 @@ const BreadCrumb = () => {
 
   const endPoint = pathSegments[1];
 
-  console.log({ endPoint });
   const handleNavigateHome = () => {
     navigate(ROUTES.APP_ROOT, { replace: true });
   };

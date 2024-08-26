@@ -19,7 +19,6 @@ const UseCreateTheme = () => {
         logoTheme
       );
       setIsCreating(false);
-      console.log(res);
     } catch (Error) {
       console.log(Error);
     }

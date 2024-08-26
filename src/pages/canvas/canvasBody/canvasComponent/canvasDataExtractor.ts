@@ -612,7 +612,6 @@ const useCanvasData = () => {
     if (isCoverSectionOrConclusionAdded) {
       enabledEl = [];
     } else if (isShapeAdded && isTitleAdded && isSubtitleAdded) {
-      console.log(isImageAdded)
       enabledEl = [];
     } else if (isImageAdded) {
       enabledEl.push('Image', 'Paragraph', 'Bullet');

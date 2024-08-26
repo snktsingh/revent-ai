@@ -72,7 +72,6 @@ export function useSWOTElement() {
 
     fabric.loadSVGFromURL(SWOTIcon, (objects, options) => {
       const svg = fabric.util.groupSVGElements(objects, options);
-      console.log({ objects });
 
       svg.set({
         left: 290,
