@@ -31,4 +31,5 @@ export interface IUserDetails {
   creditAmount : number;
   userPreferences : UserPreferencesType;
   isAdmin: boolean;
+  isCheckAdmin: boolean;
 }

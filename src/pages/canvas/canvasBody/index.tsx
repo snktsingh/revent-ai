@@ -261,11 +261,18 @@ const CanvasBody = ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers |
       if (modifiedRequest.elements) {
         const hasParagraph = modifiedRequest.elements.some(el => el.shape === 'Paragraph')
         const hasImage = modifiedRequest.elements.some(el => el.shape === 'Images')
+        const hasBullets = modifiedRequest.elements.some(el => el.shape === 'BulletTitle')
 
         if (hasParagraph && hasImage) {
           modifiedRequest.elements = modifiedRequest.elements.filter(el => el.shape !== 'Images')
           modifiedRequest.elements = modifiedRequest.elements.map(el =>
             el.shape === 'Paragraph' ? { ...el, shape: 'ImagePara' } : el
+          )
+        }
+        if (hasBullets && hasImage) {
+          modifiedRequest.elements = modifiedRequest.elements.filter(el => el.shape !== 'Images')
+          modifiedRequest.elements = modifiedRequest.elements.map(el =>
+            el.shape === 'BulletTitle' ? { ...el, shape: 'ImageBT' } : el
           )
         }
       }

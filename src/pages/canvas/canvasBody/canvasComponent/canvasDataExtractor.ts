@@ -596,9 +596,7 @@ const useCanvasData = () => {
           CYCLE,
           TABLE,
           LIST_MAIN,
-          QUOTE,
-          BULLET_POINTS,
-          PARAGRAPH,
+          QUOTE,   
           SWOT,
           IMAGE,
           CLIENT_LIST_MAIN,
@@ -608,6 +606,8 @@ const useCanvasData = () => {
         ].some(elName => obj.name.startsWith(elName));
       }
     });
+    const isBulletPointsAdded = objects.some(obj => obj.name?.startsWith(BULLET_POINTS));
+    const isParagraphAdded = objects.some(obj => obj.name?.startsWith(PARAGRAPH));
 
     if (isCoverSectionOrConclusionAdded) {
       enabledEl = [];
@@ -616,6 +616,8 @@ const useCanvasData = () => {
     } else if (isImageAdded) {
       enabledEl.push('Image');
     } else if (isTitleAdded && isSubtitleAdded && isImageAdded) {
+      enabledEl.push('Image');
+    } else if (isBulletPointsAdded || isParagraphAdded) {
       enabledEl.push('Image');
     } else if (isShapeAdded && isTitleAdded) {
       enabledEl.push('Subtitle');
@@ -714,7 +716,6 @@ const useCanvasData = () => {
 
     dispatch(setEnabledElements(enabledEl));
   }
-
   return {
     getElementsData,
     createDisabledElements,

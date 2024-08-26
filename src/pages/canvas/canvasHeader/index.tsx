@@ -34,6 +34,7 @@ import { toast } from 'react-toastify';
 import CustomTourTooltip from '@/components/tourSteps/customTooltip';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '@/constants/endpoint';
+import AdminCheckbox from '@/components/AdminCheckbox';
 
 const MainCanvasHeader = ({ pId }: any) => {
   const dispatch = useAppDispatch();
@@ -64,6 +65,8 @@ const MainCanvasHeader = ({ pId }: any) => {
   const { presentationId, presentationName, pptDetails, isLoading } =
     useAppSelector(state => state.thunk);
   const { tourVisible } = useAppSelector(state => state.slide);
+
+  const { isCheckAdmin } = useAppSelector(state => state.manageUser);
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
@@ -149,7 +152,10 @@ const MainCanvasHeader = ({ pId }: any) => {
           />
         )}
       </Box>
+      
       <Stack direction="row" spacing={1}>
+      {/* Admin checkbox  */}
+      { isCheckAdmin && <AdminCheckbox />}
         <Stack direction="row" spacing={1}>
           <Button
             variant="contained"
