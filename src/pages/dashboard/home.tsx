@@ -34,9 +34,10 @@ import {
   TagCard,
   ThumbnailCard,
   TitleCard,
+  TourCard,
   TransformCard,
 } from './style';
-import { togglePresetOpened } from '@/redux/thunk/dashboard';
+import { togglePresetOpened, toggleTour } from '@/redux/thunk/dashboard';
 import { MagnifyingGlass } from 'react-loader-spinner';
 import { theme } from '@/constants/theme';
 import { MoreVert } from '@mui/icons-material';
@@ -46,6 +47,7 @@ import { FetchUtils } from '@/utils/fetch-utils';
 import ENDPOINT from '@/constants/endpoint';
 import PresentationCardContextMenu from '@/common-ui/presentationContextMenu';
 import { Token } from '@/utils/localStorage/data';
+import useStartTheme from '../themes/container';
 
 const HomeContent = ({ onFileSelect }: any) => {
   const inputRef = React.createRef<HTMLInputElement>();
@@ -147,6 +149,8 @@ const HomeContent = ({ onFileSelect }: any) => {
     setIsLoading(false);
   }, []);
 
+  const { handleGenerate } = useStartTheme();
+
   return (
     <div>
       {/* <Box sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -200,237 +204,269 @@ const HomeContent = ({ onFileSelect }: any) => {
             </span>
           </span>
         </Card>
-        { !isAdmin ? <Card
-          style={{
-            width: '28%',
-            // padding: '14px',
-            borderRadius: '10px',
-            display: 'flex',
-            flexDirection: 'column',
-            cursor: 'pointer',
-            justifyContent: 'space-between',
-            boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px',
-          }}
-        >
-          <ComingTag></ComingTag>
-          <TransformCard>
-            <div
-              style={{
-                cursor: 'pointer',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}
-              // onClick={handleContainerClick}
-              // onDragOver={handleDragOver}
-              // onDrop={handleDrop}
-            >
-              <input
-                type="file"
-                accept=".docx,.doc"
-                onChange={handleFileChange}
-                ref={inputRef}
-                style={{ display: 'none' }}
-              />
-              {selectedFile !== null ? (
-                <span
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginTop: '10px',
-                  }}
-                >
-                  <br />
-                  <img src={UploadTick} width="30px" />
-                  <p
-                    style={{
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'inherit',
-                      textAlign: 'center',
-                    }}
-                  >
-                    {selectedFile.name}
-                  </p>
-                </span>
-              ) : (
-                <img src={DocUpload} width="100%" />
-              )}
-            </div>
-            <span
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}
-            >
-              <span
+        {!isAdmin ? (
+          <Card
+            style={{
+              width: '28%',
+              // padding: '14px',
+              borderRadius: '10px',
+              display: 'flex',
+              flexDirection: 'column',
+              cursor: 'pointer',
+              justifyContent: 'space-between',
+              boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px',
+            }}
+          >
+            <ComingTag></ComingTag>
+            <TransformCard>
+              <div
                 style={{
-                  marginTop: '18px',
+                  cursor: 'pointer',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '2px',
+                  alignItems: 'center',
+                }}
+                // onClick={handleContainerClick}
+                // onDragOver={handleDragOver}
+                // onDrop={handleDrop}
+              >
+                <input
+                  type="file"
+                  accept=".docx,.doc"
+                  onChange={handleFileChange}
+                  ref={inputRef}
+                  style={{ display: 'none' }}
+                />
+                {selectedFile !== null ? (
+                  <span
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginTop: '10px',
+                    }}
+                  >
+                    <br />
+                    <img src={UploadTick} width="30px" />
+                    <p
+                      style={{
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'inherit',
+                        textAlign: 'center',
+                      }}
+                    >
+                      {selectedFile.name}
+                    </p>
+                  </span>
+                ) : (
+                  <img src={DocUpload} width="100%" />
+                )}
+              </div>
+              <span
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
                 }}
               >
                 <span
                   style={{
-                    fontSize: '14px',
-                    fontWeight: '600',
-                  }}
-                >
-                  Transform Documents to PPT
-                </span>
-                <span
-                  style={{
-                    fontSize: '12px',
-                    fontWeight: '400',
-                    color: 'grey',
-                  }}
-                >
-                  Transform Docx / Doc to ppt
-                </span>
-              </span>
-              <span style={{ marginTop: '14px' }}>
-                {selectedFile && (
-                  <img
-                    title="Delete File"
-                    src={DeleteFile}
-                    width="25px"
-                    style={{ cursor: 'pointer', marginRight: '10px' }}
-                    onClick={() => setSelectedFile(null)}
-                  />
-                )}
-                {selectedFile && (
-                  <img
-                    title="Proceed for Transformation"
-                    src={Proceed}
-                    width="25px"
-                    style={{ cursor: 'pointer' }}
-                    onClick={handleDocsPPt}
-                  />
-                )}
-              </span>
-            </span>
-          </TransformCard>
-        </Card>
-        :
-        <Card
-          style={{
-            width: '28%',
-            // padding: '14px',
-            borderRadius: '10px',
-            display: 'flex',
-            flexDirection: 'column',
-            cursor: 'pointer',
-            justifyContent: 'space-between',
-            boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px',
-          }}
-        >
-          <TagCard></TagCard>
-          <TransformCard>
-            <div
-              style={{
-                cursor: 'pointer',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}
-              onClick={handleContainerClick}
-              onDragOver={handleDragOver}
-              onDrop={handleDrop}
-            >
-              <input
-                type="file"
-                accept=".docx,.doc"
-                onChange={handleFileChange}
-                ref={inputRef}
-                style={{ display: 'none' }}
-              />
-              {selectedFile !== null ? (
-                <span
-                  style={{
+                    marginTop: '18px',
                     display: 'flex',
                     flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginTop: '10px',
+                    gap: '2px',
                   }}
                 >
-                  <br />
-                  <img src={UploadTick} width="30px" />
-                  <p
+                  <span
                     style={{
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'inherit',
-                      textAlign: 'center',
+                      fontSize: '14px',
+                      fontWeight: '600',
                     }}
                   >
-                    {selectedFile.name}
-                  </p>
+                    Transform Documents to PPT
+                  </span>
+                  <span
+                    style={{
+                      fontSize: '12px',
+                      fontWeight: '400',
+                      color: 'grey',
+                    }}
+                  >
+                    Transform Docx / Doc to ppt
+                  </span>
                 </span>
-              ) : (
-                <img src={DocUpload} width="100%" />
-              )}
-            </div>
-            <span
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}
-            >
-              <span
+                <span style={{ marginTop: '14px' }}>
+                  {selectedFile && (
+                    <img
+                      title="Delete File"
+                      src={DeleteFile}
+                      width="25px"
+                      style={{ cursor: 'pointer', marginRight: '10px' }}
+                      onClick={() => setSelectedFile(null)}
+                    />
+                  )}
+                  {selectedFile && (
+                    <img
+                      title="Proceed for Transformation"
+                      src={Proceed}
+                      width="25px"
+                      style={{ cursor: 'pointer' }}
+                      onClick={handleDocsPPt}
+                    />
+                  )}
+                </span>
+              </span>
+            </TransformCard>
+          </Card>
+        ) : (
+          <Card
+            style={{
+              width: '28%',
+              // padding: '14px',
+              borderRadius: '10px',
+              display: 'flex',
+              flexDirection: 'column',
+              cursor: 'pointer',
+              justifyContent: 'space-between',
+              boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px',
+            }}
+          >
+            <TagCard></TagCard>
+            <TransformCard>
+              <div
                 style={{
-                  marginTop: '18px',
+                  cursor: 'pointer',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '2px',
+                  alignItems: 'center',
+                }}
+                onClick={handleContainerClick}
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
+              >
+                <input
+                  type="file"
+                  accept=".docx,.doc"
+                  onChange={handleFileChange}
+                  ref={inputRef}
+                  style={{ display: 'none' }}
+                />
+                {selectedFile !== null ? (
+                  <span
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginTop: '10px',
+                    }}
+                  >
+                    <br />
+                    <img src={UploadTick} width="30px" />
+                    <p
+                      style={{
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'inherit',
+                        textAlign: 'center',
+                      }}
+                    >
+                      {selectedFile.name}
+                    </p>
+                  </span>
+                ) : (
+                  <img src={DocUpload} width="100%" />
+                )}
+              </div>
+              <span
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
                 }}
               >
                 <span
                   style={{
-                    fontSize: '14px',
-                    fontWeight: '600',
+                    marginTop: '18px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '2px',
                   }}
                 >
-                  Transform Documents to PPT
+                  <span
+                    style={{
+                      fontSize: '14px',
+                      fontWeight: '600',
+                    }}
+                  >
+                    Transform Documents to PPT
+                  </span>
+                  <span
+                    style={{
+                      fontSize: '12px',
+                      fontWeight: '400',
+                      color: 'grey',
+                    }}
+                  >
+                    Transform Docx / Doc to ppt
+                  </span>
                 </span>
-                <span
-                  style={{
-                    fontSize: '12px',
-                    fontWeight: '400',
-                    color: 'grey',
-                  }}
-                >
-                  Transform Docx / Doc to ppt
+                <span style={{ marginTop: '14px' }}>
+                  {selectedFile && (
+                    <img
+                      title="Delete File"
+                      src={DeleteFile}
+                      width="25px"
+                      style={{ cursor: 'pointer', marginRight: '10px' }}
+                      onClick={() => setSelectedFile(null)}
+                    />
+                  )}
+                  {selectedFile && (
+                    <img
+                      title="Proceed for Transformation"
+                      src={Proceed}
+                      width="25px"
+                      style={{ cursor: 'pointer' }}
+                      onClick={handleDocsPPt}
+                    />
+                  )}
                 </span>
               </span>
-              <span style={{ marginTop: '14px' }}>
-                {selectedFile && (
-                  <img
-                    title="Delete File"
-                    src={DeleteFile}
-                    width="25px"
-                    style={{ cursor: 'pointer', marginRight: '10px' }}
-                    onClick={() => setSelectedFile(null)}
-                  />
-                )}
-                {selectedFile && (
-                  <img
-                    title="Proceed for Transformation"
-                    src={Proceed}
-                    width="25px"
-                    style={{ cursor: 'pointer' }}
-                    onClick={handleDocsPPt}
-                  />
-                )}
-              </span>
-            </span>
-          </TransformCard>
-        </Card>}
+            </TransformCard>
+          </Card>
+        )}
+        <TourCard
+          onClick={() => {
+            dispatch(toggleTour(true));
+            handleGenerate(10);
+          }}
+        >
+          <Box
+            display="flex"
+            flexDirection="column"
+            justifyContent="flex-start"
+            alignItems="center"
+          >
+            <p style={{ color: '#004fba', fontSize: '16px' }}>New user ?</p>
+            <h3
+              style={{
+                backgroundColor: '#4158D0',
+                backgroundImage:
+                  'linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)',
+
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text', // For WebKit-based browsers
+                color: 'transparent',
+                margin: '10px',
+                fontSize: '22px',
+              }}
+            >
+              BEGIN THE TOUR
+            </h3>
+          </Box>
+        </TourCard>
       </Box>
       <Box sx={{ marginTop: '30px' }}>
         <p style={{ fontSize: '14px', fontWeight: '600' }}>

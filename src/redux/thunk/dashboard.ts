@@ -25,6 +25,9 @@ interface IDashboard {
   isPresetOpened: boolean;
   isPPtsFetched: boolean;
   listPageNumber: number;
+  selectedThemeLogo: File | null;
+  isTourActive: boolean;
+  isDeleted: boolean;
 }
 
 const initialState: IDashboard = {
@@ -36,13 +39,16 @@ const initialState: IDashboard = {
   isPresetOpened: false,
   isPPtsFetched: false,
   listPageNumber: 1,
+  selectedThemeLogo: null,
+  isTourActive: false,
+  isDeleted: false,
 };
 
 export const fetchPPTList = createAsyncThunk(
   'dashboard/pptList',
   async (pageNo: number) => {
     const res = await FetchUtils.getRequest(
-      `${ENDPOINT.DASHBOARD.FETCH_PPT_LIST}?size=2000&page=${pageNo}`
+      `${ENDPOINT.DASHBOARD.FETCH_PPT_LIST}?size=18&page=${pageNo}`
     );
     return res.data;
   }
@@ -93,6 +99,15 @@ const dashboardSlice = createSlice({
     setListPageNumber: state => {
       state.listPageNumber = state.listPageNumber + 1;
     },
+    setSelectedThemeLogo: (state, action) => {
+      state.selectedThemeLogo = action.payload;
+    },
+    toggleTour: (state, action) => {
+      state.isTourActive = action.payload;
+    },
+    setDeletedStatus: (state, action) => {
+      state.isDeleted = action.payload;
+    },
   },
   extraReducers: builder => {
     builder
@@ -137,6 +152,9 @@ export const {
   togglePresetOpened,
   deletePresentationInPPtList,
   setListPageNumber,
+  setSelectedThemeLogo,
+  toggleTour,
+  setDeletedStatus,
 } = dashboardSlice.actions;
 
 export default dashboardSlice.reducer;

@@ -13,21 +13,28 @@ import {
   deletePresentationInPPtList,
   fetchPPTList,
   fetchPresetsById,
+  setDeletedStatus,
+  setListPageNumber,
   togglePresetOpened,
 } from '@/redux/thunk/dashboard';
 import { setUserPreferences } from '@/redux/thunk/user';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 const useDashboard = () => {
   const dispatch = useAppDispatch();
   // const [open, setOpen] = useState(false);
   const [pptId, setPptId] = useState(0);
-  const { pptList } = useAppSelector(state => state.manageDashboard);
+  const { pptList, listPageNumber } = useAppSelector(
+    state => state.manageDashboard
+  );
   const { isDeletePptAlertOpen } = useAppSelector(state => state.element);
   const [openProfileMenu, setOpenProfileMenu] = useState<null | HTMLElement>(
     null
   );
   const { userPreferences } = useAppSelector(state => state.manageUser);
+  const [isDeleted, setIsDeleted] = useState<boolean>(false);
+  const [fileList, setFileList] = useState<any[]>([]);
   const handleOpenProfile = (event: React.MouseEvent<HTMLButtonElement>) => {
     setOpenProfileMenu(event.currentTarget);
   };
@@ -48,6 +55,8 @@ const useDashboard = () => {
       (res: any) => {
         if (res.payload.status >= 200) {
           dispatch(deletePresentationInPPtList(presentationId));
+          toast.success('Presentation deleted successfully');
+          dispatch(setDeletedStatus(true));
         }
       }
     );
@@ -68,6 +77,15 @@ const useDashboard = () => {
     return initials;
   }
 
+  const fetchPresentationList = async (pageNumber: number) => {
+    const res = await dispatch(fetchPPTList(1));
+    if (listPageNumber === 1) {
+      setFileList(res.payload);
+    } else {
+      setFileList(prevHistory => [...prevHistory, ...res.payload]);
+    }
+  };
+
   useEffect(() => {
     let canvas: CanvasItem[] = [
       {
@@ -86,7 +104,7 @@ const useDashboard = () => {
         lastVariant: '',
         selectedOriginalCanvas: false,
         slideShape: '',
-        useAI: false
+        useAI: false,
       },
     ];
     dispatch(setCanvas(canvas[0]));
@@ -119,6 +137,9 @@ const useDashboard = () => {
     setOpenProfileMenu,
     handlePptDelCheckBox,
     fetchPreset,
+    fetchPresentationList,
+    fileList,
+    isDeleted,
   };
 };
 export default useDashboard;

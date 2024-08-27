@@ -1,6 +1,6 @@
 import { theme } from '@/constants/theme';
 import { Card, Grid, Link, TextField } from '@mui/material';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import {
   Accordion,
   AccordionDetails,
@@ -224,4 +224,25 @@ export const ComingTag = styled.span`
       #004fba 100%
     );
   }
+`;
+const bounce = keyframes`
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+`;
+export const TourCard = styled.div`
+  width: 28%;
+  padding: 14px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border-bottom: 10px solid #004fba;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  animation: ${bounce} 0.5s ease-in-out 3;
+  animation-duration: 1s; /* Run the animation for 3 seconds */
 `;

@@ -22,6 +22,7 @@ import {
   DialogTitle,
   Menu,
   Stack,
+  TextField,
 } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
@@ -32,12 +33,19 @@ import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { downloadPresentation, setPresentationName } from '@/redux/thunk/thunk';
 import { toast } from 'react-toastify';
 import CustomTourTooltip from '@/components/tourSteps/customTooltip';
-import { Link } from 'react-router-dom';
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useNavigation,
+} from 'react-router-dom';
 import { ROUTES } from '@/constants/endpoint';
+import UsePreview from '@/pages/preview/container';
 import AdminCheckbox from '@/components/AdminCheckbox';
 
 const MainCanvasHeader = ({ pId }: any) => {
   const dispatch = useAppDispatch();
+  const router = useNavigate();
   const {
     openShare,
     getFirstLettersForAvatar,
@@ -58,6 +66,13 @@ const MainCanvasHeader = ({ pId }: any) => {
     handleGoBack,
     handleInputChange,
   } = useCanvasHeader();
+
+  const { fetchPreview, fetchShareUrl, shareUrl } = UsePreview();
+
+  const handleShareUrl = async () => {
+    setOpen(true);
+    fetchShareUrl();
+  };
 
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
   const [isPdfDownloading, setIsPdfDownloading] = useState<boolean>(false);
@@ -121,6 +136,27 @@ const MainCanvasHeader = ({ pId }: any) => {
       });
   };
 
+  const [open, setOpen] = useState<boolean>(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const copyToClipboard = () => {
+    navigator.clipboard
+      .writeText(shareUrl)
+      .then(() => {
+        toast.success('Text copied to clipboard');
+      })
+      .catch(err => {
+        toast.error('Failed to copy text: ');
+      });
+  };
+
   return (
     <HeaderContainer>
       <Link to={ROUTES.DASHBOARD}>
@@ -168,15 +204,49 @@ const MainCanvasHeader = ({ pId }: any) => {
         </Stack>
         <VerticalDivider />
 
-        <CustomTourTooltip tourVisible={tourVisible} tooltipContent={'share'} >
-          <Stack direction="row" spacing={1} >
-            <Button size="small" variant="contained" className='share-menu' onClick={handleShareClick}>
+        <CustomTourTooltip tourVisible={tourVisible} tooltipContent={'share'}>
+          <Stack direction="row" spacing={1}>
+            <Button
+              size="small"
+              variant="contained"
+              className="share-menu"
+              onClick={handleShareClick}
+            >
               <img src={Share} style={{ paddingRight: '8px' }} />
               <>Export</>
             </Button>
           </Stack>
         </CustomTourTooltip>
 
+        <Button variant="contained" onClick={handleShareUrl}>
+          Share PPT
+        </Button>
+        <Dialog open={open} onClose={handleClose}>
+          <DialogTitle id="alert-dialog-title">Public URL</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              <TextField
+                size="small"
+                fullWidth
+                value={shareUrl}
+                disabled
+                sx={{ marginBottom: '20px' }}
+              />
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  window.open(shareUrl, '_blank');
+                }}
+                sx={{ marginRight: '20px' }}
+              >
+                Open Link
+              </Button>
+              <Button variant="outlined" onClick={copyToClipboard}>
+                Copy Link
+              </Button>
+            </DialogContentText>
+          </DialogContent>
+        </Dialog>
         {/* Share menu */}
         <ShareMenu
           id="Share-menu"

@@ -36,14 +36,19 @@ export const ENDPOINT = {
     DELETE_SLIDE: '/ppt/delete-slide',
     GET_ALL_JSON: '/canvas-data',
     REFRESH_PPT: '/ppt/refresh-ppt',
+    PREVIEW_TOKEN: '/ppt/share-presentation',
+    PREVIEW_PPT: '/ppt/view-presentation',
+    FILTER_PPT: '/ppt/find-presentations-by-name',
   },
   DASHBOARD: {
     FETCH_PPT_LIST: 'ppt/get-all-presentation',
     FETCH_PRESETS: '/presets',
   },
-  THEME:{
-    SET_THEME_URL:"/template/check-website-hex-logo"
-  }
+  THEME: {
+    SET_THEME_URL: '/template/check-website-hex-logo',
+    CREATE_THEME_URL: '/template/custom-website-theme-URL',
+    CREATE_THEME_LOGO: '/template/custom-website-theme',
+  },
 } as const;
 
 export const ROUTES = {
@@ -61,7 +66,8 @@ export const ROUTES = {
   PRIVACY: '/privacy-policy',
   TUTORIALS: '/tutorials',
   LIBRARY: '/my-presentations',
-  TEMPLATES:"/my-templates"
+  TEMPLATES: '/my-templates',
+  PREVIEW: '/presentation/view',
 } as const;
 
 export default ENDPOINT;

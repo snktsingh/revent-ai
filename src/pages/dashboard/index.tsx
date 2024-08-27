@@ -66,13 +66,21 @@ import { EllipsisTypography } from '@/common-ui/profileMenu/style';
 import { UserAvatar } from '../canvas/canvasHeader/style';
 import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
 import AdminTemplates from './templates';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from '@mui/material';
+import PreviewPresentation from '../preview';
 interface FileUploadProps {
   onFileSelect: (file: File) => void;
 }
 
 const Dashboard = ({ onFileSelect }: any) => {
-  const [ logoutDialogOpen, setLogoutDialogOpen] = useState<boolean>(false)
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState<boolean>(false);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { getFirstLettersForAvatar } = useDashboard();
@@ -88,7 +96,6 @@ const Dashboard = ({ onFileSelect }: any) => {
   } | null>(null);
   const [currentPresentation, setCurrentPresentation] = useState<any>(null);
   useEffect(() => {
-    dispatch(fetchPPTList(0));
     dispatch(fetchPresets());
 
     function handleClick(e: any) {
@@ -108,18 +115,6 @@ const Dashboard = ({ onFileSelect }: any) => {
     };
   }, []);
 
-  const handleMore = async () => {
-    await dispatch(fetchPPTList(1));
-  };
-
-  // const filteredPptList =
-  //   searchTerm.length > 0
-  //     ? pptList.filter((ppt: IPresentation) =>
-  //         ppt.name.toLowerCase().includes(searchTerm.toLowerCase())
-  //       )
-  //     : pptList;
-
-  const inputRef = React.createRef<HTMLInputElement>();
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -252,12 +247,12 @@ const Dashboard = ({ onFileSelect }: any) => {
   }
 
   const handleLogoutDialogClose = () => {
-    setLogoutDialogOpen(false)
-  }
+    setLogoutDialogOpen(false);
+  };
 
   const handleLogout = () => {
     userLogout();
-  }
+  };
 
   return (
     <Box
@@ -341,7 +336,7 @@ const Dashboard = ({ onFileSelect }: any) => {
                   // WebkitBackgroundClip: 'text',
                   // WebkitTextFillColor: 'transparent',
                   // textShadow: 'none',
-                  color:'#004fba'
+                  color: '#004fba',
                 },
                 border: 'none',
               }}
@@ -350,7 +345,7 @@ const Dashboard = ({ onFileSelect }: any) => {
                 sx={{
                   minHeight: 2,
                   justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,                  
+                  px: 2.5,
                 }}
                 onClick={() => handleNavigation(text)}
               >
@@ -368,7 +363,7 @@ const Dashboard = ({ onFileSelect }: any) => {
                   sx={{
                     opacity: open ? 1 : 0,
                     color: '#d9d9d9',
-                    transition: 'color 0.3s ease',                
+                    transition: 'color 0.3s ease',
                   }}
                 />
               </ListItemButton>
@@ -406,7 +401,7 @@ const Dashboard = ({ onFileSelect }: any) => {
         {pathName === 'settings' && <UserSettings />}
         {pathName === 'my-templates' && <AdminTemplates />}
       </Box>
-        {/* logout confirmation box */}
+      {/* logout confirmation box */}
       <Dialog
         open={logoutDialogOpen}
         onClose={handleLogoutDialogClose}
@@ -420,23 +415,40 @@ const Dashboard = ({ onFileSelect }: any) => {
           },
         }}
       >
-        <DialogTitle id="alert-dialog-title" style={{ color: '#333', fontSize: '1.4rem', fontWeight: 'bold' }}>
-          {"Confirm Logout"}
+        <DialogTitle
+          id="alert-dialog-title"
+          style={{ color: '#333', fontSize: '1.4rem', fontWeight: 'bold' }}
+        >
+          {'Confirm Logout'}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description" style={{ color: '#666', fontSize: '1rem' }}>
+          <DialogContentText
+            id="alert-dialog-description"
+            style={{ color: '#666', fontSize: '1rem' }}
+          >
             Are you sure you want to logout?
           </DialogContentText>
         </DialogContent>
         <DialogActions style={{ padding: '16px 24px' }}>
-          <Button onClick={handleLogoutDialogClose} style={{ color: '#666', fontWeight: 'bold' }}>Cancel</Button>
-          <Button onClick={handleLogout} autoFocus style={{ backgroundColor: '#004fba', color: 'white', fontWeight: 'bold' }}>
+          <Button
+            onClick={handleLogoutDialogClose}
+            style={{ color: '#666', fontWeight: 'bold' }}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleLogout}
+            autoFocus
+            style={{
+              backgroundColor: '#004fba',
+              color: 'white',
+              fontWeight: 'bold',
+            }}
+          >
             Logout
           </Button>
         </DialogActions>
       </Dialog>
-
-
     </Box>
   );
 };

@@ -4,10 +4,10 @@ import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 
 export const ColorContainer = styled.span`
   cursor: pointer;
-  width: 25%;
+  width: 30%;
   border: 2px dashed #ccc;
   border-radius: 10px;
-  height: 50px;
+  height: 100px;
 `;
 export const ThemeContainer = styled.div`
   display: flex;

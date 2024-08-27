@@ -12,8 +12,7 @@ import { Slide, ToastContainer } from 'react-toastify';
 import ErrorBoundary from './components/Error';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
-    <ErrorBoundary>
+  <ErrorBoundary>
     <Provider store={store}>
       <CssVarsProvider theme={theme}>
         <BrowserRouter>
@@ -27,7 +26,6 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         </BrowserRouter>
       </CssVarsProvider>
     </Provider>
-    </ErrorBoundary>
-  </React.StrictMode>
+  </ErrorBoundary>
 );
 ``;

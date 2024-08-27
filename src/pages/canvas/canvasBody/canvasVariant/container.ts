@@ -30,7 +30,11 @@ interface VariantData {
   style: string;
 }
 
-const useVariants = ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers | null> }) => {
+const useVariants = ({
+  joyrideRef,
+}: {
+  joyrideRef: React.RefObject<StoreHelpers | null>;
+}) => {
   const { updateCanvasDimensions } = useCanvasComponent();
   const { getElementsData } = useCanvasData();
   const dispatch = useAppDispatch();
@@ -55,13 +59,14 @@ const useVariants = ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
 
   useEffect(() => {
     const index = canvasList.findIndex(el => el.id === canvasJS.id);
-    const activeVariant = canvasList[index].variants.find((variant : VariantsType) => variant.activeSlide);
-      if (activeVariant) {
-        setActiveVariant(activeVariant.slideVariantId);
-      }
-  }, [canvasJS])
+    const activeVariant = canvasList[index].variants.find(
+      (variant: VariantsType) => variant.activeSlide
+    );
+    if (activeVariant) {
+      setActiveVariant(activeVariant.slideVariantId);
+    }
+  }, [canvasJS]);
 
-  
   const handleVariants = (
     CanvasURL: string,
     variantId: number,
@@ -81,11 +86,14 @@ const useVariants = ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
   const updateActiveVariant = useDebounce(
     (slideId: number, variantId: number) => {
       const pptId = Number(params.id?.split('-')[0]);
-      dispatch(updateActiveVariantApi({ pptId, slideId, variantId })).then((res : any) => {
-        if (res.payload.status >= 200) {
-          setActiveVariant(variantId);
-          dispatch(setActiveVariantInSlide({slideId, variantId}))
-        }})
+      dispatch(updateActiveVariantApi({ pptId, slideId, variantId })).then(
+        (res: any) => {
+          if (res.payload.status >= 200) {
+            setActiveVariant(variantId);
+            dispatch(setActiveVariantInSlide({ slideId, variantId }));
+          }
+        }
+      );
     },
     1000
   );
@@ -139,18 +147,22 @@ const useVariants = ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers 
 
   const handleRefreshVariants = () => {
     SetIsLoading(true);
-    
+
     const currentSlideIndex = canvasList.findIndex(
       slide => slide.id === activeSlideID
     );
-    
+
     try {
       getElementsData(
         (canvasList[currentSlideIndex].originalSlideData as any)?.objects,
         themeId
       ).then(req => {
-        let request = {...req, activeSlideVariantId: activeVariant, useAI : canvasList[currentSlideIndex].useAI}
-        dispatch(refreshPPTApi(request)).then((res : any) => {
+        let request = {
+          ...req,
+          activeSlideVariantId: activeVariant,
+          useAI: canvasList[currentSlideIndex].useAI,
+        };
+        dispatch(refreshPPTApi(request)).then((res: any) => {
           let updatedPresentation = canvasList.map(slide => {
             if (
               slide.id === activeSlideID &&

@@ -9,7 +9,7 @@ import {
   getAllThemes,
   updatePptName,
 } from '@/redux/thunk/thunk';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { faker } from '@faker-js/faker';
@@ -19,6 +19,7 @@ import { FetchUtils } from '@/utils/fetch-utils';
 
 const useStartTheme = () => {
   const thunk = useAppSelector(state => state.thunk);
+  const [isThemeApplied, setIsThemeApplied] = useState<boolean>(false);
   const { selectedThemeId, selectedDocFile, themeId } = useAppSelector(
     state => state.slideTheme
   );
@@ -37,6 +38,8 @@ const useStartTheme = () => {
 
   const handleGenerate = async (themeId: number) => {
     if (selectedDocFile) {
+      setIsThemeApplied(true);
+
       if (isAuth && Token) {
         try {
           const docData = new FormData();
@@ -49,7 +52,7 @@ const useStartTheme = () => {
             docData
           );
           toast.success(
-            'Your Presentation is under creation, Please visit the dashboard to see the status.'
+            "Your Presentation is under creation, We'll email once transformed !"
           );
           dispatch(setSelectedDocFile(null));
           setTimeout(() => {
@@ -85,6 +88,7 @@ const useStartTheme = () => {
     navigate,
     dispatch,
     handleGenerate,
+    isThemeApplied,
   };
 };
 export default useStartTheme;

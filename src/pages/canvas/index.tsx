@@ -42,16 +42,18 @@ const MainCanvas = () => {
   const { canvasJS } = useAppSelector(state => state.canvas);
   const { isPresentationLoading } = useAppSelector(state => state.element);
   const { themeId } = useAppSelector(state => state.slideTheme);
-  const { preset, isPresetOpened } = useAppSelector(state => state.manageDashboard);
+  const { preset, isPresetOpened } = useAppSelector(
+    state => state.manageDashboard
+  );
   const { tourVisible } = useAppSelector(state => state.slide);
   const [searchParams, setSearchParams] = useSearchParams();
-  const params = useParams<{ id: string }>(); 
+  const params = useParams<{ id: string }>();
 
   const pptId = Number(params.id?.split('-')[0]);
 
   useEffect(() => {
     dispatch(updatePresentationLoading(true));
-    if(preset && isPresetOpened) {
+    if (preset && isPresetOpened) {
       dispatch(updateCanvasList(preset));
       dispatch(setCanvas(preset[0]));
       dispatch(updatePresentationLoading(false));
@@ -98,27 +100,32 @@ const MainCanvas = () => {
         //   }
         // });
 
-        dispatch(getAllSlidesJSONApi(+pptId)).then((response) => {
-           const jsonData = response.payload;
-           const updatedCanvasList = slidesData.map(item2 => {
-            const matchingItem = jsonData.find((item1: any) => item1.slideId === item2.slideId);
+        dispatch(getAllSlidesJSONApi(+pptId)).then(response => {
+          const jsonData = response.payload;
+          const updatedCanvasList = slidesData.map(item2 => {
+            const matchingItem = jsonData.find(
+              (item1: any) => item1.slideId === item2.slideId
+            );
             if (matchingItem) {
               const parsedJson = JSON.parse(matchingItem.canvasData);
-              return { 
+              return {
                 ...item2,
-                originalSlideData : parsedJson.slideJSON || parsedJson,
-                notes : parsedJson.notes,
-                canvas : item2.variants.length === 0 && matchingItem.canvasData ? parsedJson.slideJSON : item2.canvas,
-                useAI : parsedJson.useAI || false,
+                originalSlideData: parsedJson.slideJSON || parsedJson,
+                notes: parsedJson.notes,
+                canvas:
+                  item2.variants.length === 0 && matchingItem.canvasData
+                    ? parsedJson.slideJSON
+                    : item2.canvas,
+                useAI: parsedJson.useAI || false,
               };
             }
             return item2;
           });
 
-        dispatch(updateCanvasList(updatedCanvasList));
-        dispatch(setCanvas(updatedCanvasList[0]));
-        })
-        
+          dispatch(updateCanvasList(updatedCanvasList));
+          dispatch(setCanvas(updatedCanvasList[0]));
+        });
+
         dispatch(setThemeId(res.payload.themeId || themeId));
         dispatch(setActiveSlideId(slidesData[0].id));
         res.payload.slides[0].variants.forEach((variant: any) => {
@@ -134,7 +141,6 @@ const MainCanvas = () => {
     } else {
       dispatch(setAuthenticateLoader());
     }
-    
   };
 
   const joyrideHelpers = useRef<StoreHelpers | null>(null);
@@ -161,13 +167,13 @@ const MainCanvas = () => {
               <p>Changing Presentation theme please wait...</p>
             </Backdrop>
             <MainCanvasHeader pId={pptId} />
-            <CanvasTools pId={pptId} joyrideRef={joyrideHelpers}/>
+            <CanvasTools pId={pptId} joyrideRef={joyrideHelpers} />
             <CanvasBody joyrideRef={joyrideHelpers} />
-            <CanvasVariant joyrideRef={joyrideHelpers}/>
+            <CanvasVariant joyrideRef={joyrideHelpers} />
             <CanvasThemes />
             <TutorialRedirectAlert />
             <ReactTourComponent joyrideRef={joyrideHelpers} />
-            { tourVisible && <TourBackDrop/>}
+            {tourVisible && <TourBackDrop />}
           </div>
         )}
       </>

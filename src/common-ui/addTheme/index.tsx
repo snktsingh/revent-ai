@@ -59,19 +59,22 @@ import {
 } from '@/constants/media';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { toast } from 'react-toastify';
-import { uploadCustomTheme } from '@/redux/thunk/thunk';
+import { getAllThemes, uploadCustomTheme } from '@/redux/thunk/thunk';
 import UseCreateTheme from './container';
-import { FetchUtils } from '@/utils/fetch-utils';
+import { FetchUtils, nonHeaderInstance } from '@/utils/fetch-utils';
 import ENDPOINT from '@/constants/endpoint';
+import { setSelectedThemeLogo } from '@/redux/thunk/dashboard';
+import { Token } from '@/utils/localStorage/data';
 
 const CanvasThemes = () => {
   const toggleTheme = useAppSelector(state => state.slideTheme);
+  const { selectedThemeLogo } = useAppSelector(state => state.manageDashboard);
   const dispatch = useAppDispatch();
-  const [inputTextColor, setInputTextColor] = useState<string>('');
   const fileUploadLabelRef = useRef<HTMLLabelElement>(null);
   const ColorRef = useRef<HTMLInputElement | null>(null);
   const [webUrl, setWebUrl] = useState<string>('');
   const [isCreating, setIsCreating] = useState(true);
+  const { inputTextColor, setInputTextColor } = UseCreateTheme();
 
   const handleColorInputClick = () => {
     ColorRef.current?.click();
@@ -79,6 +82,7 @@ const CanvasThemes = () => {
   const handleTextColorInputChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
+    console.log(e.target.value);
     setInputTextColor(e.target.value);
     dispatch(setTextColor(e.target.value));
   };
@@ -92,7 +96,11 @@ const CanvasThemes = () => {
   const [isLogoUploaded, setIsLogoUploaded] = useState<boolean>(false);
   const [isPPTUploaded, setIsPPTUploaded] = useState<boolean>(false);
   const [isSelected, setIsSelected] = useState<boolean>(true);
-  const [selectedLogo, setSelectedLogo] = useState<File | null>(null);
+  const [selectedLogo, setSelectedLogo] = useState<any>(null);
+  const [genLogo, setGenLogo] = useState<string>('');
+  const [domain, setDomain] = useState<string>('');
+
+  const [logoId, setlogoId] = useState<number>(0);
   useEffect(() => {
     setIsFileUploaded(false);
     setIsCreating(false);
@@ -108,9 +116,9 @@ const CanvasThemes = () => {
     console.log({ files });
     if (files && files[0]) {
       const reader = new FileReader();
-      // reader.onload = () => {
-      //   setImagePreview(reader.result as string);
-      // };
+      reader.onload = () => {
+        setImagePreview(reader.result as string);
+      };
       reader.readAsDataURL(files[0]);
       setSelectedFiles(files[0]);
     }
@@ -123,10 +131,7 @@ const CanvasThemes = () => {
     logoRef.current?.click();
   };
 
-  useEffect(() => {}, []);
-
   const handleLogo = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.files);
     if (event.target.files) {
       console.log('event');
       const reader = new FileReader();
@@ -135,6 +140,7 @@ const CanvasThemes = () => {
       };
       reader.readAsDataURL(event.target.files[0]);
       setSelectedLogo(event.target.files[0]);
+      dispatch(setSelectedThemeLogo(event.target.files[0]));
     }
   };
 
@@ -164,7 +170,10 @@ const CanvasThemes = () => {
       );
       setIsCreating(false);
       setIsFileUploaded(true);
-      console.log(res);
+      setInputTextColor(res.data.color);
+      setGenLogo(res.data.logo);
+      setlogoId(res.data.logoId);
+      setDomain(res.data.domain);
     } catch (Error) {
       console.log(Error);
     }
@@ -193,6 +202,60 @@ const CanvasThemes = () => {
           .catch(err => {
             console.log(err);
           });
+      }
+    }
+  };
+
+  const createNewTheme = async () => {
+    if (webUrl !== '') {
+      try {
+        const data = {
+          color: inputTextColor,
+          logoId: logoId,
+        };
+        const res = await FetchUtils.postRequest(
+          `${ENDPOINT.THEME.CREATE_THEME_URL}`,
+          data
+        );
+        toast.success(res.data);
+        setInputTextColor('');
+        setlogoId(0);
+        handleClose();
+        dispatch(getAllThemes());
+        dispatch(setNewTheme(false));
+      } catch (error: any) {
+        toast.error(error);
+        handleClose();
+        dispatch(setNewTheme(false));
+      }
+    } else {
+      try {
+        console.log(selectedLogo);
+        const formData = new FormData();
+        const jsonBlob = new Blob([JSON.stringify({ color: inputTextColor })], {
+          type: 'application/json',
+        });
+        formData.append('data', jsonBlob);
+        formData.append('logo', selectedLogo);
+        const res = await nonHeaderInstance.post(
+          `${ENDPOINT.THEME.CREATE_THEME_LOGO}`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${Token}`,
+            },
+          }
+        );
+        toast.success(res.data);
+        setInputTextColor('');
+        setlogoId(0);
+        handleClose();
+        dispatch(getAllThemes());
+        dispatch(setNewTheme(false));
+      } catch (error: any) {
+        toast.error(error);
+        handleClose();
+        dispatch(setNewTheme(false));
       }
     }
   };
@@ -241,6 +304,24 @@ const CanvasThemes = () => {
     setWebUrl('');
     setSelectedLogo(null);
     setIsFileUploaded(false);
+  };
+
+  const handleLogoChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setGenLogo(reader.result as string);
+      };
+      reader.readAsDataURL(event.target.files[0]);
+      setWebUrl('');
+      setSelectedLogo(event.target.files[0]);
+      dispatch(setSelectedThemeLogo(event.target.files[0]));
+    }
+  };
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleChangeLogoUpload = () => {
+    fileInputRef.current?.click();
   };
 
   return (
@@ -335,24 +416,66 @@ const CanvasThemes = () => {
                 <LoadingBar />
               </LoaderContainer>
             ) : isFileUploaded ? (
-              <SuccessContainer>
-                <img src={DoneGif} width={200} alt="uploadDone" />
-                <StyledText>
-                  Thank you for adding a theme on Revent Press! You will be
-                  notified via email once the theme is ready to use.
-                </StyledText>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  onClick={() => {
-                    dispatch(setNewTheme(false));
-                    handleClose();
+              <>
+                <span
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '40px',
                   }}
-                  style={{ backgroundColor: '#004FBA', color: 'white' }}
                 >
-                  Close
-                </Button>
-              </SuccessContainer>
+                  <span style={{ display: 'flex', flexDirection: 'column' }}>
+                    <h4>Generated Logo from Provided URL</h4>
+                    <img
+                      src={genLogo}
+                      alt="Preview"
+                      width="140px"
+                      height="120px"
+                    />
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleLogoChange}
+                      ref={fileInputRef}
+                      style={{ display: 'none' }}
+                    />
+                    {/* Custom button to trigger file input */}
+                    <button type="button" onClick={handleChangeLogoUpload}>
+                      Choose Image
+                    </button>{' '}
+                  </span>
+                  <span>
+                    <h4>Generated Color from Logo</h4>
+                    <span>
+                      <ColorContainer
+                        onClick={handleColorInputClick}
+                        style={{ backgroundColor: inputTextColor }}
+                      >
+                        <input
+                          type="color"
+                          style={{ visibility: 'hidden' }}
+                          ref={ColorRef}
+                          onChange={handleTextColorInputChange}
+                        />
+                      </ColorContainer>
+                      <p>
+                        Click above to change the color or proceed with the same
+                        color.
+                      </p>
+                    </span>
+                  </span>
+                  {/* <span>
+                    <Button
+                      onClick={() => {
+                        dispatch(setTextColor('transparent'));
+                        setInputTextColor('');
+                      }}
+                    >
+                      <HighlightOffIcon />
+                    </Button>
+                  </span> */}
+                </span>
+              </>
             ) : (
               <>
                 {/* <SubText style={{ marginBottom: '10px' }}>
@@ -377,24 +500,55 @@ const CanvasThemes = () => {
                 <LoadingBar />
               </LoaderContainer>
             ) : isFileUploaded ? (
-              <SuccessContainer>
-                <img src={DoneGif} width={200} alt="uploadDone" />
-                <StyledText>
-                  Thank you for adding a theme on Revent Press! You will be
-                  notified via email once the theme is ready to use.
-                </StyledText>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  onClick={() => {
-                    dispatch(setNewTheme(false));
-                    handleClose();
+              <>
+                <span
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '40px',
                   }}
-                  style={{ backgroundColor: '#004FBA', color: 'white' }}
                 >
-                  Close
-                </Button>
-              </SuccessContainer>
+                  {/* <span>
+                    <h4>Generated Logo from Provided URL</h4>
+                    <img
+                      src={genLogo}
+                      alt="Preview"
+                      width="140px"
+                      height="120px"
+                    />
+                  </span> */}
+                  <span>
+                    <h4>Generated Color from Logo</h4>
+                    <span>
+                      <ColorContainer
+                        onClick={handleColorInputClick}
+                        style={{ backgroundColor: inputTextColor }}
+                      >
+                        <input
+                          type="color"
+                          style={{ visibility: 'hidden' }}
+                          ref={ColorRef}
+                          onChange={handleTextColorInputChange}
+                        />
+                      </ColorContainer>
+                      <p>
+                        Click above to change the color or proceed with the same
+                        color.
+                      </p>
+                    </span>
+                  </span>
+                  {/* <span>
+                    <Button
+                      onClick={() => {
+                        dispatch(setTextColor('transparent'));
+                        setInputTextColor('');
+                      }}
+                    >
+                      <HighlightOffIcon />
+                    </Button>
+                  </span> */}
+                </span>
+              </>
             ) : (
               <>
                 <DialogContentText>
@@ -444,27 +598,31 @@ const CanvasThemes = () => {
                       />
                     </LogoContainer>
                   )}
-                  {/* <ColorContainer
-            onClick={handleColorInputClick}
-            style={{ backgroundColor: inputTextColor }}
-          >
-            <input
-              type="color"
-              style={{ visibility: 'hidden' }}
-              ref={ColorRef}
-              onChange={handleTextColorInputChange}
-            />
-          </ColorContainer> */}
-                  {/* <span>
-            <Button
-              onClick={() => {
-                dispatch(setTextColor('transparent'));
-                setInputTextColor('');
-              }}
-            >
-              <HighlightOffIcon />
-            </Button>
-          </span> */}
+                  {inputTextColor !== '' && (
+                    <>
+                      <ColorContainer
+                        onClick={handleColorInputClick}
+                        style={{ backgroundColor: inputTextColor }}
+                      >
+                        <input
+                          type="color"
+                          style={{ visibility: 'hidden' }}
+                          ref={ColorRef}
+                          onChange={handleTextColorInputChange}
+                        />
+                      </ColorContainer>
+                      <span>
+                        <Button
+                          onClick={() => {
+                            dispatch(setTextColor('transparent'));
+                            setInputTextColor('');
+                          }}
+                        >
+                          <HighlightOffIcon />
+                        </Button>
+                      </span>
+                    </>
+                  )}
                 </ThemeContainer>
               </>
             )}
@@ -549,6 +707,22 @@ const CanvasThemes = () => {
         )}
       </DialogContent>
       <DialogActions>
+        {isFileUploaded && (
+          <Button
+            type="submit"
+            variant="contained"
+            onClick={createNewTheme}
+            style={{
+              backgroundColor: '#004FBA',
+              color: 'white',
+              marginRight: 11,
+            }}
+          >
+            Add Theme
+          </Button>
+        )}
+      </DialogActions>
+      <DialogActions>
         {isCreating ? (
           <></>
         ) : isFileUploaded ? (
@@ -566,7 +740,7 @@ const CanvasThemes = () => {
                   marginRight: 11,
                 }}
               >
-                Add Theme
+                {isPPTUploaded ? 'Add Theme' : 'Next'}
               </Button>
             ) : (
               <></>

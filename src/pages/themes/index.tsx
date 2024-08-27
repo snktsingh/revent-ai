@@ -16,7 +16,7 @@ import {
   ThemeTitle,
   Title,
 } from './style';
-import { Stack, Typography } from '@mui/material';
+import { Backdrop, CircularProgress, Stack, Typography } from '@mui/material';
 import { CustomButton } from '@/styles/common-styles/style';
 import {
   setNewTheme,
@@ -35,8 +35,14 @@ import NavBar from '@/common-ui/NavBar';
 import { ROUTES } from '@/constants/endpoint';
 
 const AppThemes = () => {
-  const { navigate, thunk, dispatch, selectedThemeId, handleGenerate } =
-    useStartTheme();
+  const {
+    navigate,
+    thunk,
+    dispatch,
+    selectedThemeId,
+    handleGenerate,
+    isThemeApplied,
+  } = useStartTheme();
 
   const [searchTerm, setSearchTerm] = useState<string>('');
 
@@ -49,6 +55,19 @@ const AppThemes = () => {
 
   return (
     <>
+      <Backdrop
+        sx={{
+          color: '#fff',
+          zIndex: theme => theme.zIndex.drawer + 1,
+
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+        open={isThemeApplied}
+      >
+        <CircularProgress color="inherit" />
+        <p>Applying Theme...</p>
+      </Backdrop>{' '}
       <NavBar />
       <TemplateContainer>
         <span>

@@ -1,9 +1,11 @@
 import ENDPOINT from '@/constants/endpoint';
+import { setTextColor } from '@/redux/reducers/canvas';
 import { FetchUtils } from '@/utils/fetch-utils';
 import { useState } from 'react';
 
 const UseCreateTheme = () => {
   const [isCreating, setIsCreating] = useState(false);
+  const [inputTextColor, setInputTextColor] = useState<any>('');
 
   const setThemeURL = async (url: string, logo: any) => {
     const logoTheme = new FormData();
@@ -20,10 +22,17 @@ const UseCreateTheme = () => {
       );
       setIsCreating(false);
       console.log(res);
+      setTextColor(res.data.color);
     } catch (Error) {
       console.log(Error);
     }
   };
-  return { setThemeURL, isCreating, setIsCreating };
+  return {
+    setThemeURL,
+    isCreating,
+    setIsCreating,
+    inputTextColor,
+    setInputTextColor,
+  };
 };
 export default UseCreateTheme;

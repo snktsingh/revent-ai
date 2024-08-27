@@ -27,13 +27,14 @@ const useCanvasHeader = () => {
     React.useState<null | HTMLElement>(null);
   const [anchorE2, setAnchorE2] = React.useState<null | HTMLElement>(null);
   const [openWarning, setOpenWarning] = React.useState(false);
-  const { pptUrl, presentationId, presentationName } = useAppSelector(state => state.thunk);
+  const { pptUrl, presentationId, presentationName } = useAppSelector(
+    state => state.thunk
+  );
   const { presentationTitle } = useAppSelector(state => state.canvas);
   const { userDetails } = useAppSelector(state => state.manageUser);
   const [updateResponse, setUpdateResponse] = useState(null);
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
   const openShare = Boolean(anchorE2);
-
 
   const userLogout = async () => {
     toast.promise(
@@ -123,10 +124,10 @@ const useCanvasHeader = () => {
         listImages: [],
         slideId: 1,
         presentationId: 1,
-        lastVariant : '',
+        lastVariant: '',
         selectedOriginalCanvas: false,
         slideShape: '',
-        useAI : false
+        useAI: false,
       },
     ];
     dispatch(updateCanvasList(canvas));
@@ -161,6 +162,8 @@ const useCanvasHeader = () => {
     handleGoBack,
     isUpdating,
     setIsUpdating,
+
+    open,
   };
 };
 export default useCanvasHeader;

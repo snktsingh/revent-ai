@@ -115,9 +115,9 @@ nonHeaderInstance.interceptors.response.use(
         break;
       }
       case 401: {
-        // toast.warn('Entered email or password are incorrect. Please check and try again.', { 
+        // toast.warn('Entered email or password are incorrect. Please check and try again.', {
         //   position: "top-center",
-        //   style: { 
+        //   style: {
         //     width: '500px',
         //     textAlign: 'center'
         //   }

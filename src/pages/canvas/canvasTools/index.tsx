@@ -34,7 +34,11 @@ import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import ColorLensOutlinedIcon from '@mui/icons-material/ColorLensOutlined';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { addSlide, setTourStepIndex, toggleTourStarted } from '@/redux/reducers/slide';
+import {
+  addSlide,
+  setTourStepIndex,
+  toggleTourStarted,
+} from '@/redux/reducers/slide';
 import { toggleTemplateVisibility } from '@/redux/reducers/elements';
 import { ToolOutlinedButton, ToolOutlinedSelect } from '../style';
 import {
@@ -74,6 +78,7 @@ import Feedback from '@/common-ui/feedback';
 import TourIcon from '@mui/icons-material/Tour';
 import CustomTourTooltip from '@/components/tourSteps/customTooltip';
 import { StoreHelpers } from 'react-joyride';
+import { toggleTour } from '@/redux/thunk/dashboard';
 
 interface FontItem {
   family: string;
@@ -87,13 +92,21 @@ interface FontItem {
   menu: string;
 }
 
-
-const CanvasTools = ({ pId, joyrideRef }: { pId: number, joyrideRef: React.RefObject<StoreHelpers | null> }) => {  const dispatch = useAppDispatch();
+const CanvasTools = ({
+  pId,
+  joyrideRef,
+}: {
+  pId: number;
+  joyrideRef: React.RefObject<StoreHelpers | null>;
+}) => {
+  const dispatch = useAppDispatch();
   const newKey = useAppSelector(state => state.slide);
-  const { color, textColor, borderColor, canvasList, size, activeSlideID } = useAppSelector(
-    state => state.canvas
+  const { isTourActive } = useAppSelector(state => state.manageDashboard);
+  const { color, textColor, borderColor, canvasList, size, activeSlideID } =
+    useAppSelector(state => state.canvas);
+  const { pptList, isPPtsFetched } = useAppSelector(
+    state => state.manageDashboard
   );
-  const { pptList, isPPtsFetched } = useAppSelector(state => state.manageDashboard)
   const tools = useAppSelector(state => state.thunk);
   const obj = { key: newKey.nextKey, name: `Slide ${newKey.nextKey}` };
   const ColorRef = useRef<HTMLInputElement | null>(null);
@@ -119,7 +132,9 @@ const CanvasTools = ({ pId, joyrideRef }: { pId: number, joyrideRef: React.RefOb
     setAnchorShapesEl(null);
   };
   const [searchParams, setSearchParams] = useSearchParams();
-  const [anchorFeedbackEl, setAnchorFeedbackEl] = useState<HTMLElement | null>(null);
+  const [anchorFeedbackEl, setAnchorFeedbackEl] = useState<HTMLElement | null>(
+    null
+  );
 
   const handleFeedbackClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorFeedbackEl(event.currentTarget);
@@ -180,7 +195,6 @@ const CanvasTools = ({ pId, joyrideRef }: { pId: number, joyrideRef: React.RefOb
     dispatch(setBorderColor(e.target.value));
   };
 
-
   useEffect(() => {
     colorChange.colorFillChange();
   }, [color]);
@@ -193,6 +207,13 @@ const CanvasTools = ({ pId, joyrideRef }: { pId: number, joyrideRef: React.RefOb
     colorChange.colorBorderChange();
   }, [borderColor]);
 
+  useEffect(() => {
+    if (isTourActive) {
+      dispatch(toggleTourStarted(true));
+      dispatch(toggleTour(false));
+    }
+  }, [isTourActive]);
+
   const handleColor = (value: string) => {
     dispatch(setColor(value));
   };
@@ -202,9 +223,10 @@ const CanvasTools = ({ pId, joyrideRef }: { pId: number, joyrideRef: React.RefOb
   };
 
   useEffect(() => {
-    if( pptList.length === 0 && isPPtsFetched) dispatch(toggleTourStarted(true));
+    if (pptList.length === 0 && isPPtsFetched)
+      dispatch(toggleTourStarted(true));
     fetchFonts(0, 200);
-  }, [])
+  }, []);
 
   const fetchFonts = (start: number, end: number) => {
     setGoogleFonts(FontsData.sort((a, b) => a.family.localeCompare(b.family)));
@@ -238,38 +260,49 @@ const CanvasTools = ({ pId, joyrideRef }: { pId: number, joyrideRef: React.RefOb
   };
 
   const handleAddNewSlide = () => {
-    const greatestIdObject = canvasList.reduce((max, obj) => (obj.id > max.id ? obj : max), canvasList[0]);
+    const greatestIdObject = canvasList.reduce(
+      (max, obj) => (obj.id > max.id ? obj : max),
+      canvasList[0]
+    );
 
-    dispatch(addNewSlideApi({ pId, slideNo: greatestIdObject.id + 1 })).then((res: any) => {
-      if (res.payload.status >= 200 && res.payload.status < 300) {
-        dispatch(addCanvasSlide({ slideId: res.payload.data.slideId, slideNo: res.payload.data.slideNumber }));
-        dispatch(addSlide(obj));
-        dispatch(toggleIsVariantSelected(false));
-        console.log(canvasList[canvasList.length - 1].id !== activeSlideID)
-        if (canvasList[canvasList.length - 1].id !== activeSlideID) {
-          const reorderedSlides = canvasList.map((slide, i) => {
-            return {
-              slideId: slide.slideId,
-              slideNumber: slide.id
-            }
-          });
-          let req = {
-            presentationId: canvasList[0].presentationId,
-            slides: reorderedSlides
+    dispatch(addNewSlideApi({ pId, slideNo: greatestIdObject.id + 1 })).then(
+      (res: any) => {
+        if (res.payload.status >= 200 && res.payload.status < 300) {
+          dispatch(
+            addCanvasSlide({
+              slideId: res.payload.data.slideId,
+              slideNo: res.payload.data.slideNumber,
+            })
+          );
+          dispatch(addSlide(obj));
+          dispatch(toggleIsVariantSelected(false));
+          console.log(canvasList[canvasList.length - 1].id !== activeSlideID);
+          if (canvasList[canvasList.length - 1].id !== activeSlideID) {
+            const reorderedSlides = canvasList.map((slide, i) => {
+              return {
+                slideId: slide.slideId,
+                slideNumber: slide.id,
+              };
+            });
+            let req = {
+              presentationId: canvasList[0].presentationId,
+              slides: reorderedSlides,
+            };
+            dispatch(reorderSlidesApi(req)).then(res => {
+              console.log(res);
+            });
           }
-          dispatch(reorderSlidesApi(req)).then((res) => {
-            console.log(res);
-          });
         }
       }
-    })
+    );
     joyrideRef.current?.next();
   };
   const handleScroll = () => {
     if (
       listRef.current &&
-      ((listRef.current as HTMLUListElement).scrollHeight) - (listRef.current as HTMLUListElement).scrollTop <=
-      (listRef.current as HTMLUListElement).clientHeight + 1000
+      (listRef.current as HTMLUListElement).scrollHeight -
+        (listRef.current as HTMLUListElement).scrollTop <=
+        (listRef.current as HTMLUListElement).clientHeight + 1000
     ) {
       // Load more fonts when user reaches the end of the list
       const start = filteredFonts.length;
@@ -286,31 +319,33 @@ const CanvasTools = ({ pId, joyrideRef }: { pId: number, joyrideRef: React.RefOb
         spacing={1}
         style={{ display: 'flex', alignItems: 'center' }}
       >
-        <CustomTourTooltip tourVisible={newKey.tourVisible} tooltipContent={'changeTheme'} >
-        <ToolOutlinedButton
-          onClick={() => {
-            dispatch(toggleTemplateVisibility());
-          }}
-          className='change-theme-btn'
-          disabled={isLoading}
+        <CustomTourTooltip
+          tourVisible={newKey.tourVisible}
+          tooltipContent={'changeTheme'}
         >
-          <Stack direction="row" spacing={1}>
-            <img src={Template} />
-            <p>Change Theme</p>
-          </Stack>
-        </ToolOutlinedButton>
+          <ToolOutlinedButton
+            onClick={() => {
+              dispatch(toggleTemplateVisibility());
+            }}
+            className="change-theme-btn"
+            disabled={isLoading}
+          >
+            <Stack direction="row" spacing={1}>
+              <img src={Template} />
+              <p>Change Theme</p>
+            </Stack>
+          </ToolOutlinedButton>
         </CustomTourTooltip>
         <ToolOutlinedButton
           onClick={handleAddNewSlide}
           disabled={isLoading}
-          className='add-slide-step'
+          className="add-slide-step"
         >
           <Stack direction="row" spacing={1}>
             <img src={Add} />
             <p>New Slide</p>
           </Stack>
         </ToolOutlinedButton>
-
 
         {/* <Autocomplete
           sx={{ width: 200 }}
@@ -342,7 +377,6 @@ const CanvasTools = ({ pId, joyrideRef }: { pId: number, joyrideRef: React.RefOb
           }}
           ListboxProps={{ onScroll: handleScroll, ref: listRef }}
         /> */}
-
 
         {/* <IconButton
           size="small"
@@ -717,21 +751,36 @@ const CanvasTools = ({ pId, joyrideRef }: { pId: number, joyrideRef: React.RefOb
         <CreditsComponent />
         <>
           <ToolOutlinedButton onClick={handleFeedbackClick}>
-            <Stack direction="row" spacing={1} alignItems={'center'} height={'4.5vh'} justifyContent={'space-around'}>
-              <EmailIcon fontSize='small' sx={{ color: '#2f2f2f' }} />
+            <Stack
+              direction="row"
+              spacing={1}
+              alignItems={'center'}
+              height={'4.5vh'}
+              justifyContent={'space-around'}
+            >
+              <EmailIcon fontSize="small" sx={{ color: '#2f2f2f' }} />
               <p>Send Feedback</p>
             </Stack>
           </ToolOutlinedButton>
         </>
         <>
-          <ToolOutlinedButton onClick={() => dispatch(toggleTourStarted(true))} >
-            <Stack direction="row" spacing={1} alignItems={'center'} height={'4.5vh'} justifyContent={'space-around'}>
-              <TourIcon fontSize='small' sx={{ color: '#2f2f2f' }} />
+          <ToolOutlinedButton onClick={() => dispatch(toggleTourStarted(true))}>
+            <Stack
+              direction="row"
+              spacing={1}
+              alignItems={'center'}
+              height={'4.5vh'}
+              justifyContent={'space-around'}
+            >
+              <TourIcon fontSize="small" sx={{ color: '#2f2f2f' }} />
               <p>Start Tour</p>
             </Stack>
           </ToolOutlinedButton>
         </>
-        <Feedback anchorEl={anchorFeedbackEl} handleClose={handleFeedbackClose} />
+        <Feedback
+          anchorEl={anchorFeedbackEl}
+          handleClose={handleFeedbackClose}
+        />
       </Stack>
 
       <Menu

@@ -14,7 +14,9 @@ import { SingleSlideComponent } from './singleSlideComponent';
 import SlidesContextMenu from '@/common-ui/slidesContextMenu';
 import { reorderSlidesApi } from '@/redux/thunk/slidesThunk';
 
-const SlideList: React.FC<{notesRef:  React.MutableRefObject<HTMLTextAreaElement | null>}> = ({notesRef}) => {
+const SlideList: React.FC<{
+  notesRef: React.MutableRefObject<HTMLTextAreaElement | null>;
+}> = ({ notesRef }) => {
   const {
     handleKeyDown,
     svgURLs,
@@ -80,23 +82,22 @@ const SlideList: React.FC<{notesRef:  React.MutableRefObject<HTMLTextAreaElement
     const reorderedSlides = reorderArray.map((slide, i) => {
       return {
         slideId: slide.slideId,
-        slideNumber: i + 1
-      }
+        slideNumber: i + 1,
+      };
     });
     let req = {
       presentationId: reorderArray[0].presentationId,
-      slides: reorderedSlides
-    }
-    dispatch(reorderSlidesApi(req)).then((res) => {
+      slides: reorderedSlides,
+    };
+    dispatch(reorderSlidesApi(req)).then(res => {
       dispatch(updateCanvasList(updateCanvasListArray()));
-    })
+    });
   };
 
   const handleContextMenu = (event: React.MouseEvent, slide: CanvasItem) => {
     setCurrentSlide(slide);
     event.preventDefault();
     setContextMenu({ x: event.clientX, y: event.clientY });
-    // setContextMenu(contextMenu === null ? { x: event.clientX, y: event.clientY } : null);
   };
 
   const handleClose = () => {
@@ -137,6 +138,6 @@ const SlideList: React.FC<{notesRef:  React.MutableRefObject<HTMLTextAreaElement
       </SlideContainer>
     </DndContext>
   );
-}
+};
 
 export default SlideList;
