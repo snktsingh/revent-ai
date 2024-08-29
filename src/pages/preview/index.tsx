@@ -48,13 +48,19 @@ const PreviewPresentation = () => {
         </Box>
       </div>
 
-      <Box>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          flexDirection: 'column',
+        }}
+      >
         {presentation?.slides.map((slides, index) => {
           return (
-            <div>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
               <img
                 src={slides.variants[0].thumbnailUrl}
-                width="94%"
+                width="80%"
                 style={{
                   margin: '7% 3% 0% 3%',
                   boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',

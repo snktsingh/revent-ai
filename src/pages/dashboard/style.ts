@@ -137,7 +137,7 @@ export const TagCard = styled.span`
   justify-content: center;
 
   &::before {
-    content: 'Admin';
+    content: 'BETA';
     position: absolute;
     width: 150%;
     height: 30px;
@@ -186,7 +186,7 @@ export const ComingTag = styled.span`
   justify-content: center;
 
   &::before {
-    content: 'COMING SOON';
+    content: 'BETA';
     position: absolute;
     width: 150%;
     height: 30px;

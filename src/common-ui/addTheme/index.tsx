@@ -1,8 +1,10 @@
 import { setNewTheme } from '@/redux/reducers/theme';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import {
+  Box,
   Button,
   Card,
+  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
@@ -11,6 +13,7 @@ import {
   FilledInput,
   IconButton,
   Input,
+  Link,
   Stack,
   TextField,
   Typography,
@@ -65,6 +68,8 @@ import { FetchUtils, nonHeaderInstance } from '@/utils/fetch-utils';
 import ENDPOINT from '@/constants/endpoint';
 import { setSelectedThemeLogo } from '@/redux/thunk/dashboard';
 import { Token } from '@/utils/localStorage/data';
+import { CheckBox } from '@mui/icons-material';
+import { theme } from '@/constants/theme';
 
 const CanvasThemes = () => {
   const toggleTheme = useAppSelector(state => state.slideTheme);
@@ -628,6 +633,7 @@ const CanvasThemes = () => {
             )}
           </>
         )}
+
         {isPPTUploaded && (
           <>
             {/* <SubText style={{ marginBottom: '10px' }}>
@@ -706,6 +712,33 @@ const CanvasThemes = () => {
           </>
         )}
       </DialogContent>
+      <Box sx={{ marginLeft: '12px', display: 'flex', alignItems: 'center' }}>
+        <Checkbox defaultChecked />
+        <div>
+          I agree to all{' '}
+          <Link
+            href="https://revent-ppt-templates.s3.ap-south-1.amazonaws.com/Terms+of+Service+-+Revent.pdf"
+            target="_blank"
+            style={{
+              color: `${theme.colorSchemes.light.palette.primary}`,
+              textDecoration: 'none',
+            }}
+          >
+            terms of service
+          </Link>{' '}
+          and{' '}
+          <Link
+            href="https://revent-ppt-templates.s3.ap-south-1.amazonaws.com/Privacy+and+Cookie+Policy+-+Revent.pdf"
+            target="_blank"
+            style={{
+              color: `${theme.colorSchemes.light.palette.primary}`,
+              textDecoration: 'none',
+            }}
+          >
+            privacy policy
+          </Link>
+        </div>
+      </Box>
       <DialogActions>
         {isFileUploaded && (
           <Button

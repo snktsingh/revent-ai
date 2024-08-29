@@ -188,10 +188,10 @@ const MainCanvasHeader = ({ pId }: any) => {
           />
         )}
       </Box>
-      
+
       <Stack direction="row" spacing={1}>
-      {/* Admin checkbox  */}
-      { isCheckAdmin && <AdminCheckbox />}
+        {/* Admin checkbox  */}
+        {isCheckAdmin && <AdminCheckbox />}
         <Stack direction="row" spacing={1}>
           <Button
             variant="contained"
@@ -204,7 +204,7 @@ const MainCanvasHeader = ({ pId }: any) => {
         </Stack>
         <VerticalDivider />
 
-        <CustomTourTooltip tourVisible={tourVisible} tooltipContent={'share'}>
+        {/* <CustomTourTooltip tourVisible={tourVisible} tooltipContent={'share'}>
           <Stack direction="row" spacing={1}>
             <Button
               size="small"
@@ -216,10 +216,11 @@ const MainCanvasHeader = ({ pId }: any) => {
               <>Export</>
             </Button>
           </Stack>
-        </CustomTourTooltip>
+        </CustomTourTooltip> */}
 
         <Button variant="contained" onClick={handleShareUrl}>
-          Share PPT
+          <img src={Share} style={{ paddingRight: '8px' }} />
+          Share
         </Button>
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle id="alert-dialog-title">Public URL</DialogTitle>
@@ -245,30 +246,32 @@ const MainCanvasHeader = ({ pId }: any) => {
                 Copy Link
               </Button>
             </DialogContentText>
+            <Button
+              fullWidth
+              variant="outlined"
+              sx={{ marginTop: '20px', padding: '6px 0px' }}
+              onClick={() => handleDownloadPresentation('pdf')}
+            >
+              <img src={PDF} width="5%" style={{ marginRight: '10px' }} />
+              Download PDF{' '}
+              {isPdfDownloading && (
+                <CircularProgress size={14} sx={{ marginLeft: '10px' }} />
+              )}
+            </Button>
+            <Button
+              fullWidth
+              variant="outlined"
+              sx={{ marginTop: '20px', padding: '6px 0px' }}
+              onClick={() => handleDownloadPresentation('pptx')}
+            >
+              <img src={PPT} width="5%" style={{ marginRight: '10px' }} />
+              Download PPT{' '}
+              {isDownloading && (
+                <CircularProgress size={14} sx={{ marginLeft: '10px' }} />
+              )}
+            </Button>
           </DialogContent>
         </Dialog>
-        {/* Share menu */}
-        <ShareMenu
-          id="Share-menu"
-          anchorEl={anchorE2}
-          open={openShare}
-          onClose={handleShareClose}
-        >
-          <MenuItem onClick={() => handleDownloadPresentation('pdf')}>
-            <Stack direction="row" spacing={2}>
-              <img src={PDF} width="10%" />
-              <h4>Download PDF</h4>
-              {isPdfDownloading && <CircularProgress size={14} />}
-            </Stack>
-          </MenuItem>
-          <MenuItem onClick={() => handleDownloadPresentation('pptx')}>
-            <Stack direction="row" spacing={2}>
-              <img src={PPT} width="10%" />
-              <h4>Download PPT</h4>
-              {isDownloading && <CircularProgress size={14} />}
-            </Stack>
-          </MenuItem>
-        </ShareMenu>
         <Button size="small" variant="contained" onClick={handleClick}>
           <Stack direction="row" spacing={1}>
             <ButtonName>{`${userDetails?.firstName} ${userDetails?.lastName}`}</ButtonName>

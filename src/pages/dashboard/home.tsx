@@ -204,7 +204,7 @@ const HomeContent = ({ onFileSelect }: any) => {
             </span>
           </span>
         </Card>
-        {!isAdmin ? (
+        {isAdmin ? (
           <Card
             style={{
               width: '28%',

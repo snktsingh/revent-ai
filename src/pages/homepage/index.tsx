@@ -358,7 +358,7 @@ const Home = ({ onFileSelect }: any) => {
                 <UploadTitle ref={productRef}>Get Started</UploadTitle>
                 <Stack direction="row" width="80vw" spacing={13}>
                   <ComingSoonContainer>
-                    {!isAdmin ? <CardBox>
+                    {isAdmin ? <CardBox>
                       <ComingSpan></ComingSpan>
                       <>
                         <UploadSubtitle>Transform</UploadSubtitle>
