@@ -226,9 +226,9 @@ const HomeContent = ({ onFileSelect }: any) => {
                   flexDirection: 'column',
                   alignItems: 'center',
                 }}
-                // onClick={handleContainerClick}
-                // onDragOver={handleDragOver}
-                // onDrop={handleDrop}
+                onClick={handleContainerClick}
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
               >
                 <input
                   type="file"

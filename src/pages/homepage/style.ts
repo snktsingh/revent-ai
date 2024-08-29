@@ -308,7 +308,7 @@ export const ComingSpan = styled.span`
   justify-content: center;
 
   &::before {
-    content: 'COMING SOON';
+    content: 'BETA';
     position: absolute;
     width: 150%;
     height: 40px;
