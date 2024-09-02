@@ -14,6 +14,7 @@ import { Canvas } from 'fabric/fabric-impl';
 import { toggleIsRegenerating } from '@/redux/thunk/thunk';
 import { setRegenerateMode } from '@/data/data';
 import { updateCheckboxForAI } from '@/redux/reducers/apiData';
+import { setUseAiForSlides } from '@/redux/reducers/canvas';
 
 interface CanvasComponentProps {
    fabricRef : React.MutableRefObject<Canvas | null>;
@@ -61,6 +62,7 @@ const CanvasComponent: React.FC<CanvasComponentProps> = ({ fabricRef }) => {
   } = useCanvasEvents();
   const { themeCode, themeId } = useAppSelector(state => state.slideTheme);
   const { isPresentationLoading } = useAppSelector(state => state.element);
+  const { enhancementWithAI } = useAppSelector(state => state.apiData);
 
   const dispatch = useAppDispatch();
 
@@ -176,6 +178,7 @@ const CanvasComponent: React.FC<CanvasComponentProps> = ({ fabricRef }) => {
         console.error('Error loading canvas:', error);
       }
     );
+       
     document.addEventListener('keydown', e => handleBulletIndent(e, canvas));
     window.addEventListener('resize', () => updateCanvasDimensions(canvas));
     window.addEventListener('keydown', e => handleKeyDown(e, canvas));
@@ -187,7 +190,7 @@ const CanvasComponent: React.FC<CanvasComponentProps> = ({ fabricRef }) => {
       window.removeEventListener('resize', () => {});
       canvas.dispose();
     };
-  }, [canvasJS.canvas, selectedOriginalCanvas]);
+  }, [canvasJS.id, selectedOriginalCanvas]);
 
   useEffect(() => {
     const slide = canvasList.find(slide => slide.id === activeSlideID);
