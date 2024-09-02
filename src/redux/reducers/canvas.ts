@@ -352,10 +352,8 @@ export const CanvasReducer = createSlice({
       const slideIndex = state.canvasList.findIndex(s => s.id === slideId);
       if (slideIndex !== -1) {
         state.canvasList[slideIndex].useAI = useAI;
-        state.canvasJS = { ...state.canvasList[slideIndex], useAI };
+        state.canvasJS = state.canvasList[slideIndex];
       }
-
-      console.log(state.canvasList[slideIndex])
     }
   },
 });
