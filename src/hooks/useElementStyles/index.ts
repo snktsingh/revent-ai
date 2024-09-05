@@ -12,7 +12,6 @@ export const useElPreferredStyles = () => {
     }
 
     const updatePreferredStyle = (styleString: string) => {
-        console.log({styleString})
         let elementKey: string;
         if (styleString.startsWith('Metric_')) {
             elementKey = 'statistics';
@@ -31,7 +30,6 @@ export const useElPreferredStyles = () => {
                 [elementKey]: styleString
             };
             dispatch(setPreferredStyles(updatedStyles));
-            console.log("updatedStyles", updatedStyles);
         }
     }
 
@@ -57,7 +55,6 @@ export const useElPreferredStyles = () => {
         });
 
         dispatch(setPreferredStyles(updatedStyles));
-        console.log("updatedStyles", updatedStyles);
     }
 
     return {

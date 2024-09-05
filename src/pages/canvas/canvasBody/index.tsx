@@ -55,6 +55,7 @@ import { APIRequest, DataRequestType } from '@/interface/storeTypes';
 import { StoreHelpers } from 'react-joyride';
 import CustomTourTooltip from '@/components/tourSteps/customTooltip';
 import placeholderImage from '../../../assets/PlaceholderProfile.jpg';
+import { postFeedbackApi } from '@/redux/thunk/user';
 
 const CanvasBody = ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers | null> }) => {
   const slide = useAppSelector(state => state.slide);
@@ -85,7 +86,7 @@ const CanvasBody = ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers |
   const { isRegenerateDisabled, tourStepIndex, tourStarted, tourVisible } = useAppSelector(state => state.slide);
   const { isLoading } = useAppSelector(state => state.thunk);
   const { requestData, enhancementWithAI } = useAppSelector(state => state.apiData);
-  const { creditAmount } = useAppSelector(state => state.manageUser);
+  const { creditAmount, userDetails } = useAppSelector(state => state.manageUser);
   const { enabledElements, isDeleteAlertShow } = useAppSelector(
     state => state.element
   );
@@ -172,6 +173,14 @@ const CanvasBody = ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers |
     const response = await fetch(url);
     const blob = await response.blob();
     return new File([blob], filename, { type: mimeType });
+  };
+
+  const sendFeedback = (message : string) => {
+      if(message) {
+        dispatch(postFeedbackApi({ username: `${userDetails?.login}`, email: userDetails?.email!, message })).then((res: any) => {
+          if (res.payload.status >= 200 && res.payload.status < 300) { }
+        })
+      }
   };
 
   const handleRequest = async () => {
@@ -273,10 +282,15 @@ const CanvasBody = ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers |
           modifiedRequest.elements = modifiedRequest.elements.filter(el => el.shape !== 'Images')
           modifiedRequest.elements = modifiedRequest.elements.map(el => {
             if (el.shape === 'BulletTitle' && el.data) {
+              const totalBullets = el.data.length;
+              const slicedBullets = el.data.slice(0, 5);
+              if(totalBullets > 5) {
+                sendFeedback(`User added ${totalBullets} bullet points. Sliced to 5 bullet points. Removed ${totalBullets - 5} bullet points.`);
+              }
               return {
                 ...el,
                 shape: 'ImageBT',
-                data: el.data.slice(0, 5)
+                data: slicedBullets
               }
             }
             return el
@@ -292,16 +306,22 @@ const CanvasBody = ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers |
       const ImagesArray = Images.find(el => el.canvasId == canvasJS.id);
       if (ImagesArray && ImagesArray.images) {
         
+        const totalImages = ImagesArray.images.length;
         const imagesToSend = hasParagraph || hasBullets ? 
           ImagesArray.images.slice(0, 4) : 
           ImagesArray.images.slice(0, 10);
-
+        
         for (let i = 0; i < imagesToSend.length; i++) {
           formData.append('images', imagesToSend[i].imageFile);
         }
         dispatch(fetchSlideImg({ req: formData, slideJSON, pptId, notes })).then((res) => {
           if (res && res.payload.slideId) {
             setSearchParams({ slide: res.payload.slideId });
+            if ((hasParagraph || hasBullets) && totalImages > 4) {
+              sendFeedback(`User added more than 4 images with paragraph or bullet elements. Sliced to 4 images. Removed ${totalImages - 4} images.`);
+            } else if (totalImages > 10) {
+              sendFeedback(`User added more than 10 images. Sliced to 10 images. Removed ${totalImages - imagesToSend.length} images.`);
+            }
           }
         });
         dispatch(toggleSelectedOriginalCanvas(false));
