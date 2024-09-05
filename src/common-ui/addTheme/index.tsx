@@ -173,12 +173,21 @@ const CanvasThemes = () => {
         `${ENDPOINT.THEME.SET_THEME_URL}`,
         logoTheme
       );
-      setIsCreating(false);
-      setIsFileUploaded(true);
-      setInputTextColor(res.data.color);
-      setGenLogo(res.data.logo);
-      setlogoId(res.data.logoId);
-      setDomain(res.data.domain);
+      if (res.data.color === null) {
+        toast.success('New theme created successfully');
+        setInputTextColor('');
+        setlogoId(0);
+        handleClose();
+        dispatch(getAllThemes());
+        dispatch(setNewTheme(false));
+      } else {
+        setIsCreating(false);
+        setIsFileUploaded(true);
+        setInputTextColor(res.data.color);
+        setGenLogo(res.data.logo);
+        setlogoId(res.data.logoId);
+        setDomain(res.data.domain);
+      }
     } catch (Error) {
       console.log(Error);
     }

@@ -35,7 +35,7 @@ const PreviewPresentation = () => {
           <img src={Favicon} width="2%" style={{ marginRight: '20px' }} />
           <h4 style={{ width: '100%' }}>
             {presentation?.name.replaceAll('+', ' ')}
-          </h4>{' '}
+          </h4>
         </Box>
         <Box
           style={{
@@ -60,11 +60,11 @@ const PreviewPresentation = () => {
             <div style={{ display: 'flex', justifyContent: 'center' }}>
               <img
                 src={slides.variants[0].thumbnailUrl}
-                width="80%"
+                width="70%"
                 style={{
                   margin: '7% 3% 0% 3%',
                   boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
-                }}
+                }}  
               />
             </div>
           );

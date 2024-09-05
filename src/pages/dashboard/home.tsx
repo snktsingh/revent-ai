@@ -54,7 +54,7 @@ const HomeContent = ({ onFileSelect }: any) => {
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { presetList } = useAppSelector(state => state.manageDashboard);
+  const { pptList } = useAppSelector(state => state.manageDashboard);
   const { isAdmin } = useAppSelector(state => state.manageUser);
   const {
     isDeletePptAlertOpen,
@@ -129,13 +129,13 @@ const HomeContent = ({ onFileSelect }: any) => {
   const { loadingUserDetails } = useAppSelector(state => state.manageDashboard);
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [pptList, setPptList] = useState<[]>([]);
+  const [dashboardPptList, setDashboardPptList] = useState<[]>([]);
 
   const fetchPPTList = async () => {
     const res = await FetchUtils.getRequest(
       `${ENDPOINT.DASHBOARD.FETCH_PPT_LIST}?size=5`
     );
-    setPptList(res.data);
+    setDashboardPptList(res.data);
   };
 
   const [checked, setChecked] = React.useState(true);
@@ -147,15 +147,12 @@ const HomeContent = ({ onFileSelect }: any) => {
   useEffect(() => {
     fetchPPTList();
     setIsLoading(false);
-  }, []);
+  }, [pptList]);
 
   const { handleGenerate } = useStartTheme();
 
   return (
     <div>
-      {/* <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-        <img src={Empty} width="20%" style={{ margin: '80px 0px 40px' }} />
-      </Box> */}
       <Box
         sx={{
           marginTop: '35px',
@@ -476,7 +473,7 @@ const HomeContent = ({ onFileSelect }: any) => {
           <Box onContextMenu={e => e.preventDefault()} sx={{ marginTop: '3%' }}>
             <Box height="78vh" overflow="auto">
               <div style={{ display: 'flex', gap: '20px' }}>
-                {pptList.map((ppt: any, index) => {
+                {dashboardPptList.map((ppt: any, index) => {
                   return (
                     <PPTCard
                       key={ppt.presentationId}
