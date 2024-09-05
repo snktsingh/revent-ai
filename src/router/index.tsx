@@ -17,6 +17,7 @@ import Terms from '@/pages/termsofuse';
 import Tutorials from '@/pages/tutorials';
 import { isMobile } from 'react-device-detect';
 import PreviewPresentation from '@/pages/preview';
+import GoogleLogin from '@/common-ui/gooleLogin';
 
 console.log({ isMobile });
 
@@ -33,6 +34,7 @@ export const authRoutes: RouteObject[] = [
   { path: ROUTES.LIBRARY, element: <Dashboard /> },
   { path: ROUTES.TEMPLATES, element: <Dashboard /> },
   { path: ROUTES.PREVIEW, element: <PreviewPresentation /> },
+  { path: ROUTES.GOOGLE_LOGIN, element: <GoogleLogin /> },
 
   // { path: ROUTES.FORGOT_PASSWORD, element: <ForgotPasswordPage /> },
   // { path: ROUTES.RESET_PASSWORD, element: <ResetPasswordPage /> },
@@ -100,4 +102,5 @@ export const defaultRoutes: RouteObject[] = [
     path: '/*',
     element: <NotFound />,
   },
+  { path: ROUTES.GOOGLE_LOGIN, element: <GoogleLogin /> },
 ];

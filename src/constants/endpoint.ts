@@ -68,6 +68,7 @@ export const ROUTES = {
   LIBRARY: '/my-presentations',
   TEMPLATES: '/my-templates',
   PREVIEW: '/presentation/view',
+  GOOGLE_LOGIN: '/login/oauth2/code/google',
 } as const;
 
 export default ENDPOINT;
