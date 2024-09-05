@@ -15,7 +15,6 @@ import {
   toggleThemeChange,
 } from '@/redux/thunk/thunk';
 import { toast } from 'react-toastify';
-import { processSlides } from '@/utils/transformResData';
 import {
   setActiveSlideId,
   setCanvas,
@@ -33,6 +32,7 @@ import { ReactTourComponent } from '@/components/tourSteps';
 import { StoreHelpers } from 'react-joyride';
 import { parse } from 'path';
 import TourBackDrop from '@/components/tourSteps/tourBackdrop';
+import { useTransformData } from '@/utils/transformResData';
 
 const MainCanvas = () => {
   const dispatch = useAppDispatch();
@@ -50,7 +50,7 @@ const MainCanvas = () => {
   const params = useParams<{ id: string }>();
 
   const pptId = Number(params.id?.split('-')[0]);
-
+  const { processSlides } = useTransformData();
   useEffect(() => {
     dispatch(updatePresentationLoading(true));
     if (preset && isPresetOpened) {
@@ -76,29 +76,8 @@ const MainCanvas = () => {
         res.payload.slides,
         res.payload.presentationId
       );
+
       if (slidesData && slidesData.length > 0 && slidesData[0].canvas) {
-        // dispatch(
-        //   getSlideJSONData({ pptId, slideId: res.payload.slides[0].slideId })
-        // ).then(response => {
-        //   if (response.payload) {
-        //     if (response.payload.hasOwnProperty('slideJSON')) {
-        //       dispatch(
-        //         updateCurrentCanvas({
-        //           ...slidesData[0],
-        //           originalSlideData: response.payload.slideJSON,
-        //           notes : response.payload.notes
-        //         })
-        //       );
-        //     } else {
-        //       dispatch(
-        //         updateCurrentCanvas({
-        //           ...slidesData[0],
-        //           originalSlideData: response.payload,
-        //         })
-        //       );
-        //     }
-        //   }
-        // });
 
         dispatch(getAllSlidesJSONApi(+pptId)).then(response => {
           const jsonData = response.payload;
@@ -124,19 +103,19 @@ const MainCanvas = () => {
 
           dispatch(updateCanvasList(updatedCanvasList));
           dispatch(setCanvas(updatedCanvasList[0]));
+          dispatch(setActiveSlideId(slidesData[0].id));
+          dispatch(setThemeId(res.payload.themeId || themeId));
+          res.payload.slides[0].variants.forEach((variant: any) => {
+            if (variant.active) {
+              dispatch(setVariantImageAsMain(variant.thumbnailUrl));
+            }
+          });
+          dispatch(toggleSelectingSlide(true));
+          dispatch(updatePresentationLoading(false));
         });
 
-        dispatch(setThemeId(res.payload.themeId || themeId));
-        dispatch(setActiveSlideId(slidesData[0].id));
-        res.payload.slides[0].variants.forEach((variant: any) => {
-          if (variant.active) {
-            dispatch(setVariantImageAsMain(variant.thumbnailUrl));
-          }
-        });
-        dispatch(toggleSelectingSlide(true));
         // dispatch(setCanvas({ ...canvasJS, variants: slidesData[0].variants }));
       }
-      dispatch(updatePresentationLoading(false));
       dispatch(setAuthenticateLoader());
     } else {
       dispatch(setAuthenticateLoader());

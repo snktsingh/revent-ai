@@ -60,6 +60,7 @@ export interface VariantsType {
   imagesUrl: string;
   activeSlide: boolean;
   slideVariantId: number;
+  style: string;
 }
 
 export interface ISlideRequests {
