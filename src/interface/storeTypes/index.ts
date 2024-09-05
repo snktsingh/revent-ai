@@ -119,6 +119,7 @@ export interface APIRequest {
   presentationId: number | null;
   presentationName?: string;
   useAI : boolean;
+  priorityStyle: string | null;
 }
 
 
