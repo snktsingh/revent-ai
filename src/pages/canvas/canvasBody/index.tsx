@@ -285,7 +285,7 @@ const CanvasBody = ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers |
               const totalBullets = el.data.length;
               const slicedBullets = el.data.slice(0, 5);
               if(totalBullets > 5) {
-                sendFeedback(`User added ${totalBullets} bullet points. Sliced to 5 bullet points. Removed ${totalBullets - 5} bullet points.`);
+                sendFeedback(`User attempted to add ${totalBullets} bullet points. Limiting to 5 bullet points for optimal presentation. ${totalBullets - 5} additional points not included.`);
               }
               return {
                 ...el,
@@ -318,9 +318,9 @@ const CanvasBody = ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers |
           if (res && res.payload.slideId) {
             setSearchParams({ slide: res.payload.slideId });
             if ((hasParagraph || hasBullets) && totalImages > 4) {
-              sendFeedback(`User added more than 4 images with paragraph or bullet elements. Sliced to 4 images. Removed ${totalImages - 4} images.`);
+              sendFeedback(`Excessive images detected with paragraph or bullet elements. Limiting to 4 images for optimal layout. ${totalImages - 4} images removed.`);
             } else if (totalImages > 10) {
-              sendFeedback(`User added more than 10 images. Sliced to 10 images. Removed ${totalImages - imagesToSend.length} images.`);
+              sendFeedback(`Image count exceeds maximum limit. Restricting to 10 images for better performance. ${totalImages - imagesToSend.length} images removed.`);
             }
           }
         });
