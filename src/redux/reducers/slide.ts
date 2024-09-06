@@ -1,3 +1,4 @@
+import { IElementStyles } from '@/interface/elDataTypes';
 import { IListofSlides } from '@/interface/storeTypes';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
@@ -11,8 +12,29 @@ export interface TestState {
   tourStarted: boolean;
   tourStepIndex : number;
   tourVisible: boolean;
+  preferredStyles: IElementStyles;
 }
 
+const elementStyles : IElementStyles = {
+  coverSlide: null,
+  tableOfContents: null,
+  paragraph: null,
+  bullet: null,
+  sectionSlide: null,
+  image: null,
+  quotes: null,
+  statistics: null,
+  teamList: null,
+  clientList: null,
+  cycle: null,
+  process: null,
+  timeline: null,
+  funnel: null,
+  pyramid: null,
+  swot: null,
+  hubsAndSpoke: null,
+  conclusionSlide: null
+};
 const initialState: TestState = {
   listOfSlides: [
     {
@@ -28,6 +50,7 @@ const initialState: TestState = {
   tourStarted: false,
   tourStepIndex: 0,
   tourVisible: false,
+  preferredStyles: elementStyles
 };
 
 export const slideReducer = createSlice({
@@ -66,6 +89,9 @@ export const slideReducer = createSlice({
     },
     toggleTourVisible(state, action: PayloadAction<boolean>) {
       state.tourVisible = action.payload;
+    },
+    setPreferredStyles(state, action: PayloadAction<IElementStyles>) {
+      state.preferredStyles = action.payload;
     }
   },
 });
@@ -80,7 +106,8 @@ export const {
   toggleSelectingSlide,
   toggleTourStarted,
   setTourStepIndex,
-  toggleTourVisible
+  toggleTourVisible,
+  setPreferredStyles
 } = slideReducer.actions;
 
 export default slideReducer.reducer;

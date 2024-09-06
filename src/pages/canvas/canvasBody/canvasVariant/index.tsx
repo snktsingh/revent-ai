@@ -215,7 +215,8 @@ export const CanvasVariant = ({ joyrideRef }: { joyrideRef: React.RefObject<Stor
                           handleVariants(
                             el.imagesUrl,
                             el.slideVariantId,
-                            canvasJS.slideId
+                            canvasJS.slideId,
+                            el
                           );
                         }}
                       >

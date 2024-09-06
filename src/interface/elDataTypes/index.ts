@@ -14,3 +14,24 @@ export interface BulletPointsFunctionType {
   mainBulletPoints: string[];
   nestedBulletPoints: { [key: string]: string[] };
 }
+
+export interface IElementStyles {
+  coverSlide: string | null;
+  tableOfContents: string | null;
+  paragraph: string | null;
+  bullet: string | null;
+  sectionSlide: string | null;
+  image: string | null;
+  quotes: string | null;
+  statistics: string | null;
+  teamList: string | null;
+  clientList: string | null;
+  cycle: string | null;
+  process: string | null;
+  timeline: string | null;
+  funnel: string | null;
+  pyramid: string | null;
+  swot: string | null;
+  hubsAndSpoke: string | null;
+  conclusionSlide: string | null;
+}

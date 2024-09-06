@@ -65,6 +65,7 @@ const useCanvasData = () => {
   const { enabledElements } = useAppSelector(state => state.element);
   const { presentationId } = useAppSelector(state => state.thunk);
   const { enhancementWithAI } = useAppSelector(state => state.apiData);
+  const { preferredStyles } = useAppSelector(state => state.slide);
 
   const getOrCreateElement = (
     shape: string,
@@ -106,6 +107,7 @@ const useCanvasData = () => {
       presentationId: presentationId,
       // presentationName: 'Presentation-1',
       useAI: false,
+      priorityStyle: null,
     };
     let timelineData: TimelineDataType[] = [];
     let hubAndSpokeData: HunNSpokeDataType[] = [];
@@ -120,30 +122,37 @@ const useCanvasData = () => {
       ) {
         const elementID = canvasObject.name.split('_')[1];
         let elementType: string | null = null;
+        let preferredStyle: string | null = null;
 
         switch (true) {
           case canvasObject.name.startsWith(FUNNEL_TEXT):
             elementType = 'Funnel';
+            preferredStyle = preferredStyles.funnel;
             break;
 
           case canvasObject.name.startsWith(PYRAMID_TEXT):
             elementType = 'Pyramid';
+            preferredStyle = preferredStyles.pyramid;
             break;
 
           case canvasObject.name.startsWith(CYCLE_TEXT):
             elementType = 'Cycle';
+            preferredStyle = preferredStyles.cycle;
             break;
 
           case canvasObject.name.startsWith(PROCESS_TEXT):
             elementType = 'Process';
+            preferredStyle = preferredStyles.process;
             break;
 
           case canvasObject.name.startsWith(SWOT_TEXT):
             elementType = 'Swot';
+            preferredStyle = preferredStyles.swot;
             break;
 
           // case canvasObject.name.startsWith(CLIENT_LIST_MAIN):
           //   elementType = 'ClientList';
+          //   preferredStyle = preferredStyles.clientList;
           //   break;
 
           default:
@@ -151,6 +160,7 @@ const useCanvasData = () => {
         }
 
         if (elementType) {
+          outputFormat.priorityStyle = preferredStyle;
           const element = getOrCreateElement(
             elementType,
             elementID,
@@ -162,6 +172,7 @@ const useCanvasData = () => {
             text: canvasObject.text,
           });
         } else if (canvasObject.name === PARAGRAPH) {
+          outputFormat.priorityStyle = preferredStyles.paragraph;
           const paragraphData = getOrCreateElement(
             'Paragraph',
             '1',
@@ -176,19 +187,10 @@ const useCanvasData = () => {
           canvasObject.name.startsWith(TIMELINE_TEXT) ||
           canvasObject.name.startsWith(TIMELINE_HEADING)
         ) {
+          outputFormat.priorityStyle = preferredStyles.timeline;
           timelineData.push({ content: canvasObject.text, id: elementID });
-        } else if (canvasObject.name === PARAGRAPH) {
-          const paragraphData = getOrCreateElement(
-            'Paragraph',
-            '1',
-            outputFormat
-          );
-          paragraphData.data?.push({
-            name: canvasObject.text,
-            label: '',
-            text: canvasObject.text,
-          });
         } else if (canvasObject?.name === BULLET_POINTS) {
+          outputFormat.priorityStyle = preferredStyles.bullet;
           const { mainBulletPoints, nestedBulletPoints } =
             segregateBulletPoints(canvasObject.text);
           const bulletsData = mainBulletPoints.slice(0, 10).map((text, index) => {
@@ -233,6 +235,7 @@ const useCanvasData = () => {
           subTitleText = canvasObject.text;
           ConclusionSlide.subTitle = canvasObject.text;
         } else if (canvasObject.name.startsWith(LIST_TEXT)) {
+          outputFormat.priorityStyle = preferredStyles.teamList;
           const ListImage = getOrCreateElement(
             'ImageSubtitle',
             '1',
@@ -246,8 +249,10 @@ const useCanvasData = () => {
             text: canvasObject.text === 'Add Text' ? '' : canvasObject.text,
           });
         } else if (canvasObject.name.startsWith(IMAGE)) {
+          outputFormat.priorityStyle = preferredStyles.image;
           const Image = getOrCreateElement('Images', '1', outputFormat);
         } else if (canvasObject.name.startsWith(QUOTE_TEXT)) {
+          outputFormat.priorityStyle = preferredStyles.quotes;
           const [_, id] = canvasObject.name.split('_');
           const Quote = getOrCreateElement('Quote', '1', outputFormat);
 
@@ -282,6 +287,7 @@ const useCanvasData = () => {
             Quote.data = quoteData;
           }
         } else if (canvasObject?.name === TABLE_OF_CONTENTS_TEXT) {
+          outputFormat.priorityStyle = preferredStyles.tableOfContents;
           const { mainBulletPoints, nestedBulletPoints } =
             segregateBulletPoints(canvasObject.text);
           const contentsData = mainBulletPoints.slice(0, 12).map((text, index) => {
@@ -293,6 +299,7 @@ const useCanvasData = () => {
           canvasObject.name.startsWith(HUB_AND_SPOKE_BOX_HEADING) ||
           canvasObject.name.startsWith(HUB_AND_SPOKE_BOX_TEXT)
         ) {
+          outputFormat.priorityStyle = preferredStyles.hubsAndSpoke;
           const [_, id] = canvasObject.name.split('_');
           hubAndSpokeData.push({ content: canvasObject.text, id: id });
         } else if (canvasObject.name.startsWith(HUB_AND_SPOKE_MAIN_TEXT)) {
@@ -302,11 +309,13 @@ const useCanvasData = () => {
           canvasObject.name.startsWith(STATISTICS_TEXT) ||
           canvasObject.name.startsWith(STATISTICS_TITLE_TEXT)
         ) {
+          outputFormat.priorityStyle = preferredStyles.statistics;
           const [_, id] = canvasObject.name.split('_');
           statisticsData.push({ content: canvasObject.text, id: id });
         }
       }
       if (canvasObject.name.startsWith(CLIENT_LIST_MAIN)) {
+        outputFormat.priorityStyle = preferredStyles.clientList;
         const clientList = getOrCreateElement('ClientList', '1', outputFormat);
       }
     });

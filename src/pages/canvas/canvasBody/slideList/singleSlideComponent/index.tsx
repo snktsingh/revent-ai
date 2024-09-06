@@ -54,6 +54,7 @@ export const SingleSlideComponent: React.FC<SingleSlideComponentProps> = ({
     <>
       {
         !svgURLs[index] ?
+        
           <SingleSliderContainer>
             <ListSlideCard>
               <LoaderContainer>

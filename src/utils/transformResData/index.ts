@@ -1,4 +1,7 @@
+import { useState } from 'react';
 import { CanvasItem } from '@/interface/storeTypes';
+import { useElPreferredStyles } from '@/hooks/useElementStyles';
+import { update } from 'lodash';
 
 export const canvasData = {
   background: '#fff',
@@ -52,40 +55,56 @@ export const canvasDataEmpty = {
   objects: [],
 };
 
-export const processSlides = (
-  slides: any[],
-  presentationId: number
-): CanvasItem[] => {
-  return slides.map((slideData, index) => {
-    let canvas = slideData.variants.length > 0 ? JSON.parse(JSON.stringify(canvasData)) : JSON.parse(JSON.stringify(canvasDataEmpty));
-    const slide: CanvasItem = {
-      id: slideData.slideNumber,
-      canvas,
-      notes: '',
-      variants: [],
-      originalSlideData: {},
-      listImages: [],
-      slideId: slideData.slideId,
-      presentationId,
-      lastVariant: '',
-      selectedOriginalCanvas: false,
-      useAI : false
-    };
+export const useTransformData = () => {
 
-    slideData.variants.forEach((element: any) => {
-      slide.variants.push({
-        pptUrl: '',
-        imagesUrl: element.thumbnailUrl,
-        activeSlide: element.active,
-        slideVariantId: Number(element.slideVariantId),
+  const { updateMultiplePreferredStyles } = useElPreferredStyles()
+
+
+  const processSlides = (
+    slides: any[],
+    presentationId: number
+  ): CanvasItem[] => {
+    const elementStyles: string[] = [];
+    const processedSlides = slides.map((slideData, index) => {
+      let canvas = slideData.variants.length > 0 ? JSON.parse(JSON.stringify(canvasData)) : JSON.parse(JSON.stringify(canvasDataEmpty));
+      const slide: CanvasItem = {
+        id: slideData.slideNumber,
+        canvas,
+        notes: '',
+        variants: [],
+        originalSlideData: {},
+        listImages: [],
+        slideId: slideData.slideId,
+        presentationId,
+        lastVariant: '',
+        selectedOriginalCanvas: false,
+        useAI : false
+      };
+
+      slideData.variants.forEach((element: any) => {
+        slide.variants.push({
+          pptUrl: '',
+          imagesUrl: element.thumbnailUrl,
+          activeSlide: element.active,
+          slideVariantId: Number(element.slideVariantId),
+          style: element.style,
+        });
+
+        if (element.active) {
+          (slide.canvas as any).objects[0].src = element.thumbnailUrl;
+          slide.lastVariant = element.thumbnailUrl;
+          if (element.style) {
+            elementStyles.push(element.style);
+          }
+        }
       });
 
-      if (element.active) {
-        (slide.canvas as any).objects[0].src = element.thumbnailUrl;
-        slide.lastVariant = element.thumbnailUrl;
-      }
+      return slide;
     });
 
-    return slide;
-  });
+    updateMultiplePreferredStyles(elementStyles);
+    return processedSlides;
+  };
+
+  return { processSlides };
 };

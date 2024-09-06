@@ -60,6 +60,7 @@ export interface VariantsType {
   imagesUrl: string;
   activeSlide: boolean;
   slideVariantId: number;
+  style: string;
 }
 
 export interface ISlideRequests {
@@ -118,6 +119,7 @@ export interface APIRequest {
   presentationId: number | null;
   presentationName?: string;
   useAI : boolean;
+  priorityStyle: string | null;
 }
 
 

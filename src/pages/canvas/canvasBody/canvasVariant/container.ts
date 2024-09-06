@@ -21,6 +21,7 @@ import { useParams } from 'react-router-dom';
 import { VariantsType } from '@/interface/storeTypes';
 import { refreshPPTApi } from '@/redux/thunk/slidesThunk';
 import { StoreHelpers } from 'react-joyride';
+import { useElPreferredStyles } from '@/hooks/useElementStyles';
 
 interface VariantData {
   slideVariantId: number;
@@ -56,6 +57,7 @@ const useVariants = ({
   const [prevVariant, setPrevVariant] = useState<string>('');
   const array: number[] = [1, 2, 3];
   const [activeVariant, setActiveVariant] = useState<number>(1);
+  const { updatePreferredStyle } = useElPreferredStyles()
 
   useEffect(() => {
     const index = canvasList.findIndex(el => el.id === canvasJS.id);
@@ -70,7 +72,8 @@ const useVariants = ({
   const handleVariants = (
     CanvasURL: string,
     variantId: number,
-    slideId: number
+    slideId: number,
+    variant: VariantsType
   ) => {
     dispatch(toggleIsVariantSelected(true));
     dispatch(toggleVariantMode(true));
@@ -79,18 +82,21 @@ const useVariants = ({
     dispatch(
       updateLastVariant({ slideId: activeSlideID, lastVariant: CanvasURL })
     );
-    updateActiveVariant(slideId, variantId);
+    updateActiveVariant(slideId, variantId, variant);
     joyrideRef.current?.next();
   };
 
   const updateActiveVariant = useDebounce(
-    (slideId: number, variantId: number) => {
+    (slideId: number, variantId: number, variant: VariantsType) => {
       const pptId = Number(params.id?.split('-')[0]);
       dispatch(updateActiveVariantApi({ pptId, slideId, variantId })).then(
         (res: any) => {
-          if (res.payload.status >= 200) {
+          if (res.payload.status === 200) {
             setActiveVariant(variantId);
             dispatch(setActiveVariantInSlide({ slideId, variantId }));
+            if(variant.style) {
+              updatePreferredStyle(variant.style)
+            }
           }
         }
       );
