@@ -19,6 +19,8 @@ export const useElPreferredStyles = () => {
             elementKey = 'tableOfContents';
         } else if (styleString.startsWith('Hub_')) {
             elementKey = 'hubsAndSpoke';
+        } else if (styleString.startsWith('TimeLine_')) {
+            elementKey = 'timeline';
         } else {
             const [elementName] = styleString.split('_');
             elementKey = elementName.charAt(0).toLowerCase() + elementName.slice(1);
@@ -44,6 +46,8 @@ export const useElPreferredStyles = () => {
                 elementKey = 'tableOfContents';
             } else if (styleString.startsWith('Hub_')) {
                 elementKey = 'hubsAndSpoke';
+            } else if (styleString.startsWith('TimeLine_')) {
+                elementKey = 'timeline';
             } else {
                 const [elementName] = styleString.split('_');
                 elementKey = elementName.charAt(0).toLowerCase() + elementName.slice(1) as keyof IElementStyles;
