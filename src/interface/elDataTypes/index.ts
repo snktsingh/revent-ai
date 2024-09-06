@@ -16,13 +16,13 @@ export interface BulletPointsFunctionType {
 }
 
 export interface IElementStyles {
-  coverSlide: string | null;
+  cover: string | null;
   tableOfContents: string | null;
   paragraph: string | null;
   bullet: string | null;
-  sectionSlide: string | null;
-  image: string | null;
-  quotes: string | null;
+  section: string | null;
+  images: string | null;
+  quote: string | null;
   statistics: string | null;
   teamList: string | null;
   clientList: string | null;
@@ -33,5 +33,5 @@ export interface IElementStyles {
   pyramid: string | null;
   swot: string | null;
   hubsAndSpoke: string | null;
-  conclusionSlide: string | null;
+  conclusion: string | null;
 }
