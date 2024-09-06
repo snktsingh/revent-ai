@@ -16,13 +16,13 @@ export interface TestState {
 }
 
 const elementStyles : IElementStyles = {
-  coverSlide: null,
+  cover: null,
   tableOfContents: null,
   paragraph: null,
   bullet: null,
-  sectionSlide: null,
-  image: null,
-  quotes: null,
+  section: null,
+  images: null,
+  quote: null,
   statistics: null,
   teamList: null,
   clientList: null,
@@ -33,7 +33,7 @@ const elementStyles : IElementStyles = {
   pyramid: null,
   swot: null,
   hubsAndSpoke: null,
-  conclusionSlide: null
+  conclusion: null
 };
 const initialState: TestState = {
   listOfSlides: [

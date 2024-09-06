@@ -203,22 +203,27 @@ const useCanvasData = () => {
         } else if (canvasObject.name === SUBTITLE) {
           subTitleText = canvasObject.text;
         } else if (canvasObject.name === COVER_SLIDE_TITLE) {
+          outputFormat.priorityStyle = preferredStyles.cover
           const CoverSlide = getOrCreateElement('Cover', '1', outputFormat);
           titleText = canvasObject.text;
           CoverSlide.title = canvasObject.text;
         } else if (canvasObject.name === COVER_SLIDE_SUBTITLE) {
+          outputFormat.priorityStyle = preferredStyles.cover
           const CoverSlide = getOrCreateElement('Cover', '1', outputFormat);
           subTitleText = canvasObject.text;
           CoverSlide.subTitle = canvasObject.text;
         } else if (canvasObject.name === SECTION_SLIDE_TITLE) {
+          outputFormat.priorityStyle = preferredStyles.section
           const SectionSlide = getOrCreateElement('Section', '1', outputFormat);
           titleText = canvasObject.text;
           SectionSlide.title = canvasObject.text;
         } else if (canvasObject.name === SECTION_SLIDE_SUBTITLE) {
+          outputFormat.priorityStyle = preferredStyles.section
           const SectionSlide = getOrCreateElement('Section', '1', outputFormat);
           subTitleText = canvasObject.text;
           SectionSlide.subTitle = canvasObject.text;
         } else if (canvasObject.name === CONCLUSION_SLIDE_TITLE) {
+          outputFormat.priorityStyle = preferredStyles.conclusion
           const ConclusionSlide = getOrCreateElement(
             'Conclusion',
             '1',
@@ -227,6 +232,7 @@ const useCanvasData = () => {
           titleText = canvasObject.text;
           ConclusionSlide.title = canvasObject.text;
         } else if (canvasObject.name === CONCLUSION_SLIDE_SUBTITLE) {
+          outputFormat.priorityStyle = preferredStyles.conclusion
           const ConclusionSlide = getOrCreateElement(
             'Conclusion',
             '1',
@@ -249,10 +255,10 @@ const useCanvasData = () => {
             text: canvasObject.text === 'Add Text' ? '' : canvasObject.text,
           });
         } else if (canvasObject.name.startsWith(IMAGE)) {
-          outputFormat.priorityStyle = preferredStyles.image;
+          outputFormat.priorityStyle = preferredStyles.images;
           const Image = getOrCreateElement('Images', '1', outputFormat);
         } else if (canvasObject.name.startsWith(QUOTE_TEXT)) {
-          outputFormat.priorityStyle = preferredStyles.quotes;
+          outputFormat.priorityStyle = preferredStyles.quote;
           const [_, id] = canvasObject.name.split('_');
           const Quote = getOrCreateElement('Quote', '1', outputFormat);
 
