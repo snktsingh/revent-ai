@@ -283,14 +283,21 @@ const CanvasBody = ({ joyrideRef }: { joyrideRef: React.RefObject<StoreHelpers |
           modifiedRequest.elements = modifiedRequest.elements.map(el => {
             if (el.shape === 'BulletTitle' && el.data) {
               const totalBullets = el.data.length;
-              const slicedBullets = el.data.slice(0, 5);
-              if(totalBullets > 5) {
-                sendFeedback(`User attempted to add ${totalBullets} bullet points. Limiting to 5 bullet points for optimal presentation. ${totalBullets - 5} additional points not included.`);
-              }
-              return {
-                ...el,
-                shape: 'ImageBT',
-                data: slicedBullets
+              if (totalBullets === 1) {
+                return {
+                  ...el,
+                  shape: 'ImagePara'
+                }
+              } else {
+                const slicedBullets = el.data.slice(0, 5);
+                if(totalBullets > 5) {
+                  sendFeedback(`User attempted to add ${totalBullets} bullet points. Limiting to 5 bullet points for optimal presentation. ${totalBullets - 5} additional points not included.`);
+                }
+                return {
+                  ...el,
+                  shape: 'ImageBT',
+                  data: slicedBullets
+                }
               }
             }
             return el
